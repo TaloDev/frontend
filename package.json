@@ -1,0 +1,23 @@
+{
+  "scripts": {
+    "dev": "snowpack dev",
+    "build": "snowpack build"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.2.1",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
+    "tailwindcss": "^2.0.2"
+  },
+  "devDependencies": {
+    "@snowpack/plugin-dotenv": "^2.0.5",
+    "@snowpack/plugin-postcss": "^1.1.0",
+    "@snowpack/plugin-react-refresh": "^2.4.0",
+    "postcss": "^8.2.4",
+    "postcss-cli": "^8.3.1",
+    "snowpack": "^3.0.1"
+  },
+  "license": "MIT"
+}
