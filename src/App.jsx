@@ -1,15 +1,18 @@
 import { BrowserRouter, Redirect, Route } from 'react-router-dom'
+import { RecoilRoot } from 'recoil'
 import Login from './pages/Login'
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Route exact path='/'>
-        <Login />
-      </Route>
+    <RecoilRoot>
+      <BrowserRouter>
+        <Route exact path='/'>
+          <Login />
+        </Route>
 
-      <Redirect to='/' />
-    </BrowserRouter>
+        <Redirect to='/' />
+      </BrowserRouter>
+    </RecoilRoot>
   )
 }
 
