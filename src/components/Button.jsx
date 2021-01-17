@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import { focusStyle } from '../styles/theme'
 
 const Button = (props) => {
   return (
@@ -6,7 +7,7 @@ const Button = (props) => {
       {...props}
       disable={props.disabled}
       type='button'
-      className='bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-800 disabled:opacity-20 disabled:bg-indigo-500 text-gray-100 hover:text-gray-100 font-semibold rounded-md py-2 transition-colors focus:outline-none focus:ring focus:ring-indigo-300'
+      className={`bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-800 disabled:opacity-40 disabled:bg-indigo-500 text-white font-semibold rounded-md py-2 transition-colors ${focusStyle}`}
       onClick={props.onClick}
     >
       {props.children}

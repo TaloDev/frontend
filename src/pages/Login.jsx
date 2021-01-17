@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
+import Link from '../components/Link'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -8,8 +9,8 @@ const Login = () => {
 
   return (
     <div className='h-full'>
-      <main className='h-full p-8 flex md:items-center justify-center'>
-        <div className='text-gray-100 rounded-md w-full md:w-2/3 xl:w-1/3 flex flex-col space-y-12'>
+      <main className='h-full p-8 flex flex-col md:items-center justify-center'>
+        <div className='text-white rounded-md w-full md:w-2/3 xl:w-1/3 flex flex-col space-y-12'>
           <h1 className='text-4xl font-bold'>Welcome back</h1>
 
           <TextInput
@@ -36,6 +37,8 @@ const Login = () => {
             Login
           </Button>
         </div>
+
+        <p className='mt-4 text-white'>Need an account? <Link to='/register'>Register here</Link></p>
       </main>
     </div>
   )
