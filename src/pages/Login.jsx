@@ -29,7 +29,10 @@ const Login = () => {
             value={pass}
           />
 
-          <Button onClick={() => console.log('hi')}>
+          <Button
+            disabled={!email || !pass}
+            onClick={() => console.log('hi')}
+          >
             Login
           </Button>
         </div>
