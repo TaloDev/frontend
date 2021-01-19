@@ -17,10 +17,9 @@ import Players from './pages/Players'
 const App = () => {
   const [accessToken, setAccessToken] = useRecoilState(accessState)
   const [user, setUser] = useRecoilState(userState)
-  const [isRefreshing, setRefreshing] = useState(false)
+  const [isRefreshing, setRefreshing] = useState(true)
 
   const handleRefreshSession = async () => {
-    setRefreshing(true)
     try {
       let res = await refreshAccess()
       const accessToken = res.data.accessToken
