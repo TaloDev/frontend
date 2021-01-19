@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter, Redirect, Route } from 'react-router-dom'
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import { useRecoilState } from 'recoil'
@@ -10,6 +10,9 @@ import userState from './atoms/userState'
 import getMe from './api/getMe'
 import Loading from './components/Loading'
 import SideNav from './components/SideNav'
+import routes from './constants/routes'
+import Events from './pages/Events'
+import Players from './pages/Players'
 
 const App = () => {
   const [accessToken, setAccessToken] = useRecoilState(accessState)
@@ -54,25 +57,28 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      {accessToken && <SideNav />}
-
       {!accessToken &&
         <main className='bg-gray-800 w-full'>
-          <Route exact path='/'>
-            <Login />
-          </Route>
+          <Switch>
+            <Route exact path='/' component={Login} />
+            <Redirect to='/' />
+          </Switch>
         </main>
       }
 
       {accessToken &&
-        <main className='bg-gray-800 w-3/4 md:w-5/6 p-2 md:p-8 text-white'>
-          <Route exact path='/'>
-            <Dashboard />
-          </Route>
-        </main>
+        <>
+          <SideNav />
+          <main className='bg-gray-800 w-3/4 md:w-5/6 p-2 md:p-8 text-white'>
+            <Switch>
+              <Route exact path='/' component={Dashboard} />
+              <Route exact path={routes.players} component={Players} />
+              <Route exact path={routes.events} component={Events} />
+              <Redirect to='/' />
+            </Switch>
+          </main>
+        </>
       }
-
-      <Redirect to='/' />
     </BrowserRouter>
   )
 }
