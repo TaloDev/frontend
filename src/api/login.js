@@ -1,6 +1,3 @@
 import api from './api'
 
-export default async (data) => api('/public/users/login', {
-  method: 'post',
-  data
-})
+export default async (data) => api.post('/public/users/login', data)

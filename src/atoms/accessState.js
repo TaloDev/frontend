@@ -1,6 +1,8 @@
 import { atom } from 'recoil'
 
-export default atom({
+const accessState = atom({
   key: 'accessState',
-  initialValue: ''
+  default: null
 })
+
+export default accessState

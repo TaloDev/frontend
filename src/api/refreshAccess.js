@@ -1,3 +1,7 @@
-import api from './api'
+import axios from 'axios'
+import { apiConfig } from './api'
 
-export default async (data) => api('/public/users/refresh')
+export default async () => {
+  const api = axios.create(apiConfig)
+  return api.get('/public/users/refresh')
+}

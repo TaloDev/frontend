@@ -3,16 +3,13 @@ import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import Link from '../components/Link'
 import login from '../api/login'
-import refreshAccess from '../api/refreshAccess'
 import { useRecoilState } from 'recoil'
 import accessState from '../atoms/accessState'
-import isAccessTokenValid from '../utils/isAccessTokenValid'
-import axios from 'axios'
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [accessToken, setAccessToken] = useRecoilState(accessState)
+  const [, setAccessToken] = useRecoilState(accessState)
 
   const containerSize = 'w-full md:w-2/3 xl:w-1/3'
 
@@ -22,28 +19,6 @@ const Login = () => {
     try {
       const res = await login({ email, password })
       setAccessToken(res.data.accessToken)
-      axios.interceptors.request.use(async (config) => {
-        let token = res.data.accessToken
-
-        // if (!isAccessTokenValid(token)) {
-        //   try {
-        //     console.log('invalid token')
-
-        //     const res = await refreshAccess()
-        //     const newToken = res.data.accessToken
-        //     setAccessToken(newToken)
-        //     token = newToken
-        //   } catch (err) {
-        //     // logout
-        //     throw new Error('logout')
-        //   }
-        // }
-
-        config.headers.authorization = `Bearer ${token}`
-        return config
-      }, (error) => {
-        return Promise.reject(error)
-      })
     } catch (err) {
       console.error(err)
     }
