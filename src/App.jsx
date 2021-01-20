@@ -13,6 +13,7 @@ import SideNav from './components/SideNav'
 import routes from './constants/routes'
 import Events from './pages/Events'
 import Players from './pages/Players'
+import Register from './pages/Register'
 
 const App = () => {
   const [accessToken, setAccessToken] = useRecoilState(accessState)
@@ -60,6 +61,7 @@ const App = () => {
         <main className='bg-gray-800 w-full'>
           <Switch>
             <Route exact path='/' component={Login} />
+            <Route exact path={routes.register} component={Register} />
             <Redirect to='/' />
           </Switch>
         </main>

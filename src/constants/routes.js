@@ -1,4 +1,5 @@
 export default {
   events: '/events',
-  players: '/players'
+  players: '/players',
+  register: '/register'
 }

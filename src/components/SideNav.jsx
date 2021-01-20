@@ -12,10 +12,11 @@ const SideNav = () => {
   const onLogoutClick = async () => {
     try {
       await logout()
-      setAccessToken(null)
-      api.interceptors.request.eject(0)
     } catch (err) {
       console.warn('Logout failed', err)
+    } finally {
+      setAccessToken(null)
+      api.interceptors.request.eject(0)
     }
   }
 

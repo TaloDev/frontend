@@ -6,24 +6,37 @@ import { useRecoilState } from 'recoil'
 import accessState from '../atoms/accessState'
 import userState from '../atoms/userState'
 import getMe from '../api/getMe'
+import register from '../api/register'
 import ErrorMessage from '../components/ErrorMessage'
-import login from '../api/login'
 
-const Login = () => {
+const Register = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [password2, setPassword2] = useState('')
   const [, setAccessToken] = useRecoilState(accessState)
   const [, setUser] = useRecoilState(userState)
   const [error, setError] = useState(null)
 
   const containerSize = 'w-full md:w-2/3 xl:w-1/3'
 
-  const onLoginClick = async (e) => {
+  const onRegisterClick = async (e) => {
     e.preventDefault()
+
     setError(null)
 
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address')
+      return
+    }
+
+    if (password !== password2) {
+      setError('Your password and confirmed password don\'t match')
+      return
+    }
+
     try {
-      let res = await login({ email, password })
+      let res = await register({ email, password })
       const accessToken = res.data.accessToken
       res = await getMe(accessToken)
       setUser(res.data.user)
@@ -36,13 +49,13 @@ const Login = () => {
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
       <form className={`text-white rounded-md flex flex-col space-y-8 ${containerSize}`}>
-        <h1 className='text-4xl font-bold'>Welcome back</h1>
+        <h1 className='text-4xl font-bold'>Let's get started</h1>
 
         <TextInput
           id='email'
           label='Email'
           type='email'
-          placeholder='Email'
+          placeholder='Purely for functional uses'
           onChange={setEmail}
           value={email}
         />
@@ -50,27 +63,36 @@ const Login = () => {
         <TextInput
           id='password'
           label='Password'
-          placeholder='Password'
+          placeholder='Keep it secure'
           type='password'
           onChange={setPassword}
           value={password}
         />
 
+        <TextInput
+          id='password2'
+          label='Confirm password'
+          placeholder='Repeat the password above'
+          type='password'
+          onChange={setPassword2}
+          value={password2}
+        />
+
         <ErrorMessage error={error} />
 
         <Button
-          disabled={!email || !password}
-          onClick={onLoginClick}
+          disabled={!email || !password || !password2}
+          onClick={onRegisterClick}
         >
-          Login
+          Sign up
         </Button>
       </form>
 
       <div className={containerSize}>
-        <p className='mt-4 text-white'>Need an account? <Link to='/register'>Register here</Link></p>
+        <p className='mt-4 text-white'>Already have an account? <Link to='/'>Log in here</Link></p>
       </div>
     </div>
   )
 }
 
-export default Login
+export default Register
