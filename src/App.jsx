@@ -14,6 +14,7 @@ import routes from './constants/routes'
 import Events from './pages/Events'
 import Players from './pages/Players'
 import Register from './pages/Register'
+import ConfirmEmailBanner from './components/ConfirmEmailBanner'
 
 const App = () => {
   const [accessToken, setAccessToken] = useRecoilState(accessState)
@@ -71,6 +72,8 @@ const App = () => {
         <>
           <SideNav />
           <main className='bg-gray-800 w-3/4 md:w-5/6 p-2 md:p-8 text-white'>
+            {!user.emailConfirmed && <ConfirmEmailBanner />}
+
             <Switch>
               <Route exact path='/' component={Dashboard} />
               <Route exact path={routes.players} component={Players} />
