@@ -8,6 +8,9 @@ import userState from '../atoms/userState'
 import getMe from '../api/getMe'
 import ErrorMessage from '../components/ErrorMessage'
 import login from '../api/login'
+import buildError from '../utils/buildError'
+import routes from '../constants/routes'
+import { unauthedContainerStyle } from '../styles/theme'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -15,8 +18,6 @@ const Login = () => {
   const [, setAccessToken] = useRecoilState(accessState)
   const [, setUser] = useRecoilState(userState)
   const [error, setError] = useState(null)
-
-  const containerSize = 'w-full md:w-2/3 xl:w-1/3'
 
   const onLoginClick = async (e) => {
     e.preventDefault()
@@ -29,13 +30,13 @@ const Login = () => {
       setUser(res.data.user)
       setAccessToken(accessToken)
     } catch (err) {
-      setError(err)
+      setError(buildError(err))
     }
   }
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={`text-white rounded-md flex flex-col space-y-8 ${containerSize}`}>
+      <form className={`text-white rounded-md flex flex-col space-y-8 ${unauthedContainerStyle}`}>
         <h1 className='text-4xl font-bold'>Welcome back</h1>
 
         <TextInput
@@ -56,7 +57,11 @@ const Login = () => {
           value={password}
         />
 
-        <ErrorMessage error={error} />
+        <ErrorMessage error={error}>
+          {error?.showHint &&
+            <span>. Have you <Link to={routes.forgotPass}>forgotten your password?</Link></span>
+          }
+        </ErrorMessage>
 
         <Button
           disabled={!email || !password}
@@ -66,7 +71,7 @@ const Login = () => {
         </Button>
       </form>
 
-      <div className={containerSize}>
+      <div className={unauthedContainerStyle}>
         <p className='mt-4 text-white'>Need an account? <Link to='/register'>Register here</Link></p>
       </div>
     </div>
