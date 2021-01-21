@@ -71,7 +71,7 @@ const App = () => {
       {accessToken &&
         <>
           <SideNav />
-          <main className='bg-gray-800 w-3/4 md:w-5/6 p-2 md:p-8 text-white'>
+          <main className='bg-gray-800 w-full p-2 md:p-8 text-white'>
             {!user.emailConfirmed && <ConfirmEmailBanner />}
 
             <Switch>

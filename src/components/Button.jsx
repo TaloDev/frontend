@@ -9,14 +9,13 @@ const Button = (props) => {
     disabled:opacity-40
     disabled:cursor-not-allowed
     font-semibold
-    rounded-md
+    rounded
     px-4
     py-2
     transition-colors
     ${focusStyle}
   `, {
     'bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-800 disabled:bg-indigo-500 text-white': !props.variant,
-    'bg-gray-100 hover:bg-gray-200 active:bg-gray-300 disabled:bg-gray-100 text-black': props.variant === 'light',
     'flex justify-center hover:bg-indigo-500': props.isLoading
   })
 

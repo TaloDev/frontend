@@ -6,12 +6,12 @@ const TextInput = (props) => {
   const className = classNames(`
     block
     p-2
-    rounded-sm
+    rounded
     w-full
     ${focusStyle}
   `, {
     'bg-gray-600': !props.variant,
-    'bg-gray-100 text-black': props.variant === 'light'
+    'bg-gray-100 text-black focus:ring-indigo-400': props.variant === 'light'
   })
 
   return (
