@@ -4,7 +4,7 @@ const ErrorMessage = (props) => {
   if (!props.error) return null
 
   return (
-    <p className='font-bold text-red-400 text-sm w-full'>
+    <p className='font-bold text-red-400 w-full' role='alert'>
       {props.error.message}
       {props.children}
     </p>

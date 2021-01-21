@@ -18,10 +18,12 @@ const Login = () => {
   const [, setAccessToken] = useRecoilState(accessState)
   const [, setUser] = useRecoilState(userState)
   const [error, setError] = useState(null)
+  const [isLoading, setLoading] = useState(false)
 
   const onLoginClick = async (e) => {
     e.preventDefault()
     setError(null)
+    setLoading(true)
 
     try {
       let res = await login({ email, password })
@@ -31,6 +33,8 @@ const Login = () => {
       setAccessToken(accessToken)
     } catch (err) {
       setError(buildError(err))
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -64,8 +68,9 @@ const Login = () => {
         </ErrorMessage>
 
         <Button
-          disabled={!email || !password}
+          disabled={!email || !password || isLoading}
           onClick={onLoginClick}
+          isLoading={isLoading}
         >
           Login
         </Button>

@@ -18,10 +18,10 @@ const Register = () => {
   const [, setAccessToken] = useRecoilState(accessState)
   const [, setUser] = useRecoilState(userState)
   const [error, setError] = useState(null)
+  const [isLoading, setLoading] = useState(false)
 
   const onRegisterClick = async (e) => {
     e.preventDefault()
-
     setError(null)
 
     const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -35,6 +35,8 @@ const Register = () => {
       return
     }
 
+    setLoading(true)
+
     try {
       let res = await register({ email, password })
       const accessToken = res.data.accessToken
@@ -43,6 +45,8 @@ const Register = () => {
       setAccessToken(accessToken)
     } catch (err) {
       setError(buildError(err))
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -81,8 +85,9 @@ const Register = () => {
         <ErrorMessage error={error} />
 
         <Button
-          disabled={!email || !password || !password2}
+          disabled={!email || !password || !password2 || isLoading}
           onClick={onRegisterClick}
+          isLoading={isLoading}
         >
           Sign up
         </Button>
