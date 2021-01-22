@@ -5,6 +5,7 @@ import accessState from '../atoms/accessState'
 import LinkButton from '../components/LinkButton'
 import Link from '../components/Link'
 import routes from '../constants/routes'
+import { IconChevronDown } from '@tabler/icons'
 
 const SideNav = () => {
   const [, setAccessToken] = useRecoilState(accessState)
@@ -22,6 +23,20 @@ const SideNav = () => {
 
   return (
     <nav className='bg-gray-900 w-1/4 md:w-1/6 h-full p-2 md:p-8'>
+      <div className='bg-indigo-400 rounded w-full p-2 mb-4 flex items-center justify-between'>
+        <div className='flex items-center'>
+          <img src='https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/375290/7180cee0f8f58b728b99c0c77d64d655a2e7e145.jpg' className='bg-indigo-100 rounded w-8 h-8' />
+          <p className='font-semibold ml-2'>Superstatic</p>
+        </div>
+
+        <i className='cursor-pointer'>
+          <IconChevronDown 
+            size={24}
+            color='black'
+          />
+        </i>
+      </div>
+
       <ul className='flex flex-col space-y-4'>
         <li>
           <Link to='/'>Home</Link>
