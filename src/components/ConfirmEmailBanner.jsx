@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import confirmEmail from '../api/confirmEmail'
 import userState from '../atoms/userState'
@@ -11,7 +11,7 @@ const ConfirmEmailBanner = () => {
   const [code, setCode] = useState('')
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [user, setUser] = useRecoilState(userState)
+  const [, setUser] = useRecoilState(userState)
 
   const onConfirmClick = async (e) => {
     e.preventDefault()
