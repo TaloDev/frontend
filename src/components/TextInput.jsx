@@ -17,7 +17,7 @@ const TextInput = (props) => {
 
   return (
     <div className='w-full'>
-      {props.label && <label htmlFor={props.id} className='font-semibold mb-1'>{props.label}</label>}
+      {props.label && <label htmlFor={props.id} className='font-semibold mb-2'>{props.label}</label>}
       <input
         id={props.id}
         className={className}

@@ -69,7 +69,7 @@ const App = () => {
       }
 
       {accessToken &&
-        <>
+        <div className='w-full'>
           <NavBar />
           <main className='bg-gray-800 w-full p-4 md:p-8 text-white'>
             {!user.emailConfirmed && <ConfirmEmailBanner />}
@@ -81,7 +81,7 @@ const App = () => {
               <Redirect to='/' />
             </Switch>
           </main>
-        </>
+        </div>
       }
     </BrowserRouter>
   )
