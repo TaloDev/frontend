@@ -4,12 +4,13 @@ import { focusStyle } from '../styles/theme'
 import classNames from 'classnames'
 
 const TextInput = (props) => {
-  const className = classNames(`
+  const inputClassName = classNames(`
     block
     p-2
     rounded
     w-full
     ${focusStyle}
+    ${props.inputClassName || ''}
   `, {
     'bg-gray-600': !props.variant,
     'bg-gray-100 text-black focus:ring-indigo-400': props.variant === 'light'
@@ -17,10 +18,10 @@ const TextInput = (props) => {
 
   return (
     <div className='w-full'>
-      {props.label && <label htmlFor={props.id} className='font-semibold mb-2'>{props.label}</label>}
+      {props.label && <label htmlFor={props.id} className='block font-semibold mb-1'>{props.label}</label>}
       <input
         id={props.id}
-        className={className}
+        className={inputClassName}
         type={props.type ?? 'text'}
         placeholder={props.placeholder}
         onChange={(e) => props.onChange(e.target.value, e)}
@@ -37,7 +38,8 @@ TextInput.propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string.isRequired,
   type: PropTypes.string,
-  variant: PropTypes.string
+  variant: PropTypes.string,
+  inputClassName: PropTypes.string
 }
 
 export default TextInput

@@ -2,9 +2,12 @@ import React, { useState } from 'react'
 import { IconChevronDown, IconPlus } from '@tabler/icons'
 import Button from './Button'
 import classNames from 'classnames'
+import NewGame from '../modals/NewGame'
 
 const GameSwitcher = () => {
   const [isOpen, setOpen] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+
   const dropdownButtonStyle = 'p-2 hover:bg-gray-200 active:bg-gray-300'
 
   return (
@@ -18,7 +21,7 @@ const GameSwitcher = () => {
         <div className='ml-2 md:ml-8 flex items-center'>
           <Button variant='icon' onClick={() => setOpen(!isOpen)}>
             <div className={classNames('transform transition-transform', { 'rotate-180': isOpen })}>
-              <IconChevronDown size={24} color='black' />
+              <IconChevronDown size={24} />
             </div>
           </Button>
         </div>
@@ -32,7 +35,7 @@ const GameSwitcher = () => {
             </Button>
           </li>
           <li className='border-t border-gray-300'>
-            <Button variant='bare' className={`flex items-center rounded-b ${dropdownButtonStyle}`}>
+            <Button variant='bare' className={`flex items-center rounded-b ${dropdownButtonStyle}`} onClick={() => setShowModal(true)}>
               <div className='rounded-full p-1 bg-indigo-500'>
                 <IconPlus size={12} color='white' stroke={3} />
               </div>
@@ -41,8 +44,10 @@ const GameSwitcher = () => {
           </li>
         </ul>
       }
+
+      <NewGame modalState={[showModal, setShowModal]} />
     </div>
-  );
+  )
 }
 
 export default GameSwitcher
