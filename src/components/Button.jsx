@@ -8,12 +8,12 @@ const Button = (props) => {
   const className = classNames(`
     disabled:opacity-40
     disabled:cursor-not-allowed
-    font-semibold
-    rounded
     transition-colors
     ${focusStyle}
+    ${props.className ?? ''}
   `, {
-    'bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-800 disabled:bg-indigo-500 text-white px-4 py-2 w-full': !props.variant,
+    'bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-800 disabled:bg-indigo-500 text-white px-4 py-2 w-full rounded font-semibold': !props.variant,
+    'w-full text-left': props.variant === 'bare',
     'flex justify-center hover:bg-indigo-500': props.isLoading
   })
 
@@ -34,7 +34,8 @@ Button.propTypes = {
   children: PropTypes.any.isRequired,
   onClick: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
-  variant: PropTypes.string
+  variant: PropTypes.string,
+  className: PropTypes.string
 }
 
 export default Button
