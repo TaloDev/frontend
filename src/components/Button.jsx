@@ -6,17 +6,14 @@ import classNames from 'classnames'
 
 const Button = (props) => {
   const className = classNames(`
-    w-full
     disabled:opacity-40
     disabled:cursor-not-allowed
     font-semibold
     rounded
-    px-4
-    py-2
     transition-colors
     ${focusStyle}
   `, {
-    'bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-800 disabled:bg-indigo-500 text-white': !props.variant,
+    'bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-800 disabled:bg-indigo-500 text-white px-4 py-2 w-full': !props.variant,
     'flex justify-center hover:bg-indigo-500': props.isLoading
   })
 

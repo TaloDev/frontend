@@ -9,7 +9,7 @@ import attachTokenInterceptor from './utils/attachTokenInterceptor'
 import userState from './atoms/userState'
 import getMe from './api/getMe'
 import Loading from './components/Loading'
-import SideNav from './components/SideNav'
+import NavBar from './components/NavBar'
 import routes from './constants/routes'
 import Events from './pages/Events'
 import Players from './pages/Players'
@@ -70,8 +70,8 @@ const App = () => {
 
       {accessToken &&
         <>
-          <SideNav />
-          <main className='bg-gray-800 w-full p-2 md:p-8 text-white'>
+          <NavBar />
+          <main className='bg-gray-800 w-full p-4 md:p-8 text-white'>
             {!user.emailConfirmed && <ConfirmEmailBanner />}
 
             <Switch>

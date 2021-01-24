@@ -16,7 +16,6 @@ body {
 
 #root {
   height: 100%;
-  display: flex;
 }
 
 /* remove all animations and transitions for people that prefer not to see them */
