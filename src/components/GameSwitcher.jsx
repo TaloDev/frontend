@@ -3,38 +3,68 @@ import { IconChevronDown, IconPlus } from '@tabler/icons'
 import Button from './Button'
 import classNames from 'classnames'
 import NewGame from '../modals/NewGame'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import gamesState from '../atoms/gamesState'
+import activeGameState from '../atoms/activeGameState'
+import randomColor from 'randomcolor'
 
 const GameSwitcher = () => {
   const [isOpen, setOpen] = useState(false)
   const [showModal, setShowModal] = useState(false)
+  const games = useRecoilValue(gamesState)
+  const [activeGame, setActiveGame] = useRecoilState(activeGameState)
 
-  const dropdownButtonStyle = 'p-2 hover:bg-gray-200 active:bg-gray-300'
+  const dropdownButtonStyle = 'p-2 disabled:bg-transparent hover:bg-gray-200 active:bg-gray-300'
 
   return (
     <div className='relative'>
-      <div className={classNames('bg-indigo-400 rounded p-2 flex items-center', { 'rounded-b-none': isOpen })}>
-        <div className='flex items-center'>
-          <img src='https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/375290/7180cee0f8f58b728b99c0c77d64d655a2e7e145.jpg' className='bg-indigo-100 rounded w-8 h-8' />
-          <p className='font-semibold ml-2'>Superstatic</p>
-        </div>
+      {activeGame &&
+        <div className={classNames('bg-indigo-400 rounded p-2 flex items-center justify-between md:w-60', { 'rounded-b-none': isOpen })}>
+          <div className='flex items-center'>
+            <span
+              style={{ backgroundColor: randomColor({ seed: activeGame.name, luminosity: 'dark' }) }}
+              className='bg-indigo-100 rounded w-8 h-8 leading-7 text-center font-semibold text-white border-2 border-gray-900 border-opacity-40'
+            >
+              {activeGame.name.substring(0, 1).toUpperCase()}
+            </span>
+            <p className='font-semibold ml-2'>{activeGame.name}</p>
+          </div>
 
-        <div className='ml-2 md:ml-8 flex items-center'>
-          <Button variant='icon' onClick={() => setOpen(!isOpen)}>
-            <div className={classNames('transform transition-transform', { 'rotate-180': isOpen })}>
-              <IconChevronDown size={24} />
-            </div>
+          <div className='ml-2 md:ml-8 flex items-center'>
+            <Button variant='icon' onClick={() => setOpen(!isOpen)}>
+              <div className={classNames('transform transition-transform', { 'rotate-180': isOpen })}>
+                <IconChevronDown size={24} />
+              </div>
+            </Button>
+          </div>
+        </div>
+      }
+
+      {!activeGame &&
+        <div className='flex items-center'>
+          <Button className='flex items-center' onClick={() => setShowModal(true)}>
+            <IconPlus size={16} color='white' stroke={3} />
+            <span className='ml-2'>New game</span>
           </Button>
         </div>
-      </div>
+      }
 
       {isOpen &&
         <ul className='absolute bg-white w-full rounded-b -mt-0.5'>
+          {games.map((game) => (
+            <li key={game.name} className='border-b border-gray-300'>
+              <Button
+                variant='bare'
+                disabled={activeGame.id === game.id}
+                className={`${dropdownButtonStyle} truncate`}
+                onClick={() => setActiveGame(game)}
+              >
+                {game.name}
+              </Button>
+            </li>
+          ))}
+
           <li>
-            <Button variant='bare' className={`${dropdownButtonStyle} truncate`}>
-              Crawle
-            </Button>
-          </li>
-          <li className='border-t border-gray-300'>
             <Button variant='bare' className={`flex items-center rounded-b ${dropdownButtonStyle}`} onClick={() => setShowModal(true)}>
               <div className='rounded-full p-1 bg-indigo-500'>
                 <IconPlus size={12} color='white' stroke={3} />

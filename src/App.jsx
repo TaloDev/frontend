@@ -15,14 +15,19 @@ import Events from './pages/Events'
 import Players from './pages/Players'
 import Register from './pages/Register'
 import ConfirmEmailBanner from './components/ConfirmEmailBanner'
+import gamesState from './atoms/gamesState'
+import activeGameState from './atoms/activeGameState'
 
 const App = () => {
   const [accessToken, setAccessToken] = useRecoilState(accessState)
   const [user, setUser] = useRecoilState(userState)
   const [isRefreshing, setRefreshing] = useState(true)
+  const [games, setGames] = useRecoilState(gamesState)
+  const [activeGame, setActiveGame] = useRecoilState(activeGameState)
 
   const handleRefreshSession = async () => {
     try {
+      console.log('loop 1')
       let res = await refreshAccess()
       const accessToken = res.data.accessToken
       res = await getMe(accessToken)
@@ -47,6 +52,14 @@ const App = () => {
     if (!user && accessToken) setAccessToken(null)
     if (!accessToken && user) setUser(null)
   }, [user, accessToken])
+
+  useEffect(() => {
+    setGames(user?.games ?? [])
+  }, [user])
+
+  useEffect(() => {
+    if (!activeGame && games.length > 0) setActiveGame(games[0])
+  }, [activeGame, games])
 
   if (isRefreshing) {
     return (

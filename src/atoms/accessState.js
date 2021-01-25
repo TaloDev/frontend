@@ -1,7 +1,7 @@
 import { atom } from 'recoil'
 
 const accessState = atom({
-  key: 'accessState',
+  key: 'access',
   default: null
 })
 
