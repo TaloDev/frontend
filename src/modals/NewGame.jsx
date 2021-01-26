@@ -41,6 +41,7 @@ const NewGame = (props) => {
       id='new-game'
       title='Create new game'
       modalState={props.modalState}
+      resetModal={resetModal}
     >
       <form>
         <div className='p-4'>

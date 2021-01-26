@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { IconX } from '@tabler/icons'
 import Button from './Button'
@@ -6,6 +6,18 @@ import classNames from 'classnames'
 
 const Modal = (props) => {
   const [isOpen, setOpen] = props.modalState
+
+  const handleEscapePressed = (event) => {
+    if (event.keyCode === 27) props.resetModal()
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleEscapePressed)
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapePressed)
+    }
+  }, [])
 
   if (!isOpen) return null
 
@@ -36,7 +48,8 @@ Modal.propTypes = {
   title: PropTypes.string.isRequired,
   hideTitle: PropTypes.bool,
   children: PropTypes.any.isRequired,
-  modalState: PropTypes.array.isRequired
+  modalState: PropTypes.array.isRequired,
+  resetModal: PropTypes.func.isRequired
 }
 
 export default Modal
