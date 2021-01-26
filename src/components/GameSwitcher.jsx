@@ -14,16 +14,16 @@ const GameSwitcher = () => {
   const games = useRecoilValue(gamesState)
   const [activeGame, setActiveGame] = useRecoilState(activeGameState)
 
-  const dropdownButtonStyle = 'p-2 disabled:bg-transparent hover:bg-gray-200 active:bg-gray-300'
+  const dropdownButtonStyle = 'disabled:bg-transparent hover:bg-gray-200 active:bg-gray-300 focus:z-10'
 
   return (
     <div className='relative'>
       {activeGame &&
-        <div className={classNames('bg-indigo-400 rounded p-2 flex items-center justify-between md:w-60', { 'rounded-b-none': isOpen })}>
+        <div className={classNames('bg-indigo-300 rounded p-2 flex items-center justify-between md:w-60', { 'rounded-b-none': isOpen })}>
           <div className='flex items-center'>
             <span
               style={{ backgroundColor: randomColor({ seed: activeGame.name, luminosity: 'dark' }) }}
-              className='bg-indigo-100 rounded w-8 h-8 leading-7 text-center font-semibold text-white border-2 border-gray-900 border-opacity-40'
+              className='bg-indigo-100 rounded w-8 h-8 leading-7 text-center font-semibold text-white border-2 border-gray-900 border-opacity-30'
             >
               {activeGame.name.substring(0, 1).toUpperCase()}
             </span>
@@ -52,11 +52,11 @@ const GameSwitcher = () => {
       {isOpen &&
         <ul className='absolute bg-white w-full rounded-b -mt-0.5'>
           {games.map((game) => (
-            <li key={game.name} className='border-b border-gray-300'>
+            <li key={game.name} className={`border-b border-gray-300 ${dropdownButtonStyle}`}>
               <Button
                 variant='bare'
                 disabled={activeGame.id === game.id}
-                className={`${dropdownButtonStyle} truncate`}
+                className='truncate p-2'
                 onClick={() => setActiveGame(game)}
               >
                 {game.name}
@@ -64,8 +64,8 @@ const GameSwitcher = () => {
             </li>
           ))}
 
-          <li>
-            <Button variant='bare' className={`flex items-center rounded-b ${dropdownButtonStyle}`} onClick={() => setShowModal(true)}>
+          <li className={dropdownButtonStyle}>
+            <Button variant='bare' className='flex items-center rounded-b p-2' onClick={() => setShowModal(true)}>
               <div className='rounded-full p-1 bg-indigo-500'>
                 <IconPlus size={12} color='white' stroke={3} />
               </div>
