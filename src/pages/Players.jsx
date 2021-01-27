@@ -46,26 +46,19 @@ const Players = () => {
       }
  
       {players.length > 0 &&
-        <div className='mt-4 rounded overflow-hidden'>
-          <div className='grid grid-cols-4 gap-1 md:gap-2 p-2 md:p-4 bg-white text-black text-sm md:text-base font-semibold'>
-            <span>Aliases</span>
-            <span>Properties</span>
-            <span>Registered</span>
-            <span>Last seen</span>
+        <div className='mt-4 overflow-x-scroll'>
+          <div className='flex items-start p-4 bg-white text-black font-semibold w-min rounded-t'>
+            {['Aliases', 'Properties', 'Registered', 'Last seen'].map((col) => (
+              <span key={col} className='min-w-60'>{col}</span>
+            ))}
           </div>
-          <ul>
+          <ul className='w-min rounded-b overflow-hidden'>
             {players.map((player, idx) => (
-              <li key={player.id} className={classNames('grid grid-cols-4 gap-1 md:gap-2 p-2 md:p-4 text-sm items-center', { 'bg-indigo-600': idx % 2 !== 0, 'bg-indigo-500': idx % 2 === 0 })}>
-                <span><PlayerAliases aliases={player.aliases} /></span>
-                <span>{Object.keys(player.props ?? {}).length}</span>
-                <span>
-                  <span className='md:hidden'>{format(new Date(player.createdAt), 'MMM Y')}</span>
-                  <span className='hidden md:block'>{format(new Date(player.createdAt), 'do MMM Y')}</span>
-                </span>
-                <span>
-                  <span className='md:hidden'>{format(new Date(player.lastSeenAt), 'MMM Y')}</span>
-                  <span className='hidden md:block'>{format(new Date(player.lastSeenAt), 'do MMM Y')}</span>
-                </span>
+              <li key={player.id} className={classNames('flex items-center p-4 w-min', { 'bg-indigo-600': idx % 2 !== 0, 'bg-indigo-500': idx % 2 === 0 })}>
+                <span className='min-w-60'><PlayerAliases aliases={player.aliases} /></span>
+                <span className='min-w-60'>{Object.keys(player.props ?? {}).length}</span>
+                <span className='min-w-60'>{format(new Date(player.createdAt), 'do MMM Y')}</span>
+                <span className='min-w-60'>{format(new Date(player.lastSeenAt), 'do MMM Y')}</span>
               </li>
             ))}
           </ul>

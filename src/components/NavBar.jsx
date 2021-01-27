@@ -24,7 +24,7 @@ const NavBar = () => {
 
   return (
     <nav className='bg-gray-900 w-full p-4 md:p-8 flex justify-between'>
-      <ul className='flex space-x-4 md:space-x-8 items-center'>
+      <ul className='hidden md:flex space-x-4 md:space-x-8 items-center'>
         <li>
           <Link to='/'>Home</Link>
         </li>
