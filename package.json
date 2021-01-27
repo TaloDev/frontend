@@ -7,6 +7,7 @@
     "@tabler/icons": "^1.39.1",
     "axios": "^0.21.1",
     "classnames": "^2.2.6",
+    "date-fns": "^2.16.1",
     "prop-types": "^15.7.2",
     "randomcolor": "^0.6.2",
     "react": "^17.0.1",
