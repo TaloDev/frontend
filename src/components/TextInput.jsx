@@ -20,6 +20,7 @@ const TextInput = (props) => {
     <div className='w-full'>
       {props.label && <label htmlFor={props.id} className='block font-semibold mb-1'>{props.label}</label>}
       <input
+        autoFocus={props.autoFocus}
         id={props.id}
         className={inputClassName}
         type={props.type ?? 'text'}
@@ -39,7 +40,8 @@ TextInput.propTypes = {
   placeholder: PropTypes.string.isRequired,
   type: PropTypes.string,
   variant: PropTypes.string,
-  inputClassName: PropTypes.string
+  inputClassName: PropTypes.string,
+  autoFocus: PropTypes.bool
 }
 
 export default TextInput

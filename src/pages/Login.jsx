@@ -44,6 +44,7 @@ const Login = () => {
         <h1 className='text-4xl font-bold'>Welcome back</h1>
 
         <TextInput
+          autoFocus
           id='email'
           label='Email'
           type='email'
