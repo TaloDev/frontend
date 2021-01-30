@@ -1,3 +1,3 @@
 import api from './api'
 
-export default async (game) => api.get(`/players?game=${game}`)
+export default async (gameId) => api.get(`/players?gameId=${gameId}`)

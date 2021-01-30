@@ -9,6 +9,8 @@ import buildError from '../utils/buildError'
 import { format } from 'date-fns'
 import classNames from 'classnames'
 import Title from '../components/Title'
+import { IconArrowRight } from '@tabler/icons'
+import Button from '../components/Button'
 
 const Players = () => {
   const [isLoading, setLoading] = useState(true)
@@ -60,7 +62,16 @@ const Players = () => {
             {players.map((player, idx) => (
               <li key={player.id} className={classNames('flex items-center p-4 w-min', { 'bg-indigo-600': idx % 2 !== 0, 'bg-indigo-500': idx % 2 === 0 })}>
                 <span className='min-w-60'><PlayerAliases aliases={player.aliases} /></span>
-                <span className='min-w-60'>{Object.keys(player.props ?? {}).length}</span>
+                <span className='min-w-60 flex items-center'>
+                  {Object.keys(player.props ?? {}).length}
+                  <Button
+                    variant='icon'
+                    className='ml-2 p-1 rounded-full bg-indigo-900'
+                    onClick={() => console.log('hi')}
+                  >
+                    <IconArrowRight size={16} />
+                  </Button>
+                </span>
                 <span className='min-w-60'>{format(new Date(player.createdAt), 'do MMM Y')}</span>
                 <span className='min-w-60'>{format(new Date(player.lastSeenAt), 'do MMM Y')}</span>
               </li>

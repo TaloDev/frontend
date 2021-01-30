@@ -9,7 +9,7 @@ const PlayerAliases = (props) => {
     }
   }
 
-  if (!props.aliases) return 'None'
+  if (!props.aliases || Object.keys(props.aliases).length === 0) return 'None'
 
   return Object.keys(props.aliases).map((alias) => (
     <div key={alias} className='flex items-center'>
