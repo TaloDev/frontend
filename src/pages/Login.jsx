@@ -11,6 +11,7 @@ import login from '../api/login'
 import buildError from '../utils/buildError'
 import routes from '../constants/routes'
 import { unauthedContainerStyle } from '../styles/theme'
+import attachTokenInterceptor from '../utils/attachTokenInterceptor'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -30,7 +31,7 @@ const Login = () => {
       const accessToken = res.data.accessToken
       res = await getMe(accessToken)
       setUser(res.data.user)
-      setAccessToken(accessToken)
+      attachTokenInterceptor(accessToken, setAccessToken)
     } catch (err) {
       setError(buildError(err))
     } finally {

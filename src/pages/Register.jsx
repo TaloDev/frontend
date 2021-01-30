@@ -11,6 +11,7 @@ import register from '../api/register'
 import ErrorMessage from '../components/ErrorMessage'
 import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
+import attachTokenInterceptor from '../utils/attachTokenInterceptor'
 
 const Register = () => {
   const [email, setEmail] = useState('')
@@ -43,7 +44,7 @@ const Register = () => {
       const accessToken = res.data.accessToken
       res = await getMe(accessToken)
       setUser(res.data.user)
-      setAccessToken(accessToken)
+      attachTokenInterceptor(accessToken, setAccessToken)
     } catch (err) {
       setError(buildError(err))
     } finally {

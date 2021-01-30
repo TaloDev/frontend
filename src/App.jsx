@@ -31,7 +31,6 @@ const App = () => {
       const accessToken = res.data.accessToken
       res = await getMe(accessToken)
       setUser(res.data.user)
-      setAccessToken(accessToken)
       attachTokenInterceptor(accessToken, setAccessToken)
     } catch (err) {
       console.log('User doesn\'t have a session')
