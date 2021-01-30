@@ -27,12 +27,12 @@ const App = () => {
 
   const handleRefreshSession = async () => {
     try {
-      console.log('loop 1')
       let res = await refreshAccess()
       const accessToken = res.data.accessToken
       res = await getMe(accessToken)
       setUser(res.data.user)
       setAccessToken(accessToken)
+      attachTokenInterceptor(accessToken, setAccessToken)
     } catch (err) {
       console.log('User doesn\'t have a session')
     } finally {
@@ -43,10 +43,6 @@ const App = () => {
   useEffect(() => {
     if (accessToken === null) handleRefreshSession()
   }, [])
-
-  useEffect(() => {
-    if (accessToken) attachTokenInterceptor(accessToken, setAccessToken)
-  }, [accessToken])
 
   useEffect(() => {
     if (!user && accessToken) setAccessToken(null)

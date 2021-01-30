@@ -7,6 +7,7 @@ export default (accessToken, setAccessToken) => {
   api.interceptors.request.use(async (config) => {
     try {
       const token = await handleAccessToken(accessToken)
+      setAccessToken(token)
       config.headers.authorization = `Bearer ${token}`
     } catch (err) {
       await logout()
