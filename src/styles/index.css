@@ -30,3 +30,11 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+* {
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
