@@ -17,17 +17,21 @@ const Players = () => {
   const activeGame = useRecoilValue(activeGameState)
 
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await getPlayers(activeGame.id)
-        setPlayers(res.data.players)
-      } catch (err) {
-        setError(buildError(err))
-      } finally {
-        setLoading(false)
-      }
-    })()
-  }, [])
+    if (activeGame) {
+      (async () => {
+        try {
+          const res = await getPlayers(activeGame.id)
+          setPlayers(res.data.players)
+        } catch (err) {
+          setError(buildError(err))
+        } finally {
+          setLoading(false)
+        }
+      })()
+    }
+  }, [activeGame])
+
+  if (!activeGame) return null
 
   return (
     <div>

@@ -64,7 +64,7 @@ const GameSwitcher = () => {
             </li>
           ))}
 
-          <li className={dropdownButtonStyle}>
+          <li className={`rounded-b ${dropdownButtonStyle}`}>
             <Button variant='bare' className='flex items-center rounded-b p-2' onClick={() => setShowModal(true)}>
               <div className='rounded-full p-1 bg-indigo-500'>
                 <IconPlus size={12} color='white' stroke={3} />

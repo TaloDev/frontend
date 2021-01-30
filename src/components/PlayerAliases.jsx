@@ -9,6 +9,8 @@ const PlayerAliases = (props) => {
     }
   }
 
+  if (!props.aliases) return 'None'
+
   return Object.keys(props.aliases).map((alias) => (
     <div key={alias} className='flex items-center'>
       <span className='p-1 rounded-full bg-gray-900'>{getIcon(alias)}</span>
@@ -18,7 +20,7 @@ const PlayerAliases = (props) => {
 }
 
 PlayerAliases.propTypes = {
-  alias: PropTypes.object.isRequired
+  aliases: PropTypes.object.isRequired
 }
 
 export default PlayerAliases
