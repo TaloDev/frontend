@@ -5,7 +5,7 @@ export default (error) => {
     }
   }
 
-  if (Object.keys(error.response.data).length > 0) {
+  if (error.response?.data?.message && Object.keys(error.response.data).length > 0) {
     return error.response.data
   }
 
