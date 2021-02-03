@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import getPlayers from '../api/getPlayers'
-import activeGameState from '../atoms/activeGameState'
+import activeGameState from '../state/activeGameState'
 import ErrorMessage from '../components/ErrorMessage'
 import Loading from '../components/Loading'
 import PlayerAliases from '../components/PlayerAliases'
@@ -45,7 +45,9 @@ const Players = () => {
         </div>
       }
 
-      <ErrorMessage error={error} />
+      <div className='mt-4'>
+        <ErrorMessage error={error} />
+      </div>
 
       {players.length === 0 &&
         <p className='mt-4'>{activeGame.name} doesn't have any players yet.</p>

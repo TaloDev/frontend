@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRecoilValue } from 'recoil'
-import activeGameState from '../atoms/activeGameState'
-import userState from '../atoms/userState'
+import activeGameState from '../state/activeGameState'
+import userState from '../state/userState'
 
 const Dashboard = () => {
   const user = useRecoilValue(userState)

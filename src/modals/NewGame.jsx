@@ -5,14 +5,14 @@ import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import createGame from '../api/createGame'
 import { useRecoilState } from 'recoil'
-import gamesState from '../atoms/gamesState'
-import activeGameState from '../atoms/activeGameState'
+import activeGameState from '../state/activeGameState'
+import userState from '../state/userState'
 
 const NewGame = (props) => {
   const [, setOpen] = props.modalState
   const [name, setName] = useState('')
   const [isLoading, setLoading] = useState(false)
-  const [games, setGames] = useRecoilState(gamesState)
+  const [user, setUser] = useRecoilState(userState)
   const [, setActiveGame] = useRecoilState(activeGameState)
 
   const resetModal = () => {
@@ -27,7 +27,10 @@ const NewGame = (props) => {
 
     try {
       const res = await createGame(name)
-      setGames([...games, res.data.game])
+      setUser({
+        ...user,
+        games: [...user.games, res.data.game]
+      })
       setActiveGame(res.data.game)
     } catch (err) {
       console.error(err.message)

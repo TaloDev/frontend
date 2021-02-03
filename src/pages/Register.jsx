@@ -4,9 +4,8 @@ import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import Link from '../components/Link'
 import { useRecoilState } from 'recoil'
-import accessState from '../atoms/accessState'
-import userState from '../atoms/userState'
-import getMe from '../api/getMe'
+import accessState from '../state/accessState'
+import userState from '../state/userState'
 import register from '../api/register'
 import ErrorMessage from '../components/ErrorMessage'
 import { unauthedContainerStyle } from '../styles/theme'
@@ -40,14 +39,13 @@ const Register = () => {
     setLoading(true)
 
     try {
-      let res = await register({ email, password })
+      const res = await register({ email, password })
       const accessToken = res.data.accessToken
-      res = await getMe(accessToken)
       setUser(res.data.user)
+      setAccessToken(accessToken)
       attachTokenInterceptor(accessToken, setAccessToken)
     } catch (err) {
       setError(buildError(err))
-    } finally {
       setLoading(false)
     }
   }

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import refreshAccess from './api/refreshAccess'
-import accessState from './atoms/accessState'
+import accessState from './state/accessState'
 import attachTokenInterceptor from './utils/attachTokenInterceptor'
-import userState from './atoms/userState'
+import userState from './state/userState'
 import getMe from './api/getMe'
 import Loading from './components/Loading'
 import NavBar from './components/NavBar'
@@ -15,14 +15,14 @@ import Events from './pages/Events'
 import Players from './pages/Players'
 import Register from './pages/Register'
 import ConfirmEmailBanner from './components/ConfirmEmailBanner'
-import gamesState from './atoms/gamesState'
-import activeGameState from './atoms/activeGameState'
+import gamesState from './state/gamesState'
+import activeGameState from './state/activeGameState'
 
 const App = () => {
   const [accessToken, setAccessToken] = useRecoilState(accessState)
   const [user, setUser] = useRecoilState(userState)
   const [isRefreshing, setRefreshing] = useState(true)
-  const [games, setGames] = useRecoilState(gamesState)
+  const games = useRecoilValue(gamesState)
   const [activeGame, setActiveGame] = useRecoilState(activeGameState)
 
   const handleRefreshSession = async () => {
@@ -31,6 +31,7 @@ const App = () => {
       const accessToken = res.data.accessToken
       res = await getMe(accessToken)
       setUser(res.data.user)
+      setAccessToken(accessToken)
       attachTokenInterceptor(accessToken, setAccessToken)
     } catch (err) {
       console.log('User doesn\'t have a session')
@@ -40,17 +41,8 @@ const App = () => {
   }
 
   useEffect(() => {
-    if (accessToken === null) handleRefreshSession()
+    if (!accessToken) handleRefreshSession()
   }, [])
-
-  useEffect(() => {
-    if (!user && accessToken) setAccessToken(null)
-    if (!accessToken && user) setUser(null)
-  }, [user, accessToken])
-
-  useEffect(() => {
-    setGames(user?.games ?? [])
-  }, [user])
 
   useEffect(() => {
     if (!activeGame && games.length > 0) setActiveGame(games[0])

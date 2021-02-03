@@ -4,8 +4,8 @@ import Button from './Button'
 import classNames from 'classnames'
 import NewGame from '../modals/NewGame'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import gamesState from '../atoms/gamesState'
-import activeGameState from '../atoms/activeGameState'
+import gamesState from '../state/gamesState'
+import activeGameState from '../state/activeGameState'
 import randomColor from 'randomcolor'
 
 const GameSwitcher = () => {
@@ -17,7 +17,7 @@ const GameSwitcher = () => {
   const dropdownButtonStyle = 'disabled:bg-transparent hover:bg-gray-200 active:bg-gray-300 focus:z-10'
 
   return (
-    <div className='relative'>
+    <div className='relative z-50'>
       {activeGame &&
         <div className={classNames('bg-indigo-300 rounded p-2 flex items-center justify-between md:w-60', { 'rounded-b-none': isOpen })}>
           <div className='flex items-center'>

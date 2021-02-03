@@ -2,7 +2,7 @@ import React from 'react'
 import { useRecoilState } from 'recoil'
 import api from '../api/api'
 import logout from '../api/logout'
-import accessState from '../atoms/accessState'
+import accessState from '../state/accessState'
 import LinkButton from './LinkButton'
 import Link from './Link'
 import routes from '../constants/routes'
@@ -33,6 +33,9 @@ const NavBar = () => {
         </li>
         <li>
           <Link to={routes.events}>Events</Link>
+        </li>
+        <li>
+          <Link to={routes.apiKeys}>Access keys</Link>
         </li>
         <li>
           <LinkButton onClick={onLogoutClick}>Logout</LinkButton>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import confirmEmail from '../api/confirmEmail'
-import userState from '../atoms/userState'
+import userState from '../state/userState'
 import buildError from '../utils/buildError'
 import Button from './Button'
 import ErrorMessage from './ErrorMessage'

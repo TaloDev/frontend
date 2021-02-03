@@ -3,9 +3,8 @@ import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import Link from '../components/Link'
 import { useRecoilState } from 'recoil'
-import accessState from '../atoms/accessState'
-import userState from '../atoms/userState'
-import getMe from '../api/getMe'
+import accessState from '../state/accessState'
+import userState from '../state/userState'
 import ErrorMessage from '../components/ErrorMessage'
 import login from '../api/login'
 import buildError from '../utils/buildError'
@@ -27,14 +26,13 @@ const Login = () => {
     setLoading(true)
 
     try {
-      let res = await login({ email, password })
+      const res = await login({ email, password })
       const accessToken = res.data.accessToken
-      res = await getMe(accessToken)
       setUser(res.data.user)
+      setAccessToken(accessToken)
       attachTokenInterceptor(accessToken, setAccessToken)
     } catch (err) {
       setError(buildError(err))
-    } finally {
       setLoading(false)
     }
   }
