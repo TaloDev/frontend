@@ -62,7 +62,7 @@ const NewGame = (props) => {
         <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>
           <div className='w-full md:w-32'>
             <Button
-              disabled={!name || isLoading}
+              disabled={!name}
               isLoading={isLoading}
               onClick={onCreateClick}
             >

@@ -28,10 +28,11 @@ const ConfirmEmailBanner = () => {
   }
 
   return (
-    <div className='bg-gray-900 p-4 md:p-8 rounded-md mb-4 md:mb-8 w-full md:2/3 lg:w-1/2 flex flex-col space-y-4' role='alert'>
-      <p className='text-xl font-bold'>Please confirm your email address</p>
-
-      <p>We've sent a 6 digit code to your email address, please enter it below</p>
+    <div className='bg-gray-900 p-4 md:p-8 rounded-md mb-8 md:mb-12 w-full md:2/3 lg:w-1/2 space-y-4' role='alert'>
+      <div>
+        <p className='text-xl font-bold'>Please confirm your email address</p>
+        <p>We've sent a 6 digit code to your email address, please enter it below:</p>
+      </div>
 
       <ErrorMessage error={error} />
 
@@ -47,7 +48,7 @@ const ConfirmEmailBanner = () => {
         </div>
         <div className='w-full mt-4 md:mt-0 md:w-24 md:ml-4'>
           <Button
-            disabled={code.length < 6 || isLoading}
+            disabled={code.length < 6}
             onClick={onConfirmClick}
             isLoading={isLoading}
           >

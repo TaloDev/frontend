@@ -52,7 +52,7 @@ const Register = () => {
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={`text-white rounded-md flex flex-col space-y-8 ${unauthedContainerStyle}`}>
+      <form className={`text-white rounded-md space-y-8 ${unauthedContainerStyle}`}>
         <h1 className='text-4xl font-bold'>Let's get started</h1>
 
         <TextInput
@@ -85,7 +85,7 @@ const Register = () => {
         <ErrorMessage error={error} />
 
         <Button
-          disabled={!email || !password || !password2 || isLoading}
+          disabled={!email || !password || !password2}
           onClick={onRegisterClick}
           isLoading={isLoading}
         >

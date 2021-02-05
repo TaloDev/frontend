@@ -36,7 +36,7 @@ const Players = () => {
   if (!activeGame) return null
 
   return (
-    <div>
+    <div className='space-y-4 md:space-y-8'>
       <Title>Players {players.length > 0 && `(${players.length})`}</Title>
 
       {isLoading &&
@@ -45,16 +45,14 @@ const Players = () => {
         </div>
       }
 
-      <div className='mt-4'>
-        <ErrorMessage error={error} />
-      </div>
+      {error && <ErrorMessage error={error} />}
 
-      {players.length === 0 &&
-        <p className='mt-4'>{activeGame.name} doesn't have any players yet.</p>
+      {players.length === 0 && !isLoading &&
+        <p>{activeGame.name} doesn't have any players yet.</p>
       }
  
       {players.length > 0 &&
-        <div className='mt-4 overflow-x-scroll'>
+        <div className='overflow-x-scroll'>
           <div className='flex items-start p-4 bg-white text-black font-semibold w-min rounded-t'>
             {['Aliases', 'Properties', 'Registered', 'Last seen'].map((col) => (
               <span key={col} className='min-w-60'>{col}</span>
@@ -65,7 +63,7 @@ const Players = () => {
               <li key={player.id} className={classNames('flex items-center p-4 w-min', { 'bg-indigo-600': idx % 2 !== 0, 'bg-indigo-500': idx % 2 === 0 })}>
                 <span className='min-w-60'><PlayerAliases aliases={player.aliases} /></span>
                 <span className='min-w-60 flex items-center'>
-                  {Object.keys(player.props ?? {}).length}
+                  {Object.keys(player.props).length}
                   <Button
                     variant='icon'
                     className='ml-2 p-1 rounded-full bg-indigo-900'
