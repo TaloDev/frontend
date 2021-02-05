@@ -17,6 +17,7 @@ import Register from './pages/Register'
 import ConfirmEmailBanner from './components/ConfirmEmailBanner'
 import gamesState from './state/gamesState'
 import activeGameState from './state/activeGameState'
+import APIKeys from './pages/APIKeys'
 
 const App = () => {
   const [accessToken, setAccessToken] = useRecoilState(accessState)
@@ -78,6 +79,7 @@ const App = () => {
               <Route exact path='/' component={Dashboard} />
               <Route exact path={routes.players} component={Players} />
               <Route exact path={routes.events} component={Events} />
+              <Route exact path={routes.apiKeys} component={APIKeys} />
               <Redirect to='/' />
             </Switch>
           </main>
