@@ -77,9 +77,13 @@ const App = () => {
 
             <Switch>
               <Route exact path='/' component={Dashboard} />
-              <Route exact path={routes.players} component={Players} />
-              <Route exact path={routes.events} component={Events} />
-              <Route exact path={routes.apiKeys} component={APIKeys} />
+              {activeGame &&
+                <>
+                  <Route exact path={routes.players} component={Players} />
+                  <Route exact path={routes.events} component={Events} />
+                  <Route exact path={routes.apiKeys} component={APIKeys} />
+                </>
+              }
               <Redirect to='/' />
             </Switch>
           </main>

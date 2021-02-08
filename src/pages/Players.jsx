@@ -33,8 +33,6 @@ const Players = () => {
     }
   }, [activeGame])
 
-  if (!activeGame) return null
-
   return (
     <div className='space-y-4 md:space-y-8'>
       <Title>Players {players.length > 0 && `(${players.length})`}</Title>

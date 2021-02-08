@@ -1,5 +1,5 @@
 import React from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import api from '../api/api'
 import logout from '../api/logout'
 import accessState from '../state/accessState'
@@ -7,9 +7,11 @@ import LinkButton from './LinkButton'
 import Link from './Link'
 import routes from '../constants/routes'
 import GameSwitcher from './GameSwitcher'
+import activeGameState from '../state/activeGameState'
 
 const NavBar = () => {
   const [, setAccessToken] = useRecoilState(accessState)
+  const activeGame = useRecoilValue(activeGameState)
 
   const onLogoutClick = async () => {
     try {
@@ -28,15 +30,19 @@ const NavBar = () => {
         <li>
           <Link to='/'>Home</Link>
         </li>
-        <li>
-          <Link to={routes.players}>Players</Link>
-        </li>
-        <li>
-          <Link to={routes.events}>Events</Link>
-        </li>
-        <li>
-          <Link to={routes.apiKeys}>Access keys</Link>
-        </li>
+        {activeGame &&
+          <>
+            <li>
+              <Link to={routes.players}>Players</Link>
+            </li>
+            <li>
+              <Link to={routes.events}>Events</Link>
+            </li>
+            <li>
+              <Link to={routes.apiKeys}>Access keys</Link>
+            </li>
+          </>
+        }
         <li>
           <LinkButton onClick={onLogoutClick}>Logout</LinkButton>
         </li>

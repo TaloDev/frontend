@@ -86,8 +86,6 @@ const APIKeys = () => {
     }
   }
 
-  if (!activeGame) return null
-
   return (
     <div className='space-y-4 md:space-y-8'>
       <Title>Access keys {keys.length > 0 && `(${keys.length})`}</Title>
@@ -100,10 +98,6 @@ const APIKeys = () => {
 
       {error && <ErrorMessage error={error} />}
 
-      {keys.length === 0 && !isLoading &&
-        <p>{activeGame.name} doesn't have any access keys yet.</p>
-      }
- 
       {keys.length > 0 &&
         <div className='overflow-x-scroll -mx-4 md:-mx-8'>
           <div className='w-min px-4 md:px-8'>
@@ -129,7 +123,7 @@ const APIKeys = () => {
         </div>
       }
 
-      <div className='h-1 rounded bg-gray-700' />
+      {keys.length > 0 && <div className='h-1 rounded bg-gray-700' />}
 
       {!createdKey &&
         <form className='w-full md:2/3 lg:w-1/2'>
