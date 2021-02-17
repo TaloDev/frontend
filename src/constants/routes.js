@@ -3,5 +3,6 @@ export default {
   events: '/events',
   forgotPass: '/forgot',
   players: '/players',
+  playerProps: '/players/:id/props',
   register: '/register'
 }

@@ -11,12 +11,15 @@ import classNames from 'classnames'
 import Title from '../components/Title'
 import { IconArrowRight } from '@tabler/icons'
 import Button from '../components/Button'
+import { useHistory } from 'react-router-dom'
+import routes from '../constants/routes'
 
 const Players = () => {
   const [isLoading, setLoading] = useState(true)
   const [players, setPlayers] = useState([])
   const [error, setError] = useState(null)
   const activeGame = useRecoilValue(activeGameState)
+  const history = useHistory()
 
   useEffect(() => {
     if (activeGame) {
@@ -65,7 +68,12 @@ const Players = () => {
                   <Button
                     variant='icon'
                     className='ml-2 p-1 rounded-full bg-indigo-900'
-                    onClick={() => console.log('hi')}
+                    onClick={() => {
+                      history.push({
+                        pathname: routes.playerProps.replace(':id', player.id),
+                        state: { player }
+                      })
+                    }}
                   >
                     <IconArrowRight size={16} />
                   </Button>

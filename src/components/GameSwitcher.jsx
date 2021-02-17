@@ -56,7 +56,7 @@ const GameSwitcher = () => {
               <Button
                 variant='bare'
                 disabled={activeGame.id === game.id}
-                className='truncate p-2'
+                className='truncate p-2 w-full'
                 onClick={() => setActiveGame(game)}
               >
                 {game.name}

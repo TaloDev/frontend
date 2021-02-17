@@ -17,7 +17,7 @@ const Button = (props) => {
     'bg-gray-200 hover:bg-gray-300 active:bg-gray-400 disabled:bg-gray-200 text-black': props.variant === 'grey',
     'bg-red-600 hover:bg-red-700 active:bg-red-800 disabled:bg-red-600 text-white': props.variant === 'red',
     'bg-green-600 hover:bg-green-700 active:bg-green-800 disabled:bg-green-600 text-white': props.variant === 'green',
-    'w-full text-left': props.variant === 'bare',
+    'text-left': props.variant === 'bare',
     'flex justify-center hover:bg-indigo-500': props.isLoading
   })
 
