@@ -12,6 +12,8 @@ import Button from '../components/Button'
 import deleteAPIKey from '../api/deleteAPIKey'
 import getAPIKeyScopes from '../api/getAPIKeyScopes'
 import createAPIKey from '../api/createAPIKey'
+import userState from '../state/userState'
+import { IconAlertCircle } from '@tabler/icons'
 
 const APIKeys = () => {
   const [isLoading, setLoading] = useState(true)
@@ -23,6 +25,7 @@ const APIKeys = () => {
   const [selectedScopes, setSelectedScopes] = useState([])
   const [isCreating, setCreating] = useState(false)
   const [createdKey, setCreatedKey] = useState(null)
+  const user = useRecoilValue(userState)
 
   useEffect(() => {
     if (activeGame) {
@@ -98,6 +101,13 @@ const APIKeys = () => {
 
       {error && <ErrorMessage error={error} />}
 
+      {!user.emailConfirmed &&
+        <div className='bg-yellow-600 p-4 rounded lg:w-max flex items-center space-x-2'>
+          <IconAlertCircle size={24} />
+          <span className='ml-2'>You need to confirm your email address to create API keys.</span>
+        </div>
+      }
+
       {keys.length > 0 &&
         <div className='overflow-x-scroll -mx-4 md:-mx-8'>
           <div className='w-min px-4 md:px-8'>
@@ -126,8 +136,8 @@ const APIKeys = () => {
       {keys.length > 0 && <div className='h-1 rounded bg-gray-700' />}
 
       {!createdKey &&
-        <form className='w-full md:2/3 lg:w-1/2'>
-          <h2 className='text-xl md:text-2xl font-bold'>Create new key</h2>
+        <form className='w-full lg:2/3 xl:w-1/2'>
+          <h2 className='text-xl lg:text-2xl font-bold'>Create new key</h2>
 
           <div className='mt-4 rounded border-2 border-gray-700'>
             <div className='p-4 bg-gray-700'>
@@ -144,6 +154,7 @@ const APIKeys = () => {
                       <input
                         id={scope}
                         type='checkbox'
+                        disabled={!user.emailConfirmed}
                         onChange={onScopeChecked}
                         checked={Boolean(selectedScopes.find((s) => s === scope))}
                         value={scope}
@@ -161,6 +172,7 @@ const APIKeys = () => {
             variant='green'
             className='mt-4'
             onClick={onCreateClick}
+            disabled={!user.emailConfirmed}
           >
             Create
           </Button>
@@ -168,8 +180,8 @@ const APIKeys = () => {
       }
 
       {createdKey &&
-        <div className='w-full md:2/3 lg:w-1/2'>
-          <h2 className='text-xl md:text-2xl font-bold'>Your new key</h2>
+        <div className='w-full lg:2/3 xl:w-1/2'>
+          <h2 className='text-xl lg:text-2xl font-bold'>Your new key</h2>
           <p>Save this key somewhere because we won't show it again</p>
           
           <div className='mt-4 rounded border-2 border-gray-700 bg-gray-700 p-4 break-words'>
