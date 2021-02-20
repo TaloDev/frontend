@@ -17,7 +17,7 @@ const PlayerProps = () => {
   const [error, setError] = useState(null)
   const [isUpdating, setUpdating] = useState(false)
 
-  const editExitingProp = (key, value) => {
+  const editExistingProp = (key, value) => {
     setPlayer({
       ...player,
       props: {
@@ -27,9 +27,10 @@ const PlayerProps = () => {
     })
   }
 
-  const deleteExitingProp = (key) => {
+  const deleteExistingProp = (key) => {
     const playerProps = { ...player.props }
-    delete playerProps[key]
+    playerProps[key] = null
+
     setPlayer({
       ...player,
       props: {
@@ -111,7 +112,7 @@ const PlayerProps = () => {
             <span className='w-1/3' />
           </li>
 
-          {Object.keys(player.props).sort((a, b) => {
+          {Object.keys(player.props).filter((key) => player.props[key] !== null).sort((a, b) => {
             return a.localeCompare(b)
           }).map((key, idx) => (
             <li key={key} className={listItemStyle(idx)}>
@@ -122,7 +123,7 @@ const PlayerProps = () => {
                   id={`edit-${key}`}
                   variant='light'
                   placeholder='Value'
-                  onChange={(value) => editExitingProp(key, value)}
+                  onChange={(value) => editExistingProp(key, value)}
                   value={player.props[key]}
                 />
               </span>
@@ -131,7 +132,7 @@ const PlayerProps = () => {
                 <Button
                   variant='icon'
                   className='p-1 rounded-full bg-indigo-900'
-                  onClick={() => deleteExitingProp(key)}
+                  onClick={() => deleteExistingProp(key)}
                 >
                   <IconTrash size={16} />
                 </Button>
