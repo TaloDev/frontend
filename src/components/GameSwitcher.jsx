@@ -16,6 +16,11 @@ const GameSwitcher = () => {
   const games = useRecoilValue(gamesState)
   const [activeGame, setActiveGame] = useRecoilState(activeGameState)
 
+  const openModal = () => {
+    setOpen(false)
+    setShowModal(true)
+  }
+
   const dropdownButtonStyle = 'disabled:bg-transparent hover:bg-gray-200 active:bg-gray-300 focus:z-10'
 
   return (
@@ -48,7 +53,7 @@ const GameSwitcher = () => {
               ))}
 
               <li className={`rounded-b ${dropdownButtonStyle}`}>
-                <Button variant='bare' className='flex items-center rounded-b p-2' onClick={() => setShowModal(true)}>
+                <Button variant='bare' className='flex items-center rounded-b p-2' onClick={openModal}>
                   <div className='rounded-full p-1 bg-indigo-500'>
                     <IconPlus size={16} color='white' stroke={3} />
                   </div>
@@ -81,12 +86,12 @@ const GameSwitcher = () => {
       }
 
       {!activeGame &&
-        <div className='flex items-center'>
-          <Button className='flex items-center' onClick={() => setShowModal(true)}>
-            <IconPlus size={16} color='white' stroke={3} />
-            <span className='ml-2'>New game</span>
-          </Button>
-        </div>
+        <Button
+          onClick={() => setShowModal(true)}
+          icon={<IconPlus size={16} color='white' stroke={3} />}
+        >
+          <span>New game</span>
+        </Button>
       }
 
       <NewGame modalState={[showModal, setShowModal]} />

@@ -131,11 +131,10 @@ const PlayerProps = () => {
               <span className='w-1/3 text-right'>
                 <Button
                   variant='icon'
-                  className='p-1 rounded-full bg-indigo-900'
+                  className='p-1 rounded-full bg-indigo-900 ml-auto'
                   onClick={() => deleteExistingProp(key)}
-                >
-                  <IconTrash size={16} />
-                </Button>
+                  icon={<IconTrash size={16} />}
+                />
               </span>
             </li>
           ))}
@@ -165,18 +164,20 @@ const PlayerProps = () => {
               <span className='w-1/3 text-right'>
                 <Button
                   variant='icon'
-                  className='p-1 rounded-full bg-indigo-900'
+                  className='p-1 rounded-full bg-indigo-900 ml-auto'
                   onClick={() => deleteNewProp(idx)}
-                >
-                  <IconTrash size={16} />
-                </Button>
+                  icon={<IconTrash size={16} />}
+                />
               </span>
             </li>
           ))}
         </ul>
 
-        <Button className='mt-4 flex items-center justify-center space-x-1' onClick={addNewProp}>
-          <IconPlus size={16} />
+        <Button
+          className='mt-4 justify-center'
+          onClick={addNewProp}
+          icon={<IconPlus size={16} />}
+        >
           <span>New property</span>
         </Button>
 

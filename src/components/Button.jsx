@@ -18,7 +18,8 @@ const Button = (props) => {
     'bg-red-600 hover:bg-red-700 active:bg-red-800 disabled:bg-red-600 text-white': props.variant === 'red',
     'bg-green-600 hover:bg-green-700 active:bg-green-800 disabled:bg-green-600 text-white': props.variant === 'green',
     'text-left': props.variant === 'bare',
-    'flex justify-center hover:bg-indigo-500': props.isLoading
+    'flex justify-center hover:bg-indigo-500': props.isLoading,
+    'flex items-center space-x-1': Boolean(props.icon)
   })
 
   return (
@@ -28,7 +29,12 @@ const Button = (props) => {
       onClick={props.onClick}
     >
       {props.isLoading && <Loading size={24} thickness={180} />}
-      {!props.isLoading && props.children}
+      {!props.isLoading &&
+        <>
+          {props.icon}
+          {props.children}
+        </>
+      }
     </button>
   )
 }
@@ -39,7 +45,8 @@ Button.propTypes = {
   onClick: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   variant: PropTypes.string,
-  className: PropTypes.string
+  className: PropTypes.string,
+  icon: PropTypes.node
 }
 
 export default Button

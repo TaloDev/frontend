@@ -32,9 +32,11 @@ const Modal = (props) => {
             {props.title}
           </h2>
 
-          <Button variant='icon' onClick={() => setOpen(false)}>
-            <IconX />
-          </Button>
+          <Button
+            variant='icon'
+            onClick={() => setOpen(false)}
+            icon={<IconX />}
+          />
         </div>
         
         {props.children}

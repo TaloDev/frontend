@@ -85,9 +85,8 @@ const Players = () => {
                         variant='icon'
                         className='ml-2 p-1 rounded-full bg-indigo-900'
                         onClick={() => goToPlayerProps(player)}
-                      >
-                        <IconArrowRight size={16} />
-                      </Button>
+                        icon={<IconArrowRight size={16} />}
+                      />
                     </TableCell>
                     <TableCell>{format(new Date(player.createdAt), 'do MMM Y')}</TableCell>
                     <TableCell>{format(new Date(player.lastSeenAt), 'do MMM Y')}</TableCell>

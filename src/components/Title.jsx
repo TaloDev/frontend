@@ -14,9 +14,8 @@ const Title = (props) => {
           variant='bare'
           className='mr-2 bg-indigo-600 rounded-full p-1'
           onClick={() => history.goBack()}
-        >
-          <IconArrowLeft size={20} />
-        </Button>
+          icon={<IconArrowLeft size={20} />}
+        />
       }
 
       <h1 className='text-2xl md:text-4xl font-bold'>{props.children}</h1>
