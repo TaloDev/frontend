@@ -41,7 +41,7 @@ const Button = (props) => {
 
 Button.propTypes = {
   disabled: PropTypes.bool,
-  children: PropTypes.any.isRequired,
+  children: PropTypes.node,
   onClick: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   variant: PropTypes.string,

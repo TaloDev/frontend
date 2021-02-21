@@ -3,11 +3,16 @@ module.exports = {
     './src/**/*.jsx',
     './public/index.html'
   ],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: false,
   theme: {
     minWidth: {
+      '10': '2.5rem',
+      '20': '5rem',
+      '30': '7.5rem',
       '40': '10rem',
+      '50': '12.5rem',
       '60': '15rem',
+      '70': '17.5rem',
       '80': '20rem'
     }
   },

@@ -21,6 +21,7 @@ const Players = () => {
   const [isLoading, setLoading] = useState(true)
   const [players, setPlayers] = useState([])
   const [error, setError] = useState(null)
+  const [search, setSearch] = useState('')
   const activeGame = useRecoilValue(activeGameState)
   const history = useHistory()
 
@@ -67,8 +68,11 @@ const Players = () => {
           <div className='p-4'>
             <div className='w-1/2 lg:w-1/4'>
               <TextInput
+                id='players-search'
                 label='Search'
                 placeholder='Search...'
+                onChange={setSearch}
+                value={search}
               />
             </div>
           </div>

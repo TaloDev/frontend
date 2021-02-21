@@ -8,6 +8,9 @@ import TextInput from '../components/TextInput'
 import updatePlayer from '../api/updatePlayer'
 import ErrorMessage from '../components/ErrorMessage'
 import buildError from '../utils/buildError'
+import TableCell from '../components/tables/TableCell'
+import TableBody from '../components/tables/TableBody'
+import TableHeader from '../components/tables/TableHeader'
 
 const PlayerProps = () => {
   const location = useLocation()
@@ -92,9 +95,9 @@ const PlayerProps = () => {
     }
   }
 
-  const listItemStyle = (idx) => {
-    return classNames('flex items-center p-4 space-x-8', { 'bg-indigo-600': idx % 2 !== 0, 'bg-indigo-500': idx % 2 === 0 })
-  }
+  const existingProps = Object.keys(player.props)
+    .filter((key) => player.props[key] !== null)
+    .sort((a, b) => a.localeCompare(b))
 
   return (
     <div className='space-y-4 md:space-y-8'>
@@ -105,73 +108,69 @@ const PlayerProps = () => {
       </div>
 
       <div className='w-full lg:w-1/2'>
-        <ul className='rounded overflow-hidden'>
-          <li className='flex p-4 bg-white text-black'>
-            <p className='font-semibold w-1/3'>Property</p>
-            <p className='font-semibold w-1/3'>Value</p>
-            <span className='w-1/3' />
-          </li>
-
-          {Object.keys(player.props).filter((key) => player.props[key] !== null).sort((a, b) => {
-            return a.localeCompare(b)
-          }).map((key, idx) => (
-            <li key={key} className={listItemStyle(idx)}>
-              <p className='w-1/3'>{key}</p>
-
-              <span className='w-1/3'>
-                <TextInput
-                  id={`edit-${key}`}
-                  variant='light'
-                  placeholder='Value'
-                  onChange={(value) => editExistingProp(key, value)}
-                  value={player.props[key]}
-                />
-              </span>
-
-              <span className='w-1/3 text-right'>
-                <Button
-                  variant='icon'
-                  className='p-1 rounded-full bg-indigo-900 ml-auto'
-                  onClick={() => deleteExistingProp(key)}
-                  icon={<IconTrash size={16} />}
-                />
-              </span>
-            </li>
-          ))}
-
-          {newProps.map((prop, idx) => (
-            <li key={idx} className={listItemStyle(idx + Object.keys(player.props).length)}>
-              <span className='w-1/3'>
-                <TextInput
-                  id={`edit-key-${idx}`}
-                  variant='light'
-                  placeholder='Property'
-                  onChange={(value) => editNewPropKey(idx, value)}
-                  value={prop.key}
-                />
-              </span>
-
-              <span className='w-1/3'>
-                <TextInput
-                  id={`edit-value-${idx}`}
-                  variant='light'
-                  placeholder='Value'
-                  onChange={(value) => editNewPropValue(idx, value)}
-                  value={prop.value}
-                />
-              </span>
-
-              <span className='w-1/3 text-right'>
-                <Button
-                  variant='icon'
-                  className='p-1 rounded-full bg-indigo-900 ml-auto'
-                  onClick={() => deleteNewProp(idx)}
-                  icon={<IconTrash size={16} />}
-                />
-              </span>
-            </li>
-          ))}
-        </ul>
+        <div className='rounded overflow-hidden'>
+          <div className='overflow-x-scroll'>
+            <table className='table-auto'>
+              <TableHeader columns={['Property', 'Value', '']} />
+              <TableBody iterator={existingProps}>
+                {(key) => (
+                  <>
+                    <TableCell>{key}</TableCell>
+                    <TableCell className='min-w-80'>
+                      <TextInput
+                        id={`edit-${key}`}
+                        variant='light'
+                        placeholder='Value'
+                        onChange={(value) => editExistingProp(key, value)}
+                        value={player.props[key]}
+                      />
+                    </TableCell>
+                    <TableCell className='min-w-30'>
+                      <Button
+                        variant='icon'
+                        className='p-1 rounded-full bg-indigo-900 ml-auto'
+                        onClick={() => deleteExistingProp(key)}
+                        icon={<IconTrash size={16} />}
+                      />
+                    </TableCell>
+                  </>
+                )}
+              </TableBody>
+              <TableBody iterator={newProps} startIdx={existingProps.length}>
+                {(prop, idx) => (
+                  <>
+                    <TableCell>
+                      <TextInput
+                        id={`edit-key-${idx}`}
+                        variant='light'
+                        placeholder='Property'
+                        onChange={(value) => editNewPropKey(idx, value)}
+                        value={prop.key}
+                      />
+                    </TableCell>
+                    <TableCell className='min-w-80'>
+                      <TextInput
+                        id={`edit-value-${idx}`}
+                        variant='light'
+                        placeholder='Value'
+                        onChange={(value) => editNewPropValue(idx, value)}
+                        value={prop.value}
+                      />
+                    </TableCell>
+                    <TableCell className='min-w-30'>
+                      <Button
+                        variant='icon'
+                        className='p-1 rounded-full bg-indigo-900 ml-auto'
+                        onClick={() => deleteNewProp(idx)}
+                        icon={<IconTrash size={16} />}
+                      />
+                    </TableCell>
+                  </>
+                )}
+              </TableBody>
+            </table>
+          </div>
+        </div>
 
         <Button
           className='mt-4 justify-center'
