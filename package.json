@@ -5,9 +5,11 @@
   },
   "dependencies": {
     "@tabler/icons": "^1.39.1",
+    "@tippyjs/react": "^4.2.0",
     "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "date-fns": "^2.16.1",
+    "framer-motion": "^3.6.2",
     "prop-types": "^15.7.2",
     "randomcolor": "^0.6.2",
     "react": "^17.0.1",

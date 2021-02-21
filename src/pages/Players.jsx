@@ -56,7 +56,7 @@ const Players = () => {
       {players.length > 0 &&
         <div className='rounded overflow-hidden border-2 border-gray-700'>
           <div className='p-4'>
-            <div className='w-1/4'>
+            <div className='w-1/2 lg:w-1/4'>
               <TextInput
                 label='Search'
                 placeholder='Search...'
@@ -68,7 +68,7 @@ const Players = () => {
               <thead className='bg-white text-black font-semibold'>
                 <tr>
                   {['Aliases', 'Properties', 'Registered', 'Last seen'].map((col) => (
-                    <th key={col} className='p-4 min-w-40 text-left'>{col}</th>
+                    <th key={col} className='p-4 text-left'>{col}</th>
                   ))}
                 </tr>
               </thead>
