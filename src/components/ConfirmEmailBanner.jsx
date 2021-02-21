@@ -28,7 +28,7 @@ const ConfirmEmailBanner = () => {
   }
 
   return (
-    <div className='bg-gray-900 p-4 md:p-8 rounded-md mb-8 md:mb-12 w-full md:2/3 lg:w-1/2 space-y-4' role='alert'>
+    <div className='bg-gray-900 p-4 md:p-8 rounded-md mb-8 lg:mb-12 w-full lg:2/3 xl:w-1/2 space-y-4' role='alert'>
       <div>
         <p className='text-xl font-bold'>Please confirm your email address</p>
         <p>We've sent a 6 digit code to your email address, please enter it below:</p>
@@ -36,8 +36,8 @@ const ConfirmEmailBanner = () => {
 
       <ErrorMessage error={error} />
 
-      <form className='flex flex-col md:flex-row md:items-center'>
-        <div className='w-full md:w-1/3'>
+      <form className='flex flex-col lg:flex-row lg:items-center'>
+        <div className='w-full lg:w-1/3'>
           <TextInput
             id='code'
             onChange={setCode}
@@ -46,7 +46,7 @@ const ConfirmEmailBanner = () => {
             variant='light'
           />
         </div>
-        <div className='w-full mt-4 md:mt-0 md:w-24 md:ml-4'>
+        <div className='w-full mt-4 lg:mt-0 lg:w-24 lg:ml-4'>
           <Button
             disabled={code.length < 6}
             onClick={onConfirmClick}

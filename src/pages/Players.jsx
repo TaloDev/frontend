@@ -13,6 +13,7 @@ import { IconArrowRight } from '@tabler/icons'
 import Button from '../components/Button'
 import { useHistory } from 'react-router-dom'
 import routes from '../constants/routes'
+import TextInput from '../components/TextInput'
 
 const Players = () => {
   const [isLoading, setLoading] = useState(true)
@@ -53,36 +54,50 @@ const Players = () => {
       }
  
       {players.length > 0 &&
-        <div className='overflow-x-scroll'>
-          <div className='flex items-start p-4 bg-white text-black font-semibold w-min rounded-t'>
-            {['Aliases', 'Properties', 'Registered', 'Last seen'].map((col) => (
-              <span key={col} className='min-w-60'>{col}</span>
-            ))}
+        <div className='rounded overflow-hidden border-2 border-gray-700'>
+          <div className='p-4'>
+            <div className='w-1/4'>
+              <TextInput
+                label='Search'
+                placeholder='Search...'
+              />
+            </div>
           </div>
-          <ul className='w-min rounded-b overflow-hidden'>
-            {players.map((player, idx) => (
-              <li key={player.id} className={classNames('flex items-center p-4 w-min', { 'bg-indigo-600': idx % 2 !== 0, 'bg-indigo-500': idx % 2 === 0 })}>
-                <span className='min-w-60'><PlayerAliases aliases={player.aliases} /></span>
-                <span className='min-w-60 flex items-center'>
-                  {Object.keys(player.props).length}
-                  <Button
-                    variant='icon'
-                    className='ml-2 p-1 rounded-full bg-indigo-900'
-                    onClick={() => {
-                      history.push({
-                        pathname: routes.playerProps.replace(':id', player.id),
-                        state: { player }
-                      })
-                    }}
-                  >
-                    <IconArrowRight size={16} />
-                  </Button>
-                </span>
-                <span className='min-w-60'>{format(new Date(player.createdAt), 'do MMM Y')}</span>
-                <span className='min-w-60'>{format(new Date(player.lastSeenAt), 'do MMM Y')}</span>
-              </li>
-            ))}
-          </ul>
+          <div className='overflow-x-scroll'>
+            <table className='table-auto w-full'>
+              <thead className='bg-white text-black font-semibold'>
+                <tr>
+                  {['Aliases', 'Properties', 'Registered', 'Last seen'].map((col) => (
+                    <th key={col} className='p-4 min-w-40 text-left'>{col}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {players.map((player, idx) => (
+                  <tr key={player.id} className={classNames({ 'bg-indigo-600': idx % 2 !== 0, 'bg-indigo-500': idx % 2 === 0 })}>
+                    <td className='p-4 min-w-40'><PlayerAliases aliases={player.aliases} /></td>
+                    <td className='p-4 min-w-40 flex items-center'>
+                      {Object.keys(player.props).length}
+                      <Button
+                        variant='icon'
+                        className='ml-2 p-1 rounded-full bg-indigo-900'
+                        onClick={() => {
+                          history.push({
+                            pathname: routes.playerProps.replace(':id', player.id),
+                            state: { player }
+                          })
+                        }}
+                      >
+                        <IconArrowRight size={16} />
+                      </Button>
+                    </td>
+                    <td className='p-4 min-w-40'>{format(new Date(player.createdAt), 'do MMM Y')}</td>
+                    <td className='p-4 min-w-40'>{format(new Date(player.lastSeenAt), 'do MMM Y')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       }
     </div>
