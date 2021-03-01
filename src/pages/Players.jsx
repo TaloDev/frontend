@@ -69,7 +69,6 @@ const Players = () => {
             <div className='w-1/2 lg:w-1/4'>
               <TextInput
                 id='players-search'
-                label='Search'
                 placeholder='Search...'
                 onChange={setSearch}
                 value={search}
