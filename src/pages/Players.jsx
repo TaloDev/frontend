@@ -83,14 +83,16 @@ const Players = () => {
                 {(player) => (
                   <>
                     <TableCell><PlayerAliases aliases={player.aliases} /></TableCell>
-                    <TableCell className='flex items-center'>
-                      {Object.keys(player.props).length}
-                      <Button
-                        variant='icon'
-                        className='ml-2 p-1 rounded-full bg-indigo-900'
-                        onClick={() => goToPlayerProps(player)}
-                        icon={<IconArrowRight size={16} />}
-                      />
+                    <TableCell>
+                      <div className='flex items-center'>
+                        {Object.keys(player.props).length}
+                        <Button
+                          variant='icon'
+                          className='ml-2 p-1 rounded-full bg-indigo-900'
+                          onClick={() => goToPlayerProps(player)}
+                          icon={<IconArrowRight size={16} />}
+                        />
+                      </div>
                     </TableCell>
                     <TableCell>{format(new Date(player.createdAt), 'do MMM Y')}</TableCell>
                     <TableCell>{format(new Date(player.lastSeenAt), 'do MMM Y')}</TableCell>
