@@ -17,7 +17,7 @@ const PlayerAliases = (props) => {
       {Object.keys(props.aliases).map((alias) => (
         <div key={alias} className='flex items-center'>
           <span className='p-1 rounded-full bg-gray-900'>{getIcon(alias)}</span>
-          <span className='ml-2'>{props.aliases[alias]}</span>
+          <span className='ml-2 text-sm'>{props.aliases[alias]}</span>
         </div>
       ))}
     </div>

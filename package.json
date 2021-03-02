@@ -16,7 +16,9 @@
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "recoil": "^0.1.2",
-    "spinners-react": "^1.0.4"
+    "spinners-react": "^1.0.4",
+    "swr": "^0.4.2",
+    "use-debounce": "^5.2.1"
   },
   "devDependencies": {
     "@snowpack/plugin-dotenv": "^2.0.5",

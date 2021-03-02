@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import getPlayers from '../api/getPlayers'
 import activeGameState from '../state/activeGameState'
 import ErrorMessage from '../components/ErrorMessage'
 import Loading from '../components/Loading'
 import PlayerAliases from '../components/PlayerAliases'
-import buildError from '../utils/buildError'
 import { format } from 'date-fns'
 import Title from '../components/Title'
 import { IconArrowRight } from '@tabler/icons'
@@ -16,29 +14,16 @@ import TextInput from '../components/TextInput'
 import TableHeader from '../components/tables/TableHeader'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
+import usePlayers from '../api/usePlayers'
+import { useDebouncedCallback } from 'use-debounce'
 
 const Players = () => {
-  const [isLoading, setLoading] = useState(true)
-  const [players, setPlayers] = useState([])
-  const [error, setError] = useState(null)
   const [search, setSearch] = useState('')
   const activeGame = useRecoilValue(activeGameState)
   const history = useHistory()
+  const { players, loading, error } = usePlayers(activeGame, search)
 
-  useEffect(() => {
-    if (activeGame) {
-      (async () => {
-        try {
-          const res = await getPlayers(activeGame.id)
-          setPlayers(res.data.players)
-        } catch (err) {
-          setError(buildError(err))
-        } finally {
-          setLoading(false)
-        }
-      })()
-    }
-  }, [activeGame])
+  const debouncedSearch = useDebouncedCallback(setSearch, 300)
 
   const goToPlayerProps = (player) => {
     history.push({
@@ -49,32 +34,33 @@ const Players = () => {
 
   return (
     <div className='space-y-4 md:space-y-8'>
-      <Title>Players {players.length > 0 && `(${players.length})`}</Title>
-
-      {isLoading &&
-        <div className='flex justify-center'>
-          <Loading />
-        </div>
-      }
-
-      {error && <ErrorMessage error={error} />}
-
-      {players.length === 0 && !isLoading &&
-        <p>{activeGame.name} doesn't have any players yet.</p>
-      }
+      <Title>Players {players?.length > 0 && `(${players.length})`}</Title>
  
-      {players.length > 0 &&
-        <div className='rounded overflow-hidden border-2 border-gray-700'>
-          <div className='p-4'>
-            <div className='w-1/2 lg:w-1/4'>
-              <TextInput
-                id='players-search'
-                placeholder='Search...'
-                onChange={setSearch}
-                value={search}
-              />
-            </div>
+      <div className='rounded overflow-hidden border-2 border-gray-700'>
+        <div className='p-4'>
+          <div className='w-1/2 lg:w-1/4'>
+            <TextInput
+              id='players-search'
+              placeholder='Search...'
+              onChange={debouncedSearch.callback}
+              value={debouncedSearch.value}
+            />
           </div>
+        </div>
+
+        {loading &&
+          <div className='flex justify-center'>
+            <Loading />
+          </div>
+        }
+
+        {players?.length === 0 &&
+          <p>{activeGame.name} doesn't have any players yet.</p>
+        }
+
+        {error && <ErrorMessage error={error} />}
+
+        {players?.length > 0 &&
           <div className='overflow-x-scroll'>
             <table className='table-auto w-full'>
               <TableHeader columns={['Aliases', 'Properties', 'Registered', 'Last seen']} />
@@ -84,7 +70,7 @@ const Players = () => {
                     <TableCell><PlayerAliases aliases={player.aliases} /></TableCell>
                     <TableCell>
                       <div className='flex items-center'>
-                        {Object.keys(player.props).length}
+                        <span className='min-w-5'>{Object.keys(player.props).length}</span>
                         <Button
                           variant='icon'
                           className='ml-2 p-1 rounded-full bg-indigo-900'
@@ -100,8 +86,8 @@ const Players = () => {
               </TableBody>
             </table>
           </div>
-        </div>
-      }
+        }
+      </div>
     </div>
   )
 }
