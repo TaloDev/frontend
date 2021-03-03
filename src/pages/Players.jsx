@@ -54,13 +54,13 @@ const Players = () => {
           </div>
         }
 
-        {players?.length === 0 &&
+        {players.length === 0 &&
           <p>{activeGame.name} doesn't have any players yet.</p>
         }
 
         {error && <ErrorMessage error={error} />}
 
-        {players?.length > 0 &&
+        {players.length > 0 &&
           <div className='overflow-x-scroll'>
             <table className='table-auto w-full'>
               <TableHeader columns={['Aliases', 'Properties', 'Registered', 'Last seen']} />

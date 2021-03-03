@@ -14,7 +14,7 @@ const usePlayers = (activeGame, search) => {
   )
 
   return {
-    players: data,
+    players: data ?? [],
     loading: !data && !error,
     error: error && buildError(error)
   }
