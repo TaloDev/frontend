@@ -27,7 +27,6 @@ const GameSwitcher = () => {
     <div className='relative z-50'>
       {activeGame &&
         <Tippy
-          open='click'
           placement='bottom-start'
           visible={isOpen}
           onClickOutside={() =>  setOpen(false)}
