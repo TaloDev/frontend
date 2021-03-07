@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
-import { VictoryLine, VictoryChart, VictoryTheme, VictoryStack, VictoryTooltip, VictoryVoronoiContainer, VictoryBar, VictoryAxis } from 'victory'
+import { VictoryChart, VictoryTheme, VictoryStack, VictoryTooltip, VictoryBar, VictoryAxis } from 'victory'
 import useEvents from '../api/useEvents'
 import ErrorMessage from '../components/ErrorMessage'
 import Loading from '../components/Loading'
 import Title from '../components/Title'
 import activeGameState from '../state/activeGameState'
 import randomColor from 'randomcolor'
+import { format } from 'date-fns'
 
 const Events = () => {
   const activeGame = useRecoilValue(activeGameState)
@@ -33,7 +34,6 @@ const Events = () => {
 
       {error && <ErrorMessage error={error} />}
       
-
       {data &&
         <VictoryChart
           theme={VictoryTheme.material}
@@ -47,9 +47,9 @@ const Events = () => {
           />
 
           <VictoryAxis
-            scale='time'
+            tickFormat={(t) => format(new Date(t), 'd MMM')}
             style={{
-              tickLabels: { fontSize: 8, fill: 'white' }
+              tickLabels: { fontSize: 6, fill: 'white' }
             }}
           />
 
