@@ -15,11 +15,11 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
+    "recharts": "^2.0.8",
     "recoil": "^0.1.2",
     "spinners-react": "^1.0.4",
     "swr": "^0.4.2",
-    "use-debounce": "^5.2.1",
-    "victory": "^35.4.10"
+    "use-debounce": "^5.2.1"
   },
   "devDependencies": {
     "@snowpack/plugin-dotenv": "^2.0.5",

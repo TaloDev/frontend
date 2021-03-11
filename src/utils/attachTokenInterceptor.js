@@ -10,7 +10,7 @@ export default (accessToken, setAccessToken) => {
       setAccessToken(token)
       config.headers.authorization = `Bearer ${token}`
     } catch (err) {
-      console.log(err)
+      console.error(err)
       await logout()
       setAccessToken(null)
       api.interceptors.request.eject(0)
