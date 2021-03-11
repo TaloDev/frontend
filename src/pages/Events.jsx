@@ -7,7 +7,7 @@ import Title from '../components/Title'
 import activeGameState from '../state/activeGameState'
 import randomColor from 'randomcolor'
 import { format } from 'date-fns'
-import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts'
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 const Events = () => {
   const activeGame = useRecoilValue(activeGameState)
@@ -35,28 +35,42 @@ const Events = () => {
       {error && <ErrorMessage error={error} />}
       
       {data &&
-        <LineChart width={800} height={400}>
-          <CartesianGrid strokeDasharray='4 4' />
-          <XAxis
-            dataKey='date'
-            type='number'
-            domain={['dataMin', 'dataMax']}
-            tickFormatter={(tick) => format(new Date(tick), 'd MMM')}
-          />
-          <YAxis dataKey='count' allowDecimals={false} />
-          <Tooltip labelFormatter={(label) => format(new Date(label), 'do MMM yyyy')} />
-          {Object.keys(data).map((eventName) => (
-            <Line
-              dataKey='count'
-              data={data[eventName]}
-              key={eventName}
-              stroke={randomColor({ seed: eventName })}
-              activeDot={{ r: 6 }}
-              type='monotone'
-              strokeWidth={2}
-            />
-          ))}
-        </LineChart>
+        <div>
+          <ResponsiveContainer height={600}>
+            <LineChart>
+              <CartesianGrid strokeDasharray='4 4' />
+              <XAxis
+                dataKey='date'
+                type='number'
+                domain={['dataMin', 'dataMax']}
+                tickFormatter={(tick) => {
+                  if (!isFinite(tick)) return tick
+                  return format(new Date(tick), 'd MMM')
+                }}
+              />
+
+              <YAxis width={20} dataKey='count' allowDecimals={false} />
+
+              <Tooltip
+                labelFormatter={(label) => (
+                  <p className='text-black font-medium'>{format(new Date(label), 'do MMM yyyy')}</p>
+                )}
+              />
+
+              {Object.keys(data).map((eventName) => (
+                <Line
+                  dataKey='count'
+                  data={data[eventName]}
+                  key={eventName}
+                  stroke={randomColor({ seed: eventName })}
+                  activeDot={{ r: 6 }}
+                  type='monotone'
+                  strokeWidth={2}
+                />
+              ))}
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       }
     </div>
   )
