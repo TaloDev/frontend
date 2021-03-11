@@ -7,7 +7,7 @@ import Title from '../components/Title'
 import activeGameState from '../state/activeGameState'
 import randomColor from 'randomcolor'
 import { format } from 'date-fns'
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 const Events = () => {
   const activeGame = useRecoilValue(activeGameState)
@@ -38,7 +38,7 @@ const Events = () => {
         <div>
           <ResponsiveContainer height={600}>
             <LineChart>
-              <CartesianGrid strokeDasharray='4 4' />
+              <CartesianGrid strokeDasharray='2' vertical={false} />
               <XAxis
                 dataKey='date'
                 type='number'
@@ -65,7 +65,7 @@ const Events = () => {
                   stroke={randomColor({ seed: eventName })}
                   activeDot={{ r: 6 }}
                   type='monotone'
-                  strokeWidth={2}
+                  strokeWidth={3}
                 />
               ))}
             </LineChart>
