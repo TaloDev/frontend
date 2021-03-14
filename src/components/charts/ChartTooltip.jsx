@@ -13,14 +13,16 @@ const ChartTooltip = (props) => {
     <div className='bg-white p-4 rounded'>
       <p className='text-black font-medium mb-2'>{format(new Date(props.label), 'do MMM yyyy')}</p>
       <ul>
-        {uniqBy(filteredItems, 'payload.name').map((item, idx) => (
-          <li key={idx}>
-            <p className='text-black text-md'>
-              <span className='mr-2 w-4 h-4 rounded inline-block align-text-bottom' style={{ backgroundColor: randomColor({ seed: item.payload.name }) }} />
-              {item.payload.name}: {item.payload.count}
-            </p>
-          </li>
-        ))}
+        {uniqBy(filteredItems, 'payload.name')
+          .sort((a, b) => b.payload.count - a.payload.count)
+          .map((item, idx) => (
+            <li key={idx}>
+              <p className='text-black text-md'>
+                <span className='mr-2 w-4 h-4 rounded inline-block align-text-bottom' style={{ backgroundColor: randomColor({ seed: item.payload.name }) }} />
+                {item.payload.name}: {item.payload.count}
+              </p>
+            </li>
+          ))}
       </ul>
     </div>
   )
@@ -29,7 +31,7 @@ const ChartTooltip = (props) => {
 ChartTooltip.propTypes = {
   active: PropTypes.bool,
   payload: PropTypes.array,
-  label: PropTypes.string
+  label: PropTypes.any
 }
 
 export default ChartTooltip

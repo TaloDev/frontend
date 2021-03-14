@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import useEvents from '../api/useEvents'
 import ErrorMessage from '../components/ErrorMessage'
@@ -10,10 +10,27 @@ import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YA
 import ChartTooltip from '../components/charts/ChartTooltip'
 import ChartTick from '../components/charts/ChartTick'
 import { format } from 'date-fns'
+import ColourfulCheckbox from '../components/ColourfulCheckbox'
 
 const Events = () => {
   const activeGame = useRecoilValue(activeGameState)
   const { events, eventNames, loading, error } = useEvents(activeGame)
+  const [selectedEventNames, setSelectedEventNames] = useState([])
+
+  useEffect(() => {
+    if (eventNames && selectedEventNames.length === 0) {
+      setSelectedEventNames(eventNames)
+    }
+  }, [eventNames])
+
+  const onCheckEventName = (checked, name) => {
+    if (checked) {
+      setSelectedEventNames([...selectedEventNames, name])
+    } else {
+      if (selectedEventNames.length === 1) return
+      setSelectedEventNames(selectedEventNames.filter((selected) => selected !== name))
+    }
+  }
 
   return (
     <div className='space-y-4 md:space-y-8'>
@@ -32,11 +49,11 @@ const Events = () => {
       {error && <ErrorMessage error={error} />}
       
       {events && eventNames &&
-        <div className='flex border-2 border-gray-700 rounded bg-gray-900'>
-          <div className='p-4 flex-grow'>
+        <div className='flex border-2 border-gray-700 rounded'>
+          <div className='pt-4 pl-4 pb-4 flex-grow'>
             <ResponsiveContainer height={600}>
-              <LineChart margin={{ bottom: 30 }}>
-                <CartesianGrid strokeDasharray='2' vertical={false} />
+              <LineChart margin={{ top: 20, bottom: 20, right: 10 }}>
+                <CartesianGrid strokeDasharray='4' stroke='#555' vertical={false} />
 
                 <XAxis
                   dataKey='date'
@@ -68,27 +85,34 @@ const Events = () => {
 
                 <Tooltip content={<ChartTooltip />} />
 
-                {Object.keys(events).map((eventName) => (
-                  <Line
-                    dataKey='count'
-                    data={events[eventName]}
-                    key={eventName}
-                    stroke={randomColor({ seed: eventName })}
-                    activeDot={{ r: 6 }}
-                    type='monotone'
-                    strokeWidth={3}
-                    dot={false}
-                  />
-                ))}
+                {Object.keys(events)
+                  .filter((eventName) => selectedEventNames.includes(eventName))
+                  .map((eventName) => (
+                    <Line
+                      dataKey='count'
+                      data={events[eventName]}
+                      key={eventName}
+                      stroke={randomColor({ seed: eventName })}
+                      activeDot={{ r: 6 }}
+                      type='linear'
+                      strokeWidth={3}
+                      dot={false}
+                    />
+                  ))}
               </LineChart>
             </ResponsiveContainer>
           </div>
           <div className='p-4 space-y-4 border-l-2 border-gray-700'>
             <ul>
-              {eventNames.map((name) => (
+              {eventNames.sort((a, b) => a.localeCompare(b)).map((name) => (
                 <li key={name}>
-                  <input type='checkbox' />
-                  <label className='ml-2 text-xs'>{name}</label>
+                  <ColourfulCheckbox
+                    id={`${name}-checkbox`}
+                    colour={randomColor({ seed: name })}
+                    checked={selectedEventNames.find((selected) => selected === name)}
+                    onChange={(e) => onCheckEventName(e.target.checked, name)}
+                  />
+                  <label className='ml-2 text-sm' htmlFor={`${name}-checkbox`}>{name}</label>
                 </li>
               ))}
             </ul>
