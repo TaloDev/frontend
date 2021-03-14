@@ -11,7 +11,7 @@ const ChartTooltip = (props) => {
 
   return (
     <div className='bg-white p-4 rounded'>
-      <p className='text-black font-medium'>{format(new Date(props.label), 'do MMM yyyy')}</p>
+      <p className='text-black font-medium mb-2'>{format(new Date(props.label), 'do MMM yyyy')}</p>
       <ul>
         {uniqBy(filteredItems, 'payload.name').map((item, idx) => (
           <li key={idx}>

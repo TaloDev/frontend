@@ -5,7 +5,7 @@ import api from './api'
 const useEvents = (activeGame) => {
   const fetcher = async (url) => {
     const res = await api.get(`${url}?gameId=${activeGame.id}`)
-    return res.data.events
+    return res.data
   }
 
   const { data, error } = useSWR(
@@ -14,7 +14,8 @@ const useEvents = (activeGame) => {
   )
 
   return {
-    events: data ?? [],
+    events: data?.events,
+    eventNames: data?.eventNames ?? [],
     loading: !data && !error,
     error: error && buildError(error)
   }
