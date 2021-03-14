@@ -7,7 +7,8 @@ import Title from '../components/Title'
 import activeGameState from '../state/activeGameState'
 import randomColor from 'randomcolor'
 import { format } from 'date-fns'
-import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import ChartTooltip from '../components/ChartTooltip'
 
 const Events = () => {
   const activeGame = useRecoilValue(activeGameState)
@@ -47,15 +48,12 @@ const Events = () => {
                   if (!isFinite(tick)) return tick
                   return format(new Date(tick), 'd MMM')
                 }}
+                scale='time'
               />
 
               <YAxis width={20} dataKey='count' allowDecimals={false} />
 
-              <Tooltip
-                labelFormatter={(label) => (
-                  <p className='text-black font-medium'>{format(new Date(label), 'do MMM yyyy')}</p>
-                )}
-              />
+              <Tooltip content={<ChartTooltip />} />
 
               {Object.keys(data).map((eventName) => (
                 <Line
@@ -66,6 +64,7 @@ const Events = () => {
                   activeDot={{ r: 6 }}
                   type='monotone'
                   strokeWidth={3}
+                  dot={false}
                 />
               ))}
             </LineChart>
