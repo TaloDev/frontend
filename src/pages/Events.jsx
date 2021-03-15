@@ -49,7 +49,7 @@ const Events = () => {
       {error && <ErrorMessage error={error} />}
       
       {events && eventNames &&
-        <div className='flex border-2 border-gray-700 rounded'>
+        <div className='flex border-2 border-gray-700 rounded bg-gray-900'>
           <div className='pt-4 pl-4 pb-4 flex-grow'>
             <ResponsiveContainer height={600}>
               <LineChart margin={{ top: 20, bottom: 20, right: 10 }}>
@@ -103,6 +103,7 @@ const Events = () => {
             </ResponsiveContainer>
           </div>
           <div className='p-4 space-y-4 border-l-2 border-gray-700'>
+            <h2 className='text-lg'>{eventNames.length} events</h2>
             <ul>
               {eventNames.sort((a, b) => a.localeCompare(b)).map((name) => (
                 <li key={name}>
@@ -111,8 +112,8 @@ const Events = () => {
                     colour={randomColor({ seed: name })}
                     checked={selectedEventNames.find((selected) => selected === name)}
                     onChange={(e) => onCheckEventName(e.target.checked, name)}
+                    label={name}
                   />
-                  <label className='ml-2 text-sm' htmlFor={`${name}-checkbox`}>{name}</label>
                 </li>
               ))}
             </ul>
