@@ -1,18 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
 const TableCell = (props) => {
   return (
     <td
-      className={`p-4 ${props.className.startsWith('min-w-') ? '' : 'min-w-40'} ${props.className}`}
+      className={classNames(
+        'p-4',
+        props.className,
+        {
+          'min-w-40': !props.className?.startsWith('min-w-')
+        }
+      )}
     >
       {props.children}
     </td>
   )
-}
-
-TableCell.defaultProps = {
-  className: ''
 }
 
 TableCell.propTypes = {

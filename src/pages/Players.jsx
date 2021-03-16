@@ -34,60 +34,64 @@ const Players = () => {
 
   return (
     <div className='space-y-4 md:space-y-8'>
-      <Title>Players {players?.length > 0 && `(${players.length})`}</Title>
+      <Title>Players</Title>
  
-      <div className='rounded overflow-hidden border-2 border-gray-700'>
-        <div className='p-4'>
-          <div className='w-1/2 lg:w-1/4'>
-            <TextInput
-              id='players-search'
-              placeholder='Search...'
-              onChange={debouncedSearch.callback}
-              value={debouncedSearch.value}
-            />
-          </div>
+      <div className='flex items-center'>
+        <div className='w-1/2 lg:w-1/4'>
+          <TextInput
+            id='players-search'
+            placeholder='Search...'
+            onChange={debouncedSearch.callback}
+            value={debouncedSearch.value}
+          />
         </div>
-
-        {loading &&
-          <div className='flex justify-center'>
-            <Loading />
-          </div>
-        }
-
-        {players.length === 0 &&
-          <p>{activeGame.name} doesn't have any players yet.</p>
-        }
-
-        {error && <ErrorMessage error={error} />}
-
-        {players.length > 0 &&
-          <div className='overflow-x-scroll'>
-            <table className='table-auto w-full'>
-              <TableHeader columns={['Aliases', 'Properties', 'Registered', 'Last seen']} />
-              <TableBody iterator={players}>
-                {(player) => (
-                  <>
-                    <TableCell><PlayerAliases aliases={player.aliases} /></TableCell>
-                    <TableCell>
-                      <div className='flex items-center'>
-                        <span className='min-w-5'>{Object.keys(player.props).length}</span>
-                        <Button
-                          variant='icon'
-                          className='ml-2 p-1 rounded-full bg-indigo-900'
-                          onClick={() => goToPlayerProps(player)}
-                          icon={<IconArrowRight size={16} />}
-                        />
-                      </div>
-                    </TableCell>
-                    <TableCell>{format(new Date(player.createdAt), 'do MMM Y')}</TableCell>
-                    <TableCell>{format(new Date(player.lastSeenAt), 'do MMM Y')}</TableCell>
-                  </>
-                )}
-              </TableBody>
-            </table>
-          </div>
-        }
+        <span className='ml-4'>{players.length} results</span>
       </div>
+
+      {loading &&
+        <div className='flex justify-center'>
+          <Loading />
+        </div>
+      }
+
+      {players.length === 0 &&
+        <>
+          {search
+            ? <p>No players match your query</p>
+            : <p>{activeGame.name} doesn't have any players yet</p>
+          }
+        </>
+      }
+
+      {error && <ErrorMessage error={error} />}
+
+      {players.length > 0 &&
+        <div className='overflow-x-scroll'>
+          <table className='table-auto w-full'>
+            <TableHeader columns={['Aliases', 'Properties', 'Registered', 'Last seen']} />
+            <TableBody iterator={players}>
+              {(player) => (
+                <>
+                  <TableCell><PlayerAliases aliases={player.aliases} /></TableCell>
+                  <TableCell>
+                    <div className='flex items-center'>
+                      <span className='min-w-5'>{Object.keys(player.props).length}</span>
+                      <Button
+                        variant='icon'
+                        className='ml-2 p-1 rounded-full bg-indigo-900'
+                        onClick={() => goToPlayerProps(player)}
+                        icon={<IconArrowRight size={16} />}
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell>{format(new Date(player.createdAt), 'do MMM Y')}</TableCell>
+                  <TableCell>{format(new Date(player.lastSeenAt), 'do MMM Y')}</TableCell>
+                </>
+              )}
+            </TableBody>
+          </table>
+        </div>
+      }
     </div>
   )
 }

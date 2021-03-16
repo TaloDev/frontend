@@ -7,7 +7,6 @@ import refreshAccess from './api/refreshAccess'
 import accessState from './state/accessState'
 import attachTokenInterceptor from './utils/attachTokenInterceptor'
 import userState from './state/userState'
-import getMe from './api/getMe'
 import Loading from './components/Loading'
 import NavBar from './components/NavBar'
 import routes from './constants/routes'
@@ -29,9 +28,8 @@ const App = () => {
 
   const handleRefreshSession = async () => {
     try {
-      let res = await refreshAccess()
+      const res = await refreshAccess()
       const accessToken = res.data.accessToken
-      res = await getMe(accessToken)
       setUser(res.data.user)
       setAccessToken(accessToken)
       attachTokenInterceptor(accessToken, setAccessToken)

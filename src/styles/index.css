@@ -30,3 +30,19 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+thead th:first-child {
+  @apply rounded-tl;
+}
+
+thead th:last-child {
+  @apply rounded-tr;
+}
+
+table tr:last-child td:first-child {
+  @apply rounded-bl;
+}
+
+table tr:last-child td:last-child {
+  @apply rounded-br;
+}

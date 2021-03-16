@@ -6,7 +6,6 @@ import ErrorMessage from '../components/ErrorMessage'
 import Loading from '../components/Loading'
 import buildError from '../utils/buildError'
 import { format } from 'date-fns'
-import classNames from 'classnames'
 import Title from '../components/Title'
 import Button from '../components/Button'
 import deleteAPIKey from '../api/deleteAPIKey'
@@ -14,6 +13,9 @@ import getAPIKeyScopes from '../api/getAPIKeyScopes'
 import createAPIKey from '../api/createAPIKey'
 import userState from '../state/userState'
 import { IconAlertCircle } from '@tabler/icons'
+import TableHeader from '../components/tables/TableHeader'
+import TableCell from '../components/tables/TableCell'
+import TableBody from '../components/tables/TableBody'
 
 const APIKeys = () => {
   const [isLoading, setLoading] = useState(true)
@@ -109,27 +111,22 @@ const APIKeys = () => {
       }
 
       {keys.length > 0 &&
-        <div className='overflow-x-scroll -mx-4 md:-mx-8'>
-          <div className='w-min px-4 md:px-8'>
-            <div className='flex items-start p-4 bg-white text-black font-semibold w-min rounded-t'>
-              <span className='min-w-40'>Ending in</span>
-              <span className='min-w-80'>Created by</span>
-              <span className='min-w-60'>Created at</span>
-              <span className='min-w-40'></span>
-            </div>
-            <ul className='w-min rounded-b overflow-hidden'>
-              {keys.map((key, idx) => (
-                <li key={key.id} className={classNames('flex items-center p-4', { 'bg-indigo-600': idx % 2 !== 0, 'bg-indigo-500': idx % 2 === 0 })}>
-                  <span className='min-w-40'>…{key.token}</span>
-                  <span className='min-w-80'>{key.createdBy}</span>
-                  <span className='min-w-60'>{format(new Date(key.createdAt), 'do MMM Y')}</span>
-                  <span className='min-w-40'>
+        <div className='overflow-x-scroll'>
+          <table className='table-auto w-full'>
+            <TableHeader columns={['Ending in', 'Created by', 'Created at', '']} />
+            <TableBody iterator={keys}>
+              {(key) => (
+                <>
+                  <TableCell>…{key.token}</TableCell>
+                  <TableCell>{key.createdBy === user.email ? 'You' : key.createdBy}</TableCell>
+                  <TableCell>{format(new Date(key.createdAt), 'do MMM Y')}</TableCell>
+                  <TableCell className='min-w-10'>
                     <Button variant='red' onClick={() => onDeleteClick(key)}>Revoke</Button>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
+                  </TableCell>
+                </>
+              )}
+            </TableBody>
+          </table>
         </div>
       }
 
