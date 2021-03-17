@@ -16,6 +16,7 @@
     "randomcolor": "^0.6.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-resize-detector": "^6.6.3",
     "react-router-dom": "^5.2.0",
     "recharts": "^2.0.8",
     "recoil": "^0.1.2",

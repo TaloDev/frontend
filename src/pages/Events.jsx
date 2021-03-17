@@ -70,8 +70,8 @@ const Events = () => {
       {error && <ErrorMessage error={error} />}
       
       {Object.keys(events).length > 0 && eventNames &&
-        <div className='flex border-2 border-gray-700 rounded bg-gray-900'>
-          <div className='pt-4 pl-4 pb-4 flex-grow'>
+        <div className='flex border-2 border-gray-700 rounded bg-gray-900 overflow-x-scroll'>
+          <div className='pt-4 pl-4 pb-4 w-full'>
             <ResponsiveContainer height={600}>
               <LineChart margin={{ top: 20, bottom: 20, right: 10 }}>
                 <CartesianGrid strokeDasharray='4' stroke='#555' vertical={false} />
@@ -123,7 +123,7 @@ const Events = () => {
               </LineChart>
             </ResponsiveContainer>
           </div>
-          <div className='p-4 space-y-4 border-l-2 border-gray-700'>
+          <div className='p-4 space-y-4 border-l-2 border-gray-700 min-w-60'>
             <h2 className='text-lg'>{eventNames.length} events</h2>
             <ul>
               {eventNames.sort((a, b) => a.localeCompare(b)).map((name) => (
