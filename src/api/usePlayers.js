@@ -1,10 +1,16 @@
 import useSWR from 'swr'
 import buildError from '../utils/buildError'
 import api from './api'
+import { stringify } from 'querystring'
 
 const usePlayers = (activeGame, search) => {
   const fetcher = async (url) => {
-    const res = await api.get(`${url}?gameId=${activeGame.id}&search=${search}`)
+    const qs = stringify({
+      gameId: activeGame.id,
+      search
+    })
+
+    const res = await api.get(`${url}?${qs}`)
     return res.data.players
   }
 

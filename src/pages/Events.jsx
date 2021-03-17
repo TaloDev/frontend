@@ -9,13 +9,16 @@ import randomColor from 'randomcolor'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import ChartTooltip from '../components/charts/ChartTooltip'
 import ChartTick from '../components/charts/ChartTick'
-import { format } from 'date-fns'
+import { format, sub } from 'date-fns'
 import ColourfulCheckbox from '../components/ColourfulCheckbox'
+import TextInput from '../components/TextInput'
 
 const Events = () => {
   const activeGame = useRecoilValue(activeGameState)
-  const { events, eventNames, loading, error } = useEvents(activeGame)
   const [selectedEventNames, setSelectedEventNames] = useState([])
+  const [startDate, setStartDate] = useState(sub(new Date(), { days: 30 }).toISOString().split('T')[0])
+  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0])
+  const { events, eventNames, loading, error } = useEvents(activeGame, startDate, endDate)
 
   useEffect(() => {
     if (eventNames && selectedEventNames.length === 0) {
@@ -36,19 +39,37 @@ const Events = () => {
     <div className='space-y-4 md:space-y-8'>
       <Title>Events</Title>
 
+      <div className='flex w-full md:w-1/2 space-x-4'>
+        <TextInput
+          id='start-date'
+          label='Start date'
+          placeholder='Start date'
+          onChange={(e) => setStartDate(e)}
+          value={startDate}
+        />
+
+        <TextInput
+          id='end-date'
+          label='End date'
+          placeholder='End date'
+          onChange={(e) => setEndDate(e)}
+          value={endDate}
+        />
+      </div>
+
       {loading &&
         <div className='flex justify-center'>
           <Loading />
         </div>
       }
 
-      {events?.length === 0 &&
-        <p>{activeGame.name} has no events yet.</p>
+      {Object.keys(events).length === 0 &&
+        <p>There are no events for this date range</p>
       }
 
       {error && <ErrorMessage error={error} />}
       
-      {events && eventNames &&
+      {Object.keys(events).length > 0 && eventNames &&
         <div className='flex border-2 border-gray-700 rounded bg-gray-900'>
           <div className='pt-4 pl-4 pb-4 flex-grow'>
             <ResponsiveContainer height={600}>
@@ -110,7 +131,7 @@ const Events = () => {
                   <ColourfulCheckbox
                     id={`${name}-checkbox`}
                     colour={randomColor({ seed: name })}
-                    checked={selectedEventNames.find((selected) => selected === name)}
+                    checked={Boolean(selectedEventNames.find((selected) => selected === name))}
                     onChange={(e) => onCheckEventName(e.target.checked, name)}
                     label={name}
                   />
