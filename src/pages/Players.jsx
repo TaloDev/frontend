@@ -42,7 +42,7 @@ const Players = () => {
             id='players-search'
             placeholder='Search...'
             onChange={debouncedSearch.callback}
-            value={debouncedSearch.value}
+            value={debouncedSearch.value ?? ''}
           />
         </div>
         <span className='ml-4'>{players.length} results</span>
