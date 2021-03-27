@@ -16,15 +16,15 @@ import TextInput from '../components/TextInput'
 const Events = () => {
   const activeGame = useRecoilValue(activeGameState)
   const [selectedEventNames, setSelectedEventNames] = useState([])
-  const [startDate, setStartDate] = useState(sub(new Date(), { days: 30 }).toISOString().split('T')[0])
-  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0])
+  const [startDate, setStartDate] = useState(sub(new Date(), { days: 30 }))
+  const [endDate, setEndDate] = useState(new Date())
   const { events, eventNames, loading, error } = useEvents(activeGame, startDate, endDate)
 
   useEffect(() => {
-    if (eventNames && selectedEventNames.length === 0) {
+    if (eventNames.length > 0 && selectedEventNames.length === 0) {
       setSelectedEventNames(eventNames)
     }
-  }, [eventNames])
+  }, [eventNames, selectedEventNames])
 
   const onCheckEventName = (checked, name) => {
     if (checked) {
@@ -45,7 +45,7 @@ const Events = () => {
           label='Start date'
           placeholder='Start date'
           onChange={(e) => setStartDate(e)}
-          value={startDate}
+          value={format(startDate, 'yyyy-MM-dd')}
         />
 
         <TextInput
@@ -53,7 +53,7 @@ const Events = () => {
           label='End date'
           placeholder='End date'
           onChange={(e) => setEndDate(e)}
-          value={endDate}
+          value={format(endDate, 'yyyy-MM-dd')}
         />
       </div>
 
