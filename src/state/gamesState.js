@@ -5,7 +5,7 @@ const gamesState = selector({
   key: 'games',
   get: ({get}) => {
     const user = get(userState);
-    return user?.games ?? []
+    return user?.organisation.games ?? []
   }
 })
 

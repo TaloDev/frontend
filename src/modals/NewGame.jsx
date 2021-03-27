@@ -27,9 +27,12 @@ const NewGame = (props) => {
 
     try {
       const res = await createGame(name)
+      // TODO, should probably have an organisation state
       setUser({
         ...user,
-        games: [...user.games, res.data.game]
+        organisation: {
+          games: [...user.organisation.games, res.data.game]
+        }
       })
       setActiveGame(res.data.game)
     } catch (err) {

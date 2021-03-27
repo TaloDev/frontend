@@ -13,9 +13,9 @@ import buildError from '../utils/buildError'
 import attachTokenInterceptor from '../utils/attachTokenInterceptor'
 
 const Register = () => {
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [password2, setPassword2] = useState('')
   const [, setAccessToken] = useRecoilState(accessState)
   const [, setUser] = useRecoilState(userState)
   const [error, setError] = useState(null)
@@ -31,15 +31,10 @@ const Register = () => {
       return
     }
 
-    if (password !== password2) {
-      setError(buildError('Your password and confirmed password don\'t match'))
-      return
-    }
-
     setLoading(true)
 
     try {
-      const res = await register({ email, password })
+      const res = await register({ email, password, organisationName: name })
       const accessToken = res.data.accessToken
       setUser(res.data.user)
       setAccessToken(accessToken)
@@ -54,6 +49,15 @@ const Register = () => {
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
       <form className={`text-white rounded-md space-y-8 ${unauthedContainerStyle}`}>
         <h1 className='text-4xl font-bold'>Let's get started</h1>
+
+        <TextInput
+          id='name'
+          label='Name'
+          placeholder={`Your name or your team/organisation's name`}
+          type='text'
+          onChange={setName}
+          value={name}
+        />
 
         <TextInput
           id='email'
@@ -73,19 +77,10 @@ const Register = () => {
           value={password}
         />
 
-        <TextInput
-          id='password2'
-          label='Confirm password'
-          placeholder='Repeat the password above'
-          type='password'
-          onChange={setPassword2}
-          value={password2}
-        />
-
         <ErrorMessage error={error} />
 
         <Button
-          disabled={!email || !password || !password2}
+          disabled={!name || !email || !password}
           onClick={onRegisterClick}
           isLoading={isLoading}
         >
