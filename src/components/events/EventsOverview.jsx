@@ -57,7 +57,7 @@ const EventsOverview = () => {
 
         {loading &&
           <div className='mt-1 ml-4'>
-            <Loading size={24} />
+            <Loading size={24} thickness={180} />
           </div>
         }
       </div>
