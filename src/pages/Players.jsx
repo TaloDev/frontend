@@ -15,15 +15,14 @@ import TableHeader from '../components/tables/TableHeader'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
 import usePlayers from '../api/usePlayers'
-import { useDebouncedCallback } from 'use-debounce'
+import { useDebounce } from 'use-debounce'
 
 const Players = () => {
   const [search, setSearch] = useState('')
+  const [debouncedSearch] = useDebounce(search, 300)
   const activeGame = useRecoilValue(activeGameState)
   const history = useHistory()
-  const { players, loading, error } = usePlayers(activeGame, search)
-
-  const debouncedSearch = useDebouncedCallback(setSearch, 300)
+  const { players, loading, error } = usePlayers(activeGame, debouncedSearch)
 
   const goToPlayerProps = (player) => {
     history.push({
@@ -39,10 +38,11 @@ const Players = () => {
       <div className='flex items-center'>
         <div className='w-1/2 lg:w-1/4'>
           <TextInput
+            defaultValue=''
             id='players-search'
             placeholder='Search...'
-            onChange={debouncedSearch.callback}
-            value={debouncedSearch.value ?? ''}
+            onChange={setSearch}
+            value={search}
           />
         </div>
         <span className='ml-4'>{players.length} results</span>
