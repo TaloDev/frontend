@@ -119,7 +119,7 @@ const APIKeys = () => {
                 <>
                   <TableCell>…{key.token}</TableCell>
                   <TableCell>{key.createdBy === user.email ? 'You' : key.createdBy}</TableCell>
-                  <TableCell>{format(new Date(key.createdAt), 'do MMM Y')}</TableCell>
+                  <TableCell>{format(new Date(key.createdAt), 'do MMM Y, hh:mm a')}</TableCell>
                   <TableCell className='min-w-10'>
                     <Button variant='red' onClick={() => onDeleteClick(key)}>Revoke</Button>
                   </TableCell>
