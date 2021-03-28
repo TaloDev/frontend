@@ -29,14 +29,14 @@ const GameSwitcher = () => {
         <Tippy
           placement='bottom-start'
           visible={isOpen}
-          onClickOutside={() =>  setOpen(false)}
+          onClickOutside={() => setOpen(false)}
           offset={[0, 0]}
           interactive={true}
           content={(
             <motion.ul
               animate={{ opacity: isOpen ? 1 : 0 }}
               transition={{ duration: 0.2 }}
-              className='bg-white w-60 text-black rounded-b'
+              className='bg-white text-black rounded-b w-80'
             >
               {games.map((game) => (
                 <li key={game.name} className={`border-b border-gray-300 ${dropdownButtonStyle}`}>
@@ -62,7 +62,7 @@ const GameSwitcher = () => {
             </motion.ul>
           )}
         >
-          <div className={classNames('bg-indigo-300 rounded p-2 flex items-center justify-between', { 'rounded-b-none': isOpen })}>
+          <div className={classNames('bg-indigo-300 rounded p-2 flex items-center justify-between w-80', { 'rounded-b-none': isOpen })}>
             <div className='flex items-center'>
               <span
                 style={{ backgroundColor: randomColor({ seed: activeGame.name, luminosity: 'dark' }) }}

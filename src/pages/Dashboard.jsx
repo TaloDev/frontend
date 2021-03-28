@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import React from 'react'
 import { useRecoilValue } from 'recoil'
 import activeGameState from '../state/activeGameState'
@@ -19,7 +20,7 @@ const Dashboard = () => {
   return (
     <div>
       <h1 className='text-4xl font-bold'>{activeGame.name} dashboard</h1>
-      <p className='mt-2'>We last saw you {user?.lastSeenAt}</p>
+      <p className='mt-2'>We last saw you {format(new Date(user.lastSeenAt), 'do MMMM yyyy')}</p>
     </div>
   )
 }
