@@ -16,15 +16,30 @@ import TextInput from '../components/TextInput'
 const Events = () => {
   const activeGame = useRecoilValue(activeGameState)
   const [selectedEventNames, setSelectedEventNames] = useState([])
-  const [startDate, setStartDate] = useState(sub(new Date(), { days: 30 }))
-  const [endDate, setEndDate] = useState(new Date())
+  const [startDate, setStartDate] = useState(format(sub(new Date(), { days: 30 }), 'yyyy-MM-dd'))
+  const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'))
   const { events, eventNames, loading, error } = useEvents(activeGame, startDate, endDate)
+
+  const [data, setData] = useState({})
+  const [availableNames, setAvailableNames] = useState([])
 
   useEffect(() => {
     if (eventNames.length > 0 && selectedEventNames.length === 0) {
       setSelectedEventNames(eventNames)
     }
   }, [eventNames, selectedEventNames])
+
+  useEffect(() => {
+    if (Object.keys(events).length > 0) {
+      setData(events)
+    }
+  }, [events])
+
+  useEffect(() => {
+    if (eventNames.length > 0) {
+      setAvailableNames(eventNames)
+    }
+  }, [eventNames])
 
   const onCheckEventName = (checked, name) => {
     if (checked) {
@@ -37,7 +52,16 @@ const Events = () => {
 
   return (
     <div className='space-y-4 md:space-y-8'>
-      <Title>Events</Title>
+
+      <div className='flex items-center'>
+        <Title>Events</Title>
+
+        {loading &&
+          <div className='mt-1 ml-4'>
+            <Loading size={24} />
+          </div>
+        }
+      </div>
 
       <div className='flex w-full md:w-1/2 space-x-4'>
         <TextInput
@@ -45,7 +69,7 @@ const Events = () => {
           label='Start date'
           placeholder='Start date'
           onChange={(e) => setStartDate(e)}
-          value={format(startDate, 'yyyy-MM-dd')}
+          value={startDate}
         />
 
         <TextInput
@@ -53,23 +77,17 @@ const Events = () => {
           label='End date'
           placeholder='End date'
           onChange={(e) => setEndDate(e)}
-          value={format(endDate, 'yyyy-MM-dd')}
+          value={endDate}
         />
       </div>
 
-      {loading &&
-        <div className='flex justify-center'>
-          <Loading />
-        </div>
-      }
-
-      {Object.keys(events).length === 0 &&
+      {Object.keys(data).length === 0 &&
         <p>There are no events for this date range</p>
       }
 
       {error && <ErrorMessage error={error} />}
       
-      {Object.keys(events).length > 0 && eventNames &&
+      {Object.keys(data).length > 0 && availableNames &&
         <div className='flex border-2 border-gray-700 rounded bg-gray-900 overflow-x-scroll'>
           <div className='pt-4 pl-4 pb-4 w-full'>
             <ResponsiveContainer height={600}>
@@ -106,12 +124,12 @@ const Events = () => {
 
                 <Tooltip content={<ChartTooltip />} />
 
-                {Object.keys(events)
+                {Object.keys(data)
                   .filter((eventName) => selectedEventNames.includes(eventName))
                   .map((eventName) => (
                     <Line
                       dataKey='count'
-                      data={events[eventName]}
+                      data={data[eventName]}
                       key={eventName}
                       stroke={randomColor({ seed: eventName })}
                       activeDot={{ r: 6 }}
@@ -124,9 +142,9 @@ const Events = () => {
             </ResponsiveContainer>
           </div>
           <div className='p-4 space-y-4 border-l-2 border-gray-700 min-w-60'>
-            <h2 className='text-lg'>{eventNames.length} events</h2>
+            <h2 className='text-lg'>{availableNames.length} events</h2>
             <ul>
-              {eventNames.sort((a, b) => a.localeCompare(b)).map((name) => (
+              {availableNames.sort((a, b) => a.localeCompare(b)).map((name) => (
                 <li key={name}>
                   <ColourfulCheckbox
                     id={`${name}-checkbox`}

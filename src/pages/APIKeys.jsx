@@ -23,7 +23,7 @@ const APIKeys = () => {
   const [error, setError] = useState(null)
   const activeGame = useRecoilValue(activeGameState)
   const [deletingKeys, setDeletingKeys] = useState([])
-  const [availableScopes, setAvailableScopes] = useState({})
+  const [availableScopes, setAvailableScopes] = useState(null)
   const [selectedScopes, setSelectedScopes] = useState([])
   const [isCreating, setCreating] = useState(false)
   const [createdKey, setCreatedKey] = useState(null)
@@ -143,7 +143,8 @@ const APIKeys = () => {
             </div>
             
             <div className='flex space-x-8 p-4'>
-              {Object.keys(availableScopes).map((group) => (
+              {!availableScopes && <ErrorMessage error={{ message: `Couldn't fetch scopes` }} />}
+              {availableScopes && Object.keys(availableScopes).map((group) => (
                 <div key={group}>
                   <h4 className='font-semibold capitalize'>{group}</h4>
                   {availableScopes[group].map((scope) => (

@@ -1,5 +1,4 @@
 import api from '../api/api'
-import logout from '../api/logout'
 import handleAccessToken from './handleAccessToken'
 
 export default (accessToken, setAccessToken) => {
@@ -11,7 +10,6 @@ export default (accessToken, setAccessToken) => {
       config.headers.authorization = `Bearer ${token}`
     } catch (err) {
       console.error(err)
-      await logout()
       setAccessToken(null)
       api.interceptors.request.eject(0)
     }
