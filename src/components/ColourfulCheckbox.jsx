@@ -1,21 +1,33 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { IconCheck } from '@tabler/icons'
+import { focusStyle } from '../styles/theme'
 
 const ColourfulCheckbox = (props) => {
+  const labelFocusStyle = focusStyle.replaceAll('focus:', '')
+  const [focus, setFocus] = useState(false)
 
   return (
     <>
-      <input id={props.id} type='checkbox' className='absolute opacity-0' {...props} />
-      <label htmlFor={props.id}>
-        <span
-          className={classNames('inline-block rounded w-4 h-4 align-text-bottom' ,{ 'bg-white': !props.checked })}
-          style={{ backgroundColor: props.checked ? props.colour : '' }}
-        >
+      <input
+        id={props.id}
+        type='checkbox'
+        className='absolute inset-0 opacity-0'
+        onFocus={() => setFocus(true)}
+        onBlur={() => setFocus(false)}
+        {...props}
+      />
+
+      <label
+        htmlFor={props.id}
+        className={classNames('px-2 py-1 rounded block mb-2 bg-gray-900 border-r-8', { [labelFocusStyle]: focus})}
+        style={{ borderColor: props.colour }}
+      >
+        <span className='inline-block rounded w-4 h-4 bg-white align-text-bottom text-black active:bg-gray-300 transition-colors'>
           {props.checked &&
             <span className='flex items-center justify-center h-full'>
-              <IconCheck size={12} stroke={3} color='white' />
+              <IconCheck size={14} stroke={3} /> 
             </span>
           }
         </span>

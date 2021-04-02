@@ -12,6 +12,7 @@ import ChartTick from '../../components/charts/ChartTick'
 import { format, sub } from 'date-fns'
 import ColourfulCheckbox from '../../components/ColourfulCheckbox'
 import TextInput from '../../components/TextInput'
+import getEventColour from '../../utils/getEventColour'
 
 const EventsOverview = () => {
   const activeGame = useRecoilValue(activeGameState)
@@ -87,7 +88,7 @@ const EventsOverview = () => {
       {error && <ErrorMessage error={error} />}
 
       {Object.keys(data).length > 0 && availableNames &&
-        <div className='flex border-2 border-gray-700 rounded bg-gray-900 overflow-x-scroll'>
+        <div className='flex border-2 border-gray-700 rounded bg-black overflow-x-scroll'>
           <div className='pt-4 pl-4 pb-4 w-full'>
             <ResponsiveContainer height={600}>
               <LineChart margin={{ top: 20, bottom: 20, right: 10 }}>
@@ -130,7 +131,7 @@ const EventsOverview = () => {
                       dataKey='count'
                       data={data[eventName]}
                       key={eventName}
-                      stroke={randomColor({ seed: eventName })}
+                      stroke={getEventColour(eventName)}
                       activeDot={{ r: 6 }}
                       type='linear'
                       strokeWidth={3}
@@ -148,7 +149,7 @@ const EventsOverview = () => {
                 <li key={name}>
                   <ColourfulCheckbox
                     id={`${name}-checkbox`}
-                    colour={randomColor({ seed: name })}
+                    colour={getEventColour(name)}
                     checked={Boolean(selectedEventNames.find((selected) => selected === name))}
                     onChange={(e) => onCheckEventName(e.target.checked, name)}
                     label={name}

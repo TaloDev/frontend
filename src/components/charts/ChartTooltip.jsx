@@ -4,6 +4,7 @@ import { format } from 'date-fns'
 import uniqBy from 'lodash.uniqby'
 import randomColor from 'randomcolor'
 import classNames from 'classnames'
+import getEventColour from '../../utils/getEventColour'
 
 const ChartTooltip = (props) => {
   const filteredItems = props.payload?.filter((item) => item.payload.count > 0)
@@ -19,7 +20,7 @@ const ChartTooltip = (props) => {
           .map((item, idx) => (
             <li key={idx}>
               <p className='text-black text-sm'>
-                <span className='mr-2 w-4 h-4 rounded inline-block align-text-bottom' style={{ backgroundColor: randomColor({ seed: item.payload.name }) }} />
+                <span className='mr-2 w-4 h-4 rounded inline-block align-text-bottom' style={{ backgroundColor: getEventColour(item.payload.name) }} />
                 {item.payload.name}: {item.payload.count}
 
                 <span className={classNames(
