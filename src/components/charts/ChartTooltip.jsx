@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { format } from 'date-fns'
 import uniqBy from 'lodash.uniqby'
-import randomColor from 'randomcolor'
 import classNames from 'classnames'
 import getEventColour from '../../utils/getEventColour'
 

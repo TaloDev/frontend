@@ -5,7 +5,6 @@ import ErrorMessage from '../../components/ErrorMessage'
 import Loading from '../../components/Loading'
 import Title from '../../components/Title'
 import activeGameState from '../../state/activeGameState'
-import randomColor from 'randomcolor'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import ChartTooltip from '../../components/charts/ChartTooltip'
 import ChartTick from '../../components/charts/ChartTick'
@@ -13,13 +12,19 @@ import { format, sub } from 'date-fns'
 import ColourfulCheckbox from '../../components/ColourfulCheckbox'
 import TextInput from '../../components/TextInput'
 import getEventColour from '../../utils/getEventColour'
+import { useDebounce } from 'use-debounce'
 
 const EventsOverview = () => {
   const activeGame = useRecoilValue(activeGameState)
   const [selectedEventNames, setSelectedEventNames] = useState([])
+
   const [startDate, setStartDate] = useState(format(sub(new Date(), { days: 30 }), 'yyyy-MM-dd'))
   const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'))
-  const { events, eventNames, loading, error } = useEvents(activeGame, startDate, endDate)
+
+  const [debouncedStartDate] = useDebounce(startDate, 300)
+  const [debouncedEndDate] = useDebounce(endDate, 300)
+
+  const { events, eventNames, loading, error } = useEvents(activeGame, debouncedStartDate, debouncedEndDate)
 
   const [data, setData] = useState({})
   const [availableNames, setAvailableNames] = useState([])
