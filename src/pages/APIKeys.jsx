@@ -143,7 +143,7 @@ const APIKeys = () => {
             </div>
             
             <div className='flex space-x-8 p-4'>
-              {!availableScopes && <ErrorMessage error={{ message: `Couldn't fetch scopes` }} />}
+              {!isLoading && !availableScopes && <ErrorMessage error={{ message: `Couldn't fetch scopes` }} />}
               {availableScopes && Object.keys(availableScopes).map((group) => (
                 <div key={group}>
                   <h4 className='font-semibold capitalize'>{group}</h4>
