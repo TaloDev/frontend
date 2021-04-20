@@ -14,8 +14,8 @@ const PlayerAliases = (props) => {
 
   return (
     <div className='space-y-2'>
-      {props.aliases.map((alias) => (
-        <div key={alias} className='flex items-center'>
+      {props.aliases.map((alias, idx) => (
+        <div key={idx} className='flex items-center'>
           <span className='p-1 rounded-full bg-gray-900'>{getIcon(alias)}</span>
           <span className='ml-2 text-sm'>{alias.identifier}</span>
         </div>
@@ -25,7 +25,7 @@ const PlayerAliases = (props) => {
 }
 
 PlayerAliases.propTypes = {
-  aliases: PropTypes.object.isRequired
+  aliases: PropTypes.array.isRequired
 }
 
 export default PlayerAliases

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import Title from '../components/Title'
 import { useLocation } from 'react-router-dom'
-import classNames from 'classnames'
 import { IconPlus, IconTrash } from '@tabler/icons'
 import Button from '../components/Button'
 import TextInput from '../components/TextInput'
@@ -21,24 +20,34 @@ const PlayerProps = () => {
   const [isUpdating, setUpdating] = useState(false)
 
   const editExistingProp = (key, value) => {
+    const props = player.props.map((prop) => {
+      if (prop.key === key) return {
+        ...prop,
+        value
+      }
+
+      return prop
+    })
+
     setPlayer({
       ...player,
-      props: {
-        ...player.props,
-        [key]: value
-      }
+      props
     })
   }
 
   const deleteExistingProp = (key) => {
-    const playerProps = { ...player.props }
-    playerProps[key] = null
+    const props = player.props.map((prop) => {
+      if (prop.key === key) return {
+        ...prop,
+        value: null
+      }
+
+      return prop
+    })
 
     setPlayer({
       ...player,
-      props: {
-        ...playerProps
-      }
+      props
     })
   }
 
@@ -76,15 +85,13 @@ const PlayerProps = () => {
   const save = async () => {
     setUpdating(true)
 
-    let playerProps = { ...player.props }
-    for (let newProp of newProps) {
-      if (newProp.key.length > 0) {
-        playerProps[newProp.key] = newProp.value
-      }
-    }
+    const props = [
+      ...player.props,
+      ...newProps
+    ]
 
     try {
-      const res = await updatePlayer(player.id, { props: playerProps })
+      const res = await updatePlayer(player.id, { props })
       setPlayer(res.data.player)
       setOriginalPlayer(res.data.player)
       setNewProps(newProps.filter((newProp) => newProp.key.length === 0))
@@ -95,9 +102,9 @@ const PlayerProps = () => {
     }
   }
 
-  const existingProps = Object.keys(player.props)
-    .filter((key) => player.props[key] !== null)
-    .sort((a, b) => a.localeCompare(b))
+  const existingProps = player.props
+    .filter((prop) => prop.value !== null)
+    .sort((a, b) => a.key.localeCompare(b.key))
 
   return (
     <div className='space-y-4 md:space-y-8'>
@@ -117,23 +124,23 @@ const PlayerProps = () => {
             <table className='table-auto w-full'>
               <TableHeader columns={['Property', 'Value', '']} />
               <TableBody iterator={existingProps}>
-                {(key) => (
+                {(prop) => (
                   <>
-                    <TableCell>{key}</TableCell>
+                    <TableCell>{prop.key}</TableCell>
                     <TableCell className='min-w-80'>
                       <TextInput
-                        id={`edit-${key}`}
+                        id={`edit-${prop.key}`}
                         variant='light'
                         placeholder='Value'
-                        onChange={(value) => editExistingProp(key, value)}
-                        value={player.props[key]}
+                        onChange={(value) => editExistingProp(prop.key, value)}
+                        value={prop.value}
                       />
                     </TableCell>
                     <TableCell className='min-w-30'>
                       <Button
                         variant='icon'
                         className='p-1 rounded-full bg-indigo-900 ml-auto'
-                        onClick={() => deleteExistingProp(key)}
+                        onClick={() => deleteExistingProp(prop.key)}
                         icon={<IconTrash size={16} />}
                       />
                     </TableCell>

@@ -75,7 +75,7 @@ const Players = () => {
                   <TableCell><PlayerAliases aliases={player.aliases} /></TableCell>
                   <TableCell>
                     <div className='flex items-center'>
-                      <span className='min-w-5'>{Object.keys(player.props).length}</span>
+                      <span className='min-w-5'>{player.props.length}</span>
                       <Button
                         variant='icon'
                         className='ml-2 p-1 rounded-full bg-indigo-900'
