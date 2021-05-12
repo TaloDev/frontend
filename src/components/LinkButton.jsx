@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { linkStyle } from '../styles/theme'
+import { linkStyle, focusStyle } from '../styles/theme'
 
 const LinkButton = (props) => {
   return (
     <button
       type='button'
-      className={linkStyle}
+      className={`${linkStyle} ${focusStyle}`}
       onClick={props.onClick}
     >
       {props.children}
