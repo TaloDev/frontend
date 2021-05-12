@@ -7,9 +7,8 @@ module.exports = {
     '@snowpack/plugin-react-refresh',
     '@snowpack/plugin-dotenv',
     '@snowpack/plugin-postcss',
-    // '@jadex/snowpack-plugin-tailwindcss-jit',
-    // '@snowpack/plugin-webpack',
-    '@efox/snowpack-plugin-webpack5'
+    '@snowpack/plugin-webpack',
+    // '@efox/snowpack-plugin-webpack5'
   ],
   routes: [
     /* Enable an SPA Fallback in development: */
