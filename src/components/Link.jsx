@@ -7,7 +7,7 @@ const Link = (props) => {
   return (
     <RouterLink
       to={props.to}
-      className={linkStyle}
+      className={'text-indigo-400 hover:underline font-semibold transition-colors rounded-none focus:outline-none focus:ring focus:ring-pink-500'}
     >
       {props.children}
     </RouterLink>
