@@ -35,18 +35,20 @@ const Players = () => {
     <div className='space-y-4 md:space-y-8'>
       <Title>Players</Title>
  
-      <div className='flex items-center'>
-        <div className='w-1/2 lg:w-1/4'>
-          <TextInput
-            defaultValue=''
-            id='players-search'
-            placeholder='Search...'
-            onChange={setSearch}
-            value={search}
-          />
+      {players.length > 0 &&
+        <div className='flex items-center'>
+          <div className='w-1/2 lg:w-1/4'>
+            <TextInput
+              defaultValue=''
+              id='players-search'
+              placeholder='Search...'
+              onChange={setSearch}
+              value={search}
+            />
+          </div>
+          <span className='ml-4'>{players.length} results</span>
         </div>
-        <span className='ml-4'>{players.length} results</span>
-      </div>
+      }
 
       {loading &&
         <div className='flex justify-center'>
