@@ -1,9 +1,9 @@
 module.exports = {
+  mode: 'jit',
   purge: [
-    './src/**/*.jsx',
-    './public/index.html'
+    './src/**/*.{js,jsx}',
+    './public/**/*.html'
   ],
-  darkMode: false,
   theme: {
     minWidth: {
       '5': '1.25rem',
@@ -16,14 +16,5 @@ module.exports = {
       '70': '17.5rem',
       '80': '20rem'
     }
-  },
-  variants: {
-    extend: {
-      backgroundColor: ['active', 'disabled'],
-      cursor: ['disabled'],
-      opacity: ['disabled'],
-      textColor: ['active']
-    }
-  },
-  plugins: []
+  }
 }
