@@ -139,7 +139,7 @@ const APIKeys = () => {
           <div className='mt-4 rounded border-2 border-gray-700'>
             <div className='p-4 bg-gray-700'>
               <h3 className='text-lg font-bold'>Scopes</h3>
-              <p>Scopes control what your access key can and can't do.</p>
+              <p>Scopes control what your access key can and can&apos;t do.</p>
             </div>
             
             <div className='flex space-x-8 p-4'>
@@ -180,7 +180,7 @@ const APIKeys = () => {
       {createdKey &&
         <div className='w-full lg:2/3 xl:w-1/2'>
           <h2 className='text-xl lg:text-2xl font-bold'>Your new key</h2>
-          <p>Save this key somewhere because we won't show it again</p>
+          <p>Save this key somewhere because we won&apos;t show it again</p>
           
           <div className='mt-4 rounded border-2 border-gray-700 bg-gray-700 p-4 break-words'>
             <code>{createdKey}</code>

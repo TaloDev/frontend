@@ -30,7 +30,7 @@ const Dashboard = () => {
       }
 
       {!loading && !error &&
-        <h2 className='text-2xl mt-4'>This week's stats</h2>
+        <h2 className='text-2xl mt-4'>This week&apos;s stats</h2>
       }
 
       {!loading && !error &&

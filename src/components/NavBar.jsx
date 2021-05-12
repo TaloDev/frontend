@@ -8,12 +8,10 @@ import Link from './Link'
 import routes from '../constants/routes'
 import GameSwitcher from './GameSwitcher'
 import activeGameState from '../state/activeGameState'
-import userState from '../state/userState'
 
 const NavBar = () => {
   const [, setAccessToken] = useRecoilState(accessState)
   const activeGame = useRecoilValue(activeGameState)
-  const user = useRecoilValue(userState)
 
   const onLogoutClick = async () => {
     try {

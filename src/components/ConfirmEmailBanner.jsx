@@ -31,7 +31,7 @@ const ConfirmEmailBanner = () => {
     <div className='bg-gray-900 p-4 md:p-8 rounded-md mb-8 lg:mb-12 w-full lg:2/3 xl:w-1/2 space-y-4' role='alert'>
       <div>
         <p className='text-xl font-bold'>Please confirm your email address</p>
-        <p>We've sent a 6 digit code to your email address, please enter it below:</p>
+        <p>We&apos;ve sent a 6 digit code to your email address, please enter it below:</p>
       </div>
 
       <ErrorMessage error={error} />

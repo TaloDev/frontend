@@ -60,7 +60,7 @@ const Players = () => {
         <>
           {search
             ? <p>No players match your query</p>
-            : <p>{activeGame.name} doesn't have any players yet</p>
+            : <p>{activeGame.name} doesn&apos;t have any players yet</p>
           }
         </>
       }

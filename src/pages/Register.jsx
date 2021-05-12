@@ -48,7 +48,7 @@ const Register = () => {
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
       <form className={`text-white rounded-md space-y-8 ${unauthedContainerStyle}`}>
-        <h1 className='text-4xl font-bold'>Let's get started</h1>
+        <h1 className='text-4xl font-bold'>Let&apos;s get started</h1>
 
         <TextInput
           id='name'
