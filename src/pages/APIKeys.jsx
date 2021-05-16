@@ -106,11 +106,11 @@ const APIKeys = () => {
       {!user.emailConfirmed &&
         <div className='bg-yellow-600 p-4 rounded lg:w-max flex items-center space-x-2'>
           <IconAlertCircle size={24} />
-          <span className='ml-2'>You need to confirm your email address to create API keys.</span>
+          <span className='ml-2'>You need to confirm your email address to manage API keys.</span>
         </div>
       }
 
-      {keys.length > 0 &&
+      {user.emailConfirmed && keys.length > 0 &&
         <div className='overflow-x-scroll'>
           <table className='table-auto w-full'>
             <TableHeader columns={['Ending in', 'Created by', 'Created at', '']} />

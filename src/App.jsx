@@ -18,6 +18,7 @@ import gamesState from './state/gamesState'
 import activeGameState from './state/activeGameState'
 import APIKeys from './pages/APIKeys'
 import PlayerProps from './pages/PlayerProps'
+import userTypes from './constants/userTypes'
 
 const App = () => {
   const [accessToken, setAccessToken] = useRecoilState(accessState)
@@ -80,7 +81,7 @@ const App = () => {
                 <>
                   <Route exact path={routes.players} component={Players} />
                   <Route exact path={routes.events} component={Events} />
-                  <Route exact path={routes.apiKeys} component={APIKeys} />
+                  {user.type === userTypes.ADMIN && <Route exact path={routes.apiKeys} component={APIKeys} />}
                   <Route exact path={routes.playerProps} component={PlayerProps} />
                 </>
               }

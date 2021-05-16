@@ -27,7 +27,6 @@ const NewGame = (props) => {
 
     try {
       const res = await createGame(name)
-      // TODO, should probably have an organisation state
       setUser({
         ...user,
         organisation: {

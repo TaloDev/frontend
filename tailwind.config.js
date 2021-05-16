@@ -15,5 +15,13 @@ module.exports = {
       '70': '17.5rem',
       '80': '20rem'
     }
+  },
+  variants: {
+    extend: {
+      backgroundColor: ['active', 'disabled'],
+      cursor: ['disabled'],
+      opacity: ['disabled'],
+      textColor: ['active']
+    }
   }
 }

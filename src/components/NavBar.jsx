@@ -8,10 +8,13 @@ import Link from './Link'
 import routes from '../constants/routes'
 import GameSwitcher from './GameSwitcher'
 import activeGameState from '../state/activeGameState'
+import userState from '../state/userState'
+import userTypes from '../constants/userTypes'
 
 const NavBar = () => {
   const [, setAccessToken] = useRecoilState(accessState)
   const activeGame = useRecoilValue(activeGameState)
+  const user = useRecoilValue(userState)
 
   const onLogoutClick = async () => {
     try {
@@ -38,9 +41,11 @@ const NavBar = () => {
             <li>
               <Link to={routes.events}>Events</Link>
             </li>
-            <li>
-              <Link to={routes.apiKeys}>Access keys</Link>
-            </li>
+            {user.type === userTypes.ADMIN &&
+              <li>
+                <Link to={routes.apiKeys}>Access keys</Link>
+              </li>
+            }
           </>
         }
         <li>
