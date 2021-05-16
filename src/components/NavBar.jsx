@@ -1,8 +1,6 @@
 import React from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import api from '../api/api'
+import { useRecoilValue } from 'recoil'
 import logout from '../api/logout'
-import accessState from '../state/accessState'
 import LinkButton from './LinkButton'
 import Link from './Link'
 import routes from '../constants/routes'
@@ -12,7 +10,6 @@ import userState from '../state/userState'
 import userTypes from '../constants/userTypes'
 
 const NavBar = () => {
-  const [, setAccessToken] = useRecoilState(accessState)
   const activeGame = useRecoilValue(activeGameState)
   const user = useRecoilValue(userState)
 
@@ -22,8 +19,7 @@ const NavBar = () => {
     } catch (err) {
       console.warn('Logout failed', err)
     } finally {
-      setAccessToken(null)
-      api.interceptors.request.eject(0)
+      window.location.reload()
     }
   }
 

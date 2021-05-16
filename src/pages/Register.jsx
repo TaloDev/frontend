@@ -4,19 +4,17 @@ import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import Link from '../components/Link'
 import { useRecoilState } from 'recoil'
-import accessState from '../state/accessState'
 import userState from '../state/userState'
 import register from '../api/register'
 import ErrorMessage from '../components/ErrorMessage'
 import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
-import attachTokenInterceptor from '../utils/attachTokenInterceptor'
+import AuthService from '../services/AuthService'
 
 const Register = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [, setAccessToken] = useRecoilState(accessState)
   const [, setUser] = useRecoilState(userState)
   const [error, setError] = useState(null)
   const [isLoading, setLoading] = useState(false)
@@ -36,9 +34,8 @@ const Register = () => {
     try {
       const res = await register({ email, password, organisationName: name })
       const accessToken = res.data.accessToken
+      AuthService.setToken(accessToken)
       setUser(res.data.user)
-      setAccessToken(accessToken)
-      attachTokenInterceptor(accessToken, setAccessToken)
     } catch (err) {
       setError(buildError(err))
       setLoading(false)

@@ -3,19 +3,17 @@ import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import Link from '../components/Link'
 import { useRecoilState } from 'recoil'
-import accessState from '../state/accessState'
 import userState from '../state/userState'
 import ErrorMessage from '../components/ErrorMessage'
 import login from '../api/login'
 import buildError from '../utils/buildError'
 import routes from '../constants/routes'
 import { unauthedContainerStyle } from '../styles/theme'
-import attachTokenInterceptor from '../utils/attachTokenInterceptor'
+import AuthService from '../services/AuthService'
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [, setAccessToken] = useRecoilState(accessState)
   const [, setUser] = useRecoilState(userState)
   const [error, setError] = useState(null)
   const [isLoading, setLoading] = useState(false)
@@ -28,9 +26,8 @@ const Login = () => {
     try {
       const res = await login({ email, password })
       const accessToken = res.data.accessToken
+      AuthService.setToken(accessToken)
       setUser(res.data.user)
-      setAccessToken(accessToken)
-      attachTokenInterceptor(accessToken, setAccessToken)
     } catch (err) {
       setError(buildError(err))
       setLoading(false)

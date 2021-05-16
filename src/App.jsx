@@ -4,8 +4,6 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import refreshAccess from './api/refreshAccess'
-import accessState from './state/accessState'
-import attachTokenInterceptor from './utils/attachTokenInterceptor'
 import userState from './state/userState'
 import Loading from './components/Loading'
 import NavBar from './components/NavBar'
@@ -19,9 +17,9 @@ import activeGameState from './state/activeGameState'
 import APIKeys from './pages/APIKeys'
 import PlayerProps from './pages/PlayerProps'
 import userTypes from './constants/userTypes'
+import AuthService from './services/AuthService'
 
 const App = () => {
-  const [accessToken, setAccessToken] = useRecoilState(accessState)
   const [user, setUser] = useRecoilState(userState)
   const [isRefreshing, setRefreshing] = useState(true)
   const games = useRecoilValue(gamesState)
@@ -31,9 +29,8 @@ const App = () => {
     try {
       const res = await refreshAccess()
       const accessToken = res.data.accessToken
+      AuthService.setToken(accessToken)
       setUser(res.data.user)
-      setAccessToken(accessToken)
-      attachTokenInterceptor(accessToken, setAccessToken)
     } catch (err) {
       console.log('User doesn\'t have a session')
     } finally {
@@ -42,7 +39,7 @@ const App = () => {
   }
 
   useEffect(() => {
-    if (!accessToken) handleRefreshSession()
+    handleRefreshSession()
   }, [])
 
   useEffect(() => {
@@ -59,7 +56,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      {!accessToken &&
+      {!AuthService.getToken() &&
         <main className='bg-gray-800 w-full'>
           <Switch>
             <Route exact path='/' component={Login} />
@@ -69,7 +66,7 @@ const App = () => {
         </main>
       }
 
-      {accessToken &&
+      {AuthService.getToken() &&
         <div className='w-full'>
           <NavBar />
           <main className='bg-gray-800 w-full p-4 md:p-8 text-white'>
