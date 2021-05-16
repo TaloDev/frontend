@@ -24,13 +24,13 @@ const Dashboard = () => {
       <h1 className='text-4xl font-bold'>{activeGame.name} dashboard</h1>
 
       {error &&
-        <div className='mt-4'>
+        <div className='mt-8'>
           <ErrorMessage error={{ message: `Couldn't fetch headlines` }} />
         </div>
       }
 
       {!loading && !error &&
-        <h2 className='text-2xl mt-4'>This week&apos;s stats</h2>
+        <h2 className='text-2xl mt-8'>This week&apos;s stats</h2>
       }
 
       {!loading && !error &&
