@@ -46,7 +46,7 @@ const Players = () => {
               value={search}
             />
           </div>
-          <span className='ml-4'>{players.length} results</span>
+          <span className='ml-4'>{players.length} {players.length === 1 ? 'result' : 'results'}</span>
         </div>
       }
 
