@@ -35,7 +35,7 @@ const Players = () => {
     <div className='space-y-4 md:space-y-8'>
       <Title>Players</Title>
  
-      {players.length > 0 &&
+      {(players.length > 0 || debouncedSearch.length > 0) &&
         <div className='flex items-center'>
           <div className='w-1/2 lg:w-1/4'>
             <TextInput
@@ -58,7 +58,7 @@ const Players = () => {
 
       {players.length === 0 &&
         <>
-          {search
+          {debouncedSearch.length > 0
             ? <p>No players match your query</p>
             : <p>{activeGame.name} doesn&apos;t have any players yet</p>
           }
