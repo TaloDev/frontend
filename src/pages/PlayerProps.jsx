@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Title from '../components/Title'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { IconPlus, IconTrash } from '@tabler/icons'
 import Button from '../components/Button'
 import TextInput from '../components/TextInput'
@@ -10,14 +10,48 @@ import buildError from '../utils/buildError'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
 import TableHeader from '../components/tables/TableHeader'
+import Loading from '../components/Loading'
+import findPlayer from '../api/findPlayer'
+import routes from '../constants/routes'
+import { useRecoilValue } from 'recoil'
+import activeGameState from '../state/activeGameState'
 
 const PlayerProps = () => {
   const location = useLocation()
-  const [originalPlayer, setOriginalPlayer] = useState(location.state.player)
-  const [player, setPlayer] = useState(location.state.player)
+
+  const [originalPlayer, setOriginalPlayer] = useState(location.state?.player)
+  const [player, setPlayer] = useState(location.state?.player)
+
   const [newProps, setNewProps] = useState([])
   const [error, setError] = useState(null)
   const [isUpdating, setUpdating] = useState(false)
+  const [isLoading, setLoading] = useState(!location.state?.player)
+
+  const activeGame = useRecoilValue(activeGameState)
+
+  const history = useHistory()
+  const { id: playerId } = useParams()
+
+  useEffect(() => {
+    (async () => {
+      if (isLoading) {
+        try {
+          const res = await findPlayer(activeGame.id, playerId)
+          const player = res.data.players.find((p) => p.id === playerId)
+
+          if (player) {
+            setOriginalPlayer(player)
+            setPlayer(player)
+            setLoading(false)
+          } else {
+            history.replace(routes.players)
+          }
+        } catch (err) {
+          history.replace(routes.players)
+        }
+      }
+    })()
+  }, [isLoading])
 
   const editExistingProp = (key, value) => {
     const props = player.props.map((prop) => {
@@ -100,6 +134,14 @@ const PlayerProps = () => {
     } finally {
       setUpdating(false)
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className='flex items-center justify-center'>
+        <Loading />
+      </div>
+    )
   }
 
   const existingProps = player.props
