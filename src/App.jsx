@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch, useHistory } from 'react-router-dom'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -21,9 +21,15 @@ import AuthService from './services/AuthService'
 
 const App = () => {
   const [user, setUser] = useRecoilState(userState)
+  
   const [isRefreshing, setRefreshing] = useState(true)
+  const [hasTriedRefreshing, setTriedRefreshing] = useState(false)
+  const [intendedUrl, setIntendedUrl] = useState(null)
+
   const games = useRecoilValue(gamesState)
   const [activeGame, setActiveGame] = useRecoilState(activeGameState)
+
+  const history = useHistory()
 
   const handleRefreshSession = async () => {
     try {
@@ -35,12 +41,21 @@ const App = () => {
       console.log('User doesn\'t have a session')
     } finally {
       setRefreshing(false)
+      setTriedRefreshing(true)
     }
   }
 
   useEffect(() => {
-    handleRefreshSession()
+    setIntendedUrl(window.location.pathname)
   }, [])
+
+  useEffect(() => {
+    if (!hasTriedRefreshing && intendedUrl) {
+      handleRefreshSession()
+    } else if (hasTriedRefreshing) {
+      history.replace(intendedUrl)
+    }
+  }, [intendedUrl, hasTriedRefreshing])
 
   useEffect(() => {
     if (!activeGame && games.length > 0) setActiveGame(games[0])
@@ -55,7 +70,7 @@ const App = () => {
   }
 
   return (
-    <BrowserRouter>
+    <>
       {!AuthService.getToken() &&
         <main className='bg-gray-800 w-full'>
           <Switch>
@@ -87,7 +102,7 @@ const App = () => {
           </main>
         </div>
       }
-    </BrowserRouter>
+    </>
   )
 }
 
