@@ -39,6 +39,7 @@ const App = () => {
       setUser(res.data.user)
     } catch (err) {
       console.log('User doesn\'t have a session')
+      setActiveGame(null)
     } finally {
       setRefreshing(false)
       setTriedRefreshing(true)
