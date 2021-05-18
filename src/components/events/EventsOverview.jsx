@@ -13,13 +13,14 @@ import ColourfulCheckbox from '../../components/ColourfulCheckbox'
 import TextInput from '../../components/TextInput'
 import getEventColour from '../../utils/getEventColour'
 import { useDebounce } from 'use-debounce'
+import useLocalStorage from '../../utils/useLocalStorage'
 
 const EventsOverview = () => {
   const activeGame = useRecoilValue(activeGameState)
   const [selectedEventNames, setSelectedEventNames] = useState([])
 
-  const [startDate, setStartDate] = useState(format(sub(new Date(), { days: 30 }), 'yyyy-MM-dd'))
-  const [endDate, setEndDate] = useState(format(new Date(), 'yyyy-MM-dd'))
+  const [startDate, setStartDate] = useLocalStorage('eventsOverviewStartDate')
+  const [endDate, setEndDate] = useLocalStorage('eventsOverviewEndDate')
 
   const [debouncedStartDate] = useDebounce(startDate, 300)
   const [debouncedEndDate] = useDebounce(endDate, 300)
@@ -28,6 +29,13 @@ const EventsOverview = () => {
 
   const [data, setData] = useState({})
   const [availableNames, setAvailableNames] = useState([])
+
+  useEffect(() => {
+    if (!startDate && !endDate) {
+      setStartDate(format(sub(new Date(), { days: 30 }), 'yyyy-MM-dd'))
+      setEndDate(format(new Date(), 'yyyy-MM-dd'))
+    }
+  }, [])
 
   useEffect(() => {
     if (eventNames.length > 0 && selectedEventNames.length === 0) {
@@ -86,7 +94,7 @@ const EventsOverview = () => {
         />
       </div>
 
-      {Object.keys(data).length === 0 &&
+      {!loading && Object.keys(data).length === 0 &&
         <p>There are no events for this date range</p>
       }
 

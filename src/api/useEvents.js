@@ -16,7 +16,7 @@ const useEvents = (activeGame, startDate, endDate) => {
   }
 
   const { data, error } = useSWR(
-    activeGame ? ['/events', activeGame, startDate, endDate] : null,
+    activeGame && startDate && endDate ? ['/events', activeGame, startDate, endDate] : null,
     fetcher
   )
 
