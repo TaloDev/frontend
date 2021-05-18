@@ -19,8 +19,8 @@ const EventsOverview = () => {
   const activeGame = useRecoilValue(activeGameState)
   const [selectedEventNames, setSelectedEventNames] = useState([])
 
-  const [startDate, setStartDate] = useLocalStorage('eventsOverviewStartDate')
-  const [endDate, setEndDate] = useLocalStorage('eventsOverviewEndDate')
+  const [startDate, setStartDate] = useLocalStorage('eventsOverviewStartDate', '')
+  const [endDate, setEndDate] = useLocalStorage('eventsOverviewEndDate', '')
 
   const [debouncedStartDate] = useDebounce(startDate, 300)
   const [debouncedEndDate] = useDebounce(endDate, 300)
