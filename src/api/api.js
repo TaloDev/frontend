@@ -24,7 +24,7 @@ instance.interceptors.response.use((response) => {
 }, async (error) => {
   const request = error.config
 
-  if (error.response.status === 401 && !request._retry) {
+  if (error.response?.status === 401 && !request._retry) {
     request._retry = true
 
     const res = await refreshAccess()
@@ -34,7 +34,7 @@ instance.interceptors.response.use((response) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
 
     return instance(request)
-  } else if (error.response.status === 401 && request._retry) {
+  } else if (error.response?.status === 401 && request._retry) {
     window.location.reload()
   }
 
