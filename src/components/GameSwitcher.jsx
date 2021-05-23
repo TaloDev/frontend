@@ -21,7 +21,7 @@ const GameSwitcher = () => {
     setShowModal(true)
   }
 
-  const dropdownButtonStyle = 'disabled:bg-transparent hover:bg-gray-200 active:bg-gray-300 focus:z-10'
+  const dropdownButtonStyle = 'hover:bg-gray-200 active:bg-gray-300 focus:z-10'
 
   return (
     <div className='relative z-50'>
@@ -38,18 +38,22 @@ const GameSwitcher = () => {
               transition={{ duration: 0.2 }}
               className='bg-white text-black rounded-b w-80'
             >
-              {games.map((game) => (
-                <li key={game.name} className={`border-b border-gray-300 ${dropdownButtonStyle}`}>
-                  <Button
-                    variant='bare'
-                    disabled={activeGame.id === game.id}
-                    className='truncate p-2 w-full'
-                    onClick={() => setActiveGame(game)}
-                  >
-                    {game.name}
-                  </Button>
+              {games.map((game) => {
+                const disabled = activeGame.id === game.id
+
+                return (
+                  <li key={game.name} className={classNames('border-b border-gray-300', dropdownButtonStyle, { ['!bg-transparent']: disabled })}>
+                    <Button
+                      variant='bare'
+                      disabled={disabled}
+                      className='truncate p-2 w-full'
+                      onClick={() => setActiveGame(game)}
+                    >
+                      {game.name}
+                    </Button>
                 </li>
-              ))}
+                )
+              })}
 
               <li className={`rounded-b ${dropdownButtonStyle}`}>
                 <Button variant='bare' className='flex items-center rounded-b p-2 w-full' onClick={openModal}>

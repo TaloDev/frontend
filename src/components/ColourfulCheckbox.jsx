@@ -2,10 +2,9 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { IconCheck } from '@tabler/icons'
-import { focusStyle } from '../styles/theme'
+import { labelFocusStyle } from '../styles/theme'
 
 const ColourfulCheckbox = (props) => {
-  const labelFocusStyle = focusStyle.replaceAll('focus:', '')
   const [focus, setFocus] = useState(false)
 
   return (

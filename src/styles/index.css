@@ -46,3 +46,7 @@ table tr:last-child td:first-child {
 table tr:last-child td:last-child {
   @apply rounded-br;
 }
+
+.tippy-box:focus {
+  @apply outline-none;
+}

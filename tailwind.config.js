@@ -1,7 +1,9 @@
+// eslint-disable-next-line no-undef
 module.exports = {
+  mode: 'jit',
   purge: [
-    './src/**/*.{js,jsx}',
-    './public/**/*.html'
+    './public/**/*.html',
+    './src/**/*.{js,jsx}'
   ],
   theme: {
     minWidth: {
@@ -14,14 +16,6 @@ module.exports = {
       '60': '15rem',
       '70': '17.5rem',
       '80': '20rem'
-    }
-  },
-  variants: {
-    extend: {
-      backgroundColor: ['active', 'disabled'],
-      cursor: ['disabled'],
-      opacity: ['disabled'],
-      textColor: ['active']
     }
   }
 }
