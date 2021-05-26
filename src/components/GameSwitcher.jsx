@@ -32,6 +32,8 @@ const GameSwitcher = () => {
           onClickOutside={() => setOpen(false)}
           offset={[0, 0]}
           interactive={true}
+          arrow={false}
+          theme='bare'
           content={(
             <motion.ul
               animate={{ opacity: isOpen ? 1 : 0 }}

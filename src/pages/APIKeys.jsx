@@ -51,17 +51,19 @@ const APIKeys = () => {
   }, [activeGame])
 
   const onDeleteClick = async (apiKey) => {
-    setError(null)
-    setDeletingKeys([...deletingKeys, apiKey.id])
-
-    try {
-      await deleteAPIKey(apiKey.id)
-      setKeys(keys.filter((k) => k.id !== apiKey.id))
+    if (window.confirm('Are you sure you want to permanently delete this access key? This action is irreversible.')) {
       setError(null)
-    } catch (err) {
-      setError(buildError(err))
-    } finally {
-      setDeletingKeys(deletingKeys.filter((k) => k !== apiKey.id))
+      setDeletingKeys([...deletingKeys, apiKey.id])
+  
+      try {
+        await deleteAPIKey(apiKey.id)
+        setKeys(keys.filter((k) => k.id !== apiKey.id))
+        setError(null)
+      } catch (err) {
+        setError(buildError(err))
+      } finally {
+        setDeletingKeys(deletingKeys.filter((k) => k !== apiKey.id))
+      }
     }
   }
 
@@ -120,8 +122,8 @@ const APIKeys = () => {
                   <TableCell>…{key.token}</TableCell>
                   <TableCell>{key.createdBy === user.email ? 'You' : key.createdBy}</TableCell>
                   <TableCell>{format(new Date(key.createdAt), 'do MMM Y, hh:mm a')}</TableCell>
-                  <TableCell className='min-w-10'>
-                    <Button variant='red' onClick={() => onDeleteClick(key)}>Revoke</Button>
+                  <TableCell className='w-40'>
+                    <Button variant='black' onClick={() => onDeleteClick(key)}>Revoke</Button>
                   </TableCell>
                 </>
               )}

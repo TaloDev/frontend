@@ -70,7 +70,7 @@ const Players = () => {
       {players.length > 0 &&
         <div className='overflow-x-scroll'>
           <table className='table-auto w-full'>
-            <TableHeader columns={['Aliases', 'Properties', 'Registered', 'Last seen']} />
+            <TableHeader columns={['Aliases', 'Properties', 'Registered', 'Last seen', '']} />
             <TableBody iterator={players}>
               {(player) => (
                 <>
@@ -88,6 +88,9 @@ const Players = () => {
                   </TableCell>
                   <TableCell>{format(new Date(player.createdAt), 'do MMM Y')}</TableCell>
                   <TableCell>{format(new Date(player.lastSeenAt), 'do MMM Y')}</TableCell>
+                  <TableCell className='w-40'>
+                    <Button variant='grey' onClick={() => {}}>View events</Button>
+                  </TableCell>
                 </>
               )}
             </TableBody>
