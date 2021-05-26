@@ -35,6 +35,7 @@
     "eslint-plugin-react": "^7.23.2",
     "postcss": "^8.3.0",
     "postcss-cli": "^8.3.1",
+    "postcss-nesting": "^8.0.1",
     "snowpack": "^3.5.1",
     "tailwindcss": "^2.1.2"
   },
