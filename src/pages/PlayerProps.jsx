@@ -16,6 +16,7 @@ import routes from '../constants/routes'
 import { useRecoilValue } from 'recoil'
 import activeGameState from '../state/activeGameState'
 import isEqual from 'lodash.isequal'
+import classNames from 'classnames'
 
 const PlayerProps = () => {
   const location = useLocation()
@@ -169,7 +170,7 @@ const PlayerProps = () => {
               <TableBody iterator={existingProps}>
                 {(prop) => (
                   <>
-                    <TableCell>{prop.key}</TableCell>
+                    <TableCell className={classNames('w-80', { '!rounded-bl-none': newProps.length > 0 })}>{prop.key}</TableCell>
                     <TableCell className='min-w-80'>
                       <TextInput
                         id={`edit-${prop.key}`}
@@ -179,7 +180,7 @@ const PlayerProps = () => {
                         value={prop.value}
                       />
                     </TableCell>
-                    <TableCell className='min-w-40'>
+                    <TableCell className={classNames('min-w-40', { '!rounded-br-none': newProps.length > 0 })}>
                       <Button
                         variant='icon'
                         className='p-1 rounded-full bg-indigo-900 ml-auto'
@@ -193,7 +194,7 @@ const PlayerProps = () => {
               <TableBody iterator={newProps} startIdx={existingProps.length}>
                 {(prop, idx) => (
                   <>
-                    <TableCell>
+                    <TableCell className='w-80'>
                       <TextInput
                         id={`edit-key-${idx}`}
                         variant='light'
