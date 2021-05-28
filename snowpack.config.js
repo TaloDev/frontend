@@ -17,6 +17,6 @@ module.exports = {
   ],
   packageOptions: {},
   devOptions: {
-    tailwindConfig: './tailwind.config.js'
+    // tailwindConfig: './tailwind.config.js'
   }
 }
