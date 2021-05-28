@@ -31,6 +31,10 @@ const Players = () => {
     })
   }
 
+  const goToPlayerEvents = (player) => {
+    history.push(routes.playerEvents.replace(':id', player.id))
+  }
+
   return (
     <div className='space-y-4 md:space-y-8'>
       <Title>Players</Title>
@@ -74,10 +78,10 @@ const Players = () => {
             <TableBody iterator={players}>
               {(player) => (
                 <>
-                  <TableCell><PlayerAliases aliases={player.aliases} /></TableCell>
+                  <TableCell className='min-w-80 md:min-w-0'><PlayerAliases aliases={player.aliases} /></TableCell>
                   <TableCell>
                     <div className='flex items-center'>
-                      <span className='min-w-5'>{player.props.length}</span>
+                      <span>{player.props.length}</span>
                       <Button
                         variant='icon'
                         className='ml-2 p-1 rounded-full bg-indigo-900'
@@ -89,7 +93,7 @@ const Players = () => {
                   <TableCell>{format(new Date(player.createdAt), 'do MMM Y')}</TableCell>
                   <TableCell>{format(new Date(player.lastSeenAt), 'do MMM Y')}</TableCell>
                   <TableCell className='w-40'>
-                    <Button variant='grey' onClick={() => {}}>View events</Button>
+                    <Button variant='grey' onClick={() => goToPlayerEvents(player)}>View events</Button>
                   </TableCell>
                 </>
               )}

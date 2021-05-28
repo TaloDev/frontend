@@ -18,6 +18,7 @@ import APIKeys from './pages/APIKeys'
 import PlayerProps from './pages/PlayerProps'
 import userTypes from './constants/userTypes'
 import AuthService from './services/AuthService'
+import PlayerEvents from './pages/PlayerEvents'
 
 const App = () => {
   const [user, setUser] = useRecoilState(userState)
@@ -96,6 +97,7 @@ const App = () => {
                   <Route exact path={routes.events} component={Events} />
                   {user.type === userTypes.ADMIN && <Route exact path={routes.apiKeys} component={APIKeys} />}
                   <Route exact path={routes.playerProps} component={PlayerProps} />
+                  <Route exact path={routes.playerEvents} component={PlayerEvents} />
                 </>
               }
               <Redirect to='/' />
