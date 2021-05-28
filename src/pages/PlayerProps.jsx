@@ -170,7 +170,7 @@ const PlayerProps = () => {
               <TableBody iterator={existingProps}>
                 {(prop) => (
                   <>
-                    <TableCell className={classNames('w-80', { '!rounded-bl-none': newProps.length > 0 })}>{prop.key}</TableCell>
+                    <TableCell className={classNames('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}>{prop.key}</TableCell>
                     <TableCell className='min-w-80'>
                       <TextInput
                         id={`edit-${prop.key}`}
@@ -194,7 +194,7 @@ const PlayerProps = () => {
               <TableBody iterator={newProps} startIdx={existingProps.length}>
                 {(prop, idx) => (
                   <>
-                    <TableCell className='w-80'>
+                    <TableCell className='min-w-80'>
                       <TextInput
                         id={`edit-key-${idx}`}
                         variant='light'
