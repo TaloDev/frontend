@@ -15,6 +15,7 @@ import findPlayer from '../api/findPlayer'
 import routes from '../constants/routes'
 import { useRecoilValue } from 'recoil'
 import activeGameState from '../state/activeGameState'
+import isEqual from 'lodash.isequal'
 
 const PlayerProps = () => {
   const location = useLocation()
@@ -178,7 +179,7 @@ const PlayerProps = () => {
                         value={prop.value}
                       />
                     </TableCell>
-                    <TableCell className='min-w-30'>
+                    <TableCell className='min-w-40'>
                       <Button
                         variant='icon'
                         className='p-1 rounded-full bg-indigo-900 ml-auto'
@@ -210,7 +211,7 @@ const PlayerProps = () => {
                         value={prop.value}
                       />
                     </TableCell>
-                    <TableCell className='min-w-30'>
+                    <TableCell className='min-w-40'>
                       <Button
                         variant='icon'
                         className='p-1 rounded-full bg-indigo-900 ml-auto'
@@ -236,7 +237,7 @@ const PlayerProps = () => {
         {error && <ErrorMessage error={error} />}
 
         <div className='flex space-x-4 mt-8'>
-          <Button variant='grey' onClick={reset}>
+          <Button variant='grey' disabled={isEqual(player, originalPlayer)} onClick={reset}>
             Reset
           </Button>
 
