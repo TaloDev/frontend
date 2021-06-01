@@ -3,24 +3,26 @@ import buildError from '../utils/buildError'
 import api from './api'
 import { stringify } from 'querystring'
 
-const usePlayers = (activeGame, search) => {
+const usePlayers = (activeGame, search, page) => {
   const fetcher = async (url) => {
     const qs = stringify({
       gameId: activeGame.id,
-      search
+      search,
+      page
     })
 
     const res = await api.get(`${url}?${qs}`)
-    return res.data.players
+    return res.data
   }
 
   const { data, error } = useSWR(
-    activeGame ? ['/players', activeGame, search] : null,
+    activeGame ? ['/players', activeGame, search, page] : null,
     fetcher
   )
 
   return {
-    players: data ?? [],
+    players: data?.players ?? [],
+    count: data?.count,
     loading: !data && !error,
     error: error && buildError(error)
   }

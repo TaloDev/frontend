@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { IconBrandSteam, IconQuestionMark } from '@tabler/icons'
+import { IconBrandSteam, IconQuestionMark, IconUser } from '@tabler/icons'
 import Tippy from '@tippyjs/react'
 
 const PlayerAliases = (props) => {
   const getIcon = (alias) => {
     switch (alias.service) {
       case 'steam': return <IconBrandSteam size={16} />
+      case 'username': return <IconUser size={16} />
       default: return <IconQuestionMark size={16} />
     }
   }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
 import activeGameState from '../state/activeGameState'
 import ErrorMessage from '../components/ErrorMessage'
@@ -16,13 +16,15 @@ import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
 import usePlayers from '../api/usePlayers'
 import { useDebounce } from 'use-debounce'
+import Pagination from '../components/Pagination'
 
 const Players = () => {
   const [search, setSearch] = useState('')
   const [debouncedSearch] = useDebounce(search, 300)
   const activeGame = useRecoilValue(activeGameState)
   const history = useHistory()
-  const { players, loading, error } = usePlayers(activeGame, debouncedSearch)
+  const [page, setPage] = useState(0)
+  const { players, count, loading, error } = usePlayers(activeGame, debouncedSearch, page)
 
   const goToPlayerProps = (player) => {
     history.push({
@@ -35,9 +37,21 @@ const Players = () => {
     history.push(routes.playerEvents.replace(':id', player.id))
   }
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [page])
+
   return (
     <div className='space-y-4 md:space-y-8'>
-      <Title>Players</Title>
+      <div className='flex items-center'>
+        <Title showBackButton>Players</Title>
+
+        {loading &&
+          <div className='mt-1 ml-4'>
+            <Loading size={24} thickness={180} />
+          </div>
+        }
+      </div>
  
       {(players.length > 0 || debouncedSearch.length > 0) &&
         <div className='flex items-center'>
@@ -50,13 +64,7 @@ const Players = () => {
               value={search}
             />
           </div>
-          <span className='ml-4'>{players.length} {players.length === 1 ? 'result' : 'results'}</span>
-        </div>
-      }
-
-      {loading &&
-        <div className='flex justify-center'>
-          <Loading />
+          {Boolean(count) && <span className='ml-4'>{count} {count === 1 ? 'player' : 'players'}</span>}
         </div>
       }
 
@@ -72,34 +80,38 @@ const Players = () => {
       {error && <ErrorMessage error={error} />}
 
       {players.length > 0 &&
-        <div className='overflow-x-scroll'>
-          <table className='table-auto w-full'>
-            <TableHeader columns={['Aliases', 'Properties', 'Registered', 'Last seen', '']} />
-            <TableBody iterator={players}>
-              {(player) => (
-                <>
-                  <TableCell className='min-w-80 md:min-w-0'><PlayerAliases aliases={player.aliases} /></TableCell>
-                  <TableCell>
-                    <div className='flex items-center'>
-                      <span>{player.props.length}</span>
-                      <Button
-                        variant='icon'
-                        className='ml-2 p-1 rounded-full bg-indigo-900'
-                        onClick={() => goToPlayerProps(player)}
-                        icon={<IconArrowRight size={16} />}
-                      />
-                    </div>
-                  </TableCell>
-                  <TableCell>{format(new Date(player.createdAt), 'do MMM Y')}</TableCell>
-                  <TableCell>{format(new Date(player.lastSeenAt), 'do MMM Y')}</TableCell>
-                  <TableCell className='w-40'>
-                    <Button variant='grey' onClick={() => goToPlayerEvents(player)}>View events</Button>
-                  </TableCell>
-                </>
-              )}
-            </TableBody>
-          </table>
-        </div>
+        <>
+          <div className='overflow-x-scroll'>
+            <table className='table-auto w-full'>
+              <TableHeader columns={['Aliases', 'Properties', 'Registered', 'Last seen', '']} />
+              <TableBody iterator={players}>
+                {(player) => (
+                  <>
+                    <TableCell className='min-w-80 md:min-w-0'><PlayerAliases aliases={player.aliases} /></TableCell>
+                    <TableCell>
+                      <div className='flex items-center'>
+                        <span>{player.props.length}</span>
+                        <Button
+                          variant='icon'
+                          className='ml-2 p-1 rounded-full bg-indigo-900'
+                          onClick={() => goToPlayerProps(player)}
+                          icon={<IconArrowRight size={16} />}
+                        />
+                      </div>
+                    </TableCell>
+                    <TableCell>{format(new Date(player.createdAt), 'do MMM Y')}</TableCell>
+                    <TableCell>{format(new Date(player.lastSeenAt), 'do MMM Y')}</TableCell>
+                    <TableCell className='w-40'>
+                      <Button variant='grey' onClick={() => goToPlayerEvents(player)}>View events</Button>
+                    </TableCell>
+                  </>
+                )}
+              </TableBody>
+            </table>
+          </div>
+
+          {Boolean(count) && <Pagination count={count} pageState={[page, setPage]} />}
+        </>
       }
     </div>
   )

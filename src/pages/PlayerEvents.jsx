@@ -9,6 +9,9 @@ import Loading from '../components/Loading'
 import routes from '../constants/routes'
 import usePlayerEvents from '../api/usePlayerEvents'
 import { format } from 'date-fns'
+import TextInput from '../components/TextInput'
+import { useDebounce } from 'use-debounce'
+import Pagination from '../components/Pagination'
 
 const EventProps = (props) => {
   return props.eventProps.map((prop) => (
@@ -19,7 +22,10 @@ const EventProps = (props) => {
 const PlayerEvents = () => {
   const [sortedEvents, setSortedEvents] = useState([])
   const { id: playerId } = useParams()
-  const { events, loading, error, errorStatusCode } = usePlayerEvents(playerId)
+  const [search, setSearch] = useState('')
+  const [debouncedSearch] = useDebounce(search, 300)
+  const [page, setPage] = useState(0)
+  const { events, count, loading, error, errorStatusCode } = usePlayerEvents(playerId, debouncedSearch, page)
   const history = useHistory()
 
   useEffect(() => {
@@ -34,28 +40,43 @@ const PlayerEvents = () => {
     }
   }, [events])
 
-  if (loading) {
-    return (
-      <div className='flex items-center justify-center'>
-        <Loading />
-      </div>
-    )
-  }
-
   return (
     <div className='space-y-4 md:space-y-8'>
-      <Title showBackButton>Player events</Title>
+      <div className='flex items-center'>
+        <Title showBackButton>Player events</Title>
+
+        {loading &&
+          <div className='mt-1 ml-4'>
+            <Loading size={24} thickness={180} />
+          </div>
+        }
+      </div>
 
       <div>
         Showing events for <code className='bg-gray-900 rounded p-2 ml-1 text-sm'>{playerId}</code>
       </div>
 
-      <div className='w-full'>
-        {!error && events.length === 0 &&
-          <p>This player has no events.</p>
-        }
+      {(events.length > 0 || debouncedSearch.length > 0) &&
+        <div className='flex items-center'>
+          <div className='w-1/2 lg:w-1/4'>
+            <TextInput
+              defaultValue=''
+              id='events-search'
+              placeholder='Search...'
+              onChange={setSearch}
+              value={search}
+            />
+          </div>
+          {Boolean(count) && <span className='ml-4'>{count} {count === 1 ? 'event' : 'events'}</span>}
+        </div>
+      }
 
-        {!error && events.length > 0 &&
+      {!error && events.length === 0 &&
+        <p>This player has no events.</p>
+      }
+
+      {!error && events.length > 0 &&
+        <>
           <div className='overflow-x-scroll'>
             <table className='table-auto w-full'>
               <TableHeader columns={['Event', 'Props', 'Time']} />
@@ -74,10 +95,12 @@ const PlayerEvents = () => {
               </TableBody>
             </table>
           </div>
-        }
 
-        {error && <ErrorMessage error={error} />}
-      </div>
+          {Boolean(count) && <Pagination count={count} pageState={[page, setPage]} />}
+        </>
+      }
+
+      {error && <ErrorMessage error={error} />}
     </div>
   )
 }
