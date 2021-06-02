@@ -44,7 +44,7 @@ const Players = () => {
   return (
     <div className='space-y-4 md:space-y-8'>
       <div className='flex items-center'>
-        <Title showBackButton>Players</Title>
+        <Title>Players</Title>
 
         {loading &&
           <div className='mt-1 ml-4'>
