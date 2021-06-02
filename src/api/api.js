@@ -24,18 +24,20 @@ instance.interceptors.response.use((response) => {
 }, async (error) => {
   const request = error.config
 
-  if (error.response?.status === 401 && !request._retry) {
-    request._retry = true
-
-    const res = await refreshAccess()
-    const newToken = res.data.accessToken
-    
-    AuthService.setToken(newToken)
-    axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
-
-    return instance(request)
-  } else if (error.response?.status === 401 && request._retry) {
-    window.location.reload()
+  if (!request.url.startsWith('/public')) {
+    if (error.response?.status === 401 && !request._retry) {
+      request._retry = true
+  
+      const res = await refreshAccess()
+      const newToken = res.data.accessToken
+      
+      AuthService.setToken(newToken)
+      axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
+  
+      return instance(request)
+    } else if (error.response?.status === 401 && request._retry) {
+      window.location.reload()
+    }
   }
 
   return Promise.reject(error)
