@@ -238,7 +238,7 @@ const PlayerProps = () => {
         {error && <ErrorMessage error={error} />}
 
         <div className='flex space-x-4 mt-8'>
-          <Button variant='grey' disabled={isEqual(player, originalPlayer)} onClick={reset}>
+          <Button variant='grey' disabled={isEqual(player, originalPlayer) && newProps.length === 0} onClick={reset}>
             Reset
           </Button>
 
