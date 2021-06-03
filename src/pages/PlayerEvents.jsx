@@ -15,7 +15,7 @@ import Pagination from '../components/Pagination'
 
 const EventProps = (props) => {
   return props.eventProps.map((prop) => (
-    <code key={prop.key} className='bg-gray-900 rounded p-2 mr-2 mb-2 text-xs inline-block'>{prop.key} = {prop.value}</code>
+    <code key={`${prop.key}-${prop.value}`} className='bg-gray-900 rounded p-2 mr-2 mb-2 text-xs inline-block'>{prop.key} = {prop.value}</code>
   ))
 }
 
