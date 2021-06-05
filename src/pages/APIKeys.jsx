@@ -36,11 +36,11 @@ const APIKeys = () => {
         setCreatedKey(null)
 
         try {
-          let res = await getAPIKeys(activeGame.id)
-          setKeys(res.data.apiKeys)
-
-          res = await getAPIKeyScopes()
+          let res = await getAPIKeyScopes()
           setAvailableScopes(res.data.scopes)
+
+          res = await getAPIKeys(activeGame.id)
+          setKeys(res.data.apiKeys)
         } catch (err) {
           setError(buildError(err))
         } finally {
