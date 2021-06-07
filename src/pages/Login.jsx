@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import Link from '../components/Link'
@@ -10,6 +10,7 @@ import buildError from '../utils/buildError'
 import routes from '../constants/routes'
 import { unauthedContainerStyle } from '../styles/theme'
 import AuthService from '../services/AuthService'
+import AlertBanner from '../components/AlertBanner'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -17,6 +18,15 @@ const Login = () => {
   const [, setUser] = useRecoilState(userState)
   const [error, setError] = useState(null)
   const [isLoading, setLoading] = useState(false)
+  const [wasLoggedOut] = useState(window.localStorage.getItem('loggedOut'))
+
+  useEffect(() => {
+    if (wasLoggedOut) {
+      setTimeout(() => {
+        window.localStorage.removeItem('loggedOut')
+      }, 500)
+    }
+  }, [wasLoggedOut])
 
   const onLoginClick = async (e) => {
     e.preventDefault()
@@ -37,7 +47,12 @@ const Login = () => {
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
       <form className={`text-white rounded-md space-y-8 ${unauthedContainerStyle}`}>
-        <h1 className='text-4xl font-bold'>Welcome back</h1>
+        <div>
+          <h1 className='text-4xl font-bold'>Welcome back</h1>
+          {wasLoggedOut &&
+            <AlertBanner className='mt-4' text='You were logged out' />
+          }
+        </div>
 
         <TextInput
           autoFocus

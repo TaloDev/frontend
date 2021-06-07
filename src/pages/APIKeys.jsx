@@ -12,10 +12,10 @@ import deleteAPIKey from '../api/deleteAPIKey'
 import getAPIKeyScopes from '../api/getAPIKeyScopes'
 import createAPIKey from '../api/createAPIKey'
 import userState from '../state/userState'
-import { IconAlertCircle } from '@tabler/icons'
 import TableHeader from '../components/tables/TableHeader'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
+import AlertBanner from '../components/AlertBanner'
 
 const APIKeys = () => {
   const [isLoading, setLoading] = useState(true)
@@ -106,10 +106,7 @@ const APIKeys = () => {
       {error && <ErrorMessage error={error} />}
 
       {!user.emailConfirmed &&
-        <div className='bg-yellow-600 p-4 rounded lg:w-max flex items-center space-x-2'>
-          <IconAlertCircle size={24} />
-          <span className='ml-2'>You need to confirm your email address to manage API keys.</span>
-        </div>
+        <AlertBanner className='lg:w-max' text='You need to confirm your email address to manage API keys' />
       }
 
       {user.emailConfirmed && keys.length > 0 &&
