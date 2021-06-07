@@ -7,10 +7,6 @@ export const apiConfig = {
   baseURL: import.meta.env.SNOWPACK_PUBLIC_API_URL
 }
 
-const reload = () => {
-  window.localStorage.setItem('loggedOut', 'true')
-  window.location.reload()
-}
 
 const instance = axios.create(apiConfig)
 
@@ -29,11 +25,6 @@ instance.interceptors.response.use((response) => {
 }, async (error) => {
   const request = error.config
 
-  if (AuthService.getToken() && error.response?.status === 403) {
-    reload()
-    return Promise.reject(error)
-  }
-
   if (!request.url.startsWith('/public')) {
     if (error.response?.status === 401 && !request._retry) {
       request._retry = true
@@ -46,7 +37,7 @@ instance.interceptors.response.use((response) => {
   
       return instance(request)
     } else if (error.response?.status === 401 && request._retry) {
-      reload()
+      AuthService.reload()
     }
   }
 

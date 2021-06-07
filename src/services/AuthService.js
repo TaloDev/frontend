@@ -9,9 +9,15 @@ const AuthService = (() => {
     _token = token
   }
 
+  const reload = () => {
+    window.localStorage.setItem('loggedOut', 'true')
+    window.location.reload()
+  }
+
   return {
     getToken,
-    setToken
+    setToken,
+    reload
   }
  })()
 
