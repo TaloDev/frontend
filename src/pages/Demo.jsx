@@ -35,7 +35,7 @@ const Demo = () => {
       <form className={`text-white rounded-md space-y-8 ${unauthedContainerStyle}`}>
         <h1 className='text-4xl font-bold'>Browse the demo</h1>
         <p>
-          You&apos;ll get temporary access to the read-only demo organisation. Some features are restricted in the demo environment but trust us, they work!
+          You&apos;ll get to the read-only demo organisation for 1 hour. Some features are restricted in the demo environment but trust us, they work!
         </p>
 
         <ErrorMessage error={error} />
@@ -49,7 +49,7 @@ const Demo = () => {
       </form>
 
       <div className={unauthedContainerStyle}>
-        <p className='mt-4 text-white'>Want an account instead? <Link to='/register'>Register here</Link></p>
+        <p className='mt-4 text-white'>Want to make an account? <Link to='/register'>Register here</Link></p>
       </div>
     </div>
   )
