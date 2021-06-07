@@ -19,6 +19,7 @@ import PlayerProps from './pages/PlayerProps'
 import userTypes from './constants/userTypes'
 import AuthService from './services/AuthService'
 import PlayerEvents from './pages/PlayerEvents'
+import Demo from './pages/Demo'
 
 const App = () => {
   const [user, setUser] = useRecoilState(userState)
@@ -78,6 +79,7 @@ const App = () => {
           <Switch>
             <Route exact path='/' component={Login} />
             <Route exact path={routes.register} component={Register} />
+            <Route exact path='/demo' component={Demo} />
             <Redirect to='/' />
           </Switch>
         </main>
