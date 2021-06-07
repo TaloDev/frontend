@@ -151,101 +151,99 @@ const PlayerProps = () => {
     .sort((a, b) => a.key.localeCompare(b.key))
 
   return (
-    <div className='space-y-4 md:space-y-8'>
+    <div className='space-y-4 md:space-y-8 w-full lg:w-1/2'>
       <Title showBackButton>Player properties</Title>
 
       <div>
         Showing properties for <code className='bg-gray-900 rounded p-2 ml-1 text-sm'>{player.id}</code>
       </div>
 
-      <div className='w-full lg:w-1/2'>
-        {existingProps.length + newProps.length === 0 &&
-          <p>This player has no custom properties. Click the button below to add one.</p>
-        }
+      {existingProps.length + newProps.length === 0 &&
+        <p>This player has no custom properties. Click the button below to add one.</p>
+      }
 
-        {existingProps.length + newProps.length > 0 &&
-          <div className='overflow-x-scroll'>
-            <table className='table-auto w-full'>
-              <TableHeader columns={['Property', 'Value', '']} />
-              <TableBody iterator={existingProps}>
-                {(prop) => (
-                  <>
-                    <TableCell className={classNames('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}>{prop.key}</TableCell>
-                    <TableCell className='min-w-80'>
-                      <TextInput
-                        id={`edit-${prop.key}`}
-                        variant='light'
-                        placeholder='Value'
-                        onChange={(value) => editExistingProp(prop.key, value)}
-                        value={prop.value}
-                      />
-                    </TableCell>
-                    <TableCell className={classNames('min-w-40', { '!rounded-br-none': newProps.length > 0 })}>
-                      <Button
-                        variant='icon'
-                        className='p-1 rounded-full bg-indigo-900 ml-auto'
-                        onClick={() => deleteExistingProp(prop.key)}
-                        icon={<IconTrash size={16} />}
-                      />
-                    </TableCell>
-                  </>
-                )}
-              </TableBody>
-              <TableBody iterator={newProps} startIdx={existingProps.length}>
-                {(prop, idx) => (
-                  <>
-                    <TableCell className='min-w-80'>
-                      <TextInput
-                        id={`edit-key-${idx}`}
-                        variant='light'
-                        placeholder='Property'
-                        onChange={(value) => editNewPropKey(idx, value)}
-                        value={prop.key}
-                      />
-                    </TableCell>
-                    <TableCell className='min-w-80'>
-                      <TextInput
-                        id={`edit-value-${idx}`}
-                        variant='light'
-                        placeholder='Value'
-                        onChange={(value) => editNewPropValue(idx, value)}
-                        value={prop.value}
-                      />
-                    </TableCell>
-                    <TableCell className='min-w-40'>
-                      <Button
-                        variant='icon'
-                        className='p-1 rounded-full bg-indigo-900 ml-auto'
-                        onClick={() => deleteNewProp(idx)}
-                        icon={<IconTrash size={16} />}
-                      />
-                    </TableCell>
-                  </>
-                )}
-              </TableBody>
-            </table>
-          </div>
-        }
+      {existingProps.length + newProps.length > 0 &&
+        <div className='overflow-x-scroll'>
+          <table className='table-auto w-full'>
+            <TableHeader columns={['Property', 'Value', '']} />
+            <TableBody iterator={existingProps}>
+              {(prop) => (
+                <>
+                  <TableCell className={classNames('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}>{prop.key}</TableCell>
+                  <TableCell className='min-w-80'>
+                    <TextInput
+                      id={`edit-${prop.key}`}
+                      variant='light'
+                      placeholder='Value'
+                      onChange={(value) => editExistingProp(prop.key, value)}
+                      value={prop.value}
+                    />
+                  </TableCell>
+                  <TableCell className={classNames('min-w-40', { '!rounded-br-none': newProps.length > 0 })}>
+                    <Button
+                      variant='icon'
+                      className='p-1 rounded-full bg-indigo-900 ml-auto'
+                      onClick={() => deleteExistingProp(prop.key)}
+                      icon={<IconTrash size={16} />}
+                    />
+                  </TableCell>
+                </>
+              )}
+            </TableBody>
+            <TableBody iterator={newProps} startIdx={existingProps.length}>
+              {(prop, idx) => (
+                <>
+                  <TableCell className='min-w-80'>
+                    <TextInput
+                      id={`edit-key-${idx}`}
+                      variant='light'
+                      placeholder='Property'
+                      onChange={(value) => editNewPropKey(idx, value)}
+                      value={prop.key}
+                    />
+                  </TableCell>
+                  <TableCell className='min-w-80'>
+                    <TextInput
+                      id={`edit-value-${idx}`}
+                      variant='light'
+                      placeholder='Value'
+                      onChange={(value) => editNewPropValue(idx, value)}
+                      value={prop.value}
+                    />
+                  </TableCell>
+                  <TableCell className='min-w-40'>
+                    <Button
+                      variant='icon'
+                      className='p-1 rounded-full bg-indigo-900 ml-auto'
+                      onClick={() => deleteNewProp(idx)}
+                      icon={<IconTrash size={16} />}
+                    />
+                  </TableCell>
+                </>
+              )}
+            </TableBody>
+          </table>
+        </div>
+      }
 
-        <Button
-          className='mt-4 justify-center'
-          onClick={addNewProp}
-          icon={<IconPlus size={16} />}
-        >
-          <span>New property</span>
+      <Button
+        className='mt-4 justify-center'
+        onClick={addNewProp}
+        icon={<IconPlus size={16} />}
+      >
+        <span>New property</span>
+      </Button>
+
+      {error && <ErrorMessage error={error} />}
+
+      <div className='flex space-x-4 mt-8'>
+        <Button variant='grey' disabled={isEqual(player, originalPlayer) && newProps.length === 0} onClick={reset}>
+          Reset
         </Button>
 
-        {error && <ErrorMessage error={error} />}
-
-        <div className='flex space-x-4 mt-8'>
-          <Button variant='grey' disabled={isEqual(player, originalPlayer) && newProps.length === 0} onClick={reset}>
-            Reset
-          </Button>
-
-          <Button variant='green' onClick={save} isLoading={isUpdating}>
-            Save changes
-          </Button>
-        </div>
+        <Button variant='green' onClick={save} isLoading={isUpdating}>
+          Save changes
+        </Button>
       </div>
     </div>
   )

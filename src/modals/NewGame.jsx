@@ -7,6 +7,8 @@ import createGame from '../api/createGame'
 import { useRecoilState } from 'recoil'
 import activeGameState from '../state/activeGameState'
 import userState from '../state/userState'
+import buildError from '../utils/buildError'
+import ErrorMessage from '../components/ErrorMessage'
 
 const NewGame = (props) => {
   const [, setOpen] = props.modalState
@@ -14,16 +16,19 @@ const NewGame = (props) => {
   const [isLoading, setLoading] = useState(false)
   const [user, setUser] = useRecoilState(userState)
   const [, setActiveGame] = useRecoilState(activeGameState)
+  const [error, setError] = useState(null)
 
   const resetModal = () => {
     setOpen(false)
     setName('')
     setLoading(false)
+    setError(null)
   }
 
   const onCreateClick = async (e) => {
     e.preventDefault()
     setLoading(true)
+    setError(null)
 
     try {
       const res = await createGame(name)
@@ -34,10 +39,10 @@ const NewGame = (props) => {
         }
       })
       setActiveGame(res.data.game)
-    } catch (err) {
-      console.error(err.message)
-    } finally {
       resetModal()
+    } catch (err) {
+      setError(buildError(err))
+      setLoading(false)
     }
   }
 
@@ -49,7 +54,7 @@ const NewGame = (props) => {
       resetModal={resetModal}
     >
       <form>
-        <div className='p-4'>
+        <div className='p-4 space-y-4'>
           <TextInput
             id='name'
             variant='light'
@@ -59,6 +64,8 @@ const NewGame = (props) => {
             value={name}
             inputClassName='border border-gray-200 focus:border-opacity-0'
           />
+
+          <ErrorMessage error={error} />
         </div>
 
         <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>
