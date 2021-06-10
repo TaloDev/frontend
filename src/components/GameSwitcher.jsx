@@ -38,7 +38,7 @@ const GameSwitcher = () => {
             <motion.ul
               animate={{ opacity: isOpen ? 1 : 0 }}
               transition={{ duration: 0.2 }}
-              className='bg-white text-black rounded-b w-80'
+              className='bg-white text-black rounded-b w-60 md:w-80'
             >
               {games.map((game) => {
                 const disabled = activeGame.id === game.id
@@ -68,7 +68,7 @@ const GameSwitcher = () => {
             </motion.ul>
           )}
         >
-          <div className={classNames('bg-indigo-300 rounded p-2 flex items-center justify-between w-80', { 'rounded-b-none': isOpen })}>
+          <div className={classNames('bg-indigo-300 rounded p-2 flex items-center justify-between w-60 md:w-80', { 'rounded-b-none': isOpen })}>
             <div className='flex items-center'>
               <span
                 style={{ backgroundColor: randomColor({ seed: activeGame.name, luminosity: 'dark' }) }}

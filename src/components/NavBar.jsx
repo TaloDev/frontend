@@ -59,7 +59,7 @@ const NavBar = () => {
         {links}
       </ul>
 
-      <div className='md:hidden text-white'>
+      <div className='flex mr-4 md:hidden text-white'>
         <Button
           variant='icon'
           onClick={() => setShowMobileMenu(true)}
