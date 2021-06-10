@@ -36,7 +36,7 @@ const MobileMenu = (props) => {
           </span>
         </Button>
 
-      <ul className='mt-8 space-y-8 text-xl'>
+      <ul className='md:hidden mt-8 space-y-8 text-xl'>
         {props.children}
       </ul>
     </div>
