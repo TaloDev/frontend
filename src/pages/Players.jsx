@@ -68,7 +68,7 @@ const Players = () => {
         </div>
       }
 
-      {players.length === 0 &&
+      {players.length === 0 && !loading &&
         <>
           {debouncedSearch.length > 0
             ? <p>No players match your query</p>
