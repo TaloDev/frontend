@@ -154,6 +154,10 @@ const PlayerProps = () => {
     <div className='space-y-4 md:space-y-8 w-full lg:w-1/2'>
       <Title showBackButton>Player properties</Title>
 
+      <div>
+        <code className='bg-gray-900 rounded p-2 ml-1 text-xs md:text-sm'>playerId = {player.id}</code>
+      </div>
+
       {existingProps.length + newProps.length === 0 &&
         <p>This player has no custom properties. Click the button below to add one.</p>
       }

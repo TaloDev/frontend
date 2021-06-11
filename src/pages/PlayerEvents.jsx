@@ -52,6 +52,10 @@ const PlayerEvents = () => {
         }
       </div>
 
+      <div>
+        <code className='bg-gray-900 rounded p-2 ml-1 text-xs md:text-sm'>playerId = {playerId}</code>
+      </div>
+
       {(events.length > 0 || debouncedSearch.length > 0) &&
         <div className='flex items-center'>
           <div className='w-1/2 flex-grow md:flex-grow-0 lg:w-1/4'>
