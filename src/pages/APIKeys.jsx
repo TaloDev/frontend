@@ -59,6 +59,7 @@ const APIKeys = () => {
         await deleteAPIKey(apiKey.id)
         setKeys(keys.filter((k) => k.id !== apiKey.id))
         setError(null)
+        setCreatedKey(null)
       } catch (err) {
         setError(buildError(err))
       } finally {
