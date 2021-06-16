@@ -16,6 +16,7 @@ import TableHeader from '../components/tables/TableHeader'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
 import AlertBanner from '../components/AlertBanner'
+import DateCell from '../components/tables/cells/DateCell'
 
 const APIKeys = () => {
   const [isLoading, setLoading] = useState(true)
@@ -119,7 +120,7 @@ const APIKeys = () => {
                 <>
                   <TableCell>…{key.token}</TableCell>
                   <TableCell>{key.createdBy === user.email ? 'You' : key.createdBy}</TableCell>
-                  <TableCell>{format(new Date(key.createdAt), 'dd MMM Y, HH:mm')}</TableCell>
+                  <DateCell>{format(new Date(key.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
                   <TableCell className='w-40'>
                     <Button variant='black' onClick={() => onDeleteClick(key)}>Revoke</Button>
                   </TableCell>

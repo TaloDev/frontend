@@ -12,6 +12,7 @@ import { format } from 'date-fns'
 import TextInput from '../components/TextInput'
 import { useDebounce } from 'use-debounce'
 import Pagination from '../components/Pagination'
+import DateCell from '../components/tables/cells/DateCell'
 
 const EventProps = (props) => {
   return props.eventProps.map((prop) => (
@@ -89,7 +90,7 @@ const PlayerEvents = () => {
                         <EventProps eventProps={event.props} />
                       </div>
                     </TableCell>
-                    <TableCell className='min-w-60 md:min-w-0'>{format(new Date(event.createdAt), 'dd MMM Y, HH:mm')}</TableCell>
+                    <DateCell>{format(new Date(event.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
                   </>
                 )}
               </TableBody>

@@ -17,6 +17,7 @@ import TableBody from '../components/tables/TableBody'
 import usePlayers from '../api/usePlayers'
 import { useDebounce } from 'use-debounce'
 import Pagination from '../components/Pagination'
+import DateCell from '../components/tables/cells/DateCell'
 
 const Players = () => {
   const [search, setSearch] = useState('')
@@ -99,8 +100,8 @@ const Players = () => {
                         />
                       </div>
                     </TableCell>
-                    <TableCell>{format(new Date(player.createdAt), 'do MMM Y')}</TableCell>
-                    <TableCell>{format(new Date(player.lastSeenAt), 'do MMM Y')}</TableCell>
+                    <DateCell>{format(new Date(player.createdAt), 'do MMM Y')}</DateCell>
+                    <DateCell>{format(new Date(player.lastSeenAt), 'do MMM Y')}</DateCell>
                     <TableCell className='w-40'>
                       <Button variant='grey' onClick={() => goToPlayerEvents(player)}>View events</Button>
                     </TableCell>
