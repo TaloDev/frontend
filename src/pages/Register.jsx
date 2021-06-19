@@ -60,7 +60,7 @@ const Register = () => {
           id='email'
           label='Email'
           type='email'
-          placeholder='Purely for functional uses'
+          placeholder='For transactional notifications'
           onChange={setEmail}
           value={email}
         />

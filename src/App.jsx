@@ -89,7 +89,7 @@ const App = () => {
         <div className='w-full'>
           <NavBar />
           <main className='bg-gray-800 w-full p-4 md:p-8 text-white'>
-            {!user.emailConfirmed && <ConfirmEmailBanner />}
+            {(!user.emailConfirmed || user.justConfirmedEmail) && <ConfirmEmailBanner />}
 
             <Switch>
               <Route exact path='/' component={Dashboard} />
