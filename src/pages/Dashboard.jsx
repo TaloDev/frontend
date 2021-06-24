@@ -4,11 +4,25 @@ import { useRecoilValue } from 'recoil'
 import useHeadlines from '../api/useHeadlines'
 import ErrorMessage from '../components/ErrorMessage'
 import HeadlineStat from '../components/HeadlineStat'
+import TimePeriodPicker from '../components/TimePeriodPicker'
 import activeGameState from '../state/activeGameState'
+import useLocalStorage from '../utils/useLocalStorage'
+import useTimePeriod from '../utils/useTimePeriod'
 
 const Dashboard = () => {
   const activeGame = useRecoilValue(activeGameState)
-  const { headlines, loading, error } = useHeadlines(activeGame)
+
+  const timePeriods = [
+    { id: '7d', label: '7 days', titleSuffix: 'the last 7 days' },
+    { id: '30d', label: '30 days', titleSuffix: 'the last 30 days' },
+    { id: 'w', label: 'This week', titleSuffix: 'this week' },
+    { id: 'm', label: 'This month', titleSuffix: 'this month' },
+    { id: 'y', label: 'This year', titleSuffix: 'this year' }
+  ]
+
+  const [timePeriod, setTimePeriod] = useLocalStorage('headlinesTimePeriod', timePeriods[0])
+  const { startDate, endDate } = useTimePeriod(timePeriod.id)
+  const { headlines, loading, error } = useHeadlines(activeGame, startDate, endDate)
 
   if (!activeGame) {
     return (
@@ -23,14 +37,19 @@ const Dashboard = () => {
     <div>
       <h1 className='text-4xl font-bold'>{activeGame.name} dashboard</h1>
 
+      <div className='flex flex-col-reverse md:flex-row md:justify-between md:items-center mt-8'>
+        <h2 className='text-2xl mt-4 md:mt-0'>Stats for {timePeriod.titleSuffix}</h2>
+        <TimePeriodPicker
+          periods={timePeriods}
+          onPick={setTimePeriod}
+          selectedPeriod={timePeriod.id}
+        />
+      </div>
+
       {error &&
         <div className='mt-8'>
           <ErrorMessage error={{ message: `Couldn't fetch headlines` }} />
         </div>
-      }
-
-      {!loading && !error &&
-        <h2 className='text-2xl mt-8'>Stats for the last 7 days</h2>
       }
 
       {!loading && !error &&

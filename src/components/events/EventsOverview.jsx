@@ -8,22 +8,35 @@ import activeGameState from '../../state/activeGameState'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import ChartTooltip from '../../components/charts/ChartTooltip'
 import ChartTick from '../../components/charts/ChartTick'
-import { format, sub } from 'date-fns'
+import { format } from 'date-fns'
 import ColourfulCheckbox from '../../components/ColourfulCheckbox'
 import TextInput from '../../components/TextInput'
 import getEventColour from '../../utils/getEventColour'
 import { useDebounce } from 'use-debounce'
 import useLocalStorage from '../../utils/useLocalStorage'
+import TimePeriodPicker from '../TimePeriodPicker'
+import useTimePeriod from '../../utils/useTimePeriod'
 
 const EventsOverview = () => {
   const activeGame = useRecoilValue(activeGameState)
   const [selectedEventNames, setSelectedEventNames] = useState([])
 
-  const [startDate, setStartDate] = useLocalStorage('eventsOverviewStartDate', '')
-  const [endDate, setEndDate] = useLocalStorage('eventsOverviewEndDate', '')
+  const timePeriods = [
+    { id: '7d', label: '7 days' },
+    { id: '30d', label: '30 days' },
+    { id: 'w', label: 'This week' },
+    { id: 'm', label: 'This month' },
+    { id: 'y', label: 'This year' }
+  ]
 
-  const [debouncedStartDate] = useDebounce(startDate, 300)
-  const [debouncedEndDate] = useDebounce(endDate, 300)
+  const [timePeriod, setTimePeriod] = useLocalStorage('eventsOverviewTimePeriod', timePeriods[0])
+  const { startDate, endDate } = useTimePeriod(timePeriod?.id)
+
+  const [selectedStartDate, setSelectedStartDate] = useLocalStorage('eventsOverviewStartDate', '')
+  const [selectedEndDate, setSelectedEndDate] = useLocalStorage('eventsOverviewEndDate', '')
+
+  const [debouncedStartDate] = useDebounce(selectedStartDate, 300)
+  const [debouncedEndDate] = useDebounce(selectedEndDate, 300)
 
   const { events, eventNames, loading, error } = useEvents(activeGame, debouncedStartDate, debouncedEndDate)
 
@@ -31,11 +44,9 @@ const EventsOverview = () => {
   const [availableNames, setAvailableNames] = useState([])
 
   useEffect(() => {
-    if (!startDate && !endDate) {
-      setStartDate(format(sub(new Date(), { days: 30 }), 'yyyy-MM-dd'))
-      setEndDate(format(new Date(), 'yyyy-MM-dd'))
-    }
-  }, [])
+    if (startDate) setSelectedStartDate(startDate)
+    if (endDate) setSelectedEndDate(endDate)
+  }, [startDate, endDate])
 
   useEffect(() => {
     if (eventNames.length > 0 && selectedEventNames.length === 0) {
@@ -44,9 +55,7 @@ const EventsOverview = () => {
   }, [eventNames, selectedEventNames])
 
   useEffect(() => {
-    if (Object.keys(events).length > 0) {
-      setData(events)
-    }
+    setData(events)
   }, [events])
 
   useEffect(() => {
@@ -76,21 +85,35 @@ const EventsOverview = () => {
         }
       </div>
 
-      <div className='flex w-full md:w-1/2 space-x-4'>
-        <TextInput
-          id='start-date'
-          label='Start date'
-          placeholder='Start date'
-          onChange={(e) => setStartDate(e)}
-          value={startDate}
-        />
+      <div className='md:flex justify-between items-end'>
+        <div className='flex w-full md:w-1/2 space-x-4'>
+          <TextInput
+            id='start-date'
+            label='Start date'
+            placeholder='Start date'
+            onChange={(e) => {
+              setTimePeriod(null)
+              setSelectedStartDate(e)
+            }}
+            value={selectedStartDate}
+          />
 
-        <TextInput
-          id='end-date'
-          label='End date'
-          placeholder='End date'
-          onChange={(e) => setEndDate(e)}
-          value={endDate}
+          <TextInput
+            id='end-date'
+            label='End date'
+            placeholder='End date'
+            onChange={(e) => {
+              setTimePeriod(null)
+              setSelectedEndDate(e)
+            }}
+            value={selectedEndDate}
+          />
+        </div>
+
+        <TimePeriodPicker
+          periods={timePeriods}
+          onPick={setTimePeriod}
+          selectedPeriod={timePeriod?.id}
         />
       </div>
 

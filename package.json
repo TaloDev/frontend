@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "snowpack dev",
+    "dev": "TAILWIND_MODE=watch snowpack dev",
     "build": "snowpack build"
   },
   "dependencies": {
@@ -38,7 +38,7 @@
     "postcss-cli": "^8.3.1",
     "postcss-nesting": "^8.0.1",
     "snowpack": "^3.5.1",
-    "tailwindcss": "^2.1.2"
+    "tailwindcss": "^2.2.2"
   },
   "license": "MIT",
   "browserslist": ">0.75%"
