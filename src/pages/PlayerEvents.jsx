@@ -73,7 +73,7 @@ const PlayerEvents = () => {
       }
 
       {!error && events.length === 0 &&
-        <p>This player has no events.</p>
+        <p>No events match your query</p>
       }
 
       {!error && events.length > 0 &&
