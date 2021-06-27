@@ -21,7 +21,7 @@ const MobileMenu = (props) => {
 
   return (
     <div className={classNames(
-      'fixed transition-transform transform top-0 left-0 bg-gray-900 p-4 w-full h-full z-[999] ',
+      'fixed transition-transform transform top-0 left-0 bg-gray-900 p-4 w-full h-full z-[999] md:hidden',
       {
         'translate-x-0': props.visible,
         '-translate-x-full': !props.visible
