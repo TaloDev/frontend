@@ -19,7 +19,7 @@ const Scopes = (props) => {
     >
       <div>
         <div className='p-4 space-y-4'>
-          <p>Key ending in …{props.selectedKey?.token}</p>
+          <p>Key ending in <span className='font-semibold'>{props.selectedKey?.token}</span></p>
           <div className='text-white'>
             <div className='flex flex-wrap -mb-2'>
               {props.selectedKey?.scopes.sort((a, b) => {
