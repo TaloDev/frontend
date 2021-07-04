@@ -29,7 +29,7 @@ const EventsOverview = () => {
     { id: 'y', label: 'This year' }
   ]
 
-  const [timePeriod, setTimePeriod] = useLocalStorage('eventsOverviewTimePeriod', timePeriods[0])
+  const [timePeriod, setTimePeriod] = useLocalStorage('eventsOverviewTimePeriod', timePeriods[1])
   const { startDate, endDate } = useTimePeriod(timePeriod?.id)
 
   const [selectedStartDate, setSelectedStartDate] = useLocalStorage('eventsOverviewStartDate', '')

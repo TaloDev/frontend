@@ -17,6 +17,7 @@ import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
 import AlertBanner from '../components/AlertBanner'
 import DateCell from '../components/tables/cells/DateCell'
+import Scopes from '../modals/Scopes'
 
 const APIKeys = () => {
   const [isLoading, setLoading] = useState(true)
@@ -29,6 +30,7 @@ const APIKeys = () => {
   const [isCreating, setCreating] = useState(false)
   const [createdKey, setCreatedKey] = useState(null)
   const user = useRecoilValue(userState)
+  const [selectedKey, setSelectedKey] = useState(null)
 
   useEffect(() => {
     if (activeGame) {
@@ -96,106 +98,116 @@ const APIKeys = () => {
   }
 
   return (
-    <div className='space-y-4 md:space-y-8'>
-      <Title>Access keys {keys.length > 0 && `(${keys.length})`}</Title>
+    <>
+      <div className='space-y-4 md:space-y-8'>
+        <Title>Access keys</Title>
 
-      {isLoading &&
-        <div className='flex justify-center'>
-          <Loading />
-        </div>
-      }
+        {isLoading &&
+          <div className='flex justify-center'>
+            <Loading />
+          </div>
+        }
 
-      {error && <ErrorMessage error={error} />}
+        {error && <ErrorMessage error={error} />}
 
-      {!user.emailConfirmed &&
-        <AlertBanner className='lg:w-max' text='You need to confirm your email address to manage API keys' />
-      }
+        {!user.emailConfirmed &&
+          <AlertBanner className='lg:w-max' text='You need to confirm your email address to manage API keys' />
+        }
 
-      {user.emailConfirmed && keys.length > 0 &&
-        <div className='overflow-x-scroll'>
-          <table className='table-auto w-full'>
-            <TableHeader columns={['Ending in', 'Created by', 'Created at', '']} />
-            <TableBody iterator={keys}>
-              {(key) => (
-                <>
-                  <TableCell>…{key.token}</TableCell>
-                  <TableCell>{key.createdBy === user.email ? 'You' : key.createdBy}</TableCell>
-                  <DateCell>{format(new Date(key.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                  <TableCell className='w-40'>
-                    <Button variant='black' onClick={() => onDeleteClick(key)}>Revoke</Button>
-                  </TableCell>
-                </>
-              )}
-            </TableBody>
-          </table>
-        </div>
-      }
+        {user.emailConfirmed && keys.length > 0 &&
+          <div className='overflow-x-scroll'>
+            <table className='table-auto w-full'>
+              <TableHeader columns={['Ending in', 'Created by', 'Created at', 'Scopes', 'Revoke']} />
+              <TableBody iterator={keys}>
+                {(key) => (
+                  <>
+                    <TableCell>…{key.token}</TableCell>
+                    <TableCell>{key.createdBy === user.email ? 'You' : key.createdBy}</TableCell>
+                    <DateCell>{format(new Date(key.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
+                    <TableCell className='w-40'>
+                      <Button variant='grey' onClick={() => setSelectedKey(key)}>View scopes</Button>
+                    </TableCell>
+                    <TableCell className='w-40'>
+                      <Button variant='black' onClick={() => onDeleteClick(key)}>Revoke</Button>
+                    </TableCell>
+                  </>
+                )}
+              </TableBody>
+            </table>
+          </div>
+        }
 
-      {keys.length > 0 && <div className='h-1 rounded bg-gray-700' />}
+        {keys.length > 0 && <div className='h-1 rounded bg-gray-700' />}
 
-      {!createdKey &&
-        <form className='w-full lg:2/3 xl:w-1/2'>
-          <h2 className='text-xl lg:text-2xl font-bold'>Create new key</h2>
+        {!createdKey &&
+          <form className='w-full lg:2/3 xl:w-1/2'>
+            <h2 className='text-xl lg:text-2xl font-bold'>Create new key</h2>
 
-          <div className='mt-4 rounded border-2 border-gray-700'>
-            <div className='p-4 bg-gray-700'>
-              <h3 className='text-lg font-bold'>Scopes</h3>
-              <p>Scopes control what your access key can and can&apos;t do.</p>
+            <div className='mt-4 rounded border-2 border-gray-700'>
+              <div className='p-4 bg-gray-700'>
+                <h3 className='text-lg font-bold'>Scopes</h3>
+                <p>Scopes control what your access key can and can&apos;t do.</p>
+              </div>
+              
+              <div className='flex space-x-8 p-4'>
+                {!isLoading && !availableScopes && <ErrorMessage error={{ message: `Couldn't fetch scopes` }} />}
+                {availableScopes && Object.keys(availableScopes).map((group) => (
+                  <div key={group}>
+                    <h4 className='font-semibold capitalize'>{group}</h4>
+                    {availableScopes[group].map((scope) => (
+                      <div key={scope}>
+                        <input
+                          id={scope}
+                          type='checkbox'
+                          disabled={!user.emailConfirmed}
+                          onChange={onScopeChecked}
+                          checked={Boolean(selectedScopes.find((s) => s === scope))}
+                          value={scope}
+                        />
+                        <label htmlFor={scope} className='ml-2'>{scope}</label>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
+
+            <Button
+              isLoading={isCreating}
+              variant='green'
+              className='mt-4'
+              onClick={onCreateClick}
+              disabled={!user.emailConfirmed}
+            >
+              Create
+            </Button>
+          </form>
+        }
+
+        {createdKey &&
+          <div className='w-full lg:2/3 xl:w-1/2'>
+            <h2 className='text-xl lg:text-2xl font-bold'>Your new key</h2>
+            <p>Save this key somewhere because we won&apos;t show it again</p>
             
-            <div className='flex space-x-8 p-4'>
-              {!isLoading && !availableScopes && <ErrorMessage error={{ message: `Couldn't fetch scopes` }} />}
-              {availableScopes && Object.keys(availableScopes).map((group) => (
-                <div key={group}>
-                  <h4 className='font-semibold capitalize'>{group}</h4>
-                  {availableScopes[group].map((scope) => (
-                    <div key={scope}>
-                      <input
-                        id={scope}
-                        type='checkbox'
-                        disabled={!user.emailConfirmed}
-                        onChange={onScopeChecked}
-                        checked={Boolean(selectedScopes.find((s) => s === scope))}
-                        value={scope}
-                      />
-                      <label htmlFor={scope} className='ml-2'>{scope}</label>
-                    </div>
-                  ))}
-                </div>
-              ))}
+            <div className='mt-4 rounded border-2 border-gray-700 bg-gray-700 p-4 break-words'>
+              <code>{createdKey}</code>
             </div>
+
+            <Button
+              className='mt-4'
+              onClick={() => setCreatedKey(null)}
+            >
+              Create another
+            </Button>
           </div>
+        }
+      </div>
 
-          <Button
-            isLoading={isCreating}
-            variant='green'
-            className='mt-4'
-            onClick={onCreateClick}
-            disabled={!user.emailConfirmed}
-          >
-            Create
-          </Button>
-        </form>
-      }
-
-      {createdKey &&
-        <div className='w-full lg:2/3 xl:w-1/2'>
-          <h2 className='text-xl lg:text-2xl font-bold'>Your new key</h2>
-          <p>Save this key somewhere because we won&apos;t show it again</p>
-          
-          <div className='mt-4 rounded border-2 border-gray-700 bg-gray-700 p-4 break-words'>
-            <code>{createdKey}</code>
-          </div>
-
-          <Button
-            className='mt-4'
-            onClick={() => setCreatedKey(null)}
-          >
-            Create another
-          </Button>
-        </div>
-      }
-    </div>
+      <Scopes
+        modalState={[Boolean(selectedKey), setSelectedKey]}
+        selectedKey={selectedKey}
+      />
+    </>
   )
 }
 

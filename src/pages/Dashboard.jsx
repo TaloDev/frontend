@@ -20,7 +20,7 @@ const Dashboard = () => {
     { id: 'y', label: 'This year', titleSuffix: 'this year' }
   ]
 
-  const [timePeriod, setTimePeriod] = useLocalStorage('headlinesTimePeriod', timePeriods[0])
+  const [timePeriod, setTimePeriod] = useLocalStorage('headlinesTimePeriod', timePeriods[1])
   const { startDate, endDate } = useTimePeriod(timePeriod.id)
   const { headlines, loading, error } = useHeadlines(activeGame, startDate, endDate)
 

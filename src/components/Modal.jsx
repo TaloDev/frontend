@@ -22,7 +22,7 @@ const Modal = (props) => {
   if (!isOpen) return null
 
   return (
-    <div className='fixed w-screen h-screen p-4 bg-gray-900 bg-opacity-60 flex items-start md:items-center justify-center inset-0 z-50'>
+    <div className='fixed w-screen h-screen p-4 bg-gray-900 bg-opacity-60 flex items-start md:items-center justify-center inset-0 z-50 text-black'>
       <dialog className='block w-full md:w-2/3 lg:w-2/5 xl:1/4 bg-white rounded p-0' aria-modal='true' aria-labelledby={`modal-${props.id}-label`}>
         <div className='p-4 border-b border-gray-200 flex items-center justify-between'>
           <h2
