@@ -31,6 +31,7 @@ const APIKeys = () => {
   const [createdKey, setCreatedKey] = useState(null)
   const user = useRecoilValue(userState)
   const [selectedKey, setSelectedKey] = useState(null)
+  const [showScopesModal, setShowScopesModal] = useState(false)
 
   useEffect(() => {
     if (activeGame) {
@@ -52,6 +53,14 @@ const APIKeys = () => {
       })()
     }
   }, [activeGame])
+
+  useEffect(() => {
+    setShowScopesModal(Boolean(selectedKey))
+  }, [selectedKey])
+
+  useEffect(() => {
+    if (!showScopesModal) setSelectedKey(null)
+  }, [showScopesModal])
 
   const onDeleteClick = async (apiKey) => {
     if (window.confirm('Are you sure you want to permanently delete this access key? This action is irreversible.')) {
@@ -117,15 +126,17 @@ const APIKeys = () => {
         {user.emailConfirmed && keys.length > 0 &&
           <div className='overflow-x-scroll'>
             <table className='table-auto w-full'>
-              <TableHeader columns={['Ending in', 'Created by', 'Created at', 'Scopes', 'Revoke']} />
+              <TableHeader columns={['Ending in', 'Created by', 'Created at', 'Scopes', '']} />
               <TableBody iterator={keys}>
                 {(key) => (
                   <>
                     <TableCell>…{key.token}</TableCell>
                     <TableCell>{key.createdBy === user.email ? 'You' : key.createdBy}</TableCell>
                     <DateCell>{format(new Date(key.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                    <TableCell className='w-40'>
-                      <Button variant='grey' onClick={() => setSelectedKey(key)}>View scopes</Button>
+                    <TableCell className='flex'>
+                      <div>
+                        <Button variant='grey' onClick={() => setSelectedKey(key)}>View scopes</Button>
+                      </div>
                     </TableCell>
                     <TableCell className='w-40'>
                       <Button variant='black' onClick={() => onDeleteClick(key)}>Revoke</Button>
@@ -204,7 +215,7 @@ const APIKeys = () => {
       </div>
 
       <Scopes
-        modalState={[Boolean(selectedKey), setSelectedKey]}
+        modalState={[showScopesModal, setShowScopesModal]}
         selectedKey={selectedKey}
       />
     </>
