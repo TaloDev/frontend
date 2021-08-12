@@ -4,7 +4,7 @@ import Button from './Button'
 import classNames from 'classnames'
 
 const TimePeriodPicker = (props) => {
-  const buttonClassName = 'text-sm md:text-base border-2 border-l-0 py-1 px-1 md:py-1.5 md:px-2 border-indigo-500 first:rounded-l first:border-l-2 last:rounded-r hover:bg-gray-900 ring-inset'
+  const buttonClassName = 'text-sm md:text-base border-2 border-l-0 py-1 px-1 md:py-1.5 md:px-2 border-indigo-500 rounded-none first:rounded-l first:border-l-2 last:rounded-r hover:bg-gray-900 ring-inset'
 
   return (
     <div>
