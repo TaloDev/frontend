@@ -1,25 +1,26 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, lazy, Suspense } from 'react'
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom'
-import Login from './pages/Login'
-import Dashboard from './pages/Dashboard'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import refreshAccess from './api/refreshAccess'
 import userState from './state/userState'
 import Loading from './components/Loading'
 import NavBar from './components/NavBar'
 import routes from './constants/routes'
-import Events from './pages/Events'
-import Players from './pages/Players'
-import Register from './pages/Register'
 import ConfirmEmailBanner from './components/ConfirmEmailBanner'
 import gamesState from './state/gamesState'
 import activeGameState from './state/activeGameState'
-import APIKeys from './pages/APIKeys'
-import PlayerProps from './pages/PlayerProps'
 import userTypes from './constants/userTypes'
 import AuthService from './services/AuthService'
-import PlayerEvents from './pages/PlayerEvents'
-import Demo from './pages/Demo'
+
+const Login = lazy(() => import(/* webpackChunkName: 'login' */ './pages/Login'))
+const Dashboard = lazy(() => import(/* webpackChunkName: 'dashboard' */ './pages/Dashboard'))
+const Events = lazy(() => import(/* webpackChunkName: 'events' */ './pages/Events'))
+const Players = lazy(() => import(/* webpackChunkName: 'players' */ './pages/Players'))
+const Register = lazy(() => import(/* webpackChunkName: 'register' */ './pages/Register'))
+const PlayerProps = lazy(() => import(/* webpackChunkName: 'player-props' */ './pages/PlayerProps'))
+const APIKeys = lazy(() => import(/* webpackChunkName: 'api-keys' */ './pages/APIKeys'))
+const PlayerEvents = lazy(() => import(/* webpackChunkName: 'player-events' */ './pages/PlayerEvents'))
+const Demo = lazy(() => import(/* webpackChunkName: 'demo' */ './pages/Demo'))
 
 const App = () => {
   const [user, setUser] = useRecoilState(userState)
@@ -64,16 +65,16 @@ const App = () => {
     if (!activeGame && games.length > 0) setActiveGame(games[0])
   }, [activeGame, games])
 
-  if (isRefreshing) {
-    return (
-      <main className='w-full flex items-center justify-center'>
-        <Loading />
-      </main>
-    )
-  }
+  const appLoading = (
+    <main className='w-full flex items-center justify-center'>
+      <Loading />
+    </main>
+  )
+
+  if (isRefreshing) return appLoading
 
   return (
-    <>
+    <Suspense fallback={appLoading}>
       {!AuthService.getToken() &&
         <main className='bg-gray-800 w-full'>
           <Switch>
@@ -107,7 +108,7 @@ const App = () => {
           </main>
         </div>
       }
-    </>
+    </Suspense>
   )
 }
 
