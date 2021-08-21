@@ -13,7 +13,6 @@ RUN apk add --no-cache nodejs npm
 RUN npm i envsub -g
 RUN chmod +x /bin/entrypoint.sh
 
-ENTRYPOINT ["/bin/sh","-c"]
-CMD ["/bin/entrypoint.sh"]
+ENTRYPOINT ["/bin/entrypoint.sh"]
 
 EXPOSE 80
