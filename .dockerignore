@@ -1,0 +1,6 @@
+.git
+.github
+node_modules
+.env.development
+.eslintrc.json
+build

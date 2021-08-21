@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@jadex/snowpack-plugin-tailwindcss-jit": "^0.3.0",
-    "@snowpack/plugin-dotenv": "^2.1.0",
+    "@snowpack/plugin-dotenv": "https://gitpkg.now.sh/tudddorrr/snowpack/plugins/plugin-dotenv?main",
     "@snowpack/plugin-postcss": "^1.4.0",
     "@snowpack/plugin-react-refresh": "^2.5.0",
     "@snowpack/plugin-webpack": "^2.3.1",
