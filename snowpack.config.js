@@ -6,7 +6,7 @@ module.exports = {
   },
   plugins: [
     '@snowpack/plugin-react-refresh',
-    ['@snowpack/plugin-dotenv', { expand: false }],
+    ['@snowpack/plugin-dotenv', { expand: Boolean(Number(process.env.EXPAND_ENV)) }],
     '@snowpack/plugin-postcss',
     '@jadex/snowpack-plugin-tailwindcss-jit',
     '@snowpack/plugin-webpack'
