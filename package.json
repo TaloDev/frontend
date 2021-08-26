@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "TAILWIND_MODE=watch snowpack dev",
+    "dev": "snowpack dev",
     "build": "snowpack build"
   },
   "dependencies": {
@@ -26,9 +26,8 @@
     "use-debounce": "^6.0.1"
   },
   "devDependencies": {
-    "@jadex/snowpack-plugin-tailwindcss-jit": "^0.3.0",
-    "@snowpack/plugin-dotenv": "https://gitpkg.now.sh/tudddorrr/snowpack/plugins/plugin-dotenv?main",
-    "@snowpack/plugin-postcss": "^1.4.0",
+    "@snowpack/plugin-dotenv": "^2.2.0",
+    "@snowpack/plugin-postcss": "^1.4.3",
     "@snowpack/plugin-react-refresh": "^2.5.0",
     "@snowpack/plugin-webpack": "^2.3.1",
     "autoprefixer": "^10.2.5",
@@ -37,7 +36,7 @@
     "postcss": "^8.3.0",
     "postcss-cli": "^8.3.1",
     "postcss-nesting": "^8.0.1",
-    "snowpack": "^3.5.1",
+    "snowpack": "^3.8.8",
     "tailwindcss": "^2.2.2"
   },
   "license": "MIT",

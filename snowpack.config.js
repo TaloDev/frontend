@@ -6,9 +6,9 @@ module.exports = {
   },
   plugins: [
     '@snowpack/plugin-react-refresh',
+    // eslint-disable-next-line no-undef
     ['@snowpack/plugin-dotenv', { expand: Boolean(Number(process.env.EXPAND_ENV)) }],
     '@snowpack/plugin-postcss',
-    '@jadex/snowpack-plugin-tailwindcss-jit',
     '@snowpack/plugin-webpack'
   ],
   routes: [
@@ -16,7 +16,5 @@ module.exports = {
     {'match': 'routes', 'src': '.*', 'dest': '/index.html'}
   ],
   packageOptions: {},
-  devOptions: {
-    // tailwindConfig: './tailwind.config.js'
-  }
+  devOptions: {}
 }
