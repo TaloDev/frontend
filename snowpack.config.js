@@ -1,4 +1,7 @@
 // eslint-disable-next-line no-undef
+const expand = Boolean(process.env.ENV_EXPAND)
+
+// eslint-disable-next-line no-undef
 module.exports = {
   mount: {
     public: { url: '/', static: true },
@@ -6,8 +9,7 @@ module.exports = {
   },
   plugins: [
     '@snowpack/plugin-react-refresh',
-    // eslint-disable-next-line no-undef
-    ['@snowpack/plugin-dotenv', { expand: Boolean(Number(process.env.EXPAND_ENV)) }],
+    ['@snowpack/plugin-dotenv', { expand }],
     '@snowpack/plugin-postcss',
     '@snowpack/plugin-webpack'
   ],
