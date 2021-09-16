@@ -1,6 +1,10 @@
-# Talo
+# Talo dashboard
 
 > ✨ Bootstrapped with Create Snowpack App (CSA).
+
+## Installation
+
+Run `yarn` or `npm install`.
 
 ## Available Scripts
 
@@ -15,6 +19,7 @@ You will also see any lint errors in the console.
 ### yarn build
 
 Builds a static copy of your site to the `build/` folder.
-Your app is ready to be deployed!
 
-**For the best production performance:** Add a build bundler plugin like "@snowpack/plugin-webpack" to your `snowpack.config.js` config file.
+## Docker?
+
+We use Docker to build a production image of the frontend (which is simply an nginx server that hosts the static build files). It's not needed for development.
