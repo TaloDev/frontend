@@ -1,5 +1,6 @@
 export default {
   apiKeys: '/api-keys',
+  dataExports: '/exports',
   events: '/events',
   forgotPass: '/forgot',
   players: '/players',

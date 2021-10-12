@@ -157,11 +157,11 @@ const APIKeys = () => {
             <div className='mt-4 rounded border-2 border-gray-700'>
               <div className='p-4 bg-gray-700'>
                 <h3 className='text-lg font-bold'>Scopes</h3>
-                <p>Scopes control what your access key can and can&apos;t do.</p>
+                <p>Scopes control what your access key can and can&apos;t do</p>
               </div>
               
               <div className='flex space-x-8 p-4'>
-                {!isLoading && !availableScopes && <ErrorMessage error={{ message: `Couldn't fetch scopes` }} />}
+                {!isLoading && !availableScopes && <ErrorMessage error={{ message: 'Couldn\'t fetch scopes' }} />}
                 {availableScopes && Object.keys(availableScopes).map((group) => (
                   <div key={group}>
                     <h4 className='font-semibold capitalize'>{group}</h4>
