@@ -44,7 +44,6 @@ const DataExports = () => {
 
     try {
       const res = await createDataExport(activeGame.id, selectedEntities)
-      console.log(res.data)
       setCreatedExportId(res.data.dataExport.id)
     } catch (err) {
       setCreateError(buildError(err))
