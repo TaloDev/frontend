@@ -82,7 +82,7 @@ const DataExports = () => {
                 <>
                   <TableCell className='min-w-40'>
                     <span className={classNames('bg-gray-900 rounded p-1', {
-                      'text-red-400': Boolean(dataExport.failedAt),
+                      '!text-red-400': Boolean(dataExport.failedAt),
                       'text-green-400': dataExport.id === createdExportId
                     })}>
                       {dataExport.failedAt ? 'Failed' : dataExportStatuses[dataExport.status]}
@@ -112,7 +112,7 @@ const DataExports = () => {
             
             <div className='flex space-x-8 p-4'>
               {entitiesError && <ErrorMessage error={{ message: 'Couldn\'t fetch available entities' }} />}
-              {availableEntities && availableEntities.map((service) => (
+              {!entitiesError && availableEntities && availableEntities.map((service) => (
                 <div key={service}>
                   <input
                     id={service}
