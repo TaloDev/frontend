@@ -9,8 +9,8 @@ import routes from './constants/routes'
 import ConfirmEmailBanner from './components/ConfirmEmailBanner'
 import gamesState from './state/gamesState'
 import activeGameState from './state/activeGameState'
-import userTypes from './constants/userTypes'
 import AuthService from './services/AuthService'
+import canViewPage from './utils/canViewPage'
 
 const Login = lazy(() => import(/* webpackChunkName: 'login' */ './pages/Login'))
 const Dashboard = lazy(() => import(/* webpackChunkName: 'dashboard' */ './pages/Dashboard'))
@@ -21,6 +21,7 @@ const PlayerProps = lazy(() => import(/* webpackChunkName: 'player-props' */ './
 const APIKeys = lazy(() => import(/* webpackChunkName: 'api-keys' */ './pages/APIKeys'))
 const PlayerEvents = lazy(() => import(/* webpackChunkName: 'player-events' */ './pages/PlayerEvents'))
 const Demo = lazy(() => import(/* webpackChunkName: 'demo' */ './pages/Demo'))
+const DataExports = lazy(() => import(/* webpackChunkName: 'data-exports' */ './pages/DataExports'))
 
 const App = () => {
   const [user, setUser] = useRecoilState(userState)
@@ -98,11 +99,13 @@ const App = () => {
                 <>
                   <Route exact path={routes.players} component={Players} />
                   <Route exact path={routes.events} component={Events} />
-                  {user.type === userTypes.ADMIN && <Route exact path={routes.apiKeys} component={APIKeys} />}
+                  {canViewPage(user, routes.apiKeys) && <Route exact path={routes.apiKeys} component={APIKeys} />}
                   <Route exact path={routes.playerProps} component={PlayerProps} />
                   <Route exact path={routes.playerEvents} component={PlayerEvents} />
+                  {canViewPage(user, routes.dataExports) && <Route exact path={routes.dataExports} component={DataExports} />}
                 </>
               }
+
               <Redirect to='/' />
             </Switch>
           </main>

@@ -6,7 +6,7 @@ import classNames from 'classnames'
 const AlertBanner = (props) => {
   return (
     <div className={classNames('bg-yellow-600 p-4 rounded flex items-center space-x-2', props.className)}>
-      <IconAlertCircle size={24} />
+      <props.icon size={24} />
       <span>{props.text}</span>
     </div>
   )
@@ -14,7 +14,12 @@ const AlertBanner = (props) => {
 
 AlertBanner.propTypes = {
   text: PropTypes.string.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
+  icon: PropTypes.func
+}
+
+AlertBanner.defaultProps = {
+  icon: IconAlertCircle
 }
 
 export default AlertBanner

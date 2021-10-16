@@ -13,6 +13,7 @@ import TextInput from '../components/TextInput'
 import { useDebounce } from 'use-debounce'
 import Pagination from '../components/Pagination'
 import DateCell from '../components/tables/cells/DateCell'
+import useSortedItems from '../utils/useSortedItems'
 
 const EventProps = (props) => {
   return props.eventProps.map((prop) => (
@@ -21,12 +22,14 @@ const EventProps = (props) => {
 }
 
 const PlayerEvents = () => {
-  const [sortedEvents, setSortedEvents] = useState([])
   const { id: playerId } = useParams()
+
   const [search, setSearch] = useState('')
   const [debouncedSearch] = useDebounce(search, 300)
   const [page, setPage] = useState(0)
   const { events, count, loading, error, errorStatusCode } = usePlayerEvents(playerId, debouncedSearch, page)
+  const sortedEvents = useSortedItems(events, 'createdAt')
+
   const history = useHistory()
 
   useEffect(() => {
@@ -34,12 +37,6 @@ const PlayerEvents = () => {
       history.replace(routes.players)
     }
   }, [errorStatusCode])
-
-  useEffect(() => {
-    if (events) {
-      setSortedEvents(events.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)))
-    }
-  }, [events])
 
   return (
     <div className='space-y-4 md:space-y-8'>
