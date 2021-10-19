@@ -1,5 +1,4 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import Link from '../components/Link'
@@ -50,7 +49,7 @@ const Register = () => {
         <TextInput
           id='name'
           label='Name'
-          placeholder={`Your name or your team/organisation's name`}
+          placeholder={'Your name or your team/organisation\'s name'}
           type='text'
           onChange={setName}
           value={name}

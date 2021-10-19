@@ -25,7 +25,7 @@ const DataExports = lazy(() => import(/* webpackChunkName: 'data-exports' */ './
 
 const App = () => {
   const [user, setUser] = useRecoilState(userState)
-  
+
   const [isRefreshing, setRefreshing] = useState(true)
   const [hasTriedRefreshing, setTriedRefreshing] = useState(false)
   const [intendedUrl, setIntendedUrl] = useState(null)

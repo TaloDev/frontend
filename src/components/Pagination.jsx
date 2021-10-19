@@ -23,7 +23,7 @@ const Pagination = (props) => {
                 'py-2 w-8 ml-1 text-black text-center rounded-sm',
                 { 'bg-white': page !== idx },
                 { 'bg-indigo-500 !text-white': page === idx
-              })}
+                })}
               onClick={() => setPage(idx)}
             >
               {val}

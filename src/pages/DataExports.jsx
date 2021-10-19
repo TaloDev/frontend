@@ -108,7 +108,7 @@ const DataExports = () => {
               <h3 className='text-lg font-bold'>Entities</h3>
               <p>Choose which entities you would like to generate CSVs for</p>
             </div>
-            
+
             <div className='flex space-x-8 p-4'>
               {entitiesError && <ErrorMessage error={{ message: 'Couldn\'t fetch available entities' }} />}
               {!entitiesError && availableEntities && availableEntities.map((service) => (
@@ -141,7 +141,7 @@ const DataExports = () => {
 
       {createdExportId &&
         <div className='w-full lg:2/3 xl:w-1/2'>
-          <AlertBanner className='bg-green-600' icon={IconCheck} text={`Success! We'll email you when your export is ready`} />
+          <AlertBanner className='bg-green-600' icon={IconCheck} text={'Success! We\'ll email you when your export is ready'} />
         </div>
       }
     </div>

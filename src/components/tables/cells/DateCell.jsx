@@ -11,7 +11,7 @@ const DateCell = (props) => {
 }
 
 DateCell.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired
 }
 
 export default DateCell

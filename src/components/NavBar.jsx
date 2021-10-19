@@ -71,7 +71,7 @@ const NavBar = () => {
       <MobileMenu visible={showMobileMenu} onClose={() => setShowMobileMenu(false)}>
         {links}
       </MobileMenu>
-      
+
       <GameSwitcher />
     </nav>
   )

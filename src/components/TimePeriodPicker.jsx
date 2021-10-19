@@ -12,7 +12,7 @@ const TimePeriodPicker = (props) => {
         <Button
           key={period.id}
           variant='bare'
-          className={classNames(buttonClassName, { 'bg-indigo-500 hover:!bg-indigo-500': period.id === props.selectedPeriod})}
+          className={classNames(buttonClassName, { 'bg-indigo-500 hover:!bg-indigo-500': period.id === props.selectedPeriod })}
           onClick={() => props.onPick(period)}
         >
           {period.label}

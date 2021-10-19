@@ -7,7 +7,7 @@ const HeadlineStat = (props) => {
       <div className='p-4 bg-gray-700'>
         <h3 className='text-lg font-bold'>{props.title}</h3>
       </div>
-      
+
       <div className='p-4'>
         <p className='text-4xl md:text-6xl'>{props.stat}</p>
       </div>

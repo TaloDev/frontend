@@ -53,7 +53,7 @@ const Dashboard = () => {
 
       {error &&
         <div className='mt-8'>
-          <ErrorMessage error={{ message: `Couldn't fetch headlines` }} />
+          <ErrorMessage error={{ message: 'Couldn\'t fetch headlines' }} />
         </div>
       }
 

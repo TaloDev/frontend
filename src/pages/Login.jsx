@@ -55,7 +55,6 @@ const Login = () => {
         </div>
 
         <TextInput
-          autoFocus
           id='email'
           label='Email'
           type='email'
