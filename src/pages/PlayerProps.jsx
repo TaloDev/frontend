@@ -179,7 +179,7 @@ const PlayerProps = () => {
                       value={prop.value}
                     />
                   </TableCell>
-                  <TableCell className={classNames('min-w-40', { '!rounded-br-none': newProps.length > 0 })}>
+                  <TableCell className={classNames({ '!rounded-br-none': newProps.length > 0 })}>
                     <Button
                       variant='icon'
                       className='p-1 rounded-full bg-indigo-900 ml-auto'
@@ -211,7 +211,7 @@ const PlayerProps = () => {
                       value={prop.value}
                     />
                   </TableCell>
-                  <TableCell className='min-w-40'>
+                  <TableCell>
                     <Button
                       variant='icon'
                       className='p-1 rounded-full bg-indigo-900 ml-auto'

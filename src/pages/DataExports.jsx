@@ -79,7 +79,7 @@ const DataExports = () => {
             <TableBody iterator={sortedDataExports}>
               {(dataExport) => (
                 <>
-                  <TableCell className='min-w-40'>
+                  <TableCell>
                     <span className={classNames('bg-gray-900 rounded p-1', {
                       '!text-red-400': Boolean(dataExport.failedAt),
                       'text-green-400': dataExport.id === createdExportId
