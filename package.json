@@ -52,6 +52,6 @@
   "license": "MIT",
   "browserslist": ">0.75%",
   "lint-staged": {
-    "*.js": "eslint --cache --fix"
+    "*.{js,jsx}": "eslint --cache --fix"
   }
 }
