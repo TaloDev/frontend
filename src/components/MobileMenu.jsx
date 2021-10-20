@@ -27,14 +27,14 @@ const MobileMenu = (props) => {
         '-translate-x-full': !props.visible
       }
     )}>
-        <Button
-          variant='icon'
-          onClick={props.onClose}
-        >
-          <span className='text-white bg-indigo-600 rounded-full p-1 flex'>
-            <IconArrowLeft size={32} />
-          </span>
-        </Button>
+      <Button
+        variant='icon'
+        onClick={props.onClose}
+      >
+        <span className='text-white bg-indigo-600 rounded-full p-1 flex'>
+          <IconArrowLeft size={32} />
+        </span>
+      </Button>
 
       <ul className='md:hidden mt-8 space-y-8 text-xl'>
         {props.children}

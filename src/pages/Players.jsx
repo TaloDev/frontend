@@ -53,7 +53,7 @@ const Players = () => {
           </div>
         }
       </div>
- 
+
       {(players.length > 0 || debouncedSearch.length > 0) &&
         <div className='flex items-center'>
           <div className='w-1/2 flex-grow md:flex-grow-0 lg:w-1/4'>

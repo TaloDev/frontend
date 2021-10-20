@@ -15,7 +15,7 @@ const ConfirmEmailBanner = () => {
 
   const onConfirmClick = async (e) => {
     e.preventDefault()
-    
+
     setLoading(true)
     try {
       const res = await confirmEmail(code)

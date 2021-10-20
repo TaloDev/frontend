@@ -1,7 +1,4 @@
-// eslint-disable-next-line no-undef
-const expand = Boolean(process.env.ENV_EXPAND)
-
-// eslint-disable-next-line no-undef
+/* eslint-disable no-undef */
 module.exports = {
   mount: {
     public: { url: '/', static: true },
@@ -9,13 +6,13 @@ module.exports = {
   },
   plugins: [
     '@snowpack/plugin-react-refresh',
-    ['@snowpack/plugin-dotenv', { expand }],
+    ['@snowpack/plugin-dotenv', { expand: Boolean(process.env.ENV_EXPAND) }],
     '@snowpack/plugin-postcss',
     '@snowpack/plugin-webpack'
   ],
   routes: [
     /* Enable an SPA Fallback in development: */
-    {'match': 'routes', 'src': '.*', 'dest': '/index.html'}
+    { 'match': 'routes', 'src': '.*', 'dest': '/index.html' }
   ],
   packageOptions: {},
   devOptions: {}

@@ -1,7 +1,9 @@
 {
   "scripts": {
     "dev": "snowpack dev",
-    "build": "snowpack build"
+    "build": "snowpack build",
+    "test": "jest",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@tabler/icons": "^1.41.2",
@@ -21,18 +23,27 @@
     "react-router-dom": "^5.2.0",
     "recharts": "^2.0.9",
     "recoil": "^0.2.0",
-    "spinners-react": "^1.0.4",
+    "spinners-react": "^1.0.6",
     "swr": "^0.5.6",
     "use-debounce": "^6.0.1"
   },
   "devDependencies": {
+    "@snowpack/app-scripts-react": "^2.0.1",
     "@snowpack/plugin-dotenv": "^2.2.0",
     "@snowpack/plugin-postcss": "^1.4.3",
     "@snowpack/plugin-react-refresh": "^2.5.0",
-    "@snowpack/plugin-webpack": "^2.3.1",
+    "@snowpack/plugin-webpack": "^3.0.0",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.1.2",
     "autoprefixer": "^10.2.5",
-    "eslint": "^7.26.0",
-    "eslint-plugin-react": "^7.23.2",
+    "eslint": "^7.32.0",
+    "eslint-plugin-jest-dom": "^3.9.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-testing-library": "^4.12.4",
+    "husky": ">=6",
+    "jest": "^26.6.3",
+    "lint-staged": ">=10",
     "postcss": "^8.3.0",
     "postcss-cli": "^8.3.1",
     "postcss-nesting": "^8.0.1",
@@ -40,5 +51,8 @@
     "tailwindcss": "^2.2.2"
   },
   "license": "MIT",
-  "browserslist": ">0.75%"
+  "browserslist": ">0.75%",
+  "lint-staged": {
+    "*.{js,jsx}": "eslint --cache --fix"
+  }
 }

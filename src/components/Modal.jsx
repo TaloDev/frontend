@@ -38,7 +38,7 @@ const Modal = (props) => {
             icon={<IconX />}
           />
         </div>
-        
+
         {props.children}
       </dialog>
     </div>

@@ -3,3 +3,5 @@ build
 node_modules
 *.log
 .DS_Store
+.eslintcache
+coverage

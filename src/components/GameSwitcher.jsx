@@ -53,7 +53,7 @@ const GameSwitcher = () => {
                     >
                       {game.name}
                     </Button>
-                </li>
+                  </li>
                 )
               })}
 
