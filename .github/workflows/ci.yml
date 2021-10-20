@@ -34,9 +34,9 @@ jobs:
 
     - run: yarn test
 
-    # - uses: codecov/codecov-action@v1
-    #   with:
-    #     token: ${{ secrets.CODECOV_TOKEN }}
+    - uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
 
   build-check:
     runs-on: ubuntu-latest

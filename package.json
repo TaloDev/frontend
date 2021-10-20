@@ -2,7 +2,7 @@
   "scripts": {
     "dev": "snowpack dev",
     "build": "snowpack build",
-    "test": "web-test-runner",
+    "test": "jest",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -28,24 +28,25 @@
     "use-debounce": "^6.0.1"
   },
   "devDependencies": {
-    "@esm-bundle/chai": "^4.3.4-fix.0",
+    "@snowpack/app-scripts-react": "^2.0.1",
     "@snowpack/plugin-dotenv": "^2.2.0",
     "@snowpack/plugin-postcss": "^1.4.3",
     "@snowpack/plugin-react-refresh": "^2.5.0",
     "@snowpack/plugin-webpack": "^3.0.0",
-    "@snowpack/web-test-runner-plugin": "^0.2.2",
+    "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.2",
-    "@web/test-runner": "^0.13.20",
     "autoprefixer": "^10.2.5",
     "eslint": "^7.32.0",
+    "eslint-plugin-jest-dom": "^3.9.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-testing-library": "^4.12.4",
     "husky": ">=6",
+    "jest": "^26.6.3",
     "lint-staged": ">=10",
     "postcss": "^8.3.0",
     "postcss-cli": "^8.3.1",
     "postcss-nesting": "^8.0.1",
-    "sinon": "^11.1.2",
     "snowpack": "^3.8.8",
     "tailwindcss": "^2.2.2"
   },

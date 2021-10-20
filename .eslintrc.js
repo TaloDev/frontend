@@ -3,7 +3,7 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    mocha: true
+    jest: true
   },
   parserOptions: {
     ecmaFeatures: {
@@ -19,12 +19,16 @@ module.exports = {
   },
   plugins: [
     'react',
-    'jsx-a11y'
+    'jsx-a11y',
+    'testing-library',
+    'jest-dom'
   ],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:jsx-a11y/recommended'
+    'plugin:jsx-a11y/recommended',
+    'plugin:testing-library/react',
+    'plugin:jest-dom/recommended'
   ],
   rules: {
     'indent': ['error', 2, { 'SwitchCase': 1 }],
@@ -36,6 +40,7 @@ module.exports = {
     'object-curly-spacing': [2, 'always'],
     'arrow-parens': ['error', 'always'],
     'keyword-spacing': ['error', { 'before': true, 'after': true }],
-    'eol-last': ['warn', 'always']
+    'eol-last': ['warn', 'always'],
+    'jest-dom/prefer-in-document': ['off']
   }
 }
