@@ -2,12 +2,15 @@ name: Docker build
 
 on:
   push:
-    branches: [ main ]
+    tags:
+      - '*'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - run: echo "TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
@@ -26,7 +29,9 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/talodev/frontend:latest
+          tags: |
+            ghcr.io/talodev/frontend:latest
+            ghcr.io/talodev/frontend:${{ env.TAG }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
