@@ -54,5 +54,6 @@
   "browserslist": ">0.75%",
   "lint-staged": {
     "*.{js,jsx}": "eslint --cache --fix"
-  }
+  },
+  "version": "0.0.1"
 }
