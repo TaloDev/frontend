@@ -3,8 +3,8 @@ import userState from './userState'
 
 const gamesState = selector({
   key: 'games',
-  get: ({get}) => {
-    const user = get(userState);
+  get: ({ get }) => {
+    const user = get(userState)
     return user?.organisation.games ?? []
   }
 })

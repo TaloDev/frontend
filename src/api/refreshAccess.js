@@ -11,6 +11,6 @@ export default async () => {
     if (AuthService.getToken() && error.response?.status === 401) AuthService.reload()
     return Promise.reject(error)
   })
-  
+
   return api.get('/public/users/refresh')
 }

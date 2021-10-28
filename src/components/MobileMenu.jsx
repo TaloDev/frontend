@@ -20,7 +20,7 @@ const MobileMenu = (props) => {
   }, [location.pathname, pathname, props.visible])
 
   return (
-    <div className={classNames(
+    <div data-testid='mobile-menu' className={classNames(
       'fixed transition-transform transform top-0 left-0 bg-gray-900 p-4 w-full h-full z-[999] md:hidden',
       {
         'translate-x-0': props.visible,
@@ -30,6 +30,7 @@ const MobileMenu = (props) => {
       <Button
         variant='icon'
         onClick={props.onClose}
+        extra={{ 'aria-label': 'Close navigation menu' }}
       >
         <span className='text-white bg-indigo-600 rounded-full p-1 flex'>
           <IconArrowLeft size={32} />

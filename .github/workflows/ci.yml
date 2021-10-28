@@ -32,7 +32,7 @@ jobs:
     - name: Install deps
       run: yarn --prefer-offline
 
-    - run: yarn test
+    - run: yarn test --silent
 
     - uses: codecov/codecov-action@v1
       with:

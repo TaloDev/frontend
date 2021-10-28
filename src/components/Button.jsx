@@ -27,9 +27,11 @@ const Button = (props) => {
 
   return (
     <button
+      type={props.type}
       disabled={props.disabled || props.isLoading}
       className={className}
       onClick={props.onClick}
+      {...props.extra}
     >
       {props.isLoading && <Loading size={24} thickness={180} />}
       {!props.isLoading &&
@@ -43,13 +45,19 @@ const Button = (props) => {
 }
 
 Button.propTypes = {
+  type: PropTypes.string,
   disabled: PropTypes.bool,
   children: PropTypes.node,
   onClick: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
   variant: PropTypes.string,
   className: PropTypes.string,
-  icon: PropTypes.node
+  icon: PropTypes.node,
+  extra: PropTypes.object
+}
+
+Button.defaultProps = {
+  extra: {}
 }
 
 export default Button

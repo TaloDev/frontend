@@ -19,6 +19,6 @@ const AuthService = (() => {
     setToken,
     reload
   }
- })()
+})()
 
- export default AuthService
+export default AuthService
