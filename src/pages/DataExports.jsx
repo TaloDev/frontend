@@ -63,7 +63,7 @@ const DataExports = () => {
   return (
     <div className='space-y-4 md:space-y-8'>
       <div className='flex items-center'>
-        <Title showBackButton>Data exports</Title>
+        <Title>Data exports</Title>
 
         {dataExportsLoading &&
           <div className='mt-1 ml-4'>
