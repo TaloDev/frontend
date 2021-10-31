@@ -185,6 +185,7 @@ const PlayerProps = () => {
                       className='p-1 rounded-full bg-indigo-900 ml-auto'
                       onClick={() => deleteExistingProp(prop.key)}
                       icon={<IconTrash size={16} />}
+                      extra={{ 'aria-label': `Delete ${prop.key} prop` }}
                     />
                   </TableCell>
                 </>
@@ -217,6 +218,7 @@ const PlayerProps = () => {
                       className='p-1 rounded-full bg-indigo-900 ml-auto'
                       onClick={() => deleteNewProp(idx)}
                       icon={<IconTrash size={16} />}
+                      extra={{ 'aria-label': `Delete ${prop.key} prop` }}
                     />
                   </TableCell>
                 </>
@@ -234,7 +236,7 @@ const PlayerProps = () => {
         <span>New property</span>
       </Button>
 
-      {error && <ErrorMessage error={error} />}
+      <ErrorMessage error={error} />
 
       <div className='flex space-x-4 mt-8'>
         <Button variant='grey' disabled={isEqual(player, originalPlayer) && newProps.length === 0} onClick={reset}>
