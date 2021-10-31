@@ -21,7 +21,7 @@ const NavBar = () => {
     try {
       await logout()
     } catch (err) {
-      console.warn('Logout failed', err)
+      console.warn('Logout failed:', err.message)
     } finally {
       window.location.reload()
     }
@@ -63,6 +63,7 @@ const NavBar = () => {
         <Button
           variant='icon'
           onClick={() => setShowMobileMenu(true)}
+          extra={{ 'aria-label': 'Navigation menu' }}
         >
           <IconMenu2 size={24} />
         </Button>

@@ -80,7 +80,7 @@ const GameSwitcher = () => {
             </div>
 
             <div className='ml-2 md:ml-8 flex items-center'>
-              <Button variant='icon' onClick={() => setOpen(!isOpen)}>
+              <Button variant='icon' onClick={() => setOpen(!isOpen)} extra={{ 'aria-label': 'Switch games or create a new one' }}>
                 <div className={classNames('transform transition-transform', { 'rotate-180': isOpen })}>
                   <IconChevronDown size={24} />
                 </div>

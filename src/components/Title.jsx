@@ -13,8 +13,9 @@ const Title = (props) => {
         <Button
           variant='bare'
           className='mr-2 bg-indigo-600 rounded-full p-1'
-          onClick={() => history.goBack()}
+          onClick={history.goBack}
           icon={<IconArrowLeft size={20} />}
+          extra={{ 'aria-label': 'Go back' }}
         />
       }
 

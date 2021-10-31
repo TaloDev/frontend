@@ -36,6 +36,7 @@ const Modal = (props) => {
             variant='icon'
             onClick={() => setOpen(false)}
             icon={<IconX />}
+            extra={{ 'aria-label': 'Close modal' }}
           />
         </div>
 

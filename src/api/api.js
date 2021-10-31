@@ -15,8 +15,7 @@ instance.interceptors.request.use((config) => {
   }
 
   return config
-},
-  (error) => Promise.reject(error)
+}, (error) => Promise.reject(error)
 )
 
 instance.interceptors.response.use((response) => {
@@ -27,13 +26,13 @@ instance.interceptors.response.use((response) => {
   if (!request.url.startsWith('/public')) {
     if (error.response?.status === 401 && !request._retry) {
       request._retry = true
-  
+
       const res = await refreshAccess()
       const newToken = res.data.accessToken
-      
+
       AuthService.setToken(newToken)
       axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
-  
+
       return instance(request)
     } else if (error.response?.status === 401 && request._retry) {
       AuthService.reload()

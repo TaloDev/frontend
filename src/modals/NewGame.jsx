@@ -79,7 +79,7 @@ const NewGame = (props) => {
             </Button>
           </div>
           <div className='w-full md:w-32'>
-            <Button variant='grey' onClick={() => setOpen(false)}>Cancel</Button>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>Cancel</Button>
           </div>
         </div>
       </form>

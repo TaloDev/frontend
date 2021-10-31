@@ -30,7 +30,7 @@ export default (timePeriod) => {
           setStartDate(format(startOfYear(new Date()), 'yyyy-MM-dd'))
           break
       }
-  
+
       setEndDate(format(new Date(), 'yyyy-MM-dd'))
     } else {
       setStartDate('')
