@@ -84,7 +84,7 @@ describe('<NavBar />', () => {
     window.location = location
   })
 
-  it('should always render players and events if there\'s an active game', () => {
+  it('should always render the services link if there\'s an active game', () => {
     const game = {
       id: 1,
       name: 'Superstatic'
@@ -111,9 +111,7 @@ describe('<NavBar />', () => {
 
     const list = screen.getAllByRole('list')[0]
 
-    expect(within(list).getAllByRole('listitem')).toHaveLength(4)
-    expect(within(list).getByText('Players')).toBeInTheDocument()
-    expect(within(list).getByText('Events')).toBeInTheDocument()
+    expect(within(list).getByText('Services')).toBeInTheDocument()
   })
 
   it('should always render the access keys item if the user is an admin', () => {
