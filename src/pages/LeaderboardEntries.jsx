@@ -103,7 +103,7 @@ const LeaderboardEntries = () => {
             </table>
           </div>
 
-          {Boolean(count) && <Pagination count={count} pageState={[page, setPage]} />}
+          {Boolean(count) && <Pagination count={count} pageState={[page, setPage]} itemsPerPage={50} />}
         </>
       }
 
