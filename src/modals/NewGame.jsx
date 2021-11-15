@@ -18,13 +18,6 @@ const NewGame = (props) => {
   const [, setActiveGame] = useRecoilState(activeGameState)
   const [error, setError] = useState(null)
 
-  const resetModal = () => {
-    setOpen(false)
-    setName('')
-    setLoading(false)
-    setError(null)
-  }
-
   const onCreateClick = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -39,7 +32,7 @@ const NewGame = (props) => {
         }
       })
       setActiveGame(res.data.game)
-      resetModal()
+      setOpen(false)
     } catch (err) {
       setError(buildError(err))
       setLoading(false)
@@ -51,7 +44,6 @@ const NewGame = (props) => {
       id='new-game'
       title='Create new game'
       modalState={props.modalState}
-      resetModal={resetModal}
     >
       <form>
         <div className='p-4 space-y-4'>

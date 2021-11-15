@@ -214,10 +214,12 @@ const APIKeys = () => {
         }
       </div>
 
-      <Scopes
-        modalState={[showScopesModal, setShowScopesModal]}
-        selectedKey={selectedKey}
-      />
+      {showScopesModal &&
+        <Scopes
+          modalState={[showScopesModal, setShowScopesModal]}
+          selectedKey={selectedKey}
+        />
+      }
     </>
   )
 }
