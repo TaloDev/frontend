@@ -3,13 +3,12 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import Button from './Button'
 
-const Pagination = (props) => {
-  const itemsPerPage = 25
-  const totalPages = Math.ceil(props.count / itemsPerPage)
+const Pagination = ({ count, pageState, itemsPerPage }) => {
+  const totalPages = Math.ceil(count / itemsPerPage)
 
   if (totalPages === 1) return null
 
-  const [page, setPage] = props.pageState
+  const [page, setPage] = pageState
   const pages = [...new Array(totalPages)].map((_, idx) => String(idx + 1))
 
   return (
@@ -37,7 +36,12 @@ const Pagination = (props) => {
 
 Pagination.propTypes = {
   count: PropTypes.number.isRequired,
-  pageState: PropTypes.array.isRequired
+  pageState: PropTypes.array.isRequired,
+  itemsPerPage: PropTypes.number
+}
+
+Pagination.defaultProps = {
+  itemsPerPage: 25
 }
 
 export default Pagination

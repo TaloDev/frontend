@@ -22,6 +22,8 @@ const APIKeys = lazy(() => import(/* webpackChunkName: 'api-keys' */ './pages/AP
 const PlayerEvents = lazy(() => import(/* webpackChunkName: 'player-events' */ './pages/PlayerEvents'))
 const Demo = lazy(() => import(/* webpackChunkName: 'demo' */ './pages/Demo'))
 const DataExports = lazy(() => import(/* webpackChunkName: 'data-exports' */ './pages/DataExports'))
+const Leaderboards = lazy(() => import(/* webpackChunkName: 'leaderboards' */ './pages/Leaderboards'))
+const LeaderboardEntries = lazy(() => import(/* webpackChunkName: 'leaderboard-entries' */ './pages/LeaderboardEntries'))
 
 const App = () => {
   const [user, setUser] = useRecoilState(userState)
@@ -103,6 +105,8 @@ const App = () => {
                   <Route exact path={routes.playerProps} component={PlayerProps} />
                   <Route exact path={routes.playerEvents} component={PlayerEvents} />
                   {canViewPage(user, routes.dataExports) && <Route exact path={routes.dataExports} component={DataExports} />}
+                  <Route exact path={routes.leaderboards} component={Leaderboards} />
+                  <Route exact path={routes.leaderboardEntries} component={LeaderboardEntries} />
                 </>
               }
 

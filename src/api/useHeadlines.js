@@ -13,7 +13,7 @@ const useHeadlines = (activeGame, startDate, endDate) => {
 
     const headlines = ['new_players', 'returning_players', 'events', 'unique_event_submitters']
     const res = await Promise.all(headlines.map((headline) => api.get(`${url}/${headline}?${qs}`)))
-    
+
     return headlines.reduce((acc, curr, idx) => ({
       ...acc,
       [curr]: res[idx].data

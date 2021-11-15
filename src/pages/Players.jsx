@@ -39,6 +39,13 @@ const Players = () => {
   }
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+
+    const searchQuery = params.get('search')
+    if (searchQuery) setSearch(searchQuery)
+  }, [])
+
+  useEffect(() => {
     window.scrollTo(0, 0)
   }, [page])
 
@@ -78,7 +85,7 @@ const Players = () => {
         </>
       }
 
-      {error && <ErrorMessage error={error} />}
+      <ErrorMessage error={error} />
 
       {players.length > 0 &&
         <>

@@ -4,18 +4,13 @@ import { useRecoilValue } from 'recoil'
 import useHeadlines from '../api/useHeadlines'
 import ErrorMessage from '../components/ErrorMessage'
 import HeadlineStat from '../components/HeadlineStat'
-import Link from '../components/Link'
 import TimePeriodPicker from '../components/TimePeriodPicker'
-import routes from '../constants/routes'
 import activeGameState from '../state/activeGameState'
-import userState from '../state/userState'
-import canViewPage from '../utils/canViewPage'
 import useLocalStorage from '../utils/useLocalStorage'
 import useTimePeriod from '../utils/useTimePeriod'
 
 const Dashboard = () => {
   const activeGame = useRecoilValue(activeGameState)
-  const user = useRecoilValue(userState)
 
   const timePeriods = [
     { id: '7d', label: '7 days', titleSuffix: 'the last 7 days' },
@@ -67,12 +62,6 @@ const Dashboard = () => {
             <HeadlineStat title='New events' stat={headlines.events.count} />
             <HeadlineStat title='Unique event submitters' stat={headlines.unique_event_submitters.count} />
           </div>
-        </div>
-      }
-
-      {canViewPage(user, routes.dataExports) &&
-        <div className='mt-20'>
-          <Link to={routes.dataExports}>Export your data</Link>
         </div>
       }
     </div>

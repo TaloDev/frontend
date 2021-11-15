@@ -11,6 +11,7 @@ import userTypes from '../constants/userTypes'
 import { IconMenu2 } from '@tabler/icons'
 import MobileMenu from './MobileMenu'
 import Button from './Button'
+import ServicesLink from './ServicesLink'
 
 const NavBar = () => {
   const activeGame = useRecoilValue(activeGameState)
@@ -34,12 +35,7 @@ const NavBar = () => {
       </li>
       {activeGame &&
         <>
-          <li>
-            <Link to={routes.players}>Players</Link>
-          </li>
-          <li>
-            <Link to={routes.events}>Events</Link>
-          </li>
+          <ServicesLink />
           {user.type === userTypes.ADMIN &&
             <li>
               <Link to={routes.apiKeys}>Access keys</Link>
