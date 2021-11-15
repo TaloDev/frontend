@@ -11,7 +11,7 @@ const useLeaderboards = (activeGame) => {
     return res.data
   }
 
-  const { data, error } = useSWR(
+  const { data, error, mutate } = useSWR(
     ['leaderboards', activeGame],
     fetcher
   )
@@ -19,7 +19,8 @@ const useLeaderboards = (activeGame) => {
   return {
     leaderboards: data?.leaderboards ?? [],
     loading: !data && !error,
-    error: error && buildError(error)
+    error: error && buildError(error),
+    mutate
   }
 }
 

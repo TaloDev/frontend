@@ -72,7 +72,7 @@ const LeaderboardEntries = () => {
       </div>
 
       {!error && entries.length === 0 &&
-        <p>This leaderboard has no entries yet</p>
+        <p>This leaderboard doesn&apos;t have any entries yet</p>
       }
 
       {!error && entries.length > 0 &&

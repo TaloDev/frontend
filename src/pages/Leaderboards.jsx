@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Title from '../components/Title'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
@@ -10,16 +10,22 @@ import DateCell from '../components/tables/cells/DateCell'
 import useLeaderboards from '../api/useLeaderboards'
 import { useRecoilValue } from 'recoil'
 import activeGameState from '../state/activeGameState'
-import { IconChevronUp, IconChevronDown } from '@tabler/icons'
+import { IconChevronUp, IconChevronDown, IconPlus } from '@tabler/icons'
 import Button from '../components/Button'
 import { useHistory } from 'react-router'
 import routes from '../constants/routes'
+import NewLeaderboard from '../modals/NewLeaderboard'
+import useSortedItems from '../utils/useSortedItems'
 
 const Leaderboards = () => {
   const activeGame = useRecoilValue(activeGameState)
   const history = useHistory()
 
-  const { leaderboards, loading, error } = useLeaderboards(activeGame)
+  const [showModal, setShowModal] = useState(false)
+
+  const { leaderboards, loading, error, mutate } = useLeaderboards(activeGame)
+
+  const sortedLeaderboards = useSortedItems(leaderboards, 'createdAt')
 
   const goToEntries = (leaderboard) => {
     history.push({
@@ -38,17 +44,28 @@ const Leaderboards = () => {
             <Loading size={24} thickness={180} />
           </div>
         }
+
+        {!loading &&
+          <div className='mt-1 ml-4 p-1 rounded-full bg-indigo-600'>
+            <Button
+              variant='icon'
+              onClick={() => setShowModal(true)}
+              icon={<IconPlus />}
+              extra={{ 'aria-label': 'Create new leaderboard' }}
+            />
+          </div>
+        }
       </div>
 
       {!error && leaderboards.length === 0 &&
-        <p>TODO no leaderboards yet</p>
+        <p>{activeGame.name} doesn&apos;t have any leaderboards yet</p>
       }
 
       {!error && leaderboards.length > 0 &&
         <div className='overflow-x-scroll'>
           <table className='table-auto w-full'>
             <TableHeader columns={['Internal name', 'Display name', 'Sort mode', 'Unique entries', 'Created at', '']} />
-            <TableBody iterator={leaderboards}>
+            <TableBody iterator={sortedLeaderboards}>
               {(leaderboard) => (
                 <>
                   <TableCell>{leaderboard.internalName}</TableCell>
@@ -72,6 +89,13 @@ const Leaderboards = () => {
       }
 
       <ErrorMessage error={error} />
+
+      {showModal &&
+        <NewLeaderboard
+          modalState={[showModal, setShowModal]}
+          mutate={mutate}
+        />
+      }
     </div>
   )
 }
