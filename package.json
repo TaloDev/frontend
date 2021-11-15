@@ -3,7 +3,8 @@
     "dev": "snowpack dev",
     "build": "snowpack build",
     "test": "jest",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "eslint src/**/*.{js,jsx}"
   },
   "dependencies": {
     "@tabler/icons": "^1.41.2",
@@ -57,7 +58,7 @@
   "license": "MIT",
   "browserslist": ">0.75%",
   "lint-staged": {
-    "*.{js,jsx}": "eslint --cache --fix"
+    "*.{js,jsx}": "eslint --fix"
   },
   "version": "0.0.1"
 }
