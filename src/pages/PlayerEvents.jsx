@@ -38,6 +38,10 @@ const PlayerEvents = () => {
     }
   }, [errorStatusCode])
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [page])
+
   return (
     <div className='space-y-4 md:space-y-8'>
       <div className='flex items-center'>
@@ -98,7 +102,7 @@ const PlayerEvents = () => {
         </>
       }
 
-      {error && <ErrorMessage error={error} />}
+      <ErrorMessage error={error} />
     </div>
   )
 }

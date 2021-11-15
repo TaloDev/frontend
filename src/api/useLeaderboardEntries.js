@@ -3,26 +3,25 @@ import buildError from '../utils/buildError'
 import api from './api'
 import { stringify } from 'querystring'
 
-const usePlayerEvents = (playerId, search, page) => {
+const useLeaderboardEntries = (activeGame, internalName, page) => {
   const fetcher = async (url) => {
-    const qs = stringify({ search, page })
+    const qs = stringify({ gameId: activeGame.id, page })
 
     const res = await api.get(`${url}?${qs}`)
     return res.data
   }
 
   const { data, error } = useSWR(
-    [`players/${playerId}/events`, search, page],
+    [`leaderboards/${internalName}/entries`, activeGame, page],
     fetcher
   )
 
   return {
-    events: data?.events ?? [],
+    entries: data?.entries ?? [],
     count: data?.count,
     loading: !data && !error,
-    error: error && buildError(error),
-    errorStatusCode: error && error.response?.status
+    error: error && buildError(error)
   }
 }
 
-export default usePlayerEvents
+export default useLeaderboardEntries

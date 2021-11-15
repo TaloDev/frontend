@@ -6,16 +6,11 @@ import Button from '../components/Button'
 const Scopes = (props) => {
   const [, setOpen] = props.modalState
 
-  const resetModal = () => {
-    setOpen(false)
-  }
-
   return (
     <Modal
       id='scopes'
       title='Access key scopes'
       modalState={props.modalState}
-      resetModal={resetModal}
     >
       <div>
         <div className='p-4 space-y-4'>

@@ -13,7 +13,8 @@ const TextInput = (props) => {
     ${props.inputClassName || ''}
   `, {
     'bg-gray-600': !props.variant,
-    'bg-gray-100 text-black': props.variant === 'light'
+    'bg-gray-100 text-black': props.variant === 'light',
+    'bg-white border border-gray-300 focus:border-opacity-0': props.variant === 'modal'
   })
 
   return (

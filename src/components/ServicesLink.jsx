@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { Link as RouterLink } from 'react-router-dom'
 import { focusStyle } from '../styles/theme'
 import canViewPage from '../utils/canViewPage'
-import { IconCaretDown, IconBolt, IconUser, IconFileExport } from '@tabler/icons'
+import { IconCaretDown, IconBolt, IconUser, IconFileExport, IconTrophy } from '@tabler/icons'
 import { useLocation } from 'react-router'
 import LinkButton from './LinkButton'
 import routes from '../constants/routes'
@@ -45,6 +45,12 @@ function ServicesLink() {
       desc: 'Export your data',
       icon: IconFileExport,
       route: routes.dataExports
+    },
+    {
+      name: 'Leaderboards',
+      desc: 'Flexible highscore tracking',
+      icon: IconTrophy,
+      route: routes.leaderboards
     }
   ]
 
