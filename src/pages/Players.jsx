@@ -39,9 +39,7 @@ const Players = () => {
   }
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-
-    const searchQuery = params.get('search')
+    const searchQuery = new URLSearchParams(window.location.search).get('search')
     if (searchQuery) setSearch(searchQuery)
   }, [])
 

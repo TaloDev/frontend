@@ -84,7 +84,7 @@ const App = () => {
             <Route exact path='/' component={Login} />
             <Route exact path={routes.register} component={Register} />
             <Route exact path='/demo' component={Demo} />
-            <Redirect to='/' />
+            <Redirect to={`/?next=${intendedUrl}`} />
           </Switch>
         </main>
       }

@@ -1,5 +1,6 @@
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import useHeadlines from '../api/useHeadlines'
 import ErrorMessage from '../components/ErrorMessage'
@@ -10,6 +11,20 @@ import useLocalStorage from '../utils/useLocalStorage'
 import useTimePeriod from '../utils/useTimePeriod'
 
 const Dashboard = () => {
+  const history = useHistory()
+
+  const [intendedRouteChecked, setIntendedRouteChecked] = useState(false)
+
+  useEffect(() => {
+    const intended = window.localStorage.getItem('intendedRoute')
+    if (intended) {
+      window.localStorage.removeItem('intendedRoute')
+      history.replace(intended)
+    } else {
+      setIntendedRouteChecked(true)
+    }
+  }, [])
+
   const activeGame = useRecoilValue(activeGameState)
 
   const timePeriods = [
@@ -23,6 +38,8 @@ const Dashboard = () => {
   const [timePeriod, setTimePeriod] = useLocalStorage('headlinesTimePeriod', timePeriods[1])
   const { startDate, endDate } = useTimePeriod(timePeriod.id)
   const { headlines, loading, error } = useHeadlines(activeGame, startDate, endDate)
+
+  if (!intendedRouteChecked) return null
 
   if (!activeGame) {
     return (
