@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { Link as RouterLink } from 'react-router-dom'
 import { focusStyle } from '../styles/theme'
 import canViewPage from '../utils/canViewPage'
-import { IconCaretDown, IconBolt, IconUser, IconFileExport, IconTrophy } from '@tabler/icons'
+import { IconCaretDown, IconBolt, IconUser, IconFileExport, IconTrophy, IconKey } from '@tabler/icons'
 import { useLocation } from 'react-router'
 import LinkButton from './LinkButton'
 import routes from '../constants/routes'
@@ -28,6 +28,12 @@ function ServicesLink() {
   }, [location.pathname, pathname])
 
   const services = [
+    {
+      name: 'Access keys',
+      desc: 'Manage and create keys',
+      icon: IconKey,
+      route: routes.apiKeys
+    },
     {
       name: 'Players',
       desc: 'See props, aliases and events',

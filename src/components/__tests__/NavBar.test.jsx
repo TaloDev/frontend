@@ -114,37 +114,6 @@ describe('<NavBar />', () => {
     expect(within(list).getByText('Services')).toBeInTheDocument()
   })
 
-  it('should always render the access keys item if the user is an admin', () => {
-    const game = {
-      id: 1,
-      name: 'Superstatic'
-    }
-
-    const user = {
-      type: 1,
-      organisation: {
-        games: [
-          game
-        ]
-      }
-    }
-
-    render(
-      <RecoilRoot>
-        <RecoilObserver node={userState} initialValue={user}>
-          <RecoilObserver node={activeGameState} initialValue={game}>
-            <NavBar />
-          </RecoilObserver>
-        </RecoilObserver>
-      </RecoilRoot>
-      , { wrapper: BrowserRouter }
-    )
-
-    const list = screen.getAllByRole('list')[0]
-
-    expect(within(list).getByText('Access keys')).toBeInTheDocument()
-  })
-
   it('should open and close the mobile menu', () => {
     render(
       <RecoilRoot>
