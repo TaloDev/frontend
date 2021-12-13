@@ -41,6 +41,7 @@ module.exports = {
     'arrow-parens': ['error', 'always'],
     'keyword-spacing': ['error', { 'before': true, 'after': true }],
     'eol-last': ['warn', 'always'],
-    'jest-dom/prefer-in-document': ['off']
+    'jest-dom/prefer-in-document': ['off'],
+    'require-await': ['error']
   }
 }
