@@ -6,11 +6,11 @@ import userState from './state/userState'
 import Loading from './components/Loading'
 import NavBar from './components/NavBar'
 import routes from './constants/routes'
-import ConfirmEmailBanner from './components/ConfirmEmailBanner'
 import gamesState from './state/gamesState'
 import activeGameState from './state/activeGameState'
 import AuthService from './services/AuthService'
 import canViewPage from './utils/canViewPage'
+import GlobalBanners from './components/GlobalBanners'
 
 const Login = lazy(() => import(/* webpackChunkName: 'login' */ './pages/Login'))
 const Dashboard = lazy(() => import(/* webpackChunkName: 'dashboard' */ './pages/Dashboard'))
@@ -24,6 +24,10 @@ const Demo = lazy(() => import(/* webpackChunkName: 'demo' */ './pages/Demo'))
 const DataExports = lazy(() => import(/* webpackChunkName: 'data-exports' */ './pages/DataExports'))
 const Leaderboards = lazy(() => import(/* webpackChunkName: 'leaderboards' */ './pages/Leaderboards'))
 const LeaderboardEntries = lazy(() => import(/* webpackChunkName: 'leaderboard-entries' */ './pages/LeaderboardEntries'))
+const Account = lazy(() => import(/* webpackChunkName: 'account' */ './pages/Account'))
+const ConfirmPassword = lazy(() => import(/* webpackChunkName: 'confirm-password' */ './pages/ConfirmPassword'))
+const Verify2FA = lazy(() => import(/* webpackChunkName: 'verify-2FA' */ './pages/Verify2FA'))
+const RecoverAccount = lazy(() => import(/* webpackChunkName: 'recover-account' */ './pages/RecoverAccount'))
 
 const App = () => {
   const [user, setUser] = useRecoilState(userState)
@@ -81,22 +85,25 @@ const App = () => {
       {!AuthService.getToken() &&
         <main className='bg-gray-800 w-full'>
           <Switch>
-            <Route exact path='/' component={Login} />
+            <Route exact path={routes.login} component={Login} />
             <Route exact path={routes.register} component={Register} />
-            <Route exact path='/demo' component={Demo} />
-            <Redirect to={`/?next=${intendedUrl}`} />
+            <Route exact path={routes.demo} component={Demo} />
+            <Route exact path={routes.verify2FA} component={Verify2FA} />
+            <Route exact path={routes.recover} component={RecoverAccount} />
+
+            <Redirect to={`${routes.login}?next=${intendedUrl}`} />
           </Switch>
         </main>
       }
 
       {AuthService.getToken() &&
-        <div className='w-full'>
+        <div className='w-full flex flex-col'>
           <NavBar />
-          <main className='bg-gray-800 w-full p-4 md:p-8 text-white'>
-            {(!user.emailConfirmed || user.justConfirmedEmail) && <ConfirmEmailBanner />}
+          <main className='bg-gray-800 p-4 md:p-8 text-white'>
+            <GlobalBanners />
 
             <Switch>
-              <Route exact path='/' component={Dashboard} />
+              <Route exact path={routes.dashboard} component={Dashboard} />
               {activeGame &&
                 <>
                   <Route exact path={routes.players} component={Players} />
@@ -107,10 +114,12 @@ const App = () => {
                   {canViewPage(user, routes.dataExports) && <Route exact path={routes.dataExports} component={DataExports} />}
                   <Route exact path={routes.leaderboards} component={Leaderboards} />
                   <Route exact path={routes.leaderboardEntries} component={LeaderboardEntries} />
+                  <Route exact path={routes.account} component={Account} />
+                  <Route exact path={routes.confirmPassword} component={ConfirmPassword} />
                 </>
               }
 
-              <Redirect to='/' />
+              <Redirect to={routes.dashboard} />
             </Switch>
           </main>
         </div>

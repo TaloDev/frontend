@@ -49,9 +49,14 @@ const Login = () => {
 
     try {
       const res = await login({ email, password })
-      const accessToken = res.data.accessToken
-      AuthService.setToken(accessToken)
-      setUser(res.data.user)
+
+      if (res.data.twoFactorAuthRequired) {
+        history.push(routes.verify2FA, { userId: res.data.userId })
+      } else {
+        const accessToken = res.data.accessToken
+        AuthService.setToken(accessToken)
+        setUser(res.data.user)
+      }
     } catch (err) {
       setError(buildError(err))
       setLoading(false)
@@ -102,7 +107,7 @@ const Login = () => {
       </form>
 
       <div className={unauthedContainerStyle}>
-        <p className='mt-4 text-white'>Need an account? <Link to='/register'>Register here</Link></p>
+        <p className='mt-4 text-white'>Need an account? <Link to={routes.register}>Register here</Link></p>
       </div>
     </div>
   )

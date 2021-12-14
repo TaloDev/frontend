@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { IconArrowLeft } from '@tabler/icons'
 import Button from './Button'
-import { useLocation } from 'react-router'
+import { useLocation } from 'react-router-dom'
 
 const MobileMenu = (props) => {
   const location = useLocation()
