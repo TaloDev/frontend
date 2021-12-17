@@ -4,7 +4,7 @@ import TableCell from '../TableCell'
 
 const DateCell = (props) => {
   return (
-    <TableCell className='min-w-60 md:min-w-0'>
+    <TableCell className='min-w-60 lg:min-w-0'>
       {props.children}
     </TableCell>
   )

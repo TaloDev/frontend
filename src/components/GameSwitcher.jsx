@@ -62,7 +62,7 @@ const GameSwitcher = () => {
                   <div className='rounded-full p-1 bg-indigo-600'>
                     <IconPlus size={16} color='white' stroke={3} />
                   </div>
-                  <p className='ml-2'>New game</p>
+                  <span className='ml-2'>New game</span>
                 </Button>
               </li>
             </motion.ul>

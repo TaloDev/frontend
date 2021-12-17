@@ -11,6 +11,7 @@ import routes from '../constants/routes'
 import { unauthedContainerStyle } from '../styles/theme'
 import AuthService from '../services/AuthService'
 import AlertBanner from '../components/AlertBanner'
+import { useHistory } from 'react-router-dom'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -19,6 +20,19 @@ const Login = () => {
   const [error, setError] = useState(null)
   const [isLoading, setLoading] = useState(false)
   const [wasLoggedOut] = useState(window.localStorage.getItem('loggedOut'))
+
+  const history = useHistory()
+
+  useEffect(() => {
+    const intendedRoute = new URLSearchParams(window.location.search).get('next')
+
+    if (intendedRoute) {
+      window.localStorage.setItem('intendedRoute', intendedRoute)
+      history.replace(window.location.pathname)
+    } else {
+      window.localStorage.removeItem('intendedRoute')
+    }
+  }, [])
 
   useEffect(() => {
     if (wasLoggedOut) {
@@ -35,9 +49,14 @@ const Login = () => {
 
     try {
       const res = await login({ email, password })
-      const accessToken = res.data.accessToken
-      AuthService.setToken(accessToken)
-      setUser(res.data.user)
+
+      if (res.data.twoFactorAuthRequired) {
+        history.push(routes.verify2FA, { userId: res.data.userId })
+      } else {
+        const accessToken = res.data.accessToken
+        AuthService.setToken(accessToken)
+        setUser(res.data.user)
+      }
     } catch (err) {
       setError(buildError(err))
       setLoading(false)
@@ -88,7 +107,7 @@ const Login = () => {
       </form>
 
       <div className={unauthedContainerStyle}>
-        <p className='mt-4 text-white'>Need an account? <Link to='/register'>Register here</Link></p>
+        <p className='mt-4 text-white'>Need an account? <Link to={routes.register}>Register here</Link></p>
       </div>
     </div>
   )

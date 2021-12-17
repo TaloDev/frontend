@@ -1,42 +1,38 @@
 import React from 'react'
-import { render, screen, within, waitFor } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
 import NavBar from '../NavBar'
 import RecoilObserver from '../../state/RecoilObserver'
 import activeGameState from '../../state/activeGameState'
 import { RecoilRoot } from 'recoil'
-import { BrowserRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router-dom'
 import userState from '../../state/userState'
 import userEvent from '@testing-library/user-event'
+import routes from '../../constants/routes'
 
 describe('<NavBar />', () => {
   const axiosMock = new MockAdapter(api)
 
-  it('should only show the home and logout links when there\'s no active game', () => {
+  it('should not render the services link when there\'s no active game', () => {
     render(
       <RecoilRoot>
         <RecoilObserver node={activeGameState}>
           <NavBar />
         </RecoilObserver>
       </RecoilRoot>
-      , { wrapper: BrowserRouter }
+      , { wrapper: MemoryRouter }
     )
 
     const list = screen.getAllByRole('list')[0]
 
-    expect(within(list).getAllByRole('listitem')).toHaveLength(2)
+    expect(within(list).getAllByRole('listitem')).toHaveLength(3)
     expect(within(list).getByText('Home')).toBeInTheDocument()
+    expect(within(list).getByText('Account')).toBeInTheDocument()
     expect(within(list).getByText('Logout')).toBeInTheDocument()
   })
 
-  it('should log users out', async () => {
-    const reloadMock = jest.fn()
-
-    const { location } = window
-    delete window.location
-    window.location = { reload: reloadMock }
-
+  it('should log users out', () => {
     axiosMock.onPost('http://talo.test/users/logout').replyOnce(200)
 
     render(
@@ -45,25 +41,17 @@ describe('<NavBar />', () => {
           <NavBar />
         </RecoilObserver>
       </RecoilRoot>
-      , { wrapper: BrowserRouter }
+      , { wrapper: MemoryRouter }
     )
 
     const list = screen.getAllByRole('list')[0]
 
     userEvent.click(within(list).getByText('Logout'))
 
-    await waitFor(() => expect(reloadMock).toHaveBeenCalled())
-
-    window.location = location
+    expect(window.location.pathname).toBe(routes.login)
   })
 
-  it('should reload after logging out even if there is an error', async () => {
-    const reloadMock = jest.fn()
-
-    const { location } = window
-    delete window.location
-    window.location = { reload: reloadMock }
-
+  it('should reload after logging out even if there is an error', () => {
     axiosMock.onPost('http://talo.test/users/logout').networkErrorOnce()
 
     render(
@@ -72,16 +60,14 @@ describe('<NavBar />', () => {
           <NavBar />
         </RecoilObserver>
       </RecoilRoot>
-      , { wrapper: BrowserRouter }
+      , { wrapper: MemoryRouter }
     )
 
     const list = screen.getAllByRole('list')[0]
 
     userEvent.click(within(list).getByText('Logout'))
 
-    await waitFor(() => expect(reloadMock).toHaveBeenCalled())
-
-    window.location = location
+    expect(window.location.pathname).toBe(routes.login)
   })
 
   it('should always render the services link if there\'s an active game', () => {
@@ -106,43 +92,12 @@ describe('<NavBar />', () => {
           </RecoilObserver>
         </RecoilObserver>
       </RecoilRoot>
-      , { wrapper: BrowserRouter }
+      , { wrapper: MemoryRouter }
     )
 
     const list = screen.getAllByRole('list')[0]
 
     expect(within(list).getByText('Services')).toBeInTheDocument()
-  })
-
-  it('should always render the access keys item if the user is an admin', () => {
-    const game = {
-      id: 1,
-      name: 'Superstatic'
-    }
-
-    const user = {
-      type: 1,
-      organisation: {
-        games: [
-          game
-        ]
-      }
-    }
-
-    render(
-      <RecoilRoot>
-        <RecoilObserver node={userState} initialValue={user}>
-          <RecoilObserver node={activeGameState} initialValue={game}>
-            <NavBar />
-          </RecoilObserver>
-        </RecoilObserver>
-      </RecoilRoot>
-      , { wrapper: BrowserRouter }
-    )
-
-    const list = screen.getAllByRole('list')[0]
-
-    expect(within(list).getByText('Access keys')).toBeInTheDocument()
   })
 
   it('should open and close the mobile menu', () => {
@@ -152,7 +107,7 @@ describe('<NavBar />', () => {
           <NavBar />
         </RecoilObserver>
       </RecoilRoot>
-      , { wrapper: BrowserRouter }
+      , { wrapper: MemoryRouter }
     )
 
     userEvent.click(screen.getByLabelText('Navigation menu'))

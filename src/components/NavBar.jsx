@@ -6,8 +6,6 @@ import Link from './Link'
 import routes from '../constants/routes'
 import GameSwitcher from './GameSwitcher'
 import activeGameState from '../state/activeGameState'
-import userState from '../state/userState'
-import userTypes from '../constants/userTypes'
 import { IconMenu2 } from '@tabler/icons'
 import MobileMenu from './MobileMenu'
 import Button from './Button'
@@ -15,7 +13,6 @@ import ServicesLink from './ServicesLink'
 
 const NavBar = () => {
   const activeGame = useRecoilValue(activeGameState)
-  const user = useRecoilValue(userState)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
 
   const onLogoutClick = async () => {
@@ -24,7 +21,7 @@ const NavBar = () => {
     } catch (err) {
       console.warn('Logout failed:', err.message)
     } finally {
-      window.location.reload()
+      window.location.href = routes.login
     }
   }
 
@@ -34,15 +31,11 @@ const NavBar = () => {
         <Link to='/'>Home</Link>
       </li>
       {activeGame &&
-        <>
-          <ServicesLink />
-          {user.type === userTypes.ADMIN &&
-            <li>
-              <Link to={routes.apiKeys}>Access keys</Link>
-            </li>
-          }
-        </>
+        <ServicesLink />
       }
+      <li>
+        <Link to={routes.account}>Account</Link>
+      </li>
       <li>
         <LinkButton onClick={onLogoutClick}>Logout</LinkButton>
       </li>

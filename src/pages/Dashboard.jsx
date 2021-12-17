@@ -1,15 +1,31 @@
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import useHeadlines from '../api/useHeadlines'
 import ErrorMessage from '../components/ErrorMessage'
 import HeadlineStat from '../components/HeadlineStat'
 import TimePeriodPicker from '../components/TimePeriodPicker'
+import Title from '../components/Title'
 import activeGameState from '../state/activeGameState'
 import useLocalStorage from '../utils/useLocalStorage'
 import useTimePeriod from '../utils/useTimePeriod'
 
 const Dashboard = () => {
+  const history = useHistory()
+
+  const [intendedRouteChecked, setIntendedRouteChecked] = useState(false)
+
+  useEffect(() => {
+    const intended = window.localStorage.getItem('intendedRoute')
+    if (intended) {
+      window.localStorage.removeItem('intendedRoute')
+      history.replace(intended)
+    } else {
+      setIntendedRouteChecked(true)
+    }
+  }, [])
+
   const activeGame = useRecoilValue(activeGameState)
 
   const timePeriods = [
@@ -24,6 +40,8 @@ const Dashboard = () => {
   const { startDate, endDate } = useTimePeriod(timePeriod.id)
   const { headlines, loading, error } = useHeadlines(activeGame, startDate, endDate)
 
+  if (!intendedRouteChecked) return null
+
   if (!activeGame) {
     return (
       <div>
@@ -35,7 +53,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h1 className='text-4xl font-bold'>{activeGame.name} dashboard</h1>
+      <Title>{activeGame.name} dashboard</Title>
 
       <div className='flex flex-col-reverse md:flex-row md:justify-between md:items-center mt-8'>
         <h2 className='text-2xl mt-4 md:mt-0'>Stats for {timePeriod.titleSuffix}</h2>

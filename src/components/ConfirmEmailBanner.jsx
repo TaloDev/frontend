@@ -47,7 +47,7 @@ const ConfirmEmailBanner = () => {
                 id='code'
                 onChange={setCode}
                 value={code}
-                placeholder={'Code'}
+                placeholder='Code'
                 variant='light'
               />
             </div>
