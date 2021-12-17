@@ -6,6 +6,7 @@ import useHeadlines from '../api/useHeadlines'
 import ErrorMessage from '../components/ErrorMessage'
 import HeadlineStat from '../components/HeadlineStat'
 import TimePeriodPicker from '../components/TimePeriodPicker'
+import Title from '../components/Title'
 import activeGameState from '../state/activeGameState'
 import useLocalStorage from '../utils/useLocalStorage'
 import useTimePeriod from '../utils/useTimePeriod'
@@ -52,7 +53,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h1 className='text-4xl font-bold'>{activeGame.name} dashboard</h1>
+      <Title>{activeGame.name} dashboard</Title>
 
       <div className='flex flex-col-reverse md:flex-row md:justify-between md:items-center mt-8'>
         <h2 className='text-2xl mt-4 md:mt-0'>Stats for {timePeriod.titleSuffix}</h2>
