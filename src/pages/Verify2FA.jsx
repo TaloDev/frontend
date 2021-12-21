@@ -27,6 +27,12 @@ const Verify2FA = () => {
     if (!userId) history.replace(routes.login)
   }, [userId])
 
+  useEffect(() => {
+    if (error?.sessionExpired) {
+      history.replace(routes.login, { new2FASessionRequired: true })
+    }
+  }, [error])
+
   const onConfirmClick = async (e) => {
     e.preventDefault()
     setError(null)
