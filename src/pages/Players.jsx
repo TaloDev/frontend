@@ -20,7 +20,7 @@ import Pagination from '../components/Pagination'
 import DateCell from '../components/tables/cells/DateCell'
 
 const Players = () => {
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState(new URLSearchParams(window.location.search).get('search') ?? '')
   const [debouncedSearch] = useDebounce(search, 300)
   const activeGame = useRecoilValue(activeGameState)
   const history = useHistory()
@@ -37,11 +37,6 @@ const Players = () => {
   const goToPlayerEvents = (player) => {
     history.push(routes.playerEvents.replace(':id', player.id))
   }
-
-  useEffect(() => {
-    const searchQuery = new URLSearchParams(window.location.search).get('search')
-    if (searchQuery) setSearch(searchQuery)
-  }, [])
 
   useEffect(() => {
     window.scrollTo(0, 0)
