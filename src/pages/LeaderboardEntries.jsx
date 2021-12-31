@@ -62,7 +62,6 @@ const LeaderboardEntries = () => {
   const onHideToggle = async (entry) => {
     try {
       const res = await updateLeaderboardEntry(internalName, entry.id, activeGame.id, { hidden: !entry.hidden })
-      console.log(res.data.entry)
 
       mutate((data) => {
         return {
