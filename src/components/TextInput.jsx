@@ -14,7 +14,7 @@ const TextInput = (props) => {
   `, {
     'bg-gray-600': !props.variant,
     'bg-gray-100 text-black': props.variant === 'light',
-    'bg-white border border-gray-300 focus:border-opacity-0': props.variant === 'modal'
+    'bg-white border border-gray-300 focus:border-opacity-0 disabled:bg-gray-200': props.variant === 'modal'
   })
 
   return (
@@ -27,6 +27,7 @@ const TextInput = (props) => {
         placeholder={props.placeholder}
         onChange={(e) => props.onChange(e.target.value, e)}
         value={props.value}
+        disabled={props.disabled}
       />
     </div>
   )
@@ -40,7 +41,8 @@ TextInput.propTypes = {
   placeholder: PropTypes.string.isRequired,
   type: PropTypes.string,
   variant: PropTypes.string,
-  inputClassName: PropTypes.string
+  inputClassName: PropTypes.string,
+  disabled: PropTypes.bool
 }
 
 export default TextInput

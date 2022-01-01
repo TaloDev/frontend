@@ -5,8 +5,8 @@ const TableHeader = (props) => {
   return (
     <thead className='bg-white text-black font-semibold'>
       <tr>
-        {props.columns.map((col) => (
-          <th key={col} className='p-4 text-left'>{col}</th>
+        {props.columns.map((col, idx) => (
+          <th key={idx} className='p-4 text-left'>{col}</th>
         ))}
       </tr>
     </thead>

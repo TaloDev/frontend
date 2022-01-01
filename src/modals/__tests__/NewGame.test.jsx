@@ -60,7 +60,7 @@ describe('<NewGame />', () => {
     })
   })
 
-  it('should close when clicking cancel', async () => {
+  it('should close when clicking cancel', () => {
     const closeMock = jest.fn()
     const userChangeMock = jest.fn()
 

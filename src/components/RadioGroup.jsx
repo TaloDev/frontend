@@ -24,6 +24,8 @@ function RadioGroup({ label, name, options, onChange, value }) {
                 onChange={() => onChange(option.value)}
                 onFocus={() => setFocusedValue(option.value)}
                 onBlur={() => setFocusedValue(null)}
+                checked={selected}
+                value={option.value}
               />
 
               <label
