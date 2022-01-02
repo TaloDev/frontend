@@ -10,17 +10,18 @@ import Select from '../components/Select'
 import RadioGroup from '../components/RadioGroup'
 import activeGameState from '../state/activeGameState'
 import { useRecoilValue } from 'recoil'
+import updateLeaderboard from '../api/updateLeaderboard'
 
-const NewLeaderboard = ({ modalState, mutate }) => {
+const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const activeGame = useRecoilValue(activeGameState)
 
-  const [internalName, setInternalName] = useState('')
-  const [displayName, setDisplayName] = useState('')
-  const [sortMode, setSortMode] = useState('desc')
-  const [unique, setUnique] = useState(false)
+  const [internalName, setInternalName] = useState(editingLeaderboard?.internalName ?? '')
+  const [displayName, setDisplayName] = useState(editingLeaderboard?.name ?? '')
+  const [sortMode, setSortMode] = useState(editingLeaderboard?.sortMode ?? 'desc')
+  const [unique, setUnique] = useState(editingLeaderboard?.unique ?? false)
 
   const onCreateClick = async (e) => {
     e.preventDefault()
@@ -28,7 +29,7 @@ const NewLeaderboard = ({ modalState, mutate }) => {
     setError(null)
 
     try {
-      const res = await createLeaderboard({ gameId: activeGame.id, internalName, name: displayName, sortMode, unique })
+      const res = await createLeaderboard(activeGame.id, { internalName, name: displayName, sortMode, unique })
 
       mutate((data) => {
         return {
@@ -47,10 +48,40 @@ const NewLeaderboard = ({ modalState, mutate }) => {
     }
   }
 
+  const onUpdateClick = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+
+    try {
+      const res = await updateLeaderboard(internalName, activeGame.id, { internalName, name: displayName, sortMode, unique })
+
+      mutate((data) => {
+        return {
+          ...data,
+          leaderboards: data.leaderboards.map((existingLeaderboard) => {
+            if (existingLeaderboard.id === res.data.leaderboard.id) return res.data.leaderboard
+            return existingLeaderboard
+          })
+        }
+      }, false)
+
+      setOpen(false)
+    } catch (err) {
+      setError(buildError(err))
+      setLoading(false)
+    }
+  }
+
+  const sortModeOptions = [
+    { label: 'Descending', value: 'desc' },
+    { label: 'Ascending', value: 'asc' }
+  ]
+
   return (
     <Modal
       id='new-leaderboard'
-      title='Create new leaderboard'
+      title={editingLeaderboard ? 'Update leaderboard' : 'Create new leaderboard'}
       modalState={modalState}
     >
       <form>
@@ -62,6 +93,7 @@ const NewLeaderboard = ({ modalState, mutate }) => {
             placeholder='The unique identifier for this leaderboard'
             onChange={setInternalName}
             value={internalName}
+            disabled={!!editingLeaderboard}
           />
 
           <TextInput
@@ -77,12 +109,9 @@ const NewLeaderboard = ({ modalState, mutate }) => {
             <label htmlFor='sort-mode' className='block font-semibold mb-1'>Sort mode</label>
             <Select
               inputId='sort-mode'
-              defaultValue={{ label: 'Descending', value: 'desc' }}
+              defaultValue={sortModeOptions.find((option) => option.value === sortMode)}
               onChange={(option) => setSortMode(option.value)}
-              options={[
-                { label: 'Descending', value: 'desc' },
-                { label: 'Ascending', value: 'asc' }
-              ]}
+              options={sortModeOptions}
             />
           </div>
 
@@ -101,15 +130,28 @@ const NewLeaderboard = ({ modalState, mutate }) => {
         </div>
 
         <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>
-          <div className='w-full md:w-32'>
-            <Button
-              disabled={!internalName || !displayName || !sortMode}
-              isLoading={isLoading}
-              onClick={onCreateClick}
-            >
-              Create
-            </Button>
-          </div>
+          {!editingLeaderboard &&
+            <div className='w-full md:w-32'>
+              <Button
+                disabled={!internalName || !displayName || !sortMode}
+                isLoading={isLoading}
+                onClick={onCreateClick}
+              >
+                Create
+              </Button>
+            </div>
+          }
+          {editingLeaderboard &&
+            <div className='w-full md:w-32'>
+              <Button
+                disabled={!internalName || !displayName || !sortMode}
+                isLoading={isLoading}
+                onClick={onUpdateClick}
+              >
+                Update
+              </Button>
+            </div>
+          }
           <div className='w-full md:w-32'>
             <Button type='button' variant='grey' onClick={() => setOpen(false)}>Cancel</Button>
           </div>
@@ -119,9 +161,10 @@ const NewLeaderboard = ({ modalState, mutate }) => {
   )
 }
 
-NewLeaderboard.propTypes = {
+LeaderboardDetails.propTypes = {
   modalState: PropTypes.array.isRequired,
-  mutate: PropTypes.func.isRequired
+  mutate: PropTypes.func.isRequired,
+  editingLeaderboard: PropTypes.object
 }
 
-export default NewLeaderboard
+export default LeaderboardDetails

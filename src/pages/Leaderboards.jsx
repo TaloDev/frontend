@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Title from '../components/Title'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
@@ -14,7 +14,7 @@ import { IconChevronUp, IconChevronDown, IconPlus } from '@tabler/icons'
 import Button from '../components/Button'
 import { useHistory } from 'react-router-dom'
 import routes from '../constants/routes'
-import NewLeaderboard from '../modals/NewLeaderboard'
+import LeaderboardDetails from '../modals/LeaderboardDetails'
 import useSortedItems from '../utils/useSortedItems'
 
 const Leaderboards = () => {
@@ -22,16 +22,26 @@ const Leaderboards = () => {
   const history = useHistory()
 
   const [showModal, setShowModal] = useState(false)
+  const [editingLeaderboard, setEditingLeaderboard] = useState(null)
 
   const { leaderboards, loading, error, mutate } = useLeaderboards(activeGame)
 
   const sortedLeaderboards = useSortedItems(leaderboards, 'createdAt')
+
+  useEffect(() => {
+    if (!showModal) setEditingLeaderboard(null)
+  }, [showModal, editingLeaderboard])
 
   const goToEntries = (leaderboard) => {
     history.push({
       pathname: routes.leaderboardEntries.replace(':internalName', leaderboard.internalName),
       state: { leaderboard }
     })
+  }
+
+  const onEditLeaderboardClick = (leaderboard) => {
+    setEditingLeaderboard(leaderboard)
+    setShowModal(true)
   }
 
   return (
@@ -64,7 +74,7 @@ const Leaderboards = () => {
       {!error && leaderboards.length > 0 &&
         <div className='overflow-x-scroll'>
           <table className='table-auto w-full'>
-            <TableHeader columns={['Internal name', 'Display name', 'Sort mode', 'Unique entries', 'Created at', '']} />
+            <TableHeader columns={['Internal name', 'Display name', 'Sort mode', 'Unique entries', 'Created at', 'Updated at', '', '']} />
             <TableBody iterator={sortedLeaderboards}>
               {(leaderboard) => (
                 <>
@@ -78,8 +88,12 @@ const Leaderboards = () => {
                   </TableCell>
                   <TableCell>{leaderboard.unique ? 'Yes' : 'No'}</TableCell>
                   <DateCell>{format(new Date(leaderboard.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
+                  <DateCell>{format(new Date(leaderboard.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
                   <TableCell className='w-40'>
                     <Button variant='grey' onClick={() => goToEntries(leaderboard)}>View entries</Button>
+                  </TableCell>
+                  <TableCell className='w-40'>
+                    <Button variant='grey' onClick={() => onEditLeaderboardClick(leaderboard)}>Edit</Button>
                   </TableCell>
                 </>
               )}
@@ -91,9 +105,10 @@ const Leaderboards = () => {
       <ErrorMessage error={error} />
 
       {showModal &&
-        <NewLeaderboard
+        <LeaderboardDetails
           modalState={[showModal, setShowModal]}
           mutate={mutate}
+          editingLeaderboard={editingLeaderboard}
         />
       }
     </div>
