@@ -11,7 +11,7 @@ import routes from '../constants/routes'
 import { unauthedContainerStyle } from '../styles/theme'
 import AuthService from '../services/AuthService'
 import AlertBanner from '../components/AlertBanner'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -22,6 +22,7 @@ const Login = () => {
   const [wasLoggedOut] = useState(window.localStorage.getItem('loggedOut'))
 
   const history = useHistory()
+  const location = useLocation()
 
   useEffect(() => {
     const intendedRoute = new URLSearchParams(window.location.search).get('next')
@@ -66,10 +67,15 @@ const Login = () => {
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
       <form className={`text-white rounded-md space-y-8 ${unauthedContainerStyle}`}>
-        <div>
+        <div className='space-y-4'>
           <h1 className='text-4xl font-bold'>Welcome back</h1>
+
           {wasLoggedOut &&
-            <AlertBanner className='mt-4' text='You were logged out' />
+            <AlertBanner text='You were logged out' />
+          }
+
+          {location.state?.new2FASessionRequired &&
+            <AlertBanner text='Your 2FA session has expired, please log in again' />
           }
         </div>
 

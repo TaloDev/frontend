@@ -11,7 +11,7 @@ const useLeaderboardEntries = (activeGame, internalName, page) => {
     return res.data
   }
 
-  const { data, error } = useSWR(
+  const { data, error, mutate } = useSWR(
     [`leaderboards/${internalName}/entries`, activeGame, page],
     fetcher
   )
@@ -20,7 +20,8 @@ const useLeaderboardEntries = (activeGame, internalName, page) => {
     entries: data?.entries ?? [],
     count: data?.count,
     loading: !data && !error,
-    error: error && buildError(error)
+    error: error && buildError(error),
+    mutate
   }
 }
 

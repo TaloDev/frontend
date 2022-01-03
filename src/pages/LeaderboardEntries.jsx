@@ -16,6 +16,8 @@ import activeGameState from '../state/activeGameState'
 import { IconArrowRight } from '@tabler/icons'
 import Button from '../components/Button'
 import getLeaderboard from '../api/getLeaderboard'
+import updateLeaderboardEntry from '../api/updateLeaderboardEntry'
+import buildError from '../utils/buildError'
 
 const LeaderboardEntries = () => {
   const { internalName } = useParams()
@@ -25,7 +27,9 @@ const LeaderboardEntries = () => {
   const [leaderboard, setLeaderboard] = useState(location.state?.leaderboard)
 
   const [page, setPage] = useState(0)
-  const { entries, count, loading, error } = useLeaderboardEntries(activeGame, internalName, page)
+  const { entries, count, loading, error: fetchError, mutate } = useLeaderboardEntries(activeGame, internalName, page)
+
+  const [error, setError] = useState(null)
 
   const history = useHistory()
 
@@ -44,11 +48,34 @@ const LeaderboardEntries = () => {
   }, [isLoading])
 
   useEffect(() => {
+    setError(fetchError)
+  }, [fetchError])
+
+  useEffect(() => {
     window.scrollTo(0, 0)
   }, [page])
 
   const goToPlayer = (identifier) => {
     history.push(`${routes.players}?search=${identifier}`)
+  }
+
+  const onHideToggle = async (entry) => {
+    try {
+      const res = await updateLeaderboardEntry(internalName, entry.id, activeGame.id, { hidden: !entry.hidden })
+
+      mutate((data) => {
+        return {
+          ...data,
+          entries: data.entries.map((existingEntry) => {
+            if (existingEntry.id === entry.id) return { ...existingEntry, ...res.data.entry }
+            return existingEntry
+          })
+        }
+      }, false)
+
+    } catch (err) {
+      setError(buildError(err))
+    }
   }
 
   if (isLoading) {
@@ -71,15 +98,17 @@ const LeaderboardEntries = () => {
         }
       </div>
 
-      {!error && entries.length === 0 &&
+      {error && <ErrorMessage error={error} />}
+
+      {!fetchError && entries.length === 0 &&
         <p>This leaderboard doesn&apos;t have any entries yet</p>
       }
 
-      {!error && entries.length > 0 &&
+      {!fetchError && entries.length > 0 &&
         <>
           <div className='overflow-x-scroll'>
             <table className='table-auto w-full'>
-              <TableHeader columns={['#', 'Player', 'Score', 'Time']} />
+              <TableHeader columns={['#', 'Player', 'Score', 'Time', '']} />
               <TableBody iterator={entries}>
                 {(entry) => (
                   <>
@@ -97,6 +126,14 @@ const LeaderboardEntries = () => {
                     </TableCell>
                     <TableCell>{entry.score}</TableCell>
                     <DateCell>{format(new Date(entry.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
+                    <TableCell className='w-40'>
+                      <Button
+                        variant={entry.hidden ? 'black' : 'grey'}
+                        onClick={() => onHideToggle(entry)}
+                      >
+                        <span>{entry.hidden ? 'Unhide' : 'Hide'}</span>
+                      </Button>
+                    </TableCell>
                   </>
                 )}
               </TableBody>
@@ -106,8 +143,6 @@ const LeaderboardEntries = () => {
           {Boolean(count) && <Pagination count={count} pageState={[page, setPage]} itemsPerPage={50} />}
         </>
       }
-
-      <ErrorMessage error={error} />
     </div>
   )
 }
