@@ -60,5 +60,5 @@
   "lint-staged": {
     "*.{js,jsx}": "eslint --fix"
   },
-  "version": "0.2.0"
+  "version": "0.3.0"
 }
