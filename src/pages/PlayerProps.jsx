@@ -155,7 +155,7 @@ const PlayerProps = () => {
       <Title showBackButton>Player properties</Title>
 
       <div>
-        <code className='bg-gray-900 rounded p-2 ml-1 text-xs md:text-sm'>playerId = {player.id}</code>
+        <code className='bg-gray-900 rounded p-2 text-xs md:text-sm'>Player = {player.id}</code>
       </div>
 
       {existingProps.length + newProps.length === 0 &&

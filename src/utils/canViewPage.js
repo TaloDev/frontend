@@ -4,6 +4,7 @@ import userTypes from '../constants/userTypes'
 /* istanbul ignore file */
 export default function canViewPage(user, route) {
   switch (route) {
+    case routes.activity:
     case routes.apiKeys:
       return user.type === userTypes.ADMIN
     case routes.dataExports:
