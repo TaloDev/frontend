@@ -1,5 +1,6 @@
 export default {
   account: '/account',
+  activity: '/activity',
   apiKeys: '/api-keys',
   confirmPassword: '/confirm-password',
   dashboard: '/',

@@ -55,7 +55,7 @@ const PlayerEvents = () => {
       </div>
 
       <div>
-        <code className='bg-gray-900 rounded p-2 ml-1 text-xs md:text-sm'>playerId = {playerId}</code>
+        <code className='bg-gray-900 rounded p-2 text-xs md:text-sm'>Player = {playerId}</code>
       </div>
 
       {(events.length > 0 || debouncedSearch.length > 0) &&
