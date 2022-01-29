@@ -5,6 +5,7 @@ import userTypes from '../constants/userTypes'
 export default function canViewPage(user, route) {
   switch (route) {
     case routes.activity:
+      return [userTypes.ADMIN, userTypes.DEMO].includes(user.type)
     case routes.apiKeys:
       return user.type === userTypes.ADMIN
     case routes.dataExports:
