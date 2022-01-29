@@ -67,7 +67,7 @@ const Leaderboards = () => {
         }
       </div>
 
-      {!error && leaderboards.length === 0 &&
+      {!error && !loading && leaderboards.length === 0 &&
         <p>{activeGame.name} doesn&apos;t have any leaderboards yet</p>
       }
 

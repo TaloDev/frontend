@@ -160,8 +160,7 @@ const APIKeys = () => {
                 <p>Scopes control what your access key can and can&apos;t do</p>
               </div>
 
-              <div className='flex space-x-8 p-4'>
-                {!isLoading && !availableScopes && <ErrorMessage error={{ message: 'Couldn\'t fetch scopes' }} />}
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 md:gap-y-8 p-4'>
                 {availableScopes && Object.keys(availableScopes).map((group) => (
                   <div key={group}>
                     <h4 className='font-semibold capitalize'>{group}</h4>
@@ -181,6 +180,8 @@ const APIKeys = () => {
                   </div>
                 ))}
               </div>
+
+              {!isLoading && !availableScopes && <ErrorMessage className='mt-4' error={{ message: 'Couldn\'t fetch scopes' }} />}
             </div>
 
             <Button

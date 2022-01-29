@@ -35,7 +35,7 @@ describe('<PlayerProps />', () => {
 
   const axiosMock = new MockAdapter(api)
 
-  it('should render current props', async () => {
+  it('should render current props', () => {
     const history = createMemoryHistory()
     history.push(routes.playerProps.replace(':id', basePlayer.id), {
       player: basePlayer
@@ -48,7 +48,7 @@ describe('<PlayerProps />', () => {
       , { wrapper: RecoilRoot }
     )
 
-    expect(screen.getByText(`playerId = ${basePlayer.id}`)).toBeInTheDocument()
+    expect(screen.getByText(`Player = ${basePlayer.id}`)).toBeInTheDocument()
 
     for (const prop of basePlayer.props) {
       expect(screen.getByText(prop.key)).toBeInTheDocument()
@@ -56,7 +56,7 @@ describe('<PlayerProps />', () => {
     }
   })
 
-  it('should only enable the reset button after a change', async () => {
+  it('should only enable the reset button after a change', () => {
     const history = createMemoryHistory()
     history.push(routes.playerProps.replace(':id', basePlayer.id), {
       player: basePlayer
@@ -78,7 +78,7 @@ describe('<PlayerProps />', () => {
     expect(screen.getByText('Reset')).toBeEnabled()
   })
 
-  it('should only enable the reset a change', async () => {
+  it('should only enable the reset a change', () => {
     const history = createMemoryHistory()
     history.push(routes.playerProps.replace(':id', basePlayer.id), {
       player: basePlayer
@@ -100,7 +100,7 @@ describe('<PlayerProps />', () => {
     expect(screen.getByDisplayValue('80')).toBeInTheDocument()
   })
 
-  it('should delete existing props', async () => {
+  it('should delete existing props', () => {
     const history = createMemoryHistory()
     history.push(routes.playerProps.replace(':id', basePlayer.id), {
       player: basePlayer
@@ -119,7 +119,7 @@ describe('<PlayerProps />', () => {
     expect(screen.queryByText('health')).not.toBeInTheDocument()
   })
 
-  it('should add new props', async () => {
+  it('should add new props', () => {
     const history = createMemoryHistory()
     history.push(routes.playerProps.replace(':id', basePlayer.id), {
       player: basePlayer
@@ -141,7 +141,7 @@ describe('<PlayerProps />', () => {
     expect(screen.getByDisplayValue('5')).toBeInTheDocument()
   })
 
-  it('should delete new props', async () => {
+  it('should delete new props', () => {
     const history = createMemoryHistory()
     history.push(routes.playerProps.replace(':id', basePlayer.id), {
       player: basePlayer
@@ -178,7 +178,7 @@ describe('<PlayerProps />', () => {
       , { wrapper: RecoilRoot }
     )
 
-    expect(await screen.findByText(`playerId = ${basePlayer.id}`)).toBeInTheDocument()
+    expect(await screen.findByText(`Player = ${basePlayer.id}`)).toBeInTheDocument()
 
     for (const prop of basePlayer.props) {
       expect(screen.getByText(prop.key)).toBeInTheDocument()
@@ -201,7 +201,7 @@ describe('<PlayerProps />', () => {
       , { wrapper: RecoilRoot }
     )
 
-    expect(await screen.findByText(`playerId = ${basePlayer.id}`)).toBeInTheDocument()
+    expect(await screen.findByText(`Player = ${basePlayer.id}`)).toBeInTheDocument()
 
     expect(screen.getByText('This player has no custom properties. Click the button below to add one.')).toBeInTheDocument()
   })

@@ -7,14 +7,19 @@ import ErrorMessage from '../components/ErrorMessage'
 import HeadlineStat from '../components/HeadlineStat'
 import TimePeriodPicker from '../components/TimePeriodPicker'
 import Title from '../components/Title'
+import routes from '../constants/routes'
 import activeGameState from '../state/activeGameState'
+import canViewPage from '../utils/canViewPage'
 import useLocalStorage from '../utils/useLocalStorage'
 import useTimePeriod from '../utils/useTimePeriod'
+import Link from '../components/Link'
+import userState from '../state/userState'
 
 const Dashboard = () => {
   const history = useHistory()
 
   const [intendedRouteChecked, setIntendedRouteChecked] = useState(false)
+  const user = useRecoilValue(userState)
 
   useEffect(() => {
     const intended = window.localStorage.getItem('intendedRoute')
@@ -80,6 +85,13 @@ const Dashboard = () => {
             <HeadlineStat title='New events' stat={headlines.events.count} />
             <HeadlineStat title='Unique event submitters' stat={headlines.unique_event_submitters.count} />
           </div>
+        </div>
+      }
+
+      {canViewPage(user, routes.activity) &&
+        <div className='mt-8'>
+          <h2 className='text-2xl mt-4 mb-2 md:mt-0'>Activity</h2>
+          <Link to={routes.activity}>Go to activity log</Link>
         </div>
       }
     </div>
