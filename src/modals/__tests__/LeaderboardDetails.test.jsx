@@ -75,7 +75,7 @@ describe('<LeaderboardDetails />', () => {
     })
   })
 
-  it('should close when clicking cancel', () => {
+  it('should close when clicking close', () => {
     const closeMock = jest.fn()
 
     render(
@@ -85,7 +85,7 @@ describe('<LeaderboardDetails />', () => {
       { wrapper: RecoilRoot }
     )
 
-    userEvent.click(screen.getByText('Cancel'))
+    userEvent.click(screen.getByText('Close'))
 
     expect(closeMock).toHaveBeenCalled()
   })
@@ -180,6 +180,73 @@ describe('<LeaderboardDetails />', () => {
     )
 
     userEvent.click(screen.getByText('Update'))
+
+    await waitFor(() => {
+      expect(screen.getByText('Network Error')).toBeInTheDocument()
+    })
+  })
+
+  it('should delete a leaderboard', async () => {
+    const closeMock = jest.fn()
+    const mutateMock = jest.fn()
+
+    const initialLeaderboard = {
+      id: 1,
+      internalName: 'score',
+      name: 'Score',
+      sortMode: 'asc',
+      unique: false
+    }
+
+    axiosMock.onDelete('http://talo.test/leaderboards/score').replyOnce(200)
+    window.confirm = jest.fn(() => true)
+
+    render(
+      <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
+        <LeaderboardDetails
+          modalState={[true, closeMock]}
+          mutate={mutateMock}
+          editingLeaderboard={initialLeaderboard}
+        />
+      </RecoilObserver>,
+      { wrapper: RecoilRoot }
+    )
+
+    userEvent.click(screen.getByText('Delete'))
+
+    await waitFor(() => {
+      expect(closeMock).toHaveBeenCalled()
+      expect(mutateMock).toHaveBeenCalled()
+    })
+
+    const mutator = mutateMock.mock.calls[0][0]
+    expect(mutator({ leaderboards: [initialLeaderboard, { id: 2 }] })).toStrictEqual({
+      leaderboards: [{ id: 2 }]
+    })
+  })
+
+  it('should handle deleting errors', async () => {
+    axiosMock.onDelete('http://talo.test/leaderboards/score').networkErrorOnce()
+
+    const closeMock = jest.fn()
+
+    render(
+      <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
+        <LeaderboardDetails
+          modalState={[true, closeMock]}
+          mutate={jest.fn()}
+          editingLeaderboard={{
+            internalName: 'score',
+            name: 'Score',
+            sortMode: 'asc',
+            unique: false
+          }}
+        />
+      </RecoilObserver>,
+      { wrapper: RecoilRoot }
+    )
+
+    userEvent.click(screen.getByText('Delete'))
 
     await waitFor(() => {
       expect(screen.getByText('Network Error')).toBeInTheDocument()

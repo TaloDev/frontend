@@ -11,10 +11,12 @@ import RadioGroup from '../components/RadioGroup'
 import activeGameState from '../state/activeGameState'
 import { useRecoilValue } from 'recoil'
 import updateLeaderboard from '../api/updateLeaderboard'
+import deleteLeaderboard from '../api/deleteLeaderboard'
 
 const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)
+  const [isDeleting, setDeleting] = useState(false)
   const [error, setError] = useState(null)
   const activeGame = useRecoilValue(activeGameState)
 
@@ -70,6 +72,32 @@ const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
     } catch (err) {
       setError(buildError(err))
       setLoading(false)
+    }
+  }
+
+  const onDeleteClick = async () => {
+    /* istanbul ignore if */
+    if (!window.confirm('Are you sure you want to delete this leaderboard?')) return
+
+    setDeleting(true)
+    setError(null)
+
+    try {
+      await deleteLeaderboard(internalName, activeGame.id)
+
+      mutate((data) => {
+        return {
+          ...data,
+          leaderboards: data.leaderboards.filter((existingLeaderboard) => {
+            return existingLeaderboard.id !== editingLeaderboard.id
+          })
+        }
+      }, false)
+
+      setOpen(false)
+    } catch (err) {
+      setError(buildError(err))
+      setDeleting(false)
     }
   }
 
@@ -142,18 +170,31 @@ const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
             </div>
           }
           {editingLeaderboard &&
-            <div className='w-full md:w-32'>
-              <Button
-                disabled={!internalName || !displayName || !sortMode}
-                isLoading={isLoading}
-                onClick={onUpdateClick}
-              >
-                Update
-              </Button>
+            <div className='flex space-x-2'>
+              <div className='w-full md:w-32'>
+                <Button
+                  type='button'
+                  isLoading={isDeleting}
+                  onClick={onDeleteClick}
+                  variant='red'
+                >
+                  Delete
+                </Button>
+              </div>
+
+              <div className='w-full md:w-32'>
+                <Button
+                  disabled={!internalName || !displayName || !sortMode || isDeleting}
+                  isLoading={isLoading}
+                  onClick={onUpdateClick}
+                >
+                  Update
+                </Button>
+              </div>
             </div>
           }
           <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>Cancel</Button>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>Close</Button>
           </div>
         </div>
       </form>
