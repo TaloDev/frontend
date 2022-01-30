@@ -7,6 +7,8 @@ import MockAdapter from 'axios-mock-adapter'
 import { RecoilRoot } from 'recoil'
 import RecoilObserver from '../../state/RecoilObserver'
 import activeGameState from '../../state/activeGameState'
+import userState from '../../state/userState'
+import userTypes from '../../constants/userTypes'
 
 describe('<LeaderboardDetails />', () => {
   const axiosMock = new MockAdapter(api)
@@ -19,8 +21,10 @@ describe('<LeaderboardDetails />', () => {
     const mutateMock = jest.fn()
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-        <LeaderboardDetails modalState={[true, closeMock]} mutate={mutateMock} />
+      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
+        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
+          <LeaderboardDetails modalState={[true, closeMock]} mutate={mutateMock} />
+        </RecoilObserver>
       </RecoilObserver>,
       { wrapper: RecoilRoot }
     )
@@ -59,8 +63,10 @@ describe('<LeaderboardDetails />', () => {
     const closeMock = jest.fn()
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-        <LeaderboardDetails modalState={[true, closeMock]} mutate={jest.fn()} />
+      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
+        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
+          <LeaderboardDetails modalState={[true, closeMock]} mutate={jest.fn()} />
+        </RecoilObserver>
       </RecoilObserver>,
       { wrapper: RecoilRoot }
     )
@@ -79,8 +85,10 @@ describe('<LeaderboardDetails />', () => {
     const closeMock = jest.fn()
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-        <LeaderboardDetails modalState={[true, closeMock]} mutate={jest.fn()} />
+      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
+        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
+          <LeaderboardDetails modalState={[true, closeMock]} mutate={jest.fn()} />
+        </RecoilObserver>
       </RecoilObserver>,
       { wrapper: RecoilRoot }
     )
@@ -92,17 +100,19 @@ describe('<LeaderboardDetails />', () => {
 
   it('should prefill details if a leaderboard is being edited', () => {
     render(
-      <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-        <LeaderboardDetails
-          modalState={[true, jest.fn()]}
-          mutate={jest.fn()}
-          editingLeaderboard={{
-            internalName: 'score',
-            name: 'Score',
-            sortMode: 'asc',
-            unique: true
-          }}
-        />
+      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
+        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
+          <LeaderboardDetails
+            modalState={[true, jest.fn()]}
+            mutate={jest.fn()}
+            editingLeaderboard={{
+              internalName: 'score',
+              name: 'Score',
+              sortMode: 'asc',
+              unique: true
+            }}
+          />
+        </RecoilObserver>
       </RecoilObserver>,
       { wrapper: RecoilRoot }
     )
@@ -134,12 +144,14 @@ describe('<LeaderboardDetails />', () => {
     })
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-        <LeaderboardDetails
-          modalState={[true, closeMock]}
-          mutate={mutateMock}
-          editingLeaderboard={initialLeaderboard}
-        />
+      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
+        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
+          <LeaderboardDetails
+            modalState={[true, closeMock]}
+            mutate={mutateMock}
+            editingLeaderboard={initialLeaderboard}
+          />
+        </RecoilObserver>
       </RecoilObserver>,
       { wrapper: RecoilRoot }
     )
@@ -164,17 +176,19 @@ describe('<LeaderboardDetails />', () => {
     const closeMock = jest.fn()
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-        <LeaderboardDetails
-          modalState={[true, closeMock]}
-          mutate={jest.fn()}
-          editingLeaderboard={{
-            internalName: 'score',
-            name: 'Score',
-            sortMode: 'asc',
-            unique: false
-          }}
-        />
+      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
+        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
+          <LeaderboardDetails
+            modalState={[true, closeMock]}
+            mutate={jest.fn()}
+            editingLeaderboard={{
+              internalName: 'score',
+              name: 'Score',
+              sortMode: 'asc',
+              unique: false
+            }}
+          />
+        </RecoilObserver>
       </RecoilObserver>,
       { wrapper: RecoilRoot }
     )
@@ -202,12 +216,14 @@ describe('<LeaderboardDetails />', () => {
     window.confirm = jest.fn(() => true)
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-        <LeaderboardDetails
-          modalState={[true, closeMock]}
-          mutate={mutateMock}
-          editingLeaderboard={initialLeaderboard}
-        />
+      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
+        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
+          <LeaderboardDetails
+            modalState={[true, closeMock]}
+            mutate={mutateMock}
+            editingLeaderboard={initialLeaderboard}
+          />
+        </RecoilObserver>
       </RecoilObserver>,
       { wrapper: RecoilRoot }
     )
@@ -225,23 +241,50 @@ describe('<LeaderboardDetails />', () => {
     })
   })
 
+  it('should not render the delete button for dev users', () => {
+    const initialLeaderboard = {
+      id: 1,
+      internalName: 'score',
+      name: 'Score',
+      sortMode: 'asc',
+      unique: false
+    }
+
+    render(
+      <RecoilObserver node={userState} initialValue={{ type: userTypes.DEV }}>
+        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
+          <LeaderboardDetails
+            modalState={[true, jest.fn()]}
+            mutate={jest.fn()}
+            editingLeaderboard={initialLeaderboard}
+          />
+        </RecoilObserver>
+      </RecoilObserver>,
+      { wrapper: RecoilRoot }
+    )
+
+    expect(screen.queryByText('Delete')).not.toBeInTheDocument()
+  })
+
   it('should handle deleting errors', async () => {
     axiosMock.onDelete('http://talo.test/leaderboards/score').networkErrorOnce()
 
     const closeMock = jest.fn()
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-        <LeaderboardDetails
-          modalState={[true, closeMock]}
-          mutate={jest.fn()}
-          editingLeaderboard={{
-            internalName: 'score',
-            name: 'Score',
-            sortMode: 'asc',
-            unique: false
-          }}
-        />
+      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
+        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
+          <LeaderboardDetails
+            modalState={[true, closeMock]}
+            mutate={jest.fn()}
+            editingLeaderboard={{
+              internalName: 'score',
+              name: 'Score',
+              sortMode: 'asc',
+              unique: false
+            }}
+          />
+        </RecoilObserver>
       </RecoilObserver>,
       { wrapper: RecoilRoot }
     )

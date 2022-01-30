@@ -9,9 +9,11 @@ import ErrorMessage from '../components/ErrorMessage'
 import Select from '../components/Select'
 import RadioGroup from '../components/RadioGroup'
 import activeGameState from '../state/activeGameState'
+import userState from '../state/userState'
 import { useRecoilValue } from 'recoil'
 import updateLeaderboard from '../api/updateLeaderboard'
 import deleteLeaderboard from '../api/deleteLeaderboard'
+import userTypes from '../constants/userTypes'
 
 const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
   const [, setOpen] = modalState
@@ -24,6 +26,8 @@ const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
   const [displayName, setDisplayName] = useState(editingLeaderboard?.name ?? '')
   const [sortMode, setSortMode] = useState(editingLeaderboard?.sortMode ?? 'desc')
   const [unique, setUnique] = useState(editingLeaderboard?.unique ?? false)
+
+  const user = useRecoilValue(userState)
 
   const onCreateClick = async (e) => {
     e.preventDefault()
@@ -171,16 +175,18 @@ const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
           }
           {editingLeaderboard &&
             <div className='flex space-x-2'>
-              <div className='w-full md:w-32'>
-                <Button
-                  type='button'
-                  isLoading={isDeleting}
-                  onClick={onDeleteClick}
-                  variant='red'
-                >
-                  Delete
-                </Button>
-              </div>
+              {user.type === userTypes.ADMIN &&
+                <div className='w-full md:w-32'>
+                  <Button
+                    type='button'
+                    isLoading={isDeleting}
+                    onClick={onDeleteClick}
+                    variant='red'
+                  >
+                    Delete
+                  </Button>
+                </div>
+              }
 
               <div className='w-full md:w-32'>
                 <Button
