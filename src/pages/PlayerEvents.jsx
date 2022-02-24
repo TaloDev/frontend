@@ -102,7 +102,7 @@ const PlayerEvents = () => {
         </>
       }
 
-      <ErrorMessage error={error} />
+      {error && <ErrorMessage error={error} />}
     </div>
   )
 }

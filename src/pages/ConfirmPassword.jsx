@@ -86,7 +86,7 @@ const ConfirmPassword = () => {
           value={password}
         />
 
-        <ErrorMessage error={error} />
+        {error && <ErrorMessage error={error} />}
 
         <Button
           disabled={!password}

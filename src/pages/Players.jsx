@@ -78,7 +78,7 @@ const Players = () => {
         </>
       }
 
-      <ErrorMessage error={error} />
+      {error && <ErrorMessage error={error} />}
 
       {players.length > 0 &&
         <>

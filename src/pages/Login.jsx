@@ -97,11 +97,13 @@ const Login = () => {
           value={password}
         />
 
-        <ErrorMessage error={error}>
-          {error?.showHint &&
-            <span>. Have you <Link to={routes.forgotPass}>forgotten your password?</Link></span>
-          }
-        </ErrorMessage>
+        {error &&
+          <ErrorMessage error={error}>
+            {error?.showHint &&
+              <span>. Have you <Link to={routes.forgotPass}>forgotten your password?</Link></span>
+            }
+          </ErrorMessage>
+        }
 
         <Button
           disabled={!email || !password}

@@ -81,7 +81,7 @@ const RecoverAccount = () => {
               value={code}
             />
 
-            <ErrorMessage error={error} />
+            {error && <ErrorMessage error={error} />}
 
             <Button
               disabled={code.length < 10}

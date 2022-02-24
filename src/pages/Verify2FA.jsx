@@ -67,7 +67,7 @@ const Verify2FA = () => {
           value={code}
         />
 
-        <ErrorMessage error={error} />
+        {error && <ErrorMessage error={error} />}
 
         <Button
           disabled={code.length < 6}

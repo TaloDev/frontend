@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 const ErrorMessage = (props) => {
-  if (!props.error) return null
-
   return (
     <p className='font-bold text-red-400 w-full' role='alert'>
       {props.error.message}

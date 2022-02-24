@@ -97,7 +97,7 @@ const DataExports = () => {
         </div>
       }
 
-      <ErrorMessage error={fetchError} />
+      {fetchError && <ErrorMessage error={fetchError} />}
 
       {!createdExportId &&
         <form className='w-full lg:2/3 xl:w-1/2 space-y-4'>
@@ -126,7 +126,7 @@ const DataExports = () => {
             </div>
           </div>
 
-          <ErrorMessage error={createError} />
+          {createError && <ErrorMessage error={createError} />}
 
           <Button
             isLoading={isCreating}

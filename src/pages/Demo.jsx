@@ -38,7 +38,7 @@ const Demo = () => {
           You&apos;ll get to the read-only demo organisation for 1 hour. Some features are restricted in the demo environment but trust us, they work!
         </p>
 
-        <ErrorMessage error={error} />
+        {error && <ErrorMessage error={error} />}
 
         <Button
           onClick={onLaunchClick}
