@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { focusStyle } from '../styles/theme'
 import classNames from 'classnames'
+import { IconAlertCircle } from '@tabler/icons'
 
 const TextInput = (props) => {
+  const [hasFocus, setFocus] = useState(false)
+
+  const showErrorHighlight = !hasFocus && props.errors?.length > 0
+
   const inputClassName = classNames(`
     block
     p-2
-    rounded
     w-full
+    rounded
     ${focusStyle}
     ${props.inputClassName || ''}
   `, {
@@ -19,16 +24,30 @@ const TextInput = (props) => {
 
   return (
     <div className='w-full'>
-      {props.label && <label htmlFor={props.id} className='block font-semibold mb-1'>{props.label}</label>}
-      <input
-        id={props.id}
-        className={inputClassName}
-        type={props.type ?? 'text'}
-        placeholder={props.placeholder}
-        onChange={(e) => props.onChange(e.target.value, e)}
-        value={props.value}
-        disabled={props.disabled}
-      />
+      {props.label &&
+        <label htmlFor={props.id} className='flex justify-between items-end font-semibold mb-2'>
+          {props.label}
+          {props.errors?.length > 0 && <span className=''><IconAlertCircle className='inline -mt-0.5 text-red-500' size={20} /></span>}
+        </label>
+      }
+
+      <div className='relative'>
+        <input
+          id={props.id}
+          className={inputClassName}
+          type={props.type ?? 'text'}
+          placeholder={props.placeholder}
+          onChange={(e) => props.onChange(e.target.value, e)}
+          value={props.value}
+          disabled={props.disabled}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
+        />
+
+        {showErrorHighlight && <div className='h-1 bg-red-500 absolute bottom-0 left-0 right-0 rounded-bl rounded-br' />}
+      </div>
+
+      {props.errors?.map((error, idx) => <p role='alert' key={idx} className='text-red-500 font-medium mt-2'>{error}</p>)}
     </div>
   )
 }
@@ -42,7 +61,8 @@ TextInput.propTypes = {
   type: PropTypes.string,
   variant: PropTypes.string,
   inputClassName: PropTypes.string,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  errors: PropTypes.arrayOf(PropTypes.string)
 }
 
 export default TextInput

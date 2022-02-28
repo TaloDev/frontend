@@ -73,7 +73,7 @@ const Register = () => {
           value={password}
         />
 
-        <ErrorMessage error={error} />
+        {error && <ErrorMessage error={error} />}
 
         <Button
           disabled={!name || !email || !password}

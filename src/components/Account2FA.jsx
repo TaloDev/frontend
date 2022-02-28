@@ -84,7 +84,7 @@ function Account2FA() {
 
       {!user.has2fa &&
         <>
-          <ErrorMessage error={enable2FAError} />
+          {enable2FAError && <ErrorMessage error={enable2FAError} />}
 
           {qrCode &&
             <form className='space-y-4'>

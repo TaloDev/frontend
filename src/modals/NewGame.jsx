@@ -57,7 +57,7 @@ const NewGame = (props) => {
             inputClassName='border border-gray-200 focus:border-opacity-0'
           />
 
-          <ErrorMessage error={error} />
+          {error && <ErrorMessage error={error} />}
         </div>
 
         <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>

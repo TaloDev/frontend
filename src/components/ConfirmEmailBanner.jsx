@@ -39,8 +39,6 @@ const ConfirmEmailBanner = () => {
             <p>We&apos;ve sent a 6 digit code to your email address, please enter it below:</p>
           </div>
 
-          <ErrorMessage error={error} />
-
           <form className='flex flex-col lg:flex-row lg:items-center'>
             <div className='w-full lg:w-1/3'>
               <TextInput
@@ -61,6 +59,8 @@ const ConfirmEmailBanner = () => {
               </Button>
             </div>
           </form>
+
+          {error && <ErrorMessage error={error} />}
         </>
       }
 

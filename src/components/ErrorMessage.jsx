@@ -1,14 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { IconAlertCircle } from '@tabler/icons'
 
-const ErrorMessage = (props) => {
-  if (!props.error) return null
-
+function ErrorMessage({ error, children }) {
   return (
-    <p className='font-bold text-red-400 w-full' role='alert'>
-      {props.error.message}
-      {props.children}
-    </p>
+    <div className='bg-red-500 p-4 rounded w-auto'>
+      <div className='flex'>
+        <IconAlertCircle />
+        <p className='font-bold text-white w-full ml-2' role='alert'>
+          {error.message}
+          {children}
+        </p>
+      </div>
+    </div>
   )
 }
 

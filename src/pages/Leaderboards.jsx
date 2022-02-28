@@ -102,7 +102,7 @@ const Leaderboards = () => {
         </div>
       }
 
-      <ErrorMessage error={error} />
+      {error && <ErrorMessage error={error} />}
 
       {showModal &&
         <LeaderboardDetails

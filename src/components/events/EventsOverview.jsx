@@ -40,29 +40,18 @@ const EventsOverview = () => {
 
   const { events, eventNames, loading, error } = useEvents(activeGame, debouncedStartDate, debouncedEndDate)
 
-  const [data, setData] = useState({})
-  const [availableNames, setAvailableNames] = useState([])
-
   useEffect(() => {
     if (startDate) setSelectedStartDate(startDate)
     if (endDate) setSelectedEndDate(endDate)
   }, [startDate, endDate])
 
   useEffect(() => {
-    if (eventNames.length > 0 && selectedEventNames.length === 0) {
-      setSelectedEventNames(eventNames)
+    if (eventNames.length > 0) {
+      if (selectedEventNames.length === 0) {
+        setSelectedEventNames(eventNames)
+      }
     }
   }, [eventNames, selectedEventNames])
-
-  useEffect(() => {
-    setData(events)
-  }, [events])
-
-  useEffect(() => {
-    if (eventNames.length > 0) {
-      setAvailableNames(eventNames)
-    }
-  }, [eventNames])
 
   const onCheckEventName = (checked, name) => {
     if (checked) {
@@ -85,7 +74,15 @@ const EventsOverview = () => {
         }
       </div>
 
-      <div className='md:flex justify-between items-end'>
+      <div className='justify-between items-start'>
+        <div className='mb-4 md:mb-8'>
+          <TimePeriodPicker
+            periods={timePeriods}
+            onPick={setTimePeriod}
+            selectedPeriod={timePeriod?.id}
+          />
+        </div>
+
         <div className='flex w-full md:w-1/2 space-x-4'>
           <TextInput
             id='start-date'
@@ -96,6 +93,7 @@ const EventsOverview = () => {
               setSelectedStartDate(e)
             }}
             value={selectedStartDate}
+            errors={error?.keys.startDate}
           />
 
           <TextInput
@@ -107,23 +105,18 @@ const EventsOverview = () => {
               setSelectedEndDate(e)
             }}
             value={selectedEndDate}
+            errors={error?.keys.endDate}
           />
         </div>
-
-        <TimePeriodPicker
-          periods={timePeriods}
-          onPick={setTimePeriod}
-          selectedPeriod={timePeriod?.id}
-        />
       </div>
 
-      {!loading && Object.keys(data).length === 0 &&
+      {!loading && Object.keys(events).length === 0 &&
         <p>There are no events for this date range</p>
       }
 
-      {error && <ErrorMessage error={error} />}
+      {error?.hasKeys === false && <ErrorMessage error={error} />}
 
-      {Object.keys(data).length > 0 && availableNames &&
+      {Object.keys(events).length > 0 && eventNames.length > 0 &&
         <div className='flex border-2 border-gray-700 rounded bg-black overflow-x-scroll'>
           <div className='pt-4 pl-4 pb-4 w-full'>
             <ResponsiveContainer height={600}>
@@ -160,12 +153,12 @@ const EventsOverview = () => {
 
                 <Tooltip content={<ChartTooltip />} />
 
-                {Object.keys(data)
+                {Object.keys(events)
                   .filter((eventName) => selectedEventNames.includes(eventName))
                   .map((eventName) => (
                     <Line
                       dataKey='count'
-                      data={data[eventName]}
+                      data={events[eventName]}
                       key={eventName}
                       stroke={getEventColour(eventName)}
                       activeDot={{ r: 6 }}
@@ -179,9 +172,9 @@ const EventsOverview = () => {
           </div>
 
           <div className='p-4 space-y-4 border-l-2 border-gray-700 min-w-60'>
-            <h2 className='text-lg'>{availableNames.length} events</h2>
+            <h2 className='text-lg'>{eventNames.length} events</h2>
             <ul>
-              {availableNames.sort((a, b) => a.localeCompare(b)).map((name) => (
+              {eventNames.sort((a, b) => a.localeCompare(b)).map((name) => (
                 <li key={name}>
                   <ColourfulCheckbox
                     id={`${name}-checkbox`}

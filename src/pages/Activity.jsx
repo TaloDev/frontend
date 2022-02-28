@@ -72,7 +72,7 @@ function Activity() {
         </div>
       ))}
 
-      <ErrorMessage error={error} />
+      {error && <ErrorMessage error={error} />}
     </div>
   )
 }
