@@ -1,29 +1,89 @@
 import buildError from '../buildError'
 
 describe('buildError', () => {
-  it('should always return an object if passed a screen', () => {
-    expect(buildError('Something went wrong')).toStrictEqual({ message: 'Something went wrong' })
+  it('should turn a string into an object', () => {
+    const error = buildError('Something went wrong')
+    expect(error.message).toBe('Something went wrong')
+    expect(error.keys).toStrictEqual({})
+    expect(error.hasKeys).toBe(false)
+    expect(error.extra).toStrictEqual({})
   })
 
-  it('should strip out everything but the message key in an error object', () => {
-    expect(buildError({ message: 'Something went wrong', timestamp: 1234 })).toStrictEqual({ message: 'Something went wrong' })
+  it('should pluck out the message from an error object', () => {
+    const error = buildError(new Error('Something went wrong'))
+    expect(error.message).toBe('Something went wrong')
+    expect(error.keys).toStrictEqual({})
+    expect(error.hasKeys).toBe(false)
+    expect(error.extra).toStrictEqual({})
   })
 
-  it('should extract the message from the response data', () => {
-    expect(buildError({
+  it('should pluck out the message from a response body with a message key', () => {
+    const error = buildError({
       response: {
         data: {
           message: 'Something went wrong'
         }
       }
-    })).toStrictEqual({ message: 'Something went wrong' })
+    })
+    expect(error.message).toBe('Something went wrong')
+    expect(error.keys).toStrictEqual({})
+    expect(error.hasKeys).toBe(false)
+    expect(error.extra).toStrictEqual({})
   })
 
-  it('should not use the response data if there are no keys inside it', () => {
-    expect(buildError({
+  it('should fill the extra object from a response body with a message key', () => {
+    const error = buildError({
       response: {
-        data: {}
+        data: {
+          message: 'Something went wrong',
+          showHint: true
+        }
       }
-    })).toStrictEqual({ message: undefined })
+    })
+    expect(error.message).toBe('Something went wrong')
+    expect(error.keys).toStrictEqual({})
+    expect(error.hasKeys).toBe(false)
+    expect(error.extra).toStrictEqual({ showHint: true })
+  })
+
+  it('should pluck out the validation keys from an error response', () => {
+    const error = buildError({
+      response: {
+        data: {
+          errors: {
+            startDate: ['The startDate is invalid'],
+            endDate: ['The endDate is invalid']
+          }
+        }
+      }
+    })
+    expect(error.message).toBe('Something went wrong, please try again later')
+    expect(error.keys).toStrictEqual({
+      startDate: ['The startDate is invalid'],
+      endDate: ['The endDate is invalid']
+    })
+    expect(error.hasKeys).toBe(true)
+    expect(error.extra).toStrictEqual({})
+  })
+
+  it('should fill the extra object from an error response', () => {
+    const error = buildError({
+      response: {
+        data: {
+          errors: {
+            startDate: ['The startDate is invalid'],
+            endDate: ['The endDate is invalid']
+          },
+          showHint: true
+        }
+      }
+    })
+    expect(error.message).toBe('Something went wrong, please try again later')
+    expect(error.keys).toStrictEqual({
+      startDate: ['The startDate is invalid'],
+      endDate: ['The endDate is invalid']
+    })
+    expect(error.hasKeys).toBe(true)
+    expect(error.extra).toStrictEqual({ showHint: true })
   })
 })

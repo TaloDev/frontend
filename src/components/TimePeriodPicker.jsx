@@ -25,7 +25,7 @@ const TimePeriodPicker = (props) => {
 TimePeriodPicker.propTypes = {
   periods: PropTypes.arrayOf(PropTypes.object).isRequired,
   onPick: PropTypes.func.isRequired,
-  selectedPeriod: PropTypes.string.isRequired
+  selectedPeriod: PropTypes.string
 }
 
 export default TimePeriodPicker

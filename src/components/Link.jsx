@@ -3,19 +3,20 @@ import PropTypes from 'prop-types'
 import { Link as RouterLink } from 'react-router-dom'
 import { focusStyle, linkStyle } from '../styles/theme'
 
-const Link = (props) => {
+function Link({ to, className, children }) {
   return (
     <RouterLink
-      to={props.to}
-      className={`${linkStyle} ${focusStyle}`}
+      to={to}
+      className={`${linkStyle} ${focusStyle} ${className ?? ''}`}
     >
-      {props.children}
+      {children}
     </RouterLink>
   )
 }
 
 Link.propTypes = {
   to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  className: PropTypes.string,
   children: PropTypes.any.isRequired
 }
 
