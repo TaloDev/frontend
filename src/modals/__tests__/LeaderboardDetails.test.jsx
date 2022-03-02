@@ -137,7 +137,7 @@ describe('<LeaderboardDetails />', () => {
       unique: false
     }
 
-    axiosMock.onPatch('http://talo.test/leaderboards/score').replyOnce(200, {
+    axiosMock.onPatch('http://talo.test/leaderboards/1').replyOnce(200, {
       leaderboard: {
         ...initialLeaderboard, unique: true
       }
@@ -171,7 +171,7 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should handle updating errors', async () => {
-    axiosMock.onPatch('http://talo.test/leaderboards/score').networkErrorOnce()
+    axiosMock.onPatch('http://talo.test/leaderboards/1').networkErrorOnce()
 
     const closeMock = jest.fn()
 
@@ -182,6 +182,7 @@ describe('<LeaderboardDetails />', () => {
             modalState={[true, closeMock]}
             mutate={jest.fn()}
             editingLeaderboard={{
+              id: 1,
               internalName: 'score',
               name: 'Score',
               sortMode: 'asc',
@@ -212,7 +213,7 @@ describe('<LeaderboardDetails />', () => {
       unique: false
     }
 
-    axiosMock.onDelete('http://talo.test/leaderboards/score').replyOnce(200)
+    axiosMock.onDelete('http://talo.test/leaderboards/1').replyOnce(200)
     window.confirm = jest.fn(() => true)
 
     render(
@@ -267,7 +268,7 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should handle deleting errors', async () => {
-    axiosMock.onDelete('http://talo.test/leaderboards/score').networkErrorOnce()
+    axiosMock.onDelete('http://talo.test/leaderboards/1').networkErrorOnce()
 
     const closeMock = jest.fn()
 
@@ -278,6 +279,7 @@ describe('<LeaderboardDetails />', () => {
             modalState={[true, closeMock]}
             mutate={jest.fn()}
             editingLeaderboard={{
+              id: 1,
               internalName: 'score',
               name: 'Score',
               sortMode: 'asc',

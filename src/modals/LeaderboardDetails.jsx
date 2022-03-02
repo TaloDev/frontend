@@ -60,7 +60,7 @@ const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
     setError(null)
 
     try {
-      const res = await updateLeaderboard(internalName, activeGame.id, { internalName, name: displayName, sortMode, unique })
+      const res = await updateLeaderboard(editingLeaderboard.id, { internalName, name: displayName, sortMode, unique })
 
       mutate((data) => {
         return {
@@ -87,7 +87,7 @@ const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
     setError(null)
 
     try {
-      await deleteLeaderboard(internalName, activeGame.id)
+      await deleteLeaderboard(editingLeaderboard.id)
 
       mutate((data) => {
         return {
