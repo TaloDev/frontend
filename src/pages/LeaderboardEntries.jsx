@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Title from '../components/Title'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
@@ -11,8 +11,6 @@ import { format } from 'date-fns'
 import Pagination from '../components/Pagination'
 import DateCell from '../components/tables/cells/DateCell'
 import useLeaderboardEntries from '../api/useLeaderboardEntries'
-import { useRecoilValue } from 'recoil'
-import activeGameState from '../state/activeGameState'
 import { IconArrowRight } from '@tabler/icons'
 import Button from '../components/Button'
 import getLeaderboard from '../api/getLeaderboard'
@@ -20,14 +18,13 @@ import updateLeaderboardEntry from '../api/updateLeaderboardEntry'
 import buildError from '../utils/buildError'
 
 const LeaderboardEntries = () => {
-  const { internalName } = useParams()
-  const activeGame = useRecoilValue(activeGameState)
+  const location = useLocation()
 
   const [isLoading, setLoading] = useState(!location.state?.leaderboard)
   const [leaderboard, setLeaderboard] = useState(location.state?.leaderboard)
 
   const [page, setPage] = useState(0)
-  const { entries, count, loading, error: fetchError, mutate } = useLeaderboardEntries(activeGame, internalName, page)
+  const { entries, count, loading, error: fetchError, mutate } = useLeaderboardEntries(leaderboard?.id, page)
 
   const [error, setError] = useState(null)
 
@@ -37,7 +34,7 @@ const LeaderboardEntries = () => {
     (async () => {
       if (isLoading) {
         try {
-          const res = await getLeaderboard(activeGame.id, internalName)
+          const res = await getLeaderboard(leaderboard?.id)
           setLeaderboard(res.data.leaderboard)
           setLoading(false)
         } catch (err) {
@@ -61,7 +58,7 @@ const LeaderboardEntries = () => {
 
   const onHideToggle = async (entry) => {
     try {
-      const res = await updateLeaderboardEntry(internalName, entry.id, activeGame.id, { hidden: !entry.hidden })
+      const res = await updateLeaderboardEntry(leaderboard?.id, entry.id, { hidden: !entry.hidden })
 
       mutate((data) => {
         return {
