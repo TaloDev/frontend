@@ -1,8 +1,5 @@
 import api from './api'
 
-export default (leaderboardInternalName, entryId, gameId, data) => {
-  return api.patch(`/leaderboards/${leaderboardInternalName}/entries/${entryId}`, {
-    ...data,
-    gameId
-  })
+export default (leaderboardId, entryId, data) => {
+  return api.patch(`/leaderboards/${leaderboardId}/entries/${entryId}`, data)
 }

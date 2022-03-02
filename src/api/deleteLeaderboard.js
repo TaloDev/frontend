@@ -1,7 +1,3 @@
 import api from './api'
 
-export default (internalName, gameId) => api.delete(`/leaderboards/${internalName}`, {
-  data: {
-    gameId
-  }
-})
+export default (id) => api.delete(`/leaderboards/${id}`)
