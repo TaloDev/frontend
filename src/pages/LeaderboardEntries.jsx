@@ -122,7 +122,7 @@ const LeaderboardEntries = () => {
                       </div>
                     </TableCell>
                     <TableCell>{entry.score}</TableCell>
-                    <DateCell>{format(new Date(entry.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
+                    <DateCell>{format(new Date(entry.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
                     <TableCell className='w-40'>
                       <Button
                         variant={entry.hidden ? 'black' : 'grey'}
