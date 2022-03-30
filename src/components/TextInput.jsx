@@ -46,7 +46,7 @@ const TextInput = (props) => {
     w-full
     rounded
     ${focusStyle}
-    ${props.inputClassName || ''}
+    ${props.inputClassName ?? ''}
   `, {
     'bg-gray-600': !props.variant,
     'bg-gray-100 text-black': props.variant === 'light',
@@ -98,7 +98,7 @@ TextInput.propTypes = {
   onChange: requiredIf(PropTypes.func, (props) => !props.inputExtra?.name),
   value: requiredIf(PropTypes.string, (props) => !props.inputExtra?.name),
   label: PropTypes.string,
-  placeholder: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
   type: PropTypes.string,
   variant: PropTypes.string,
   inputClassName: PropTypes.string,
@@ -110,7 +110,8 @@ TextInput.propTypes = {
 }
 
 TextInput.defaultProps = {
-  inputExtra: {}
+  inputExtra: {},
+  placeholder: ''
 }
 
 export default TextInput

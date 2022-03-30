@@ -14,7 +14,9 @@ export default {
   players: '/players',
   playerProps: '/players/:id/props',
   playerEvents: '/players/:id/events',
+  playerStats: '/players/:id/stats',
   register: '/register',
   recover: '/recover',
+  stats: '/stats',
   verify2FA: '/verify'
 }
