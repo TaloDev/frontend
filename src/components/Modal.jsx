@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { IconX } from '@tabler/icons'
 import Button from './Button'
 import classNames from 'classnames'
+import usePortal from '../utils/usePortal'
+import { createPortal } from 'react-dom'
 
 const Modal = (props) => {
   const [, setOpen] = props.modalState
@@ -19,9 +21,11 @@ const Modal = (props) => {
     }
   }, [])
 
-  return (
-    <div className='fixed w-screen h-screen p-4 bg-gray-900 bg-opacity-60 flex items-start md:items-center justify-center inset-0 z-50 text-black transition-colors'>
-      <dialog className='block w-full md:w-2/3 lg:w-2/5 xl:1/4 bg-white rounded p-0' aria-modal='true' aria-labelledby={`modal-${props.id}-label`}>
+  const target = usePortal(props.id)
+
+  return createPortal(
+    <div className='fixed w-screen md:p-4 bg-gray-900 bg-opacity-60 flex items-start md:items-center justify-center inset-0 z-50 text-black transition-colors'>
+      <dialog className='overflow-scroll block w-full h-full md:h-auto md:w-[600px] bg-white md:rounded p-0' aria-modal='true' aria-labelledby={`modal-${props.id}-label`}>
         <div className='p-4 border-b border-gray-200 flex items-center justify-between'>
           <h2
             id={`modal-${props.id}-label`}
@@ -40,7 +44,8 @@ const Modal = (props) => {
 
         {props.children}
       </dialog>
-    </div>
+    </div>,
+    target
   )
 }
 
