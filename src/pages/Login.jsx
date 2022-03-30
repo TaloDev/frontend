@@ -100,7 +100,7 @@ const Login = () => {
         {error &&
           <ErrorMessage error={error}>
             {error?.extra.showHint &&
-              <span>. Have you <Link to={routes.forgotPass} className='text-gray-800'>forgotten your password?</Link></span>
+              <span>. Have you <Link to={routes.forgotPass} className='!text-gray-800'>forgotten your password?</Link></span>
             }
           </ErrorMessage>
         }

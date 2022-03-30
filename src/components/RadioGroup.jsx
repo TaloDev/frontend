@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { labelFocusStyle } from '../styles/theme'
 
-function RadioGroup({ label, name, options, onChange, value }) {
+function RadioGroup({ label, name, options, onChange, value, info }) {
   const [focusedValue, setFocusedValue] = useState()
 
   return (
@@ -15,7 +15,7 @@ function RadioGroup({ label, name, options, onChange, value }) {
           const selected = option.value === value
 
           return (
-            <div key={option.value} className='min-w-[100px]'>
+            <div key={option.value} className='min-w-[96px]'>
               <input
                 id={`${name}${idx}`}
                 className='absolute inset-0 opacity-0'
@@ -48,6 +48,8 @@ function RadioGroup({ label, name, options, onChange, value }) {
           )
         })}
       </div>
+
+      {info && <p className='mt-2 text-sm text-gray-500'>{info}</p>}
     </fieldset>
   )
 }
@@ -60,7 +62,8 @@ RadioGroup.propTypes = {
     value: PropTypes.any.isRequired
   })).isRequired,
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.any
+  value: PropTypes.any,
+  info: PropTypes.string
 }
 
 export default RadioGroup
