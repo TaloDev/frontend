@@ -15,5 +15,8 @@ module.exports = {
     { 'match': 'routes', 'src': '.*', 'dest': '/index.html' }
   ],
   packageOptions: {},
-  devOptions: {}
+  devOptions: {},
+  buildOptions: {
+    sourcemap: Boolean(process.env.ENABLE_SOURCEMAPS) || false
+  }
 }

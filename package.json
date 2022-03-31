@@ -7,6 +7,8 @@
     "lint": "eslint src/**/*.{js,jsx}"
   },
   "dependencies": {
+    "@sentry/react": "^6.19.3",
+    "@sentry/tracing": "^6.19.3",
     "@tabler/icons": "^1.54.0",
     "@tippyjs/react": "^4.2.5",
     "axios": "^0.26.0",
