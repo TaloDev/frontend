@@ -229,7 +229,7 @@ const PlayerProps = () => {
       }
 
       <Button
-        className='mt-4 justify-center'
+        className='mt-4'
         onClick={addNewProp}
         icon={<IconPlus size={16} />}
       >

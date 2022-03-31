@@ -29,6 +29,8 @@ const ConfirmPassword = lazy(() => import(/* webpackChunkName: 'confirm-password
 const Verify2FA = lazy(() => import(/* webpackChunkName: 'verify-2FA' */ './pages/Verify2FA'))
 const RecoverAccount = lazy(() => import(/* webpackChunkName: 'recover-account' */ './pages/RecoverAccount'))
 const Activity = lazy(() => import(/* webpackChunkName: 'activity' */ './pages/Activity'))
+const Stats = lazy(() => import(/* webpackChunkName: 'stats' */ './pages/Stats'))
+const PlayerStats = lazy(() => import(/* webpackChunkName: 'player-stats' */ './pages/PlayerStats'))
 
 const App = () => {
   const [user, setUser] = useRecoilState(userState)
@@ -118,6 +120,8 @@ const App = () => {
                   <Route exact path={routes.account} component={Account} />
                   <Route exact path={routes.confirmPassword} component={ConfirmPassword} />
                   {canViewPage(user, routes.activity) && <Route exact path={routes.activity} component={Activity} />}
+                  <Route exact path={routes.stats} component={Stats} />
+                  <Route exact path={routes.playerStats} component={PlayerStats} />
                 </>
               }
 

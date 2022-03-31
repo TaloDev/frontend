@@ -22,7 +22,7 @@ const Button = (props) => {
     'bg-gray-800 hover:bg-gray-900 active:bg-black disabled:bg-gray-600 text-white': props.variant === 'black',
     'text-left': props.variant === 'bare',
     'flex justify-center hover:bg-indigo-500': props.isLoading,
-    'flex items-center space-x-1': Boolean(props.icon)
+    'flex items-center justify-center space-x-1': Boolean(props.icon)
   })
 
   return (
@@ -48,7 +48,7 @@ Button.propTypes = {
   type: PropTypes.string,
   disabled: PropTypes.bool,
   children: PropTypes.node,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   isLoading: PropTypes.bool,
   variant: PropTypes.string,
   className: PropTypes.string,
