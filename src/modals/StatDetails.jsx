@@ -91,7 +91,6 @@ const StatDetails = ({ modalState, mutate, editingStat }) => {
     }
 
     const sub = watch((data) => {
-      console.log(data)
       setRange({
         min: numberFromStringInput(data.minValue),
         max: numberFromStringInput(data.maxValue)
