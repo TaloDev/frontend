@@ -112,13 +112,14 @@ const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
 
   return (
     <Modal
-      id='new-leaderboard'
+      id='leaderboard-details'
       title={editingLeaderboard ? 'Update leaderboard' : 'Create new leaderboard'}
       modalState={modalState}
     >
       <form>
         <div className='p-4 space-y-4'>
           <TextInput
+            startFocused
             id='internal-name'
             variant='modal'
             label='Internal name'

@@ -6,7 +6,7 @@ import Loading from '../components/Loading'
 import PlayerAliases from '../components/PlayerAliases'
 import { format } from 'date-fns'
 import Title from '../components/Title'
-import { IconArrowRight } from '@tabler/icons'
+import { IconArrowRight, IconBolt, IconChartBar } from '@tabler/icons'
 import Button from '../components/Button'
 import { useHistory } from 'react-router-dom'
 import routes from '../constants/routes'
@@ -36,6 +36,10 @@ const Players = () => {
 
   const goToPlayerEvents = (player) => {
     history.push(routes.playerEvents.replace(':id', player.id))
+  }
+
+  const goToPlayerStats = (player) => {
+    history.push(routes.playerStats.replace(':id', player.id))
   }
 
   useEffect(() => {
@@ -84,12 +88,12 @@ const Players = () => {
         <>
           <div className='overflow-x-scroll'>
             <table className='table-auto w-full'>
-              <TableHeader columns={['Aliases', 'Properties', 'Registered', 'Last seen', '']} />
+              <TableHeader columns={['Aliases', 'Properties', 'Registered', 'Last seen', '', '']} />
               <TableBody iterator={players}>
                 {(player) => (
                   <>
                     <TableCell className='min-w-80 md:min-w-0'><PlayerAliases aliases={player.aliases} /></TableCell>
-                    <TableCell>
+                    <TableCell className='w-40'>
                       <div className='flex items-center'>
                         <span>{player.props.length}</span>
                         <Button
@@ -103,7 +107,22 @@ const Players = () => {
                     <DateCell>{format(new Date(player.createdAt), 'do MMM Y')}</DateCell>
                     <DateCell>{format(new Date(player.lastSeenAt), 'do MMM Y')}</DateCell>
                     <TableCell className='w-40'>
-                      <Button variant='grey' onClick={() => goToPlayerEvents(player)}>View events</Button>
+                      <Button
+                        variant='grey'
+                        onClick={() => goToPlayerEvents(player)}
+                        icon={<IconBolt size={16} />}
+                      >
+                        <span>Events</span>
+                      </Button>
+                    </TableCell>
+                    <TableCell className='w-40'>
+                      <Button
+                        variant='grey'
+                        onClick={() => goToPlayerStats(player)}
+                        icon={<IconChartBar size={16} />}
+                      >
+                        <span>Stats</span>
+                      </Button>
                     </TableCell>
                   </>
                 )}

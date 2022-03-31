@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 import { focusStyle } from '../styles/theme'
 import canViewPage from '../utils/canViewPage'
-import { IconCaretDown, IconBolt, IconUser, IconFileExport, IconTrophy, IconKey } from '@tabler/icons'
+import { IconCaretDown, IconBolt, IconUser, IconFileExport, IconTrophy, IconKey, IconChartBar } from '@tabler/icons'
 import LinkButton from './LinkButton'
 import routes from '../constants/routes'
 import userState from '../state/userState'
@@ -56,6 +56,12 @@ function ServicesLink() {
       desc: 'Flexible highscore tracking',
       icon: IconTrophy,
       route: routes.leaderboards
+    },
+    {
+      name: 'Stats',
+      desc: 'Global and individual data',
+      icon: IconChartBar,
+      route: routes.stats
     }
   ]
 

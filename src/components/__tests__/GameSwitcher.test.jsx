@@ -25,7 +25,7 @@ describe('<GameSwitcher />', () => {
 
     userEvent.click(screen.getByRole('button'))
 
-    expect(screen.getByText('Create new game')).toBeInTheDocument()
+    expect(screen.getByText('New game')).toBeInTheDocument()
   })
 
   it('should render the active game name', () => {
