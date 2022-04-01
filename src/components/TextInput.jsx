@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { focusStyle } from '../styles/theme'
 import classNames from 'classnames'
@@ -7,16 +7,17 @@ import requiredIf from 'react-required-if'
 
 const TextInput = (props) => {
   const ref = useRef()
+  const [didFocus, setDidFocus] = useState(false)
 
   const setRef = useCallback((el) => {
     if (el) {
       ref.current = el
-
-      if (props.startFocused) {
+      if (props.startFocused && !didFocus) {
+        ref.current.addEventListener('focus', () => setDidFocus(true))
         ref.current.focus()
       }
     }
-  }, [props.startFocused])
+  }, [didFocus])
 
   const errors = props.errors?.filter((err) => err !== null && err !== undefined) ?? []
   const showErrorHighlight = document.activeElement === ref.current && errors.length > 0
