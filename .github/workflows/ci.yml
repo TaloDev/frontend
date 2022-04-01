@@ -1,6 +1,6 @@
 name: React tests
 
-on: [push, pull_request]
+on: push
 
 jobs:
   test:
