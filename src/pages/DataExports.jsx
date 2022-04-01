@@ -109,8 +109,7 @@ const DataExports = () => {
               <p>Choose which entities you would like to generate CSVs for</p>
             </div>
 
-            <div className='flex space-x-8 p-4'>
-              {entitiesError && <ErrorMessage error={{ message: 'Couldn\'t fetch available entities' }} />}
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 p-4'>
               {!entitiesError && availableEntities && availableEntities.map((service) => (
                 <div key={service}>
                   <input
@@ -125,6 +124,8 @@ const DataExports = () => {
               ))}
             </div>
           </div>
+
+          {entitiesError && <ErrorMessage error={{ message: 'Couldn\'t fetch available entities' }} />}
 
           {createError && <ErrorMessage error={createError} />}
 
