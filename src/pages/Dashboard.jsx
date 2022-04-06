@@ -35,15 +35,15 @@ const Dashboard = () => {
   const activeGame = useRecoilValue(activeGameState)
 
   const timePeriods = [
-    { id: '7d', label: '7 days', titleSuffix: 'the last 7 days' },
-    { id: '30d', label: '30 days', titleSuffix: 'the last 30 days' },
-    { id: 'w', label: 'This week', titleSuffix: 'this week' },
-    { id: 'm', label: 'This month', titleSuffix: 'this month' },
-    { id: 'y', label: 'This year', titleSuffix: 'this year' }
+    { id: '7d', label: '7 days', titlePrefix: 'Last 7 days' },
+    { id: '30d', label: '30 days', titlePrefix: 'Last 30 days' },
+    { id: 'w', label: 'This week', titlePrefix: 'This week' },
+    { id: 'm', label: 'This month', titlePrefix: 'This month' },
+    { id: 'y', label: 'This year', titlePrefix: 'This year' }
   ]
 
-  const [timePeriod, setTimePeriod] = useLocalStorage('headlinesTimePeriod', timePeriods[1])
-  const { startDate, endDate } = useTimePeriod(timePeriod.id)
+  const [timePeriod, setTimePeriod] = useLocalStorage('headlinesTimePeriod', timePeriods[1].id)
+  const { startDate, endDate } = useTimePeriod(timePeriod)
   const { headlines, loading: headlinesLoading, error: headlinesError } = useHeadlines(activeGame, startDate, endDate)
   const { stats, loading: statsLoading, error: statsError } = useStats(activeGame)
 
@@ -58,14 +58,16 @@ const Dashboard = () => {
     )
   }
 
+  const titlePrefix = timePeriods.find((period) => period.id === timePeriod).titlePrefix
+
   return (
     <Page title={`${activeGame.name} dashboard`} isLoading={headlinesLoading || statsLoading}>
       <div className='flex flex-col-reverse md:flex-row md:justify-between md:items-center'>
-        <h2 className='text-2xl mt-4 md:mt-0'>Stats for {timePeriod.titleSuffix}</h2>
+        <h2 className='text-2xl mt-4 md:mt-0'>{titlePrefix} at a glance</h2>
         <TimePeriodPicker
           periods={timePeriods}
-          onPick={setTimePeriod}
-          selectedPeriod={timePeriod.id}
+          onPick={(period) => setTimePeriod(period.id)}
+          selectedPeriod={timePeriod}
         />
       </div>
 
