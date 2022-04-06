@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const HeadlineStat = (props) => {
   return (
-    <div className={`mt-4 rounded border-2 border-gray-700 w-full text-center md:text-left ${props.className ?? ''}`}>
+    <div className={`rounded border-2 border-gray-700 w-full text-center md:text-left ${props.className ?? ''}`}>
       <div className='p-4 bg-gray-700'>
         <h3 className='text-lg font-bold'>{props.title}</h3>
       </div>

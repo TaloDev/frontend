@@ -29,7 +29,7 @@ const EventsOverview = () => {
     { id: 'y', label: 'This year' }
   ]
 
-  const [timePeriod, setTimePeriod] = useLocalStorage('eventsOverviewTimePeriod', timePeriods[1])
+  const [timePeriod, setTimePeriod] = useLocalStorage('eventsOverviewTimePeriod', timePeriods[1].id)
   const { startDate, endDate } = useTimePeriod(timePeriod?.id)
 
   const [selectedStartDate, setSelectedStartDate] = useLocalStorage('eventsOverviewStartDate', '')
@@ -78,8 +78,8 @@ const EventsOverview = () => {
         <div className='mb-4 md:mb-8'>
           <TimePeriodPicker
             periods={timePeriods}
-            onPick={setTimePeriod}
-            selectedPeriod={timePeriod?.id}
+            onPick={(period) => setTimePeriod(period.id)}
+            selectedPeriod={timePeriod}
           />
         </div>
 

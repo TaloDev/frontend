@@ -6,7 +6,7 @@ import useHeadlines from '../api/useHeadlines'
 import ErrorMessage from '../components/ErrorMessage'
 import HeadlineStat from '../components/HeadlineStat'
 import TimePeriodPicker from '../components/TimePeriodPicker'
-import Title from '../components/Title'
+import Page from '../components/Page'
 import routes from '../constants/routes'
 import activeGameState from '../state/activeGameState'
 import canViewPage from '../utils/canViewPage'
@@ -14,6 +14,7 @@ import useLocalStorage from '../utils/useLocalStorage'
 import useTimePeriod from '../utils/useTimePeriod'
 import Link from '../components/Link'
 import userState from '../state/userState'
+import useStats from '../api/useStats'
 
 const Dashboard = () => {
   const history = useHistory()
@@ -34,16 +35,17 @@ const Dashboard = () => {
   const activeGame = useRecoilValue(activeGameState)
 
   const timePeriods = [
-    { id: '7d', label: '7 days', titleSuffix: 'the last 7 days' },
-    { id: '30d', label: '30 days', titleSuffix: 'the last 30 days' },
-    { id: 'w', label: 'This week', titleSuffix: 'this week' },
-    { id: 'm', label: 'This month', titleSuffix: 'this month' },
-    { id: 'y', label: 'This year', titleSuffix: 'this year' }
+    { id: '7d', label: '7 days', titlePrefix: 'Last 7 days' },
+    { id: '30d', label: '30 days', titlePrefix: 'Last 30 days' },
+    { id: 'w', label: 'This week', titlePrefix: 'This week' },
+    { id: 'm', label: 'This month', titlePrefix: 'This month' },
+    { id: 'y', label: 'This year', titlePrefix: 'This year' }
   ]
 
-  const [timePeriod, setTimePeriod] = useLocalStorage('headlinesTimePeriod', timePeriods[1])
-  const { startDate, endDate } = useTimePeriod(timePeriod.id)
-  const { headlines, loading, error } = useHeadlines(activeGame, startDate, endDate)
+  const [timePeriod, setTimePeriod] = useLocalStorage('headlinesTimePeriod', timePeriods[1].id)
+  const { startDate, endDate } = useTimePeriod(timePeriod)
+  const { headlines, loading: headlinesLoading, error: headlinesError } = useHeadlines(activeGame, startDate, endDate)
+  const { stats, loading: statsLoading, error: statsError } = useStats(activeGame)
 
   if (!intendedRouteChecked) return null
 
@@ -56,45 +58,53 @@ const Dashboard = () => {
     )
   }
 
-  return (
-    <div>
-      <Title>{activeGame.name} dashboard</Title>
+  const titlePrefix = timePeriods.find((period) => period.id === timePeriod).titlePrefix
 
-      <div className='flex flex-col-reverse md:flex-row md:justify-between md:items-center mt-8'>
-        <h2 className='text-2xl mt-4 md:mt-0'>Stats for {timePeriod.titleSuffix}</h2>
+  return (
+    <Page title={`${activeGame.name} dashboard`} isLoading={headlinesLoading || statsLoading}>
+      <div className='flex flex-col-reverse md:flex-row md:justify-between md:items-center'>
+        <h2 className='text-2xl mt-4 md:mt-0'>{titlePrefix} at a glance</h2>
         <TimePeriodPicker
           periods={timePeriods}
-          onPick={setTimePeriod}
-          selectedPeriod={timePeriod.id}
+          onPick={(period) => setTimePeriod(period.id)}
+          selectedPeriod={timePeriod}
         />
       </div>
 
-      {error &&
-        <div className='mt-8'>
-          <ErrorMessage error={{ message: 'Couldn\'t fetch headlines' }} />
+      {headlinesError &&
+        <ErrorMessage error={{ message: 'Couldn\'t fetch headlines' }} />
+      }
+
+      {!headlinesLoading &&
+        <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-4'>
+          <HeadlineStat title='New players' stat={headlines.new_players.count} />
+          <HeadlineStat title='Returning players' stat={headlines.returning_players.count} />
+          <HeadlineStat title='New events' stat={headlines.events.count} />
+          <HeadlineStat title='Unique event submitters' stat={headlines.unique_event_submitters.count} />
         </div>
       }
 
-      {!loading && !error &&
-        <div className='lg:flex'>
-          <div className='md:flex md:space-x-4 lg:w-1/2'>
-            <HeadlineStat title='New players' stat={headlines.new_players.count} />
-            <HeadlineStat title='Returning players' stat={headlines.returning_players.count} />
-          </div>
-          <div className='md:flex md:space-x-4 lg:w-1/2 lg:ml-4'>
-            <HeadlineStat title='New events' stat={headlines.events.count} />
-            <HeadlineStat title='Unique event submitters' stat={headlines.unique_event_submitters.count} />
-          </div>
+      <h2 className='text-2xl'>Global stats</h2>
+
+      {statsError &&
+        <ErrorMessage error={{ message: 'Couldn\'t fetch stats' }} />
+      }
+
+      {!statsLoading &&
+        <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-4'>
+          {stats.filter((stat) => stat.global).map((stat) => (
+            <HeadlineStat key={stat.id} title={stat.name} stat={stat.globalValue} />
+          ))}
         </div>
       }
 
       {canViewPage(user, routes.activity) &&
-        <div className='mt-8'>
+        <div className='!mb-24'>
           <h2 className='text-2xl mt-4 mb-2 md:mt-0'>Activity</h2>
           <Link to={routes.activity}>Go to activity log</Link>
         </div>
       }
-    </div>
+    </Page>
   )
 }
 
