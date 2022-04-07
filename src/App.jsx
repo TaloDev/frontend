@@ -107,6 +107,9 @@ const App = () => {
 
             <Switch>
               <Route exact path={routes.dashboard} component={Dashboard} />
+              <Route exact path={routes.account} component={Account} />
+              <Route exact path={routes.confirmPassword} component={ConfirmPassword} />
+
               {activeGame &&
                 <>
                   <Route exact path={routes.players} component={Players} />
@@ -117,8 +120,6 @@ const App = () => {
                   {canViewPage(user, routes.dataExports) && <Route exact path={routes.dataExports} component={DataExports} />}
                   <Route exact path={routes.leaderboards} component={Leaderboards} />
                   <Route exact path={routes.leaderboardEntries} component={LeaderboardEntries} />
-                  <Route exact path={routes.account} component={Account} />
-                  <Route exact path={routes.confirmPassword} component={ConfirmPassword} />
                   {canViewPage(user, routes.activity) && <Route exact path={routes.activity} component={Activity} />}
                   <Route exact path={routes.stats} component={Stats} />
                   <Route exact path={routes.playerStats} component={PlayerStats} />
