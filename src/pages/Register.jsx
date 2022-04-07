@@ -11,7 +11,8 @@ import buildError from '../utils/buildError'
 import AuthService from '../services/AuthService'
 
 const Register = () => {
-  const [name, setName] = useState('')
+  const [organisationName, setOrganisationName] = useState('')
+  const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [, setUser] = useRecoilState(userState)
@@ -31,7 +32,7 @@ const Register = () => {
     setLoading(true)
 
     try {
-      const res = await register({ email, password, organisationName: name })
+      const res = await register({ email, password, organisationName, username })
       const accessToken = res.data.accessToken
       AuthService.setToken(accessToken)
       setUser(res.data.user)
@@ -48,11 +49,20 @@ const Register = () => {
 
         <TextInput
           id='name'
-          label='Name'
-          placeholder={'Your name or your team/organisation\'s name'}
+          label='Team name'
+          placeholder={'Your team\'s name'}
           type='text'
-          onChange={setName}
-          value={name}
+          onChange={setOrganisationName}
+          value={organisationName}
+        />
+
+        <TextInput
+          id='username'
+          label='Username'
+          type='text'
+          placeholder='Your name or a screen name'
+          onChange={setUsername}
+          value={username}
         />
 
         <TextInput
@@ -76,7 +86,7 @@ const Register = () => {
         {error && <ErrorMessage error={error} />}
 
         <Button
-          disabled={!name || !email || !password}
+          disabled={!organisationName || !username || !email || !password}
           onClick={onRegisterClick}
           isLoading={isLoading}
         >
