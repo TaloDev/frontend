@@ -25,9 +25,12 @@ const StatDetails = ({ modalState, mutate, editingStat }) => {
   const [error, setError] = useState(null)
   const activeGame = useRecoilValue(activeGameState)
 
-  const [global, setGlobal] = useState(editingStat?.unique ?? false)
+  const [global, setGlobal] = useState(editingStat?.global ?? false)
 
-  const [range, setRange] = useState({ min: null, max: null })
+  const [range, setRange] = useState({
+    min: editingStat?.minValue ?? null,
+    max: editingStat?.maxValue ?? null
+  })
 
   const validationSchema = useMemo(() => {
     return yup.object({

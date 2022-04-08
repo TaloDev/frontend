@@ -84,7 +84,7 @@ const Dashboard = () => {
         </div>
       }
 
-      <h2 className='text-2xl'>Global stats</h2>
+      {stats.length > 0 && <h2 className='text-2xl'>Global stats</h2>}
 
       {statsError &&
         <ErrorMessage error={{ message: 'Couldn\'t fetch stats' }} />
