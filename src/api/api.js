@@ -14,6 +14,8 @@ instance.interceptors.request.use((config) => {
     config.headers['Authorization'] = `Bearer ${AuthService.getToken()}`
   }
 
+  config.headers['X-Talo-Dev-Data'] = window.localStorage.getItem('includeDevData') === 'true' ? '1' : '0'
+
   return config
 }, (error) => Promise.reject(error)
 )

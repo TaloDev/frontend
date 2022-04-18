@@ -3,7 +3,7 @@ import buildError from '../utils/buildError'
 import api from './api'
 import { stringify } from 'querystring'
 
-const useStats = (activeGame) => {
+const useStats = (activeGame, includeDevData) => {
   const fetcher = async (url) => {
     const qs = stringify({ gameId: activeGame.id })
 
@@ -12,7 +12,7 @@ const useStats = (activeGame) => {
   }
 
   const { data, error, mutate } = useSWR(
-    ['game-stats', activeGame],
+    ['game-stats', activeGame, includeDevData],
     fetcher
   )
 

@@ -3,7 +3,7 @@ import buildError from '../utils/buildError'
 import api from './api'
 import { stringify } from 'querystring'
 
-const useHeadlines = (activeGame, startDate, endDate) => {
+const useHeadlines = (activeGame, startDate, endDate, includeDevData) => {
   const fetcher = async (url) => {
     const qs = stringify({
       gameId: activeGame.id,
@@ -21,7 +21,7 @@ const useHeadlines = (activeGame, startDate, endDate) => {
   }
 
   const { data, error } = useSWR(
-    activeGame && startDate && endDate ? ['/headlines', activeGame, startDate, endDate] : null,
+    activeGame && startDate && endDate ? ['/headlines', activeGame, startDate, endDate, includeDevData] : null,
     fetcher
   )
 

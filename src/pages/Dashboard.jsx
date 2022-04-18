@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import useHeadlines from '../api/useHeadlines'
 import ErrorMessage from '../components/ErrorMessage'
 import HeadlineStat from '../components/HeadlineStat'
@@ -15,12 +15,16 @@ import useTimePeriod from '../utils/useTimePeriod'
 import Link from '../components/Link'
 import userState from '../state/userState'
 import useStats from '../api/useStats'
+import Toggle from '../components/Toggle'
+import devDataState from '../state/devDataState'
 
 const Dashboard = () => {
   const history = useHistory()
 
   const [intendedRouteChecked, setIntendedRouteChecked] = useState(false)
   const user = useRecoilValue(userState)
+
+  const [includeDevData, setIncludeDevData] = useRecoilState(devDataState)
 
   useEffect(() => {
     const intended = window.localStorage.getItem('intendedRoute')
@@ -44,8 +48,8 @@ const Dashboard = () => {
 
   const [timePeriod, setTimePeriod] = useLocalStorage('headlinesTimePeriod', timePeriods[1].id)
   const { startDate, endDate } = useTimePeriod(timePeriod)
-  const { headlines, loading: headlinesLoading, error: headlinesError } = useHeadlines(activeGame, startDate, endDate)
-  const { stats, loading: statsLoading, error: statsError } = useStats(activeGame)
+  const { headlines, loading: headlinesLoading, error: headlinesError } = useHeadlines(activeGame, startDate, endDate, includeDevData)
+  const { stats, loading: statsLoading, error: statsError } = useStats(activeGame, includeDevData)
 
   if (!intendedRouteChecked) return null
 
@@ -62,8 +66,17 @@ const Dashboard = () => {
 
   return (
     <Page title={`${activeGame.name} dashboard`} isLoading={headlinesLoading || statsLoading}>
+      <div className='space-y-4'>
+        <h2 className='text-2xl mt-4 md:mt-0'>Enable dev data</h2>
+        <p>When enabled, you&apos;ll see data submitted by players from dev builds of your game</p>
+
+        <Toggle id='dev-data' enabled={includeDevData} onToggle={setIncludeDevData} />
+
+        <p className='font-semibold'>This is currently turned {includeDevData ? 'on' : 'off'}</p>
+      </div>
+
       <div className='flex flex-col-reverse md:flex-row md:justify-between md:items-center'>
-        <h2 className='text-2xl mt-4 md:mt-0'>{titlePrefix} at a glance</h2>
+        <h2 className='text-2xl mt-4'>{titlePrefix} at a glance</h2>
         <TimePeriodPicker
           periods={timePeriods}
           onPick={(period) => setTimePeriod(period.id)}

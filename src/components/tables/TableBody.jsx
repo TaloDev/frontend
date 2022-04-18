@@ -2,18 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-const TableBody = (props) => {
+function TableBody({ iterator, children, startIdx, configureClassNames }) {
   return (
     <tbody>
-      {props.iterator.map((iterator, idx) => (
+      {iterator.map((iteraee, idx) => (
         <tr
           key={idx}
           className={classNames({
-            'bg-indigo-600': (props.startIdx + idx) % 2 !== 0,
-            'bg-indigo-500': (props.startIdx + idx) % 2 === 0
+            'bg-indigo-600': (startIdx + idx) % 2 !== 0,
+            'bg-indigo-500': (startIdx + idx) % 2 === 0,
+            ...configureClassNames?.(iteraee, startIdx + idx)
           })}
         >
-          {props.children(iterator, idx)}
+          {children(iteraee, idx)}
         </tr>
       ))}
     </tbody>
@@ -27,7 +28,8 @@ TableBody.defaultProps = {
 TableBody.propTypes = {
   iterator: PropTypes.array.isRequired,
   children: PropTypes.func.isRequired,
-  startIdx: PropTypes.number
+  startIdx: PropTypes.number,
+  configureClassNames: PropTypes.func
 }
 
 export default TableBody

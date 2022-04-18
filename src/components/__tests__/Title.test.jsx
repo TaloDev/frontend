@@ -6,7 +6,7 @@ import { createMemoryHistory } from 'history'
 import Title from '../Title'
 
 describe('<Title />', () => {
-  it('should go back', async () => {
+  it('should go back', () => {
     const history = createMemoryHistory()
     history.push('/players')
     history.push('/players/1/props')
