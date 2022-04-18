@@ -1,3 +1,3 @@
 import api from './api'
 
-export default async (name) => api.post('/games', { name })
+export default (name) => api.post('/games', { name })

@@ -1,3 +1,3 @@
 import api from './api'
 
-export default async (gameId) => api.get(`/api-keys?gameId=${gameId}`)
+export default (gameId) => api.get(`/api-keys?gameId=${gameId}`)
