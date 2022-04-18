@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import Title from '../components/Title'
-import { useHistory, useLocation, useParams } from 'react-router-dom'
+import React, { useState } from 'react'
+import Page from '../components/Page'
+import { useLocation } from 'react-router-dom'
 import { IconPlus, IconTrash } from '@tabler/icons'
 import Button from '../components/Button'
 import TextInput from '../components/TextInput'
@@ -11,49 +11,22 @@ import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
 import TableHeader from '../components/tables/TableHeader'
 import Loading from '../components/Loading'
-import findPlayer from '../api/findPlayer'
-import routes from '../constants/routes'
-import { useRecoilValue } from 'recoil'
-import activeGameState from '../state/activeGameState'
 import isEqual from 'lodash.isequal'
 import classNames from 'classnames'
+import PlayerIdentifier from '../components/PlayerIdentifier'
+import usePlayer from '../utils/usePlayer'
 
 const PlayerProps = () => {
   const location = useLocation()
 
   const [originalPlayer, setOriginalPlayer] = useState(location.state?.player)
-  const [player, setPlayer] = useState(location.state?.player)
+  const [player, setPlayer] = usePlayer({
+    onLoaded: (player) => setOriginalPlayer(player)
+  })
 
   const [newProps, setNewProps] = useState([])
   const [error, setError] = useState(null)
   const [isUpdating, setUpdating] = useState(false)
-  const [isLoading, setLoading] = useState(!location.state?.player)
-
-  const activeGame = useRecoilValue(activeGameState)
-
-  const history = useHistory()
-  const { id: playerId } = useParams()
-
-  useEffect(() => {
-    (async () => {
-      if (isLoading) {
-        try {
-          const res = await findPlayer(activeGame.id, playerId)
-          const player = res.data.players.find((p) => p.id === playerId)
-
-          if (player) {
-            setOriginalPlayer(player)
-            setPlayer(player)
-            setLoading(false)
-          } else {
-            history.replace(routes.players)
-          }
-        } catch (err) {
-          history.replace(routes.players)
-        }
-      }
-    })()
-  }, [isLoading])
 
   const editExistingProp = (key, value) => {
     const props = player.props.map((prop) => {
@@ -120,11 +93,12 @@ const PlayerProps = () => {
 
   const save = async () => {
     setUpdating(true)
+    setError(null)
 
     const props = [
       ...player.props,
       ...newProps
-    ]
+    ].filter((prop) => !prop.key.startsWith('META_'))
 
     try {
       const res = await updatePlayer(player.id, { props })
@@ -138,7 +112,7 @@ const PlayerProps = () => {
     }
   }
 
-  if (isLoading) {
+  if (!player) {
     return (
       <div className='flex items-center justify-center'>
         <Loading />
@@ -148,15 +122,15 @@ const PlayerProps = () => {
 
   const existingProps = player.props
     .filter((prop) => prop.value !== null)
-    .sort((a, b) => a.key.localeCompare(b.key))
+    .sort((a, b) => a.key.startsWith('META_') ? -1 : a.key.localeCompare(b.key))
 
   return (
-    <div className='space-y-4 md:space-y-8 w-full lg:w-1/2'>
-      <Title showBackButton>Player properties</Title>
-
-      <div>
-        <code className='bg-gray-900 rounded p-2 text-xs md:text-sm'>Player = {player.id}</code>
-      </div>
+    <Page
+      showBackButton
+      containerClassName='w-full lg:w-1/2'
+      title='Player properties'
+    >
+      <PlayerIdentifier player={player} />
 
       {existingProps.length + newProps.length === 0 &&
         <p>This player has no custom properties. Click the button below to add one.</p>
@@ -166,13 +140,20 @@ const PlayerProps = () => {
         <div className='overflow-x-scroll'>
           <table className='table-auto w-full'>
             <TableHeader columns={['Property', 'Value', '']} />
-            <TableBody iterator={existingProps}>
+            <TableBody
+              iterator={existingProps}
+              configureClassNames={(prop, idx) => ({
+                'bg-orange-600': prop.key.startsWith('META_') && idx % 2 !== 0,
+                'bg-orange-500': prop.key.startsWith('META_') && idx % 2 === 0
+              })}
+            >
               {(prop) => (
                 <>
                   <TableCell className={classNames('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}>{prop.key}</TableCell>
                   <TableCell className='min-w-80'>
                     <TextInput
                       id={`edit-${prop.key}`}
+                      disabled={prop.key.startsWith('META_')}
                       variant='light'
                       placeholder='Value'
                       onChange={(value) => editExistingProp(prop.key, value)}
@@ -180,13 +161,15 @@ const PlayerProps = () => {
                     />
                   </TableCell>
                   <TableCell className={classNames({ '!rounded-br-none': newProps.length > 0 })}>
-                    <Button
-                      variant='icon'
-                      className='p-1 rounded-full bg-indigo-900 ml-auto'
-                      onClick={() => deleteExistingProp(prop.key)}
-                      icon={<IconTrash size={16} />}
-                      extra={{ 'aria-label': `Delete ${prop.key} prop` }}
-                    />
+                    {!prop.key.startsWith('META_') &&
+                      <Button
+                        variant='icon'
+                        className='p-1 rounded-full bg-indigo-900 ml-auto'
+                        onClick={() => deleteExistingProp(prop.key)}
+                        icon={<IconTrash size={16} />}
+                        extra={{ 'aria-label': `Delete ${prop.key} prop` }}
+                      />
+                    }
                   </TableCell>
                 </>
               )}
@@ -247,7 +230,7 @@ const PlayerProps = () => {
           Save changes
         </Button>
       </div>
-    </div>
+    </Page>
   )
 }
 

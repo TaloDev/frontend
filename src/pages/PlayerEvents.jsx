@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import Title from '../components/Title'
 import { useHistory, useParams } from 'react-router-dom'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
 import TableHeader from '../components/tables/TableHeader'
-import Loading from '../components/Loading'
 import routes from '../constants/routes'
 import usePlayerEvents from '../api/usePlayerEvents'
 import { format } from 'date-fns'
@@ -14,6 +12,9 @@ import { useDebounce } from 'use-debounce'
 import Pagination from '../components/Pagination'
 import DateCell from '../components/tables/cells/DateCell'
 import useSortedItems from '../utils/useSortedItems'
+import PlayerIdentifier from '../components/PlayerIdentifier'
+import Page from '../components/Page'
+import usePlayer from '../utils/usePlayer'
 
 const EventProps = (props) => {
   return props.eventProps.map((prop) => (
@@ -23,11 +24,12 @@ const EventProps = (props) => {
 
 const PlayerEvents = () => {
   const { id: playerId } = useParams()
+  const [player] = usePlayer()
 
   const [search, setSearch] = useState('')
   const [debouncedSearch] = useDebounce(search, 300)
   const [page, setPage] = useState(0)
-  const { events, count, loading, error, errorStatusCode } = usePlayerEvents(playerId, debouncedSearch, page)
+  const { events, count, loading: eventsLoading, error, errorStatusCode } = usePlayerEvents(playerId, debouncedSearch, page)
   const sortedEvents = useSortedItems(events, 'createdAt')
 
   const history = useHistory()
@@ -43,20 +45,12 @@ const PlayerEvents = () => {
   }, [page])
 
   return (
-    <div className='space-y-4 md:space-y-8'>
-      <div className='flex items-center'>
-        <Title showBackButton>Player events</Title>
-
-        {loading &&
-          <div className='mt-1 ml-4'>
-            <Loading size={24} thickness={180} />
-          </div>
-        }
-      </div>
-
-      <div>
-        <code className='bg-gray-900 rounded p-2 text-xs md:text-sm'>Player = {playerId}</code>
-      </div>
+    <Page
+      showBackButton
+      title='Player events'
+      isLoading={!player || eventsLoading}
+    >
+      <PlayerIdentifier player={player} />
 
       {(events.length > 0 || debouncedSearch.length > 0) &&
         <div className='flex items-center'>
@@ -103,7 +97,7 @@ const PlayerEvents = () => {
       }
 
       {error && <ErrorMessage error={error} />}
-    </div>
+    </Page>
   )
 }
 

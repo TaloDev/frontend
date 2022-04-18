@@ -2,7 +2,7 @@ import axios from 'axios'
 import AuthService from '../services/AuthService'
 import { apiConfig } from './api'
 
-export default async () => {
+export default () => {
   const api = axios.create(apiConfig)
 
   api.interceptors.response.use((response) => {

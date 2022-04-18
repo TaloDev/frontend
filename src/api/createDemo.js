@@ -1,3 +1,3 @@
 import api from './api'
 
-export default async () => api.post('/public/demo')
+export default () => api.post('/public/demo')

@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-undef
 module.exports = {
-  mode: 'jit',
-  purge: [
+  content: [
     './public/**/*.html',
     './src/**/*.{js,jsx}'
   ],

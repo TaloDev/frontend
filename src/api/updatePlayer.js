@@ -1,3 +1,3 @@
 import api from './api'
 
-export default async (playerId, data) => api.patch(`/players/${playerId}`, data)
+export default (playerId, data) => api.patch(`/players/${playerId}`, data)

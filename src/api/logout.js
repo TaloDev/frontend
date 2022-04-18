@@ -1,3 +1,3 @@
 import api from './api'
 
-export default async () => api.post('/users/logout')
+export default () => api.post('/users/logout')
