@@ -18,6 +18,7 @@ import usePlayers from '../api/usePlayers'
 import { useDebounce } from 'use-debounce'
 import Pagination from '../components/Pagination'
 import DateCell from '../components/tables/cells/DateCell'
+import classNames from 'classnames'
 
 const Players = () => {
   const [search, setSearch] = useState(new URLSearchParams(window.location.search).get('search') ?? '')
@@ -35,11 +36,17 @@ const Players = () => {
   }
 
   const goToPlayerEvents = (player) => {
-    history.push(routes.playerEvents.replace(':id', player.id))
+    history.push({
+      pathname: routes.playerEvents.replace(':id', player.id),
+      state: { player }
+    })
   }
 
   const goToPlayerStats = (player) => {
-    history.push(routes.playerStats.replace(':id', player.id))
+    history.push({
+      pathname: routes.playerStats.replace(':id', player.id),
+      state: { player }
+    })
   }
 
   useEffect(() => {
@@ -89,7 +96,13 @@ const Players = () => {
           <div className='overflow-x-scroll'>
             <table className='table-auto w-full'>
               <TableHeader columns={['Aliases', 'Properties', 'Registered', 'Last seen', '', '']} />
-              <TableBody iterator={players}>
+              <TableBody
+                iterator={players}
+                configureClassNames={(player, idx) => ({
+                  'bg-orange-600': player.devBuild && idx % 2 !== 0,
+                  'bg-orange-500': player.devBuild && idx % 2 === 0
+                })}
+              >
                 {(player) => (
                   <>
                     <TableCell className='min-w-80 md:min-w-0'><PlayerAliases aliases={player.aliases} /></TableCell>
@@ -98,7 +111,7 @@ const Players = () => {
                         <span>{player.props.length}</span>
                         <Button
                           variant='icon'
-                          className='ml-2 p-1 rounded-full bg-indigo-900'
+                          className={classNames('ml-2 p-1 rounded-full bg-indigo-900', { 'bg-orange-900': player.devBuild })}
                           onClick={() => goToPlayerProps(player)}
                           icon={<IconArrowRight size={16} />}
                         />

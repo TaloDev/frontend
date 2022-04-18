@@ -206,26 +206,6 @@ describe('<PlayerProps />', () => {
     expect(screen.getByText('This player has no custom properties. Click the button below to add one.')).toBeInTheDocument()
   })
 
-  it('should return to the players page if the player does not exist', async () => {
-    const history = createMemoryHistory()
-    history.push(routes.playerProps.replace(':id', basePlayer.id))
-
-    axiosMock.onGet(`http://talo.test/players?gameId=1&search=${basePlayer.id}`).replyOnce(200, {
-      players: []
-    })
-
-    render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <PlayerPropsRoute history={history} />
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
-    )
-
-    await waitFor(() => {
-      expect(history.location.pathname).toBe('/players')
-    })
-  })
-
   it('should return to the players page if the find request fails', async () => {
     const history = createMemoryHistory()
     history.push(routes.playerProps.replace(':id', basePlayer.id))

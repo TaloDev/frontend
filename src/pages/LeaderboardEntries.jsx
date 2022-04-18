@@ -16,6 +16,7 @@ import Button from '../components/Button'
 import getLeaderboard from '../api/getLeaderboard'
 import updateLeaderboardEntry from '../api/updateLeaderboardEntry'
 import buildError from '../utils/buildError'
+import classNames from 'classnames'
 
 const LeaderboardEntries = () => {
   const location = useLocation()
@@ -106,7 +107,13 @@ const LeaderboardEntries = () => {
           <div className='overflow-x-scroll'>
             <table className='table-auto w-full'>
               <TableHeader columns={['#', 'Player', 'Score', 'Time', '']} />
-              <TableBody iterator={entries}>
+              <TableBody
+                iterator={entries}
+                configureClassNames={(entry, idx) => ({
+                  'bg-orange-600': entry.playerAlias.player.devBuild && idx % 2 !== 0,
+                  'bg-orange-500': entry.playerAlias.player.devBuild && idx % 2 === 0
+                })}
+              >
                 {(entry) => (
                   <>
                     <TableCell><span className='font-semibold'>{entry.position + 1}</span></TableCell>
@@ -115,7 +122,7 @@ const LeaderboardEntries = () => {
                         <span>{entry.playerAlias.identifier}</span>
                         <Button
                           variant='icon'
-                          className='ml-2 p-1 rounded-full bg-indigo-900'
+                          className={classNames('ml-2 p-1 rounded-full bg-indigo-900', { 'bg-orange-900': entry.playerAlias.player.devBuild })}
                           onClick={() => goToPlayer(entry.playerAlias.identifier)}
                           icon={<IconArrowRight size={16} />}
                         />

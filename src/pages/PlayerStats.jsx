@@ -10,11 +10,14 @@ import DateCell from '../components/tables/cells/DateCell'
 import useSortedItems from '../utils/useSortedItems'
 import Page from '../components/Page'
 import usePlayerStats from '../api/usePlayerStats'
+import PlayerIdentifier from '../components/PlayerIdentifier'
+import usePlayer from '../utils/usePlayer'
 
 const PlayerStats = () => {
   const { id: playerId } = useParams()
+  const [player] = usePlayer()
 
-  const { stats, loading, error, errorStatusCode } = usePlayerStats(playerId)
+  const { stats, loading: statsLoading, error, errorStatusCode } = usePlayerStats(playerId)
   const sortedStats = useSortedItems(stats, 'name')
 
   const history = useHistory()
@@ -29,11 +32,9 @@ const PlayerStats = () => {
     <Page
       showBackButton
       title='Player stats'
-      isLoading={loading}
+      isLoading={!player || statsLoading}
     >
-      <div>
-        <code className='bg-gray-900 rounded p-2 text-xs md:text-sm'>Player = {playerId}</code>
-      </div>
+      <PlayerIdentifier player={player} />
 
       {!error && sortedStats.length === 0 &&
         <p>This player has no stat entries yet</p>
