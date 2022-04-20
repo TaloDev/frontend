@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
-import Title from '../components/Title'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
 import TableHeader from '../components/tables/TableHeader'
-import Loading from '../components/Loading'
 import { format } from 'date-fns'
 import DateCell from '../components/tables/cells/DateCell'
 import activeGameState from '../state/activeGameState'
@@ -19,6 +17,8 @@ import AlertBanner from '../components/AlertBanner'
 import { IconCheck } from '@tabler/icons'
 import buildError from '../utils/buildError'
 import classNames from 'classnames'
+import Page from '../components/Page'
+import DevDataStatus from '../components/DevDataStatus'
 
 const dataExportStatuses = ['Requested', 'Processing', 'Processing', 'Delivered']
 
@@ -61,16 +61,8 @@ const DataExports = () => {
   }
 
   return (
-    <div className='space-y-4 md:space-y-8'>
-      <div className='flex items-center'>
-        <Title>Data exports</Title>
-
-        {dataExportsLoading &&
-          <div className='mt-1 ml-4'>
-            <Loading size={24} thickness={180} />
-          </div>
-        }
-      </div>
+    <Page title='Data exports' isLoading={dataExportsLoading}>
+      <DevDataStatus />
 
       {!fetchError && dataExports.length > 0 &&
         <div className='overflow-x-scroll'>
@@ -145,7 +137,7 @@ const DataExports = () => {
           <AlertBanner className='bg-green-600' icon={IconCheck} text={'Success! We\'ll email you when your export is ready'} />
         </div>
       }
-    </div>
+    </Page>
   )
 }
 
