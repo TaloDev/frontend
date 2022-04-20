@@ -3,10 +3,8 @@ import { useRecoilValue } from 'recoil'
 import getAPIKeys from '../api/getAPIKeys'
 import activeGameState from '../state/activeGameState'
 import ErrorMessage from '../components/ErrorMessage'
-import Loading from '../components/Loading'
 import buildError from '../utils/buildError'
 import { format } from 'date-fns'
-import Title from '../components/Title'
 import Button from '../components/Button'
 import deleteAPIKey from '../api/deleteAPIKey'
 import getAPIKeyScopes from '../api/getAPIKeyScopes'
@@ -18,6 +16,7 @@ import TableBody from '../components/tables/TableBody'
 import AlertBanner from '../components/AlertBanner'
 import DateCell from '../components/tables/cells/DateCell'
 import Scopes from '../modals/Scopes'
+import Page from '../components/Page'
 
 const APIKeys = () => {
   const [isLoading, setLoading] = useState(true)
@@ -108,15 +107,7 @@ const APIKeys = () => {
 
   return (
     <>
-      <div className='space-y-4 md:space-y-8'>
-        <Title>Access keys</Title>
-
-        {isLoading &&
-          <div className='flex justify-center'>
-            <Loading />
-          </div>
-        }
-
+      <Page title='Access keys' isLoading={isLoading}>
         {error && <ErrorMessage error={error} />}
 
         {!user.emailConfirmed &&
@@ -213,7 +204,7 @@ const APIKeys = () => {
             </Button>
           </div>
         }
-      </div>
+      </Page>
 
       {showScopesModal &&
         <Scopes

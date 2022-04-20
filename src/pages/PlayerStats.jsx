@@ -13,7 +13,7 @@ import usePlayerStats from '../api/usePlayerStats'
 import PlayerIdentifier from '../components/PlayerIdentifier'
 import usePlayer from '../utils/usePlayer'
 
-const PlayerStats = () => {
+function PlayerStats() {
   const { id: playerId } = useParams()
   const [player] = usePlayer()
 

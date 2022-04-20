@@ -68,7 +68,7 @@ const GameSwitcher = () => {
             </motion.ul>
           )}
         >
-          <div className={classNames('bg-indigo-300 rounded p-2 flex items-center justify-between w-60 md:w-80', { 'rounded-b-none': isOpen })}>
+          <div className={classNames('bg-indigo-300 rounded p-2 flex items-center justify-between w-60 lg:w-80', { 'rounded-b-none': isOpen })}>
             <div className='flex items-center'>
               <span
                 style={{ backgroundColor: randomColor({ seed: activeGame.name, luminosity: 'dark' }) }}

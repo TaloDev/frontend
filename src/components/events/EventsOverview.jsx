@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import useEvents from '../../api/useEvents'
 import ErrorMessage from '../../components/ErrorMessage'
-import Loading from '../../components/Loading'
-import Title from '../../components/Title'
 import activeGameState from '../../state/activeGameState'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import ChartTooltip from '../../components/charts/ChartTooltip'
@@ -16,6 +14,7 @@ import { useDebounce } from 'use-debounce'
 import useLocalStorage from '../../utils/useLocalStorage'
 import TimePeriodPicker from '../TimePeriodPicker'
 import useTimePeriod from '../../utils/useTimePeriod'
+import Page from '../Page'
 
 const EventsOverview = () => {
   const activeGame = useRecoilValue(activeGameState)
@@ -63,17 +62,7 @@ const EventsOverview = () => {
   }
 
   return (
-    <>
-      <div className='flex items-center'>
-        <Title>Events overview</Title>
-
-        {loading &&
-          <div className='mt-1 ml-4'>
-            <Loading size={24} thickness={180} />
-          </div>
-        }
-      </div>
-
+    <Page title='Events overview' isLoading={loading}>
       <div className='justify-between items-start'>
         <div className='mb-4 md:mb-8'>
           <TimePeriodPicker
@@ -189,7 +178,7 @@ const EventsOverview = () => {
           </div>
         </div>
       }
-    </>
+    </Page>
   )
 }
 

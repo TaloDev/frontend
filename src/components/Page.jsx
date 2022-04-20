@@ -6,7 +6,7 @@ import Loading from './Loading'
 
 function Page({ title, showBackButton, isLoading, containerClassName, extraTitleComponent, children }) {
   return (
-    <div className={classNames('space-y-4 md:space-y-8', containerClassName)}>
+    <div className={classNames('space-y-8', containerClassName)}>
       <div className='flex items-center'>
         <Title showBackButton={showBackButton}>{title}</Title>
 
