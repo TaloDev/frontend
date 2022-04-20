@@ -31,6 +31,8 @@ const RecoverAccount = lazy(() => import(/* webpackChunkName: 'recover-account' 
 const Activity = lazy(() => import(/* webpackChunkName: 'activity' */ './pages/Activity'))
 const Stats = lazy(() => import(/* webpackChunkName: 'stats' */ './pages/Stats'))
 const PlayerStats = lazy(() => import(/* webpackChunkName: 'player-stats' */ './pages/PlayerStats'))
+const AcceptInvite = lazy(() => import(/* webpackChunkName: 'accept-invite' */ './pages/AcceptInvite'))
+const Organisation = lazy(() => import(/* webpackChunkName: 'organisation' */ './pages/Organisation'))
 
 const App = () => {
   const [user, setUser] = useRecoilState(userState)
@@ -93,6 +95,7 @@ const App = () => {
             <Route exact path={routes.demo} component={Demo} />
             <Route exact path={routes.verify2FA} component={Verify2FA} />
             <Route exact path={routes.recover} component={RecoverAccount} />
+            <Route exact path={routes.acceptInvite} component={AcceptInvite} />
 
             <Redirect to={`${routes.login}?next=${intendedUrl}`} />
           </Switch>
@@ -109,6 +112,7 @@ const App = () => {
               <Route exact path={routes.dashboard} component={Dashboard} />
               <Route exact path={routes.account} component={Account} />
               <Route exact path={routes.confirmPassword} component={ConfirmPassword} />
+              {canViewPage(user, routes.organisation) && <Route exact path={routes.organisation} component={Organisation} />}
 
               {activeGame &&
                 <>
