@@ -122,7 +122,7 @@ const APIKeys = () => {
                 {(key) => (
                   <>
                     <TableCell>…{key.token}</TableCell>
-                    <TableCell>{key.createdBy === user.email ? 'You' : key.createdBy}</TableCell>
+                    <TableCell>{key.createdBy === user.username ? 'You' : key.createdBy}</TableCell>
                     <DateCell>{format(new Date(key.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
                     <TableCell className='flex'>
                       <div>

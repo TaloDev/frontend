@@ -54,12 +54,13 @@ function Organisation() {
               {pendingInvites.length > 0 &&
                 <div className='overflow-x-scroll'>
                   <table className='table-auto w-full'>
-                    <TableHeader columns={['Email', 'Type', 'Sent at']} />
+                    <TableHeader columns={['Email', 'Type', 'Invited by', 'Sent at']} />
                     <TableBody iterator={pendingInvites}>
                       {(invite) => (
                         <>
                           <TableCell>{invite.email}</TableCell>
                           <TableCell>{invite.type === userTypes.ADMIN ? 'Admin' : 'Dev'}</TableCell>
+                          <TableCell>{invite.invitedBy}</TableCell>
                           <DateCell>{format(new Date(invite.createdAt), 'do MMM Y')}</DateCell>
                         </>
                       )}
@@ -83,11 +84,10 @@ function Organisation() {
 
             <div className='overflow-x-scroll'>
               <table className='table-auto w-full'>
-                <TableHeader columns={['Email', 'Username', 'Type', 'Joined', 'Last seen']} />
+                <TableHeader columns={['Username', 'Type', 'Joined', 'Last seen']} />
                 <TableBody iterator={members}>
                   {(member) => (
                     <>
-                      <TableCell>{member.email}</TableCell>
                       <TableCell>{member.username}</TableCell>
                       <TableCell>{member.type === userTypes.ADMIN ? 'Admin' : 'Dev'}</TableCell>
                       <DateCell>{format(new Date(member.createdAt), 'do MMM Y')}</DateCell>
