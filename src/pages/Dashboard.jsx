@@ -87,7 +87,7 @@ const Dashboard = () => {
           <ErrorMessage error={{ message: 'Couldn\'t fetch headlines' }} />
         }
 
-        {!headlinesLoading &&
+        {!headlinesLoading && !headlinesError &&
           <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-4'>
             <HeadlineStat title='New players' stat={headlines.new_players.count} />
             <HeadlineStat title='Returning players' stat={headlines.returning_players.count} />

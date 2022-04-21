@@ -53,7 +53,8 @@ function Activity() {
                 {item.extra &&
                   <div className='-ml-2 flex flex-wrap'>
                     {Object.keys(item.extra).sort((a, b) => {
-                      if (a === 'Player') return -1
+                      if (b === 'Player') return 1
+
                       return a.localeCompare(b)
                     }).map((key) => (
                       <code key={key} className='bg-gray-900 rounded p-2 text-xs md:text-sm ml-2 mt-2'>{key} = {item.extra[key]}</code>

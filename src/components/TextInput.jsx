@@ -46,12 +46,12 @@ function TextInput(props) {
             value={props.value}
             disabled={props.disabled}
             {...props.inputExtra}
-            onFocus={() => {
-              props.inputExtra.onFocus?.()
+            onFocus={(e) => {
+              props.inputExtra.onFocus?.(e)
               setHasFocus(true)
             }}
-            onBlur={() => {
-              props.inputExtra.onBlur?.()
+            onBlur={(e) => {
+              props.inputExtra.onBlur?.(e)
               setHasFocus(false)
             }}
           />

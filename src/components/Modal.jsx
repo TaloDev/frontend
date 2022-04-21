@@ -5,7 +5,7 @@ import Button from './Button'
 import classNames from 'classnames'
 import usePortal from '../utils/usePortal'
 import { createPortal } from 'react-dom'
-import FocusTrap from 'focus-trap-react'
+import FocusLock from 'react-focus-lock'
 
 const Modal = (props) => {
   const [, setOpen] = props.modalState
@@ -25,7 +25,7 @@ const Modal = (props) => {
   const target = usePortal(props.id)
 
   return createPortal(
-    <FocusTrap>
+    <FocusLock>
       <div className='fixed w-screen md:p-4 bg-gray-900 bg-opacity-60 flex items-start md:items-center justify-center inset-0 z-50 text-black transition-colors'>
         <dialog
           className={classNames('block w-full h-full md:h-auto md:w-[600px] bg-white md:rounded p-0', {
@@ -54,7 +54,7 @@ const Modal = (props) => {
           {props.children}
         </dialog>
       </div>
-    </FocusTrap>,
+    </FocusLock>,
     target
   )
 }
