@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import Title from '../components/Title'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
 import TableHeader from '../components/tables/TableHeader'
-import Loading from '../components/Loading'
 import { format } from 'date-fns'
 import DateCell from '../components/tables/cells/DateCell'
 import useLeaderboards from '../api/useLeaderboards'
@@ -16,6 +14,7 @@ import { useHistory } from 'react-router-dom'
 import routes from '../constants/routes'
 import LeaderboardDetails from '../modals/LeaderboardDetails'
 import useSortedItems from '../utils/useSortedItems'
+import Page from '../components/Page'
 
 const Leaderboards = () => {
   const activeGame = useRecoilValue(activeGameState)
@@ -45,28 +44,20 @@ const Leaderboards = () => {
   }
 
   return (
-    <div className='space-y-4 md:space-y-8'>
-      <div className='flex items-center'>
-        <Title>Leaderboards</Title>
-
-        {loading &&
-          <div className='mt-1 ml-4'>
-            <Loading size={24} thickness={180} />
-          </div>
-        }
-
-        {!loading &&
-          <div className='mt-1 ml-4 p-1 rounded-full bg-indigo-600'>
-            <Button
-              variant='icon'
-              onClick={() => setShowModal(true)}
-              icon={<IconPlus />}
-              extra={{ 'aria-label': 'Create new leaderboard' }}
-            />
-          </div>
-        }
-      </div>
-
+    <Page
+      title='Leaderboards'
+      isLoading={loading}
+      extraTitleComponent={
+        <div className='mt-1 ml-4 p-1 rounded-full bg-indigo-600'>
+          <Button
+            variant='icon'
+            onClick={() => setShowModal(true)}
+            icon={<IconPlus />}
+            extra={{ 'aria-label': 'Create new leaderboard' }}
+          />
+        </div>
+      }
+    >
       {!error && !loading && leaderboards.length === 0 &&
         <p>{activeGame.name} doesn&apos;t have any leaderboards yet</p>
       }
@@ -111,7 +102,7 @@ const Leaderboards = () => {
           editingLeaderboard={editingLeaderboard}
         />
       }
-    </div>
+    </Page>
   )
 }
 

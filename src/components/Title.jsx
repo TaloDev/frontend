@@ -20,7 +20,7 @@ function Title({ children, showBackButton, className }) {
         />
       }
 
-      <h1 className='text-2xl md:text-4xl font-bold'>{children}</h1>
+      <h1 className='text-3xl md:text-4xl font-bold'>{children}</h1>
     </header>
   )
 }

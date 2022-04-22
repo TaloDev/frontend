@@ -1,4 +1,5 @@
 export default {
+  acceptInvite: '/accept/:token',
   account: '/account',
   activity: '/activity',
   apiKeys: '/api-keys',
@@ -11,6 +12,7 @@ export default {
   leaderboards: '/leaderboards',
   leaderboardEntries: '/leaderboards/:internalName',
   login: '/',
+  organisation: '/organisation',
   players: '/players',
   playerProps: '/players/:id/props',
   playerEvents: '/players/:id/events',

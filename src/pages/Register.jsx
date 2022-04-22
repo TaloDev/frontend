@@ -9,11 +9,14 @@ import ErrorMessage from '../components/ErrorMessage'
 import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
 import AuthService from '../services/AuthService'
+import { useLocation } from 'react-router-dom'
 
 const Register = () => {
+  const location = useLocation()
+
   const [organisationName, setOrganisationName] = useState('')
   const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState(location.state?.invite.email ?? '')
   const [password, setPassword] = useState('')
   const [, setUser] = useRecoilState(userState)
   const [error, setError] = useState(null)
@@ -32,7 +35,7 @@ const Register = () => {
     setLoading(true)
 
     try {
-      const res = await register({ email, password, organisationName, username })
+      const res = await register({ email, password, organisationName, username, inviteToken: location.state?.invite.token })
       const accessToken = res.data.accessToken
       AuthService.setToken(accessToken)
       setUser(res.data.user)
@@ -47,14 +50,22 @@ const Register = () => {
       <form className={`text-white rounded-md space-y-8 ${unauthedContainerStyle}`}>
         <h1 className='text-4xl font-bold'>Let&apos;s get started</h1>
 
-        <TextInput
-          id='name'
-          label='Team name'
-          placeholder={'Your team\'s name'}
-          type='text'
-          onChange={setOrganisationName}
-          value={organisationName}
-        />
+        {location.state?.invite &&
+          <p>
+            <span role='img' aria-label='Success'>🎉</span> <span className='font-semibold'>{location.state.invite.organisation.name}</span> has invited you to join them on Talo
+          </p>
+        }
+
+        {!location.state?.invite &&
+          <TextInput
+            id='name'
+            label='Team name'
+            placeholder={'Your team\'s name'}
+            type='text'
+            onChange={setOrganisationName}
+            value={organisationName}
+          />
+        }
 
         <TextInput
           id='username'
@@ -67,6 +78,7 @@ const Register = () => {
 
         <TextInput
           id='email'
+          disabled={Boolean(location.state?.invite)}
           label='Email'
           type='email'
           placeholder='For transactional notifications'
@@ -86,7 +98,7 @@ const Register = () => {
         {error && <ErrorMessage error={error} />}
 
         <Button
-          disabled={!organisationName || !username || !email || !password}
+          disabled={(!organisationName && !location.state?.invite) || !username || !email || !password}
           onClick={onRegisterClick}
           isLoading={isLoading}
         >

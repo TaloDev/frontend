@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
 import activeGameState from '../state/activeGameState'
 import ErrorMessage from '../components/ErrorMessage'
-import Loading from '../components/Loading'
 import PlayerAliases from '../components/PlayerAliases'
 import { format } from 'date-fns'
-import Title from '../components/Title'
 import { IconArrowRight, IconBolt, IconChartBar } from '@tabler/icons'
 import Button from '../components/Button'
 import { useHistory } from 'react-router-dom'
@@ -19,6 +17,7 @@ import { useDebounce } from 'use-debounce'
 import Pagination from '../components/Pagination'
 import DateCell from '../components/tables/cells/DateCell'
 import classNames from 'classnames'
+import Page from '../components/Page'
 
 const Players = () => {
   const [search, setSearch] = useState(new URLSearchParams(window.location.search).get('search') ?? '')
@@ -54,17 +53,7 @@ const Players = () => {
   }, [page])
 
   return (
-    <div className='space-y-4 md:space-y-8'>
-      <div className='flex items-center'>
-        <Title>Players</Title>
-
-        {loading &&
-          <div className='mt-1 ml-4'>
-            <Loading size={24} thickness={180} />
-          </div>
-        }
-      </div>
-
+    <Page title='Players' isLoading={loading}>
       {(players.length > 0 || debouncedSearch.length > 0) &&
         <div className='flex items-center'>
           <div className='w-1/2 flex-grow md:flex-grow-0 lg:w-1/4'>
@@ -146,7 +135,7 @@ const Players = () => {
           {Boolean(count) && <Pagination count={count} pageState={[page, setPage]} />}
         </>
       }
-    </div>
+    </Page>
   )
 }
 

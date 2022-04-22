@@ -10,6 +10,7 @@ import activeGameState from '../../state/activeGameState'
 import routes from '../../constants/routes'
 import { createMemoryHistory } from 'history'
 import { format } from 'date-fns'
+import userState from '../../state/userState'
 
 describe('<Activity />', () => {
   // eslint-disable-next-line react/prop-types
@@ -28,8 +29,10 @@ describe('<Activity />', () => {
     axiosMock.onGet('http://talo.test/game-activities?gameId=1').replyOnce(200, { activities: [] })
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1, name: 'Superstatic' }}>
-        <ActivityRoute history={history} />
+      <RecoilObserver node={userState} initialValue={{ type: 1 }}>
+        <RecoilObserver node={activeGameState} initialValue={{ id: 1, name: 'Superstatic' }}>
+          <ActivityRoute history={history} />
+        </RecoilObserver>
       </RecoilObserver>
       , { wrapper: RecoilRoot }
     )
@@ -44,7 +47,8 @@ describe('<Activity />', () => {
         createdAt: '2022-01-01 19:53:00',
         extra: {
           'Player': '1234-567-89',
-          'Other prop': 'another prop'
+          'Other prop': 'another prop',
+          'And another prop': 'something'
         }
       },
       {
@@ -60,8 +64,10 @@ describe('<Activity />', () => {
     axiosMock.onGet('http://talo.test/game-activities?gameId=1').replyOnce(200, { activities })
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <ActivityRoute history={history} />
+      <RecoilObserver node={userState} initialValue={{ type: 1 }}>
+        <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
+          <ActivityRoute history={history} />
+        </RecoilObserver>
       </RecoilObserver>
       , { wrapper: RecoilRoot }
     )
@@ -96,8 +102,10 @@ describe('<Activity />', () => {
     axiosMock.onGet('http://talo.test/game-activities?gameId=1').replyOnce(200, { activities })
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <ActivityRoute history={history} />
+      <RecoilObserver node={userState} initialValue={{ type: 1 }}>
+        <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
+          <ActivityRoute history={history} />
+        </RecoilObserver>
       </RecoilObserver>
       , { wrapper: RecoilRoot }
     )
@@ -130,8 +138,10 @@ describe('<Activity />', () => {
     axiosMock.onGet('http://talo.test/game-activities?gameId=1').replyOnce(200, { activities })
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <ActivityRoute history={history} />
+      <RecoilObserver node={userState} initialValue={{ type: 1 }}>
+        <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
+          <ActivityRoute history={history} />
+        </RecoilObserver>
       </RecoilObserver>
       , { wrapper: RecoilRoot }
     )
@@ -148,5 +158,20 @@ describe('<Activity />', () => {
       expect(screen.getByText(activity.description)).toBeInTheDocument()
       expect(screen.getByText(format(new Date(activity.createdAt), 'HH:mm'))).toBeInTheDocument()
     }
+  })
+
+  it('should render an error', async () => {
+    axiosMock.onGet('http://talo.test/game-activities?gameId=1').networkErrorOnce()
+
+    render(
+      <RecoilObserver node={userState} initialValue={{ type: 1 }}>
+        <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
+          <ActivityRoute history={history} />
+        </RecoilObserver>
+      </RecoilObserver>
+      , { wrapper: RecoilRoot }
+    )
+
+    expect(await screen.findByRole('alert')).toBeInTheDocument()
   })
 })

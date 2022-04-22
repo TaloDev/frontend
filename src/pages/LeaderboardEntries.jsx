@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Title from '../components/Title'
 import { useHistory, useLocation } from 'react-router-dom'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
@@ -17,6 +16,7 @@ import getLeaderboard from '../api/getLeaderboard'
 import updateLeaderboardEntry from '../api/updateLeaderboardEntry'
 import buildError from '../utils/buildError'
 import classNames from 'classnames'
+import Page from '../components/Page'
 
 const LeaderboardEntries = () => {
   const location = useLocation()
@@ -85,17 +85,11 @@ const LeaderboardEntries = () => {
   }
 
   return (
-    <div className='space-y-4 md:space-y-8'>
-      <div className='flex items-center'>
-        <Title showBackButton>{leaderboard.name} entries</Title>
-
-        {loading &&
-          <div className='mt-1 ml-4'>
-            <Loading size={24} thickness={180} />
-          </div>
-        }
-      </div>
-
+    <Page
+      showBackButton
+      title={`${leaderboard.name} entries`}
+      isLoading={loading}
+    >
       {error && <ErrorMessage error={error} />}
 
       {!fetchError && entries.length === 0 &&
@@ -147,7 +141,7 @@ const LeaderboardEntries = () => {
           {Boolean(count) && <Pagination count={count} pageState={[page, setPage]} itemsPerPage={50} />}
         </>
       }
-    </div>
+    </Page>
   )
 }
 

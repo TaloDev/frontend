@@ -3,10 +3,17 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { motion } from 'framer-motion'
 import { labelFocusStyle } from '../styles/theme'
-import { IconCheck } from '@tabler/icons'
+import { IconCheck, IconX } from '@tabler/icons'
 
 function Toggle({ id, enabled, onToggle }) {
   const [focus, setFocus] = useState(false)
+  const [innerEnabled, setInnerEnabled] = useState(enabled)
+
+  const sharedIconProps = {
+    className:'flex items-center justify-center h-full absolute left-0 right-0',
+    initial: false,
+    transition: { duration: 0.3 }
+  }
 
   return (
     <>
@@ -16,7 +23,7 @@ function Toggle({ id, enabled, onToggle }) {
         className='absolute inset-0 opacity-0'
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
-        onChange={() => onToggle(!enabled)}
+        onChange={() => setInnerEnabled(!innerEnabled)}
       />
 
       <label
@@ -25,18 +32,21 @@ function Toggle({ id, enabled, onToggle }) {
       >
         <motion.div
           animate={{
-            x: enabled ? 44 : 0,
-            opacity: enabled ? 1 : 0.2
+            x: innerEnabled ? 44 : 0,
+            backgroundColor: innerEnabled ? 'rgb(251,146,60)' : 'rgb(99,102,241)'
           }}
           initial={false}
           transition={{ duration: 0.2 }}
-          className={classNames('bg-indigo-500 h-full w-8 rounded-md')}
+          className='h-full w-8 rounded-md relative'
+          onAnimationComplete={() => onToggle(innerEnabled)}
         >
-          {enabled &&
-            <span className='flex items-center justify-center h-full'>
-              <IconCheck size={24} stroke={3} />
-            </span>
-          }
+          <motion.span {...sharedIconProps} animate={{ opacity: innerEnabled ? 1 : 0 }}>
+            <IconCheck size={24} stroke={3} />
+          </motion.span>
+
+          <motion.span {...sharedIconProps} animate={{ opacity: innerEnabled ? 0 : 1 }}>
+            <IconX size={24} stroke={3} />
+          </motion.span>
         </motion.div>
       </label>
     </>

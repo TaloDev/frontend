@@ -30,7 +30,8 @@ describe('<PlayerProps />', () => {
         key: 'level',
         value: '42'
       }
-    ]
+    ],
+    devBuild: false
   }
 
   const axiosMock = new MockAdapter(api)
@@ -191,7 +192,7 @@ describe('<PlayerProps />', () => {
     history.push(routes.playerProps.replace(':id', basePlayer.id))
 
     axiosMock.onGet(`http://talo.test/players?gameId=1&search=${basePlayer.id}`).replyOnce(200, {
-      players: [{ id: basePlayer.id, props: [] }]
+      players: [{ ...basePlayer, props: [] }]
     })
 
     render(

@@ -1,26 +1,15 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { focusStyle } from '../styles/theme'
 import classNames from 'classnames'
 import { IconAlertCircle } from '@tabler/icons'
 import requiredIf from 'react-required-if'
 
-const TextInput = (props) => {
-  const ref = useRef()
-  const [didFocus, setDidFocus] = useState(false)
-
-  const setRef = useCallback((el) => {
-    if (el) {
-      ref.current = el
-      if (props.startFocused && !didFocus) {
-        ref.current.addEventListener('focus', () => setDidFocus(true))
-        ref.current.focus()
-      }
-    }
-  }, [didFocus])
+function TextInput(props) {
+  const [hasFocus, setHasFocus] = useState(false)
 
   const errors = props.errors?.filter((err) => err !== null && err !== undefined) ?? []
-  const showErrorHighlight = document.activeElement === ref.current && errors.length > 0
+  const showErrorHighlight = !hasFocus && errors.length > 0
 
   const inputClassName = classNames(`
     block
@@ -28,6 +17,7 @@ const TextInput = (props) => {
     w-full
     rounded
     disabled:bg-gray-300
+    disabled:text-gray-700
     ${focusStyle}
     ${props.inputClassName ?? ''}
   `, {
@@ -56,9 +46,13 @@ const TextInput = (props) => {
             value={props.value}
             disabled={props.disabled}
             {...props.inputExtra}
-            ref={(el) => {
-              setRef(el)
-              props.inputExtra.ref?.(el)
+            onFocus={(e) => {
+              props.inputExtra.onFocus?.(e)
+              setHasFocus(true)
+            }}
+            onBlur={(e) => {
+              props.inputExtra.onBlur?.(e)
+              setHasFocus(false)
             }}
           />
 

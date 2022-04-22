@@ -1,16 +1,13 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import React from 'react'
-import { Router, MemoryRouter } from 'react-router-dom'
-import { RecoilRoot } from 'recoil'
-import RecoilObserver from '../../state/RecoilObserver'
 import userState from '../../state/userState'
-import { createMemoryHistory } from 'history'
 import routes from '../../constants/routes'
 import { ConfirmPasswordAction } from '../../pages/ConfirmPassword'
 import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
 import Account2FA from '../Account2FA'
+import KitchenSink from '../../utils/KitchenSink'
 
 describe('<Account2FA />', () => {
   const axiosMock = new MockAdapter(api)
@@ -28,12 +25,10 @@ describe('<Account2FA />', () => {
     })
 
     render(
-      <RecoilRoot>
-        <RecoilObserver node={userState} initialValue={{ has2fa: false }}>
-          <Account2FA />
-        </RecoilObserver>
-      </RecoilRoot>
-      , { wrapper: MemoryRouter })
+      <KitchenSink states={[{ node: userState, initialValue: { has2fa: false } }]}>
+        <Account2FA />
+      </KitchenSink>
+    )
 
     expect(screen.getByText('Enable 2FA')).toBeInTheDocument()
 
@@ -58,12 +53,10 @@ describe('<Account2FA />', () => {
     axiosMock.onGet('http://talo.test/users/2fa/enable').networkErrorOnce()
 
     render(
-      <RecoilRoot>
-        <RecoilObserver node={userState} initialValue={{ has2fa: false }}>
-          <Account2FA />
-        </RecoilObserver>
-      </RecoilRoot>
-      , { wrapper: MemoryRouter })
+      <KitchenSink states={[{ node: userState, initialValue: { has2fa: false } }]}>
+        <Account2FA />
+      </KitchenSink>
+    )
 
     expect(screen.getByText('Enable 2FA')).toBeInTheDocument()
 
@@ -80,12 +73,10 @@ describe('<Account2FA />', () => {
     axiosMock.onPost('http://talo.test/users/2fa/enable').networkErrorOnce()
 
     render(
-      <RecoilRoot>
-        <RecoilObserver node={userState} initialValue={{ has2fa: false }}>
-          <Account2FA />
-        </RecoilObserver>
-      </RecoilRoot>
-      , { wrapper: MemoryRouter })
+      <KitchenSink states={[{ node: userState, initialValue: { has2fa: false } }]}>
+        <Account2FA />
+      </KitchenSink>
+    )
 
     expect(screen.getByText('Enable 2FA')).toBeInTheDocument()
 
@@ -100,12 +91,10 @@ describe('<Account2FA />', () => {
 
   it('should render the enabled state', () => {
     render(
-      <RecoilRoot>
-        <RecoilObserver node={userState} initialValue={{ has2fa: true }}>
-          <Account2FA />
-        </RecoilObserver>
-      </RecoilRoot>
-      , { wrapper: MemoryRouter })
+      <KitchenSink states={[{ node: userState, initialValue: { has2fa: true } }]}>
+        <Account2FA />
+      </KitchenSink>
+    )
 
     expect(screen.getByText('Disable 2FA')).toBeInTheDocument()
 
@@ -115,82 +104,85 @@ describe('<Account2FA />', () => {
   })
 
   it('should send the user to the confirm password screen when they click the disable 2fa button', () => {
-    const history = createMemoryHistory()
+    const setLocationMock = jest.fn()
 
     render(
-      <Router history={history}>
-        <RecoilRoot>
-          <RecoilObserver node={userState} initialValue={{ has2fa: true }}>
-            <Account2FA />
-          </RecoilObserver>
-        </RecoilRoot>
-      </Router>
+      <KitchenSink
+        states={[{ node: userState, initialValue: { has2fa: true } }]}
+        setLocation={setLocationMock}
+      >
+        <Account2FA />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('Disable 2FA'))
 
-    expect(history.location.pathname).toBe(routes.confirmPassword)
-    expect(history.location.state).toStrictEqual({
-      onConfirmAction: ConfirmPasswordAction.DISABLE_2FA
+    expect(setLocationMock).toHaveBeenLastCalledWith({
+      pathname: routes.confirmPassword,
+      state: {
+        onConfirmAction: ConfirmPasswordAction.DISABLE_2FA
+      }
     })
   })
 
   it('should send the user to the confirm password screen when they click the view recovery codes button', () => {
-    const history = createMemoryHistory()
+    const setLocationMock = jest.fn()
 
     render(
-      <Router history={history}>
-        <RecoilRoot>
-          <RecoilObserver node={userState} initialValue={{ has2fa: true }}>
-            <Account2FA />
-          </RecoilObserver>
-        </RecoilRoot>
-      </Router>
+      <KitchenSink
+        states={[{ node: userState, initialValue: { has2fa: true } }]}
+        setLocation={setLocationMock}
+      >
+        <Account2FA />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('View recovery codes'))
 
-    expect(history.location.pathname).toBe(routes.confirmPassword)
-    expect(history.location.state).toStrictEqual({
-      onConfirmAction: ConfirmPasswordAction.VIEW_RECOVERY_CODES
+    expect(setLocationMock).toHaveBeenLastCalledWith({
+      pathname: routes.confirmPassword,
+      state: {
+        onConfirmAction: ConfirmPasswordAction.VIEW_RECOVERY_CODES
+      }
     })
   })
 
   it('should send the user to the confirm password screen when they click the create recovery codes button', () => {
-    const history = createMemoryHistory()
+    const setLocationMock = jest.fn()
 
     render(
-      <Router history={history}>
-        <RecoilRoot>
-          <RecoilObserver node={userState} initialValue={{ has2fa: true }}>
-            <Account2FA />
-          </RecoilObserver>
-        </RecoilRoot>
-      </Router>
+      <KitchenSink
+        states={[{ node: userState, initialValue: { has2fa: true } }]}
+        setLocation={setLocationMock}
+      >
+        <Account2FA />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('Create new recovery codes'))
 
-    expect(history.location.pathname).toBe(routes.confirmPassword)
-    expect(history.location.state).toStrictEqual({
-      onConfirmAction: ConfirmPasswordAction.CREATE_RECOVERY_CODES
+    expect(setLocationMock).toHaveBeenLastCalledWith({
+      pathname: routes.confirmPassword,
+      state: {
+        onConfirmAction: ConfirmPasswordAction.CREATE_RECOVERY_CODES
+      }
     })
   })
 
   it('should render recovery codes if found in the location state', () => {
-    const history = createMemoryHistory()
-    history.location.state = {
-      recoveryCodes: ['abc123', 'efg456', 'hij789']
-    }
-
     render(
-      <Router history={history}>
-        <RecoilRoot>
-          <RecoilObserver node={userState} initialValue={{ has2fa: true }}>
-            <Account2FA />
-          </RecoilObserver>
-        </RecoilRoot>
-      </Router>
+      <KitchenSink
+        initialEntries={[{
+          state: {
+            recoveryCodes: ['abc123', 'efg456', 'hij789']
+          }
+        }]}
+        states={[
+          { node: userState, initialValue: { has2fa: true } }
+        ]}
+      >
+        <Account2FA />
+      </KitchenSink>
     )
 
     expect(screen.getAllByRole('listitem')).toHaveLength(3)

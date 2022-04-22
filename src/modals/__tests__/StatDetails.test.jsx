@@ -52,6 +52,29 @@ describe('<StatDetails />', () => {
     })
   })
 
+  it('should handle creation errors', async () => {
+    axiosMock.onPost('http://talo.test/game-stats').networkErrorOnce()
+
+    render(
+      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
+        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
+          <StatDetails modalState={[true, jest.fn()]} mutate={jest.fn()} />
+        </RecoilObserver>
+      </RecoilObserver>,
+      { wrapper: RecoilRoot }
+    )
+
+    userEvent.type(screen.getByLabelText('Internal name'), 'hearts-collected')
+    userEvent.type(screen.getByLabelText('Display name'), 'Hearts collected')
+    userEvent.click(screen.getByText('Yes'))
+    userEvent.type(screen.getByLabelText('Default value'), '52')
+
+    await waitFor(() => expect(screen.getByText('Create')).toBeEnabled())
+    userEvent.click(screen.getByText('Create'))
+
+    expect(await screen.findByText('Network Error')).toBeInTheDocument()
+  })
+
   it('should display an error if the default value is less than the min value', async () => {
     axiosMock.onPost('http://talo.test/game-stats').replyOnce(200, { stat: { id: 2 } })
 
@@ -195,6 +218,40 @@ describe('<StatDetails />', () => {
     })
   })
 
+  it('should handle updating errors', async () => {
+    const initialStat = {
+      id: 1,
+      internalName: 'hearts-collected',
+      name: 'Hearts collected',
+      global: false,
+      minValue: null,
+      defaultValue: 5,
+      maxValue: null,
+      maxChange: null,
+      minTimeBetweenUpdates: 0
+    }
+
+    axiosMock.onPatch('http://talo.test/game-stats/1').networkErrorOnce()
+
+    render(
+      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
+        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
+          <StatDetails
+            modalState={[true, jest.fn()]}
+            mutate={jest.fn()}
+            editingStat={initialStat}
+          />
+        </RecoilObserver>
+      </RecoilObserver>,
+      { wrapper: RecoilRoot }
+    )
+
+    await waitFor(() => expect(screen.getByText('Update')).toBeEnabled())
+    userEvent.click(screen.getByText('Update'))
+
+    expect(await screen.findByText('Network Error')).toBeInTheDocument()
+  })
+
   it('should delete a stat', async () => {
     const closeMock = jest.fn()
     const mutateMock = jest.fn()
@@ -238,6 +295,41 @@ describe('<StatDetails />', () => {
     expect(mutator({ stats: [initialStat, { id: 2 }] })).toStrictEqual({
       stats: [{ id: 2 }]
     })
+  })
+
+  it('should handle deletion errors', async () => {
+    const initialStat = {
+      id: 1,
+      internalName: 'hearts-collected',
+      name: 'Hearts collected',
+      global: false,
+      minValue: null,
+      defaultValue: 5,
+      maxValue: null,
+      maxChange: null,
+      minTimeBetweenUpdates: 0
+    }
+
+    axiosMock.onDelete('http://talo.test/game-stats/1').networkErrorOnce()
+    window.confirm = jest.fn(() => true)
+
+    render(
+      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
+        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
+          <StatDetails
+            modalState={[true, jest.fn()]}
+            mutate={jest.fn()}
+            editingStat={initialStat}
+          />
+        </RecoilObserver>
+      </RecoilObserver>,
+      { wrapper: RecoilRoot }
+    )
+
+    await waitFor(() => expect(screen.getByText('Delete')).toBeEnabled())
+    userEvent.click(screen.getByText('Delete'))
+
+    expect(await screen.findByText('Network Error')).toBeInTheDocument()
   })
 
   it('should not render the delete button for dev users', () => {

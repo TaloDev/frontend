@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Toggle from '../Toggle'
 
@@ -15,15 +15,15 @@ describe('<Toggle />', () => {
     )
   }
 
-  it('should correctly toggle between states', () => {
+  it('should correctly toggle between states', async () => {
     const toggleMock = jest.fn()
 
     render(<ToggleDummy toggleMock={toggleMock} />)
 
     userEvent.click(screen.getByRole('checkbox'))
-    expect(toggleMock).toHaveBeenLastCalledWith(true)
+    await waitFor(() => expect(toggleMock).toHaveBeenLastCalledWith(true))
 
     userEvent.click(screen.getByRole('checkbox'))
-    expect(toggleMock).toHaveBeenLastCalledWith(false)
+    await waitFor(() => expect(toggleMock).toHaveBeenLastCalledWith(false))
   })
 })

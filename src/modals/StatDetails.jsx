@@ -189,7 +189,6 @@ const StatDetails = ({ modalState, mutate, editingStat }) => {
       <form onSubmit={handleSubmit(editingStat ? onUpdateClick : onCreateClick)}>
         <div className='p-4 space-y-4'>
           <TextInput
-            startFocused
             id='internal-name'
             disabled={Boolean(editingStat)}
             variant='modal'
