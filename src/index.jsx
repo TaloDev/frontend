@@ -6,13 +6,10 @@ import App from './App'
 import { RecoilRoot } from 'recoil'
 import { BrowserRouter } from 'react-router-dom'
 import * as Sentry from '@sentry/react'
-import { BrowserTracing } from '@sentry/tracing'
 
 Sentry.init({
-  dsn: import.meta.env.SENTRY_DSN,
-  environment: import.meta.env.SENTRY_ENV,
-  integrations: [new BrowserTracing()],
-  tracesSampleRate: 1.0
+  dsn: import.meta.env.SNOWPACK_PUBLIC_SENTRY_DSN,
+  environment: import.meta.env.SNOWPACK_PUBLIC_SENTRY_ENV
 })
 
 ReactDOM.render(
