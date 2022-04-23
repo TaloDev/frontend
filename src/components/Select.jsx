@@ -1,7 +1,19 @@
 import React from 'react'
-import ReactSelect from 'react-select'
+import ReactSelect, { components } from 'react-select'
 
-function Select(props) {
+function Option(props) {
+  // eslint-disable-next-line react/prop-types
+  const { label, desc } = props.data
+
+  return (
+    <components.Option {...props}>
+      <p className='font-medium'>{label}</p>
+      {desc && <p className='text-sm mt-2'>{desc}</p>}
+    </components.Option>
+  )
+}
+
+function Select(props, ref) {
   const styles = {
     control: (provided, state) => ({
       ...provided,
@@ -26,8 +38,13 @@ function Select(props) {
   }
 
   return (
-    <ReactSelect {...props} styles={styles} />
+    <ReactSelect
+      {...props}
+      innerRef={ref}
+      components={{ Option }}
+      styles={styles}
+    />
   )
 }
 
-export default Select
+export default React.forwardRef(Select)

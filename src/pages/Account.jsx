@@ -2,16 +2,20 @@ import React, { useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import Button from '../components/Button'
 import TextInput from '../components/TextInput'
-import Title from '../components/Title'
 import routes from '../constants/routes'
 import { ConfirmPasswordAction } from './ConfirmPassword'
 import AlertBanner from '../components/AlertBanner'
 import { IconCheck } from '@tabler/icons'
 import Account2FA from '../components/Account2FA'
+import { useRecoilValue } from 'recoil'
+import userState from '../state/userState'
+import Page from '../components/Page'
 
 function Account() {
   const history = useHistory()
   const location = useLocation()
+
+  const user = useRecoilValue(userState)
 
   const [successMessage] = useState(location.state?.successMessage)
 
@@ -27,8 +31,8 @@ function Account() {
   }
 
   return (
-    <div className='space-y-4 w-full lg:2/3 xl:w-1/2'>
-      <Title className='mb-8'>Account</Title>
+    <Page title={user.username} containerClassName='w-full lg:2/3 xl:w-1/2'>
+      <h2 className='text-xl'>{user.email}</h2>
 
       {successMessage &&
         <AlertBanner className='bg-green-600' icon={IconCheck} text={successMessage} />
@@ -61,7 +65,7 @@ function Account() {
           Change password
         </Button>
       </form>
-    </div>
+    </Page>
   )
 }
 
