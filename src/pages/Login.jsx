@@ -12,6 +12,7 @@ import { unauthedContainerStyle } from '../styles/theme'
 import AuthService from '../services/AuthService'
 import AlertBanner from '../components/AlertBanner'
 import { useHistory, useLocation } from 'react-router-dom'
+import * as Sentry from '@sentry/react'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -57,6 +58,8 @@ const Login = () => {
         const accessToken = res.data.accessToken
         AuthService.setToken(accessToken)
         setUser(res.data.user)
+
+        Sentry.setUser({ id: res.data.user.id, username: res.data.user.username })
       }
     } catch (err) {
       setError(buildError(err))

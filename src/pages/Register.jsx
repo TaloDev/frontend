@@ -10,6 +10,7 @@ import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
 import AuthService from '../services/AuthService'
 import { useLocation } from 'react-router-dom'
+import * as Sentry from '@sentry/react'
 
 const Register = () => {
   const location = useLocation()
@@ -39,6 +40,8 @@ const Register = () => {
       const accessToken = res.data.accessToken
       AuthService.setToken(accessToken)
       setUser(res.data.user)
+
+      Sentry.setUser({ id: res.data.user.id, username: res.data.user.username })
     } catch (err) {
       setError(buildError(err))
       setLoading(false)

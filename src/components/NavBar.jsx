@@ -10,6 +10,7 @@ import { IconMenu2 } from '@tabler/icons'
 import MobileMenu from './MobileMenu'
 import Button from './Button'
 import ServicesLink from './ServicesLink'
+import * as Sentry from '@sentry/react'
 
 const NavBar = () => {
   const activeGame = useRecoilValue(activeGameState)
@@ -17,6 +18,8 @@ const NavBar = () => {
 
   const onLogoutClick = async () => {
     try {
+      Sentry.configureScope((scope) => scope.setUser(null))
+
       await logout()
     } catch (err) {
       console.warn('Logout failed:', err.message)
