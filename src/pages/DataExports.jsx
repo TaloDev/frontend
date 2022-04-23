@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
-import TableHeader from '../components/tables/TableHeader'
 import { format } from 'date-fns'
 import DateCell from '../components/tables/cells/DateCell'
 import activeGameState from '../state/activeGameState'
@@ -19,6 +18,7 @@ import buildError from '../utils/buildError'
 import classNames from 'classnames'
 import Page from '../components/Page'
 import DevDataStatus from '../components/DevDataStatus'
+import Table from '../components/tables/Table'
 
 const dataExportStatuses = ['Requested', 'Processing', 'Processing', 'Delivered']
 
@@ -65,9 +65,7 @@ const DataExports = () => {
       <DevDataStatus />
 
       {!fetchError && dataExports.length > 0 &&
-        <div className='overflow-x-scroll'>
-          <table className='table-auto w-full'>
-            <TableHeader columns={['Status', 'Entities', 'Created at', 'Created by']} />
+          <Table columns={['Status', 'Entities', 'Created at', 'Created by']}>
             <TableBody iterator={sortedDataExports}>
               {(dataExport) => (
                 <>
@@ -85,8 +83,7 @@ const DataExports = () => {
                 </>
               )}
             </TableBody>
-          </table>
-        </div>
+          </Table>
       }
 
       {fetchError && <ErrorMessage error={fetchError} />}

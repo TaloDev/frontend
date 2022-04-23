@@ -3,7 +3,6 @@ import { useHistory, useLocation } from 'react-router-dom'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
-import TableHeader from '../components/tables/TableHeader'
 import Loading from '../components/Loading'
 import routes from '../constants/routes'
 import { format } from 'date-fns'
@@ -17,6 +16,7 @@ import updateLeaderboardEntry from '../api/updateLeaderboardEntry'
 import buildError from '../utils/buildError'
 import classNames from 'classnames'
 import Page from '../components/Page'
+import Table from '../components/tables/Table'
 
 const LeaderboardEntries = () => {
   const location = useLocation()
@@ -98,45 +98,42 @@ const LeaderboardEntries = () => {
 
       {!fetchError && entries.length > 0 &&
         <>
-          <div className='overflow-x-scroll'>
-            <table className='table-auto w-full'>
-              <TableHeader columns={['#', 'Player', 'Score', 'Time', '']} />
-              <TableBody
-                iterator={entries}
-                configureClassNames={(entry, idx) => ({
-                  'bg-orange-600': entry.playerAlias.player.devBuild && idx % 2 !== 0,
-                  'bg-orange-500': entry.playerAlias.player.devBuild && idx % 2 === 0
-                })}
-              >
-                {(entry) => (
-                  <>
-                    <TableCell><span className='font-semibold'>{entry.position + 1}</span></TableCell>
-                    <TableCell>
-                      <div className='flex items-center'>
-                        <span>{entry.playerAlias.identifier}</span>
-                        <Button
-                          variant='icon'
-                          className={classNames('ml-2 p-1 rounded-full bg-indigo-900', { 'bg-orange-900': entry.playerAlias.player.devBuild })}
-                          onClick={() => goToPlayer(entry.playerAlias.identifier)}
-                          icon={<IconArrowRight size={16} />}
-                        />
-                      </div>
-                    </TableCell>
-                    <TableCell>{entry.score}</TableCell>
-                    <DateCell>{format(new Date(entry.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                    <TableCell className='w-40'>
+          <Table columns={['#', 'Player', 'Score', 'Time', '']}>
+            <TableBody
+              iterator={entries}
+              configureClassNames={(entry, idx) => ({
+                'bg-orange-600': entry.playerAlias.player.devBuild && idx % 2 !== 0,
+                'bg-orange-500': entry.playerAlias.player.devBuild && idx % 2 === 0
+              })}
+            >
+              {(entry) => (
+                <>
+                  <TableCell><span className='font-semibold'>{entry.position + 1}</span></TableCell>
+                  <TableCell>
+                    <div className='flex items-center'>
+                      <span>{entry.playerAlias.identifier}</span>
                       <Button
-                        variant={entry.hidden ? 'black' : 'grey'}
-                        onClick={() => onHideToggle(entry)}
-                      >
-                        <span>{entry.hidden ? 'Unhide' : 'Hide'}</span>
-                      </Button>
-                    </TableCell>
-                  </>
-                )}
-              </TableBody>
-            </table>
-          </div>
+                        variant='icon'
+                        className={classNames('ml-2 p-1 rounded-full bg-indigo-900', { 'bg-orange-900': entry.playerAlias.player.devBuild })}
+                        onClick={() => goToPlayer(entry.playerAlias.identifier)}
+                        icon={<IconArrowRight size={16} />}
+                      />
+                    </div>
+                  </TableCell>
+                  <TableCell>{entry.score}</TableCell>
+                  <DateCell>{format(new Date(entry.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
+                  <TableCell className='w-40'>
+                    <Button
+                      variant={entry.hidden ? 'black' : 'grey'}
+                      onClick={() => onHideToggle(entry)}
+                    >
+                      <span>{entry.hidden ? 'Unhide' : 'Hide'}</span>
+                    </Button>
+                  </TableCell>
+                </>
+              )}
+            </TableBody>
+          </Table>
 
           {Boolean(count) && <Pagination count={count} pageState={[page, setPage]} itemsPerPage={50} />}
         </>
