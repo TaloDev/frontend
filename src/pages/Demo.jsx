@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Button from '../components/Button'
 import Link from '../components/Link'
-import { useRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import userState from '../state/userState'
 import ErrorMessage from '../components/ErrorMessage'
 import buildError from '../utils/buildError'
@@ -10,7 +10,7 @@ import AuthService from '../services/AuthService'
 import createDemo from '../api/createDemo'
 
 const Demo = () => {
-  const [, setUser] = useRecoilState(userState)
+  const setUser = useSetRecoilState(userState)
   const [error, setError] = useState(null)
   const [isLoading, setLoading] = useState(false)
 

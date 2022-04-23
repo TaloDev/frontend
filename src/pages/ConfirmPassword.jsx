@@ -8,7 +8,7 @@ import Title from '../components/Title'
 import buildError from '../utils/buildError'
 import disable2fa from '../api/disable2fa'
 import userState from '../state/userState'
-import { useRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import routes from '../constants/routes'
 import changePassword from '../api/changePassword'
 import viewRecoveryCodes from '../api/viewRecoveryCodes'
@@ -29,7 +29,7 @@ const ConfirmPassword = () => {
   const [error, setError] = useState(null)
   const [isLoading, setLoading] = useState(false)
 
-  const [, setUser] = useRecoilState(userState)
+  const setUser = useSetRecoilState(userState)
 
   useEffect(() => {
     if (!location.state?.onConfirmAction) {

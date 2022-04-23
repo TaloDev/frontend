@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import Link from '../components/Link'
-import { useRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import userState from '../state/userState'
 import ErrorMessage from '../components/ErrorMessage'
 import login from '../api/login'
@@ -17,7 +17,7 @@ import * as Sentry from '@sentry/react'
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [, setUser] = useRecoilState(userState)
+  const setUser = useSetRecoilState(userState)
   const [error, setError] = useState(null)
   const [isLoading, setLoading] = useState(false)
   const [wasLoggedOut] = useState(window.localStorage.getItem('loggedOut'))

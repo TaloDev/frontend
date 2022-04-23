@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import Link from '../components/Link'
-import { useRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import userState from '../state/userState'
 import register from '../api/register'
 import ErrorMessage from '../components/ErrorMessage'
@@ -19,7 +19,7 @@ const Register = () => {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState(location.state?.invite.email ?? '')
   const [password, setPassword] = useState('')
-  const [, setUser] = useRecoilState(userState)
+  const setUser = useSetRecoilState(userState)
   const [error, setError] = useState(null)
   const [isLoading, setLoading] = useState(false)
 
