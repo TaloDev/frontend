@@ -1,5 +1,6 @@
 export default {
-  DEV: 0,
+  OWNER: 0,
   ADMIN: 1,
-  DEMO: 2
+  DEV: 2,
+  DEMO: 3
 }
