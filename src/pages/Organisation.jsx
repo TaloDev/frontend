@@ -7,7 +7,7 @@ import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
 import organisationState from '../state/organisationState'
 import useOrganisation from '../api/useOrganisation'
-import userTypes from '../constants/userTypes'
+import userTypes, { userTypeMap } from '../constants/userTypes'
 import Button from '../components/Button'
 import { IconPlus } from '@tabler/icons'
 import ErrorMessage from '../components/ErrorMessage'
@@ -81,7 +81,7 @@ function Organisation() {
                 {(member) => (
                   <>
                     <TableCell>{member.username}</TableCell>
-                    <TableCell>{member.type === userTypes.ADMIN ? 'Admin' : 'Dev'}</TableCell>
+                    <TableCell>{userTypeMap[member.type]}</TableCell>
                     <DateCell>{format(new Date(member.createdAt), 'do MMM Y')}</DateCell>
                     <DateCell>{format(new Date(member.lastSeenAt), 'do MMM Y')}</DateCell>
                   </>
