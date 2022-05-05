@@ -13,7 +13,7 @@ import userState from '../state/userState'
 import { useRecoilValue } from 'recoil'
 import updateLeaderboard from '../api/updateLeaderboard'
 import deleteLeaderboard from '../api/deleteLeaderboard'
-import userTypes from '../constants/userTypes'
+import canPerformAction, { permissionBasedActions } from '../utils/canPerformAction'
 
 const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
   const [, setOpen] = modalState
@@ -176,7 +176,7 @@ const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
           }
           {editingLeaderboard &&
             <div className='flex space-x-2'>
-              {user.type === userTypes.ADMIN &&
+              {canPerformAction(user, permissionBasedActions.DELETE_LEADERBOARD) &&
                 <div className='w-full md:w-32'>
                   <Button
                     type='button'
