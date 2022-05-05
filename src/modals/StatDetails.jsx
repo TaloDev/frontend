@@ -9,7 +9,6 @@ import RadioGroup from '../components/RadioGroup'
 import activeGameState from '../state/activeGameState'
 import userState from '../state/userState'
 import { useRecoilValue } from 'recoil'
-import userTypes from '../constants/userTypes'
 import createStat from '../api/createStat'
 import updateStat from '../api/updateStat'
 import deleteStat from '../api/deleteStat'
@@ -17,6 +16,7 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import nullableNumber from '../utils/nullableNumber'
+import canPerformAction, { permissionBasedActions } from '../utils/canPerformAction'
 
 const StatDetails = ({ modalState, mutate, editingStat }) => {
   const [, setOpen] = modalState
@@ -325,7 +325,7 @@ const StatDetails = ({ modalState, mutate, editingStat }) => {
           }
           {editingStat &&
             <div className='flex space-x-2'>
-              {user.type === userTypes.ADMIN &&
+              {canPerformAction(user, permissionBasedActions.DELETE_STAT) &&
                 <div className='w-full md:w-32'>
                   <Button
                     type='button'

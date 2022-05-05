@@ -3,6 +3,8 @@ import userTypes from '../constants/userTypes'
 
 /* istanbul ignore file */
 export default function canViewPage(user, route) {
+  if (user.type === userTypes.OWNER) return true
+
   switch (route) {
     case routes.activity:
       return [userTypes.ADMIN, userTypes.DEMO].includes(user.type)
