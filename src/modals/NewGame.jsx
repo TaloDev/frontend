@@ -4,7 +4,7 @@ import Modal from '../components/Modal'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import createGame from '../api/createGame'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import activeGameState from '../state/activeGameState'
 import userState from '../state/userState'
 import buildError from '../utils/buildError'
@@ -15,7 +15,7 @@ const NewGame = (props) => {
   const [name, setName] = useState('')
   const [isLoading, setLoading] = useState(false)
   const [user, setUser] = useRecoilState(userState)
-  const [, setActiveGame] = useRecoilState(activeGameState)
+  const setActiveGame = useSetRecoilState(activeGameState)
   const [error, setError] = useState(null)
 
   const onCreateClick = async (e) => {

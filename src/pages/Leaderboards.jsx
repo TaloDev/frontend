@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
-import TableHeader from '../components/tables/TableHeader'
 import { format } from 'date-fns'
 import DateCell from '../components/tables/cells/DateCell'
 import useLeaderboards from '../api/useLeaderboards'
@@ -15,6 +14,7 @@ import routes from '../constants/routes'
 import LeaderboardDetails from '../modals/LeaderboardDetails'
 import useSortedItems from '../utils/useSortedItems'
 import Page from '../components/Page'
+import Table from '../components/tables/Table'
 
 const Leaderboards = () => {
   const activeGame = useRecoilValue(activeGameState)
@@ -63,34 +63,31 @@ const Leaderboards = () => {
       }
 
       {!error && leaderboards.length > 0 &&
-        <div className='overflow-x-scroll'>
-          <table className='table-auto w-full'>
-            <TableHeader columns={['Internal name', 'Display name', 'Sort mode', 'Unique entries', 'Created at', 'Updated at', '', '']} />
-            <TableBody iterator={sortedLeaderboards}>
-              {(leaderboard) => (
-                <>
-                  <TableCell>{leaderboard.internalName}</TableCell>
-                  <TableCell>{leaderboard.name}</TableCell>
-                  <TableCell>
-                    {leaderboard.sortMode === 'asc'
-                      ? <span><IconChevronUp className='inline-block mr-1 mb-0.5' /> Ascending</span>
-                      : <span><IconChevronDown className='inline-block mr-1' /> Descending</span>
-                    }
-                  </TableCell>
-                  <TableCell>{leaderboard.unique ? 'Yes' : 'No'}</TableCell>
-                  <DateCell>{format(new Date(leaderboard.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                  <DateCell>{format(new Date(leaderboard.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
-                  <TableCell className='w-40'>
-                    <Button variant='grey' onClick={() => goToEntries(leaderboard)}>View entries</Button>
-                  </TableCell>
-                  <TableCell className='w-40'>
-                    <Button variant='grey' onClick={() => onEditLeaderboardClick(leaderboard)}>Edit</Button>
-                  </TableCell>
-                </>
-              )}
-            </TableBody>
-          </table>
-        </div>
+        <Table columns={['Internal name', 'Display name', 'Sort mode', 'Unique entries', 'Created at', 'Updated at', '', '']}>
+          <TableBody iterator={sortedLeaderboards}>
+            {(leaderboard) => (
+              <>
+                <TableCell>{leaderboard.internalName}</TableCell>
+                <TableCell>{leaderboard.name}</TableCell>
+                <TableCell>
+                  {leaderboard.sortMode === 'asc'
+                    ? <span><IconChevronUp className='inline-block mr-1 mb-0.5' /> Ascending</span>
+                    : <span><IconChevronDown className='inline-block mr-1' /> Descending</span>
+                  }
+                </TableCell>
+                <TableCell>{leaderboard.unique ? 'Yes' : 'No'}</TableCell>
+                <DateCell>{format(new Date(leaderboard.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(leaderboard.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
+                <TableCell className='w-40'>
+                  <Button variant='grey' onClick={() => goToEntries(leaderboard)}>View entries</Button>
+                </TableCell>
+                <TableCell className='w-40'>
+                  <Button variant='grey' onClick={() => onEditLeaderboardClick(leaderboard)}>Edit</Button>
+                </TableCell>
+              </>
+            )}
+          </TableBody>
+        </Table>
       }
 
       {error && <ErrorMessage error={error} />}

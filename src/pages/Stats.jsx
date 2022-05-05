@@ -7,9 +7,9 @@ import Button from '../components/Button'
 import ErrorMessage from '../components/ErrorMessage'
 import Page from '../components/Page'
 import DateCell from '../components/tables/cells/DateCell'
+import Table from '../components/tables/Table'
 import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
-import TableHeader from '../components/tables/TableHeader'
 import StatDetails from '../modals/StatDetails'
 import activeGameState from '../state/activeGameState'
 import useSortedItems from '../utils/useSortedItems'
@@ -52,25 +52,22 @@ function Stats() {
       }
 
       {!error && sortedStats.length > 0 &&
-        <div className='overflow-x-scroll'>
-          <table className='table-auto w-full'>
-            <TableHeader columns={['Internal name', 'Display name', 'Global value', 'Created at', 'Updated at', '']} />
-            <TableBody iterator={sortedStats}>
-              {(stat) => (
-                <>
-                  <TableCell>{stat.internalName}</TableCell>
-                  <TableCell>{stat.name}</TableCell>
-                  <TableCell>{stat.global ? stat.globalValue : '—'}</TableCell>
-                  <DateCell>{format(new Date(stat.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                  <DateCell>{format(new Date(stat.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
-                  <TableCell className='w-40'>
-                    <Button variant='grey' onClick={() => onEditStatClick(stat)}>Edit</Button>
-                  </TableCell>
-                </>
-              )}
-            </TableBody>
-          </table>
-        </div>
+        <Table columns={['Internal name', 'Display name', 'Global value', 'Created at', 'Updated at', '']}>
+          <TableBody iterator={sortedStats}>
+            {(stat) => (
+              <>
+                <TableCell>{stat.internalName}</TableCell>
+                <TableCell>{stat.name}</TableCell>
+                <TableCell>{stat.global ? stat.globalValue : '—'}</TableCell>
+                <DateCell>{format(new Date(stat.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(stat.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
+                <TableCell className='w-40'>
+                  <Button variant='grey' onClick={() => onEditStatClick(stat)}>Edit</Button>
+                </TableCell>
+              </>
+            )}
+          </TableBody>
+        </Table>
       }
 
       {error && <ErrorMessage error={error} />}

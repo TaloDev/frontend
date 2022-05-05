@@ -1,5 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react'
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom'
+import * as Sentry from '@sentry/react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import refreshAccess from './api/refreshAccess'
 import userState from './state/userState'
@@ -52,6 +53,8 @@ const App = () => {
       const accessToken = res.data.accessToken
       AuthService.setToken(accessToken)
       setUser(res.data.user)
+
+      Sentry.setUser({ id: res.data.user.id, username: res.data.user.username })
     } catch (err) {
       console.log('User doesn\'t have a session')
       setActiveGame(null)

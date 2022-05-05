@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import Link from '../components/Link'
-import { useRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import userState from '../state/userState'
 import register from '../api/register'
 import ErrorMessage from '../components/ErrorMessage'
@@ -10,6 +10,7 @@ import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
 import AuthService from '../services/AuthService'
 import { useLocation } from 'react-router-dom'
+import * as Sentry from '@sentry/react'
 
 const Register = () => {
   const location = useLocation()
@@ -18,7 +19,7 @@ const Register = () => {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState(location.state?.invite.email ?? '')
   const [password, setPassword] = useState('')
-  const [, setUser] = useRecoilState(userState)
+  const setUser = useSetRecoilState(userState)
   const [error, setError] = useState(null)
   const [isLoading, setLoading] = useState(false)
 
@@ -39,6 +40,8 @@ const Register = () => {
       const accessToken = res.data.accessToken
       AuthService.setToken(accessToken)
       setUser(res.data.user)
+
+      Sentry.setUser({ id: res.data.user.id, username: res.data.user.username })
     } catch (err) {
       setError(buildError(err))
       setLoading(false)

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
-import { useRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import userState from '../state/userState'
 import ErrorMessage from '../components/ErrorMessage'
 import buildError from '../utils/buildError'
@@ -19,7 +19,7 @@ const Verify2FA = () => {
 
   const [userId] = useState(location.state?.userId)
   const [code, setCode] = useState('')
-  const [, setUser] = useRecoilState(userState)
+  const setUser = useSetRecoilState(userState)
   const [error, setError] = useState(null)
   const [isLoading, setLoading] = useState(false)
 

@@ -9,12 +9,12 @@ import ErrorMessage from '../components/ErrorMessage'
 import buildError from '../utils/buildError'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
-import TableHeader from '../components/tables/TableHeader'
 import Loading from '../components/Loading'
 import isEqual from 'lodash.isequal'
 import classNames from 'classnames'
 import PlayerIdentifier from '../components/PlayerIdentifier'
 import usePlayer from '../utils/usePlayer'
+import Table from '../components/tables/Table'
 
 const PlayerProps = () => {
   const location = useLocation()
@@ -137,78 +137,75 @@ const PlayerProps = () => {
       }
 
       {existingProps.length + newProps.length > 0 &&
-        <div className='overflow-x-scroll'>
-          <table className='table-auto w-full'>
-            <TableHeader columns={['Property', 'Value', '']} />
-            <TableBody
-              iterator={existingProps}
-              configureClassNames={(prop, idx) => ({
-                'bg-orange-600': prop.key.startsWith('META_') && idx % 2 !== 0,
-                'bg-orange-500': prop.key.startsWith('META_') && idx % 2 === 0
-              })}
-            >
-              {(prop) => (
-                <>
-                  <TableCell className={classNames('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}>{prop.key}</TableCell>
-                  <TableCell className='min-w-80'>
-                    <TextInput
-                      id={`edit-${prop.key}`}
-                      disabled={prop.key.startsWith('META_')}
-                      variant='light'
-                      placeholder='Value'
-                      onChange={(value) => editExistingProp(prop.key, value)}
-                      value={prop.value}
-                    />
-                  </TableCell>
-                  <TableCell className={classNames({ '!rounded-br-none': newProps.length > 0 })}>
-                    {!prop.key.startsWith('META_') &&
-                      <Button
-                        variant='icon'
-                        className='p-1 rounded-full bg-indigo-900 ml-auto'
-                        onClick={() => deleteExistingProp(prop.key)}
-                        icon={<IconTrash size={16} />}
-                        extra={{ 'aria-label': `Delete ${prop.key} prop` }}
-                      />
-                    }
-                  </TableCell>
-                </>
-              )}
-            </TableBody>
-            <TableBody iterator={newProps} startIdx={existingProps.length}>
-              {(prop, idx) => (
-                <>
-                  <TableCell className='min-w-80'>
-                    <TextInput
-                      id={`edit-key-${idx}`}
-                      variant='light'
-                      placeholder='Property'
-                      onChange={(value) => editNewPropKey(idx, value)}
-                      value={prop.key}
-                    />
-                  </TableCell>
-                  <TableCell className='min-w-80'>
-                    <TextInput
-                      id={`edit-value-${idx}`}
-                      variant='light'
-                      placeholder='Value'
-                      onChange={(value) => editNewPropValue(idx, value)}
-                      value={prop.value}
-                    />
-                  </TableCell>
-                  <TableCell>
+        <Table columns={['Property', 'Value', '']}>
+          <TableBody
+            iterator={existingProps}
+            configureClassNames={(prop, idx) => ({
+              'bg-orange-600': prop.key.startsWith('META_') && idx % 2 !== 0,
+              'bg-orange-500': prop.key.startsWith('META_') && idx % 2 === 0
+            })}
+          >
+            {(prop) => (
+              <>
+                <TableCell className={classNames('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}>{prop.key}</TableCell>
+                <TableCell className='min-w-80'>
+                  <TextInput
+                    id={`edit-${prop.key}`}
+                    disabled={prop.key.startsWith('META_')}
+                    variant='light'
+                    placeholder='Value'
+                    onChange={(value) => editExistingProp(prop.key, value)}
+                    value={prop.value}
+                  />
+                </TableCell>
+                <TableCell className={classNames({ '!rounded-br-none': newProps.length > 0 })}>
+                  {!prop.key.startsWith('META_') &&
                     <Button
                       variant='icon'
                       className='p-1 rounded-full bg-indigo-900 ml-auto'
-                      onClick={() => deleteNewProp(idx)}
+                      onClick={() => deleteExistingProp(prop.key)}
                       icon={<IconTrash size={16} />}
                       extra={{ 'aria-label': `Delete ${prop.key} prop` }}
                     />
-                  </TableCell>
-                </>
-              )}
-            </TableBody>
-          </table>
-        </div>
+                  }
+                </TableCell>
+              </>
+            )}
+          </TableBody>
+          <TableBody iterator={newProps} startIdx={existingProps.length}>
+            {(prop, idx) => (
+              <>
+                <TableCell className='min-w-80'>
+                  <TextInput
+                    id={`edit-key-${idx}`}
+                    variant='light'
+                    placeholder='Property'
+                    onChange={(value) => editNewPropKey(idx, value)}
+                    value={prop.key}
+                  />
+                </TableCell>
+                <TableCell className='min-w-80'>
+                  <TextInput
+                    id={`edit-value-${idx}`}
+                    variant='light'
+                    placeholder='Value'
+                    onChange={(value) => editNewPropValue(idx, value)}
+                    value={prop.value}
+                  />
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant='icon'
+                    className='p-1 rounded-full bg-indigo-900 ml-auto'
+                    onClick={() => deleteNewProp(idx)}
+                    icon={<IconTrash size={16} />}
+                    extra={{ 'aria-label': `Delete ${prop.key} prop` }}
+                  />
+                </TableCell>
+              </>
+            )}
+          </TableBody>
+        </Table>
       }
 
       <Button

@@ -10,13 +10,13 @@ import deleteAPIKey from '../api/deleteAPIKey'
 import getAPIKeyScopes from '../api/getAPIKeyScopes'
 import createAPIKey from '../api/createAPIKey'
 import userState from '../state/userState'
-import TableHeader from '../components/tables/TableHeader'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
 import AlertBanner from '../components/AlertBanner'
 import DateCell from '../components/tables/cells/DateCell'
 import Scopes from '../modals/Scopes'
 import Page from '../components/Page'
+import Table from '../components/tables/Table'
 
 const APIKeys = () => {
   const [isLoading, setLoading] = useState(true)
@@ -115,28 +115,25 @@ const APIKeys = () => {
         }
 
         {user.emailConfirmed && keys.length > 0 &&
-          <div className='overflow-x-scroll'>
-            <table className='table-auto w-full'>
-              <TableHeader columns={['Ending in', 'Created by', 'Created at', 'Scopes', '']} />
-              <TableBody iterator={keys}>
-                {(key) => (
-                  <>
-                    <TableCell>…{key.token}</TableCell>
-                    <TableCell>{key.createdBy === user.username ? 'You' : key.createdBy}</TableCell>
-                    <DateCell>{format(new Date(key.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                    <TableCell className='flex'>
-                      <div>
-                        <Button variant='grey' onClick={() => setSelectedKey(key)}>View scopes</Button>
-                      </div>
-                    </TableCell>
-                    <TableCell className='w-40'>
-                      <Button variant='black' onClick={() => onDeleteClick(key)}>Revoke</Button>
-                    </TableCell>
-                  </>
-                )}
-              </TableBody>
-            </table>
-          </div>
+          <Table columns={['Ending in', 'Created by', 'Created at', 'Scopes', '']}>
+            <TableBody iterator={keys}>
+              {(key) => (
+                <>
+                  <TableCell>…{key.token}</TableCell>
+                  <TableCell>{key.createdBy === user.username ? 'You' : key.createdBy}</TableCell>
+                  <DateCell>{format(new Date(key.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
+                  <TableCell className='flex'>
+                    <div>
+                      <Button variant='grey' onClick={() => setSelectedKey(key)}>View scopes</Button>
+                    </div>
+                  </TableCell>
+                  <TableCell className='w-40'>
+                    <Button variant='black' onClick={() => onDeleteClick(key)}>Revoke</Button>
+                  </TableCell>
+                </>
+              )}
+            </TableBody>
+          </Table>
         }
 
         {keys.length > 0 && <div className='h-1 rounded bg-gray-700' />}
