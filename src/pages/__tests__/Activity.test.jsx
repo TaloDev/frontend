@@ -61,11 +61,11 @@ describe('<Activity />', () => {
       }
     ]
 
-    axiosMock.onGet('http://talo.test/game-activities?gameId=1').replyOnce(200, { activities })
+    axiosMock.onGet('http://talo.test/game-activities?gameId=2').replyOnce(200, { activities })
 
     render(
       <RecoilObserver node={userState} initialValue={{ type: 1 }}>
-        <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
+        <RecoilObserver node={activeGameState} initialValue={{ id: 2 }}>
           <ActivityRoute history={history} />
         </RecoilObserver>
       </RecoilObserver>
@@ -99,11 +99,11 @@ describe('<Activity />', () => {
       }
     ]
 
-    axiosMock.onGet('http://talo.test/game-activities?gameId=1').replyOnce(200, { activities })
+    axiosMock.onGet('http://talo.test/game-activities?gameId=3').replyOnce(200, { activities })
 
     render(
       <RecoilObserver node={userState} initialValue={{ type: 1 }}>
-        <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
+        <RecoilObserver node={activeGameState} initialValue={{ id: 3 }}>
           <ActivityRoute history={history} />
         </RecoilObserver>
       </RecoilObserver>
@@ -135,11 +135,11 @@ describe('<Activity />', () => {
       }
     ]
 
-    axiosMock.onGet('http://talo.test/game-activities?gameId=1').replyOnce(200, { activities })
+    axiosMock.onGet('http://talo.test/game-activities?gameId=4').replyOnce(200, { activities })
 
     render(
       <RecoilObserver node={userState} initialValue={{ type: 1 }}>
-        <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
+        <RecoilObserver node={activeGameState} initialValue={{ id: 4 }}>
           <ActivityRoute history={history} />
         </RecoilObserver>
       </RecoilObserver>
@@ -161,11 +161,11 @@ describe('<Activity />', () => {
   })
 
   it('should render an error', async () => {
-    axiosMock.onGet('http://talo.test/game-activities?gameId=1').networkErrorOnce()
+    axiosMock.onGet('http://talo.test/game-activities?gameId=5').networkErrorOnce()
 
     render(
       <RecoilObserver node={userState} initialValue={{ type: 1 }}>
-        <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
+        <RecoilObserver node={activeGameState} initialValue={{ id: 5 }}>
           <ActivityRoute history={history} />
         </RecoilObserver>
       </RecoilObserver>
