@@ -11,7 +11,7 @@ const Modal = (props) => {
   const [, setOpen] = props.modalState
 
   const handleEscapePressed = (event) => {
-    if (event.keyCode === 27) setOpen(false)
+    if (event.key === 'Escape') setOpen(false)
   }
 
   useEffect(() => {

@@ -31,7 +31,7 @@ const ConfirmEmailBanner = () => {
   }
 
   return (
-    <div className='bg-gray-900 p-4 md:p-8 rounded-md mb-8 lg:mb-12 w-full lg:2/3 xl:w-1/2 space-y-4' role='alert'>
+    <div className='bg-gray-900 p-4 md:p-8 rounded-md w-full lg:2/3 xl:w-1/2 space-y-4' role='alert'>
       {!user.emailConfirmed &&
         <>
           <div>
