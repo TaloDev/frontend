@@ -11,7 +11,6 @@ import gamesState from './state/gamesState'
 import activeGameState from './state/activeGameState'
 import AuthService from './services/AuthService'
 import canViewPage from './utils/canViewPage'
-import GlobalBanners from './components/GlobalBanners'
 
 const Login = lazy(() => import(/* webpackChunkName: 'login' */ './pages/Login'))
 const Dashboard = lazy(() => import(/* webpackChunkName: 'dashboard' */ './pages/Dashboard'))
@@ -109,8 +108,6 @@ const App = () => {
         <div className='w-full flex flex-col'>
           <NavBar />
           <main className='bg-gray-800 p-4 md:p-8 text-white'>
-            <GlobalBanners />
-
             <Switch>
               <Route exact path={routes.dashboard} component={Dashboard} />
               <Route exact path={routes.account} component={Account} />

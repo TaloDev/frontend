@@ -20,11 +20,11 @@ export default function GlobalBanners() {
 
   if (!showBanners) return null
 
+  const showConfirmEmailBanner = !user.emailConfirmed || user.justConfirmedEmail
+
   return (
-    <>
-      {(!user.emailConfirmed || user.justConfirmedEmail) &&
-        <ConfirmEmailBanner />
-      }
-    </>
+    <div className='space-y-8'>
+      {showConfirmEmailBanner && <ConfirmEmailBanner />}
+    </div>
   )
 }

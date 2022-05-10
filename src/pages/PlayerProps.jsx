@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Page from '../components/Page'
 import { useLocation } from 'react-router-dom'
 import { IconPlus, IconTrash } from '@tabler/icons'
@@ -10,7 +10,6 @@ import buildError from '../utils/buildError'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
 import Loading from '../components/Loading'
-import isEqual from 'lodash.isequal'
 import classNames from 'classnames'
 import PlayerIdentifier from '../components/PlayerIdentifier'
 import usePlayer from '../utils/usePlayer'
@@ -85,6 +84,14 @@ const PlayerProps = () => {
   const deleteNewProp = (newPropIdx) => {
     setNewProps(newProps.filter((_, idx) => idx !== newPropIdx))
   }
+
+  const enableResetButton = useMemo(() => {
+    if (newProps.length > 0) return true
+
+    return originalPlayer?.props.some((prop, idx) => {
+      return prop.value !== player?.props[idx].value
+    })
+  }, [newProps, originalPlayer, player])
 
   const reset = () => {
     setPlayer(originalPlayer)
@@ -219,7 +226,7 @@ const PlayerProps = () => {
       {error && <ErrorMessage error={error} />}
 
       <div className='flex space-x-4 mt-8'>
-        <Button variant='grey' disabled={isEqual(player, originalPlayer) && newProps.length === 0} onClick={reset}>
+        <Button variant='grey' disabled={!enableResetButton} onClick={reset}>
           Reset
         </Button>
 

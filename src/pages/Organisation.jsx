@@ -22,85 +22,86 @@ function Organisation() {
   const [showModal, setShowModal] = useState(false)
 
   return (
-    <>
-      <SecondaryNav routes={secondaryNavRoutes} />
-      <Page title={organisation.name} isLoading={loading}>
-        {!loading && !error &&
-          <>
-            {games.length > 0 &&
-              <>
-                <h2 className='text-2xl'>Games</h2>
+    <Page
+      title={organisation.name}
+      isLoading={loading}
+      secondaryNav={<SecondaryNav routes={secondaryNavRoutes} />}
+    >
+      {!loading && !error &&
+        <>
+          {games.length > 0 &&
+            <>
+              <h2 className='text-2xl'>Games</h2>
 
-                <Table columns={['Game', 'Player count', 'Created at']}>
-                  <TableBody iterator={games}>
-                    {(game) => (
-                      <>
-                        <TableCell>{game.name}</TableCell>
-                        <TableCell>{game.playerCount}</TableCell>
-                        <DateCell>{format(new Date(game.createdAt), 'do MMM Y')}</DateCell>
-                      </>
-                    )}
-                  </TableBody>
-                </Table>
-              </>
+              <Table columns={['Game', 'Player count', 'Created at']}>
+                <TableBody iterator={games}>
+                  {(game) => (
+                    <>
+                      <TableCell>{game.name}</TableCell>
+                      <TableCell>{game.playerCount}</TableCell>
+                      <DateCell>{format(new Date(game.createdAt), 'do MMM Y')}</DateCell>
+                    </>
+                  )}
+                </TableBody>
+              </Table>
+            </>
+          }
+
+          <h2 className='text-2xl'>Pending invites</h2>
+
+          <div className='space-y-4'>
+            {pendingInvites.length > 0 &&
+              <Table columns={['Email', 'Type', 'Invited by', 'Sent at']}>
+                <TableBody iterator={pendingInvites}>
+                  {(invite) => (
+                    <>
+                      <TableCell>{invite.email}</TableCell>
+                      <TableCell>{invite.type === userTypes.ADMIN ? 'Admin' : 'Dev'}</TableCell>
+                      <TableCell>{invite.invitedBy}</TableCell>
+                      <DateCell>{format(new Date(invite.createdAt), 'do MMM Y')}</DateCell>
+                    </>
+                  )}
+                </TableBody>
+              </Table>
             }
 
-            <h2 className='text-2xl'>Pending invites</h2>
+            {pendingInvites.length === 0 && <p>There are currently no pending invitations</p>}
 
-            <div className='space-y-4'>
-              {pendingInvites.length > 0 &&
-                <Table columns={['Email', 'Type', 'Invited by', 'Sent at']}>
-                  <TableBody iterator={pendingInvites}>
-                    {(invite) => (
-                      <>
-                        <TableCell>{invite.email}</TableCell>
-                        <TableCell>{invite.type === userTypes.ADMIN ? 'Admin' : 'Dev'}</TableCell>
-                        <TableCell>{invite.invitedBy}</TableCell>
-                        <DateCell>{format(new Date(invite.createdAt), 'do MMM Y')}</DateCell>
-                      </>
-                    )}
-                  </TableBody>
-                </Table>
-              }
+            <Button
+              className='w-auto'
+              onClick={() => setShowModal(true)}
+              icon={<IconPlus />}
+            >
+              <span>Invite member</span>
+            </Button>
+          </div>
 
-              {pendingInvites.length === 0 && <p>There are currently no pending invitations</p>}
+          <h2 className='text-2xl'>Members</h2>
 
-              <Button
-                className='w-auto'
-                onClick={() => setShowModal(true)}
-                icon={<IconPlus />}
-              >
-                <span>Invite member</span>
-              </Button>
-            </div>
+          <Table columns={['Username', 'Type', 'Joined', 'Last seen']}>
+            <TableBody iterator={members}>
+              {(member) => (
+                <>
+                  <TableCell>{member.username}</TableCell>
+                  <TableCell>{userTypeMap[member.type]}</TableCell>
+                  <DateCell>{format(new Date(member.createdAt), 'do MMM Y')}</DateCell>
+                  <DateCell>{format(new Date(member.lastSeenAt), 'do MMM Y')}</DateCell>
+                </>
+              )}
+            </TableBody>
+          </Table>
+        </>
+      }
 
-            <h2 className='text-2xl'>Members</h2>
+      {showModal &&
+        <NewInvite
+          modalState={[showModal, setShowModal]}
+          mutate={mutate}
+        />
+      }
 
-            <Table columns={['Username', 'Type', 'Joined', 'Last seen']}>
-              <TableBody iterator={members}>
-                {(member) => (
-                  <>
-                    <TableCell>{member.username}</TableCell>
-                    <TableCell>{userTypeMap[member.type]}</TableCell>
-                    <DateCell>{format(new Date(member.createdAt), 'do MMM Y')}</DateCell>
-                    <DateCell>{format(new Date(member.lastSeenAt), 'do MMM Y')}</DateCell>
-                  </>
-                )}
-              </TableBody>
-            </Table>
-          </>
-        }
-
-        {showModal &&
-          <NewInvite
-            modalState={[showModal, setShowModal]}
-            mutate={mutate}
-          />
-        }
-
-        {error && <ErrorMessage error={error} />}
-      </Page>
-    </>
+      {error && <ErrorMessage error={error} />}
+    </Page>
   )
 }
 

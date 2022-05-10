@@ -4,7 +4,7 @@ import { RecoilRoot } from 'recoil'
 import RecoilObserver from '../state/RecoilObserver'
 import { MemoryRouter, Route } from 'react-router-dom'
 
-function KitchenSink({ states, children, initialEntries, setLocation }) {
+function KitchenSink({ states, children, initialEntries, setLocation, routePath }) {
   const Renderer = () => states.reduce((Acc, { node, initialValue }) => {
     return React.cloneElement(
       <RecoilObserver node={node} initialValue={initialValue} />,
@@ -16,7 +16,7 @@ function KitchenSink({ states, children, initialEntries, setLocation }) {
   return (
     <RecoilRoot>
       <MemoryRouter initialEntries={initialEntries}>
-        <Route path='/' component={Renderer} />
+        <Route path={routePath} component={Renderer} />
         <Route
           path='*'
           render={({ location }) => {
@@ -36,12 +36,14 @@ KitchenSink.propTypes = {
   })),
   initialEntries: PropTypes.array,
   children: PropTypes.node.isRequired,
-  setLocation: PropTypes.func
+  setLocation: PropTypes.func,
+  routePath: PropTypes.string
 }
 
 KitchenSink.defaultProps = {
   states: [],
-  initialEntries: ['/']
+  initialEntries: ['/'],
+  routePath: '/'
 }
 
 export default KitchenSink
