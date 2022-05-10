@@ -2,23 +2,13 @@ import React from 'react'
 import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
 import { render, screen, waitFor } from '@testing-library/react'
-import { Router, Route } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
 import PlayerProps from '../PlayerProps'
-import { RecoilRoot } from 'recoil'
-import RecoilObserver from '../../state/RecoilObserver'
 import activeGameState from '../../state/activeGameState'
-import routes from '../../constants/routes'
-import { createMemoryHistory } from 'history'
+import KitchenSink from '../../utils/KitchenSink'
+import userState from '../../state/userState'
 
 describe('<PlayerProps />', () => {
-  // eslint-disable-next-line react/prop-types
-  const PlayerPropsRoute = ({ history }) => (
-    <Router history={history}>
-      <Route exact path={routes.playerProps} component={PlayerProps} />
-    </Router>
-  )
-
   const basePlayer = {
     id: 'abce-efgh-ijkl-mnop',
     props: [
@@ -34,19 +24,22 @@ describe('<PlayerProps />', () => {
     devBuild: false
   }
 
+  const userValue = { emailConfirmed: true }
+
   const axiosMock = new MockAdapter(api)
 
   it('should render current props', () => {
-    const history = createMemoryHistory()
-    history.push(routes.playerProps.replace(':id', basePlayer.id), {
-      player: basePlayer
-    })
-
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <PlayerPropsRoute history={history} />
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
     )
 
     expect(screen.getByText(`Player = ${basePlayer.id}`)).toBeInTheDocument()
@@ -58,16 +51,17 @@ describe('<PlayerProps />', () => {
   })
 
   it('should only enable the reset button after a change', () => {
-    const history = createMemoryHistory()
-    history.push(routes.playerProps.replace(':id', basePlayer.id), {
-      player: basePlayer
-    })
-
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <PlayerPropsRoute history={history} />
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
     )
 
     expect(screen.getByText('Reset')).toBeDisabled()
@@ -80,16 +74,17 @@ describe('<PlayerProps />', () => {
   })
 
   it('should only enable the reset a change', () => {
-    const history = createMemoryHistory()
-    history.push(routes.playerProps.replace(':id', basePlayer.id), {
-      player: basePlayer
-    })
-
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <PlayerPropsRoute history={history} />
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
     )
 
     expect(screen.getByDisplayValue('80')).toBeInTheDocument()
@@ -102,16 +97,17 @@ describe('<PlayerProps />', () => {
   })
 
   it('should delete existing props', () => {
-    const history = createMemoryHistory()
-    history.push(routes.playerProps.replace(':id', basePlayer.id), {
-      player: basePlayer
-    })
-
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <PlayerPropsRoute history={history} />
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
     )
 
     expect(screen.getByText('health')).toBeInTheDocument()
@@ -121,16 +117,17 @@ describe('<PlayerProps />', () => {
   })
 
   it('should add new props', () => {
-    const history = createMemoryHistory()
-    history.push(routes.playerProps.replace(':id', basePlayer.id), {
-      player: basePlayer
-    })
-
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <PlayerPropsRoute history={history} />
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('New property'))
@@ -143,16 +140,17 @@ describe('<PlayerProps />', () => {
   })
 
   it('should delete new props', () => {
-    const history = createMemoryHistory()
-    history.push(routes.playerProps.replace(':id', basePlayer.id), {
-      player: basePlayer
-    })
-
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <PlayerPropsRoute history={history} />
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('New property'))
@@ -165,18 +163,21 @@ describe('<PlayerProps />', () => {
   })
 
   it('should load in players that are not in the location state', async () => {
-    const history = createMemoryHistory()
-    history.push(routes.playerProps.replace(':id', basePlayer.id))
-
     axiosMock.onGet(`http://talo.test/players?gameId=1&search=${basePlayer.id}`).replyOnce(200, {
       players: [basePlayer]
     })
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <PlayerPropsRoute history={history} />
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}` }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
     )
 
     expect(await screen.findByText(`Player = ${basePlayer.id}`)).toBeInTheDocument()
@@ -188,18 +189,21 @@ describe('<PlayerProps />', () => {
   })
 
   it('should show a message for players with no props', async () => {
-    const history = createMemoryHistory()
-    history.push(routes.playerProps.replace(':id', basePlayer.id))
-
     axiosMock.onGet(`http://talo.test/players?gameId=1&search=${basePlayer.id}`).replyOnce(200, {
       players: [{ ...basePlayer, props: [] }]
     })
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <PlayerPropsRoute history={history} />
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}` }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
     )
 
     expect(await screen.findByText(`Player = ${basePlayer.id}`)).toBeInTheDocument()
@@ -208,29 +212,30 @@ describe('<PlayerProps />', () => {
   })
 
   it('should return to the players page if the find request fails', async () => {
-    const history = createMemoryHistory()
-    history.push(routes.playerProps.replace(':id', basePlayer.id))
-
     axiosMock.onGet(`http://talo.test/players?gameId=1&search=${basePlayer.id}`).networkErrorOnce()
 
+    const setLocationMock = jest.fn()
+
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <PlayerPropsRoute history={history} />
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/players/:id'
+        initialEntries={[{ pathname: `/players/${basePlayer.id}` }]}
+        setLocation={setLocationMock}
+      >
+        <PlayerProps />
+      </KitchenSink>
     )
 
     await waitFor(() => {
-      expect(history.location.pathname).toBe('/players')
+      expect(setLocationMock).toHaveBeenCalledWith({ pathname: '/players' })
     })
   })
 
   it('should save props', async () => {
-    const history = createMemoryHistory()
-    history.push(routes.playerProps.replace(':id', basePlayer.id), {
-      player: basePlayer
-    })
-
     axiosMock.onPatch(`http://talo.test/players/${basePlayer.id}`).replyOnce(200, {
       player: {
         ...basePlayer,
@@ -242,10 +247,16 @@ describe('<PlayerProps />', () => {
     })
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <PlayerPropsRoute history={history} />
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('New property'))
@@ -262,20 +273,21 @@ describe('<PlayerProps />', () => {
   })
 
   it('should keep new props without keys after saving', async () => {
-    const history = createMemoryHistory()
-    history.push(routes.playerProps.replace(':id', basePlayer.id), {
-      player: basePlayer
-    })
-
     axiosMock.onPatch(`http://talo.test/players/${basePlayer.id}`).replyOnce(200, {
       player: basePlayer
     })
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <PlayerPropsRoute history={history} />
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('New property'))
@@ -290,18 +302,19 @@ describe('<PlayerProps />', () => {
   })
 
   it('should render saving errors', async () => {
-    const history = createMemoryHistory()
-    history.push(routes.playerProps.replace(':id', basePlayer.id), {
-      player: basePlayer
-    })
-
     axiosMock.onPatch(`http://talo.test/players/${basePlayer.id}`).networkErrorOnce()
 
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ id: 1 }}>
-        <PlayerPropsRoute history={history} />
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('Save changes'))
