@@ -152,6 +152,6 @@ describe('<Dashboard />', () => {
       </KitchenSink>
     )
 
-    expect(locationMock).toHaveBeenCalledWith({ pathname: '/players' })
+    expect(locationMock).toHaveBeenCalledWith({ pathname: '/players', state: null })
   })
 })

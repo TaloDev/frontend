@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import useHeadlines from '../api/useHeadlines'
 import ErrorMessage from '../components/ErrorMessage'
@@ -23,7 +23,7 @@ export const secondaryNavRoutes = [
 ]
 
 const Dashboard = () => {
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const [intendedRouteChecked, setIntendedRouteChecked] = useState(false)
 
@@ -33,7 +33,7 @@ const Dashboard = () => {
     const intended = window.localStorage.getItem('intendedRoute')
     if (intended) {
       window.localStorage.removeItem('intendedRoute')
-      history.replace(intended)
+      navigate(intended, { replace: true })
     } else {
       setIntendedRouteChecked(true)
     }

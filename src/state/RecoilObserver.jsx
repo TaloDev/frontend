@@ -1,4 +1,5 @@
-/* eslint-disable react/prop-types */
+import React from 'react'
+import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 
@@ -20,5 +21,14 @@ export default function RecoilObserver({ node, onChange, initialValue, children 
 
   useEffect(() => onChange?.(value), [onChange, value])
 
-  return ready && children
+  if (!ready) return <div>Loading</div>
+
+  return children
+}
+
+RecoilObserver.propTypes = {
+  node: PropTypes.object.isRequired,
+  onChange: PropTypes.func,
+  initialValue: PropTypes.any,
+  children: PropTypes.node
 }

@@ -5,7 +5,7 @@ import ErrorMessage from '../components/ErrorMessage'
 import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
 import getInvite from '../api/getInvite'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import routes from '../constants/routes'
 
 const AcceptInvite = () => {
@@ -14,14 +14,16 @@ const AcceptInvite = () => {
   const [error, setError] = useState(null)
   const [isLoading, setLoading] = useState(true)
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   useEffect(() => {
     (async () => {
       try {
         const res = await getInvite(token)
-        history.push(routes.register, {
-          invite: { ...res.data.invite, token }
+        navigate(routes.register, {
+          state: {
+            invite: { ...res.data.invite, token }
+          }
         })
       } catch (err) {
         setError(buildError(err))

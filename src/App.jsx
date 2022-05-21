@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import * as Sentry from '@sentry/react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import refreshAccess from './api/refreshAccess'
@@ -10,7 +10,15 @@ import activeGameState from './state/activeGameState'
 import AuthService from './services/AuthService'
 import Router from './Router'
 
-const App = () => {
+function AppLoading() {
+  return (
+    <main className='w-full flex items-center justify-center'>
+      <Loading />
+    </main>
+  )
+}
+
+function App() {
   const setUser = useSetRecoilState(userState)
 
   const [isRefreshing, setRefreshing] = useState(true)
@@ -20,7 +28,7 @@ const App = () => {
   const games = useRecoilValue(gamesState)
   const [activeGame, setActiveGame] = useRecoilState(activeGameState)
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const handleRefreshSession = async () => {
     try {
@@ -47,7 +55,7 @@ const App = () => {
     if (!hasTriedRefreshing && intendedUrl) {
       handleRefreshSession()
     } else if (hasTriedRefreshing) {
-      history.replace(intendedUrl)
+      navigate(intendedUrl, { replace: true })
     }
   }, [intendedUrl, hasTriedRefreshing])
 
@@ -55,16 +63,11 @@ const App = () => {
     if (!activeGame && games.length > 0) setActiveGame(games[0])
   }, [activeGame, games])
 
-  const appLoading = (
-    <main className='w-full flex items-center justify-center'>
-      <Loading />
-    </main>
-  )
 
-  if (isRefreshing) return appLoading
+  if (isRefreshing) return <AppLoading />
 
   return (
-    <Suspense fallback={appLoading}>
+    <Suspense fallback={<AppLoading />}>
       <Router intendedUrl={intendedUrl} />
     </Suspense>
   )

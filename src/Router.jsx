@@ -1,6 +1,6 @@
 import React, { lazy } from 'react'
 import PropTypes from 'prop-types'
-import { Redirect, Route, Switch } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import userState from './state/userState'
 import NavBar from './components/NavBar'
@@ -36,19 +36,19 @@ function Router({ intendedUrl }) {
   const activeGame = useRecoilValue(activeGameState)
 
   return (
-    <div>
+    <>
       {!AuthService.getToken() &&
         <main className='bg-gray-800 w-full'>
-          <Switch>
-            <Route exact path={routes.login} component={Login} />
-            <Route exact path={routes.register} component={Register} />
-            <Route exact path={routes.demo} component={Demo} />
-            <Route exact path={routes.verify2FA} component={Verify2FA} />
-            <Route exact path={routes.recover} component={RecoverAccount} />
-            <Route exact path={routes.acceptInvite} component={AcceptInvite} />
+          <Routes>
+            <Route exact path={routes.login} element={<Login />} />
+            <Route exact path={routes.register} element={<Register />} />
+            <Route exact path={routes.demo} element={<Demo />} />
+            <Route exact path={routes.verify2FA} element={<Verify2FA />} />
+            <Route exact path={routes.recover} element={<RecoverAccount />} />
+            <Route exact path={routes.acceptInvite} element={<AcceptInvite />} />
 
-            <Redirect to={`${routes.login}?next=${intendedUrl}`} />
-          </Switch>
+            <Route path='*' element={<Navigate to={`${routes.login}?next=${intendedUrl}`} replace />} />
+          </Routes>
         </main>
       }
 
@@ -56,34 +56,34 @@ function Router({ intendedUrl }) {
         <div className='w-full flex flex-col'>
           <NavBar />
           <main className='bg-gray-800 p-4 md:p-8 text-white'>
-            <Switch>
-              <Route exact path={routes.dashboard} component={Dashboard} />
-              <Route exact path={routes.account} component={Account} />
-              <Route exact path={routes.confirmPassword} component={ConfirmPassword} />
-              {canViewPage(user, routes.organisation) && <Route exact path={routes.organisation} component={Organisation} />}
+            <Routes>
+              <Route exact path={routes.dashboard} element={<Dashboard />} />
+              <Route exact path={routes.account} element={<Account />} />
+              <Route exact path={routes.confirmPassword} element={<ConfirmPassword />} />
+              {canViewPage(user, routes.organisation) && <Route exact path={routes.organisation} element={<Organisation />} />}
 
               {activeGame &&
                 <>
-                  <Route exact path={routes.players} component={Players} />
-                  <Route exact path={routes.events} component={Events} />
-                  {canViewPage(user, routes.apiKeys) && <Route exact path={routes.apiKeys} component={APIKeys} />}
-                  <Route exact path={routes.playerProps} component={PlayerProps} />
-                  <Route exact path={routes.playerEvents} component={PlayerEvents} />
-                  {canViewPage(user, routes.dataExports) && <Route exact path={routes.dataExports} component={DataExports} />}
-                  <Route exact path={routes.leaderboards} component={Leaderboards} />
-                  <Route exact path={routes.leaderboardEntries} component={LeaderboardEntries} />
-                  {canViewPage(user, routes.activity) && <Route exact path={routes.activity} component={Activity} />}
-                  <Route exact path={routes.stats} component={Stats} />
-                  <Route exact path={routes.playerStats} component={PlayerStats} />
+                  <Route exact path={routes.players} element={<Players />} />
+                  <Route exact path={routes.events} element={<Events />} />
+                  {canViewPage(user, routes.apiKeys) && <Route exact path={routes.apiKeys} element={<APIKeys />} />}
+                  <Route exact path={routes.playerProps} element={<PlayerProps />} />
+                  <Route exact path={routes.playerEvents} element={<PlayerEvents />} />
+                  {canViewPage(user, routes.dataExports) && <Route exact path={routes.dataExports} element={<DataExports />} />}
+                  <Route exact path={routes.leaderboards} element={<Leaderboards />} />
+                  <Route exact path={routes.leaderboardEntries} element={<LeaderboardEntries />} />
+                  {canViewPage(user, routes.activity) && <Route exact path={routes.activity} element={<Activity />} />}
+                  <Route exact path={routes.stats} element={<Stats />} />
+                  <Route exact path={routes.playerStats} element={<PlayerStats />} />
                 </>
               }
 
-              <Redirect to={routes.dashboard} />
-            </Switch>
+              <Route path='*' element={<Navigate to={routes.dashboard} replace />} />
+            </Routes>
           </main>
         </div>
       }
-    </div>
+    </>
   )
 }
 

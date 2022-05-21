@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
@@ -20,11 +20,11 @@ function PlayerStats() {
   const { stats, loading: statsLoading, error, errorStatusCode } = usePlayerStats(playerId)
   const sortedStats = useSortedItems(stats, 'name')
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (errorStatusCode === 404) {
-      history.replace(routes.players)
+      navigate(routes.players, { replace: true })
     }
   }, [errorStatusCode])
 
