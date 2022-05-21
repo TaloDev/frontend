@@ -11,7 +11,7 @@ import routes from '../constants/routes'
 import { unauthedContainerStyle } from '../styles/theme'
 import AuthService from '../services/AuthService'
 import AlertBanner from '../components/AlertBanner'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import * as Sentry from '@sentry/react'
 
 const Login = () => {
@@ -22,7 +22,7 @@ const Login = () => {
   const [isLoading, setLoading] = useState(false)
   const [wasLoggedOut] = useState(window.localStorage.getItem('loggedOut'))
 
-  const history = useHistory()
+  const navigate = useNavigate()
   const location = useLocation()
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const Login = () => {
 
     if (intendedRoute) {
       window.localStorage.setItem('intendedRoute', intendedRoute)
-      history.replace(window.location.pathname)
+      navigate(window.location.pathname, { replace: true })
     } else {
       window.localStorage.removeItem('intendedRoute')
     }
@@ -53,7 +53,9 @@ const Login = () => {
       const res = await login({ email, password })
 
       if (res.data.twoFactorAuthRequired) {
-        history.push(routes.verify2FA, { userId: res.data.userId })
+        navigate(routes.verify2FA, {
+          state: { userId: res.data.userId }
+        })
       } else {
         const accessToken = res.data.accessToken
         AuthService.setToken(accessToken)

@@ -2,39 +2,28 @@ import React from 'react'
 import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
 import { render, screen } from '@testing-library/react'
-import { Router, Route } from 'react-router-dom'
 import Activity from '../Activity'
-import { RecoilRoot } from 'recoil'
-import RecoilObserver from '../../state/RecoilObserver'
 import activeGameState from '../../state/activeGameState'
-import routes from '../../constants/routes'
-import { createMemoryHistory } from 'history'
 import { format } from 'date-fns'
 import userState from '../../state/userState'
+import KitchenSink from '../../utils/KitchenSink'
+import userTypes from '../../constants/userTypes'
 
 describe('<Activity />', () => {
-  // eslint-disable-next-line react/prop-types
-  const ActivityRoute = ({ history }) => (
-    <Router history={history}>
-      <Route exact path={routes.activity} component={Activity} />
-    </Router>
-  )
-
   const axiosMock = new MockAdapter(api)
-
-  const history = createMemoryHistory()
-  history.push(routes.activity)
 
   it('should handle having no activities', async () => {
     axiosMock.onGet('http://talo.test/game-activities?gameId=1').replyOnce(200, { activities: [] })
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: 1 }}>
-        <RecoilObserver node={activeGameState} initialValue={{ id: 1, name: 'Superstatic' }}>
-          <ActivityRoute history={history} />
-        </RecoilObserver>
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: { id: 1, name: 'Superstatic' } }
+        ]}
+      >
+        <Activity />
+      </KitchenSink>
     )
 
     expect(await screen.findByText('Superstatic doesn\'t have any activity yet')).toBeInTheDocument()
@@ -64,12 +53,14 @@ describe('<Activity />', () => {
     axiosMock.onGet('http://talo.test/game-activities?gameId=2').replyOnce(200, { activities })
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: 1 }}>
-        <RecoilObserver node={activeGameState} initialValue={{ id: 2 }}>
-          <ActivityRoute history={history} />
-        </RecoilObserver>
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: { id: 2, name: 'Superstatic' } }
+        ]}
+      >
+        <Activity />
+      </KitchenSink>
     )
 
     expect(await screen.findByText('01 Jan 2022')).toBeInTheDocument()
@@ -102,12 +93,14 @@ describe('<Activity />', () => {
     axiosMock.onGet('http://talo.test/game-activities?gameId=3').replyOnce(200, { activities })
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: 1 }}>
-        <RecoilObserver node={activeGameState} initialValue={{ id: 3 }}>
-          <ActivityRoute history={history} />
-        </RecoilObserver>
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: { id: 3, name: 'Superstatic' } }
+        ]}
+      >
+        <Activity />
+      </KitchenSink>
     )
 
     expect(await screen.findByText('01 Jan 2022')).toBeInTheDocument()
@@ -138,12 +131,14 @@ describe('<Activity />', () => {
     axiosMock.onGet('http://talo.test/game-activities?gameId=4').replyOnce(200, { activities })
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: 1 }}>
-        <RecoilObserver node={activeGameState} initialValue={{ id: 4 }}>
-          <ActivityRoute history={history} />
-        </RecoilObserver>
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: { id: 4, name: 'Superstatic' } }
+        ]}
+      >
+        <Activity />
+      </KitchenSink>
     )
 
     expect(await screen.findByText('01 Jan 2022')).toBeInTheDocument()
@@ -164,12 +159,14 @@ describe('<Activity />', () => {
     axiosMock.onGet('http://talo.test/game-activities?gameId=5').networkErrorOnce()
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: 1 }}>
-        <RecoilObserver node={activeGameState} initialValue={{ id: 5 }}>
-          <ActivityRoute history={history} />
-        </RecoilObserver>
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: { id: 5, name: 'Superstatic' } }
+        ]}
+      >
+        <Activity />
+      </KitchenSink>
     )
 
     expect(await screen.findByRole('alert')).toBeInTheDocument()

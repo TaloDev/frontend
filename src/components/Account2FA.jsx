@@ -10,10 +10,10 @@ import routes from '../constants/routes'
 import { ConfirmPasswordAction } from '../pages/ConfirmPassword'
 import Button from './Button'
 import TextInput from './TextInput'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 function Account2FA() {
-  const history = useHistory()
+  const navigate = useNavigate()
   const location = useLocation()
 
   const [user, setUser] = useRecoilState(userState)
@@ -58,20 +58,26 @@ function Account2FA() {
   }
 
   const onDisable2FAClick = () => {
-    history.push(routes.confirmPassword, {
-      onConfirmAction: ConfirmPasswordAction.DISABLE_2FA
+    navigate(routes.confirmPassword, {
+      state: {
+        onConfirmAction: ConfirmPasswordAction.DISABLE_2FA
+      }
     })
   }
 
   const onViewRecoveryCodesClick = () => {
-    history.push(routes.confirmPassword, {
-      onConfirmAction: ConfirmPasswordAction.VIEW_RECOVERY_CODES
+    navigate(routes.confirmPassword, {
+      state: {
+        onConfirmAction: ConfirmPasswordAction.VIEW_RECOVERY_CODES
+      }
     })
   }
 
   const onCreateRecoveryCodesClick = () => {
-    history.push(routes.confirmPassword, {
-      onConfirmAction: ConfirmPasswordAction.CREATE_RECOVERY_CODES
+    navigate(routes.confirmPassword, {
+      state: {
+        onConfirmAction: ConfirmPasswordAction.CREATE_RECOVERY_CODES
+      }
     })
   }
 

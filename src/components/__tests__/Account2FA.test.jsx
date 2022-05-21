@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import React from 'react'
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import userState from '../../state/userState'
 import routes from '../../constants/routes'
 import { ConfirmPasswordAction } from '../../pages/ConfirmPassword'
@@ -103,7 +103,7 @@ describe('<Account2FA />', () => {
     expect(screen.getByText('Create new recovery codes')).toBeInTheDocument()
   })
 
-  it('should send the user to the confirm password screen when they click the disable 2fa button', () => {
+  it('should send the user to the confirm password screen when they click the disable 2fa button', async () => {
     const setLocationMock = jest.fn()
 
     render(
@@ -117,15 +117,17 @@ describe('<Account2FA />', () => {
 
     userEvent.click(screen.getByText('Disable 2FA'))
 
-    expect(setLocationMock).toHaveBeenLastCalledWith({
-      pathname: routes.confirmPassword,
-      state: {
-        onConfirmAction: ConfirmPasswordAction.DISABLE_2FA
-      }
+    await waitFor(() => {
+      expect(setLocationMock).toHaveBeenLastCalledWith({
+        pathname: routes.confirmPassword,
+        state: {
+          onConfirmAction: ConfirmPasswordAction.DISABLE_2FA
+        }
+      })
     })
   })
 
-  it('should send the user to the confirm password screen when they click the view recovery codes button', () => {
+  it('should send the user to the confirm password screen when they click the view recovery codes button', async () => {
     const setLocationMock = jest.fn()
 
     render(
@@ -139,15 +141,17 @@ describe('<Account2FA />', () => {
 
     userEvent.click(screen.getByText('View recovery codes'))
 
-    expect(setLocationMock).toHaveBeenLastCalledWith({
-      pathname: routes.confirmPassword,
-      state: {
-        onConfirmAction: ConfirmPasswordAction.VIEW_RECOVERY_CODES
-      }
+    await waitFor(() => {
+      expect(setLocationMock).toHaveBeenLastCalledWith({
+        pathname: routes.confirmPassword,
+        state: {
+          onConfirmAction: ConfirmPasswordAction.VIEW_RECOVERY_CODES
+        }
+      })
     })
   })
 
-  it('should send the user to the confirm password screen when they click the create recovery codes button', () => {
+  it('should send the user to the confirm password screen when they click the create recovery codes button', async () => {
     const setLocationMock = jest.fn()
 
     render(
@@ -161,11 +165,13 @@ describe('<Account2FA />', () => {
 
     userEvent.click(screen.getByText('Create new recovery codes'))
 
-    expect(setLocationMock).toHaveBeenLastCalledWith({
-      pathname: routes.confirmPassword,
-      state: {
-        onConfirmAction: ConfirmPasswordAction.CREATE_RECOVERY_CODES
-      }
+    await waitFor(() => {
+      expect(setLocationMock).toHaveBeenLastCalledWith({
+        pathname: routes.confirmPassword,
+        state: {
+          onConfirmAction: ConfirmPasswordAction.CREATE_RECOVERY_CODES
+        }
+      })
     })
   })
 

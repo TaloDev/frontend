@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { IconArrowLeft } from '@tabler/icons'
 import Button from './Button'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import classNames from 'classnames'
 
 function Title({ children, showBackButton, className }) {
-  const history = useHistory()
+  const navigate = useNavigate()
 
   return (
     <header className={classNames('flex items-center', className)}>
@@ -14,7 +14,7 @@ function Title({ children, showBackButton, className }) {
         <Button
           variant='bare'
           className='mr-2 bg-indigo-600 rounded-full p-1'
-          onClick={history.goBack}
+          onClick={() => navigate(-1)}
           icon={<IconArrowLeft size={20} />}
           extra={{ 'aria-label': 'Go back' }}
         />

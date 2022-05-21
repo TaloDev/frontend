@@ -8,13 +8,13 @@ import buildError from '../utils/buildError'
 import routes from '../constants/routes'
 import { unauthedContainerStyle } from '../styles/theme'
 import AuthService from '../services/AuthService'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import Title from '../components/Title'
 import verify2FA from '../api/verify2FA'
 import Link from '../components/Link'
 
 const Verify2FA = () => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const location = useLocation()
 
   const [userId] = useState(location.state?.userId)
@@ -24,12 +24,17 @@ const Verify2FA = () => {
   const [isLoading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (!userId) history.replace(routes.login)
+    if (!userId) navigate(routes.login, { replace: true })
   }, [userId])
 
   useEffect(() => {
     if (error?.sessionExpired) {
-      history.replace(routes.login, { new2FASessionRequired: true })
+      navigate(routes.login, {
+        replace: true,
+        state: {
+          new2FASessionRequired: true
+        }
+      })
     }
   }, [error])
 

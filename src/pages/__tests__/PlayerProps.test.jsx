@@ -231,7 +231,7 @@ describe('<PlayerProps />', () => {
     )
 
     await waitFor(() => {
-      expect(setLocationMock).toHaveBeenCalledWith({ pathname: '/players' })
+      expect(setLocationMock).toHaveBeenCalledWith({ pathname: '/players', state: null })
     })
   })
 

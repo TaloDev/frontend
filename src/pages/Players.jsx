@@ -6,7 +6,7 @@ import PlayerAliases from '../components/PlayerAliases'
 import { format } from 'date-fns'
 import { IconArrowRight, IconBolt, IconChartBar } from '@tabler/icons'
 import Button from '../components/Button'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import routes from '../constants/routes'
 import TextInput from '../components/TextInput'
 import TableCell from '../components/tables/TableCell'
@@ -23,27 +23,24 @@ const Players = () => {
   const [search, setSearch] = useState(new URLSearchParams(window.location.search).get('search') ?? '')
   const [debouncedSearch] = useDebounce(search, 300)
   const activeGame = useRecoilValue(activeGameState)
-  const history = useHistory()
+  const navigate = useNavigate()
   const [page, setPage] = useState(0)
   const { players, count, loading, error } = usePlayers(activeGame, debouncedSearch, page)
 
   const goToPlayerProps = (player) => {
-    history.push({
-      pathname: routes.playerProps.replace(':id', player.id),
+    navigate(routes.playerProps.replace(':id', player.id), {
       state: { player }
     })
   }
 
   const goToPlayerEvents = (player) => {
-    history.push({
-      pathname: routes.playerEvents.replace(':id', player.id),
+    navigate(routes.playerEvents.replace(':id', player.id), {
       state: { player }
     })
   }
 
   const goToPlayerStats = (player) => {
-    history.push({
-      pathname: routes.playerStats.replace(':id', player.id),
+    navigate(routes.playerStats.replace(':id', player.id), {
       state: { player }
     })
   }
