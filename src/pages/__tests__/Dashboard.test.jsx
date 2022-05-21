@@ -54,7 +54,7 @@ describe('<Dashboard />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: {} },
-          { node: activeGameState, initialValue: { name: 'Swerve City' } },
+          { node: activeGameState, initialValue: { id: 1, name: 'Swerve City' } },
           { node: devDataState, initialValue: false }
         ]}
       >
@@ -78,7 +78,7 @@ describe('<Dashboard />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: {} },
-          { node: activeGameState, initialValue: { name: 'Swerve City' } },
+          { node: activeGameState, initialValue: { id: 2, name: 'Swerve City' } },
           { node: devDataState, initialValue: false }
         ]}
       >
@@ -121,7 +121,7 @@ describe('<Dashboard />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: {} },
-          { node: activeGameState, initialValue: { name: 'Swerve City' } },
+          { node: activeGameState, initialValue: { id: 3, name: 'Swerve City' } },
           { node: devDataState, initialValue: false }
         ]}
       >
@@ -143,7 +143,7 @@ describe('<Dashboard />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: {} },
-          { node: activeGameState, initialValue: { name: 'Swerve City' } },
+          { node: activeGameState, initialValue: { id: 4, name: 'Swerve City' } },
           { node: devDataState, initialValue: false }
         ]}
         setLocation={locationMock}
@@ -152,6 +152,6 @@ describe('<Dashboard />', () => {
       </KitchenSink>
     )
 
-    expect(locationMock).toHaveBeenCalledWith({ pathname: '/players' })
+    expect(locationMock).toHaveBeenCalledWith({ pathname: '/players', state: null })
   })
 })

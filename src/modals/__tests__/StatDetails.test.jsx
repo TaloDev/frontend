@@ -4,11 +4,10 @@ import userEvent from '@testing-library/user-event'
 import StatDetails from '../StatDetails'
 import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
-import { RecoilRoot } from 'recoil'
-import RecoilObserver from '../../state/RecoilObserver'
 import activeGameState from '../../state/activeGameState'
 import userState from '../../state/userState'
 import userTypes from '../../constants/userTypes'
+import KitchenSink from '../../utils/KitchenSink'
 
 describe('<StatDetails />', () => {
   const axiosMock = new MockAdapter(api)
@@ -21,12 +20,14 @@ describe('<StatDetails />', () => {
     const mutateMock = jest.fn()
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <StatDetails modalState={[true, closeMock]} mutate={mutateMock} />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue }
+        ]}
+      >
+        <StatDetails modalState={[true, closeMock]} mutate={mutateMock} />
+      </KitchenSink>
     )
 
     userEvent.type(screen.getByLabelText('Internal name'), 'hearts-collected')
@@ -56,12 +57,14 @@ describe('<StatDetails />', () => {
     axiosMock.onPost('http://talo.test/game-stats').networkErrorOnce()
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <StatDetails modalState={[true, jest.fn()]} mutate={jest.fn()} />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue }
+        ]}
+      >
+        <StatDetails modalState={[true, jest.fn()]} mutate={jest.fn()} />
+      </KitchenSink>
     )
 
     userEvent.type(screen.getByLabelText('Internal name'), 'hearts-collected')
@@ -82,12 +85,14 @@ describe('<StatDetails />', () => {
     const mutateMock = jest.fn()
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <StatDetails modalState={[true, closeMock]} mutate={mutateMock} />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue }
+        ]}
+      >
+        <StatDetails modalState={[true, closeMock]} mutate={mutateMock} />
+      </KitchenSink>
     )
 
     userEvent.type(screen.getByLabelText('Min value'), '60')
@@ -103,12 +108,14 @@ describe('<StatDetails />', () => {
     const mutateMock = jest.fn()
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <StatDetails modalState={[true, closeMock]} mutate={mutateMock} />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue }
+        ]}
+      >
+        <StatDetails modalState={[true, closeMock]} mutate={mutateMock} />
+      </KitchenSink>
     )
 
     userEvent.type(screen.getByLabelText('Max value'), '52')
@@ -124,12 +131,14 @@ describe('<StatDetails />', () => {
     const mutateMock = jest.fn()
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <StatDetails modalState={[true, closeMock]} mutate={mutateMock} />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue }
+        ]}
+      >
+        <StatDetails modalState={[true, closeMock]} mutate={mutateMock} />
+      </KitchenSink>
     )
 
     userEvent.type(screen.getByLabelText('Max value'), '52')
@@ -142,12 +151,14 @@ describe('<StatDetails />', () => {
     const closeMock = jest.fn()
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <StatDetails modalState={[true, closeMock]} mutate={jest.fn()} />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue }
+        ]}
+      >
+        <StatDetails modalState={[true, closeMock]} mutate={jest.fn()} />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('Close'))
@@ -180,16 +191,14 @@ describe('<StatDetails />', () => {
     })
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <StatDetails
-            modalState={[true, closeMock]}
-            mutate={mutateMock}
-            editingStat={initialStat}
-          />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue }
+        ]}
+      >
+        <StatDetails modalState={[true, closeMock]} mutate={mutateMock} editingStat={initialStat} />
+      </KitchenSink>
     )
 
     expect(await screen.findByDisplayValue('hearts-collected')).toBeDisabled()
@@ -198,6 +207,7 @@ describe('<StatDetails />', () => {
     userEvent.type(screen.getByLabelText('Min value'), '-10')
     userEvent.type(screen.getByLabelText('Max value'), '30')
 
+    await waitFor(() => expect(screen.getByText('Update')).toBeEnabled())
     userEvent.click(screen.getByText('Update'))
 
     await waitFor(() => {
@@ -234,16 +244,14 @@ describe('<StatDetails />', () => {
     axiosMock.onPatch('http://talo.test/game-stats/1').networkErrorOnce()
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <StatDetails
-            modalState={[true, jest.fn()]}
-            mutate={jest.fn()}
-            editingStat={initialStat}
-          />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue }
+        ]}
+      >
+        <StatDetails modalState={[true, jest.fn()]} mutate={jest.fn()} editingStat={initialStat} />
+      </KitchenSink>
     )
 
     await waitFor(() => expect(screen.getByText('Update')).toBeEnabled())
@@ -272,16 +280,14 @@ describe('<StatDetails />', () => {
     window.confirm = jest.fn(() => true)
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <StatDetails
-            modalState={[true, closeMock]}
-            mutate={mutateMock}
-            editingStat={initialStat}
-          />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue }
+        ]}
+      >
+        <StatDetails modalState={[true, closeMock]} mutate={mutateMock} editingStat={initialStat} />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('Delete'))
@@ -314,19 +320,16 @@ describe('<StatDetails />', () => {
     window.confirm = jest.fn(() => true)
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <StatDetails
-            modalState={[true, jest.fn()]}
-            mutate={jest.fn()}
-            editingStat={initialStat}
-          />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue }
+        ]}
+      >
+        <StatDetails modalState={[true, jest.fn()]} mutate={jest.fn()} editingStat={initialStat} />
+      </KitchenSink>
     )
 
-    await waitFor(() => expect(screen.getByText('Delete')).toBeEnabled())
     userEvent.click(screen.getByText('Delete'))
 
     expect(await screen.findByText('Network Error')).toBeInTheDocument()
@@ -346,16 +349,14 @@ describe('<StatDetails />', () => {
     }
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.DEV }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <StatDetails
-            modalState={[true, jest.fn()]}
-            mutate={jest.fn()}
-            editingStat={initialStat}
-          />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.DEV } },
+          { node: activeGameState, initialValue: activeGameValue }
+        ]}
+      >
+        <StatDetails modalState={[true, jest.fn()]} mutate={jest.fn()} editingStat={initialStat} />
+      </KitchenSink>
     )
 
     expect(screen.queryByText('Delete')).not.toBeInTheDocument()

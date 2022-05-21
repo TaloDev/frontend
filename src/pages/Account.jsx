@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import Button from '../components/Button'
 import TextInput from '../components/TextInput'
 import routes from '../constants/routes'
@@ -12,7 +12,7 @@ import userState from '../state/userState'
 import Page from '../components/Page'
 
 function Account() {
-  const history = useHistory()
+  const navigate = useNavigate()
   const location = useLocation()
 
   const user = useRecoilValue(userState)
@@ -24,9 +24,11 @@ function Account() {
   const onChangePasswordClick = (e) => {
     e.preventDefault()
 
-    history.push(routes.confirmPassword, {
-      onConfirmAction: ConfirmPasswordAction.CHANGE_PASSWORD,
-      newPassword
+    navigate(routes.confirmPassword, {
+      state: {
+        onConfirmAction: ConfirmPasswordAction.CHANGE_PASSWORD,
+        newPassword
+      }
     })
   }
 

@@ -12,7 +12,7 @@ const useStats = (activeGame, includeDevData) => {
   }
 
   const { data, error, mutate } = useSWR(
-    ['game-stats', activeGame, includeDevData],
+    ['/game-stats', activeGame, includeDevData],
     fetcher
   )
 

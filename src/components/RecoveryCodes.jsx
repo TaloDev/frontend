@@ -5,10 +5,10 @@ import Button from './Button'
 import AlertBanner from './AlertBanner'
 import routes from '../constants/routes'
 import { ConfirmPasswordAction } from '../pages/ConfirmPassword'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function RecoveryCodes({ codes, showCreateButton, withBackground }) {
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const [codesCopied, setCodesCopied] = useState(false)
 
@@ -31,8 +31,10 @@ function RecoveryCodes({ codes, showCreateButton, withBackground }) {
   }
 
   const onCreateRecoveryCodesClick = () => {
-    history.push(routes.confirmPassword, {
-      onConfirmAction: ConfirmPasswordAction.CREATE_RECOVERY_CODES
+    navigate(routes.confirmPassword, {
+      state: {
+        onConfirmAction: ConfirmPasswordAction.CREATE_RECOVERY_CODES
+      }
     })
   }
 

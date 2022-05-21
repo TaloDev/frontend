@@ -9,7 +9,7 @@ const usePlayerStats = (playerId) => {
   }
 
   const { data, error } = useSWR(
-    [`players/${playerId}/stats`],
+    [`/players/${playerId}/stats`],
     fetcher
   )
 

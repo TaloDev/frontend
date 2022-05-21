@@ -12,7 +12,7 @@ const usePlayerEvents = (playerId, search, page) => {
   }
 
   const { data, error } = useSWR(
-    [`players/${playerId}/events`, search, page],
+    [`/players/${playerId}/events`, search, page],
     fetcher
   )
 

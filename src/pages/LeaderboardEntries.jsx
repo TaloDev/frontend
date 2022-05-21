@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
@@ -29,7 +29,7 @@ const LeaderboardEntries = () => {
 
   const [error, setError] = useState(null)
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   useEffect(() => {
     (async () => {
@@ -39,7 +39,7 @@ const LeaderboardEntries = () => {
           setLeaderboard(res.data.leaderboard)
           setLoading(false)
         } catch (err) {
-          history.replace(routes.leaderboards)
+          navigate(routes.leaderboards, { replace: true })
         }
       }
     })()
@@ -54,7 +54,7 @@ const LeaderboardEntries = () => {
   }, [page])
 
   const goToPlayer = (identifier) => {
-    history.push(`${routes.players}?search=${identifier}`)
+    navigate(`${routes.players}?search=${identifier}`)
   }
 
   const onHideToggle = async (entry) => {

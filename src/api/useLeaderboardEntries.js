@@ -12,7 +12,7 @@ const useLeaderboardEntries = (id, page) => {
   }
 
   const { data, error, mutate } = useSWR(
-    [`leaderboards/${id}/entries`, page],
+    [`/leaderboards/${id}/entries`, page],
     fetcher
   )
 

@@ -3,7 +3,7 @@ import { atom } from 'recoil'
 const devDataState = atom({
   key: 'includeDevData',
   default: (JSON.parse(window.localStorage.getItem('includeDevData')) ?? 'true') === 'true',
-  effects_UNSTABLE: [
+  effects: [
     ({ onSet }) => {
       onSet((includeDevData) => {
         window.localStorage.setItem('includeDevData', JSON.stringify(includeDevData))

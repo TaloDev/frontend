@@ -12,7 +12,7 @@ const useLeaderboards = (activeGame) => {
   }
 
   const { data, error, mutate } = useSWR(
-    ['leaderboards', activeGame],
+    ['/leaderboards', activeGame],
     fetcher
   )
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation, useHistory, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import findPlayer from '../api/findPlayer'
 import routes from '../constants/routes'
@@ -12,7 +12,7 @@ function usePlayer({ onLoaded } = {}) {
   const [player, setPlayer] = useState(location.state?.player)
   const activeGame = useRecoilValue(activeGameState)
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   useEffect(() => {
     (async () => {
@@ -25,10 +25,10 @@ function usePlayer({ onLoaded } = {}) {
             setPlayer(player)
             onLoaded?.(player)
           } else {
-            history.replace(routes.players)
+            navigate(routes.players, { replace: true })
           }
         } catch (err) {
-          history.replace(routes.players)
+          navigate(routes.players, { replace: true })
         }
       }
     })()

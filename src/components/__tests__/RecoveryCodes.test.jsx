@@ -1,15 +1,18 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import RecoveryCodes from '../RecoveryCodes'
 import userEvent from '@testing-library/user-event'
 import routes from '../../constants/routes'
 import { ConfirmPasswordAction } from '../../pages/ConfirmPassword'
-import { createMemoryHistory } from 'history'
-import { Router } from 'react-router-dom'
+import KitchenSink from '../../utils/KitchenSink'
 
 describe('<RecoveryCodes />', () => {
   it('should render recovery codes', () => {
-    render(<RecoveryCodes codes={['abc123', 'efg456', 'hij789']} />)
+    render(
+      <KitchenSink>
+        <RecoveryCodes codes={['abc123', 'efg456', 'hij789']} />
+      </KitchenSink>
+    )
 
     expect(screen.getAllByRole('listitem')).toHaveLength(3)
 
@@ -21,7 +24,11 @@ describe('<RecoveryCodes />', () => {
   })
 
   it('should render recovery codes when the withBackground prop is defined', () => {
-    render(<RecoveryCodes codes={['abc123', 'efg456', 'hij789']} withBackground />)
+    render(
+      <KitchenSink>
+        <RecoveryCodes codes={['abc123', 'efg456', 'hij789']} withBackground />
+      </KitchenSink>
+    )
 
     expect(screen.getAllByRole('listitem')).toHaveLength(3)
 
@@ -32,22 +39,26 @@ describe('<RecoveryCodes />', () => {
     expect(screen.queryByText('Create new codes')).not.toBeInTheDocument()
   })
 
-  it('should let the user start creating new codes', () => {
-    const history = createMemoryHistory()
+  it('should let the user start creating new codes', async () => {
+    const setLocationMock = jest.fn()
 
     render(
-      <Router history={history}>
+      <KitchenSink setLocation={setLocationMock}>
         <RecoveryCodes codes={['abc123', 'efg456', 'hij789']} showCreateButton />
-      </Router>
+      </KitchenSink>
     )
 
     expect(screen.getByText('Create new codes')).toBeInTheDocument()
 
     userEvent.click(screen.getByText('Create new codes'))
 
-    expect(history.location.pathname).toBe(routes.confirmPassword)
-    expect(history.location.state).toStrictEqual({
-      onConfirmAction: ConfirmPasswordAction.CREATE_RECOVERY_CODES
+    await waitFor(() => {
+      expect(setLocationMock).toHaveBeenCalledWith({
+        pathname: routes.confirmPassword,
+        state: {
+          onConfirmAction: ConfirmPasswordAction.CREATE_RECOVERY_CODES
+        }
+      })
     })
   })
 
@@ -55,7 +66,11 @@ describe('<RecoveryCodes />', () => {
     navigator.clipboard = { writeText: jest.fn() }
 
     const codes = ['abc123', 'efg456', 'hij789']
-    render(<RecoveryCodes codes={codes} />)
+    render(
+      <KitchenSink>
+        <RecoveryCodes codes={codes} />
+      </KitchenSink>
+    )
 
     userEvent.click(screen.getByText('Copy codes'))
     expect(await screen.findByText('Copied')).toBeInTheDocument()
@@ -73,7 +88,11 @@ describe('<RecoveryCodes />', () => {
     URL.createObjectURL = jest.fn(() => 'data')
     URL.revokeObjectURL = jest.fn()
 
-    render(<RecoveryCodes codes={['abc123', 'efg456', 'hij789']} />)
+    render(
+      <KitchenSink>
+        <RecoveryCodes codes={['abc123', 'efg456', 'hij789']} />
+      </KitchenSink>
+    )
 
     jest.spyOn(document, 'createElement').mockImplementation(() => link)
 

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import useHeadlines from '../api/useHeadlines'
 import ErrorMessage from '../components/ErrorMessage'
@@ -23,7 +23,7 @@ export const secondaryNavRoutes = [
 ]
 
 const Dashboard = () => {
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const [intendedRouteChecked, setIntendedRouteChecked] = useState(false)
 
@@ -33,7 +33,7 @@ const Dashboard = () => {
     const intended = window.localStorage.getItem('intendedRoute')
     if (intended) {
       window.localStorage.removeItem('intendedRoute')
-      history.replace(intended)
+      navigate(intended, { replace: true })
     } else {
       setIntendedRouteChecked(true)
     }
@@ -68,49 +68,49 @@ const Dashboard = () => {
   const titlePrefix = timePeriods.find((period) => period.id === timePeriod).titlePrefix
 
   return (
-    <>
-      <SecondaryNav routes={secondaryNavRoutes} />
+    <Page
+      title={`${activeGame.name} dashboard`}
+      isLoading={headlinesLoading || statsLoading}
+      secondaryNav={<SecondaryNav routes={secondaryNavRoutes} />}
+    >
+      <DevDataStatus />
 
-      <Page title={`${activeGame.name} dashboard`} isLoading={headlinesLoading || statsLoading}>
-        <DevDataStatus />
+      <div className='flex flex-col md:flex-row md:justify-between md:items-center'>
+        <h2 className='text-2xl mb-4 md:mb-0'>{titlePrefix} at a glance</h2>
+        <TimePeriodPicker
+          periods={timePeriods}
+          onPick={(period) => setTimePeriod(period.id)}
+          selectedPeriod={timePeriod}
+        />
+      </div>
 
-        <div className='flex flex-col md:flex-row md:justify-between md:items-center'>
-          <h2 className='text-2xl mb-4 md:mb-0'>{titlePrefix} at a glance</h2>
-          <TimePeriodPicker
-            periods={timePeriods}
-            onPick={(period) => setTimePeriod(period.id)}
-            selectedPeriod={timePeriod}
-          />
+      {headlinesError &&
+        <ErrorMessage error={{ message: 'Couldn\'t fetch headlines' }} />
+      }
+
+      {!headlinesLoading && !headlinesError &&
+        <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-4'>
+          <HeadlineStat title='New players' stat={headlines.new_players.count} />
+          <HeadlineStat title='Returning players' stat={headlines.returning_players.count} />
+          <HeadlineStat title='New events' stat={headlines.events.count} />
+          <HeadlineStat title='Unique event submitters' stat={headlines.unique_event_submitters.count} />
         </div>
+      }
 
-        {headlinesError &&
-          <ErrorMessage error={{ message: 'Couldn\'t fetch headlines' }} />
-        }
+      {stats.length > 0 && <h2 className='text-2xl'>Global stats</h2>}
 
-        {!headlinesLoading && !headlinesError &&
-          <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-4'>
-            <HeadlineStat title='New players' stat={headlines.new_players.count} />
-            <HeadlineStat title='Returning players' stat={headlines.returning_players.count} />
-            <HeadlineStat title='New events' stat={headlines.events.count} />
-            <HeadlineStat title='Unique event submitters' stat={headlines.unique_event_submitters.count} />
-          </div>
-        }
+      {statsError &&
+        <ErrorMessage error={{ message: 'Couldn\'t fetch stats' }} />
+      }
 
-        {stats.length > 0 && <h2 className='text-2xl'>Global stats</h2>}
-
-        {statsError &&
-          <ErrorMessage error={{ message: 'Couldn\'t fetch stats' }} />
-        }
-
-        {!statsLoading &&
-          <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-4'>
-            {stats.filter((stat) => stat.global).map((stat) => (
-              <HeadlineStat key={stat.id} title={stat.name} stat={stat.globalValue} />
-            ))}
-          </div>
-        }
-      </Page>
-    </>
+      {!statsLoading &&
+        <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-4'>
+          {stats.filter((stat) => stat.global).map((stat) => (
+            <HeadlineStat key={stat.id} title={stat.name} stat={stat.globalValue} />
+          ))}
+        </div>
+      }
+    </Page>
   )
 }
 

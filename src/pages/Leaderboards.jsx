@@ -9,7 +9,7 @@ import { useRecoilValue } from 'recoil'
 import activeGameState from '../state/activeGameState'
 import { IconChevronUp, IconChevronDown, IconPlus } from '@tabler/icons'
 import Button from '../components/Button'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import routes from '../constants/routes'
 import LeaderboardDetails from '../modals/LeaderboardDetails'
 import useSortedItems from '../utils/useSortedItems'
@@ -18,7 +18,7 @@ import Table from '../components/tables/Table'
 
 const Leaderboards = () => {
   const activeGame = useRecoilValue(activeGameState)
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const [showModal, setShowModal] = useState(false)
   const [editingLeaderboard, setEditingLeaderboard] = useState(null)
@@ -32,8 +32,7 @@ const Leaderboards = () => {
   }, [showModal, editingLeaderboard])
 
   const goToEntries = (leaderboard) => {
-    history.push({
-      pathname: routes.leaderboardEntries.replace(':internalName', leaderboard.internalName),
+    navigate(routes.leaderboardEntries.replace(':internalName', leaderboard.internalName), {
       state: { leaderboard }
     })
   }

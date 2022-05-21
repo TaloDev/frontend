@@ -3,7 +3,7 @@ import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import ErrorMessage from '../components/ErrorMessage'
 import { unauthedContainerStyle } from '../styles/theme'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import Title from '../components/Title'
 import buildError from '../utils/buildError'
 import disable2fa from '../api/disable2fa'
@@ -23,7 +23,7 @@ export const ConfirmPasswordAction = {
 
 const ConfirmPassword = () => {
   const location = useLocation()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
@@ -33,29 +33,47 @@ const ConfirmPassword = () => {
 
   useEffect(() => {
     if (!location.state?.onConfirmAction) {
-      history.goBack()
+      navigate(-1)
     }
-  }, [location, history])
+  }, [location, navigate])
 
   const ActionMap = {
     [ConfirmPasswordAction.DISABLE_2FA]: async () => {
       const res = await disable2fa(password)
       setUser(res.data.user)
-      history.replace(routes.account, { successMessage: 'Two factor authentication has been disabled' })
+      navigate(routes.account, {
+        replace: true,
+        state: {
+          successMessage: 'Two factor authentication has been disabled'
+        }
+      })
     },
     [ConfirmPasswordAction.CHANGE_PASSWORD]: async () => {
       await changePassword(password, location.state.newPassword)
-      history.replace(routes.account, { successMessage: 'Your password has been updated' })
+      navigate(routes.account, {
+        replace: true,
+        state: {
+          successMessage: 'Your password has been updated'
+        }
+      })
     },
     [ConfirmPasswordAction.VIEW_RECOVERY_CODES]: async () => {
       const res = await viewRecoveryCodes(password)
-      history.replace(routes.account, { recoveryCodes: res.data.recoveryCodes })
+      navigate(routes.account, {
+        replace: true,
+        state: {
+          recoveryCodes: res.data.recoveryCodes
+        }
+      })
     },
     [ConfirmPasswordAction.CREATE_RECOVERY_CODES]: async () => {
       const res = await createRecoveryCodes(password)
-      history.replace(routes.account, {
-        successMessage: 'Your new recovery codes have been generated',
-        recoveryCodes: res.data.recoveryCodes
+      navigate(routes.account, {
+        replace: true,
+        state: {
+          successMessage: 'Your new recovery codes have been generated',
+          recoveryCodes: res.data.recoveryCodes
+        }
       })
     }
   }

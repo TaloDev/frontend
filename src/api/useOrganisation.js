@@ -9,7 +9,7 @@ const useOrganisation = () => {
   }
 
   const { data, error, mutate } = useSWR(
-    'organisations/current',
+    '/organisations/current',
     fetcher
   )
 
