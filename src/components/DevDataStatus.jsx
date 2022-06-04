@@ -1,11 +1,11 @@
 import classNames from 'classnames'
 import React from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import devDataState from '../state/devDataState'
-import Toggle from './Toggle'
+import DevDataToggle from './toggles/DevDataToggle'
 
 function DevDataStatus() {
-  const [includeDevData, setIncludeDevData] = useRecoilState(devDataState)
+  const includeDevData = useRecoilValue(devDataState)
 
   return (
     <div className='space-y-4'>
@@ -17,7 +17,7 @@ function DevDataStatus() {
 
       <p>When enabled, you&apos;ll see data submitted by players from dev builds of your game.</p>
 
-      <Toggle id='dev-data' enabled={includeDevData} onToggle={setIncludeDevData} />
+      <DevDataToggle />
     </div>
   )
 }

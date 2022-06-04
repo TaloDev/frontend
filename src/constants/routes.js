@@ -3,6 +3,7 @@ export default {
   account: '/account',
   activity: '/activity',
   apiKeys: '/api-keys',
+  billing: '/billing',
   confirmPassword: '/confirm-password',
   dashboard: '/',
   dataExports: '/exports',
