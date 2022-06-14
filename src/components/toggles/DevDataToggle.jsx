@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { motion } from 'framer-motion'
-import { labelFocusStyle } from '../styles/theme'
+import { labelFocusStyle } from '../../styles/theme'
 import { IconCheck, IconX } from '@tabler/icons'
+import { useRecoilState } from 'recoil'
+import devDataState from '../../state/devDataState'
 
-function Toggle({ id, enabled, onToggle }) {
+function DevDataToggle() {
+  const [includeDevData, setIncludeDevData] = useRecoilState(devDataState)
+
   const [focus, setFocus] = useState(false)
-  const [innerEnabled, setInnerEnabled] = useState(enabled)
+  const [innerEnabled, setInnerEnabled] = useState(includeDevData)
 
   const sharedIconProps = {
     className:'flex items-center justify-center h-full absolute left-0 right-0',
@@ -18,7 +21,7 @@ function Toggle({ id, enabled, onToggle }) {
   return (
     <>
       <input
-        id={id}
+        id='dev-data'
         type='checkbox'
         className='absolute inset-0 opacity-0'
         onFocus={() => setFocus(true)}
@@ -27,7 +30,7 @@ function Toggle({ id, enabled, onToggle }) {
       />
 
       <label
-        htmlFor={id}
+        htmlFor='dev-data'
         className={classNames('block h-12 w-24 p-2 bg-gray-900 border-2 border-gray-700 rounded-lg cursor-pointer', { [labelFocusStyle]: focus })}
       >
         <motion.div
@@ -38,7 +41,7 @@ function Toggle({ id, enabled, onToggle }) {
           initial={false}
           transition={{ duration: 0.2 }}
           className='h-full w-8 rounded-md relative'
-          onAnimationComplete={() => onToggle(innerEnabled)}
+          onAnimationComplete={() => setIncludeDevData(innerEnabled)}
         >
           <motion.span {...sharedIconProps} animate={{ opacity: innerEnabled ? 1 : 0 }}>
             <IconCheck size={24} stroke={3} />
@@ -53,10 +56,4 @@ function Toggle({ id, enabled, onToggle }) {
   )
 }
 
-Toggle.propTypes = {
-  id: PropTypes.string.isRequired,
-  enabled: PropTypes.bool.isRequired,
-  onToggle: PropTypes.func.isRequired
-}
-
-export default Toggle
+export default DevDataToggle

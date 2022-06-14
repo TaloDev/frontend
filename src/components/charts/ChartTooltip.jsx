@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { format } from 'date-fns'
-import uniqBy from 'lodash.uniqby'
+import { uniqBy } from 'lodash-es'
 import classNames from 'classnames'
 import getEventColour from '../../utils/getEventColour'
 

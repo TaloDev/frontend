@@ -28,6 +28,7 @@ const NewGame = (props) => {
       setUser({
         ...user,
         organisation: {
+          ...user.organisation,
           games: [...user.organisation.games, res.data.game]
         }
       })

@@ -30,6 +30,7 @@ const Stats = lazy(() => import(/* webpackChunkName: 'stats' */ './pages/Stats')
 const PlayerStats = lazy(() => import(/* webpackChunkName: 'player-stats' */ './pages/PlayerStats'))
 const AcceptInvite = lazy(() => import(/* webpackChunkName: 'accept-invite' */ './pages/AcceptInvite'))
 const Organisation = lazy(() => import(/* webpackChunkName: 'organisation' */ './pages/Organisation'))
+const Billing = lazy(() => import(/* webpackChunkName: 'billing' */ './pages/Billing'))
 
 function Router({ intendedUrl }) {
   const user = useRecoilValue(userState)
@@ -47,7 +48,7 @@ function Router({ intendedUrl }) {
             <Route exact path={routes.recover} element={<RecoverAccount />} />
             <Route exact path={routes.acceptInvite} element={<AcceptInvite />} />
 
-            <Route path='*' element={<Navigate to={`${routes.login}?next=${intendedUrl}`} replace />} />
+            <Route path='*' element={<Navigate to={`${routes.login}?next=${encodeURIComponent(intendedUrl)}`} replace />} />
           </Routes>
         </main>
       }
@@ -61,6 +62,7 @@ function Router({ intendedUrl }) {
               <Route exact path={routes.account} element={<Account />} />
               <Route exact path={routes.confirmPassword} element={<ConfirmPassword />} />
               {canViewPage(user, routes.organisation) && <Route exact path={routes.organisation} element={<Organisation />} />}
+              {canViewPage(user, routes.billing) && <Route exact path={routes.billing} element={<Billing />} />}
 
               {activeGame &&
                 <>

@@ -18,8 +18,9 @@ import DevDataStatus from '../components/DevDataStatus'
 
 export const secondaryNavRoutes = [
   { title: 'Dashboard', to: routes.dashboard },
+  { title: 'Activity log', to: routes.activity },
   { title: 'Organisation', to: routes.organisation },
-  { title: 'Activity log', to: routes.activity }
+  { title: 'Billing', to: routes.billing }
 ]
 
 const Dashboard = () => {
