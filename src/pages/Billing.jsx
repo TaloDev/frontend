@@ -74,7 +74,10 @@ export default function Billing() {
             }
 
             <BillingUsageTile />
-            <BillingPortalTile />
+
+            {orgPlan.canViewBillingPortal &&
+              <BillingPortalTile />
+            }
           </ul>
         </div>
 
