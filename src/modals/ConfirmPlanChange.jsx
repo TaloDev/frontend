@@ -17,7 +17,7 @@ const ConfirmPlanChange = ({ modalState, plan, pricingInterval, invoice }) => {
 
   const { lines, total, prorationDate, collectionDate } = invoice
 
-  const onUpgradeClick = async (e) => {
+  const onConfirmClick = async (e) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
@@ -75,7 +75,7 @@ const ConfirmPlanChange = ({ modalState, plan, pricingInterval, invoice }) => {
               const endDate = dates.split(',')[1]
 
               return (
-                <tbody key={dates}>
+                <tbody key={dates} data-testid={`${startDate} - ${endDate}`}>
                   <tr className='border-y border-y-gray-200 text-xs uppercase text-gray-600'>
                     <td className='py-2'>{startDate} - {endDate}</td>
                     <td />
@@ -106,7 +106,7 @@ const ConfirmPlanChange = ({ modalState, plan, pricingInterval, invoice }) => {
             <Button
               variant='green'
               isLoading={isLoading}
-              onClick={onUpgradeClick}
+              onClick={onConfirmClick}
             >
               Confirm
             </Button>

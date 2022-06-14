@@ -6,7 +6,7 @@ import { IconCheck, IconX } from '@tabler/icons'
 import { useRecoilState } from 'recoil'
 import devDataState from '../../state/devDataState'
 
-function DataExportToggle() {
+function DevDataToggle() {
   const [includeDevData, setIncludeDevData] = useRecoilState(devDataState)
 
   const [focus, setFocus] = useState(false)
@@ -56,4 +56,4 @@ function DataExportToggle() {
   )
 }
 
-export default DataExportToggle
+export default DevDataToggle

@@ -7,7 +7,8 @@ import usePricingPlans from '../api/usePricingPlans'
 import useOrganisationPricingPlan from '../api/useOrganisationPricingPlan'
 import Toggle from '../components/toggles/Toggle'
 import PricingPlanTile from '../components/billing/PricingPlanTile'
-import BillingUsage from '../components/billing/BillingUsage'
+import BillingUsageTile from '../components/billing/BillingUsageTile'
+import BillingPortalTile from '../components/billing/BillingPortalTile'
 import Tile from '../components/Tile'
 import { format } from 'date-fns'
 import { IconAlertCircle } from '@tabler/icons'
@@ -15,7 +16,7 @@ import Loading from '../components/Loading'
 
 export default function Billing() {
   const { plan: orgPlan, loading: orgPlanLoading, error: orgPlanError } = useOrganisationPricingPlan()
-  const { plans, loading: allPlansLoading, error: plansError } = usePricingPlans()
+  const { plans, loading: allPlansLoading, error: allPlansError } = usePricingPlans()
   const [yearlyPricing, setYearlyPricing] = useState(false)
 
   const [planLoading, setPlanLoading] = useState(null)
@@ -44,13 +45,15 @@ export default function Billing() {
           {orgPlanError && <div className='mb-4'><ErrorMessage error={orgPlanError} /></div>}
 
           <ul className='space-y-2'>
-            <PricingPlanTile
-              current
-              plan={currentPlan}
-              displayInterval={currentPlanPrice.interval}
-              currentPlanPrice={currentPlanPrice.amount}
-              planLoadingState={[planLoading, setPlanLoading]}
-            />
+            {currentPlan &&
+              <PricingPlanTile
+                current
+                plan={currentPlan}
+                displayInterval={currentPlanPrice.interval}
+                currentPlanPrice={currentPlanPrice}
+                planLoadingState={[planLoading, setPlanLoading]}
+              />
+            }
 
             {orgPlan.endDate &&
               <li>
@@ -70,7 +73,8 @@ export default function Billing() {
               </li>
             }
 
-            <BillingUsage />
+            <BillingUsageTile />
+            <BillingPortalTile />
           </ul>
         </div>
 
@@ -78,7 +82,7 @@ export default function Billing() {
           <div className='w-full lg:w-1/2'>
             <h2 className='text-2xl mb-4'>Other plans</h2>
 
-            {plansError && <div className='mb-4'><ErrorMessage error={plansError} /></div>}
+            {allPlansError && <div className='mb-4'><ErrorMessage error={allPlansError} /></div>}
 
             <div className='md:flex justify-between items-center bg-gray-900 border border-gray-900 rounded p-4 space-y-4 md:space-y-0'>
               <p className='text-center md:text-left'>Get{' '}<span className='text-sm p-1 rounded bg-indigo-600'>10% off</span> with yearly pricing</p>
@@ -105,7 +109,7 @@ export default function Billing() {
 
               <PricingPlanTile
                 custom
-                plan={{ id: 99, actions: [], name: 'Custom', prices: [] }}
+                plan={{ id: Infinity, actions: [], name: 'Custom Plan', prices: [] }}
                 displayInterval={yearlyPricing ? 'year' : 'month'}
                 planLoadingState={[planLoading, setPlanLoading]}
               />

@@ -12,8 +12,6 @@ import ConfirmPlanChange from '../../modals/ConfirmPlanChange'
 import Tile from '../Tile'
 import pricingPlanActionTypes from '../../constants/pricingPlanActionTypes'
 
-const pricingPlanMonthlyUsageBasedTypes = [0]
-
 export default function PricingPlanTile({ plan, displayInterval, custom, currentPlanPrice, planLoadingState, current }) {
   const [error, setError] = useState(null)
   const [planLoading, setPlanLoading] = planLoadingState
@@ -21,7 +19,7 @@ export default function PricingPlanTile({ plan, displayInterval, custom, current
   const [invoice, setInvoice] = useState(null)
 
   const isUpgrade = useCallback(() => {
-    return plan.prices[0].amount > currentPlanPrice
+    return plan.prices[0].amount > currentPlanPrice?.amount
   }, [plan, currentPlanPrice])
 
   const getPrice = useCallback(({ prices }) => {
@@ -70,7 +68,7 @@ export default function PricingPlanTile({ plan, displayInterval, custom, current
               {plan.actions.map((action) => {
                 return (
                   <li key={action.id}>
-                    <span className='font-semibold'>{action.limit} {pricingPlanActionTypes[action.type]}</span> {pricingPlanMonthlyUsageBasedTypes.includes(action.type) ? 'per month' : ''}
+                    <span className='font-semibold'>{action.limit} {pricingPlanActionTypes[action.type]}</span> {action.trackedMonthly ? 'per month' : ''}
                   </li>
                 )
               })}
@@ -91,7 +89,7 @@ export default function PricingPlanTile({ plan, displayInterval, custom, current
                 isLoading={planLoading === plan.id}
                 disabled={Boolean(planLoading)}
               >
-                <span>{isUpgrade() ? 'Upgrade' : 'Change plan' }</span>
+                <span>{isUpgrade() ? 'Upgrade' : 'Change plan'}</span>
               </Button>
             }
           </>
@@ -129,7 +127,8 @@ PricingPlanTile.propTypes = {
     actions: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
       type: PropTypes.number.isRequired,
-      limit: PropTypes.number.isRequired
+      limit: PropTypes.number.isRequired,
+      trackedMonthly: PropTypes.bool.isRequired
     })),
     name: PropTypes.string.isRequired,
     prices: PropTypes.arrayOf(PropTypes.shape({
@@ -140,7 +139,11 @@ PricingPlanTile.propTypes = {
   }).isRequired,
   displayInterval: PropTypes.string.isRequired,
   custom: PropTypes.bool,
-  currentPlanPrice: PropTypes.number,
+  currentPlanPrice: PropTypes.shape({
+    amount: PropTypes.number.isRequired,
+    currency: PropTypes.string.isRequired,
+    interval: PropTypes.string.isRequired
+  }),
   planLoadingState: PropTypes.array.isRequired,
   current: PropTypes.bool
 }

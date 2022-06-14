@@ -24,7 +24,7 @@ const PaymentRequiredBanner = () => {
   }
 
   return (
-    <div className='bg-gray-900 p-4 md:p-8 rounded-md w-full lg:2/3 xl:w-1/2 space-y-4' role='alert'>
+    <div className='bg-gray-900 p-4 md:p-8 rounded-md w-full lg:2/3 xl:w-1/2 space-y-4' role='alert' data-testid='banner-content'>
       <div>
         <p className='text-xl font-bold'>
           <IconAlertCircle className='inline -mt-0.5 text-red-500 mr-2' size={24} />

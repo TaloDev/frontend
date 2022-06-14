@@ -48,7 +48,7 @@ function Router({ intendedUrl }) {
             <Route exact path={routes.recover} element={<RecoverAccount />} />
             <Route exact path={routes.acceptInvite} element={<AcceptInvite />} />
 
-            <Route path='*' element={<Navigate to={`${routes.login}?next=${intendedUrl}`} replace />} />
+            <Route path='*' element={<Navigate to={`${routes.login}?next=${encodeURIComponent(intendedUrl)}`} replace />} />
           </Routes>
         </main>
       }

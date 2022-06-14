@@ -48,7 +48,7 @@ function App() {
   }
 
   useEffect(() => {
-    setIntendedUrl(window.location.pathname)
+    setIntendedUrl(window.location.pathname + window.location.search)
   }, [])
 
   useEffect(() => {
