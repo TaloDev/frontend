@@ -35,7 +35,8 @@ describe('<Billing />', () => {
       ]
     },
     status: 'active',
-    endDate: null
+    endDate: null,
+    canViewBillingPortal: true
   }
 
   const userValue = {
@@ -179,6 +180,26 @@ describe('<Billing />', () => {
     )
 
     expect(await screen.findByText('Your plan expires on 2nd Mar 2022')).toBeInTheDocument()
+  })
+
+  it('should not render the billing portal tile if they cannot view it', async () => {
+    const pricingPlan = {
+      ...orgPlan,
+      canViewBillingPortal: false
+    }
+
+    axiosMock.onGet('http://talo.test/billing/organisation-plan').replyOnce(200, { pricingPlan })
+    axiosMock.onGet('http://talo.test/billing/plans').replyOnce(200, { pricingPlans })
+    axiosMock.onGet('http://talo.test/billing/usage').replyOnce(200, { usage })
+
+    render(
+      <KitchenSink states={[{ node: userState, initialValue: userValue }]}>
+        <Billing />
+      </KitchenSink>
+    )
+
+    expect(await screen.findByText('Current plan')).toBeInTheDocument()
+    expect(screen.queryByText('Billing details')).not.toBeInTheDocument()
   })
 
   it('should handle organisation plan errors', async () => {
