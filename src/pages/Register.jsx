@@ -11,6 +11,7 @@ import buildError from '../utils/buildError'
 import AuthService from '../services/AuthService'
 import { useLocation } from 'react-router-dom'
 import * as Sentry from '@sentry/react'
+import RegisterPlanBanner from '../components/billing/RegisterPlanBanner'
 
 const Register = () => {
   const location = useLocation()
@@ -52,6 +53,8 @@ const Register = () => {
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
       <form className={`text-white rounded-md space-y-8 ${unauthedContainerStyle}`}>
         <h1 className='text-4xl font-bold'>Let&apos;s get started</h1>
+
+        <RegisterPlanBanner />
 
         {location.state?.invite &&
           <p>
