@@ -19,7 +19,7 @@ const NavBar = () => {
   const onLogoutClick = async () => {
     try {
       Sentry.configureScope((scope) => scope.setUser(null))
-
+      window.localStorage.removeItem('loggedOut')
       await logout()
     } catch (err) {
       console.warn('Logout failed:', err.message)

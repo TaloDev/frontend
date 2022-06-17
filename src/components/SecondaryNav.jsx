@@ -17,12 +17,24 @@ function SecondaryNav({ routes }) {
   return (
     <nav className='bg-gray-700 w-screen px-4 md:px-8 -mx-4 md:-mx-8 -mt-4 md:-mt-8 mb-8 py-4 border-b-2 border-b-gray-600 flex justify-between items-center overflow-x-scroll'>
       <ul className='flex space-x-6 md:space-x-8'>
-        {availableRoutes.map(({ title, to }) => (
-          <li key={to} className='relative'>
-            <Link to={to} className={classNames({ '!text-white': location.pathname === to, '!text-indigo-300': location.pathname !== to })}>{title}</Link>
-            {location.pathname === to && <div className='absolute left-0 right-0 h-[2px] bg-white transform translate-y-full' />}
+        {availableRoutes.map(({ title, to }) => {
+          const active = location.pathname === to
+
+          return <li
+            key={to}
+            className={classNames('shrink-0 relative after:content-[""] after:absolute after:top-[38px] after:left-0 after:h-0.5 after:w-full', {
+              'after:bg-white': active,
+              'hover:after:bg-indigo-300': !active
+            })}
+          >
+            <Link
+              to={to}
+              className={classNames('!no-underline', { '!text-white': active, '!text-indigo-300': !active })}
+            >
+              {title}
+            </Link>
           </li>
-        ))}
+        })}
         <li className='md:hidden w-6' />
       </ul>
     </nav>

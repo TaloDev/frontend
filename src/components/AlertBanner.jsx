@@ -6,7 +6,7 @@ import classNames from 'classnames'
 const AlertBanner = (props) => {
   return (
     <div className={classNames('bg-yellow-600 p-4 rounded flex items-center space-x-4', props.className)} data-testid='alert-banner'>
-      <props.icon size={32} />
+      <props.icon size={24} className='shrink-0' />
       <span>{props.text}</span>
     </div>
   )
