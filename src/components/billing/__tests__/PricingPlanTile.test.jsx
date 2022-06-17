@@ -119,6 +119,30 @@ describe('<PricingPlanTile />', () => {
     expect(screen.getByText('Upgrade')).toBeInTheDocument()
   })
 
+  it('should fallback the cta to an upgrade if there is no current price', () => {
+    render(
+      <PricingPlanTile
+        plan={{
+          id: 1,
+          actions: [
+            { id: 1, type: 0, limit: 5, trackedMonthly: false },
+            { id: 2, type: 1, limit: 8, trackedMonthly: true }
+          ],
+          name: 'Team plan',
+          prices: [
+            { amount: 5999, currency: 'usd', interval: 'year' },
+            { amount: 499, currency: 'usd', interval: 'month' }
+          ]
+        }}
+        displayInterval='month'
+        planLoadingState={[null, jest.fn()]}
+        currentPlanPrice={null}
+      />
+    )
+
+    expect(screen.getByText('Upgrade')).toBeInTheDocument()
+  })
+
   it('should render the cta as change plan if the plan has a higher price than the current price', () => {
     render(
       <PricingPlanTile

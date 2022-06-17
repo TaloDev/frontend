@@ -27,7 +27,6 @@ const Login = () => {
 
   useEffect(() => {
     const intendedRoute = new URLSearchParams(window.location.search).get('next')
-    console.log(intendedRoute)
 
     if (intendedRoute) {
       window.localStorage.setItem('intendedRoute', intendedRoute)
