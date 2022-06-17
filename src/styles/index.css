@@ -55,11 +55,17 @@ table {
   @apply outline-none;
 }
 
-.tippy-box[data-theme~='bare'] {
+.tippy-box[data-theme~='bare'], .tippy-box[data-theme~='services'] {
   background-color: unset;
   font-size: unset;
 
   & .tippy-content {
     padding: 0;
   }
+}
+
+.tippy-box[data-theme~='services'] {
+  width: calc(100vw - 32px);
+
+  @apply sm:w-auto
 }

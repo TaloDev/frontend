@@ -75,21 +75,21 @@ function ServicesLink() {
         offset={[0, 10]}
         interactive={true}
         arrow={false}
-        theme='bare'
+        theme='services'
+        maxWidth=''
         content={(
-          <ul className='w-full sm:w-[480px] grid grid-cols-2 gap-2 bg-gray-800 border border-gray-700 p-2 rounded text-white transition-all'>
+          <ul className='mb-4 sm:min-w-[480px] grid sm:grid-cols-2 gap-2 bg-gray-800 border border-gray-700 p-2 rounded text-white transition-all'>
             {services.filter(({ route }) => canViewPage(user, route)).map(({ name, desc, icon: Icon, route }) => (
               <li key={name}>
                 {showServicesMenu &&
                   <RouterLink to={route} className={classNames('group block p-4 rounded transition-colors hover:bg-gray-700 focus:bg-gray-700 space-y-2', focusStyle)}>
-                    <p className='font-bold text-white group-hover:text-indigo-300 group-focus:text-indigo-300'>
-                      <Icon size={18} className='inline-block mb-1 mr-1' />
+                    <p className='font-bold text-white group-hover:text-indigo-300 group-focus:text-indigo-300 text-sm md:text-base'>
+                      <Icon size={16} className='inline-block mb-1 mr-1' />
                       {name}
                     </p>
                     <p className='text-gray-300 text-sm group-hover:text-white group-focus:text-white'>{desc}</p>
                   </RouterLink>
                 }
-                {!showServicesMenu && <div className='h-[80px]' />}
               </li>
             ))}
           </ul>

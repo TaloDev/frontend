@@ -19,7 +19,9 @@ export default function PricingPlanTile({ plan, displayInterval, custom, current
   const [invoice, setInvoice] = useState(null)
 
   const isUpgrade = useCallback(() => {
-    return plan.prices[0].amount > currentPlanPrice?.amount
+    if (!currentPlanPrice) return true
+
+    return plan.prices.find((price) => price.interval === currentPlanPrice.interval).amount > currentPlanPrice.amount
   }, [plan, currentPlanPrice])
 
   const getPrice = useCallback(({ prices }) => {
