@@ -15,11 +15,14 @@ import NewInvite from '../modals/NewInvite'
 import SecondaryNav from '../components/SecondaryNav'
 import { secondaryNavRoutes } from './Dashboard'
 import Table from '../components/tables/Table'
+import AlertBanner from '../components/AlertBanner'
+import userState from '../state/userState'
 
 function Organisation() {
   const organisation = useRecoilValue(organisationState)
   const { games, members, pendingInvites, loading, error, mutate } = useOrganisation()
   const [showModal, setShowModal] = useState(false)
+  const user = useRecoilValue(userState)
 
   return (
     <Page
@@ -49,6 +52,10 @@ function Organisation() {
 
           <h2 className='text-2xl'>Pending invites</h2>
 
+          {!user.emailConfirmed &&
+            <AlertBanner className='lg:w-max' text='You need to confirm your email address to invite users' />
+          }
+
           <div className='space-y-4'>
             {pendingInvites.length > 0 &&
               <Table columns={['Email', 'Type', 'Invited by', 'Sent at']}>
@@ -65,12 +72,15 @@ function Organisation() {
               </Table>
             }
 
-            {pendingInvites.length === 0 && <p>There are currently no pending invitations</p>}
+            {pendingInvites.length === 0 && user.emailConfirmed &&
+              <p>There are currently no pending invitations</p>
+            }
 
             <Button
               className='w-auto'
               onClick={() => setShowModal(true)}
               icon={<IconPlus />}
+              disabled={!user.emailConfirmed}
             >
               <span>Invite member</span>
             </Button>

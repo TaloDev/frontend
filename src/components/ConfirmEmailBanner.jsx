@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import confirmEmail from '../api/confirmEmail'
 import userState from '../state/userState'
@@ -13,16 +14,19 @@ const ConfirmEmailBanner = () => {
   const [error, setError] = useState(null)
   const [user, setUser] = useRecoilState(userState)
 
+  const location = useLocation()
+
+  useEffect(() => {
+    setUser({ ...user, justConfirmedEmail: false })
+  }, [location])
+
   const onConfirmClick = async (e) => {
     e.preventDefault()
 
     setLoading(true)
     try {
       const res = await confirmEmail(code)
-      setUser({
-        ...res.data.user,
-        justConfirmedEmail: true
-      })
+      setUser({ ...res.data.user, justConfirmedEmail: true })
     } catch (err) {
       setError(buildError(err))
     } finally {
