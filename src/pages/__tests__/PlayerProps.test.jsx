@@ -323,4 +323,38 @@ describe('<PlayerProps />', () => {
       expect(screen.getByRole('alert')).toBeInTheDocument()
     })
   })
+
+  it('should render meta props', () => {
+    const player = {
+      ...basePlayer,
+      props: [
+        ...basePlayer.props,
+        { key: 'META_DEV_BUILD', value: '1' },
+        { key: 'META_WINDOW_MODE', value: 'Windowed' },
+        { key: 'META_SCREEN_WIDTH', value: '1920' }
+      ]
+    }
+
+    render(
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
+    )
+
+    expect(screen.getByText('DEV BUILD')).toBeInTheDocument()
+    expect(screen.getByText('1')).toBeInTheDocument()
+
+    expect(screen.getByText('WINDOW MODE')).toBeInTheDocument()
+    expect(screen.getByText('Windowed')).toBeInTheDocument()
+
+    expect(screen.getByText('SCREEN WIDTH')).toBeInTheDocument()
+    expect(screen.getByText('1920')).toBeInTheDocument()
+  })
 })

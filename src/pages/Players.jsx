@@ -18,6 +18,7 @@ import DateCell from '../components/tables/cells/DateCell'
 import classNames from 'classnames'
 import Page from '../components/Page'
 import Table from '../components/tables/Table'
+import { isMetaProp } from '../constants/metaProps'
 
 const Players = () => {
   const [search, setSearch] = useState(new URLSearchParams(window.location.search).get('search') ?? '')
@@ -92,7 +93,7 @@ const Players = () => {
                   <TableCell className='min-w-80 md:min-w-0'><PlayerAliases aliases={player.aliases} /></TableCell>
                   <TableCell className='w-40'>
                     <div className='flex items-center'>
-                      <span>{player.props.length}</span>
+                      <span>{player.props.filter((prop) => !isMetaProp(prop)).length}</span>
                       <Button
                         variant='icon'
                         className={classNames('ml-2 p-1 rounded-full bg-indigo-900', { 'bg-orange-900': player.devBuild })}

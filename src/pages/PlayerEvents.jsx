@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 import { useNavigate, useParams } from 'react-router-dom'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
@@ -15,11 +16,24 @@ import PlayerIdentifier from '../components/PlayerIdentifier'
 import Page from '../components/Page'
 import usePlayer from '../utils/usePlayer'
 import Table from '../components/tables/Table'
+import { isMetaProp } from '../constants/metaProps'
 
-const EventProps = (props) => {
-  return props.eventProps.map((prop) => (
-    <code key={`${prop.key}-${prop.value}`} className='bg-gray-900 rounded p-2 mr-2 mb-2 text-xs inline-block'>{prop.key} = {prop.value}</code>
+const EventProps = ({ props }) => {
+  return props.filter((prop) => !isMetaProp(prop)).map(({ key, value }) => (
+    <code
+      key={`${key}-${value}`}
+      className='bg-gray-900 rounded p-2 mr-2 mb-2 text-xs inline-block'
+    >
+      {key} = {value}
+    </code>
   ))
+}
+
+EventProps.propTypes = {
+  props: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired
+  })).isRequired
 }
 
 const PlayerEvents = () => {
@@ -80,7 +94,7 @@ const PlayerEvents = () => {
                   <TableCell className='min-w-60'>{event.name}</TableCell>
                   <TableCell className='min-w-80'>
                     <div className='-mb-2'>
-                      <EventProps eventProps={event.props} />
+                      <EventProps props={event.props} />
                     </div>
                   </TableCell>
                   <DateCell>{format(new Date(event.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
