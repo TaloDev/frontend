@@ -159,7 +159,7 @@ function PlayerProps() {
             >
               {(prop) => (
                 <>
-                  <TableCell className={classNames('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}>{metaPropKeyMap[prop.key]}</TableCell>
+                  <TableCell className='min-w-80'>{metaPropKeyMap[prop.key]}</TableCell>
                   <TableCell className='min-w-80'>{prop.value}</TableCell>
                   <TableCell />
                 </>
