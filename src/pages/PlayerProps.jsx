@@ -14,8 +14,10 @@ import classNames from 'classnames'
 import PlayerIdentifier from '../components/PlayerIdentifier'
 import usePlayer from '../utils/usePlayer'
 import Table from '../components/tables/Table'
+import SecondaryTitle from '../components/SecondaryTitle'
+import { isMetaProp, metaPropKeyMap } from '../constants/metaProps'
 
-const PlayerProps = () => {
+function PlayerProps() {
   const location = useLocation()
 
   const [originalPlayer, setOriginalPlayer] = useState(location.state?.player)
@@ -102,10 +104,7 @@ const PlayerProps = () => {
     setUpdating(true)
     setError(null)
 
-    const props = [
-      ...player.props,
-      ...newProps
-    ].filter((prop) => !prop.key.startsWith('META_'))
+    const props = [...player.props, ...newProps].filter((prop) => !isMetaProp(prop))
 
     try {
       const res = await updatePlayer(player.id, { props })
@@ -128,8 +127,12 @@ const PlayerProps = () => {
   }
 
   const existingProps = player.props
-    .filter((prop) => prop.value !== null)
-    .sort((a, b) => a.key.startsWith('META_') ? -1 : a.key.localeCompare(b.key))
+    .filter((prop) => prop.value !== null && !isMetaProp(prop))
+    .sort((a, b) => a.key.localeCompare(b.key))
+
+  const metaProps = player.props
+    .filter((prop) => isMetaProp(prop))
+    .sort((a, b) => a.key.localeCompare(b.key))
 
   return (
     <Page
@@ -143,30 +146,47 @@ const PlayerProps = () => {
         <p>This player has no custom properties. Click the button below to add one.</p>
       }
 
+      {metaProps.length > 0 &&
+        <>
+          <SecondaryTitle>Talo props</SecondaryTitle>
+          <Table columns={['Property', 'Value', '']}>
+            <TableBody
+              iterator={metaProps}
+              configureClassNames={(prop, idx) => ({
+                'bg-orange-600': prop.key === 'META_DEV_BUILD' && idx % 2 !== 0,
+                'bg-orange-500': prop.key === 'META_DEV_BUILD' && idx % 2 === 0
+              })}
+            >
+              {(prop) => (
+                <>
+                  <TableCell className={classNames('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}>{metaPropKeyMap[prop.key]}</TableCell>
+                  <TableCell className='min-w-80'>{prop.value}</TableCell>
+                  <TableCell />
+                </>
+              )}
+            </TableBody>
+          </Table>
+        </>
+      }
+
       {existingProps.length + newProps.length > 0 &&
-        <Table columns={['Property', 'Value', '']}>
-          <TableBody
-            iterator={existingProps}
-            configureClassNames={(prop, idx) => ({
-              'bg-orange-600': prop.key.startsWith('META_') && idx % 2 !== 0,
-              'bg-orange-500': prop.key.startsWith('META_') && idx % 2 === 0
-            })}
-          >
-            {(prop) => (
-              <>
-                <TableCell className={classNames('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}>{prop.key}</TableCell>
-                <TableCell className='min-w-80'>
-                  <TextInput
-                    id={`edit-${prop.key}`}
-                    disabled={prop.key.startsWith('META_')}
-                    variant='light'
-                    placeholder='Value'
-                    onChange={(value) => editExistingProp(prop.key, value)}
-                    value={prop.value}
-                  />
-                </TableCell>
-                <TableCell className={classNames({ '!rounded-br-none': newProps.length > 0 })}>
-                  {!prop.key.startsWith('META_') &&
+        <>
+          <SecondaryTitle>Your props</SecondaryTitle>
+          <Table columns={['Property', 'Value', '']}>
+            <TableBody iterator={existingProps}>
+              {(prop) => (
+                <>
+                  <TableCell className={classNames('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}>{prop.key}</TableCell>
+                  <TableCell className='min-w-80'>
+                    <TextInput
+                      id={`edit-${prop.key}`}
+                      variant='light'
+                      placeholder='Value'
+                      onChange={(value) => editExistingProp(prop.key, value)}
+                      value={prop.value}
+                    />
+                  </TableCell>
+                  <TableCell className={classNames({ '!rounded-br-none': newProps.length > 0 })}>
                     <Button
                       variant='icon'
                       className='p-1 rounded-full bg-indigo-900 ml-auto'
@@ -174,45 +194,45 @@ const PlayerProps = () => {
                       icon={<IconTrash size={16} />}
                       extra={{ 'aria-label': `Delete ${prop.key} prop` }}
                     />
-                  }
-                </TableCell>
-              </>
-            )}
-          </TableBody>
-          <TableBody iterator={newProps} startIdx={existingProps.length}>
-            {(prop, idx) => (
-              <>
-                <TableCell className='min-w-80'>
-                  <TextInput
-                    id={`edit-key-${idx}`}
-                    variant='light'
-                    placeholder='Property'
-                    onChange={(value) => editNewPropKey(idx, value)}
-                    value={prop.key}
-                  />
-                </TableCell>
-                <TableCell className='min-w-80'>
-                  <TextInput
-                    id={`edit-value-${idx}`}
-                    variant='light'
-                    placeholder='Value'
-                    onChange={(value) => editNewPropValue(idx, value)}
-                    value={prop.value}
-                  />
-                </TableCell>
-                <TableCell>
-                  <Button
-                    variant='icon'
-                    className='p-1 rounded-full bg-indigo-900 ml-auto'
-                    onClick={() => deleteNewProp(idx)}
-                    icon={<IconTrash size={16} />}
-                    extra={{ 'aria-label': `Delete ${prop.key} prop` }}
-                  />
-                </TableCell>
-              </>
-            )}
-          </TableBody>
-        </Table>
+                  </TableCell>
+                </>
+              )}
+            </TableBody>
+            <TableBody iterator={newProps} startIdx={existingProps.length}>
+              {(prop, idx) => (
+                <>
+                  <TableCell className='min-w-80'>
+                    <TextInput
+                      id={`edit-key-${idx}`}
+                      variant='light'
+                      placeholder='Property'
+                      onChange={(value) => editNewPropKey(idx, value)}
+                      value={prop.key}
+                    />
+                  </TableCell>
+                  <TableCell className='min-w-80'>
+                    <TextInput
+                      id={`edit-value-${idx}`}
+                      variant='light'
+                      placeholder='Value'
+                      onChange={(value) => editNewPropValue(idx, value)}
+                      value={prop.value}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant='icon'
+                      className='p-1 rounded-full bg-indigo-900 ml-auto'
+                      onClick={() => deleteNewProp(idx)}
+                      icon={<IconTrash size={16} />}
+                      extra={{ 'aria-label': `Delete ${prop.key} prop` }}
+                    />
+                  </TableCell>
+                </>
+              )}
+            </TableBody>
+          </Table>
+        </>
       }
 
       <Button
