@@ -15,6 +15,7 @@ import useStats from '../api/useStats'
 import devDataState from '../state/devDataState'
 import SecondaryNav from '../components/SecondaryNav'
 import DevDataStatus from '../components/DevDataStatus'
+import SecondaryTitle from '../components/SecondaryTitle'
 
 export const secondaryNavRoutes = [
   { title: 'Dashboard', to: routes.dashboard },
@@ -77,7 +78,7 @@ const Dashboard = () => {
       <DevDataStatus />
 
       <div className='flex flex-col md:flex-row md:justify-between md:items-center'>
-        <h2 className='text-2xl mb-4 md:mb-0'>{titlePrefix} at a glance</h2>
+        <SecondaryTitle className='mb-4 md:mb-0'>{titlePrefix} at a glance</SecondaryTitle>
         <TimePeriodPicker
           periods={timePeriods}
           onPick={(period) => setTimePeriod(period.id)}
@@ -98,7 +99,7 @@ const Dashboard = () => {
         </div>
       }
 
-      {stats.length > 0 && <h2 className='text-2xl'>Global stats</h2>}
+      {stats.length > 0 && <SecondaryTitle>Global stats</SecondaryTitle>}
 
       {statsError &&
         <ErrorMessage error={{ message: 'Couldn\'t fetch stats' }} />

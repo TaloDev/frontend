@@ -8,6 +8,7 @@ import { differenceInDays, subDays, startOfDay, isSameDay, format } from 'date-f
 import SecondaryNav from '../components/SecondaryNav'
 import { secondaryNavRoutes } from '../pages/Dashboard'
 import Page from '../components/Page'
+import SecondaryTitle from '../components/SecondaryTitle'
 
 function Activity() {
   const activeGame = useRecoilValue(activeGameState)
@@ -46,7 +47,7 @@ function Activity() {
 
       {!error && sections.map((section, sectionIdx) => (
         <div key={sectionIdx} className='space-y-4'>
-          <h2 className='text-2xl'>{format(section.date, 'dd MMM Y')}</h2>
+          <SecondaryTitle>{format(section.date, 'dd MMM Y')}</SecondaryTitle>
 
           {section.items.map((item, itemIdx) => (
             <div key={itemIdx} className='border-t border-gray-600 pt-4'>

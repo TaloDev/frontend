@@ -62,6 +62,10 @@ const DataExports = () => {
 
   return (
     <Page title='Data exports' isLoading={dataExportsLoading}>
+      {!user.emailConfirmed &&
+        <AlertBanner className='lg:w-max' text='You need to confirm your email address to export data' />
+      }
+
       <DevDataStatus />
 
       {!fetchError && dataExports.length > 0 &&
@@ -120,7 +124,7 @@ const DataExports = () => {
 
           <Button
             isLoading={isCreating}
-            disabled={selectedEntities.length === 0}
+            disabled={selectedEntities.length === 0 || !user.emailConfirmed}
             variant='green'
             onClick={onCreateClick}
           >

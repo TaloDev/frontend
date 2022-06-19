@@ -13,6 +13,7 @@ import Tile from '../components/Tile'
 import { format } from 'date-fns'
 import { IconAlertCircle } from '@tabler/icons'
 import Loading from '../components/Loading'
+import SecondaryTitle from '../components/SecondaryTitle'
 
 export default function Billing() {
   const { plan: orgPlan, loading: orgPlanLoading, error: orgPlanError } = useOrganisationPricingPlan()
@@ -39,10 +40,10 @@ export default function Billing() {
       secondaryNav={<SecondaryNav routes={secondaryNavRoutes} />}
     >
       <div className='lg:flex space-y-8 lg:space-y-0 lg:space-x-8'>
-        <div className='w-full lg:w-1/2'>
-          <h2 className='text-2xl mb-4'>Current plan</h2>
+        <div className='w-full lg:w-1/2 space-y-4'>
+          <SecondaryTitle>Current plan</SecondaryTitle>
 
-          {orgPlanError && <div className='mb-4'><ErrorMessage error={orgPlanError} /></div>}
+          {orgPlanError && <div><ErrorMessage error={orgPlanError} /></div>}
 
           <ul className='space-y-2'>
             {currentPlan &&
@@ -82,10 +83,10 @@ export default function Billing() {
         </div>
 
         {!orgPlanError && !orgPlan.pricingPlan.hidden &&
-          <div className='w-full lg:w-1/2'>
-            <h2 className='text-2xl mb-4'>Other plans</h2>
+          <div className='w-full lg:w-1/2 space-y-4'>
+            <SecondaryTitle>Other plans</SecondaryTitle>
 
-            {allPlansError && <div className='mb-4'><ErrorMessage error={allPlansError} /></div>}
+            {allPlansError && <div><ErrorMessage error={allPlansError} /></div>}
 
             <div className='md:flex justify-between items-center bg-gray-900 border border-gray-900 rounded p-4 space-y-4 md:space-y-0'>
               <p className='text-center md:text-left'>Get{' '}<span className='text-sm p-1 rounded bg-indigo-600'>10% off</span> with yearly pricing</p>
@@ -99,7 +100,7 @@ export default function Billing() {
               </div>
             </div>
 
-            <ul className='mt-2 space-y-2'>
+            <ul className='!mt-2 space-y-2'>
               {otherPlans.map((plan) => (
                 <PricingPlanTile
                   key={plan.id}
