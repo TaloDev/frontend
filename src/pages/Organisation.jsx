@@ -17,6 +17,7 @@ import { secondaryNavRoutes } from './Dashboard'
 import Table from '../components/tables/Table'
 import AlertBanner from '../components/AlertBanner'
 import userState from '../state/userState'
+import SecondaryTitle from '../components/SecondaryTitle'
 
 function Organisation() {
   const organisation = useRecoilValue(organisationState)
@@ -34,7 +35,7 @@ function Organisation() {
         <>
           {games.length > 0 &&
             <>
-              <h2 className='text-2xl'>Games</h2>
+              <SecondaryTitle>Games</SecondaryTitle>
 
               <Table columns={['Game', 'Player count', 'Created at']}>
                 <TableBody iterator={games}>
@@ -50,7 +51,7 @@ function Organisation() {
             </>
           }
 
-          <h2 className='text-2xl'>Pending invites</h2>
+          <SecondaryTitle>Pending invites</SecondaryTitle>
 
           {!user.emailConfirmed &&
             <AlertBanner className='lg:w-max' text='You need to confirm your email address to invite users' />
@@ -86,7 +87,7 @@ function Organisation() {
             </Button>
           </div>
 
-          <h2 className='text-2xl'>Members</h2>
+          <SecondaryTitle>Members</SecondaryTitle>
 
           <Table columns={['Username', 'Type', 'Joined', 'Last seen']}>
             <TableBody iterator={members}>
