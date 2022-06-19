@@ -142,10 +142,6 @@ function PlayerProps() {
     >
       <PlayerIdentifier player={player} />
 
-      {existingProps.length + newProps.length === 0 &&
-        <p>This player has no custom properties. Click the button below to add one.</p>
-      }
-
       {metaProps.length > 0 &&
         <>
           <SecondaryTitle>Talo props</SecondaryTitle>
@@ -167,6 +163,10 @@ function PlayerProps() {
             </TableBody>
           </Table>
         </>
+      }
+
+      {existingProps.length + newProps.length === 0 &&
+        <p>This player has no custom properties. Click the button below to add one.</p>
       }
 
       {existingProps.length + newProps.length > 0 &&
