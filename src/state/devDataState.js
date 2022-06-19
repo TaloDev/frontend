@@ -1,14 +1,22 @@
 import { atom } from 'recoil'
 
+const localStorageEffect = ({ setSelf, onSet }) => {
+  if (!window.localStorage.getItem(key)) {
+    setSelf(true)
+    window.localStorage.setItem(key, 'true')
+  }
+
+  onSet((includeDevData) => {
+    window.localStorage.setItem(key, JSON.stringify(includeDevData))
+  })
+}
+
+const key = 'includeDevData'
 const devDataState = atom({
-  key: 'includeDevData',
-  default: (JSON.parse(window.localStorage.getItem('includeDevData')) ?? 'true') === 'true',
+  key,
+  default: window.localStorage.getItem(key) === 'true',
   effects: [
-    ({ onSet }) => {
-      onSet((includeDevData) => {
-        window.localStorage.setItem('includeDevData', JSON.stringify(includeDevData))
-      })
-    }
+    localStorageEffect
   ]
 })
 
