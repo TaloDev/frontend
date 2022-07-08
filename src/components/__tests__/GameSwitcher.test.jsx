@@ -2,16 +2,16 @@ import React from 'react'
 import { render, screen, within, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import GameSwitcher from '../GameSwitcher'
-import { RecoilRoot } from 'recoil'
 import activeGameState from '../../state/activeGameState'
-import RecoilObserver from '../../state/RecoilObserver'
 import userState from '../../state/userState'
+import KitchenSink from '../../utils/KitchenSink'
 
 describe('<GameSwitcher />', () => {
   it('should render a cta if there is no active game', () => {
     render(
-      <GameSwitcher />,
-      { wrapper: RecoilRoot }
+      <KitchenSink>
+        <GameSwitcher />
+      </KitchenSink>
     )
 
     expect(screen.getByText('New game')).toBeInTheDocument()
@@ -19,8 +19,9 @@ describe('<GameSwitcher />', () => {
 
   it('should open the new game modal', () => {
     render(
-      <GameSwitcher />,
-      { wrapper: RecoilRoot }
+      <KitchenSink>
+        <GameSwitcher />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByRole('button'))
@@ -30,10 +31,9 @@ describe('<GameSwitcher />', () => {
 
   it('should render the active game name', () => {
     render(
-      <RecoilObserver node={activeGameState} initialValue={{ name: 'Crawle' }}>
+      <KitchenSink states={[{ node: activeGameState, initialValue: { name: 'Crawle' } }]}>
         <GameSwitcher />
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      </KitchenSink>
     )
 
     expect(screen.getByText('Crawle')).toBeInTheDocument()
@@ -51,12 +51,12 @@ describe('<GameSwitcher />', () => {
     }
 
     render(
-      <RecoilObserver node={userState} initialValue={user}>
-        <RecoilObserver node={activeGameState} initialValue={{ name: 'Crawle' }}>
-          <GameSwitcher />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink states={[
+        { node: userState, initialValue: user },
+        { node: activeGameState, initialValue: { name: 'Crawle' } }
+      ]}>
+        <GameSwitcher />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByLabelText('Switch games or create a new one'))
@@ -81,12 +81,12 @@ describe('<GameSwitcher />', () => {
     const switchMock = jest.fn()
 
     render(
-      <RecoilObserver node={userState} initialValue={user}>
-        <RecoilObserver node={activeGameState} onChange={switchMock} initialValue={{ name: 'Crawle' }}>
-          <GameSwitcher />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink states={[
+        { node: userState, initialValue: user },
+        { node: activeGameState, onChange: switchMock, initialValue: { name: 'Crawle' } }
+      ]}>
+        <GameSwitcher />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByLabelText('Switch games or create a new one'))
@@ -110,12 +110,12 @@ describe('<GameSwitcher />', () => {
     }
 
     render(
-      <RecoilObserver node={userState} initialValue={user}>
-        <RecoilObserver node={activeGameState} initialValue={{ name: 'Crawle' }}>
-          <GameSwitcher />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink states={[
+        { node: userState, initialValue: user },
+        { node: activeGameState, initialValue: { name: 'Crawle' } }
+      ]}>
+        <GameSwitcher />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByLabelText('Switch games or create a new one'))
@@ -138,12 +138,13 @@ describe('<GameSwitcher />', () => {
     }
 
     render(
-      <RecoilObserver node={userState} initialValue={user}>
-        <RecoilObserver node={activeGameState} initialValue={{ name: 'Crawle' }}>
-          <GameSwitcher />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot, container: document.body.appendChild(main) }
+      <KitchenSink states={[
+        { node: userState, initialValue: user },
+        { node: activeGameState, initialValue: { name: 'Crawle' } }
+      ]}>
+        <GameSwitcher />
+      </KitchenSink>,
+      { container: document.body.appendChild(main) }
     )
 
     userEvent.click(screen.getByLabelText('Switch games or create a new one'))

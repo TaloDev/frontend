@@ -3,25 +3,20 @@ import { render, screen, within } from '@testing-library/react'
 import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
 import NavBar from '../NavBar'
-import RecoilObserver from '../../state/RecoilObserver'
 import activeGameState from '../../state/activeGameState'
-import { RecoilRoot } from 'recoil'
-import { MemoryRouter } from 'react-router-dom'
 import userState from '../../state/userState'
 import userEvent from '@testing-library/user-event'
 import routes from '../../constants/routes'
+import KitchenSink from '../../utils/KitchenSink'
 
 describe('<NavBar />', () => {
   const axiosMock = new MockAdapter(api)
 
   it('should not render the services link when there\'s no active game', () => {
     render(
-      <RecoilRoot>
-        <RecoilObserver node={activeGameState}>
-          <NavBar />
-        </RecoilObserver>
-      </RecoilRoot>
-      , { wrapper: MemoryRouter }
+      <KitchenSink states={[{ node: activeGameState }]}>
+        <NavBar />
+      </KitchenSink>
     )
 
     const list = screen.getAllByRole('list')[0]
@@ -36,12 +31,9 @@ describe('<NavBar />', () => {
     axiosMock.onPost('http://talo.test/users/logout').replyOnce(200)
 
     render(
-      <RecoilRoot>
-        <RecoilObserver node={activeGameState}>
-          <NavBar />
-        </RecoilObserver>
-      </RecoilRoot>
-      , { wrapper: MemoryRouter }
+      <KitchenSink states={[{ node: activeGameState }]}>
+        <NavBar />
+      </KitchenSink>
     )
 
     const list = screen.getAllByRole('list')[0]
@@ -55,12 +47,9 @@ describe('<NavBar />', () => {
     axiosMock.onPost('http://talo.test/users/logout').networkErrorOnce()
 
     render(
-      <RecoilRoot>
-        <RecoilObserver node={activeGameState}>
-          <NavBar />
-        </RecoilObserver>
-      </RecoilRoot>
-      , { wrapper: MemoryRouter }
+      <KitchenSink states={[{ node: activeGameState }]}>
+        <NavBar />
+      </KitchenSink>
     )
 
     const list = screen.getAllByRole('list')[0]
@@ -85,14 +74,14 @@ describe('<NavBar />', () => {
     }
 
     render(
-      <RecoilRoot>
-        <RecoilObserver node={userState} initialValue={user}>
-          <RecoilObserver node={activeGameState} initialValue={game}>
-            <NavBar />
-          </RecoilObserver>
-        </RecoilObserver>
-      </RecoilRoot>
-      , { wrapper: MemoryRouter }
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: user },
+          { node: activeGameState, initialValue: game }
+        ]}
+      >
+        <NavBar />
+      </KitchenSink>
     )
 
     const list = screen.getAllByRole('list')[0]
@@ -102,12 +91,9 @@ describe('<NavBar />', () => {
 
   it('should open and close the mobile menu', () => {
     render(
-      <RecoilRoot>
-        <RecoilObserver node={activeGameState}>
-          <NavBar />
-        </RecoilObserver>
-      </RecoilRoot>
-      , { wrapper: MemoryRouter }
+      <KitchenSink states={[{ node: activeGameState }]}>
+        <NavBar />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByLabelText('Navigation menu'))

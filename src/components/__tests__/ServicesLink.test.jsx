@@ -1,25 +1,34 @@
 import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
-import { BrowserRouter } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
 import ServicesLink from '../ServicesLink'
-import { RecoilRoot } from 'recoil'
 import userState from '../../state/userState'
-import RecoilObserver from '../../state/RecoilObserver'
+import KitchenSink from '../../utils/KitchenSink'
+import userTypes from '../../constants/userTypes'
+import routes from '../../constants/routes'
 
 describe('<ServicesLink />', () => {
   it('should close when going to a different page', async () => {
+    const setLocationMock = jest.fn()
+
     render(
-      <BrowserRouter>
-        <RecoilObserver node={userState} initialValue={{ type: 1 }}>
-          <ServicesLink />
-        </RecoilObserver>
-      </BrowserRouter>
-      , { wrapper: RecoilRoot }
+      <KitchenSink
+        states={[{ node: userState, initialValue: { type: userTypes.ADMIN } }]}
+        setLocation={setLocationMock}
+      >
+        <ServicesLink />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('Services'))
     userEvent.click(screen.getByText('Players'))
+
+    await waitFor(() => {
+      expect(setLocationMock).toHaveBeenLastCalledWith({
+        pathname: routes.players,
+        state: null
+      })
+    })
 
     await waitFor(() => expect(screen.queryByText('Players')).not.toBeInTheDocument())
   })
