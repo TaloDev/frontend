@@ -1968,10 +1968,10 @@
   dependencies:
     defer-to-connect "^2.0.0"
 
-"@tabler/icons@^1.68.0":
-  version "1.68.0"
-  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-1.68.0.tgz#047bd88966cc24ef957b3c429a13bb82cca95561"
-  integrity sha512-UseBEEhv7r+Drl3iZih7rkwqkfJJZscjd5ZvK1WdIIulQsBa+qE8WBDGdAO0RtjkCclEK88z9kC0s5wiVPIvkw==
+"@tabler/icons@^1.72.0":
+  version "1.72.0"
+  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-1.72.0.tgz#58272695fec6fd9dbf6a59fa472e42614d228d4d"
+  integrity sha512-ZWi0Xn2utBor8ryZYFxx+BGV9mmdyiJYN1Nq/Koj3bp88VBh7mF4VNGN8oVIVml9s1rsD/D9I/z/WA7QrdRxsg==
 
 "@testing-library/dom@^7.31.2":
   version "7.31.2"
