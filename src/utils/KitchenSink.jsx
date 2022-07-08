@@ -44,7 +44,7 @@ function KitchenSink({ states, children, initialEntries, setLocation, routePath 
 KitchenSink.propTypes = {
   states: PropTypes.arrayOf(PropTypes.shape({
     node: PropTypes.object.isRequired,
-    initialValue: PropTypes.any.isRequired,
+    initialValue: PropTypes.any,
     onChange: PropTypes.func
   })),
   initialEntries: PropTypes.array,

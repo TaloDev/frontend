@@ -4,11 +4,10 @@ import userEvent from '@testing-library/user-event'
 import LeaderboardDetails from '../LeaderboardDetails'
 import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
-import { RecoilRoot } from 'recoil'
-import RecoilObserver from '../../state/RecoilObserver'
 import activeGameState from '../../state/activeGameState'
 import userState from '../../state/userState'
 import userTypes from '../../constants/userTypes'
+import KitchenSink from '../../utils/KitchenSink'
 
 describe('<LeaderboardDetails />', () => {
   const axiosMock = new MockAdapter(api)
@@ -21,12 +20,12 @@ describe('<LeaderboardDetails />', () => {
     const mutateMock = jest.fn()
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <LeaderboardDetails modalState={[true, closeMock]} mutate={mutateMock} />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink states={[
+        { node: userState, initialValue: { type: userTypes.ADMIN } },
+        { node: activeGameState, initialValue: activeGameValue }
+      ]}>
+        <LeaderboardDetails modalState={[true, closeMock]} mutate={mutateMock} />
+      </KitchenSink>
     )
 
     userEvent.type(screen.getByLabelText('Internal name'), 'score')
@@ -63,12 +62,12 @@ describe('<LeaderboardDetails />', () => {
     const closeMock = jest.fn()
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <LeaderboardDetails modalState={[true, closeMock]} mutate={jest.fn()} />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink states={[
+        { node: userState, initialValue: { type: userTypes.ADMIN } },
+        { node: activeGameState, initialValue: activeGameValue }
+      ]}>
+        <LeaderboardDetails modalState={[true, closeMock]} mutate={jest.fn()} />
+      </KitchenSink>
     )
 
     userEvent.type(screen.getByLabelText('Internal name'), 'score')
@@ -85,12 +84,12 @@ describe('<LeaderboardDetails />', () => {
     const closeMock = jest.fn()
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <LeaderboardDetails modalState={[true, closeMock]} mutate={jest.fn()} />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink states={[
+        { node: userState, initialValue: { type: userTypes.ADMIN } },
+        { node: activeGameState, initialValue: activeGameValue }
+      ]}>
+        <LeaderboardDetails modalState={[true, closeMock]} mutate={jest.fn()} />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('Close'))
@@ -100,21 +99,21 @@ describe('<LeaderboardDetails />', () => {
 
   it('should prefill details if a leaderboard is being edited', () => {
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <LeaderboardDetails
-            modalState={[true, jest.fn()]}
-            mutate={jest.fn()}
-            editingLeaderboard={{
-              internalName: 'score',
-              name: 'Score',
-              sortMode: 'asc',
-              unique: true
-            }}
-          />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink states={[
+        { node: userState, initialValue: { type: userTypes.ADMIN } },
+        { node: activeGameState, initialValue: activeGameValue }
+      ]}>
+        <LeaderboardDetails
+          modalState={[true, jest.fn()]}
+          mutate={jest.fn()}
+          editingLeaderboard={{
+            internalName: 'score',
+            name: 'Score',
+            sortMode: 'asc',
+            unique: true
+          }}
+        />
+      </KitchenSink>
     )
 
     expect(screen.getByLabelText('Internal name')).toHaveValue('score')
@@ -144,16 +143,16 @@ describe('<LeaderboardDetails />', () => {
     })
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <LeaderboardDetails
-            modalState={[true, closeMock]}
-            mutate={mutateMock}
-            editingLeaderboard={initialLeaderboard}
-          />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink states={[
+        { node: userState, initialValue: { type: userTypes.ADMIN } },
+        { node: activeGameState, initialValue: activeGameValue }
+      ]}>
+        <LeaderboardDetails
+          modalState={[true, closeMock]}
+          mutate={mutateMock}
+          editingLeaderboard={initialLeaderboard}
+        />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('Yes'))
@@ -176,22 +175,22 @@ describe('<LeaderboardDetails />', () => {
     const closeMock = jest.fn()
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <LeaderboardDetails
-            modalState={[true, closeMock]}
-            mutate={jest.fn()}
-            editingLeaderboard={{
-              id: 1,
-              internalName: 'score',
-              name: 'Score',
-              sortMode: 'asc',
-              unique: false
-            }}
-          />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink states={[
+        { node: userState, initialValue: { type: userTypes.ADMIN } },
+        { node: activeGameState, initialValue: activeGameValue }
+      ]}>
+        <LeaderboardDetails
+          modalState={[true, closeMock]}
+          mutate={jest.fn()}
+          editingLeaderboard={{
+            id: 1,
+            internalName: 'score',
+            name: 'Score',
+            sortMode: 'asc',
+            unique: false
+          }}
+        />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('Update'))
@@ -217,16 +216,16 @@ describe('<LeaderboardDetails />', () => {
     window.confirm = jest.fn(() => true)
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <LeaderboardDetails
-            modalState={[true, closeMock]}
-            mutate={mutateMock}
-            editingLeaderboard={initialLeaderboard}
-          />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink states={[
+        { node: userState, initialValue: { type: userTypes.ADMIN } },
+        { node: activeGameState, initialValue: activeGameValue }
+      ]}>
+        <LeaderboardDetails
+          modalState={[true, closeMock]}
+          mutate={mutateMock}
+          editingLeaderboard={initialLeaderboard}
+        />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('Delete'))
@@ -252,16 +251,16 @@ describe('<LeaderboardDetails />', () => {
     }
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.DEV }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <LeaderboardDetails
-            modalState={[true, jest.fn()]}
-            mutate={jest.fn()}
-            editingLeaderboard={initialLeaderboard}
-          />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink states={[
+        { node: userState, initialValue: { type: userTypes.DEV } },
+        { node: activeGameState, initialValue: activeGameValue }
+      ]}>
+        <LeaderboardDetails
+          modalState={[true, jest.fn()]}
+          mutate={jest.fn()}
+          editingLeaderboard={initialLeaderboard}
+        />
+      </KitchenSink>
     )
 
     expect(screen.queryByText('Delete')).not.toBeInTheDocument()
@@ -273,22 +272,22 @@ describe('<LeaderboardDetails />', () => {
     const closeMock = jest.fn()
 
     render(
-      <RecoilObserver node={userState} initialValue={{ type: userTypes.ADMIN }}>
-        <RecoilObserver node={activeGameState} initialValue={activeGameValue}>
-          <LeaderboardDetails
-            modalState={[true, closeMock]}
-            mutate={jest.fn()}
-            editingLeaderboard={{
-              id: 1,
-              internalName: 'score',
-              name: 'Score',
-              sortMode: 'asc',
-              unique: false
-            }}
-          />
-        </RecoilObserver>
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      <KitchenSink states={[
+        { node: userState, initialValue: { type: userTypes.ADMIN } },
+        { node: activeGameState, initialValue: activeGameValue }
+      ]}>
+        <LeaderboardDetails
+          modalState={[true, closeMock]}
+          mutate={jest.fn()}
+          editingLeaderboard={{
+            id: 1,
+            internalName: 'score',
+            name: 'Score',
+            sortMode: 'asc',
+            unique: false
+          }}
+        />
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('Delete'))
