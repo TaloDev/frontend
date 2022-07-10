@@ -6,7 +6,6 @@ import { stringify } from 'querystring'
 const useEvents = (activeGame, startDate, endDate) => {
   const fetcher = async (url) => {
     const qs = stringify({
-      gameId: activeGame.id,
       startDate,
       endDate
     })
@@ -16,7 +15,7 @@ const useEvents = (activeGame, startDate, endDate) => {
   }
 
   const { data, error } = useSWR(
-    activeGame && startDate && endDate ? ['/events', activeGame, startDate, endDate] : null,
+    activeGame && startDate && endDate ? [`/games/${activeGame.id}/events`, startDate, endDate] : null,
     fetcher
   )
 

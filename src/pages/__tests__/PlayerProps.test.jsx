@@ -163,7 +163,7 @@ describe('<PlayerProps />', () => {
   })
 
   it('should load in players that are not in the location state', async () => {
-    axiosMock.onGet(`http://talo.test/players?gameId=1&search=${basePlayer.id}`).replyOnce(200, {
+    axiosMock.onGet(`http://talo.test/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
       players: [basePlayer]
     })
 
@@ -189,7 +189,7 @@ describe('<PlayerProps />', () => {
   })
 
   it('should show a message for players with no props', async () => {
-    axiosMock.onGet(`http://talo.test/players?gameId=1&search=${basePlayer.id}`).replyOnce(200, {
+    axiosMock.onGet(`http://talo.test/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
       players: [{ ...basePlayer, props: [] }]
     })
 
@@ -212,7 +212,7 @@ describe('<PlayerProps />', () => {
   })
 
   it('should return to the players page if the find request fails', async () => {
-    axiosMock.onGet(`http://talo.test/players?gameId=1&search=${basePlayer.id}`).networkErrorOnce()
+    axiosMock.onGet(`http://talo.test/games/1/players?search=${basePlayer.id}`).networkErrorOnce()
 
     const setLocationMock = jest.fn()
 
@@ -236,7 +236,7 @@ describe('<PlayerProps />', () => {
   })
 
   it('should save props', async () => {
-    axiosMock.onPatch(`http://talo.test/players/${basePlayer.id}`).replyOnce(200, {
+    axiosMock.onPatch(`http://talo.test/games/1/players/${basePlayer.id}`).replyOnce(200, {
       player: {
         ...basePlayer,
         props: [
@@ -273,7 +273,7 @@ describe('<PlayerProps />', () => {
   })
 
   it('should keep new props without keys after saving', async () => {
-    axiosMock.onPatch(`http://talo.test/players/${basePlayer.id}`).replyOnce(200, {
+    axiosMock.onPatch(`http://talo.test/games/1/players/${basePlayer.id}`).replyOnce(200, {
       player: basePlayer
     })
 
@@ -302,7 +302,7 @@ describe('<PlayerProps />', () => {
   })
 
   it('should render saving errors', async () => {
-    axiosMock.onPatch(`http://talo.test/players/${basePlayer.id}`).networkErrorOnce()
+    axiosMock.onPatch(`http://talo.test/games/1/players/${basePlayer.id}`).networkErrorOnce()
 
     render(
       <KitchenSink

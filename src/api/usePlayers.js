@@ -6,7 +6,6 @@ import { stringify } from 'querystring'
 const usePlayers = (activeGame, search, page) => {
   const fetcher = async (url) => {
     const qs = stringify({
-      gameId: activeGame.id,
       search,
       page
     })
@@ -16,7 +15,7 @@ const usePlayers = (activeGame, search, page) => {
   }
 
   const { data, error } = useSWR(
-    activeGame ? ['/players', activeGame, search, page] : null,
+    activeGame ? [`games/${activeGame.id}/players`, search, page] : null,
     fetcher
   )
 

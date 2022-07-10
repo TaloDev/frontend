@@ -17,6 +17,8 @@ import Page from '../components/Page'
 import usePlayer from '../utils/usePlayer'
 import Table from '../components/tables/Table'
 import { isMetaProp } from '../constants/metaProps'
+import activeGameState from '../state/activeGameState'
+import { useRecoilValue } from 'recoil'
 
 const EventProps = ({ props }) => {
   return props.filter((prop) => !isMetaProp(prop)).map(({ key, value }) => (
@@ -37,13 +39,15 @@ EventProps.propTypes = {
 }
 
 const PlayerEvents = () => {
+  const activeGame = useRecoilValue(activeGameState)
+
   const { id: playerId } = useParams()
   const [player] = usePlayer()
 
   const [search, setSearch] = useState('')
   const [debouncedSearch] = useDebounce(search, 300)
   const [page, setPage] = useState(0)
-  const { events, count, loading: eventsLoading, error, errorStatusCode } = usePlayerEvents(playerId, debouncedSearch, page)
+  const { events, count, loading: eventsLoading, error, errorStatusCode } = usePlayerEvents(activeGame, playerId, debouncedSearch, page)
   const sortedEvents = useSortedItems(events, 'createdAt')
 
   const navigate = useNavigate()

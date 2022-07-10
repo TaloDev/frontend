@@ -2,14 +2,14 @@ import useSWR from 'swr'
 import buildError from '../utils/buildError'
 import api from './api'
 
-const useDataExportEntities = () => {
+const useDataExportEntities = (activeGame) => {
   const fetcher = async (url) => {
     const res = await api.get(url)
     return res.data
   }
 
   const { data, error } = useSWR(
-    '/data-exports/entities',
+    [`/games/${activeGame.id}/data-exports/entities`],
     fetcher
   )
 

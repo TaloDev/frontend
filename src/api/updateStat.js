@@ -1,3 +1,3 @@
 import api from './api'
 
-export default (id, data) => api.patch(`/game-stats/${id}`, data)
+export default (gameId, statId, data) => api.patch(`/games/${gameId}/game-stats/${statId}`, data)

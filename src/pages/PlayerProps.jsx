@@ -16,8 +16,12 @@ import usePlayer from '../utils/usePlayer'
 import Table from '../components/tables/Table'
 import SecondaryTitle from '../components/SecondaryTitle'
 import { isMetaProp, metaPropKeyMap } from '../constants/metaProps'
+import activeGameState from '../state/activeGameState'
+import { useRecoilValue } from 'recoil'
 
 function PlayerProps() {
+  const activeGame = useRecoilValue(activeGameState)
+
   const location = useLocation()
 
   const [originalPlayer, setOriginalPlayer] = useState(location.state?.player)
@@ -107,7 +111,7 @@ function PlayerProps() {
     const props = [...player.props, ...newProps].filter((prop) => !isMetaProp(prop))
 
     try {
-      const res = await updatePlayer(player.id, { props })
+      const res = await updatePlayer(activeGame.id, player.id, { props })
       setPlayer(res.data.player)
       setOriginalPlayer(res.data.player)
       setNewProps(newProps.filter((newProp) => newProp.key.length === 0))

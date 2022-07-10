@@ -135,7 +135,7 @@ const StatDetails = ({ modalState, mutate, editingStat }) => {
     setError(null)
 
     try {
-      const res = await updateStat(editingStat.id, { ...data, global })
+      const res = await updateStat(activeGame.id, editingStat.id, { ...data, global })
 
       mutate((data) => {
         return {
@@ -162,7 +162,7 @@ const StatDetails = ({ modalState, mutate, editingStat }) => {
     setError(null)
 
     try {
-      await deleteStat(editingStat.id)
+      await deleteStat(activeGame.id, editingStat.id)
 
       mutate((data) => {
         return {

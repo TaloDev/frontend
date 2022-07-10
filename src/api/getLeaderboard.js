@@ -1,3 +1,3 @@
 import api from './api'
 
-export default (id) => api.get(`/leaderboards/${id}`)
+export default (gameId, leaderboardId) => api.get(`/games/${gameId}/leaderboards/${leaderboardId}`)

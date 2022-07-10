@@ -39,7 +39,7 @@ const APIKeys = () => {
         setCreatedKey(null)
 
         try {
-          let res = await getAPIKeyScopes()
+          let res = await getAPIKeyScopes(activeGame.id)
           setAvailableScopes(res.data.scopes)
 
           res = await getAPIKeys(activeGame.id)
@@ -67,7 +67,7 @@ const APIKeys = () => {
       setDeletingKeys([...deletingKeys, apiKey.id])
 
       try {
-        await deleteAPIKey(apiKey.id)
+        await deleteAPIKey(activeGame.id, apiKey.id)
         setKeys(keys.filter((k) => k.id !== apiKey.id))
         setError(null)
         setCreatedKey(null)

@@ -1,3 +1,3 @@
 import api from './api'
 
-export default (gameId, scopes) => api.post('/api-keys', { gameId, scopes })
+export default (gameId, scopes) => api.post(`/games/${gameId}/api-keys`, { scopes })

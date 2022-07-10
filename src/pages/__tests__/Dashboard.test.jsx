@@ -13,16 +13,16 @@ describe('<Dashboard />', () => {
   const axiosMock = new MockAdapter(api)
 
   beforeEach(() => {
-    axiosMock.onGet(/\/headlines\/new_players/).replyOnce(200, {
+    axiosMock.onGet(/\/games\/\d\/headlines\/new_players/).replyOnce(200, {
       count: 3
     })
-    axiosMock.onGet(/\/headlines\/returning_players/).replyOnce(200, {
+    axiosMock.onGet(/\/games\/\d\/headlines\/returning_players/).replyOnce(200, {
       count: 1
     })
-    axiosMock.onGet(/\/headlines\/events/).replyOnce(200, {
+    axiosMock.onGet(/\/games\/\d\/headlines\/events/).replyOnce(200, {
       count: 104
     })
-    axiosMock.onGet(/\/headlines\/unique_event_submitters/).replyOnce(200, {
+    axiosMock.onGet(/\/games\/\d\/headlines\/unique_event_submitters/).replyOnce(200, {
       count: 8
     })
   })
@@ -91,16 +91,16 @@ describe('<Dashboard />', () => {
     expect(await screen.findByText('New players')).toBeInTheDocument()
 
     axiosMock.reset()
-    axiosMock.onGet(/\/headlines\/new_players/).replyOnce(200, {
+    axiosMock.onGet(/\/games\/\d\/headlines\/new_players/).replyOnce(200, {
       count: 3
     })
-    axiosMock.onGet(/\/headlines\/returning_players/).replyOnce(200, {
+    axiosMock.onGet(/\/games\/\d\/headlines\/returning_players/).replyOnce(200, {
       count: 1
     })
-    axiosMock.onGet(/\/headlines\/events/).replyOnce(200, {
+    axiosMock.onGet(/\/games\/\d\/headlines\/events/).replyOnce(200, {
       count: 2103
     })
-    axiosMock.onGet(/\/headlines\/unique_event_submitters/).replyOnce(200, {
+    axiosMock.onGet(/\/games\/\d\/headlines\/unique_event_submitters/).replyOnce(200, {
       count: 8
     })
 
@@ -111,11 +111,11 @@ describe('<Dashboard />', () => {
 
   it('should render headline and stat errors', async () => {
     axiosMock.reset()
-    axiosMock.onGet(/\/headlines\/new_players/).networkErrorOnce()
-    axiosMock.onGet(/\/headlines\/returning_players/).networkErrorOnce()
-    axiosMock.onGet(/\/headlines\/events/).networkErrorOnce()
-    axiosMock.onGet(/\/headlines\/unique_event_submitters/).networkErrorOnce()
-    axiosMock.onGet(/\/game-stats/).networkErrorOnce()
+    axiosMock.onGet(/\/games\/\d\/headlines\/new_players/).networkErrorOnce()
+    axiosMock.onGet(/\/games\/\d\/headlines\/returning_players/).networkErrorOnce()
+    axiosMock.onGet(/\/games\/\d\/headlines\/events/).networkErrorOnce()
+    axiosMock.onGet(/\/games\/\d\/headlines\/unique_event_submitters/).networkErrorOnce()
+    axiosMock.onGet(/\/games\/\d\/game-stats/).networkErrorOnce()
 
     render(
       <KitchenSink
