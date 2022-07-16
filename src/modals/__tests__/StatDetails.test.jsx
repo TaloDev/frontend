@@ -33,6 +33,7 @@ describe('<StatDetails />', () => {
     userEvent.type(screen.getByLabelText('Internal name'), 'hearts-collected')
     userEvent.type(screen.getByLabelText('Display name'), 'Hearts collected')
     userEvent.click(screen.getByText('Yes'))
+    userEvent.type(screen.getByLabelText('Max change'), '30')
     userEvent.type(screen.getByLabelText('Default value'), '52')
 
     await waitFor(() => expect(screen.getByText('Create')).toBeEnabled())
@@ -145,6 +146,28 @@ describe('<StatDetails />', () => {
     userEvent.type(screen.getByLabelText('Min value'), '60')
 
     expect(await screen.findByText('Max value must be more than the min value')).toBeInTheDocument()
+  })
+
+  it('should display an error if the max change is negative', async () => {
+    axiosMock.onPost('http://talo.test/games/1/game-stats').replyOnce(200, { stat: { id: 2 } })
+
+    const closeMock = jest.fn()
+    const mutateMock = jest.fn()
+
+    render(
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue }
+        ]}
+      >
+        <StatDetails modalState={[true, closeMock]} mutate={mutateMock} />
+      </KitchenSink>
+    )
+
+    userEvent.type(screen.getByLabelText('Max change'), '-8')
+
+    expect(await screen.findByText('Max change must be a positive number')).toBeInTheDocument()
   })
 
   it('should close when clicking close', () => {

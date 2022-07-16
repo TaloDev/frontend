@@ -246,7 +246,6 @@ const StatDetails = ({ modalState, mutate, editingStat }) => {
                 }}
                 inputClassName='md:max-w-[160px]'
                 containerClassName='max-w-xs md:!w-auto'
-                errors={errors.minValue && ['']}
               />
 
               <TextInput

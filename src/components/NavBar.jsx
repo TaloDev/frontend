@@ -18,6 +18,7 @@ const NavBar = () => {
 
   const onLogoutClick = async () => {
     try {
+      /* istanbul ignore next */
       Sentry.configureScope((scope) => scope.setUser(null))
       window.localStorage.removeItem('loggedOut')
       await logout()
