@@ -182,7 +182,7 @@ describe('<StatDetails />', () => {
       minTimeBetweenUpdates: 0
     }
 
-    axiosMock.onPatch('http://talo.test/games/1/game-stats/1').replyOnce(200, {
+    axiosMock.onPut('http://talo.test/games/1/game-stats/1').replyOnce(200, {
       stat: {
         ...initialStat,
         minValue: -10,
@@ -241,7 +241,7 @@ describe('<StatDetails />', () => {
       minTimeBetweenUpdates: 0
     }
 
-    axiosMock.onPatch('http://talo.test/games/1/game-stats/1').networkErrorOnce()
+    axiosMock.onPut('http://talo.test/games/1/game-stats/1').networkErrorOnce()
 
     render(
       <KitchenSink
