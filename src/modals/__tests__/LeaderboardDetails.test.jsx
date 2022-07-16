@@ -136,7 +136,7 @@ describe('<LeaderboardDetails />', () => {
       unique: false
     }
 
-    axiosMock.onPatch('http://talo.test/games/1/leaderboards/1').replyOnce(200, {
+    axiosMock.onPut('http://talo.test/games/1/leaderboards/1').replyOnce(200, {
       leaderboard: {
         ...initialLeaderboard, unique: true
       }
@@ -170,7 +170,7 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should handle updating errors', async () => {
-    axiosMock.onPatch('http://talo.test/games/1/leaderboards/1').networkErrorOnce()
+    axiosMock.onPut('http://talo.test/games/1/leaderboards/1').networkErrorOnce()
 
     const closeMock = jest.fn()
 
