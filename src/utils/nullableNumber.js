@@ -1,4 +1,4 @@
 export default function(val) {
-  if (val === null) return null
+  if ([null, undefined, ''].includes(val)) return null
   return Number(val)
 }

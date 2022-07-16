@@ -1,3 +1,3 @@
 import api from './api'
 
-export default (id, data) => api.patch(`/leaderboards/${id}`, data)
+export default (gameId, leaderboardId, data) => api.put(`/games/${gameId}/leaderboards/${leaderboardId}`, data)

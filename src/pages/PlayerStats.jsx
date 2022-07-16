@@ -12,12 +12,16 @@ import usePlayerStats from '../api/usePlayerStats'
 import PlayerIdentifier from '../components/PlayerIdentifier'
 import usePlayer from '../utils/usePlayer'
 import Table from '../components/tables/Table'
+import { useRecoilValue } from 'recoil'
+import activeGameState from '../state/activeGameState'
 
 function PlayerStats() {
+  const activeGame = useRecoilValue(activeGameState)
+
   const { id: playerId } = useParams()
   const [player] = usePlayer()
 
-  const { stats, loading: statsLoading, error, errorStatusCode } = usePlayerStats(playerId)
+  const { stats, loading: statsLoading, error, errorStatusCode } = usePlayerStats(activeGame, playerId)
   const sortedStats = useSortedItems(stats, 'name')
 
   const navigate = useNavigate()

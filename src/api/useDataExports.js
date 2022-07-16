@@ -1,20 +1,15 @@
 import useSWR from 'swr'
 import buildError from '../utils/buildError'
 import api from './api'
-import { stringify } from 'querystring'
 
 const useDataExports = (activeGame, createdExport) => {
   const fetcher = async (url) => {
-    const qs = stringify({
-      gameId: activeGame.id
-    })
-
-    const res = await api.get(`${url}?${qs}`)
+    const res = await api.get(url)
     return res.data
   }
 
   const { data, error } = useSWR(
-    activeGame ? ['/data-exports', activeGame, createdExport] : null,
+    activeGame ? [`/games/${activeGame.id}/data-exports`, createdExport] : null,
     fetcher
   )
 

@@ -14,7 +14,7 @@ describe('<LeaderboardDetails />', () => {
   const activeGameValue = { id: 1, name: 'Shattered' }
 
   it('should create a leaderboard', async () => {
-    axiosMock.onPost('http://talo.test/leaderboards').replyOnce(200, { leaderboard: { id: 4 } })
+    axiosMock.onPost('http://talo.test/games/1/leaderboards').replyOnce(200, { leaderboard: { id: 4 } })
 
     const closeMock = jest.fn()
     const mutateMock = jest.fn()
@@ -57,7 +57,7 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should handle creation errors', async () => {
-    axiosMock.onPost('http://talo.test/leaderboards').networkErrorOnce()
+    axiosMock.onPost('http://talo.test/games/1/leaderboards').networkErrorOnce()
 
     const closeMock = jest.fn()
 
@@ -136,7 +136,7 @@ describe('<LeaderboardDetails />', () => {
       unique: false
     }
 
-    axiosMock.onPatch('http://talo.test/leaderboards/1').replyOnce(200, {
+    axiosMock.onPut('http://talo.test/games/1/leaderboards/1').replyOnce(200, {
       leaderboard: {
         ...initialLeaderboard, unique: true
       }
@@ -170,7 +170,7 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should handle updating errors', async () => {
-    axiosMock.onPatch('http://talo.test/leaderboards/1').networkErrorOnce()
+    axiosMock.onPut('http://talo.test/games/1/leaderboards/1').networkErrorOnce()
 
     const closeMock = jest.fn()
 
@@ -212,7 +212,7 @@ describe('<LeaderboardDetails />', () => {
       unique: false
     }
 
-    axiosMock.onDelete('http://talo.test/leaderboards/1').replyOnce(200)
+    axiosMock.onDelete('http://talo.test/games/1/leaderboards/1').replyOnce(200)
     window.confirm = jest.fn(() => true)
 
     render(
@@ -267,7 +267,7 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should handle deleting errors', async () => {
-    axiosMock.onDelete('http://talo.test/leaderboards/1').networkErrorOnce()
+    axiosMock.onDelete('http://talo.test/games/1/leaderboards/1').networkErrorOnce()
 
     const closeMock = jest.fn()
 

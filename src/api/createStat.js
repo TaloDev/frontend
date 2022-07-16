@@ -1,6 +1,3 @@
 import api from './api'
 
-export default (gameId, data) => api.post('/game-stats', {
-  ...data,
-  gameId
-})
+export default (gameId, data) => api.post(`/games/${gameId}/game-stats`, data)

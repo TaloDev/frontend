@@ -106,6 +106,7 @@ export default function PricingPlanTile({ plan, displayInterval, custom, current
               <ConfirmPlanChange
                 modalState={[
                   Boolean(invoice),
+                  /* istanbul ignore next */
                   () => {
                     setInvoice(null)
                     setPlanLoading(null)

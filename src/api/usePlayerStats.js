@@ -2,14 +2,14 @@ import useSWR from 'swr'
 import buildError from '../utils/buildError'
 import api from './api'
 
-const usePlayerStats = (playerId) => {
+const usePlayerStats = (activeGame, playerId) => {
   const fetcher = async (url) => {
     const res = await api.get(url)
     return res.data
   }
 
   const { data, error } = useSWR(
-    [`/players/${playerId}/stats`],
+    [`/games/${activeGame.id}/players/${playerId}/stats`],
     fetcher
   )
 

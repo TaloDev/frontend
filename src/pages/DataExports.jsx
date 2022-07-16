@@ -31,7 +31,7 @@ const DataExports = () => {
   const [createdExportId, setCreatedExportId] = useState(null)
 
   const { dataExports, loading: dataExportsLoading, error: fetchError } = useDataExports(activeGame, createdExportId)
-  const { entities: availableEntities, error: entitiesError } = useDataExportEntities()
+  const { entities: availableEntities, error: entitiesError } = useDataExportEntities(activeGame)
 
   const sortedDataExports = useSortedItems(dataExports, 'createdAt')
 

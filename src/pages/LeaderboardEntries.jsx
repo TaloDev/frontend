@@ -17,15 +17,18 @@ import buildError from '../utils/buildError'
 import classNames from 'classnames'
 import Page from '../components/Page'
 import Table from '../components/tables/Table'
+import { useRecoilValue } from 'recoil'
+import activeGameState from '../state/activeGameState'
 
 const LeaderboardEntries = () => {
   const location = useLocation()
 
   const [isLoading, setLoading] = useState(!location.state?.leaderboard)
+  const activeGame = useRecoilValue(activeGameState)
   const [leaderboard, setLeaderboard] = useState(location.state?.leaderboard)
 
   const [page, setPage] = useState(0)
-  const { entries, count, loading, error: fetchError, mutate } = useLeaderboardEntries(leaderboard?.id, page)
+  const { entries, count, loading, error: fetchError, mutate } = useLeaderboardEntries(activeGame.id, leaderboard?.id, page)
 
   const [error, setError] = useState(null)
 
@@ -35,7 +38,7 @@ const LeaderboardEntries = () => {
     (async () => {
       if (isLoading) {
         try {
-          const res = await getLeaderboard(leaderboard?.id)
+          const res = await getLeaderboard(activeGame.id, leaderboard?.id)
           setLeaderboard(res.data.leaderboard)
           setLoading(false)
         } catch (err) {
@@ -59,7 +62,7 @@ const LeaderboardEntries = () => {
 
   const onHideToggle = async (entry) => {
     try {
-      const res = await updateLeaderboardEntry(leaderboard?.id, entry.id, { hidden: !entry.hidden })
+      const res = await updateLeaderboardEntry(activeGame.id, leaderboard?.id, entry.id, { hidden: !entry.hidden })
 
       mutate((data) => {
         return {
