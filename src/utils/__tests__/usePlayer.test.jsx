@@ -19,7 +19,7 @@ describe('usePlayer', () => {
   it('should correctly set the player', async () => {
     const id = '82141b6e-e662-4ff2-bc77-5dc46236f339'
 
-    axiosMock.onGet(`http://talo.test/players?gameId=1&search=${id}`).replyOnce(200, {
+    axiosMock.onGet(`http://talo.test/games/1/players?search=${id}`).replyOnce(200, {
       players: [{ id }]
     })
 
@@ -39,7 +39,7 @@ describe('usePlayer', () => {
   it('should return to the players page if the player does not exist', async () => {
     const setLocationMock = jest.fn()
 
-    axiosMock.onGet('http://talo.test/players?gameId=1&search=1').replyOnce(200, {
+    axiosMock.onGet('http://talo.test/games/1/players?search=1').replyOnce(200, {
       players: []
     })
 
@@ -62,7 +62,7 @@ describe('usePlayer', () => {
   it('should return to the players page if an unexpected error occurs', async () => {
     const setLocationMock = jest.fn()
 
-    axiosMock.onGet('http://talo.test/players?gameId=1&search=1').networkErrorOnce()
+    axiosMock.onGet('http://talo.test/games/1/players?search=1').networkErrorOnce()
 
     render(
       <KitchenSink

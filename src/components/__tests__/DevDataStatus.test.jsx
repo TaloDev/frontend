@@ -1,17 +1,15 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import devDataState from '../../state/devDataState'
-import RecoilObserver from '../../state/RecoilObserver'
 import DevDataStatus from '../DevDataStatus'
-import { RecoilRoot } from 'recoil'
+import KitchenSink from '../../utils/KitchenSink'
 
 describe('<DevDataStatus />', () => {
   it('should render the not enabled state', () => {
     render(
-      <RecoilObserver node={devDataState} initialValue={false}>
+      <KitchenSink states={[{ node: devDataState, initialValue: false }]}>
         <DevDataStatus />
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      </KitchenSink>
     )
 
     expect(screen.getByText('not enabled')).toBeInTheDocument()
@@ -19,10 +17,9 @@ describe('<DevDataStatus />', () => {
 
   it('should render the enabled state', () => {
     render(
-      <RecoilObserver node={devDataState} initialValue={true}>
+      <KitchenSink states={[{ node: devDataState, initialValue: true }]}>
         <DevDataStatus />
-      </RecoilObserver>
-      , { wrapper: RecoilRoot }
+      </KitchenSink>
     )
 
     expect(screen.queryByText('not enabled')).not.toBeInTheDocument()

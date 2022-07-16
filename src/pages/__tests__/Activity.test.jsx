@@ -13,7 +13,7 @@ describe('<Activity />', () => {
   const axiosMock = new MockAdapter(api)
 
   it('should handle having no activities', async () => {
-    axiosMock.onGet('http://talo.test/game-activities?gameId=1').replyOnce(200, { activities: [] })
+    axiosMock.onGet('http://talo.test/games/1/game-activities').replyOnce(200, { activities: [] })
 
     render(
       <KitchenSink
@@ -50,7 +50,7 @@ describe('<Activity />', () => {
       }
     ]
 
-    axiosMock.onGet('http://talo.test/game-activities?gameId=2').replyOnce(200, { activities })
+    axiosMock.onGet('http://talo.test/games/2/game-activities').replyOnce(200, { activities })
 
     render(
       <KitchenSink
@@ -90,7 +90,7 @@ describe('<Activity />', () => {
       }
     ]
 
-    axiosMock.onGet('http://talo.test/game-activities?gameId=3').replyOnce(200, { activities })
+    axiosMock.onGet('http://talo.test/games/3/game-activities').replyOnce(200, { activities })
 
     render(
       <KitchenSink
@@ -128,7 +128,7 @@ describe('<Activity />', () => {
       }
     ]
 
-    axiosMock.onGet('http://talo.test/game-activities?gameId=4').replyOnce(200, { activities })
+    axiosMock.onGet('http://talo.test/games/4/game-activities').replyOnce(200, { activities })
 
     render(
       <KitchenSink
@@ -156,7 +156,7 @@ describe('<Activity />', () => {
   })
 
   it('should render an error', async () => {
-    axiosMock.onGet('http://talo.test/game-activities?gameId=5').networkErrorOnce()
+    axiosMock.onGet('http://talo.test/games/5/game-activities').networkErrorOnce()
 
     render(
       <KitchenSink

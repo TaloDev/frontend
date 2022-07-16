@@ -4,9 +4,8 @@ import userEvent from '@testing-library/user-event'
 import NewGame from '../NewGame'
 import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
-import { RecoilRoot } from 'recoil'
-import RecoilObserver from '../../state/RecoilObserver'
 import userState from '../../state/userState'
+import KitchenSink from '../../utils/KitchenSink'
 
 describe('<NewGame />', () => {
   const axiosMock = new MockAdapter(api)
@@ -18,10 +17,9 @@ describe('<NewGame />', () => {
     const userChangeMock = jest.fn()
 
     render(
-      <RecoilObserver node={userState} onChange={userChangeMock} initialValue={{ organisation: { games: [] } }}>
+      <KitchenSink states={[{ node: userState, onChange: userChangeMock, initialValue: { organisation: { games: [] } } }]}>
         <NewGame modalState={[true, closeMock]} />
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      </KitchenSink>
     )
 
     userEvent.type(screen.getByLabelText('Name'), 'Shattered')
@@ -45,10 +43,9 @@ describe('<NewGame />', () => {
     const userChangeMock = jest.fn()
 
     render(
-      <RecoilObserver node={userState} onChange={userChangeMock} initialValue={{ organisation: { games: [] } }}>
+      <KitchenSink states={[{ node: userState, onChange: userChangeMock, initialValue: { organisation: { games: [] } } }]}>
         <NewGame modalState={[true, closeMock]} />
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      </KitchenSink>
     )
 
     userEvent.type(screen.getByLabelText('Name'), 'Shattered')
@@ -65,10 +62,9 @@ describe('<NewGame />', () => {
     const userChangeMock = jest.fn()
 
     render(
-      <RecoilObserver node={userState} onChange={userChangeMock} initialValue={{ organisation: { games: [] } }}>
+      <KitchenSink states={[{ node: userState, onChange: userChangeMock, initialValue: { organisation: { games: [] } } }]}>
         <NewGame modalState={[true, closeMock]} />
-      </RecoilObserver>,
-      { wrapper: RecoilRoot }
+      </KitchenSink>
     )
 
     userEvent.click(screen.getByText('Cancel'))

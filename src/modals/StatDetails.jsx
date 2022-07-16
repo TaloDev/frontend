@@ -49,11 +49,11 @@ const StatDetails = ({ modalState, mutate, editingStat }) => {
         .label('Default value')
         .typeError('Default value must be a number')
         .when('minValue', {
-          is: (val) => Boolean(val),
+          is: (val) => val !== null,
           then: (schema) => schema.min(range.min, 'Default value must be more than the min value')
         })
         .when('maxValue', {
-          is: (val) => Boolean(val),
+          is: (val) => val !== null,
           then: (schema) => schema.max(range.max, 'Default value must be less than the max value')
         })
         .required(),
@@ -62,7 +62,7 @@ const StatDetails = ({ modalState, mutate, editingStat }) => {
         .typeError('Max value must be a number')
         .nullable()
         .when('minValue', {
-          is: (val) => val !== null,
+          is: (val) => val !== null && range.max !== null,
           then: (schema) => schema.min(range.min + 1, 'Max value must be more than the min value')
         }),
       maxChange: yup.number()
@@ -88,15 +88,10 @@ const StatDetails = ({ modalState, mutate, editingStat }) => {
   })
 
   useEffect(() => {
-    const numberFromStringInput = (val) => {
-      if (val === null || val === undefined) return null
-      return Number(val)
-    }
-
     const sub = watch((data) => {
       setRange({
-        min: numberFromStringInput(data.minValue),
-        max: numberFromStringInput(data.maxValue)
+        min: nullableNumber(data.minValue),
+        max: nullableNumber(data.maxValue)
       })
     })
     return () => sub.unsubscribe()
@@ -135,7 +130,7 @@ const StatDetails = ({ modalState, mutate, editingStat }) => {
     setError(null)
 
     try {
-      const res = await updateStat(editingStat.id, { ...data, global })
+      const res = await updateStat(activeGame.id, editingStat.id, { ...data, global })
 
       mutate((data) => {
         return {
@@ -162,7 +157,7 @@ const StatDetails = ({ modalState, mutate, editingStat }) => {
     setError(null)
 
     try {
-      await deleteStat(editingStat.id)
+      await deleteStat(activeGame.id, editingStat.id)
 
       mutate((data) => {
         return {
@@ -246,12 +241,11 @@ const StatDetails = ({ modalState, mutate, editingStat }) => {
                 label='Min value'
                 placeholder='Optional'
                 inputExtra={{
-                  ...register('minValue', { deps: ['defaultValue', 'maxValue'], valueAsNumber: true }),
+                  ...register('minValue', { deps: ['defaultValue', 'maxValue'], setValueAs: nullableNumber }),
                   step: 'any'
                 }}
                 inputClassName='md:max-w-[160px]'
                 containerClassName='max-w-xs md:!w-auto'
-                errors={errors.minValue && ['']}
               />
 
               <TextInput

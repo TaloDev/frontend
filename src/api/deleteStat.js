@@ -1,3 +1,3 @@
 import api from './api'
 
-export default (id) => api.delete(`/game-stats/${id}`)
+export default (gameId, statId) => api.delete(`/games/${gameId}/game-stats/${statId}`)

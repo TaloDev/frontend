@@ -1,3 +1,3 @@
 import api from './api'
 
-export default (gameId, playerId) => api.get(`/players?gameId=${gameId}&search=${playerId}`)
+export default (gameId, playerId) => api.get(`/games/${gameId}/players?search=${playerId}`)

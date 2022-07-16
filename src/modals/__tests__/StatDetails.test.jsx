@@ -14,7 +14,7 @@ describe('<StatDetails />', () => {
   const activeGameValue = { id: 1, name: 'Heart Heist' }
 
   it('should create a stat', async () => {
-    axiosMock.onPost('http://talo.test/game-stats').replyOnce(200, { stat: { id: 2 } })
+    axiosMock.onPost('http://talo.test/games/1/game-stats').replyOnce(200, { stat: { id: 2 } })
 
     const closeMock = jest.fn()
     const mutateMock = jest.fn()
@@ -33,6 +33,7 @@ describe('<StatDetails />', () => {
     userEvent.type(screen.getByLabelText('Internal name'), 'hearts-collected')
     userEvent.type(screen.getByLabelText('Display name'), 'Hearts collected')
     userEvent.click(screen.getByText('Yes'))
+    userEvent.type(screen.getByLabelText('Max change'), '30')
     userEvent.type(screen.getByLabelText('Default value'), '52')
 
     await waitFor(() => expect(screen.getByText('Create')).toBeEnabled())
@@ -54,7 +55,7 @@ describe('<StatDetails />', () => {
   })
 
   it('should handle creation errors', async () => {
-    axiosMock.onPost('http://talo.test/game-stats').networkErrorOnce()
+    axiosMock.onPost('http://talo.test/games/1/game-stats').networkErrorOnce()
 
     render(
       <KitchenSink
@@ -79,7 +80,7 @@ describe('<StatDetails />', () => {
   })
 
   it('should display an error if the default value is less than the min value', async () => {
-    axiosMock.onPost('http://talo.test/game-stats').replyOnce(200, { stat: { id: 2 } })
+    axiosMock.onPost('http://talo.test/games/1/game-stats').replyOnce(200, { stat: { id: 2 } })
 
     const closeMock = jest.fn()
     const mutateMock = jest.fn()
@@ -102,7 +103,7 @@ describe('<StatDetails />', () => {
   })
 
   it('should display an error if the default value is more than the max value', async () => {
-    axiosMock.onPost('http://talo.test/game-stats').replyOnce(200, { stat: { id: 2 } })
+    axiosMock.onPost('http://talo.test/games/1/game-stats').replyOnce(200, { stat: { id: 2 } })
 
     const closeMock = jest.fn()
     const mutateMock = jest.fn()
@@ -125,7 +126,7 @@ describe('<StatDetails />', () => {
   })
 
   it('should display an error if the min value is more than the max value', async () => {
-    axiosMock.onPost('http://talo.test/game-stats').replyOnce(200, { stat: { id: 2 } })
+    axiosMock.onPost('http://talo.test/games/1/game-stats').replyOnce(200, { stat: { id: 2 } })
 
     const closeMock = jest.fn()
     const mutateMock = jest.fn()
@@ -145,6 +146,28 @@ describe('<StatDetails />', () => {
     userEvent.type(screen.getByLabelText('Min value'), '60')
 
     expect(await screen.findByText('Max value must be more than the min value')).toBeInTheDocument()
+  })
+
+  it('should display an error if the max change is negative', async () => {
+    axiosMock.onPost('http://talo.test/games/1/game-stats').replyOnce(200, { stat: { id: 2 } })
+
+    const closeMock = jest.fn()
+    const mutateMock = jest.fn()
+
+    render(
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: userTypes.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue }
+        ]}
+      >
+        <StatDetails modalState={[true, closeMock]} mutate={mutateMock} />
+      </KitchenSink>
+    )
+
+    userEvent.type(screen.getByLabelText('Max change'), '-8')
+
+    expect(await screen.findByText('Max change must be a positive number')).toBeInTheDocument()
   })
 
   it('should close when clicking close', () => {
@@ -182,7 +205,7 @@ describe('<StatDetails />', () => {
       minTimeBetweenUpdates: 0
     }
 
-    axiosMock.onPatch('http://talo.test/game-stats/1').replyOnce(200, {
+    axiosMock.onPut('http://talo.test/games/1/game-stats/1').replyOnce(200, {
       stat: {
         ...initialStat,
         minValue: -10,
@@ -241,7 +264,7 @@ describe('<StatDetails />', () => {
       minTimeBetweenUpdates: 0
     }
 
-    axiosMock.onPatch('http://talo.test/game-stats/1').networkErrorOnce()
+    axiosMock.onPut('http://talo.test/games/1/game-stats/1').networkErrorOnce()
 
     render(
       <KitchenSink
@@ -276,7 +299,7 @@ describe('<StatDetails />', () => {
       minTimeBetweenUpdates: 0
     }
 
-    axiosMock.onDelete('http://talo.test/game-stats/1').replyOnce(200)
+    axiosMock.onDelete('http://talo.test/games/1/game-stats/1').replyOnce(200)
     window.confirm = jest.fn(() => true)
 
     render(
@@ -316,7 +339,7 @@ describe('<StatDetails />', () => {
       minTimeBetweenUpdates: 0
     }
 
-    axiosMock.onDelete('http://talo.test/game-stats/1').networkErrorOnce()
+    axiosMock.onDelete('http://talo.test/games/1/game-stats/1').networkErrorOnce()
     window.confirm = jest.fn(() => true)
 
     render(
