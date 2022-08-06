@@ -31,6 +31,7 @@ const PlayerStats = lazy(() => import(/* webpackChunkName: 'player-stats' */ './
 const AcceptInvite = lazy(() => import(/* webpackChunkName: 'accept-invite' */ './pages/AcceptInvite'))
 const Organisation = lazy(() => import(/* webpackChunkName: 'organisation' */ './pages/Organisation'))
 const Billing = lazy(() => import(/* webpackChunkName: 'billing' */ './pages/Billing'))
+const Integrations = lazy(() => import(/* webpackChunkName: 'integrations' */ './pages/Integrations'))
 
 function Router({ intendedUrl }) {
   const user = useRecoilValue(userState)
@@ -77,6 +78,7 @@ function Router({ intendedUrl }) {
                   {canViewPage(user, routes.activity) && <Route exact path={routes.activity} element={<Activity />} />}
                   <Route exact path={routes.stats} element={<Stats />} />
                   <Route exact path={routes.playerStats} element={<PlayerStats />} />
+                  {canViewPage(user, routes.integrations) && <Route exact path={routes.integrations} element={<Integrations />} />}
                 </>
               }
 

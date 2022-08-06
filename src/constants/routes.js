@@ -10,6 +10,7 @@ export default {
   demo: '/demo',
   events: '/events',
   forgotPass: '/forgot',
+  integrations: '/integrations',
   leaderboards: '/leaderboards',
   leaderboardEntries: '/leaderboards/:internalName',
   login: '/',
