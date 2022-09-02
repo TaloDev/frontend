@@ -6,6 +6,7 @@ import App from './App'
 import { RecoilRoot } from 'recoil'
 import { BrowserRouter } from 'react-router-dom'
 import * as Sentry from '@sentry/react'
+import ToastProvider from './components/toast/ToastProvider'
 
 Sentry.init({
   dsn: import.meta.env.SNOWPACK_PUBLIC_SENTRY_DSN,
@@ -15,9 +16,11 @@ Sentry.init({
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ToastProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ToastProvider>
     </RecoilRoot>
   </React.StrictMode>,
   document.getElementById('root')

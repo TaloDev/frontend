@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 import { focusStyle } from '../styles/theme'
 import canViewPage from '../utils/canViewPage'
-import { IconCaretDown, IconBolt, IconUser, IconFileExport, IconTrophy, IconKey, IconChartBar } from '@tabler/icons'
+import { IconCaretDown, IconBolt, IconUser, IconFileExport, IconTrophy, IconKey, IconChartBar, IconExchange } from '@tabler/icons'
 import LinkButton from './LinkButton'
 import routes from '../constants/routes'
 import userState from '../state/userState'
@@ -63,6 +63,12 @@ function ServicesLink() {
       desc: 'Global and individual data',
       icon: IconChartBar,
       route: routes.stats
+    },
+    {
+      name: 'Integrations',
+      desc: 'Sync data with external services',
+      icon: IconExchange,
+      route: routes.integrations
     }
   ]
 
