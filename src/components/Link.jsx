@@ -7,7 +7,7 @@ import classNames from 'classnames'
 function Link({ to, className, children }) {
   const linkClass = classNames(linkStyle, focusStyle, className ?? '')
 
-  if (to.startsWith('http')) {
+  if (typeof to === 'string' && to.startsWith('http')) {
     return (
       <a href={to} className={linkClass} target='_blank' rel='noreferrer'>{children}</a>
     )
