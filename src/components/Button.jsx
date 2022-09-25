@@ -22,7 +22,8 @@ const Button = (props) => {
     'bg-gray-800 hover:bg-gray-900 active:bg-black disabled:bg-gray-600 text-white': props.variant === 'black',
     'text-left': props.variant === 'bare',
     'flex justify-center hover:bg-indigo-500': props.isLoading,
-    'flex items-center justify-center space-x-1': Boolean(props.icon)
+    'flex items-center justify-center space-x-1': Boolean(props.icon),
+    'bg-gray-200 hover:bg-gray-300 active:bg-gray-400 text-sm p-2 rounded': props.variant === 'small'
   })
 
   return (

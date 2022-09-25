@@ -140,7 +140,7 @@ const APIKeys = () => {
 
         {!createdKey &&
           <form className='w-full lg:2/3 xl:w-1/2'>
-            <h2 className='text-xl lg:text-2xl font-bold'>Create new key</h2>
+            <h2 className='text-xl lg:text-2xl font-bold'>Create key</h2>
 
             <div className='mt-4 rounded border-2 border-gray-700'>
               <div className='p-4 bg-gray-700'>

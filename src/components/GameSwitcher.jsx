@@ -38,7 +38,7 @@ const GameSwitcher = () => {
             <motion.ul
               animate={{ opacity: isOpen ? 1 : 0 }}
               transition={{ duration: 0.2 }}
-              className='bg-white text-black rounded-b w-60 md:w-80'
+              className='bg-white text-black rounded-b w-60 md:w-80 shadow'
             >
               {games.map((game) => {
                 const disabled = activeGame.id === game.id

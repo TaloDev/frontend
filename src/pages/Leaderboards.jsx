@@ -52,7 +52,7 @@ const Leaderboards = () => {
             variant='icon'
             onClick={() => setShowModal(true)}
             icon={<IconPlus />}
-            extra={{ 'aria-label': 'Create new leaderboard' }}
+            extra={{ 'aria-label': 'Create leaderboard' }}
           />
         </div>
       }

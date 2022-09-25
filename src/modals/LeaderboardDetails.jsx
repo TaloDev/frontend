@@ -113,7 +113,7 @@ const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
   return (
     <Modal
       id='leaderboard-details'
-      title={editingLeaderboard ? 'Update leaderboard' : 'Create new leaderboard'}
+      title={editingLeaderboard ? 'Update leaderboard' : 'Create leaderboard'}
       modalState={modalState}
     >
       <form>

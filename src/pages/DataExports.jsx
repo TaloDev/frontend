@@ -94,7 +94,7 @@ const DataExports = () => {
 
       {!createdExportId &&
         <form className='w-full lg:2/3 xl:w-1/2 space-y-4'>
-          <h2 className='text-xl lg:text-2xl font-bold'>Create new data export</h2>
+          <h2 className='text-xl lg:text-2xl font-bold'>Create data export</h2>
 
           <div className='rounded border-2 border-gray-700'>
             <div className='p-4 bg-gray-700'>

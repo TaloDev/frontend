@@ -153,6 +153,6 @@ describe('<GameSwitcher />', () => {
       userEvent.click(screen.getByRole('main'))
     })
 
-    expect(screen.queryByText('Create new game')).not.toBeInTheDocument()
+    expect(screen.queryByText('Create game')).not.toBeInTheDocument()
   })
 })
