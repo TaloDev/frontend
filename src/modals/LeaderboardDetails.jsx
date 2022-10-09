@@ -49,7 +49,7 @@ const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
 
       setOpen(false)
     } catch (err) {
-      setError(buildError(err))
+      setError(buildError(err, 'internalName'))
       setLoading(false)
     }
   }
@@ -74,7 +74,7 @@ const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
 
       setOpen(false)
     } catch (err) {
-      setError(buildError(err))
+      setError(buildError(err, 'internalName'))
       setLoading(false)
     }
   }
@@ -113,7 +113,7 @@ const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
   return (
     <Modal
       id='leaderboard-details'
-      title={editingLeaderboard ? 'Update leaderboard' : 'Create new leaderboard'}
+      title={editingLeaderboard ? 'Update leaderboard' : 'Create leaderboard'}
       modalState={modalState}
     >
       <form>

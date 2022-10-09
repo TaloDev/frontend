@@ -1,4 +1,4 @@
-export default (error) => {
+export default (error, preferredKey) => {
   let message = ''
   let keys = {}, extra = {}
 
@@ -13,7 +13,6 @@ export default (error) => {
       return acc
     }, {})
   } else if (error.response?.data?.errors) {
-    message = 'Something went wrong, please try again later'
     keys = error.response.data.errors
     extra = Object.keys(error.response.data).reduce((acc, key) => {
       if (key !== 'errors') {
@@ -21,6 +20,11 @@ export default (error) => {
       }
       return acc
     }, {})
+
+    message =  Object.keys(keys).includes(preferredKey)
+      ? keys[preferredKey][0]
+      : 'Something went wrong, please try again later'
+
   } else {
     message = error.message
   }

@@ -8,6 +8,7 @@ import routes from './constants/routes'
 import activeGameState from './state/activeGameState'
 import AuthService from './services/AuthService'
 import canViewPage from './utils/canViewPage'
+import Groups from './pages/Groups'
 
 const Login = lazy(() => import(/* webpackChunkName: 'login' */ './pages/Login'))
 const Dashboard = lazy(() => import(/* webpackChunkName: 'dashboard' */ './pages/Dashboard'))
@@ -79,6 +80,7 @@ function Router({ intendedUrl }) {
                   <Route exact path={routes.stats} element={<Stats />} />
                   <Route exact path={routes.playerStats} element={<PlayerStats />} />
                   {canViewPage(user, routes.integrations) && <Route exact path={routes.integrations} element={<Integrations />} />}
+                  <Route exact path={routes.groups} element={<Groups />} />
                 </>
               }
 

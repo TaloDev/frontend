@@ -10,7 +10,7 @@
     "@dinero.js/currencies": "^2.0.0-alpha.8",
     "@hookform/resolvers": "^2.8.8",
     "@sentry/react": "^6.19.6",
-    "@tabler/icons": "^1.74.0",
+    "@tabler/icons": "^1.100.0",
     "@tippyjs/react": "^4.2.5",
     "axios": "^0.26.0",
     "classnames": "^2.3.1",
@@ -67,5 +67,5 @@
   "lint-staged": {
     "*.{js,jsx}": "eslint --fix"
   },
-  "version": "0.16.1"
+  "version": "0.17.0"
 }

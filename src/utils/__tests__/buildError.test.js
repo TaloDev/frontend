@@ -86,4 +86,18 @@ describe('buildError', () => {
     expect(error.hasKeys).toBe(true)
     expect(error.extra).toStrictEqual({ showHint: true })
   })
+
+  it('should use the message from a preferredKey if it is set', () => {
+    const error = buildError({
+      response: {
+        data: {
+          errors: {
+            startDate: ['The startDate is invalid'],
+            endDate: ['The endDate is invalid']
+          }
+        }
+      }
+    }, 'startDate')
+    expect(error.message).toBe('The startDate is invalid')
+  })
 })
