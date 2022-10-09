@@ -255,7 +255,7 @@ GroupDetails.propTypes = {
   modalState: PropTypes.array.isRequired,
   mutate: PropTypes.func.isRequired,
   editingGroup: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     rules: PropTypes.arrayOf(PropTypes.shape({
