@@ -28,7 +28,7 @@ const Modal = (props) => {
     <FocusLock>
       <div className='fixed w-screen md:p-4 bg-gray-900 bg-opacity-60 flex items-start md:items-center justify-center inset-0 z-50 text-black transition-colors'>
         <dialog
-          className={classNames('block w-full h-full md:h-auto md:w-[600px] bg-white md:rounded p-0', {
+          className={classNames('block w-full h-full md:h-auto md:w-[640px] bg-white md:rounded p-0', {
             'overflow-scroll': props.scroll,
             'overflow-visible': !props.scroll
           })}

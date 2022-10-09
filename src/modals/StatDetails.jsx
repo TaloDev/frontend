@@ -178,7 +178,7 @@ const StatDetails = ({ modalState, mutate, editingStat }) => {
   return (
     <Modal
       id='stat-details'
-      title={editingStat ? 'Update stat' : 'Create new stat'}
+      title={editingStat ? 'Update stat' : 'Create stat'}
       modalState={modalState}
     >
       <form onSubmit={handleSubmit(editingStat ? onUpdateClick : onCreateClick)}>

@@ -41,7 +41,7 @@ function Stats() {
             variant='icon'
             onClick={() => setShowModal(true)}
             icon={<IconPlus />}
-            extra={{ 'aria-label': 'Create new stat' }}
+            extra={{ 'aria-label': 'Create stat' }}
           />
         </div>
       }
