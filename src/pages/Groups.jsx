@@ -65,7 +65,7 @@ export default function Groups() {
                   </TableCell>
                   <TableCell className='min-w-[320px] max-w-[320px] lg:min-w-0'>
                     {group.name}
-                    <div className='mt-4 text-sm'>
+                    <div className='mt-2 text-sm'>
                       {group.description}
                     </div>
                   </TableCell>
