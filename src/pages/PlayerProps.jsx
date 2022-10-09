@@ -175,7 +175,7 @@ function PlayerProps() {
 
       {existingProps.length + newProps.length > 0 &&
         <>
-          <SecondaryTitle>Your props</SecondaryTitle>
+          {metaProps.length > 0 && <SecondaryTitle>Your props</SecondaryTitle>}
           <Table columns={['Property', 'Value', '']}>
             <TableBody iterator={existingProps}>
               {(prop) => (
