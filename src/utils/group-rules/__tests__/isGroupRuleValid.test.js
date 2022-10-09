@@ -32,4 +32,13 @@ describe('isGroupRuleValid', () => {
       propKey: 'zonesVisited'
     })).toBe(true)
   })
+
+  it('should mark a rule with empty operands as invalid', () => {
+    expect(isGroupRuleValid({
+      operands: {
+        0: ''
+      },
+      operandCount: 1
+    })).toBe(false)
+  })
 })

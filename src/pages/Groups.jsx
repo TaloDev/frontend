@@ -13,6 +13,7 @@ import Table from '../components/tables/Table'
 import useGroups from '../api/useGroups'
 import GroupDetails from '../modals/groups/GroupDetails'
 import useSortedItems from '../utils/useSortedItems'
+import Identifier from '../components/Identifier'
 
 export default function Groups() {
   const activeGame = useRecoilValue(activeGameState)
@@ -55,12 +56,19 @@ export default function Groups() {
 
       {groups.length > 0 &&
         <>
-          <Table columns={['Name', 'Description', 'Players', 'Last updated', '']}>
+          <Table columns={['ID', 'Name', 'Players', 'Last updated', '']}>
             <TableBody iterator={sortedGroups}>
               {(group) => (
                 <>
-                  <TableCell>{group.name}</TableCell>
-                  <TableCell className='w-96'>{group.description}</TableCell>
+                  <TableCell className='min-w-80'>
+                    <Identifier id='ccb3226c-54ac-4e8d-af27-6154a6315f2f' />
+                  </TableCell>
+                  <TableCell className='min-w-[320px] max-w-[320px] lg:min-w-0'>
+                    {group.name}
+                    <div className='mt-4 text-sm'>
+                      {group.description}
+                    </div>
+                  </TableCell>
                   <TableCell>{group.count}</TableCell>
                   <DateCell>{format(new Date(group.updatedAt), 'do MMM Y')}</DateCell>
                   <TableCell className='w-40'>

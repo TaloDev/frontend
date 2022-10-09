@@ -1,14 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Identifier from './Identifier'
 
 function PlayerIdentifier({ player }) {
   return (
-    <div>
-      <code className='bg-gray-900 rounded p-2 text-xs md:text-sm'>
-        {player?.devBuild && <span className='mr-2 bg-orange-600 rounded px-1 py-0.5'>DEV</span>}
-        Player = {player?.id}
-      </code>
-    </div>
+    <Identifier id={`Player = ${player?.id}`}>
+      {player?.devBuild && <span className='mr-2 bg-orange-600 rounded px-1 py-0.5'>DEV</span>}
+    </Identifier>
   )
 }
 

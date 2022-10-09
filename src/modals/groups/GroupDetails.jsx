@@ -21,6 +21,7 @@ import Loading from '../../components/Loading'
 import { useDebounce } from 'use-debounce'
 import prepareRule from '../../utils/group-rules/prepareRule'
 import isGroupRuleValid from '../../utils/group-rules/isGroupRuleValid'
+import { useEffect } from 'react'
 
 const validationSchema = yup.object({
   name: yup.string().label('Name').required(),
@@ -59,6 +60,13 @@ export default function GroupDetails({ modalState, mutate, editingGroup }) {
 
   const [debouncedRules] = useDebounce(rules, 300)
   const { count, loading: countLoading } = useGroupPreviewCount(activeGame, ruleMode, debouncedRules)
+  const [displayableCount, setDisplayableCount] = useState(count)
+
+  useEffect(() => {
+    if (count !== undefined) {
+      setDisplayableCount(count)
+    }
+  }, [count])
 
   const allRulesValid = useMemo(() => {
     return rules.every(isGroupRuleValid)
@@ -192,7 +200,7 @@ export default function GroupDetails({ modalState, mutate, editingGroup }) {
                 <Loading size={24} thickness={180} />
               </div>
             }
-            <p>{count} player{count !== 1 ? 's' : ''} in group</p>
+            <p>{displayableCount} player{displayableCount !== 1 ? 's' : ''} in group</p>
           </div>
         </div>
 

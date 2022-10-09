@@ -27,7 +27,7 @@ const useGroupPreviewCount = (activeGame, ruleMode, rules) => {
   )
 
   return {
-    count: data?.count ?? 0,
+    count: data?.count,
     loading: allValid && !data && !error,
     error: error && buildError(error)
   }
