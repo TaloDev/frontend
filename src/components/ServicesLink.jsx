@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 import { focusStyle } from '../styles/theme'
 import canViewPage from '../utils/canViewPage'
-import { IconCaretDown, IconBolt, IconUser, IconFileExport, IconTrophy, IconKey, IconChartBar, IconExchange, IconSocial } from '@tabler/icons'
+import { IconCaretDown, IconBolt, IconUser, IconFileExport, IconTrophy, IconKey, IconChartBar, IconExchange, IconSocial, IconSettings } from '@tabler/icons'
 import LinkButton from './LinkButton'
 import routes from '../constants/routes'
 import userState from '../state/userState'
@@ -75,6 +75,12 @@ function ServicesLink() {
       desc: 'Sync data with external services',
       icon: IconExchange,
       route: routes.integrations
+    },
+    {
+      name: 'Live config',
+      desc: 'Push state directly to your game',
+      icon: IconSettings,
+      route: routes.gameProps
     }
   ]
 
