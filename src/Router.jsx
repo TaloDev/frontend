@@ -8,7 +8,6 @@ import routes from './constants/routes'
 import activeGameState from './state/activeGameState'
 import AuthService from './services/AuthService'
 import canViewPage from './utils/canViewPage'
-import Groups from './pages/Groups'
 
 const Login = lazy(() => import(/* webpackChunkName: 'login' */ './pages/Login'))
 const Dashboard = lazy(() => import(/* webpackChunkName: 'dashboard' */ './pages/Dashboard'))
@@ -33,6 +32,8 @@ const AcceptInvite = lazy(() => import(/* webpackChunkName: 'accept-invite' */ '
 const Organisation = lazy(() => import(/* webpackChunkName: 'organisation' */ './pages/Organisation'))
 const Billing = lazy(() => import(/* webpackChunkName: 'billing' */ './pages/Billing'))
 const Integrations = lazy(() => import(/* webpackChunkName: 'integrations' */ './pages/Integrations'))
+const Groups = lazy(() => import(/* webpackChunkName: 'groups' */ './pages/Groups'))
+const GameProps = lazy(() => import(/* webpackChunkName: 'game-props' */ './pages/GameProps'))
 
 function Router({ intendedUrl }) {
   const user = useRecoilValue(userState)
@@ -81,6 +82,7 @@ function Router({ intendedUrl }) {
                   <Route exact path={routes.playerStats} element={<PlayerStats />} />
                   {canViewPage(user, routes.integrations) && <Route exact path={routes.integrations} element={<Integrations />} />}
                   <Route exact path={routes.groups} element={<Groups />} />
+                  {canViewPage(user, routes.gameProps) && <Route exact path={routes.gameProps} element={<GameProps />} />}
                 </>
               }
 

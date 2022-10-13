@@ -10,6 +10,7 @@ export default {
   demo: '/demo',
   events: '/events',
   forgotPass: '/forgot',
+  gameProps: '/game-config',
   groups: '/groups',
   integrations: '/integrations',
   leaderboards: '/leaderboards',

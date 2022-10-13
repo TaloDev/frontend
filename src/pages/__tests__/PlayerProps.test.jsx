@@ -272,35 +272,6 @@ describe('<PlayerProps />', () => {
     })
   })
 
-  it('should keep new props without keys after saving', async () => {
-    axiosMock.onPatch(`http://talo.test/games/1/players/${basePlayer.id}`).replyOnce(200, {
-      player: basePlayer
-    })
-
-    render(
-      <KitchenSink
-        states={[
-          { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
-        ]}
-        routePath='/:id'
-        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
-      >
-        <PlayerProps />
-      </KitchenSink>
-    )
-
-    userEvent.click(screen.getByText('New property'))
-
-    userEvent.click(screen.getByText('Save changes'))
-
-    await waitFor(() => {
-      expect(screen.getByText('Save changes')).toBeEnabled()
-    })
-
-    expect(screen.getAllByDisplayValue('')).toHaveLength(2)
-  })
-
   it('should render saving errors', async () => {
     axiosMock.onPatch(`http://talo.test/games/1/players/${basePlayer.id}`).networkErrorOnce()
 
@@ -317,6 +288,7 @@ describe('<PlayerProps />', () => {
       </KitchenSink>
     )
 
+    userEvent.type(screen.getByDisplayValue('42'), '6')
     userEvent.click(screen.getByText('Save changes'))
 
     await waitFor(() => {

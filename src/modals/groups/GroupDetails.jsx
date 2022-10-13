@@ -55,7 +55,7 @@ export default function GroupDetails({ modalState, mutate, editingGroup }) {
   const [isDeleting, setDeleting] = useState(false)
   const [error, setError] = useState(null)
 
-  const [ruleMode, setRuleMode] = useState('$and')
+  const [ruleMode, setRuleMode] = useState(editingGroup?.ruleMode ?? '$and')
   const [rules, setRules] = useState(unpackRules(editingGroup?.rules) ?? [])
 
   const [debouncedRules] = useDebounce(rules, 300)
@@ -255,9 +255,10 @@ GroupDetails.propTypes = {
   modalState: PropTypes.array.isRequired,
   mutate: PropTypes.func.isRequired,
   editingGroup: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
+    ruleMode: PropTypes.oneOf(['$and', '$or']).isRequired,
     rules: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string.isRequired,
       negate: PropTypes.bool.isRequired,
