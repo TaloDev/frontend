@@ -60,7 +60,7 @@ table {
   font-size: unset;
 
   & .tippy-content {
-    padding: 0;
+    @apply p-0;
   }
 }
 
@@ -68,4 +68,31 @@ table {
   width: calc(100vw - 32px);
 
   @apply sm:w-auto
+}
+
+.rdp {
+  @apply bg-white;
+  @apply text-black;
+  @apply p-2;
+  @apply m-0;
+  @apply rounded;
+  @apply border;
+  @apply border-gray-300;
+  @apply shadow-lg;
+}
+
+.rdp-day, .rdp-button {
+  @apply transition-colors;
+}
+
+.rdp-day:hover, .rdp-button:hover {
+  @apply bg-indigo-100 !important;
+}
+
+.rdp-day_selected {
+  @apply bg-indigo-500;
+}
+
+.rdp-day_selected:hover {
+  @apply bg-indigo-600 !important;
 }

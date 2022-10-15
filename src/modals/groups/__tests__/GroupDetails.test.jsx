@@ -11,7 +11,7 @@ import KitchenSink from '../../../utils/KitchenSink'
 
 describe('<GroupDetails />', () => {
   const axiosMock = new MockAdapter(api)
-  const activeGameValue = { id: 1, name: 'Shattered' }
+  const activeGameValue = { id: '1', name: 'Shattered' }
   axiosMock.onGet(/(.*)preview-count(.*)/).reply(200, { count: 8 })
 
   it('should create a group', async () => {
@@ -43,7 +43,7 @@ describe('<GroupDetails />', () => {
     })
 
     const groups = [
-      { id: 1 }
+      { id: '1' }
     ]
 
     const mutator = mutateMock.mock.calls[0][0]
@@ -104,13 +104,14 @@ describe('<GroupDetails />', () => {
           modalState={[true, jest.fn()]}
           mutate={jest.fn()}
           editingGroup={{
-            id: 1,
+            id: '1',
             name: 'Winners',
             description: 'Players who have won the game',
             rules: [
               { name: 'SET', negate: false, operands: [], field: 'props.hasWonGame', castType: 'CHAR' },
               { name: 'GTE', negate: false, operands: ['70'], field: 'props.currentLevel', castType: 'DOUBLE' }
-            ]
+            ],
+            ruleMode: '$and'
           }}
         />
       </KitchenSink>
@@ -127,13 +128,14 @@ describe('<GroupDetails />', () => {
     const mutateMock = jest.fn()
 
     const initialGroup = {
-      id: 1,
+      id: '1',
       name: 'Winners',
       description: 'Players who have won the game',
       rules: [
         { name: 'SET', negate: false, operands: [], field: 'props.hasWonGame', castType: 'CHAR' },
         { name: 'GTE', negate: false, operands: ['70'], field: 'props.currentLevel', castType: 'DOUBLE' }
-      ]
+      ],
+      ruleMode: '$and'
     }
 
     axiosMock.onPut('http://talo.test/games/1/player-groups/1').replyOnce(200, {
@@ -185,10 +187,11 @@ describe('<GroupDetails />', () => {
           modalState={[true, closeMock]}
           mutate={jest.fn()}
           editingGroup={{
-            id: 1,
+            id: '1',
             name: 'Winners',
             description: 'Players who have won the game',
-            rules: []
+            rules: [],
+            ruleMode: '$and'
           }}
         />
       </KitchenSink>
@@ -207,10 +210,11 @@ describe('<GroupDetails />', () => {
     const mutateMock = jest.fn()
 
     const initialGroup = {
-      id: 1,
+      id: '1',
       name: 'Winners',
       description: 'Players who have won the game',
-      rules: []
+      rules: [],
+      ruleMode: '$and'
     }
 
     axiosMock.onDelete('http://talo.test/games/1/player-groups/1').replyOnce(200)
@@ -244,10 +248,11 @@ describe('<GroupDetails />', () => {
 
   it('should not render the delete button for demo users', () => {
     const initialGroup = {
-      id: 1,
+      id: '1',
       name: 'Winners',
       description: 'Players who have won the game',
-      rules: []
+      rules: [],
+      ruleMode: '$and'
     }
 
     render(
@@ -280,10 +285,11 @@ describe('<GroupDetails />', () => {
           modalState={[true, closeMock]}
           mutate={jest.fn()}
           editingGroup={{
-            id: 1,
+            id: '1',
             name: 'Winners',
             description: 'Players who have won the game',
-            rules: []
+            rules: [],
+            ruleMode: '$and'
           }}
         />
       </KitchenSink>

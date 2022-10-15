@@ -9,6 +9,7 @@ import Loading from '../../components/Loading'
 import { useRecoilValue } from 'recoil'
 import activeGameState from '../../state/activeGameState'
 import ErrorMessage from '../../components/ErrorMessage'
+import DateInput from '../../components/DateInput'
 
 export const groupPropKeyField = 'prop with key'
 
@@ -74,23 +75,28 @@ export default function GroupRules({ ruleModeState, rulesState }) {
     setRules((rules) => rules.filter((_, idx) => idx !== deleteIdx))
   }
 
-  const updateRule = (ruleIdx, key, value) => {
-    setRules((rules) => rules.map((rule, idx) => {
-      if (idx === ruleIdx) {
-        const updatedRule = Object.assign(rule, { [key]: value })
-        const availableRule = findRuleByName(updatedRule.name)
+  const updateRule = (ruleIdx, partial) => {
+    setRules((rules) => {
+      return rules.map((rule, idx) => {
+        if (idx === ruleIdx) {
+          const updatedRule = Object.assign(rule, partial)
+          const availableRule = findRuleByName(updatedRule.name)
 
-        if (key === 'name') {
-          updatedRule.operandCount = availableRule.operandCount
-        } else if (key === 'field') {
-          if (!availableRule.castTypes.includes(updatedRule.castType)) {
-            updatedRule.castType = availableRule.castTypes[0]
+          if (Object.keys(partial).includes('name')) {
+            updatedRule.operandCount = availableRule.operandCount
+          } else if (Object.keys(partial).includes('field')) {
+            updatedRule.name = findRuleByName('EQUALS').name
+            updatedRule.propKey = ''
+            updatedRule.castType = availableFields.find((f) => f.field === partial.field).defaultCastType
+            for (const key in updatedRule.operands) {
+              updatedRule.operands[key] = ''
+            }
           }
+          return updatedRule
         }
-        return updatedRule
-      }
-      return rule
-    }))
+        return rule
+      })
+    })
   }
 
   const updateOperands = (ruleIdx, operandIdx, value) => {
@@ -156,7 +162,7 @@ export default function GroupRules({ ruleModeState, rulesState }) {
                 options={availableFields.map(({ field }) => ({
                   label: field,
                   onClick: () => {
-                    updateRule(idx, 'field', field)
+                    updateRule(idx, { field })
                   }
                 }))}
               >
@@ -176,7 +182,7 @@ export default function GroupRules({ ruleModeState, rulesState }) {
                   id='prop-key'
                   variant='modal'
                   containerClassName='w-24 md:w-32'
-                  onChange={(value) => updateRule(idx, 'propKey', value)}
+                  onChange={(propKey) => updateRule(idx, { propKey })}
                   value={rule.propKey ?? ''}
                 />
               }
@@ -200,7 +206,7 @@ export default function GroupRules({ ruleModeState, rulesState }) {
                   options={['CHAR', 'DOUBLE', 'DATETIME'].map((castType) => ({
                     label: getCastTypeDescription(castType),
                     onClick: () => {
-                      updateRule(idx, 'castType', castType)
+                      updateRule(idx, { castType })
                     }
                   }))}
                 >
@@ -222,8 +228,7 @@ export default function GroupRules({ ruleModeState, rulesState }) {
                 options={availableRules.filter((availableRule) => availableRule.castTypes.includes(rule.castType)).map(({ name, negate }) => ({
                   label: getRuleDescription(name, negate),
                   onClick: () => {
-                    updateRule(idx, 'name', name)
-                    updateRule(idx, 'negate', negate)
+                    updateRule(idx, { name, negate })
                   }
                 }))}
               >
@@ -238,16 +243,30 @@ export default function GroupRules({ ruleModeState, rulesState }) {
                 )}
               </DropdownMenu>
 
-              {[...new Array(findRuleByName(rule.name).operandCount)].map((_, operandIdx) => (
-                <TextInput
-                  key={operandIdx}
-                  id={`operand-${operandIdx}`}
-                  variant='modal'
-                  containerClassName='w-14 md:w-20'
-                  onChange={(value) => updateOperands(idx, operandIdx, value)}
-                  value={rule.operands[operandIdx] ?? ''}
-                />
-              ))}
+              {[...new Array(findRuleByName(rule.name).operandCount)].map((_, operandIdx) => {
+                if (rule.castType === 'DATETIME') {
+                  return (
+                    <DateInput
+                      key={operandIdx}
+                      id={`operand-${operandIdx}`}
+                      mode='single'
+                      onChange={(value) => updateOperands(idx, operandIdx, value)}
+                      value={rule.operands[operandIdx]}
+                    />
+                  )
+                } else {
+                  return (
+                    <TextInput
+                      key={operandIdx}
+                      id={`operand-${operandIdx}`}
+                      variant='modal'
+                      containerClassName='w-14 md:w-20'
+                      onChange={(value) => updateOperands(idx, operandIdx, value)}
+                      value={rule.operands[operandIdx] ?? ''}
+                    />
+                  )
+                }
+              })}
             </div>
           </div>
         ))}
