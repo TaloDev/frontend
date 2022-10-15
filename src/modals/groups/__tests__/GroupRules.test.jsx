@@ -7,6 +7,10 @@ import activeGameState from '../../../state/activeGameState'
 import KitchenSink from '../../../utils/KitchenSink'
 import GroupRules from '../GroupRules'
 
+function getLatestChange(changeMock) {
+  return changeMock.mock.calls[changeMock.mock.calls.length - 1][0]
+}
+
 describe('<GroupRules />', () => {
   const axiosMock = new MockAdapter(api)
   const activeGameValue = { id: 1, name: 'Shattered' }
@@ -95,13 +99,16 @@ describe('<GroupRules />', () => {
     ],
     availableFields: [
       {
-        field: 'prop with key'
+        field: 'prop with key',
+        defaultCastType: 'CHAR'
       },
       {
-        field: 'lastSeenAt'
+        field: 'lastSeenAt',
+        defaultCastType: 'DATETIME'
       },
       {
-        field: 'createdAt'
+        field: 'createdAt',
+        defaultCastType: 'DATETIME'
       }
     ]
   })
@@ -131,7 +138,7 @@ describe('<GroupRules />', () => {
 
     expect(await screen.findByText('createdAt')).toBeInTheDocument()
     expect(screen.getByText('is greater than')).toBeInTheDocument()
-    expect(screen.getByDisplayValue('2022-03-03')).toBeInTheDocument()
+    expect(screen.getByDisplayValue('03 Mar 2022')).toBeInTheDocument()
   })
 
   it('should render prop rules', async () => {
@@ -180,7 +187,7 @@ describe('<GroupRules />', () => {
 
     userEvent.click(await screen.findByText('Add filter'))
 
-    expect(changeMock.mock.calls[0][0]([])).toStrictEqual([{
+    expect(getLatestChange(changeMock)([])).toStrictEqual([{
       name: 'EQUALS',
       negate: false,
       castType: 'CHAR',
@@ -232,7 +239,7 @@ describe('<GroupRules />', () => {
 
     userEvent.click(await screen.findByLabelText('Delete rule 1'))
 
-    expect(changeMock.mock.calls[0][0](rules)).toStrictEqual([rules[1]])
+    expect(getLatestChange(changeMock)(rules)).toStrictEqual([rules[1]])
   })
 
   it('should update operands', async () => {
@@ -274,7 +281,7 @@ describe('<GroupRules />', () => {
 
     userEvent.type(await screen.findByDisplayValue('5'), '6')
 
-    expect(changeMock.mock.calls[0][0]([initialRule, irrelevantRule])).toStrictEqual([{
+    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
       name: 'LT',
       negate: false,
       castType: 'DOUBLE',
@@ -327,17 +334,7 @@ describe('<GroupRules />', () => {
     userEvent.click(await screen.findByText('is less than'))
     userEvent.click(await screen.findByText('is greater than'))
 
-    expect(changeMock.mock.calls[0][0]([initialRule, irrelevantRule])).toStrictEqual([{
-      name: 'GT',
-      negate: false,
-      castType: 'DOUBLE',
-      field: 'prop with key',
-      propKey: 'pos.x',
-      operands: {
-        0: '5'
-      },
-      operandCount: 1
-    }, irrelevantRule])
+    expect(await screen.findByText('is greater than')).toBeInTheDocument()
   })
 
   it('should update rule mode to $or', async () => {
@@ -472,14 +469,14 @@ describe('<GroupRules />', () => {
     userEvent.click(await screen.findByText('createdAt'))
     userEvent.click(await screen.findByText('lastSeenAt'))
 
-    expect(changeMock.mock.calls[0][0]([initialRule, irrelevantRule])).toStrictEqual([{
-      name: 'LT',
+    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
+      name: 'EQUALS',
       negate: false,
       castType: 'DATETIME',
       field: 'lastSeenAt',
       propKey: '',
       operands: {
-        0: '5'
+        0: ''
       },
       operandCount: 1
     }, irrelevantRule])
@@ -524,7 +521,7 @@ describe('<GroupRules />', () => {
 
     userEvent.type(await screen.findByDisplayValue('hasLoggedIn'), '1')
 
-    expect(changeMock.mock.calls[0][0]([initialRule, irrelevantRule])).toStrictEqual([{
+    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
       name: 'SET',
       negate: false,
       castType: 'CHAR',
@@ -575,68 +572,13 @@ describe('<GroupRules />', () => {
     userEvent.click(await screen.findByText('text'))
     userEvent.click(await screen.findByText('number'))
 
-    expect(changeMock.mock.calls[0][0]([initialRule, irrelevantRule])).toStrictEqual([{
+    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
       name: 'SET',
       negate: false,
       castType: 'DOUBLE',
       field: 'prop with key',
       propKey: 'hasLoggedIn',
       operands: {},
-      operandCount: 0
-    }, irrelevantRule])
-  })
-
-  it('should update the cast type to the first available cast type of the rule after changing the field', async () => {
-    const changeMock = jest.fn()
-
-    const initialRule = {
-      name: 'GT',
-      negate: false,
-      castType: 'CHAR',
-      field: 'lastSeenAt',
-      propKey: '',
-      operands: {
-        0: '2022-01-01'
-      },
-      operandCount: 0
-    }
-
-    const irrelevantRule = {
-      name: 'LT',
-      negate: false,
-      castType: 'DATETIME',
-      field: 'createdAt',
-      propKey: '',
-      operands: {
-        0: '5'
-      },
-      operandCount: 1
-    }
-
-    render(
-      <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
-        <GroupRules
-          ruleModeState={['$and', jest.fn()]}
-          rulesState={[
-            [initialRule, irrelevantRule],
-            changeMock
-          ]}
-        />
-      </KitchenSink>
-    )
-
-    userEvent.click(await screen.findByText('lastSeenAt'))
-    userEvent.click(await screen.findByText('prop with key'))
-
-    expect(changeMock.mock.calls[0][0]([initialRule, irrelevantRule])).toStrictEqual([{
-      name: 'GT',
-      negate: false,
-      castType: 'DOUBLE',
-      field: 'prop with key',
-      propKey: '',
-      operands: {
-        0: '2022-01-01'
-      },
       operandCount: 0
     }, irrelevantRule])
   })

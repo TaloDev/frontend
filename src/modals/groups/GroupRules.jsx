@@ -9,6 +9,7 @@ import Loading from '../../components/Loading'
 import { useRecoilValue } from 'recoil'
 import activeGameState from '../../state/activeGameState'
 import ErrorMessage from '../../components/ErrorMessage'
+import DateInput from '../../components/DateInput'
 
 export const groupPropKeyField = 'prop with key'
 
@@ -83,8 +84,11 @@ export default function GroupRules({ ruleModeState, rulesState }) {
         if (key === 'name') {
           updatedRule.operandCount = availableRule.operandCount
         } else if (key === 'field') {
-          if (!availableRule.castTypes.includes(updatedRule.castType)) {
-            updatedRule.castType = availableRule.castTypes[0]
+          updatedRule.name = findRuleByName('EQUALS').name
+          updatedRule.propKey = ''
+          updatedRule.castType = availableFields.find((f) => f.field === value).defaultCastType
+          for (const key in updatedRule.operands) {
+            updatedRule.operands[key] = ''
           }
         }
         return updatedRule
@@ -238,16 +242,30 @@ export default function GroupRules({ ruleModeState, rulesState }) {
                 )}
               </DropdownMenu>
 
-              {[...new Array(findRuleByName(rule.name).operandCount)].map((_, operandIdx) => (
-                <TextInput
-                  key={operandIdx}
-                  id={`operand-${operandIdx}`}
-                  variant='modal'
-                  containerClassName='w-14 md:w-20'
-                  onChange={(value) => updateOperands(idx, operandIdx, value)}
-                  value={rule.operands[operandIdx] ?? ''}
-                />
-              ))}
+              {[...new Array(findRuleByName(rule.name).operandCount)].map((_, operandIdx) => {
+                if (rule.castType === 'DATETIME') {
+                  return (
+                    <DateInput
+                      key={operandIdx}
+                      id={`operand-${operandIdx}`}
+                      mode='single'
+                      onChange={(value) => updateOperands(idx, operandIdx, value)}
+                      value={rule.operands[operandIdx]}
+                    />
+                  )
+                } else {
+                  return (
+                    <TextInput
+                      key={operandIdx}
+                      id={`operand-${operandIdx}`}
+                      variant='modal'
+                      containerClassName='w-14 md:w-20'
+                      onChange={(value) => updateOperands(idx, operandIdx, value)}
+                      value={rule.operands[operandIdx] ?? ''}
+                    />
+                  )
+                }
+              })}
             </div>
           </div>
         ))}
