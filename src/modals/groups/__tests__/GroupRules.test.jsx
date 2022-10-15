@@ -334,7 +334,17 @@ describe('<GroupRules />', () => {
     userEvent.click(await screen.findByText('is less than'))
     userEvent.click(await screen.findByText('is greater than'))
 
-    expect(await screen.findByText('is greater than')).toBeInTheDocument()
+    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
+      name: 'GT',
+      negate: false,
+      castType: 'DOUBLE',
+      field: 'prop with key',
+      propKey: 'pos.x',
+      operands: {
+        0: '5'
+      },
+      operandCount: 1
+    }, irrelevantRule])
   })
 
   it('should update rule mode to $or', async () => {
