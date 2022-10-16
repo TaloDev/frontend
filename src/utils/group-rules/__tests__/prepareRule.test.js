@@ -11,7 +11,8 @@ describe('prepareRule', () => {
       },
       operandCount: 1,
       field: 'prop with key',
-      propKey: 'level'
+      propKey: 'level',
+      mapsTo: 'props'
     })).toStrictEqual({
       name: 'EQUALS',
       negate: true,
@@ -30,7 +31,8 @@ describe('prepareRule', () => {
         0: '60'
       },
       operandCount: 1,
-      field: 'lastSeenAt'
+      field: 'latest login',
+      mapsTo: 'lastSeenAt'
     })).toStrictEqual({
       name: 'EQUALS',
       negate: true,
@@ -51,7 +53,8 @@ describe('prepareRule', () => {
         2: '80'
       },
       operandCount: 1,
-      field: 'lastSeenAt'
+      field: 'latest login',
+      mapsTo: 'lastSeenAt'
     })).toStrictEqual({
       name: 'EQUALS',
       negate: true,
