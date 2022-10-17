@@ -34,6 +34,8 @@ const Billing = lazy(() => import(/* webpackChunkName: 'billing' */ './pages/Bil
 const Integrations = lazy(() => import(/* webpackChunkName: 'integrations' */ './pages/Integrations'))
 const Groups = lazy(() => import(/* webpackChunkName: 'groups' */ './pages/Groups'))
 const GameProps = lazy(() => import(/* webpackChunkName: 'game-props' */ './pages/GameProps'))
+const PlayerProfile = lazy(() => import(/* webpackChunkName: 'player-profile' */ './pages/PlayerProfile'))
+const PlayerLeaderboardEntries = lazy(() => import(/* webpackChunkName: 'player-leaderboard-entries' */ './pages/PlayerLeaderboardEntries'))
 
 function Router({ intendedUrl }) {
   const user = useRecoilValue(userState)
@@ -83,6 +85,8 @@ function Router({ intendedUrl }) {
                   {canViewPage(user, routes.integrations) && <Route exact path={routes.integrations} element={<Integrations />} />}
                   <Route exact path={routes.groups} element={<Groups />} />
                   {canViewPage(user, routes.gameProps) && <Route exact path={routes.gameProps} element={<GameProps />} />}
+                  <Route exact path={routes.playerProfile} element={<PlayerProfile />} />
+                  <Route exact path={routes.playerLeaderboardEntries} element={<PlayerLeaderboardEntries />} />
                 </>
               }
 

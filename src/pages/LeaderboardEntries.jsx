@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
@@ -11,7 +11,6 @@ import DateCell from '../components/tables/cells/DateCell'
 import useLeaderboardEntries from '../api/useLeaderboardEntries'
 import { IconArrowRight } from '@tabler/icons'
 import Button from '../components/Button'
-import getLeaderboard from '../api/getLeaderboard'
 import updateLeaderboardEntry from '../api/updateLeaderboardEntry'
 import buildError from '../utils/buildError'
 import classNames from 'classnames'
@@ -19,16 +18,18 @@ import Page from '../components/Page'
 import Table from '../components/tables/Table'
 import { useRecoilValue } from 'recoil'
 import activeGameState from '../state/activeGameState'
+import findLeaderboard from '../api/findLeaderboard'
 
 const LeaderboardEntries = () => {
   const location = useLocation()
+  const { internalName } = useParams()
 
   const [isLoading, setLoading] = useState(!location.state?.leaderboard)
   const activeGame = useRecoilValue(activeGameState)
   const [leaderboard, setLeaderboard] = useState(location.state?.leaderboard)
 
   const [page, setPage] = useState(0)
-  const { entries, count, loading, error: fetchError, mutate } = useLeaderboardEntries(activeGame.id, leaderboard?.id, page)
+  const { entries, count, loading, error: fetchError, mutate } = useLeaderboardEntries(activeGame, leaderboard?.id, page)
 
   const [error, setError] = useState(null)
 
@@ -38,7 +39,7 @@ const LeaderboardEntries = () => {
     (async () => {
       if (isLoading) {
         try {
-          const res = await getLeaderboard(activeGame.id, leaderboard?.id)
+          const res = await findLeaderboard(activeGame.id, internalName)
           setLeaderboard(res.data.leaderboard)
           setLoading(false)
         } catch (err) {
@@ -101,7 +102,7 @@ const LeaderboardEntries = () => {
 
       {!fetchError && entries.length > 0 &&
         <>
-          <Table columns={['#', 'Player', 'Score', 'Time', '']}>
+          <Table columns={['#', 'Player', 'Score', 'Submitted at', '']}>
             <TableBody
               iterator={entries}
               configureClassNames={(entry, idx) => ({

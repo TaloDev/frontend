@@ -11,7 +11,7 @@ function DevDataStatus() {
   return (
     <div className='space-y-4'>
       <SecondaryTitle className='mt-4 md:mt-0'>Dev data is currently
-        <span className={classNames('font-semibold', { 'text-orange-400': includeDevData })}>
+        <span className={classNames('font-semibold', { 'text-orange-500': includeDevData })}>
           {' '}{includeDevData ? 'enabled' : 'not enabled'}
         </span>
       </SecondaryTitle>
