@@ -3,7 +3,7 @@ export default function prepareRule(rule) {
     name: rule.name,
     negate: rule.negate,
     castType: rule.castType,
-    field: rule.propKey ? `props.${rule.propKey}` : rule.field,
+    field: rule.propKey ? `${rule.mapsTo}.${rule.propKey}` : rule.mapsTo,
     operands: Object.values(rule.operands).filter((_, idx) => idx < rule.operandCount)
   }
 }

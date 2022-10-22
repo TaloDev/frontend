@@ -90,7 +90,7 @@ table {
 }
 
 .rdp-day_selected {
-  @apply bg-indigo-500;
+  @apply bg-indigo-500 !important;
 }
 
 .rdp-day_selected:hover {
