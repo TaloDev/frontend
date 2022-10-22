@@ -13,8 +13,8 @@
     "@tabler/icons": "^1.100.0",
     "@tippyjs/react": "^4.2.5",
     "axios": "^0.26.0",
-    "classnames": "^2.3.1",
-    "date-fns": "^2.21.3",
+    "classnames": "^2.3.2",
+    "date-fns": "^2.29.3",
     "dinero.js": "^2.0.0-alpha.8",
     "framer-motion": "^6.3.3",
     "lodash-es": "^4.17.21",
@@ -22,6 +22,7 @@
     "querystring": "^0.2.1",
     "randomcolor": "^0.6.2",
     "react": "^17.0.2",
+    "react-day-picker": "^8.3.5",
     "react-dom": "^17.0.2",
     "react-focus-lock": "^2.8.1",
     "react-hook-form": "^7.31.2",
@@ -67,5 +68,5 @@
   "lint-staged": {
     "*.{js,jsx}": "eslint --fix"
   },
-  "version": "0.18.0"
+  "version": "0.19.0"
 }
