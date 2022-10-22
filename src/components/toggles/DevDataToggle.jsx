@@ -36,7 +36,7 @@ function DevDataToggle() {
         <motion.div
           animate={{
             x: innerEnabled ? 44 : 0,
-            backgroundColor: innerEnabled ? 'rgb(251,146,60)' : 'rgb(99,102,241)'
+            backgroundColor: innerEnabled ? 'rgb(249,115,22)' : 'rgb(99,102,241)'
           }}
           initial={false}
           transition={{ duration: 0.2 }}

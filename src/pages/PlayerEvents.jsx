@@ -52,6 +52,8 @@ const PlayerEvents = () => {
 
   const navigate = useNavigate()
 
+  const loading = !player || eventsLoading
+
   useEffect(() => {
     if (errorStatusCode === 404) {
       navigate(routes.players, { replace: true })
@@ -66,7 +68,7 @@ const PlayerEvents = () => {
     <Page
       showBackButton
       title='Player events'
-      isLoading={!player || eventsLoading}
+      isLoading={loading}
     >
       <PlayerIdentifier player={player} />
 
@@ -85,8 +87,8 @@ const PlayerEvents = () => {
         </div>
       }
 
-      {!error && events.length === 0 &&
-        <p>No events match your query</p>
+      {!error && !loading && events.length === 0 &&
+        <p>{search.length > 0 ? 'No events match your query' : 'This player has not submitted any events yet'}</p>
       }
 
       {!error && events.length > 0 &&

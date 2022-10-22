@@ -4,7 +4,6 @@ import activeGameState from '../state/activeGameState'
 import ErrorMessage from '../components/ErrorMessage'
 import PlayerAliases from '../components/PlayerAliases'
 import { format } from 'date-fns'
-import { IconArrowRight, IconBolt, IconChartBar } from '@tabler/icons'
 import Button from '../components/Button'
 import { useNavigate } from 'react-router-dom'
 import routes from '../constants/routes'
@@ -15,10 +14,8 @@ import usePlayers from '../api/usePlayers'
 import { useDebounce } from 'use-debounce'
 import Pagination from '../components/Pagination'
 import DateCell from '../components/tables/cells/DateCell'
-import classNames from 'classnames'
 import Page from '../components/Page'
 import Table from '../components/tables/Table'
-import { isMetaProp } from '../constants/metaProps'
 
 const Players = () => {
   const [search, setSearch] = useState(new URLSearchParams(window.location.search).get('search') ?? '')
@@ -28,20 +25,8 @@ const Players = () => {
   const [page, setPage] = useState(0)
   const { players, count, loading, error } = usePlayers(activeGame, debouncedSearch, page)
 
-  const goToPlayerProps = (player) => {
-    navigate(routes.playerProps.replace(':id', player.id), {
-      state: { player }
-    })
-  }
-
-  const goToPlayerEvents = (player) => {
-    navigate(routes.playerEvents.replace(':id', player.id), {
-      state: { player }
-    })
-  }
-
-  const goToPlayerStats = (player) => {
-    navigate(routes.playerStats.replace(':id', player.id), {
+  const goToPlayerProfile = (player) => {
+    navigate(routes.playerProfile.replace(':id', player.id), {
       state: { player }
     })
   }
@@ -80,7 +65,7 @@ const Players = () => {
 
       {players.length > 0 &&
         <>
-          <Table columns={['Aliases', 'Properties', 'Registered', 'Last seen', '', '']}>
+          <Table columns={['Aliases', 'Registered', 'Last seen', '']}>
             <TableBody
               iterator={players}
               configureClassNames={(player, idx) => ({
@@ -91,35 +76,14 @@ const Players = () => {
               {(player) => (
                 <>
                   <TableCell className='min-w-80 md:min-w-0'><PlayerAliases aliases={player.aliases} /></TableCell>
-                  <TableCell className='w-40'>
-                    <div className='flex items-center'>
-                      <span>{player.props.filter((prop) => !isMetaProp(prop)).length}</span>
-                      <Button
-                        variant='icon'
-                        className={classNames('ml-2 p-1 rounded-full bg-indigo-900', { 'bg-orange-900': player.devBuild })}
-                        onClick={() => goToPlayerProps(player)}
-                        icon={<IconArrowRight size={16} />}
-                      />
-                    </div>
-                  </TableCell>
                   <DateCell>{format(new Date(player.createdAt), 'do MMM Y')}</DateCell>
                   <DateCell>{format(new Date(player.lastSeenAt), 'do MMM Y')}</DateCell>
-                  <TableCell className='w-40'>
+                  <TableCell className='w-48'>
                     <Button
                       variant='grey'
-                      onClick={() => goToPlayerEvents(player)}
-                      icon={<IconBolt size={16} />}
+                      onClick={() => goToPlayerProfile(player)}
                     >
-                      <span>Events</span>
-                    </Button>
-                  </TableCell>
-                  <TableCell className='w-40'>
-                    <Button
-                      variant='grey'
-                      onClick={() => goToPlayerStats(player)}
-                      icon={<IconChartBar size={16} />}
-                    >
-                      <span>Stats</span>
+                      <span>View profile</span>
                     </Button>
                   </TableCell>
                 </>

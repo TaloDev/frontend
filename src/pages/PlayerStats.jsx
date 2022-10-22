@@ -26,6 +26,8 @@ function PlayerStats() {
 
   const navigate = useNavigate()
 
+  const loading = !player || statsLoading
+
   useEffect(() => {
     if (errorStatusCode === 404) {
       navigate(routes.players, { replace: true })
@@ -36,11 +38,11 @@ function PlayerStats() {
     <Page
       showBackButton
       title='Player stats'
-      isLoading={!player || statsLoading}
+      isLoading={loading}
     >
       <PlayerIdentifier player={player} />
 
-      {!error && sortedStats.length === 0 &&
+      {!error && !loading && sortedStats.length === 0 &&
         <p>This player has no stat entries yet</p>
       }
 
