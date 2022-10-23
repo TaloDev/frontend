@@ -10,6 +10,7 @@ import { useRecoilValue } from 'recoil'
 import activeGameState from '../../state/activeGameState'
 import ErrorMessage from '../../components/ErrorMessage'
 import DateInput from '../../components/DateInput'
+import { metaGroupFields } from '../../constants/metaProps'
 
 export const groupPropKeyField = 'prop with key'
 
@@ -47,7 +48,16 @@ function getCastTypeDescription(castType) {
 
 export default function GroupRules({ ruleModeState, rulesState }) {
   const activeGame = useRecoilValue(activeGameState)
-  const { availableRules, availableFields, loading, error } = useGroupRules(activeGame)
+  const { availableRules, availableFields: fields, loading, error } = useGroupRules(activeGame)
+
+  const availableFields = [
+    ...fields,
+    ...metaGroupFields
+  ].sort((a, b) => {
+    if (a.field === groupPropKeyField) return -1
+    if (b.field === groupPropKeyField) return 1
+    return a.field.localeCompare(b.field)
+  })
 
   const [ruleMode, setRuleMode] = ruleModeState
   const [rules, setRules] = rulesState
@@ -65,7 +75,8 @@ export default function GroupRules({ ruleModeState, rulesState }) {
       castType: rule.castTypes[0],
       negate: false,
       operands: {},
-      operandCount: rule.operandCount
+      operandCount: rule.operandCount,
+      mapsTo: availableFields[0].mapsTo
     }
 
     setRules((rules) => [...rules, newRule])
@@ -85,9 +96,12 @@ export default function GroupRules({ ruleModeState, rulesState }) {
           if (Object.keys(partial).includes('name')) {
             updatedRule.operandCount = availableRule.operandCount
           } else if (Object.keys(partial).includes('field')) {
+            const availableField = availableFields.find((f) => f.field === partial.field)
+
             updatedRule.name = findRuleByName('EQUALS').name
-            updatedRule.propKey = ''
-            updatedRule.castType = availableFields.find((f) => f.field === partial.field).defaultCastType
+            updatedRule.propKey = availableField.mapsTo.startsWith('META_') ? availableField.mapsTo : ''
+            updatedRule.mapsTo = availableField.mapsTo
+            updatedRule.castType = availableField.defaultCastType
             for (const key in updatedRule.operands) {
               updatedRule.operands[key] = ''
             }

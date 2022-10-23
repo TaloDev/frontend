@@ -10,7 +10,7 @@
     "@dinero.js/currencies": "^2.0.0-alpha.8",
     "@hookform/resolvers": "^2.8.8",
     "@sentry/react": "^6.19.6",
-    "@tabler/icons": "^1.100.0",
+    "@tabler/icons": "^1.104.0",
     "@tippyjs/react": "^4.2.5",
     "axios": "^0.26.0",
     "classnames": "^2.3.2",
@@ -28,7 +28,7 @@
     "react-hook-form": "^7.31.2",
     "react-required-if": "^1.0.3",
     "react-resize-detector": "^6.7.1",
-    "react-router-dom": "^6.3.0",
+    "react-router-dom": "^6.4.2",
     "react-select": "^5.2.1",
     "recharts": "^2.0.9",
     "recoil": "0.7.2",
@@ -68,5 +68,5 @@
   "lint-staged": {
     "*.{js,jsx}": "eslint --fix"
   },
-  "version": "0.19.0"
+  "version": "0.20.0"
 }

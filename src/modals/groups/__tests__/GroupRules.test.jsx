@@ -100,15 +100,18 @@ describe('<GroupRules />', () => {
     availableFields: [
       {
         field: 'prop with key',
-        defaultCastType: 'CHAR'
+        defaultCastType: 'CHAR',
+        mapsTo: 'props'
       },
       {
-        field: 'lastSeenAt',
-        defaultCastType: 'DATETIME'
+        field: 'latest login',
+        defaultCastType: 'DATETIME',
+        mapsTo: 'lastSeenAt'
       },
       {
-        field: 'createdAt',
-        defaultCastType: 'DATETIME'
+        field: 'first login',
+        defaultCastType: 'DATETIME',
+        mapsTo: 'createdAt'
       }
     ]
   })
@@ -123,12 +126,13 @@ describe('<GroupRules />', () => {
               name: 'GT',
               negate: false,
               castType: 'DATETIME',
-              field: 'createdAt',
+              field: 'first login',
               propKey: '',
               operands: {
                 0: '2022-03-03'
               },
-              operandCount: 1
+              operandCount: 1,
+              mapsTo: 'createdAt'
             }],
             jest.fn()
           ]}
@@ -136,7 +140,7 @@ describe('<GroupRules />', () => {
       </KitchenSink>
     )
 
-    expect(await screen.findByText('createdAt')).toBeInTheDocument()
+    expect(await screen.findByText('first login')).toBeInTheDocument()
     expect(screen.getByText('is greater than')).toBeInTheDocument()
     expect(screen.getByDisplayValue('03 Mar 2022')).toBeInTheDocument()
   })
@@ -156,7 +160,8 @@ describe('<GroupRules />', () => {
               operands: {
                 0: '55'
               },
-              operandCount: 1
+              operandCount: 1,
+              mapsTo: 'props'
             }],
             jest.fn()
           ]}
@@ -193,7 +198,8 @@ describe('<GroupRules />', () => {
       castType: 'CHAR',
       field: 'prop with key',
       operands: {},
-      operandCount: 1
+      operandCount: 1,
+      mapsTo: 'props'
     }])
   })
 
@@ -205,23 +211,25 @@ describe('<GroupRules />', () => {
         name: 'LT',
         negate: false,
         castType: 'DATETIME',
-        field: 'createdAt',
+        field: 'first login',
         propKey: '',
         operands: {
           0: '2022-03-03'
         },
-        operandCount: 1
+        operandCount: 1,
+        mapsTo: 'createdAt'
       },
       {
         name: 'GT',
         negate: false,
         castType: 'DATETIME',
-        field: 'createdAt',
+        field: 'first login',
         propKey: '',
         operands: {
           0: '2022-01-01'
         },
-        operandCount: 1
+        operandCount: 1,
+        mapsTo: 'createdAt'
       }
     ]
 
@@ -254,7 +262,8 @@ describe('<GroupRules />', () => {
       operands: {
         0: '5'
       },
-      operandCount: 1
+      operandCount: 1,
+      mapsTo: 'props'
     }
 
     const irrelevantRule = {
@@ -264,7 +273,8 @@ describe('<GroupRules />', () => {
       field: 'prop with key',
       propKey: 'hasWonGame',
       operands: {},
-      operandCount: 0
+      operandCount: 0,
+      mapsTo: 'props'
     }
 
     render(
@@ -290,7 +300,8 @@ describe('<GroupRules />', () => {
       operands: {
         0: '56'
       },
-      operandCount: 1
+      operandCount: 1,
+      mapsTo: 'props'
     }, irrelevantRule])
   })
 
@@ -306,7 +317,8 @@ describe('<GroupRules />', () => {
       operands: {
         0: '5'
       },
-      operandCount: 1
+      operandCount: 1,
+      mapsTo: 'props'
     }
 
     const irrelevantRule = {
@@ -316,7 +328,8 @@ describe('<GroupRules />', () => {
       field: 'prop with key',
       propKey: 'hasWonGame',
       operands: {},
-      operandCount: 0
+      operandCount: 0,
+      mapsTo: 'props'
     }
 
     render(
@@ -343,7 +356,8 @@ describe('<GroupRules />', () => {
       operands: {
         0: '5'
       },
-      operandCount: 1
+      operandCount: 1,
+      mapsTo: 'props'
     }, irrelevantRule])
   })
 
@@ -355,23 +369,25 @@ describe('<GroupRules />', () => {
         name: 'LT',
         negate: false,
         castType: 'DATETIME',
-        field: 'createdAt',
+        field: 'first login',
         propKey: '',
         operands: {
           0: '2022-03-03'
         },
-        operandCount: 1
+        operandCount: 1,
+        mapsTo: 'createdAt'
       },
       {
         name: 'GT',
         negate: false,
         castType: 'DATETIME',
-        field: 'createdAt',
+        field: 'first login',
         propKey: '',
         operands: {
           0: '2022-01-01'
         },
-        operandCount: 1
+        operandCount: 1,
+        mapsTo: 'createdAt'
       }
     ]
 
@@ -401,23 +417,25 @@ describe('<GroupRules />', () => {
         name: 'LT',
         negate: false,
         castType: 'DATETIME',
-        field: 'createdAt',
+        field: 'first login',
         propKey: '',
         operands: {
           0: '2022-03-03'
         },
-        operandCount: 1
+        operandCount: 1,
+        mapsTo: 'createdAt'
       },
       {
         name: 'GT',
         negate: false,
         castType: 'DATETIME',
-        field: 'createdAt',
+        field: 'first login',
         propKey: '',
         operands: {
           0: '2022-01-01'
         },
-        operandCount: 1
+        operandCount: 1,
+        mapsTo: 'createdAt'
       }
     ]
 
@@ -446,12 +464,13 @@ describe('<GroupRules />', () => {
       name: 'LT',
       negate: false,
       castType: 'DATETIME',
-      field: 'createdAt',
+      field: 'first login',
       propKey: '',
       operands: {
         0: '5'
       },
-      operandCount: 1
+      operandCount: 1,
+      mapsTo: 'createdAt'
     }
 
     const irrelevantRule = {
@@ -461,7 +480,8 @@ describe('<GroupRules />', () => {
       field: 'prop with key',
       propKey: 'hasWonGame',
       operands: {},
-      operandCount: 0
+      operandCount: 0,
+      mapsTo: 'props'
     }
 
     render(
@@ -476,19 +496,20 @@ describe('<GroupRules />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(await screen.findByText('createdAt'))
-    userEvent.click(await screen.findByText('lastSeenAt'))
+    userEvent.click(await screen.findByText('first login'))
+    userEvent.click(await screen.findByText('latest login'))
 
     expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
       name: 'EQUALS',
       negate: false,
       castType: 'DATETIME',
-      field: 'lastSeenAt',
+      field: 'latest login',
       propKey: '',
       operands: {
         0: ''
       },
-      operandCount: 1
+      operandCount: 1,
+      mapsTo: 'lastSeenAt'
     }, irrelevantRule])
   })
 
@@ -502,19 +523,21 @@ describe('<GroupRules />', () => {
       field: 'prop with key',
       propKey: 'hasLoggedIn',
       operands: {},
-      operandCount: 0
+      operandCount: 0,
+      mapsTo: 'props'
     }
 
     const irrelevantRule = {
       name: 'LT',
       negate: false,
       castType: 'DATETIME',
-      field: 'createdAt',
+      field: 'first login',
       propKey: '',
       operands: {
         0: '5'
       },
-      operandCount: 1
+      operandCount: 1,
+      mapsTo: 'createdAt'
     }
 
     render(
@@ -538,7 +561,8 @@ describe('<GroupRules />', () => {
       field: 'prop with key',
       propKey: 'hasLoggedIn1',
       operands: {},
-      operandCount: 0
+      operandCount: 0,
+      mapsTo: 'props'
     }, irrelevantRule])
   })
 
@@ -590,6 +614,62 @@ describe('<GroupRules />', () => {
       propKey: 'hasLoggedIn',
       operands: {},
       operandCount: 0
+    }, irrelevantRule])
+  })
+
+  it('should select meta props', async () => {
+    const changeMock = jest.fn()
+
+    const initialRule = {
+      name: 'LT',
+      negate: false,
+      castType: 'DATETIME',
+      field: 'first login',
+      propKey: '',
+      operands: {
+        0: '5'
+      },
+      operandCount: 1,
+      mapsTo: 'createdAt'
+    }
+
+    const irrelevantRule = {
+      name: 'SET',
+      negate: false,
+      castType: 'CHAR',
+      field: 'prop with key',
+      propKey: 'hasWonGame',
+      operands: {},
+      operandCount: 0,
+      mapsTo: 'props'
+    }
+
+    render(
+      <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
+        <GroupRules
+          ruleModeState={['$and', jest.fn()]}
+          rulesState={[
+            [initialRule, irrelevantRule],
+            changeMock
+          ]}
+        />
+      </KitchenSink>
+    )
+
+    userEvent.click(await screen.findByText('first login'))
+    userEvent.click(await screen.findByText('window mode'))
+
+    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
+      name: 'EQUALS',
+      negate: false,
+      castType: 'DOUBLE',
+      field: 'window mode',
+      propKey: 'META_WINDOW_MODE',
+      operands: {
+        0: ''
+      },
+      operandCount: 1,
+      mapsTo: 'META_WINDOW_MODE'
     }, irrelevantRule])
   })
 

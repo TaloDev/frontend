@@ -9,6 +9,8 @@ import activeGameState from '../state/activeGameState'
 import randomColor from 'randomcolor'
 import Tippy from '@tippyjs/react'
 import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+import routes from '../constants/routes'
 
 const GameSwitcher = () => {
   const [isOpen, setOpen] = useState(false)
@@ -16,9 +18,16 @@ const GameSwitcher = () => {
   const games = useRecoilValue(gamesState)
   const [activeGame, setActiveGame] = useRecoilState(activeGameState)
 
+  const navigate = useNavigate()
+
   const openModal = () => {
     setOpen(false)
     setShowModal(true)
+  }
+
+  const switchToGame = (game) => {
+    setActiveGame(game)
+    navigate(routes.dashboard)
   }
 
   const dropdownButtonStyle = 'hover:bg-gray-200 active:bg-gray-300 focus:z-10'
@@ -49,7 +58,7 @@ const GameSwitcher = () => {
                       variant='bare'
                       disabled={disabled}
                       className='truncate p-2 w-full'
-                      onClick={() => setActiveGame(game)}
+                      onClick={() => switchToGame(game)}
                     >
                       {game.name}
                     </Button>
