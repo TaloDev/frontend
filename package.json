@@ -9,7 +9,7 @@
   "dependencies": {
     "@dinero.js/currencies": "^2.0.0-alpha.8",
     "@hookform/resolvers": "^2.8.8",
-    "@sentry/react": "^6.19.6",
+    "@sentry/react": "^7.0.0",
     "@tabler/icons": "^1.104.0",
     "@tippyjs/react": "^4.2.5",
     "axios": "^0.27.0",
