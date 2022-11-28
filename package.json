@@ -44,7 +44,7 @@
     "@snowpack/plugin-react-refresh": "^2.5.0",
     "@snowpack/plugin-webpack": "^3.0.0",
     "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^12.1.2",
+    "@testing-library/react": "^13.0.0",
     "@testing-library/react-hooks": "^8.0.0",
     "@testing-library/user-event": "^13.5.0",
     "autoprefixer": "^10.2.5",
