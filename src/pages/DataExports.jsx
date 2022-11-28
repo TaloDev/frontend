@@ -46,7 +46,11 @@ const DataExports = () => {
       const res = await createDataExport(activeGame.id, selectedEntities)
       setCreatedExportId(res.data.dataExport.id)
     } catch (err) {
-      setCreateError(buildError(err))
+      if (err.response?.status === 402) {
+        setCreateError(buildError('You have reached the data export limit for this month, contact the account owner to upgrade the pricing plan'))
+      } else {
+        setCreateError(buildError(err))
+      }
     } finally {
       setCreating(false)
     }
