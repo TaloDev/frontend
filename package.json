@@ -27,7 +27,7 @@
     "react-focus-lock": "^2.8.1",
     "react-hook-form": "^7.31.2",
     "react-required-if": "^1.0.3",
-    "react-resize-detector": "^6.7.1",
+    "react-resize-detector": "^7.0.0",
     "react-router-dom": "^6.4.2",
     "react-select": "^5.2.1",
     "recharts": "^2.1.15",
