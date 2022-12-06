@@ -24,10 +24,10 @@ describe('<Integrations />', () => {
     )
 
     expect(await screen.findByText('Enable integration')).toBeInTheDocument()
-    userEvent.click(screen.getByText('Enable integration'))
+    await userEvent.click(screen.getByText('Enable integration'))
 
     expect(screen.getByText('Steamworks integration')).toBeInTheDocument()
-    userEvent.click(screen.getByText('Cancel'))
+    await userEvent.click(screen.getByText('Cancel'))
   })
 
   it('should render the enabled state for the steamworks integration', async () => {
@@ -55,10 +55,10 @@ describe('<Integrations />', () => {
     )
 
     expect(await screen.findByText('Update integration')).toBeInTheDocument()
-    userEvent.click(screen.getByText('Update integration'))
+    await userEvent.click(screen.getByText('Update integration'))
 
     expect(screen.getByText('Steamworks integration')).toBeInTheDocument()
-    userEvent.click(screen.getByText('Done'))
+    await userEvent.click(screen.getByText('Done'))
 
     expect(screen.getByText('Enabled 1st Aug 2022'))
     expect(screen.getByText('Last updated 1st Aug 2022 20:32'))
@@ -113,13 +113,13 @@ describe('<Integrations />', () => {
 
     if (syncLeaderboards) {
       expect(await screen.findByText('Sync leaderboards')).toBeInTheDocument()
-      userEvent.click(screen.getByText('Sync leaderboards'))
+      await userEvent.click(screen.getByText('Sync leaderboards'))
       expect(await screen.findByText('This will usually only take a few minutes. Leaderboards will be updated in the background.')).toBeInTheDocument()
     }
 
     if (syncStats) {
       expect(await screen.findByText('Sync stats')).toBeInTheDocument()
-      userEvent.click(screen.getByText('Sync stats'))
+      await userEvent.click(screen.getByText('Sync stats'))
       expect(await screen.findByText('This will usually only take a few minutes.')).toBeInTheDocument()
     }
   })
@@ -150,7 +150,7 @@ describe('<Integrations />', () => {
       </KitchenSink>
     )
     expect(await screen.findByText('Sync leaderboards')).toBeInTheDocument()
-    userEvent.click(screen.getByText('Sync leaderboards'))
+    await userEvent.click(screen.getByText('Sync leaderboards'))
     expect(await screen.findByText('Network Error')).toBeInTheDocument()
   })
 
@@ -180,7 +180,7 @@ describe('<Integrations />', () => {
       </KitchenSink>
     )
     expect(await screen.findByText('Sync stats')).toBeInTheDocument()
-    userEvent.click(screen.getByText('Sync stats'))
+    await userEvent.click(screen.getByText('Sync stats'))
     expect(await screen.findByText('Network Error')).toBeInTheDocument()
   })
 })

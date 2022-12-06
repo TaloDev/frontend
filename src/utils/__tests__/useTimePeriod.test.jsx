@@ -1,17 +1,9 @@
-import { renderHook } from '@testing-library/react-hooks'
+import { renderHook } from '@testing-library/react'
 import useTimePeriod from '../useTimePeriod'
 
 describe('useTimePeriod', () => {
-  beforeAll(() => {
-    jest.useFakeTimers('modern')
-  })
-
   beforeEach(() => {
-    jest.setSystemTime(new Date(2021, 5, 12))
-  })
-
-  afterAll(() => {
-    jest.useRealTimers()
+    vi.setSystemTime(new Date(2021, 5, 12))
   })
 
   it('should return empty dates with no time period', () => {
@@ -33,7 +25,7 @@ describe('useTimePeriod', () => {
   })
 
   it('should use the previous week as the start date if today is the start of the week', () => {
-    jest.setSystemTime(new Date(2021, 5, 20))
+    vi.setSystemTime(new Date(2021, 5, 20))
 
     const { result } = renderHook(() => useTimePeriod('w'))
     expect(result.current.startDate).toBe('2021-06-13')

@@ -21,7 +21,7 @@ describe('<PricingPlanTile />', () => {
           ]
         }}
         displayInterval='month'
-        planLoadingState={[null, jest.fn()]}
+        planLoadingState={[null, vi.fn()]}
       />
     )
 
@@ -41,7 +41,7 @@ describe('<PricingPlanTile />', () => {
           ]
         }}
         displayInterval='month'
-        planLoadingState={[null, jest.fn()]}
+        planLoadingState={[null, vi.fn()]}
       />
     )
 
@@ -64,7 +64,7 @@ describe('<PricingPlanTile />', () => {
           ]
         }}
         displayInterval='month'
-        planLoadingState={[null, jest.fn()]}
+        planLoadingState={[null, vi.fn()]}
       />
     )
 
@@ -85,7 +85,7 @@ describe('<PricingPlanTile />', () => {
           prices: []
         }}
         displayInterval='month'
-        planLoadingState={[null, jest.fn()]}
+        planLoadingState={[null, vi.fn()]}
       />
     )
 
@@ -111,7 +111,7 @@ describe('<PricingPlanTile />', () => {
           ]
         }}
         displayInterval='month'
-        planLoadingState={[null, jest.fn()]}
+        planLoadingState={[null, vi.fn()]}
         currentPlanPrice={{ amount: 0, currency: 'usd', interval: 'month' }}
       />
     )
@@ -135,7 +135,7 @@ describe('<PricingPlanTile />', () => {
           ]
         }}
         displayInterval='month'
-        planLoadingState={[null, jest.fn()]}
+        planLoadingState={[null, vi.fn()]}
         currentPlanPrice={null}
       />
     )
@@ -159,7 +159,7 @@ describe('<PricingPlanTile />', () => {
           ]
         }}
         displayInterval='month'
-        planLoadingState={[null, jest.fn()]}
+        planLoadingState={[null, vi.fn()]}
         currentPlanPrice={{ amount: 7999, currency: 'usd', interval: 'month' }}
       />
     )
@@ -172,7 +172,7 @@ describe('<PricingPlanTile />', () => {
       redirect: 'http://stripe.com/portal'
     })
 
-    const assignMock = jest.fn()
+    const assignMock = vi.fn()
     delete window.location
     window.location = { assign: assignMock }
 
@@ -191,12 +191,12 @@ describe('<PricingPlanTile />', () => {
           ]
         }}
         displayInterval='month'
-        planLoadingState={[null, jest.fn()]}
+        planLoadingState={[null, vi.fn()]}
         currentPlanPrice={{ amount: 0, currency: 'usd', interval: 'month' }}
       />
     )
 
-    userEvent.click(screen.getByText('Upgrade'))
+    await userEvent.click(screen.getByText('Upgrade'))
 
     await waitFor(() => {
       expect(assignMock).toHaveBeenCalledWith('http://stripe.com/portal')
@@ -213,7 +213,7 @@ describe('<PricingPlanTile />', () => {
       }
     })
 
-    const assignMock = jest.fn()
+    const assignMock = vi.fn()
     delete window.location
     window.location = { assign: assignMock }
 
@@ -232,12 +232,12 @@ describe('<PricingPlanTile />', () => {
           ]
         }}
         displayInterval='month'
-        planLoadingState={[null, jest.fn()]}
+        planLoadingState={[null, vi.fn()]}
         currentPlanPrice={{ amount: 0, currency: 'usd', interval: 'month' }}
       />
     )
 
-    userEvent.click(screen.getByText('Upgrade'))
+    await userEvent.click(screen.getByText('Upgrade'))
 
     expect(await screen.findByText('Upcoming invoice')).toBeInTheDocument()
   })
@@ -245,7 +245,7 @@ describe('<PricingPlanTile />', () => {
   it('should render the confirm plan change modal if an invoice is returned after clicking upgrade', async () => {
     axiosMock.onPost('http://talo.test/billing/checkout-session').networkErrorOnce()
 
-    const assignMock = jest.fn()
+    const assignMock = vi.fn()
     delete window.location
     window.location = { assign: assignMock }
 
@@ -264,12 +264,12 @@ describe('<PricingPlanTile />', () => {
           ]
         }}
         displayInterval='month'
-        planLoadingState={[null, jest.fn()]}
+        planLoadingState={[null, vi.fn()]}
         currentPlanPrice={{ amount: 0, currency: 'usd', interval: 'month' }}
       />
     )
 
-    userEvent.click(screen.getByText('Upgrade'))
+    await userEvent.click(screen.getByText('Upgrade'))
 
     expect(await screen.findByText('Network Error')).toHaveAttribute('role', 'alert')
   })

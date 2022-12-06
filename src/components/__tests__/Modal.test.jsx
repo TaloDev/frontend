@@ -4,8 +4,8 @@ import userEvent from '@testing-library/user-event'
 import Modal from '../Modal'
 
 describe('<Modal />', () => {
-  it('should close when pressing escape', () => {
-    const closeMock = jest.fn()
+  it('should close when pressing escape', async () => {
+    const closeMock = vi.fn()
 
     render(
       <Modal
@@ -17,13 +17,13 @@ describe('<Modal />', () => {
       </Modal>
     )
 
-    userEvent.keyboard('{esc}')
+    await userEvent.keyboard('{Escape}')
 
     expect(closeMock).toHaveBeenCalled()
   })
 
-  it('should close when clicking the close button', () => {
-    const closeMock = jest.fn()
+  it('should close when clicking the close button', async () => {
+    const closeMock = vi.fn()
 
     render(
       <Modal
@@ -35,7 +35,7 @@ describe('<Modal />', () => {
       </Modal>
     )
 
-    userEvent.click(screen.getByLabelText('Close modal'))
+    await userEvent.click(screen.getByLabelText('Close modal'))
 
     expect(closeMock).toHaveBeenCalled()
   })

@@ -300,11 +300,11 @@ describe('<Billing />', () => {
     expect(await screen.findAllByText(/99 \/ month/)).toHaveLength(pricingPlans.length - 1)
     expect(screen.queryAllByText(/99 \/ year/)).toHaveLength(0)
 
-    userEvent.click(screen.getByRole('checkbox'))
+    await userEvent.click(screen.getByRole('checkbox'))
     expect(await screen.findAllByText(/99 \/ year/)).toHaveLength(pricingPlans.length - 1)
     expect(screen.queryAllByText(/99 \/ month/)).toHaveLength(0)
 
-    userEvent.click(screen.getByRole('checkbox'))
+    await userEvent.click(screen.getByRole('checkbox'))
     expect(await screen.findAllByText(/99 \/ month/)).toHaveLength(pricingPlans.length - 1)
     expect(screen.queryAllByText(/99 \/ year/)).toHaveLength(0)
   })

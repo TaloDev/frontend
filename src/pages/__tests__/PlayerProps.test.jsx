@@ -50,7 +50,7 @@ describe('<PlayerProps />', () => {
     }
   })
 
-  it('should only enable the reset button after a change', () => {
+  it('should only enable the reset button after a change', async () => {
     render(
       <KitchenSink
         states={[
@@ -66,14 +66,14 @@ describe('<PlayerProps />', () => {
 
     expect(screen.getByText('Reset')).toBeDisabled()
 
-    userEvent.type(screen.getByDisplayValue('80'), '{backspace}4')
+    await userEvent.type(screen.getByDisplayValue('80'), '{backspace}4')
 
     expect(screen.getByDisplayValue('84')).toBeInTheDocument()
 
     expect(screen.getByText('Reset')).toBeEnabled()
   })
 
-  it('should only enable the reset a change', () => {
+  it('should only enable the reset a change', async () => {
     render(
       <KitchenSink
         states={[
@@ -88,15 +88,15 @@ describe('<PlayerProps />', () => {
     )
 
     expect(screen.getByDisplayValue('80')).toBeInTheDocument()
-    userEvent.type(screen.getByDisplayValue('80'), '{backspace}4')
+    await userEvent.type(screen.getByDisplayValue('80'), '{backspace}4')
     expect(screen.getByDisplayValue('84')).toBeInTheDocument()
 
-    userEvent.click(screen.getByText('Reset'))
+    await userEvent.click(screen.getByText('Reset'))
     expect(screen.queryByDisplayValue('84')).not.toBeInTheDocument()
     expect(screen.getByDisplayValue('80')).toBeInTheDocument()
   })
 
-  it('should delete existing props', () => {
+  it('should delete existing props', async () => {
     render(
       <KitchenSink
         states={[
@@ -112,11 +112,11 @@ describe('<PlayerProps />', () => {
 
     expect(screen.getByText('health')).toBeInTheDocument()
 
-    userEvent.click(screen.getByLabelText('Delete health prop'))
+    await userEvent.click(screen.getByLabelText('Delete health prop'))
     expect(screen.queryByText('health')).not.toBeInTheDocument()
   })
 
-  it('should add new props', () => {
+  it('should add new props', async () => {
     render(
       <KitchenSink
         states={[
@@ -130,16 +130,16 @@ describe('<PlayerProps />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('New property'))
+    await userEvent.click(screen.getByText('New property'))
 
-    userEvent.type(screen.getByPlaceholderText('Property'), 'treasuresDiscovered')
-    userEvent.type(screen.getByDisplayValue(''), '5')
+    await userEvent.type(screen.getByPlaceholderText('Property'), 'treasuresDiscovered')
+    await userEvent.type(screen.getByDisplayValue(''), '5')
 
     expect(screen.getByDisplayValue('treasuresDiscovered')).toBeInTheDocument()
     expect(screen.getByDisplayValue('5')).toBeInTheDocument()
   })
 
-  it('should delete new props', () => {
+  it('should delete new props', async () => {
     render(
       <KitchenSink
         states={[
@@ -153,11 +153,11 @@ describe('<PlayerProps />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('New property'))
+    await userEvent.click(screen.getByText('New property'))
 
-    userEvent.type(screen.getByPlaceholderText('Property'), 'treasuresDiscovered')
+    await userEvent.type(screen.getByPlaceholderText('Property'), 'treasuresDiscovered')
 
-    userEvent.click(screen.getByLabelText('Delete treasuresDiscovered prop'))
+    await userEvent.click(screen.getByLabelText('Delete treasuresDiscovered prop'))
 
     expect(screen.queryByDisplayValue('treasuresDiscovered')).not.toBeInTheDocument()
   })
@@ -214,7 +214,7 @@ describe('<PlayerProps />', () => {
   it('should return to the players page if the find request fails', async () => {
     axiosMock.onGet(`http://talo.test/games/1/players?search=${basePlayer.id}`).networkErrorOnce()
 
-    const setLocationMock = jest.fn()
+    const setLocationMock = vi.fn()
 
     render(
       <KitchenSink
@@ -259,12 +259,12 @@ describe('<PlayerProps />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('New property'))
+    await userEvent.click(screen.getByText('New property'))
 
-    userEvent.type(screen.getByPlaceholderText('Property'), 'treasuresDiscovered')
-    userEvent.type(screen.getByDisplayValue(''), '5')
+    await userEvent.type(screen.getByPlaceholderText('Property'), 'treasuresDiscovered')
+    await userEvent.type(screen.getByDisplayValue(''), '5')
 
-    userEvent.click(screen.getByText('Save changes'))
+    await userEvent.click(screen.getByText('Save changes'))
 
     await waitFor(() => {
       expect(screen.queryByDisplayValue('treasuresDiscovered')).not.toBeInTheDocument()
@@ -289,8 +289,8 @@ describe('<PlayerProps />', () => {
       </KitchenSink>
     )
 
-    userEvent.type(screen.getByDisplayValue('42'), '6')
-    userEvent.click(screen.getByText('Save changes'))
+    await userEvent.type(screen.getByDisplayValue('42'), '6')
+    await userEvent.click(screen.getByText('Save changes'))
 
     await waitFor(() => {
       expect(screen.getByRole('alert')).toBeInTheDocument()

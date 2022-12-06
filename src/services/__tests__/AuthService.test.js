@@ -7,7 +7,7 @@ describe('AuthService', () => {
   })
 
   it('should set the loggedOut key after reloading', () => {
-    const reloadMock = jest.fn()
+    const reloadMock = vi.fn()
 
     const { reload } = window.location
     delete window.location

@@ -13,13 +13,13 @@ describe('<BillingPortalTile />', () => {
       redirect: 'http://stripe.com/portal'
     })
 
-    const assignMock = jest.fn()
+    const assignMock = vi.fn()
     delete window.location
     window.location = { assign: assignMock }
 
     render(<BillingPortalTile />)
 
-    userEvent.click(screen.getByText('Billing Portal'))
+    await userEvent.click(screen.getByText('Billing Portal'))
 
     await waitFor(() => {
       expect(assignMock).toHaveBeenCalledWith('http://stripe.com/portal')
@@ -31,7 +31,7 @@ describe('<BillingPortalTile />', () => {
 
     render(<BillingPortalTile />)
 
-    userEvent.click(screen.getByText('Billing Portal'))
+    await userEvent.click(screen.getByText('Billing Portal'))
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Network Error')
   })

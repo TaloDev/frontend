@@ -37,7 +37,7 @@ describe('usePlayer', () => {
   })
 
   it('should return to the players page if the player does not exist', async () => {
-    const setLocationMock = jest.fn()
+    const setLocationMock = vi.fn()
 
     axiosMock.onGet('http://talo.test/games/1/players?search=1').replyOnce(200, {
       players: []
@@ -60,7 +60,7 @@ describe('usePlayer', () => {
   })
 
   it('should return to the players page if an unexpected error occurs', async () => {
-    const setLocationMock = jest.fn()
+    const setLocationMock = vi.fn()
 
     axiosMock.onGet('http://talo.test/games/1/players?search=1').networkErrorOnce()
 

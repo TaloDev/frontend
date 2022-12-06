@@ -5,8 +5,7 @@ import DateInput from '../DateInput'
 
 describe('<DateInput />', () => {
   beforeAll(() => {
-    jest.useFakeTimers('modern')
-    jest.setSystemTime(new Date(2022, 0, 1))
+    vi.setSystemTime(new Date(2022, 0, 1))
   })
 
   it('should the date as dd MMM yyyy', () => {
@@ -14,7 +13,7 @@ describe('<DateInput />', () => {
       <DateInput
         id='test'
         mode='single'
-        onChange={() => jest.fn()}
+        onChange={() => vi.fn()}
         value='2022-03-03'
       />
     )
@@ -27,7 +26,7 @@ describe('<DateInput />', () => {
       <DateInput
         id='test'
         mode='single'
-        onChange={() => jest.fn()}
+        onChange={() => vi.fn()}
         value=''
       />
     )
@@ -36,7 +35,7 @@ describe('<DateInput />', () => {
   })
 
   it('should pick a date', async () => {
-    const changeMock = jest.fn()
+    const changeMock = vi.fn()
 
     render(
       <DateInput
@@ -47,9 +46,9 @@ describe('<DateInput />', () => {
       />
     )
 
-    userEvent.click(screen.getByDisplayValue('01 Jan 2022'))
+    await userEvent.click(screen.getByDisplayValue('01 Jan 2022'))
     expect(await screen.findByText('January 2022')).toBeInTheDocument()
-    userEvent.click(screen.getByText('15'))
+    await userEvent.click(screen.getByText('15'))
     expect(changeMock).toHaveBeenCalledWith('2022-01-15T00:00:00.000Z')
   })
 })

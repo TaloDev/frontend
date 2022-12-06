@@ -40,7 +40,7 @@ describe('<RecoilObserver />', () => {
   })
 
   it('should listen for state changes', () => {
-    const changeMock = jest.fn()
+    const changeMock = vi.fn()
 
     render(
       <RecoilObserver node={dummyState} onChange={changeMock} initialValue={{ name: 'Joe' }}>

@@ -13,8 +13,8 @@ describe('<NewGame />', () => {
   it('should create a game', async () => {
     axiosMock.onPost('http://talo.test/games').replyOnce(200, { game: { id: 1, name: 'Shattered' } })
 
-    const closeMock = jest.fn()
-    const userChangeMock = jest.fn()
+    const closeMock = vi.fn()
+    const userChangeMock = vi.fn()
 
     render(
       <KitchenSink states={[{ node: userState, onChange: userChangeMock, initialValue: { organisation: { games: [] } } }]}>
@@ -22,9 +22,9 @@ describe('<NewGame />', () => {
       </KitchenSink>
     )
 
-    userEvent.type(screen.getByLabelText('Name'), 'Shattered')
+    await userEvent.type(screen.getByLabelText('Name'), 'Shattered')
 
-    userEvent.click(screen.getByText('Create'))
+    await userEvent.click(screen.getByText('Create'))
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
@@ -40,8 +40,8 @@ describe('<NewGame />', () => {
   it('should handle creation errors', async () => {
     axiosMock.onPost('http://talo.test/games').networkErrorOnce()
 
-    const closeMock = jest.fn()
-    const userChangeMock = jest.fn()
+    const closeMock = vi.fn()
+    const userChangeMock = vi.fn()
 
     render(
       <KitchenSink states={[{ node: userState, onChange: userChangeMock, initialValue: { organisation: { games: [] } } }]}>
@@ -49,18 +49,18 @@ describe('<NewGame />', () => {
       </KitchenSink>
     )
 
-    userEvent.type(screen.getByLabelText('Name'), 'Shattered')
+    await userEvent.type(screen.getByLabelText('Name'), 'Shattered')
 
-    userEvent.click(screen.getByText('Create'))
+    await userEvent.click(screen.getByText('Create'))
 
     await waitFor(() => {
       expect(screen.getByText('Network Error')).toBeInTheDocument()
     })
   })
 
-  it('should close when clicking cancel', () => {
-    const closeMock = jest.fn()
-    const userChangeMock = jest.fn()
+  it('should close when clicking cancel', async () => {
+    const closeMock = vi.fn()
+    const userChangeMock = vi.fn()
 
     render(
       <KitchenSink states={[{ node: userState, onChange: userChangeMock, initialValue: { organisation: { games: [] } } }]}>
@@ -68,7 +68,7 @@ describe('<NewGame />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Cancel'))
+    await userEvent.click(screen.getByText('Cancel'))
 
     expect(closeMock).toHaveBeenCalled()
   })

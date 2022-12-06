@@ -24,7 +24,7 @@ describe('<ConfirmEmailBanner />', () => {
 
   it('should show the success state on confirmation and disappear on navigating away', async () => {
     render(
-      <KitchenSink states={[{ node: userState, initialValue: {}, onChange: jest.fn() }]}>
+      <KitchenSink states={[{ node: userState, initialValue: {}, onChange: vi.fn() }]}>
         <>
           <Link to='/'>Navigate away</Link>
           <ConfirmEmailBanner />
@@ -32,13 +32,13 @@ describe('<ConfirmEmailBanner />', () => {
       </KitchenSink>
     )
 
-    userEvent.type(screen.getByRole('textbox'), '123456')
+    await userEvent.type(screen.getByRole('textbox'), '123456')
 
-    userEvent.click(screen.getByText('Confirm'))
+    await userEvent.click(screen.getByText('Confirm'))
 
     expect(await screen.findByText('Success!')).toBeInTheDocument()
 
-    userEvent.click(screen.getByText('Navigate away'))
+    await userEvent.click(screen.getByText('Navigate away'))
 
     expect(screen.queryByText('Success!')).not.toBeInTheDocument()
   })
@@ -52,9 +52,9 @@ describe('<ConfirmEmailBanner />', () => {
       </KitchenSink>
     )
 
-    userEvent.type(screen.getByRole('textbox'), '123456')
+    await userEvent.type(screen.getByRole('textbox'), '123456')
 
-    userEvent.click(screen.getByText('Confirm'))
+    await userEvent.click(screen.getByText('Confirm'))
 
     expect(await screen.findByRole('alert')).toBeInTheDocument()
   })

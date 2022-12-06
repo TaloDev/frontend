@@ -104,7 +104,7 @@ describe('<Dashboard />', () => {
       count: 8
     })
 
-    userEvent.click(screen.getByText('This year'))
+    await userEvent.click(screen.getByText('This year'))
 
     expect(await screen.findByText('2103')).toBeInTheDocument()
   })
@@ -136,7 +136,7 @@ describe('<Dashboard />', () => {
   })
 
   it('should go to the intended route', () => {
-    const locationMock = jest.fn()
+    const locationMock = vi.fn()
     window.localStorage.setItem('intendedRoute', '/players')
 
     render(

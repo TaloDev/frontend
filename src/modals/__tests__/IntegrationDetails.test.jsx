@@ -11,19 +11,11 @@ import ToastProvider from '../../components/toast/ToastProvider'
 describe('<IntegrationDetails />', () => {
   const axiosMock = new MockAdapter(api)
 
-  beforeAll(() => {
-    jest.useFakeTimers('modern')
-  })
-
-  afterAll(() => {
-    jest.useRealTimers()
-  })
-
   it('should enable a steamworks integration', async () => {
     axiosMock.onPost('http://talo.test/games/1/integrations').replyOnce(200, { integration: { id: 1 } })
 
-    const closeMock = jest.fn()
-    const mutateMock = jest.fn()
+    const closeMock = vi.fn()
+    const mutateMock = vi.fn()
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
@@ -39,13 +31,13 @@ describe('<IntegrationDetails />', () => {
 
     expect(screen.getByText('Enable')).toBeDisabled()
 
-    userEvent.type(screen.getByLabelText('Publisher API key'), '337e67be02be453695f8a5b8038496c2')
+    await userEvent.type(screen.getByLabelText('Publisher API key'), '337e67be02be453695f8a5b8038496c2')
     expect(screen.getByText('Enable')).toBeDisabled()
 
-    userEvent.type(screen.getByLabelText('Game app ID'), '375290')
+    await userEvent.type(screen.getByLabelText('Game app ID'), '375290')
     expect(await screen.findByText('Enable')).toBeEnabled()
 
-    userEvent.click(screen.getByText('Enable'))
+    await userEvent.click(screen.getByText('Enable'))
 
     expect(await screen.findByText('Steamworks integration successfully enabled')).toBeInTheDocument()
 
@@ -68,26 +60,26 @@ describe('<IntegrationDetails />', () => {
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
           <IntegrationDetails
-            modalState={[true, jest.fn()]}
-            mutate={jest.fn()}
+            modalState={[true, vi.fn()]}
+            mutate={vi.fn()}
             editingIntegration={{ type: 'steamworks' }}
           />
         </ToastProvider>
       </KitchenSink>
     )
 
-    userEvent.type(screen.getByLabelText('Publisher API key'), '337e67be02be453695f8a5b8038496c2')
-    userEvent.type(screen.getByLabelText('Game app ID'), '375290')
+    await userEvent.type(screen.getByLabelText('Publisher API key'), '337e67be02be453695f8a5b8038496c2')
+    await userEvent.type(screen.getByLabelText('Game app ID'), '375290')
 
     expect(await screen.findByText('Enable')).toBeEnabled()
-    userEvent.click(screen.getByText('Enable'))
+    await userEvent.click(screen.getByText('Enable'))
 
     expect(await screen.findByText('Network Error')).toBeInTheDocument()
   })
 
   it('should close the modal', async () => {
-    const closeMock = jest.fn()
-    const mutateMock = jest.fn()
+    const closeMock = vi.fn()
+    const mutateMock = vi.fn()
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
@@ -101,7 +93,7 @@ describe('<IntegrationDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Cancel'))
+    await userEvent.click(screen.getByText('Cancel'))
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
@@ -113,23 +105,23 @@ describe('<IntegrationDetails />', () => {
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
           <IntegrationDetails
-            modalState={[true, jest.fn()]}
-            mutate={jest.fn()}
+            modalState={[true, vi.fn()]}
+            mutate={vi.fn()}
             editingIntegration={{ type: 'steamworks' }}
           />
         </ToastProvider>
       </KitchenSink>
     )
 
-    userEvent.type(screen.getByLabelText('Publisher API key'), '337e67be02be453695f8a5b8038496c')
+    await userEvent.type(screen.getByLabelText('Publisher API key'), '337e67be02be453695f8a5b8038496c')
     expect(await screen.findByText('Key must be exactly 32 characters')).toBeInTheDocument()
 
-    userEvent.type(screen.getByLabelText('Publisher API key'), '2')
+    await userEvent.type(screen.getByLabelText('Publisher API key'), '2')
     await waitFor(() => {
       expect(screen.queryByText('Key must be exactly 32 characters')).not.toBeInTheDocument()
     })
 
-    userEvent.type(screen.getByLabelText('Publisher API key'), 'a')
+    await userEvent.type(screen.getByLabelText('Publisher API key'), 'a')
     expect(await screen.findByText('Key must be exactly 32 characters')).toBeInTheDocument()
   })
 
@@ -138,8 +130,8 @@ describe('<IntegrationDetails />', () => {
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
           <IntegrationDetails
-            modalState={[true, jest.fn()]}
-            mutate={jest.fn()}
+            modalState={[true, vi.fn()]}
+            mutate={vi.fn()}
             editingIntegration={{
               id: 1,
               type: 'steamworks',
@@ -162,8 +154,8 @@ describe('<IntegrationDetails />', () => {
   it('should disable an enabled steamworks integration', async () => {
     axiosMock.onDelete('http://talo.test/games/1/integrations/1').replyOnce(204)
 
-    const closeMock = jest.fn()
-    const mutateMock = jest.fn()
+    const closeMock = vi.fn()
+    const mutateMock = vi.fn()
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
@@ -185,7 +177,7 @@ describe('<IntegrationDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Disable'))
+    await userEvent.click(screen.getByText('Disable'))
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
@@ -204,8 +196,8 @@ describe('<IntegrationDetails />', () => {
   it('should handle disabling errors', async () => {
     axiosMock.onDelete('http://talo.test/games/1/integrations/1').networkErrorOnce()
 
-    const closeMock = jest.fn()
-    const mutateMock = jest.fn()
+    const closeMock = vi.fn()
+    const mutateMock = vi.fn()
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
@@ -227,20 +219,20 @@ describe('<IntegrationDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Disable'))
+    await userEvent.click(screen.getByText('Disable'))
     expect(await screen.findByText('Network Error')).toBeInTheDocument()
   })
 
   it('should update the steamworks integration api key', async () => {
     axiosMock.onPatch('http://talo.test/games/1/integrations/1').replyOnce(200, { integration: { id: 1 } })
 
-    const mutateMock = jest.fn()
+    const mutateMock = vi.fn()
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
           <IntegrationDetails
-            modalState={[true, jest.fn()]}
+            modalState={[true, vi.fn()]}
             mutate={mutateMock}
             editingIntegration={{
               id: 1,
@@ -256,7 +248,7 @@ describe('<IntegrationDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Update key'))
+    await userEvent.click(screen.getByText('Update key'))
 
     await waitFor(() => {
       expect(mutateMock).toHaveBeenCalled()
@@ -273,13 +265,13 @@ describe('<IntegrationDetails />', () => {
   it('should update the steamworks integration app id', async () => {
     axiosMock.onPatch('http://talo.test/games/1/integrations/1').replyOnce(200, { integration: { id: 1, config: { appId: '375299' } } })
 
-    const mutateMock = jest.fn()
+    const mutateMock = vi.fn()
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
           <IntegrationDetails
-            modalState={[true, jest.fn()]}
+            modalState={[true, vi.fn()]}
             mutate={mutateMock}
             editingIntegration={{
               id: 1,
@@ -295,8 +287,8 @@ describe('<IntegrationDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.type(screen.getByLabelText('Game app ID'), '375299')
-    userEvent.click(screen.getByText('Update app ID'))
+    await userEvent.type(screen.getByLabelText('Game app ID'), '375299')
+    await userEvent.click(screen.getByText('Update app ID'))
 
     await waitFor(() => {
       expect(mutateMock).toHaveBeenCalled()
@@ -313,13 +305,13 @@ describe('<IntegrationDetails />', () => {
   it('should update the steamworks integration leaderboard syncing', async () => {
     axiosMock.onPatch('http://talo.test/games/1/integrations/1').replyOnce(200, { integration: { id: 1, config: { syncLeaderboards: false } } })
 
-    const mutateMock = jest.fn()
+    const mutateMock = vi.fn()
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
           <IntegrationDetails
-            modalState={[true, jest.fn()]}
+            modalState={[true, vi.fn()]}
             mutate={mutateMock}
             editingIntegration={{
               id: 1,
@@ -335,7 +327,7 @@ describe('<IntegrationDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByTestId('sync-leaderboards'))
+    await userEvent.click(screen.getByTestId('sync-leaderboards'))
 
     await waitFor(() => {
       expect(mutateMock).toHaveBeenCalled()
@@ -352,13 +344,13 @@ describe('<IntegrationDetails />', () => {
   it('should update the steamworks integration stat syncing', async () => {
     axiosMock.onPatch('http://talo.test/games/1/integrations/1').replyOnce(200, { integration: { id: 1, config: { syncStats: true } } })
 
-    const mutateMock = jest.fn()
+    const mutateMock = vi.fn()
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
           <IntegrationDetails
-            modalState={[true, jest.fn()]}
+            modalState={[true, vi.fn()]}
             mutate={mutateMock}
             editingIntegration={{
               id: 1,
@@ -374,7 +366,7 @@ describe('<IntegrationDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByTestId('sync-stats'))
+    await userEvent.click(screen.getByTestId('sync-stats'))
 
     await waitFor(() => {
       expect(mutateMock).toHaveBeenCalled()
@@ -391,13 +383,13 @@ describe('<IntegrationDetails />', () => {
   it('should handle updating errors', async () => {
     axiosMock.onPatch('http://talo.test/games/1/integrations/1').networkErrorOnce()
 
-    const mutateMock = jest.fn()
+    const mutateMock = vi.fn()
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
           <IntegrationDetails
-            modalState={[true, jest.fn()]}
+            modalState={[true, vi.fn()]}
             mutate={mutateMock}
             editingIntegration={{
               id: 1,
@@ -413,7 +405,7 @@ describe('<IntegrationDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Update key'))
+    await userEvent.click(screen.getByText('Update key'))
 
     expect(await screen.findByText('Network Error')).toBeInTheDocument()
 

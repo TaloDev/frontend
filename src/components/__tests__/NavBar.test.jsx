@@ -27,7 +27,7 @@ describe('<NavBar />', () => {
     expect(within(list).getByText('Logout')).toBeInTheDocument()
   })
 
-  it('should log users out', () => {
+  it('should log users out', async () => {
     axiosMock.onPost('http://talo.test/users/logout').replyOnce(200)
 
     render(
@@ -38,12 +38,12 @@ describe('<NavBar />', () => {
 
     const list = screen.getAllByRole('list')[0]
 
-    userEvent.click(within(list).getByText('Logout'))
+    await userEvent.click(within(list).getByText('Logout'))
 
     expect(window.location.pathname).toBe(routes.login)
   })
 
-  it('should reload after logging out even if there is an error', () => {
+  it('should reload after logging out even if there is an error', async () => {
     axiosMock.onPost('http://talo.test/users/logout').networkErrorOnce()
 
     render(
@@ -54,7 +54,7 @@ describe('<NavBar />', () => {
 
     const list = screen.getAllByRole('list')[0]
 
-    userEvent.click(within(list).getByText('Logout'))
+    await userEvent.click(within(list).getByText('Logout'))
 
     expect(window.location.pathname).toBe(routes.login)
   })
@@ -89,18 +89,18 @@ describe('<NavBar />', () => {
     expect(within(list).getByText('Services')).toBeInTheDocument()
   })
 
-  it('should open and close the mobile menu', () => {
+  it('should open and close the mobile menu', async () => {
     render(
       <KitchenSink states={[{ node: activeGameState }]}>
         <NavBar />
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByLabelText('Navigation menu'))
+    await userEvent.click(screen.getByLabelText('Navigation menu'))
 
     expect(screen.getByTestId('mobile-menu')).toHaveClass('translate-x-0')
 
-    userEvent.click(screen.getByLabelText('Close navigation menu'))
+    await userEvent.click(screen.getByLabelText('Close navigation menu'))
 
     expect(screen.getByTestId('mobile-menu')).toHaveClass('-translate-x-full')
   })

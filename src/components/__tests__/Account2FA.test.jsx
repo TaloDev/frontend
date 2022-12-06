@@ -32,17 +32,17 @@ describe('<Account2FA />', () => {
 
     expect(screen.getByText('Enable 2FA')).toBeInTheDocument()
 
-    userEvent.click(screen.getByText('Enable 2FA'))
+    await userEvent.click(screen.getByText('Enable 2FA'))
 
     expect(await screen.findByAltText('Authenticator QR Code')).toBeInTheDocument()
 
     expect(screen.getByText('Confirm')).toBeDisabled()
 
-    userEvent.type(screen.getByPlaceholderText('Enter your code'), '123456')
+    await userEvent.type(screen.getByPlaceholderText('Enter your code'), '123456')
 
     expect(screen.getByText('Confirm')).toBeEnabled()
 
-    userEvent.click(screen.getByText('Confirm'))
+    await userEvent.click(screen.getByText('Confirm'))
 
     expect(await screen.findByTestId('2fa-success')).toBeInTheDocument()
 
@@ -60,7 +60,7 @@ describe('<Account2FA />', () => {
 
     expect(screen.getByText('Enable 2FA')).toBeInTheDocument()
 
-    userEvent.click(screen.getByText('Enable 2FA'))
+    await userEvent.click(screen.getByText('Enable 2FA'))
 
     expect(await screen.findByText('Network Error')).toBeInTheDocument()
   })
@@ -80,11 +80,11 @@ describe('<Account2FA />', () => {
 
     expect(screen.getByText('Enable 2FA')).toBeInTheDocument()
 
-    userEvent.click(screen.getByText('Enable 2FA'))
+    await userEvent.click(screen.getByText('Enable 2FA'))
 
-    userEvent.type(await screen.findByPlaceholderText('Enter your code'), '123456')
+    await userEvent.type(await screen.findByPlaceholderText('Enter your code'), '123456')
 
-    userEvent.click(screen.getByText('Confirm'))
+    await userEvent.click(screen.getByText('Confirm'))
 
     expect(await screen.findByText('Network Error')).toBeInTheDocument()
   })
@@ -104,7 +104,7 @@ describe('<Account2FA />', () => {
   })
 
   it('should send the user to the confirm password screen when they click the disable 2fa button', async () => {
-    const setLocationMock = jest.fn()
+    const setLocationMock = vi.fn()
 
     render(
       <KitchenSink
@@ -115,7 +115,7 @@ describe('<Account2FA />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Disable 2FA'))
+    await userEvent.click(screen.getByText('Disable 2FA'))
 
     await waitFor(() => {
       expect(setLocationMock).toHaveBeenLastCalledWith({
@@ -128,7 +128,7 @@ describe('<Account2FA />', () => {
   })
 
   it('should send the user to the confirm password screen when they click the view recovery codes button', async () => {
-    const setLocationMock = jest.fn()
+    const setLocationMock = vi.fn()
 
     render(
       <KitchenSink
@@ -139,7 +139,7 @@ describe('<Account2FA />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('View recovery codes'))
+    await userEvent.click(screen.getByText('View recovery codes'))
 
     await waitFor(() => {
       expect(setLocationMock).toHaveBeenLastCalledWith({
@@ -152,7 +152,7 @@ describe('<Account2FA />', () => {
   })
 
   it('should send the user to the confirm password screen when they click the create recovery codes button', async () => {
-    const setLocationMock = jest.fn()
+    const setLocationMock = vi.fn()
 
     render(
       <KitchenSink
@@ -163,7 +163,7 @@ describe('<Account2FA />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Create new recovery codes'))
+    await userEvent.click(screen.getByText('Create new recovery codes'))
 
     await waitFor(() => {
       expect(setLocationMock).toHaveBeenLastCalledWith({

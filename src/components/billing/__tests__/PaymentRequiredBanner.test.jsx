@@ -13,13 +13,13 @@ describe('<PaymentRequiredBanner />', () => {
       redirect: 'http://stripe.com/portal'
     })
 
-    const assignMock = jest.fn()
+    const assignMock = vi.fn()
     delete window.location
     window.location = { assign: assignMock }
 
     render(<PaymentRequiredBanner />)
 
-    userEvent.click(screen.getByText('Update details'))
+    await userEvent.click(screen.getByText('Update details'))
 
     await waitFor(() => {
       expect(assignMock).toHaveBeenCalledWith('http://stripe.com/portal')
@@ -31,7 +31,7 @@ describe('<PaymentRequiredBanner />', () => {
 
     render(<PaymentRequiredBanner />)
 
-    userEvent.click(screen.getByText('Update details'))
+    await userEvent.click(screen.getByText('Update details'))
 
     const content = screen.getByTestId('banner-content')
     expect(await within(content).findByRole('alert')).toHaveTextContent('Network Error')
