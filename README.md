@@ -1,7 +1,5 @@
 # Talo dashboard
 
-> ✨ Bootstrapped with Create Snowpack App (CSA).
-
 ## Installation
 
 Run `yarn` or `npm install`.
