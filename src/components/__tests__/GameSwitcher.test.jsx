@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, within, waitFor, act } from '@testing-library/react'
+import { render, screen, within, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import GameSwitcher from '../GameSwitcher'
 import activeGameState from '../../state/activeGameState'
@@ -149,9 +149,7 @@ describe('<GameSwitcher />', () => {
 
     userEvent.click(screen.getByLabelText('Switch games or create a new one'))
 
-    act(() => {
-      userEvent.click(screen.getByRole('main'))
-    })
+    userEvent.click(screen.getByRole('main'))
 
     expect(screen.queryByText('Create game')).not.toBeInTheDocument()
   })
