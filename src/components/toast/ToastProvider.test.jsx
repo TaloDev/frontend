@@ -36,7 +36,7 @@ describe('<ToastProvider />', () => {
 
     await act(async () => {
       jest.runAllTimers()
-      await waitForElementToBeRemoved(screen.queryByText('Hello!'))
+      await waitForElementToBeRemoved(() => screen.queryByText('Hello!'))
     })
   })
 
@@ -65,7 +65,7 @@ describe('<ToastProvider />', () => {
 
     await act(async () => {
       jest.runAllTimers()
-      await waitForElementToBeRemoved(screen.queryByText('Hello again!'))
+      await waitForElementToBeRemoved(() => screen.queryByText('Hello again!'))
     })
   })
 })
