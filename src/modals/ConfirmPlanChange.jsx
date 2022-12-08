@@ -5,7 +5,7 @@ import Button from '../components/Button'
 import buildError from '../utils/buildError'
 import ErrorMessage from '../components/ErrorMessage'
 import confirmPlan from '../api/confirmPlan'
-import { dinero, toFormat } from 'dinero.js'
+import { dinero, toDecimal } from 'dinero.js'
 import { USD } from '@dinero.js/currencies'
 import { groupBy } from 'lodash-es'
 import { format } from 'date-fns'
@@ -39,8 +39,8 @@ const ConfirmPlanChange = ({ modalState, plan, pricingInterval, invoice }) => {
 
   const formatPrice = (amount) => {
     const d = dinero({ amount, currency: USD })
-    const transformer = ({ amount }) => `${amount < 0 ? '-' : ''}$${Math.abs(amount).toFixed(2)}`
-    return toFormat(d, transformer)
+    const transformer = ({ value }) => `${value < 0 ? '-' : ''}$${Math.abs(value).toFixed(2)}`
+    return toDecimal(d, transformer)
   }
 
   const groupedLines = groupBy(lines, (line) => {

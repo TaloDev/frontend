@@ -7,7 +7,7 @@
     "lint": "eslint src/**/*.{js,jsx}"
   },
   "dependencies": {
-    "@dinero.js/currencies": "^2.0.0-alpha.8",
+    "@dinero.js/currencies": "^2.0.0-alpha.11",
     "@hookform/resolvers": "^2.8.8",
     "@sentry/react": "^7.0.0",
     "@tabler/icons": "^1.104.0",
@@ -15,7 +15,7 @@
     "axios": "^0.27.0",
     "classnames": "^2.3.2",
     "date-fns": "^2.29.3",
-    "dinero.js": "^2.0.0-alpha.8",
+    "dinero.js": "^2.0.0-alpha.11",
     "framer-motion": "^6.3.3",
     "lodash-es": "^4.17.21",
     "prop-types": "^15.7.2",
