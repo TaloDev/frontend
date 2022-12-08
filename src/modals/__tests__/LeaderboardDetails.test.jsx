@@ -41,8 +41,9 @@ describe('<LeaderboardDetails />', () => {
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
-      expect(mutateMock).toHaveBeenCalled()
     })
+
+    expect(mutateMock).toHaveBeenCalled()
 
     const leaderboards = [
       { id: 1 },
@@ -160,8 +161,9 @@ describe('<LeaderboardDetails />', () => {
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
-      expect(mutateMock).toHaveBeenCalled()
     })
+
+    expect(mutateMock).toHaveBeenCalled()
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ leaderboards: [initialLeaderboard, { id: 2 }] })).toStrictEqual({
@@ -232,8 +234,9 @@ describe('<LeaderboardDetails />', () => {
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
-      expect(mutateMock).toHaveBeenCalled()
     })
+
+    expect(mutateMock).toHaveBeenCalled()
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ leaderboards: [initialLeaderboard, { id: 2 }] })).toStrictEqual({

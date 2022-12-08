@@ -39,8 +39,9 @@ describe('<GroupDetails />', () => {
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
-      expect(mutateMock).toHaveBeenCalled()
     })
+
+    expect(mutateMock).toHaveBeenCalled()
 
     const groups = [
       { id: '1' }
@@ -164,8 +165,9 @@ describe('<GroupDetails />', () => {
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
-      expect(mutateMock).toHaveBeenCalled()
     })
+
+    expect(mutateMock).toHaveBeenCalled()
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ groups: [initialGroup, { id: 2 }] })).toStrictEqual({
@@ -237,8 +239,9 @@ describe('<GroupDetails />', () => {
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
-      expect(mutateMock).toHaveBeenCalled()
     })
+
+    expect(mutateMock).toHaveBeenCalled()
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ groups: [initialGroup, { id: 2 }] })).toStrictEqual({

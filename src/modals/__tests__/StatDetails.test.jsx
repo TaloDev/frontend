@@ -41,8 +41,9 @@ describe('<StatDetails />', () => {
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
-      expect(mutateMock).toHaveBeenCalled()
     })
+
+    expect(mutateMock).toHaveBeenCalled()
 
     const stats = [
       { id: 1 }
@@ -235,8 +236,9 @@ describe('<StatDetails />', () => {
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
-      expect(mutateMock).toHaveBeenCalled()
     })
+
+    expect(mutateMock).toHaveBeenCalled()
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ stats: [initialStat, { id: 2 }] })).toStrictEqual({
@@ -317,8 +319,9 @@ describe('<StatDetails />', () => {
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
-      expect(mutateMock).toHaveBeenCalled()
     })
+
+    expect(mutateMock).toHaveBeenCalled()
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ stats: [initialStat, { id: 2 }] })).toStrictEqual({

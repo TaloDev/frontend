@@ -51,8 +51,9 @@ describe('<IntegrationDetails />', () => {
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
-      expect(mutateMock).toHaveBeenCalled()
     })
+
+    expect(mutateMock).toHaveBeenCalled()
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ integrations: [] })).toStrictEqual({
@@ -188,8 +189,9 @@ describe('<IntegrationDetails />', () => {
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
-      expect(mutateMock).toHaveBeenCalled()
     })
+
+    expect(mutateMock).toHaveBeenCalled()
 
     expect(await screen.findByText('Steamworks integration successfully disabled')).toBeInTheDocument()
 
