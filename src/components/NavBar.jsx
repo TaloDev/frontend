@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import logout from '../api/logout'
 import LinkButton from './LinkButton'
 import Link from './Link'
@@ -13,13 +13,14 @@ import ServicesLink from './ServicesLink'
 import * as Sentry from '@sentry/react'
 
 const NavBar = () => {
-  const activeGame = useRecoilValue(activeGameState)
+  const [activeGame, setActiveGame] = useRecoilState(activeGameState)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
 
   const onLogoutClick = async () => {
     try {
       /* istanbul ignore next */
       Sentry.configureScope((scope) => scope.setUser(null))
+      setActiveGame(null)
       window.localStorage.removeItem('loggedOut')
       await logout()
     } catch (err) {
