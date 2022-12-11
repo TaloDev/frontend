@@ -67,6 +67,6 @@
   },
   "version": "0.21.1",
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   }
 }
