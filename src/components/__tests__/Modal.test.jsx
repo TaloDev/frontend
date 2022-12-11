@@ -22,7 +22,7 @@ describe('<Modal />', () => {
     expect(closeMock).toHaveBeenCalled()
   })
 
-  it('should close when clicking the close button', async () => {
+  it('should close when clicking the close button', () => {
     const closeMock = jest.fn()
 
     render(

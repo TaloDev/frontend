@@ -4,7 +4,7 @@ import Button from '../components/Button'
 import Link from '../components/Link'
 import { useSetRecoilState } from 'recoil'
 import userState from '../state/userState'
-import register from '../api/register'
+import registerUser from '../api/register'
 import ErrorMessage from '../components/ErrorMessage'
 import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
@@ -12,32 +12,49 @@ import AuthService from '../services/AuthService'
 import { useLocation } from 'react-router-dom'
 import * as Sentry from '@sentry/react'
 import RegisterPlanBanner from '../components/billing/RegisterPlanBanner'
+import Checkbox from '../components/Checkbox'
+import { Controller, useForm } from 'react-hook-form'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import classNames from 'classnames'
 
-const Register = () => {
+const validationSchema = yup.object({
+  organisationName: yup
+    .string()
+    .label('Team name')
+    .when('hasInvite', {
+      is: false,
+      then: (schema) => schema.required()
+    }),
+  username: yup.string().label('Username').required(),
+  email: yup.string().label('Email').email('Please enter a valid email address').required(),
+  password: yup.string().label('Password').required(),
+  termsAccepted: yup.boolean().label('Terms').oneOf([true])
+})
+
+export default function Register() {
   const location = useLocation()
 
-  const [organisationName, setOrganisationName] = useState('')
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState(location.state?.invite.email ?? '')
-  const [password, setPassword] = useState('')
   const setUser = useSetRecoilState(userState)
   const [error, setError] = useState(null)
   const [isLoading, setLoading] = useState(false)
 
-  const onRegisterClick = async (e) => {
-    e.preventDefault()
+  const { register, handleSubmit, formState: { isValid, errors }, control } = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      email: location.state?.invite.email ?? '',
+      hasInvite: Boolean(location.state?.invite),
+      termsAccepted: false
+    },
+    mode: 'onBlur'
+  })
+
+  const onRegisterClick = async ({ email, password, organisationName, username }) => {
     setError(null)
-
-    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    if (!emailRegex.test(email)) {
-      setError(buildError('Please enter a valid email address'))
-      return
-    }
-
     setLoading(true)
 
     try {
-      const res = await register({ email, password, organisationName, username, inviteToken: location.state?.invite.token })
+      const res = await registerUser({ email, password, organisationName, username, inviteToken: location.state?.invite.token })
       const accessToken = res.data.accessToken
       AuthService.setToken(accessToken)
       setUser(res.data.user)
@@ -51,7 +68,7 @@ const Register = () => {
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={`text-white rounded-md space-y-8 ${unauthedContainerStyle}`}>
+      <form className={classNames(unauthedContainerStyle, 'text-white rounded-md space-y-8')} onSubmit={handleSubmit(onRegisterClick)}>
         <h1 className='text-4xl font-bold'>Let&apos;s get started</h1>
 
         <RegisterPlanBanner />
@@ -68,8 +85,8 @@ const Register = () => {
             label='Team name'
             placeholder={'Your team\'s name'}
             type='text'
-            onChange={setOrganisationName}
-            value={organisationName}
+            inputExtra={{ ...register('organisationName') }}
+            errors={[errors.organisationName?.message]}
           />
         }
 
@@ -78,8 +95,8 @@ const Register = () => {
           label='Username'
           type='text'
           placeholder='Your name or a screen name'
-          onChange={setUsername}
-          value={username}
+          inputExtra={{ ...register('username') }}
+          errors={[errors.username?.message]}
         />
 
         <TextInput
@@ -88,8 +105,8 @@ const Register = () => {
           label='Email'
           type='email'
           placeholder='For transactional notifications'
-          onChange={setEmail}
-          value={email}
+          inputExtra={{ ...register('email') }}
+          errors={[errors.email?.message]}
         />
 
         <TextInput
@@ -97,15 +114,30 @@ const Register = () => {
           label='Password'
           placeholder='Keep it secure'
           type='password'
-          onChange={setPassword}
-          value={password}
+          inputExtra={{ ...register('password') }}
+          errors={[errors.password?.message]}
+        />
+
+        <Controller
+          control={control}
+          name='termsAccepted'
+          render={({
+            field: { onChange, value, ref }
+          }) => (
+            <Checkbox
+              id='terms'
+              inputRef={ref}
+              checked={value}
+              onChange={onChange}
+              labelContent={<>I agree to the <Link to='https://trytalo.com/terms'>Terms of Use</Link> and <Link to='https://trytalo.com/privacy'>Privacy Policy</Link></>}
+            />
+          )}
         />
 
         {error && <ErrorMessage error={error} />}
 
         <Button
-          disabled={(!organisationName && !location.state?.invite) || !username || !email || !password}
-          onClick={onRegisterClick}
+          disabled={!isValid}
           isLoading={isLoading}
         >
           Sign up
@@ -118,5 +150,3 @@ const Register = () => {
     </div>
   )
 }
-
-export default Register

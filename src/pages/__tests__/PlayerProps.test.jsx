@@ -268,8 +268,9 @@ describe('<PlayerProps />', () => {
 
     await waitFor(() => {
       expect(screen.queryByDisplayValue('treasuresDiscovered')).not.toBeInTheDocument()
-      expect(screen.getByText('treasuresDiscovered')).toBeInTheDocument()
     })
+
+    expect(screen.getByText('treasuresDiscovered')).toBeInTheDocument()
   })
 
   it('should render saving errors', async () => {

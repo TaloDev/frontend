@@ -15,6 +15,10 @@ function CatchAll({ setLocation }) {
   return null
 }
 
+CatchAll.propTypes = {
+  setLocation: PropTypes.func
+}
+
 function KitchenSink({ states, children, initialEntries, setLocation, routePath }) {
   const Renderer = () => states.reduce((Acc, { node, initialValue, onChange }) => {
     return React.cloneElement(

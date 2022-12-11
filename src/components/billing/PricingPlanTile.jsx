@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { IconArrowUp } from '@tabler/icons'
-import { dinero, toFormat } from 'dinero.js'
+import { dinero, toDecimal } from 'dinero.js'
 import { USD } from '@dinero.js/currencies'
 import Button from '../Button'
 import { focusStyle, linkStyle } from '../../styles/theme'
@@ -33,8 +33,8 @@ export default function PricingPlanTile({ plan, displayInterval, custom, current
     if (!amount) return 'Free forever'
 
     const d = dinero({ amount, currency: USD })
-    const transformer = ({ amount }) => `$${amount} / ${price.interval}`
-    return toFormat(d, transformer)
+    const transformer = ({ value }) => `$${value} / ${price.interval}`
+    return toDecimal(d, transformer)
   }, [displayInterval])
 
   const onChangePlanClick = async () => {

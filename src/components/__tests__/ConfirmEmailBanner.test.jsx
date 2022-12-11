@@ -1,7 +1,7 @@
 import React from 'react'
 import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
-import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import ConfirmEmailBanner from '../ConfirmEmailBanner'
 import userState from '../../state/userState'
 import userEvent from '@testing-library/user-event'
@@ -40,7 +40,7 @@ describe('<ConfirmEmailBanner />', () => {
 
     userEvent.click(screen.getByText('Navigate away'))
 
-    await waitForElementToBeRemoved(screen.getByText('Success!'))
+    expect(screen.queryByText('Success!')).not.toBeInTheDocument()
   })
 
   it('should render errors', async () => {

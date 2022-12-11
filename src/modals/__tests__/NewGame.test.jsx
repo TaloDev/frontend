@@ -28,11 +28,12 @@ describe('<NewGame />', () => {
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
-      expect(userChangeMock).toHaveBeenCalledWith({
-        organisation: {
-          games: [{ id: 1, name: 'Shattered' }]
-        }
-      })
+    })
+
+    expect(userChangeMock).toHaveBeenCalledWith({
+      organisation: {
+        games: [{ id: 1, name: 'Shattered' }]
+      }
     })
   })
 
