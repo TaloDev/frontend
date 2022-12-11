@@ -39,7 +39,6 @@ function App() {
 
       Sentry.setUser({ id: res.data.user.id, username: res.data.user.username })
     } catch (err) {
-      console.log('User doesn\'t have a session')
       setActiveGame(null)
     } finally {
       setRefreshing(false)
