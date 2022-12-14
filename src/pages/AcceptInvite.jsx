@@ -34,7 +34,7 @@ const AcceptInvite = () => {
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={`text-white rounded-md space-y-8 ${unauthedContainerStyle}`}>
+      <form className={`text-white space-y-8 ${unauthedContainerStyle}`}>
         {!isLoading && <h1 className='text-4xl font-bold'>Accept invite</h1>}
 
         {isLoading &&

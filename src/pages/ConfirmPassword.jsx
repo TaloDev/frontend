@@ -92,7 +92,7 @@ const ConfirmPassword = () => {
 
   return (
     <div className='md:translate-y-[80%]'>
-      <form className={`mx-auto text-white rounded-md space-y-8 ${unauthedContainerStyle}`}>
+      <form className={`mx-auto text-white space-y-8 ${unauthedContainerStyle}`}>
         <Title>Confirm your password</Title>
 
         <TextInput

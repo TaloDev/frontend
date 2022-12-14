@@ -17,6 +17,7 @@ import { Controller, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import classNames from 'classnames'
+import routes from '../constants/routes'
 
 const validationSchema = yup.object({
   organisationName: yup
@@ -68,7 +69,7 @@ export default function Register() {
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={classNames(unauthedContainerStyle, 'text-white rounded-md space-y-8')} onSubmit={handleSubmit(onRegisterClick)}>
+      <form className={classNames(unauthedContainerStyle, 'text-white space-y-8')} onSubmit={handleSubmit(onRegisterClick)}>
         <h1 className='text-4xl font-bold'>Let&apos;s get started</h1>
 
         <RegisterPlanBanner />
@@ -145,7 +146,7 @@ export default function Register() {
       </form>
 
       <div className={unauthedContainerStyle}>
-        <p className='mt-4 text-white'>Already have an account? <Link to='/'>Log in here</Link></p>
+        <p className='mt-4 text-white'>Already have an account? <Link to={routes.login}>Log in here</Link></p>
       </div>
     </div>
   )

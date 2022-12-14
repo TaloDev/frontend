@@ -32,7 +32,7 @@ const Demo = () => {
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={`text-white rounded-md space-y-8 ${unauthedContainerStyle}`}>
+      <form className={`text-white space-y-8 ${unauthedContainerStyle}`}>
         <h1 className='text-4xl font-bold'>Browse the demo</h1>
         <p>
           You&apos;ll get to the read-only demo organisation for 1 hour. Some features are restricted in the demo environment but trust us, they work!
