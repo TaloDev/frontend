@@ -71,7 +71,7 @@ const Login = () => {
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={`text-white rounded-md space-y-8 ${unauthedContainerStyle}`}>
+      <form className={`text-white space-y-8 ${unauthedContainerStyle}`}>
         <div className='space-y-4'>
           <h1 className='text-4xl font-bold'>Welcome back</h1>
 
@@ -93,22 +93,20 @@ const Login = () => {
           value={email}
         />
 
-        <TextInput
-          id='password'
-          label='Password'
-          placeholder='Password'
-          type='password'
-          onChange={setPassword}
-          value={password}
-        />
+        <div>
+          <TextInput
+            id='password'
+            label='Password'
+            placeholder='Password'
+            type='password'
+            onChange={setPassword}
+            value={password}
+          />
 
-        {error &&
-          <ErrorMessage error={error}>
-            {error?.extra.showHint &&
-              <span>. Have you <Link to={routes.forgotPass} className='!text-gray-800'>forgotten your password?</Link></span>
-            }
-          </ErrorMessage>
-        }
+          <Link to={routes.forgotPassword} className='block mt-4'>Forgot your password?</Link>
+        </div>
+
+        {error && <ErrorMessage error={error} />}
 
         <Button
           disabled={!email || !password}

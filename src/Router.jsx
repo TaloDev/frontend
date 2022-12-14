@@ -36,6 +36,8 @@ const Groups = lazy(() => import(/* webpackChunkName: 'groups' */ './pages/Group
 const GameProps = lazy(() => import(/* webpackChunkName: 'game-props' */ './pages/GameProps'))
 const PlayerProfile = lazy(() => import(/* webpackChunkName: 'player-profile' */ './pages/PlayerProfile'))
 const PlayerLeaderboardEntries = lazy(() => import(/* webpackChunkName: 'player-leaderboard-entries' */ './pages/PlayerLeaderboardEntries'))
+const ForgotPassword = lazy(() => import(/* webpackChunkName: 'forgot-password' */ './pages/ForgotPassword'))
+const ResetPassword = lazy(() => import(/* webpackChunkName: 'reset-password' */ './pages/ResetPassword'))
 
 function Router({ intendedUrl }) {
   const user = useRecoilValue(userState)
@@ -52,6 +54,8 @@ function Router({ intendedUrl }) {
             <Route exact path={routes.verify2FA} element={<Verify2FA />} />
             <Route exact path={routes.recover} element={<RecoverAccount />} />
             <Route exact path={routes.acceptInvite} element={<AcceptInvite />} />
+            <Route exact path={routes.forgotPassword} element={<ForgotPassword />} />
+            <Route exact path={routes.resetPassword} element={<ResetPassword />} />
 
             <Route path='*' element={<Navigate to={`${routes.login}?next=${encodeURIComponent(intendedUrl)}`} replace />} />
           </Routes>

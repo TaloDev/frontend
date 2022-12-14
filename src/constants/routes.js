@@ -9,7 +9,7 @@ export default {
   dataExports: '/exports',
   demo: '/demo',
   events: '/events',
-  forgotPass: '/forgot',
+  forgotPassword: '/forgot-password',
   gameProps: '/game-config',
   groups: '/groups',
   integrations: '/integrations',
@@ -23,8 +23,9 @@ export default {
   playerProfile: '/players/:id/profile',
   playerProps: '/players/:id/props',
   playerStats: '/players/:id/stats',
-  register: '/register',
   recover: '/recover',
+  register: '/register',
+  resetPassword: '/reset-password',
   stats: '/stats',
   verify2FA: '/verify'
 }
