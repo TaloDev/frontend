@@ -9,7 +9,7 @@ export default function useGameActivities(activeGame) {
   }
 
   const { data, error } = useSWR(
-    activeGame ? [`/games/${activeGame.id}/game-activities`] : null,
+    activeGame ? `/games/${activeGame.id}/game-activities` : null,
     fetcher
   )
 

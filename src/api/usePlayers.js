@@ -4,7 +4,7 @@ import api from './api'
 import { stringify } from 'querystring'
 
 const usePlayers = (activeGame, search, page) => {
-  const fetcher = async (url) => {
+  const fetcher = async ([url]) => {
     const qs = stringify({
       search,
       page

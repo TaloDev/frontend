@@ -9,7 +9,7 @@ const useDataExportEntities = (activeGame) => {
   }
 
   const { data, error } = useSWR(
-    [`/games/${activeGame.id}/data-exports/entities`],
+    `/games/${activeGame.id}/data-exports/entities`,
     fetcher
   )
 

@@ -9,7 +9,7 @@ const useIntegrations = (activeGame) => {
   }
 
   const { data, error, mutate } = useSWR(
-    activeGame ? [`/games/${activeGame.id}/integrations`] : null,
+    activeGame ? `/games/${activeGame.id}/integrations` : null,
     fetcher
   )
 
