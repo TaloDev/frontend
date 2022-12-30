@@ -3,7 +3,7 @@ import buildError from '../utils/buildError'
 import api from './api'
 
 const usePlayerLeaderboardEntries = (activeGame, leaderboards, player) => {
-  const fetcher = async (activeGame, leaderboards, aliases) => {
+  const fetcher = async ([activeGame, leaderboards, aliases]) => {
     const urls = aliases.flatMap((alias) => {
       return leaderboards.map((leaderboard) => `/games/${activeGame.id}/leaderboards/${leaderboard.id}/entries?aliasId=${alias.id}&page=0`)
     })

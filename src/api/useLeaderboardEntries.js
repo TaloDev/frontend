@@ -4,7 +4,7 @@ import api from './api'
 import { stringify } from 'querystring'
 
 const useLeaderboardEntries = (activeGame, leaderboardId, page) => {
-  const fetcher = async (url) => {
+  const fetcher = async ([url]) => {
     const qs = stringify({ page })
 
     const res = await api.get(`${url}?${qs}`)
