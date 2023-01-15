@@ -1,4 +1,3 @@
-import React from 'react'
 import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
 import { render, screen } from '@testing-library/react'
@@ -25,20 +24,18 @@ describe('<ConfirmEmailBanner />', () => {
   it('should show the success state on confirmation and disappear on navigating away', async () => {
     render(
       <KitchenSink states={[{ node: userState, initialValue: {}, onChange: vi.fn() }]}>
-        <>
-          <Link to='/'>Navigate away</Link>
-          <ConfirmEmailBanner />
-        </>
+        <Link to='/'>Navigate away</Link>
+        <ConfirmEmailBanner />
       </KitchenSink>
     )
 
-    await userEvent.type(screen.getByRole('textbox'), '123456')
-
-    await userEvent.click(screen.getByText('Confirm'))
+    const { type, click } = userEvent.setup()
+    await type(screen.getByRole('textbox'), '123456')
+    await click(screen.getByText('Confirm'))
 
     expect(await screen.findByText('Success!')).toBeInTheDocument()
 
-    await userEvent.click(screen.getByText('Navigate away'))
+    await click(screen.getByText('Navigate away'))
 
     expect(screen.queryByText('Success!')).not.toBeInTheDocument()
   })
@@ -52,10 +49,10 @@ describe('<ConfirmEmailBanner />', () => {
       </KitchenSink>
     )
 
-    await userEvent.type(screen.getByRole('textbox'), '123456')
+    const { type, click } = userEvent.setup()
+    await type(screen.getByRole('textbox'), '123456')
+    await click(screen.getByText('Confirm'))
 
-    await userEvent.click(screen.getByText('Confirm'))
-
-    expect(await screen.findByRole('alert')).toBeInTheDocument()
+    expect(await screen.findByText('Network Error')).toBeInTheDocument()
   })
 })
