@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import LeaderboardDetails from '../LeaderboardDetails'
@@ -14,10 +13,10 @@ describe('<LeaderboardDetails />', () => {
   const activeGameValue = { id: 1, name: 'Shattered' }
 
   it('should create a leaderboard', async () => {
-    axiosMock.onPost('http://talo.test/games/1/leaderboards').replyOnce(200, { leaderboard: { id: 4 } })
+    axiosMock.onPost('http://talo.api/games/1/leaderboards').replyOnce(200, { leaderboard: { id: 4 } })
 
-    const closeMock = jest.fn()
-    const mutateMock = jest.fn()
+    const closeMock = vi.fn()
+    const mutateMock = vi.fn()
 
     render(
       <KitchenSink states={[
@@ -28,16 +27,16 @@ describe('<LeaderboardDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.type(screen.getByLabelText('Internal name'), 'score')
+    await userEvent.type(screen.getByLabelText('Internal name'), 'score')
 
-    userEvent.type(screen.getByLabelText('Display name'), 'Score')
+    await userEvent.type(screen.getByLabelText('Display name'), 'Score')
 
-    userEvent.click(screen.getByLabelText('Sort mode'))
-    userEvent.click(screen.getByText('Ascending'))
+    await userEvent.click(screen.getByLabelText('Sort mode'))
+    await userEvent.click(screen.getByText('Ascending'))
 
-    userEvent.click(screen.getByText('Yes'))
+    await userEvent.click(screen.getByText('Yes'))
 
-    userEvent.click(screen.getByText('Create'))
+    await userEvent.click(screen.getByText('Create'))
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
@@ -58,42 +57,42 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should handle creation errors', async () => {
-    axiosMock.onPost('http://talo.test/games/1/leaderboards').networkErrorOnce()
+    axiosMock.onPost('http://talo.api/games/1/leaderboards').networkErrorOnce()
 
-    const closeMock = jest.fn()
+    const closeMock = vi.fn()
 
     render(
       <KitchenSink states={[
         { node: userState, initialValue: { type: userTypes.ADMIN } },
         { node: activeGameState, initialValue: activeGameValue }
       ]}>
-        <LeaderboardDetails modalState={[true, closeMock]} mutate={jest.fn()} />
+        <LeaderboardDetails modalState={[true, closeMock]} mutate={vi.fn()} />
       </KitchenSink>
     )
 
-    userEvent.type(screen.getByLabelText('Internal name'), 'score')
-    userEvent.type(screen.getByLabelText('Display name'), 'Score')
+    await userEvent.type(screen.getByLabelText('Internal name'), 'score')
+    await userEvent.type(screen.getByLabelText('Display name'), 'Score')
 
-    userEvent.click(screen.getByText('Create'))
+    await userEvent.click(screen.getByText('Create'))
 
     await waitFor(() => {
       expect(screen.getByText('Network Error')).toBeInTheDocument()
     })
   })
 
-  it('should close when clicking close', () => {
-    const closeMock = jest.fn()
+  it('should close when clicking close', async () => {
+    const closeMock = vi.fn()
 
     render(
       <KitchenSink states={[
         { node: userState, initialValue: { type: userTypes.ADMIN } },
         { node: activeGameState, initialValue: activeGameValue }
       ]}>
-        <LeaderboardDetails modalState={[true, closeMock]} mutate={jest.fn()} />
+        <LeaderboardDetails modalState={[true, closeMock]} mutate={vi.fn()} />
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Close'))
+    await userEvent.click(screen.getByText('Close'))
 
     expect(closeMock).toHaveBeenCalled()
   })
@@ -105,8 +104,8 @@ describe('<LeaderboardDetails />', () => {
         { node: activeGameState, initialValue: activeGameValue }
       ]}>
         <LeaderboardDetails
-          modalState={[true, jest.fn()]}
-          mutate={jest.fn()}
+          modalState={[true, vi.fn()]}
+          mutate={vi.fn()}
           editingLeaderboard={{
             internalName: 'score',
             name: 'Score',
@@ -126,8 +125,8 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should update a leaderboard', async () => {
-    const closeMock = jest.fn()
-    const mutateMock = jest.fn()
+    const closeMock = vi.fn()
+    const mutateMock = vi.fn()
 
     const initialLeaderboard = {
       id: 1,
@@ -137,7 +136,7 @@ describe('<LeaderboardDetails />', () => {
       unique: false
     }
 
-    axiosMock.onPut('http://talo.test/games/1/leaderboards/1').replyOnce(200, {
+    axiosMock.onPut('http://talo.api/games/1/leaderboards/1').replyOnce(200, {
       leaderboard: {
         ...initialLeaderboard, unique: true
       }
@@ -156,8 +155,8 @@ describe('<LeaderboardDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Yes'))
-    userEvent.click(screen.getByText('Update'))
+    await userEvent.click(screen.getByText('Yes'))
+    await userEvent.click(screen.getByText('Update'))
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
@@ -172,9 +171,9 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should handle updating errors', async () => {
-    axiosMock.onPut('http://talo.test/games/1/leaderboards/1').networkErrorOnce()
+    axiosMock.onPut('http://talo.api/games/1/leaderboards/1').networkErrorOnce()
 
-    const closeMock = jest.fn()
+    const closeMock = vi.fn()
 
     render(
       <KitchenSink states={[
@@ -183,7 +182,7 @@ describe('<LeaderboardDetails />', () => {
       ]}>
         <LeaderboardDetails
           modalState={[true, closeMock]}
-          mutate={jest.fn()}
+          mutate={vi.fn()}
           editingLeaderboard={{
             id: 1,
             internalName: 'score',
@@ -195,7 +194,7 @@ describe('<LeaderboardDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Update'))
+    await userEvent.click(screen.getByText('Update'))
 
     await waitFor(() => {
       expect(screen.getByText('Network Error')).toBeInTheDocument()
@@ -203,8 +202,8 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should delete a leaderboard', async () => {
-    const closeMock = jest.fn()
-    const mutateMock = jest.fn()
+    const closeMock = vi.fn()
+    const mutateMock = vi.fn()
 
     const initialLeaderboard = {
       id: 1,
@@ -214,8 +213,8 @@ describe('<LeaderboardDetails />', () => {
       unique: false
     }
 
-    axiosMock.onDelete('http://talo.test/games/1/leaderboards/1').replyOnce(200)
-    window.confirm = jest.fn(() => true)
+    axiosMock.onDelete('http://talo.api/games/1/leaderboards/1').replyOnce(200)
+    window.confirm = vi.fn(() => true)
 
     render(
       <KitchenSink states={[
@@ -230,7 +229,7 @@ describe('<LeaderboardDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Delete'))
+    await userEvent.click(screen.getByText('Delete'))
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
@@ -259,8 +258,8 @@ describe('<LeaderboardDetails />', () => {
         { node: activeGameState, initialValue: activeGameValue }
       ]}>
         <LeaderboardDetails
-          modalState={[true, jest.fn()]}
-          mutate={jest.fn()}
+          modalState={[true, vi.fn()]}
+          mutate={vi.fn()}
           editingLeaderboard={initialLeaderboard}
         />
       </KitchenSink>
@@ -270,9 +269,9 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should handle deleting errors', async () => {
-    axiosMock.onDelete('http://talo.test/games/1/leaderboards/1').networkErrorOnce()
+    axiosMock.onDelete('http://talo.api/games/1/leaderboards/1').networkErrorOnce()
 
-    const closeMock = jest.fn()
+    const closeMock = vi.fn()
 
     render(
       <KitchenSink states={[
@@ -281,7 +280,7 @@ describe('<LeaderboardDetails />', () => {
       ]}>
         <LeaderboardDetails
           modalState={[true, closeMock]}
-          mutate={jest.fn()}
+          mutate={vi.fn()}
           editingLeaderboard={{
             id: 1,
             internalName: 'score',
@@ -293,7 +292,7 @@ describe('<LeaderboardDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Delete'))
+    await userEvent.click(screen.getByText('Delete'))
 
     await waitFor(() => {
       expect(screen.getByText('Network Error')).toBeInTheDocument()

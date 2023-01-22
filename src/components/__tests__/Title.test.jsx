@@ -6,7 +6,7 @@ import Title from '../Title'
 
 describe('<Title />', () => {
   it('should go back', async  () => {
-    const setLocationMock = jest.fn()
+    const setLocationMock = vi.fn()
 
     render(
       <KitchenSink initialEntries={['/players', '/']} setLocation={setLocationMock}>
@@ -16,7 +16,7 @@ describe('<Title />', () => {
 
     expect(screen.getByText('Player Props')).toBeInTheDocument()
 
-    userEvent.click(screen.getByLabelText('Go back'))
+    await userEvent.click(screen.getByLabelText('Go back'))
 
     await waitFor(() => {
       expect(setLocationMock).toHaveBeenCalledWith({

@@ -6,18 +6,18 @@ import DropdownMenu from '../DropdownMenu'
 import Button from '../Button'
 
 describe('<DropdownMenu />', () => {
-  it('should render list options correctly', () => {
+  it('should render list options correctly', async () => {
     render(
       <KitchenSink>
         <DropdownMenu
           options={[
             {
               label: 'Option 1',
-              onClick: jest.fn
+              onClick: vi.fn
             },
             {
               label: 'Option 2',
-              onClick: jest.fn
+              onClick: vi.fn
             }
           ]}
         >
@@ -34,14 +34,14 @@ describe('<DropdownMenu />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Open me'))
+    await userEvent.click(screen.getByText('Open me'))
     expect(screen.getByText('Option 1')).toBeInTheDocument()
     expect(screen.getByText('Option 2')).toBeInTheDocument()
   })
 
-  it('should handle list option clicks', () => {
-    const opt1Mock = jest.fn()
-    const opt2Mock = jest.fn()
+  it('should handle list option clicks', async () => {
+    const opt1Mock = vi.fn()
+    const opt2Mock = vi.fn()
 
     render(
       <KitchenSink>
@@ -70,12 +70,12 @@ describe('<DropdownMenu />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Open me'))
-    userEvent.click(screen.getByText('Option 1'))
+    await userEvent.click(screen.getByText('Open me'))
+    await userEvent.click(screen.getByText('Option 1'))
     expect(opt1Mock).toHaveBeenCalled()
 
-    userEvent.click(screen.getByText('Open me'))
-    userEvent.click(screen.getByText('Option 2'))
+    await userEvent.click(screen.getByText('Open me'))
+    await userEvent.click(screen.getByText('Option 2'))
     expect(opt2Mock).toHaveBeenCalled()
   })
 })

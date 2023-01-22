@@ -1,4 +1,3 @@
-import React from 'react'
 import MockAdapter from 'axios-mock-adapter'
 import api from '../../api/api'
 import { render, screen, waitFor } from '@testing-library/react'
@@ -16,7 +15,7 @@ describe('<Register />', () => {
       username: 'Talo'
     }
 
-    const postMock = jest.fn(() => [
+    const postMock = vi.fn(() => [
       200,
       {
         accessToken: 'ey...',
@@ -24,9 +23,9 @@ describe('<Register />', () => {
       }
     ])
 
-    const changeMock = jest.fn()
+    const changeMock = vi.fn()
 
-    axiosMock.onPost('http://talo.test/public/users/register').replyOnce(postMock)
+    axiosMock.onPost('http://talo.api/public/users/register').replyOnce(postMock)
 
     render(
       <KitchenSink states={[{ node: userState, onChange: changeMock }]}>
@@ -36,20 +35,21 @@ describe('<Register />', () => {
 
     expect(screen.getByText('Sign up')).toBeDisabled()
 
-    userEvent.type(screen.getByLabelText('Team name'), 'Sleepy Studios')
-    userEvent.type(screen.getByLabelText('Username'), 'Talo')
-    userEvent.type(screen.getByLabelText('Email'), 'hello@trytalo.com')
-    userEvent.type(screen.getByLabelText('Password'), 'p@ssw0rd')
+    const { type, click } = userEvent.setup()
+    await type(screen.getByLabelText('Team name'), 'Sleepy Studios')
+    await type(screen.getByLabelText('Username'), 'Talo')
+    await type(screen.getByLabelText('Email'), 'hello@trytalo.com')
+    await type(screen.getByLabelText('Password'), 'p@ssw0rd')
 
     expect(screen.getByText('Sign up')).toBeDisabled()
 
-    userEvent.click(screen.getByRole('checkbox'))
+    await click(screen.getByRole('checkbox'))
 
     await waitFor(() => {
       expect(screen.getByText('Sign up')).toBeEnabled()
     })
 
-    userEvent.click(screen.getByText('Sign up'))
+    await click(screen.getByText('Sign up'))
 
     await waitFor(() => {
       expect(JSON.parse(postMock.mock.calls[0][0].data)).toStrictEqual({
@@ -74,11 +74,12 @@ describe('<Register />', () => {
 
     expect(screen.getByText('Sign up')).toBeDisabled()
 
-    userEvent.type(screen.getByLabelText('Team name'), 'Sleepy Studios')
-    userEvent.type(screen.getByLabelText('Username'), 'Talo')
-    userEvent.type(screen.getByLabelText('Email'), 'hello@trytalo')
-    userEvent.type(screen.getByLabelText('Password'), 'p@ssw0rd')
-    userEvent.click(screen.getByRole('checkbox'))
+    const { type, click } = userEvent.setup()
+    await type(screen.getByLabelText('Team name'), 'Sleepy Studios')
+    await type(screen.getByLabelText('Username'), 'Talo')
+    await type(screen.getByLabelText('Email'), 'hello@trytalo')
+    await type(screen.getByLabelText('Password'), 'p@ssw0rd')
+    await click(screen.getByRole('checkbox'))
 
     expect(screen.getByText('Sign up')).toBeDisabled()
     expect(await screen.findByText('Please enter a valid email address')).toBeInTheDocument()
@@ -98,7 +99,7 @@ describe('<Register />', () => {
       email: 'dev@trytalo.com'
     }
 
-    const postMock = jest.fn(() => [
+    const postMock = vi.fn(() => [
       200,
       {
         accessToken: 'ey...',
@@ -106,9 +107,9 @@ describe('<Register />', () => {
       }
     ])
 
-    const changeMock = jest.fn()
+    const changeMock = vi.fn()
 
-    axiosMock.onPost('http://talo.test/public/users/register').replyOnce(postMock)
+    axiosMock.onPost('http://talo.api/public/users/register').replyOnce(postMock)
 
     render(
       <KitchenSink
@@ -124,19 +125,20 @@ describe('<Register />', () => {
     expect(screen.getByText(invite.organisation.name)).toBeInTheDocument()
     expect(screen.getByText('has invited you to join them on Talo')).toBeInTheDocument()
 
-    userEvent.type(screen.getByLabelText('Username'), 'Talo')
+    const { type, click } = userEvent.setup()
+    await type(screen.getByLabelText('Username'), 'Talo')
     expect(screen.getByLabelText('Email')).toHaveValue('dev@trytalo.com')
-    userEvent.type(screen.getByLabelText('Password'), 'p@ssw0rd')
+    await type(screen.getByLabelText('Password'), 'p@ssw0rd')
 
     expect(screen.getByText('Sign up')).toBeDisabled()
 
-    userEvent.click(screen.getByRole('checkbox'))
+    await click(screen.getByRole('checkbox'))
 
     await waitFor(() => {
       expect(screen.getByText('Sign up')).toBeEnabled()
     })
 
-    userEvent.click(screen.getByText('Sign up'))
+    await click(screen.getByText('Sign up'))
 
     await waitFor(() => {
       expect(JSON.parse(postMock.mock.calls[0][0].data)).toStrictEqual({
@@ -154,7 +156,7 @@ describe('<Register />', () => {
 
 
   it('should render registration errors', async () => {
-    axiosMock.onPost('http://talo.test/public/users/register').networkErrorOnce()
+    axiosMock.onPost('http://talo.api/public/users/register').networkErrorOnce()
 
     render(
       <KitchenSink>
@@ -164,26 +166,27 @@ describe('<Register />', () => {
 
     expect(screen.getByText('Sign up')).toBeDisabled()
 
-    userEvent.type(screen.getByLabelText('Team name'), 'Sleepy Studios')
-    userEvent.type(screen.getByLabelText('Username'), 'Talo')
-    userEvent.type(screen.getByLabelText('Email'), 'hello@trytalo.com')
-    userEvent.type(screen.getByLabelText('Password'), 'p@ssw0rd')
+    const { type, click } = userEvent.setup()
+    await type(screen.getByLabelText('Team name'), 'Sleepy Studios')
+    await type(screen.getByLabelText('Username'), 'Talo')
+    await type(screen.getByLabelText('Email'), 'hello@trytalo.com')
+    await type(screen.getByLabelText('Password'), 'p@ssw0rd')
 
     expect(screen.getByText('Sign up')).toBeDisabled()
 
-    userEvent.click(screen.getByRole('checkbox'))
+    await click(screen.getByRole('checkbox'))
 
     await waitFor(() => {
       expect(screen.getByText('Sign up')).toBeEnabled()
     })
 
-    userEvent.click(screen.getByText('Sign up'))
+    click(screen.getByText('Sign up'))
 
     expect(await screen.findByText('Network Error')).toBeInTheDocument()
   })
 
   it('should not display the pricing plan banner if the chosen plan is the indie plan', () => {
-    jest.spyOn(URLSearchParams.prototype, 'get').mockImplementation((key) => {
+    vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation((key) => {
       if (key === 'plan') return 'indie'
       return null
     })
@@ -198,7 +201,7 @@ describe('<Register />', () => {
   })
 
   it('should display the pricing plan banner if the chosen plan is not the indie plan', () => {
-    jest.spyOn(URLSearchParams.prototype, 'get').mockImplementation((key) => {
+    vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation((key) => {
       if (key === 'plan') return 'team'
       return null
     })
@@ -214,7 +217,7 @@ describe('<Register />', () => {
   })
 
   it('should display different copy for the enterprise plan', () => {
-    jest.spyOn(URLSearchParams.prototype, 'get').mockImplementation((key) => {
+    vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation((key) => {
       if (key === 'plan') return 'enterprise'
       return null
     })

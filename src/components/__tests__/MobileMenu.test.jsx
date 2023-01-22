@@ -7,7 +7,7 @@ import Link from '../Link'
 
 describe('<MobileMenu />', () => {
   it('should close when going to a different page', async () => {
-    const closeMock = jest.fn()
+    const closeMock = vi.fn()
 
     render(
       <MobileMenu visible={true} onClose={closeMock}>
@@ -18,7 +18,7 @@ describe('<MobileMenu />', () => {
       , { wrapper: BrowserRouter }
     )
 
-    userEvent.click(screen.getByText('Events'))
+    await userEvent.click(screen.getByText('Events'))
 
     await waitFor(() => expect(closeMock).toHaveBeenCalled())
   })

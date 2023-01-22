@@ -9,7 +9,7 @@ import routes from '../../constants/routes'
 
 describe('<ServicesLink />', () => {
   it('should close when going to a different page', async () => {
-    const setLocationMock = jest.fn()
+    const setLocationMock = vi.fn()
 
     render(
       <KitchenSink
@@ -20,8 +20,8 @@ describe('<ServicesLink />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Services'))
-    userEvent.click(screen.getByText('Players'))
+    await userEvent.click(screen.getByText('Services'))
+    await userEvent.click(screen.getByText('Players'))
 
     await waitFor(() => {
       expect(setLocationMock).toHaveBeenLastCalledWith({

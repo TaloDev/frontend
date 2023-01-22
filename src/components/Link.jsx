@@ -1,13 +1,12 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { Link as RouterLink } from 'react-router-dom'
 import { focusStyle, linkStyle } from '../styles/theme'
 import classNames from 'classnames'
 
-function Link({ to, className, children }) {
+function Link({ to, state, className, children }) {
   const linkClass = classNames(linkStyle, focusStyle, className ?? '')
 
-  if (typeof to === 'string' && to.startsWith('http')) {
+  if (to.startsWith('http')) {
     return (
       <a href={to} className={linkClass} target='_blank' rel='noreferrer'>{children}</a>
     )
@@ -16,6 +15,7 @@ function Link({ to, className, children }) {
   return (
     <RouterLink
       to={to}
+      state={state}
       className={linkClass}
     >
       {children}
@@ -24,9 +24,10 @@ function Link({ to, className, children }) {
 }
 
 Link.propTypes = {
-  to: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+  to: PropTypes.string.isRequired,
+  state: PropTypes.object,
   className: PropTypes.string,
-  children: PropTypes.any.isRequired
+  children: PropTypes.node.isRequired
 }
 
 export default Link

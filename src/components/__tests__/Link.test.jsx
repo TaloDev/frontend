@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
 import routes from '../../constants/routes'
 import KitchenSink from '../../utils/KitchenSink'
@@ -18,7 +17,7 @@ describe('<Link />', () => {
   it('should render an external link', () => {
     render(
       <KitchenSink>
-        <Link to='https://talo.test/docs'>See the docs</Link>
+        <Link to='https://docs.trytalo.com'>See the docs</Link>
       </KitchenSink>
     )
 

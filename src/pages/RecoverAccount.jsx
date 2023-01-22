@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import { useSetRecoilState } from 'recoil'
@@ -13,7 +13,7 @@ import Title from '../components/Title'
 import recoverAccount from '../api/recoverAccount'
 import RecoveryCodes from '../components/RecoveryCodes'
 
-const RecoverAccount = () => {
+export default function RecoverAccount() {
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -116,5 +116,3 @@ const RecoverAccount = () => {
     </div>
   )
 }
-
-export default RecoverAccount

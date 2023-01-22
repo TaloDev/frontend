@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { RecoilRoot } from 'recoil'
 import RecoilObserver from '../state/RecoilObserver'
@@ -19,21 +19,46 @@ CatchAll.propTypes = {
   setLocation: PropTypes.func
 }
 
-function KitchenSink({ states, children, initialEntries, setLocation, routePath }) {
-  const Renderer = () => states.reduce((Acc, { node, initialValue, onChange }) => {
-    return React.cloneElement(
-      <RecoilObserver node={node} initialValue={initialValue} onChange={onChange} />,
-      {},
-      Acc
-    )
-  }, children)
+function Renderer({ states, children }) {
+  return (
+    <>
+      {states.map(({ node, onChange }, idx) => {
+        return (
+          <RecoilObserver
+            key={idx}
+            node={node}
+            onChange={onChange}
+          />
+        )
+      })}
 
+      {children}
+    </>
+  )
+}
+
+Renderer.propTypes = {
+  states: PropTypes.arrayOf(PropTypes.shape({
+    node: PropTypes.object.isRequired,
+    initialValue: PropTypes.any,
+    onChange: PropTypes.func
+  })).isRequired,
+  children: PropTypes.node.isRequired
+}
+
+function KitchenSink({ states, children, initialEntries, setLocation, routePath }) {
   return (
     <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0 }}>
-      <RecoilRoot>
+      <RecoilRoot
+        initializeState={(snap) => {
+          states.forEach(({ node, initialValue }) => {
+            snap.set(node, initialValue)
+          })
+        }}
+      >
         <MemoryRouter initialEntries={initialEntries}>
           <Routes>
-            <Route path={routePath} element={<Renderer />} />
+            <Route path={routePath} element={<Renderer states={states}>{children}</Renderer>} />
             <Route
               path='*'
               element={<CatchAll setLocation={setLocation} />}

@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, within, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import GameSwitcher from '../GameSwitcher'
@@ -17,14 +16,14 @@ describe('<GameSwitcher />', () => {
     expect(screen.getByText('New game')).toBeInTheDocument()
   })
 
-  it('should open the new game modal', () => {
+  it('should open the new game modal', async () => {
     render(
       <KitchenSink>
         <GameSwitcher />
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByRole('button'))
+    await userEvent.click(screen.getByRole('button'))
 
     expect(screen.getByText('New game')).toBeInTheDocument()
   })
@@ -39,7 +38,7 @@ describe('<GameSwitcher />', () => {
     expect(screen.getByText('Crawle')).toBeInTheDocument()
   })
 
-  it('should render all the organisation\'s games', () => {
+  it('should render all the organisation\'s games', async () => {
     const user = {
       organisation: {
         games: [
@@ -59,7 +58,7 @@ describe('<GameSwitcher />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByLabelText('Switch games or create a new one'))
+    await userEvent.click(screen.getByLabelText('Switch games or create a new one'))
     const list = screen.getByRole('list')
 
     for (const game of user.organisation.games) {
@@ -78,7 +77,7 @@ describe('<GameSwitcher />', () => {
       }
     }
 
-    const switchMock = jest.fn()
+    const switchMock = vi.fn()
 
     render(
       <KitchenSink states={[
@@ -89,16 +88,16 @@ describe('<GameSwitcher />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByLabelText('Switch games or create a new one'))
+    await userEvent.click(screen.getByLabelText('Switch games or create a new one'))
 
-    userEvent.click(screen.getByText(user.organisation.games[1].name))
+    await userEvent.click(screen.getByText(user.organisation.games[1].name))
 
     await waitFor(() => {
       expect(switchMock).toHaveBeenCalledWith(user.organisation.games[1])
     })
   })
 
-  it('should open the new game modal from the dropdown', () => {
+  it('should open the new game modal from the dropdown', async () => {
     const user = {
       organisation: {
         games: [
@@ -118,13 +117,13 @@ describe('<GameSwitcher />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByLabelText('Switch games or create a new one'))
-    userEvent.click(screen.getByText('New game'))
+    await userEvent.click(screen.getByLabelText('Switch games or create a new one'))
+    await userEvent.click(screen.getByText('New game'))
 
     expect(screen.getByText('Create new game')).toBeInTheDocument()
   })
 
-  it('should hide the dropdown when clicking outside', () => {
+  it('should hide the dropdown when clicking outside', async () => {
     const main = document.createElement('main')
 
     const user = {
@@ -147,9 +146,8 @@ describe('<GameSwitcher />', () => {
       { container: document.body.appendChild(main) }
     )
 
-    userEvent.click(screen.getByLabelText('Switch games or create a new one'))
-
-    userEvent.click(screen.getByRole('main'))
+    await userEvent.click(screen.getByLabelText('Switch games or create a new one'))
+    await userEvent.click(screen.getByRole('main'))
 
     expect(screen.queryByText('Create game')).not.toBeInTheDocument()
   })

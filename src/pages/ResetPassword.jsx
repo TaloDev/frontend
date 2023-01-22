@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import ErrorMessage from '../components/ErrorMessage'
@@ -87,7 +87,7 @@ export default function ResetPassword() {
 
         <TextInput
           id='password'
-          label='Password'
+          label='New password'
           type='password'
           placeholder='Password'
           inputExtra={{ ...register('password') }}

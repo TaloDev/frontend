@@ -1,34 +1,18 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 
-export default function RecoilObserver({ node, onChange, initialValue, children }) {
-  const [value, setValue] = useRecoilState(node)
-  const [ready, setReady] = useState(false)
+export default function RecoilObserver({ node, onChange }) {
+  const [value] = useRecoilState(node)
 
   useEffect(() => {
-    if (initialValue !== undefined) {
-      setValue(initialValue)
-    } else {
-      setReady(true)
-    }
-  }, [])
+    onChange?.(value)
+  }, [onChange, value])
 
-  useEffect(() => {
-    if (value === initialValue) setReady(true)
-  }, [value, initialValue])
-
-  useEffect(() => onChange?.(value), [onChange, value])
-
-  if (!ready) return <div>Loading</div>
-
-  return children
+  return null
 }
 
 RecoilObserver.propTypes = {
   node: PropTypes.object.isRequired,
-  onChange: PropTypes.func,
-  initialValue: PropTypes.any,
-  children: PropTypes.node
+  onChange: PropTypes.func
 }

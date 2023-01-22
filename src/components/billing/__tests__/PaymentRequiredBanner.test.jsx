@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import api from '../../../api/api'
 import MockAdapter from 'axios-mock-adapter'
@@ -9,17 +8,17 @@ describe('<PaymentRequiredBanner />', () => {
   const axiosMock = new MockAdapter(api)
 
   it('should create a portal session and redirect', async () => {
-    axiosMock.onPost('http://talo.test/billing/portal-session').replyOnce(200, {
+    axiosMock.onPost('http://talo.api/billing/portal-session').replyOnce(200, {
       redirect: 'http://stripe.com/portal'
     })
 
-    const assignMock = jest.fn()
+    const assignMock = vi.fn()
     delete window.location
     window.location = { assign: assignMock }
 
     render(<PaymentRequiredBanner />)
 
-    userEvent.click(screen.getByText('Update details'))
+    await userEvent.click(screen.getByText('Update details'))
 
     await waitFor(() => {
       expect(assignMock).toHaveBeenCalledWith('http://stripe.com/portal')
@@ -27,11 +26,11 @@ describe('<PaymentRequiredBanner />', () => {
   })
 
   it('should render errors', async () => {
-    axiosMock.onPost('http://talo.test/billing/portal-session').networkErrorOnce()
+    axiosMock.onPost('http://talo.api/billing/portal-session').networkErrorOnce()
 
     render(<PaymentRequiredBanner />)
 
-    userEvent.click(screen.getByText('Update details'))
+    await userEvent.click(screen.getByText('Update details'))
 
     const content = screen.getByTestId('banner-content')
     expect(await within(content).findByRole('alert')).toHaveTextContent('Network Error')
