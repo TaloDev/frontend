@@ -4,7 +4,7 @@ import api from './api'
 import { stringify } from 'querystring'
 
 const useEvents = (activeGame, startDate, endDate) => {
-  const fetcher = async (url) => {
+  const fetcher = async ([url]) => {
     const qs = stringify({
       startDate,
       endDate

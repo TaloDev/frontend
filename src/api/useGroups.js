@@ -9,7 +9,7 @@ const useGroups = (activeGame) => {
   }
 
   const { data, error, mutate } = useSWR(
-    activeGame ? [`games/${activeGame.id}/player-groups`] : null,
+    activeGame ? `games/${activeGame.id}/player-groups` : null,
     fetcher
   )
 

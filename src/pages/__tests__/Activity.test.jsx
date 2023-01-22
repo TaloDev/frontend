@@ -1,4 +1,3 @@
-import React from 'react'
 import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
 import { render, screen } from '@testing-library/react'
@@ -13,7 +12,7 @@ describe('<Activity />', () => {
   const axiosMock = new MockAdapter(api)
 
   it('should handle having no activities', async () => {
-    axiosMock.onGet('http://talo.test/games/1/game-activities').replyOnce(200, { activities: [] })
+    axiosMock.onGet('http://talo.api/games/1/game-activities').replyOnce(200, { activities: [] })
 
     render(
       <KitchenSink
@@ -50,7 +49,7 @@ describe('<Activity />', () => {
       }
     ]
 
-    axiosMock.onGet('http://talo.test/games/2/game-activities').replyOnce(200, { activities })
+    axiosMock.onGet('http://talo.api/games/2/game-activities').replyOnce(200, { activities })
 
     render(
       <KitchenSink
@@ -90,7 +89,7 @@ describe('<Activity />', () => {
       }
     ]
 
-    axiosMock.onGet('http://talo.test/games/3/game-activities').replyOnce(200, { activities })
+    axiosMock.onGet('http://talo.api/games/3/game-activities').replyOnce(200, { activities })
 
     render(
       <KitchenSink
@@ -128,7 +127,7 @@ describe('<Activity />', () => {
       }
     ]
 
-    axiosMock.onGet('http://talo.test/games/4/game-activities').replyOnce(200, { activities })
+    axiosMock.onGet('http://talo.api/games/4/game-activities').replyOnce(200, { activities })
 
     render(
       <KitchenSink
@@ -156,7 +155,7 @@ describe('<Activity />', () => {
   })
 
   it('should render an error', async () => {
-    axiosMock.onGet('http://talo.test/games/5/game-activities').networkErrorOnce()
+    axiosMock.onGet('http://talo.api/games/5/game-activities').networkErrorOnce()
 
     render(
       <KitchenSink

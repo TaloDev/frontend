@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import RecoveryCodes from '../RecoveryCodes'
 import userEvent from '@testing-library/user-event'
@@ -40,7 +39,7 @@ describe('<RecoveryCodes />', () => {
   })
 
   it('should let the user start creating new codes', async () => {
-    const setLocationMock = jest.fn()
+    const setLocationMock = vi.fn()
 
     render(
       <KitchenSink setLocation={setLocationMock}>
@@ -50,7 +49,7 @@ describe('<RecoveryCodes />', () => {
 
     expect(screen.getByText('Create new codes')).toBeInTheDocument()
 
-    userEvent.click(screen.getByText('Create new codes'))
+    await userEvent.click(screen.getByText('Create new codes'))
 
     await waitFor(() => {
       expect(setLocationMock).toHaveBeenCalledWith({
@@ -63,7 +62,7 @@ describe('<RecoveryCodes />', () => {
   })
 
   it('should let the user copy codes', async () => {
-    navigator.clipboard = { writeText: jest.fn() }
+    navigator.clipboard = { writeText: vi.fn() }
 
     const codes = ['abc123', 'efg456', 'hij789']
     render(
@@ -72,21 +71,21 @@ describe('<RecoveryCodes />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Copy codes'))
+    await userEvent.click(screen.getByText('Copy codes'))
     expect(await screen.findByText('Copied')).toBeInTheDocument()
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1)
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith(['abc123', 'efg456', 'hij789'].join('\n\n'))
   })
 
-  it('should let the user download codes', () => {
+  it('should let the user download codes', async () => {
     const link = {
-      click: jest.fn(),
-      remove: jest.fn()
+      click: vi.fn(),
+      remove: vi.fn()
     }
 
-    URL.createObjectURL = jest.fn(() => 'data')
-    URL.revokeObjectURL = jest.fn()
+    URL.createObjectURL = vi.fn(() => 'data')
+    URL.revokeObjectURL = vi.fn()
 
     render(
       <KitchenSink>
@@ -94,9 +93,9 @@ describe('<RecoveryCodes />', () => {
       </KitchenSink>
     )
 
-    jest.spyOn(document, 'createElement').mockImplementation(() => link)
+    vi.spyOn(document, 'createElement').mockImplementation(() => link)
 
-    userEvent.click(screen.getByText('Download codes'))
+    await userEvent.click(screen.getByText('Download codes'))
 
     expect(link.download).toEqual('talo-recovery-codes.txt')
     expect(link.href).toBeDefined()

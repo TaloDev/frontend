@@ -1,4 +1,3 @@
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'

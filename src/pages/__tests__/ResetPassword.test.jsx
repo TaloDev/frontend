@@ -1,4 +1,3 @@
-import React from 'react'
 import MockAdapter from 'axios-mock-adapter'
 import api from '../../api/api'
 import { render, screen, waitFor } from '@testing-library/react'
@@ -11,14 +10,14 @@ describe('<ResetPassword />', () => {
   const axiosMock = new MockAdapter(api)
 
   it('should render a success state', async () => {
-    jest.spyOn(URLSearchParams.prototype, 'get').mockImplementation((key) => {
+    vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation((key) => {
       if (key === 'token') return 'ey...'
       return null
     })
 
     axiosMock.onPost('/public/users/reset_password').replyOnce(204)
 
-    const setLocationMock = jest.fn()
+    const setLocationMock = vi.fn()
 
     render(
       <KitchenSink
@@ -32,22 +31,23 @@ describe('<ResetPassword />', () => {
 
     expect(screen.getByText('Confirm')).toBeDisabled()
 
-    userEvent.type(screen.getByLabelText('Password'), 'password1')
+    const { type, click } = userEvent.setup()
+    await type(screen.getByLabelText('New password'), 'password1')
     expect(screen.getByText('Confirm')).toBeDisabled()
 
-    userEvent.type(screen.getByLabelText('Confirm password'), 'password')
+    await type(screen.getByLabelText('Confirm password'), 'password')
     expect(screen.getByText('Confirm')).toBeDisabled()
 
-    userEvent.type(screen.getByLabelText('Confirm password'), '1')
+    await type(screen.getByLabelText('Confirm password'), '1')
 
     await waitFor(() => {
       expect(screen.getByText('Confirm')).toBeEnabled()
     })
-    userEvent.click(screen.getByText('Confirm'))
+    await click(screen.getByText('Confirm'))
 
     expect(await screen.findByText('Success! Your password has been reset')).toBeInTheDocument()
 
-    userEvent.click(screen.getByText('Go to Login'))
+    await click(screen.getByText('Go to Login'))
 
     await waitFor(() => {
       expect(setLocationMock).toHaveBeenLastCalledWith({ pathname: routes.login, state: null })
@@ -55,7 +55,7 @@ describe('<ResetPassword />', () => {
   })
 
   it('should render errors', async () => {
-    jest.spyOn(URLSearchParams.prototype, 'get').mockImplementation((key) => {
+    vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation((key) => {
       if (key === 'token') return 'ey...'
       return null
     })
@@ -70,19 +70,20 @@ describe('<ResetPassword />', () => {
 
     expect(screen.getByText('Confirm')).toBeDisabled()
 
-    userEvent.type(screen.getByLabelText('Password'), 'password1')
-    userEvent.type(screen.getByLabelText('Confirm password'), 'password1')
+    const { type, click } = userEvent.setup()
+    await type(screen.getByLabelText('New password'), 'password1')
+    await type(screen.getByLabelText('Confirm password'), 'password1')
 
     await waitFor(() => {
       expect(screen.getByText('Confirm')).toBeEnabled()
     })
-    userEvent.click(screen.getByText('Confirm'))
+    await click(screen.getByText('Confirm'))
 
     expect(await screen.findByText('Network Error')).toBeInTheDocument()
   })
 
   it('should render the expired hint', async () => {
-    jest.spyOn(URLSearchParams.prototype, 'get').mockImplementation((key) => {
+    vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation((key) => {
       if (key === 'token') return 'ey...'
       return null
     })
@@ -97,21 +98,22 @@ describe('<ResetPassword />', () => {
 
     expect(screen.getByText('Confirm')).toBeDisabled()
 
-    userEvent.type(screen.getByLabelText('Password'), 'password1')
-    userEvent.type(screen.getByLabelText('Confirm password'), 'password1')
+    const { type, click } = userEvent.setup()
+    await type(screen.getByLabelText('New password'), 'password1')
+    await type(screen.getByLabelText('Confirm password'), 'password1')
 
     await waitFor(() => {
       expect(screen.getByText('Confirm')).toBeEnabled()
     })
-    userEvent.click(screen.getByText('Confirm'))
+    await click(screen.getByText('Confirm'))
 
     expect(await screen.findByText('please request a new reset link')).toBeInTheDocument()
   })
 
   it('should redirect back to login if there is no token', async () => {
-    jest.spyOn(URLSearchParams.prototype, 'get').mockImplementation(() => '')
+    vi.spyOn(URLSearchParams.prototype, 'get').mockImplementation(() => '')
 
-    const setLocationMock = jest.fn()
+    const setLocationMock = vi.fn()
 
     render(
       <KitchenSink

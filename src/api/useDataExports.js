@@ -3,7 +3,7 @@ import buildError from '../utils/buildError'
 import api from './api'
 
 const useDataExports = (activeGame, createdExport) => {
-  const fetcher = async (url) => {
+  const fetcher = async ([url]) => {
     const res = await api.get(url)
     return res.data
   }

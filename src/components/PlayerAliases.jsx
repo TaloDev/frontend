@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { IconBrandSteam, IconMail, IconQuestionMark, IconUser } from '@tabler/icons'
 import Tippy from '@tippyjs/react'

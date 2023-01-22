@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import './styles/index.css'
 import 'tippy.js/dist/tippy.css'
 import 'react-day-picker/dist/style.css'
@@ -10,11 +10,12 @@ import * as Sentry from '@sentry/react'
 import ToastProvider from './components/toast/ToastProvider'
 
 Sentry.init({
-  dsn: import.meta.env.SNOWPACK_PUBLIC_SENTRY_DSN,
-  environment: import.meta.env.SNOWPACK_PUBLIC_SENTRY_ENV
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+  environment: import.meta.env.VITE_SENTRY_ENV
 })
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root'))
+root.render(
   <React.StrictMode>
     <RecoilRoot>
       <ToastProvider>
@@ -23,10 +24,5 @@ ReactDOM.render(
         </BrowserRouter>
       </ToastProvider>
     </RecoilRoot>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 )
-
-if (import.meta.hot) {
-  import.meta.hot.accept()
-}

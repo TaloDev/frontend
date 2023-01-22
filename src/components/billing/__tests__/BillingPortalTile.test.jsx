@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import api from '../../../api/api'
 import MockAdapter from 'axios-mock-adapter'
@@ -9,17 +8,17 @@ describe('<BillingPortalTile />', () => {
   const axiosMock = new MockAdapter(api)
 
   it('should create a portal session and redirect', async () => {
-    axiosMock.onPost('http://talo.test/billing/portal-session').replyOnce(200, {
+    axiosMock.onPost('http://talo.api/billing/portal-session').replyOnce(200, {
       redirect: 'http://stripe.com/portal'
     })
 
-    const assignMock = jest.fn()
+    const assignMock = vi.fn()
     delete window.location
     window.location = { assign: assignMock }
 
     render(<BillingPortalTile />)
 
-    userEvent.click(screen.getByText('Billing Portal'))
+    await userEvent.click(screen.getByText('Billing Portal'))
 
     await waitFor(() => {
       expect(assignMock).toHaveBeenCalledWith('http://stripe.com/portal')
@@ -27,11 +26,11 @@ describe('<BillingPortalTile />', () => {
   })
 
   it('should render errors', async () => {
-    axiosMock.onPost('http://talo.test/billing/portal-session').networkErrorOnce()
+    axiosMock.onPost('http://talo.api/billing/portal-session').networkErrorOnce()
 
     render(<BillingPortalTile />)
 
-    userEvent.click(screen.getByText('Billing Portal'))
+    await userEvent.click(screen.getByText('Billing Portal'))
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Network Error')
   })

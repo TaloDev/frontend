@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as Sentry from '@sentry/react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'

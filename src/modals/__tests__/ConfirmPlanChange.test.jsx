@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import ConfirmPlanChange from '../ConfirmPlanChange'
@@ -7,14 +6,6 @@ import MockAdapter from 'axios-mock-adapter'
 
 describe('<ConfirmPlanChange />', () => {
   const axiosMock = new MockAdapter(api)
-
-  beforeAll(() => {
-    jest.useFakeTimers('modern')
-  })
-
-  afterAll(() => {
-    jest.useRealTimers()
-  })
 
   const lines = [
     {
@@ -49,7 +40,7 @@ describe('<ConfirmPlanChange />', () => {
   it('should group invoice lines by the formatted dates', () => {
     render(
       <ConfirmPlanChange
-        modalState={[true, jest.fn()]}
+        modalState={[true, vi.fn()]}
         plan={{ id: 1 }}
         pricingInterval='month'
         invoice={{
@@ -82,16 +73,15 @@ describe('<ConfirmPlanChange />', () => {
   })
 
   it('should reload the page on success', async () => {
-    const replyMock = jest.fn(() => [200])
-    axiosMock.onPost('http://talo.test/billing/confirm-plan').replyOnce(replyMock)
+    const replyMock = vi.fn(() => [200])
+    axiosMock.onPost('http://talo.api/billing/confirm-plan').replyOnce(replyMock)
 
-    const reloadMock = jest.fn()
-    delete window.location
-    window.location = { reload: reloadMock }
+    const reloadMock = vi.fn()
+    vi.stubGlobal('location', { reload: reloadMock })
 
     render(
       <ConfirmPlanChange
-        modalState={[true, jest.fn()]}
+        modalState={[true, vi.fn()]}
         plan={{ id: 1 }}
         pricingInterval='month'
         invoice={{
@@ -103,13 +93,11 @@ describe('<ConfirmPlanChange />', () => {
       />
     )
 
-    userEvent.click(screen.getByText('Confirm'))
+    await userEvent.click(screen.getByText('Confirm'))
 
     await waitFor(() => {
       expect(replyMock).toHaveBeenCalled()
     })
-
-    jest.runAllTimers()
 
     await waitFor(() => {
       expect(reloadMock).toHaveBeenCalled()
@@ -117,15 +105,14 @@ describe('<ConfirmPlanChange />', () => {
   })
 
   it('should reload the page on receiving a 400', async () => {
-    axiosMock.onPost('http://talo.test/billing/confirm-plan').replyOnce(400)
+    axiosMock.onPost('http://talo.api/billing/confirm-plan').replyOnce(400)
 
-    const reloadMock = jest.fn()
-    delete window.location
-    window.location = { reload: reloadMock }
+    const reloadMock = vi.fn()
+    vi.stubGlobal('location', { reload: reloadMock })
 
     render(
       <ConfirmPlanChange
-        modalState={[true, jest.fn()]}
+        modalState={[true, vi.fn()]}
         plan={{ id: 1 }}
         pricingInterval='month'
         invoice={{
@@ -137,7 +124,7 @@ describe('<ConfirmPlanChange />', () => {
       />
     )
 
-    userEvent.click(screen.getByText('Confirm'))
+    await userEvent.click(screen.getByText('Confirm'))
 
     await waitFor(() => {
       expect(reloadMock).toHaveBeenCalled()
@@ -145,11 +132,11 @@ describe('<ConfirmPlanChange />', () => {
   })
 
   it('should render an error if the status code was not a 200 or 400', async () => {
-    axiosMock.onPost('http://talo.test/billing/confirm-plan').replyOnce(403)
+    axiosMock.onPost('http://talo.api/billing/confirm-plan').replyOnce(403)
 
     render(
       <ConfirmPlanChange
-        modalState={[true, jest.fn()]}
+        modalState={[true, vi.fn()]}
         plan={{ id: 1 }}
         pricingInterval='month'
         invoice={{
@@ -161,13 +148,13 @@ describe('<ConfirmPlanChange />', () => {
       />
     )
 
-    userEvent.click(screen.getByText('Confirm'))
+    await userEvent.click(screen.getByText('Confirm'))
 
     expect(await screen.findByText('Request failed with status code 403')).toHaveAttribute('role', 'alert')
   })
 
-  it('should close the modal', () => {
-    const closeMock = jest.fn()
+  it('should close the modal', async () => {
+    const closeMock = vi.fn()
 
     render(
       <ConfirmPlanChange
@@ -183,7 +170,7 @@ describe('<ConfirmPlanChange />', () => {
       />
     )
 
-    userEvent.click(screen.getByText('Cancel'))
+    await userEvent.click(screen.getByText('Cancel'))
 
     expect(closeMock).toHaveBeenCalled()
   })

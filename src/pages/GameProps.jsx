@@ -1,4 +1,3 @@
-import React from 'react'
 import Page from '../components/Page'
 import activeGameState from '../state/activeGameState'
 import { useRecoilState } from 'recoil'

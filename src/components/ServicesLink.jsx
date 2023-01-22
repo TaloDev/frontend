@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import classNames from 'classnames'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 import { focusStyle } from '../styles/theme'

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Toggle from '../Toggle'
@@ -16,25 +16,25 @@ describe('<Toggle />', () => {
   }
 
   it('should correctly toggle between states', async () => {
-    const toggleMock = jest.fn()
+    const toggleMock = vi.fn()
 
     render(<ToggleDummy toggleMock={toggleMock} />)
 
-    userEvent.click(screen.getByRole('checkbox'))
+    await userEvent.click(screen.getByRole('checkbox'))
     await waitFor(() => expect(toggleMock).toHaveBeenLastCalledWith(true))
 
-    userEvent.click(screen.getByRole('checkbox'))
+    await userEvent.click(screen.getByRole('checkbox'))
     await waitFor(() => expect(toggleMock).toHaveBeenLastCalledWith(false))
   })
 
   it('should correctly render the disabled state', () => {
-    render(<ToggleDummy toggleMock={jest.fn()} disabled={true} />)
+    render(<ToggleDummy toggleMock={vi.fn()} disabled={true} />)
     expect(screen.getByRole('checkbox')).toBeDisabled()
     expect(screen.getByRole('checkbox')).not.toBeChecked()
   })
 
   it('should correctly render a toggled disabled state', async () => {
-    render(<ToggleDummy toggleMock={jest.fn()} enabled={true} disabled={true} />)
+    render(<ToggleDummy toggleMock={vi.fn()} enabled={true} disabled={true} />)
     expect(screen.getByRole('checkbox')).toBeDisabled()
     await waitFor(() => expect(screen.getByRole('checkbox')).toBeChecked())
   })

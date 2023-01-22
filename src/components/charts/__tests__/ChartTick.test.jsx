@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
 import ChartTick from '../ChartTick'
 
@@ -9,7 +8,7 @@ describe('<ChartTick />', () => {
         <ChartTick
           payload={{ value: '1995-11-12 23:05:00' }}
           formatter={(tick) => tick.split(' ')[0]}
-          transform={jest.fn()}
+          transform={vi.fn()}
         />
       </svg>
     )

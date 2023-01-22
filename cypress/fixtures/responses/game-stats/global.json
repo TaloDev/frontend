@@ -1,0 +1,32 @@
+{
+  "stats": [
+    {
+      "id": 1,
+      "internalName": "damage-done",
+      "name": "Damage done",
+      "global": true,
+      "globalValue": 56,
+      "defaultValue": 0,
+      "maxChange": 999,
+      "minValue": 0,
+      "maxValue": null,
+      "minTimeBetweenUpdates": 0,
+      "createdAt": "2023-01-01 00:00:00",
+      "updatedAt": "2023-01-01 00:00:00"
+    },
+    {
+      "id": 2,
+      "internalName": "treasures-found",
+      "name": "Treasures found",
+      "global": true,
+      "globalValue": 14,
+      "defaultValue": 0,
+      "maxChange": 1,
+      "minValue": 0,
+      "maxValue": 30,
+      "minTimeBetweenUpdates": 0,
+      "createdAt": "2023-01-01 00:00:00",
+      "updatedAt": "2023-01-01 00:00:00"
+    }
+  ]  
+}

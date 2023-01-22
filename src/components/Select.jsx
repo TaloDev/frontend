@@ -1,4 +1,4 @@
-import React from 'react'
+import { forwardRef } from 'react'
 import ReactSelect, { components } from 'react-select'
 
 function Option(props) {
@@ -47,4 +47,4 @@ function Select(props, ref) {
   )
 }
 
-export default React.forwardRef(Select)
+export default forwardRef(Select)

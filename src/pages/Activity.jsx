@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import useGameActivities from '../api/useGameActivities'
 import ErrorMessage from '../components/ErrorMessage'
 import activeGameState from '../state/activeGameState'

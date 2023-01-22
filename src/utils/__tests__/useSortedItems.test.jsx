@@ -1,5 +1,5 @@
 
-import { renderHook } from '@testing-library/react-hooks'
+import { renderHook } from '@testing-library/react'
 import useSortedItems from '../useSortedItems'
 
 describe('useSortedItems', () => {

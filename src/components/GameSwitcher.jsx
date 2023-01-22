@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { IconChevronDown, IconPlus } from '@tabler/icons'
 import Button from './Button'
 import classNames from 'classnames'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import GroupDetails from '../GroupDetails'
@@ -15,10 +14,10 @@ describe('<GroupDetails />', () => {
   axiosMock.onGet(/(.*)preview-count(.*)/).reply(200, { count: 8 })
 
   it('should create a group', async () => {
-    axiosMock.onPost('http://talo.test/games/1/player-groups').replyOnce(200, { group: { id: 2 } })
+    axiosMock.onPost('http://talo.api/games/1/player-groups').replyOnce(200, { group: { id: 2 } })
 
-    const closeMock = jest.fn()
-    const mutateMock = jest.fn()
+    const closeMock = vi.fn()
+    const mutateMock = vi.fn()
 
     render(
       <KitchenSink states={[
@@ -29,13 +28,13 @@ describe('<GroupDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.type(screen.getByLabelText('Name'), 'Winners')
-    userEvent.type(screen.getByLabelText('Description'), 'Players who have won the game')
+    await userEvent.type(screen.getByLabelText('Name'), 'Winners')
+    await userEvent.type(screen.getByLabelText('Description'), 'Players who have won the game')
 
     await screen.findByText('8 players in group')
 
     await waitFor(() => expect(screen.getByText('Create')).toBeEnabled())
-    userEvent.click(screen.getByText('Create'))
+    await userEvent.click(screen.getByText('Create'))
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
@@ -54,43 +53,43 @@ describe('<GroupDetails />', () => {
   })
 
   it('should handle creation errors', async () => {
-    axiosMock.onPost('http://talo.test/games/1/player-groups').networkErrorOnce()
+    axiosMock.onPost('http://talo.api/games/1/player-groups').networkErrorOnce()
 
-    const closeMock = jest.fn()
+    const closeMock = vi.fn()
 
     render(
       <KitchenSink states={[
         { node: userState, initialValue: { type: userTypes.ADMIN } },
         { node: activeGameState, initialValue: activeGameValue }
       ]}>
-        <GroupDetails modalState={[true, closeMock]} mutate={jest.fn()} />
+        <GroupDetails modalState={[true, closeMock]} mutate={vi.fn()} />
       </KitchenSink>
     )
 
-    userEvent.type(screen.getByLabelText('Name'), 'Winners')
-    userEvent.type(screen.getByLabelText('Description'), 'Players who have won the game')
+    await userEvent.type(screen.getByLabelText('Name'), 'Winners')
+    await userEvent.type(screen.getByLabelText('Description'), 'Players who have won the game')
 
     await waitFor(() => expect(screen.getByText('Create')).toBeEnabled())
-    userEvent.click(screen.getByText('Create'))
+    await userEvent.click(screen.getByText('Create'))
 
     await waitFor(() => {
       expect(screen.getByText('Network Error')).toBeInTheDocument()
     })
   })
 
-  it('should close when clicking close', () => {
-    const closeMock = jest.fn()
+  it('should close when clicking close', async () => {
+    const closeMock = vi.fn()
 
     render(
       <KitchenSink states={[
         { node: userState, initialValue: { type: userTypes.ADMIN } },
         { node: activeGameState, initialValue: activeGameValue }
       ]}>
-        <GroupDetails modalState={[true, closeMock]} mutate={jest.fn()} />
+        <GroupDetails modalState={[true, closeMock]} mutate={vi.fn()} />
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Close'))
+    await userEvent.click(screen.getByText('Close'))
 
     expect(closeMock).toHaveBeenCalled()
   })
@@ -102,8 +101,8 @@ describe('<GroupDetails />', () => {
         { node: activeGameState, initialValue: activeGameValue }
       ]}>
         <GroupDetails
-          modalState={[true, jest.fn()]}
-          mutate={jest.fn()}
+          modalState={[true, vi.fn()]}
+          mutate={vi.fn()}
           editingGroup={{
             id: '1',
             name: 'Winners',
@@ -125,8 +124,8 @@ describe('<GroupDetails />', () => {
   })
 
   it('should update a group', async () => {
-    const closeMock = jest.fn()
-    const mutateMock = jest.fn()
+    const closeMock = vi.fn()
+    const mutateMock = vi.fn()
 
     const initialGroup = {
       id: '1',
@@ -139,7 +138,7 @@ describe('<GroupDetails />', () => {
       ruleMode: '$and'
     }
 
-    axiosMock.onPut('http://talo.test/games/1/player-groups/1').replyOnce(200, {
+    axiosMock.onPut('http://talo.api/games/1/player-groups/1').replyOnce(200, {
       group: {
         ...initialGroup, name: 'High level winners'
       }
@@ -158,10 +157,10 @@ describe('<GroupDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.type(screen.getByText('Name'), 'High level winners')
+    await userEvent.type(screen.getByText('Name'), 'High level winners')
 
     await waitFor(() => expect(screen.getByText('Update')).toBeEnabled())
-    userEvent.click(screen.getByText('Update'))
+    await userEvent.click(screen.getByText('Update'))
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
@@ -176,9 +175,9 @@ describe('<GroupDetails />', () => {
   })
 
   it('should handle updating errors', async () => {
-    axiosMock.onPut('http://talo.test/games/1/player-groups/1').networkErrorOnce()
+    axiosMock.onPut('http://talo.api/games/1/player-groups/1').networkErrorOnce()
 
-    const closeMock = jest.fn()
+    const closeMock = vi.fn()
 
     render(
       <KitchenSink states={[
@@ -187,7 +186,7 @@ describe('<GroupDetails />', () => {
       ]}>
         <GroupDetails
           modalState={[true, closeMock]}
-          mutate={jest.fn()}
+          mutate={vi.fn()}
           editingGroup={{
             id: '1',
             name: 'Winners',
@@ -200,7 +199,7 @@ describe('<GroupDetails />', () => {
     )
 
     await waitFor(() => expect(screen.getByText('Update')).toBeEnabled())
-    userEvent.click(screen.getByText('Update'))
+    await userEvent.click(screen.getByText('Update'))
 
     await waitFor(() => {
       expect(screen.getByText('Network Error')).toBeInTheDocument()
@@ -208,8 +207,8 @@ describe('<GroupDetails />', () => {
   })
 
   it('should delete a group', async () => {
-    const closeMock = jest.fn()
-    const mutateMock = jest.fn()
+    const closeMock = vi.fn()
+    const mutateMock = vi.fn()
 
     const initialGroup = {
       id: '1',
@@ -219,8 +218,8 @@ describe('<GroupDetails />', () => {
       ruleMode: '$and'
     }
 
-    axiosMock.onDelete('http://talo.test/games/1/player-groups/1').replyOnce(200)
-    window.confirm = jest.fn(() => true)
+    axiosMock.onDelete('http://talo.api/games/1/player-groups/1').replyOnce(200)
+    window.confirm = vi.fn(() => true)
 
     render(
       <KitchenSink states={[
@@ -235,7 +234,7 @@ describe('<GroupDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Delete'))
+    await userEvent.click(screen.getByText('Delete'))
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
@@ -264,8 +263,8 @@ describe('<GroupDetails />', () => {
         { node: activeGameState, initialValue: activeGameValue }
       ]}>
         <GroupDetails
-          modalState={[true, jest.fn()]}
-          mutate={jest.fn()}
+          modalState={[true, vi.fn()]}
+          mutate={vi.fn()}
           editingGroup={initialGroup}
         />
       </KitchenSink>
@@ -275,9 +274,9 @@ describe('<GroupDetails />', () => {
   })
 
   it('should handle deleting errors', async () => {
-    axiosMock.onDelete('http://talo.test/games/1/player-groups/1').networkErrorOnce()
+    axiosMock.onDelete('http://talo.api/games/1/player-groups/1').networkErrorOnce()
 
-    const closeMock = jest.fn()
+    const closeMock = vi.fn()
 
     render(
       <KitchenSink states={[
@@ -286,7 +285,7 @@ describe('<GroupDetails />', () => {
       ]}>
         <GroupDetails
           modalState={[true, closeMock]}
-          mutate={jest.fn()}
+          mutate={vi.fn()}
           editingGroup={{
             id: '1',
             name: 'Winners',
@@ -298,7 +297,7 @@ describe('<GroupDetails />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(screen.getByText('Delete'))
+    await userEvent.click(screen.getByText('Delete'))
 
     await waitFor(() => {
       expect(screen.getByText('Network Error')).toBeInTheDocument()

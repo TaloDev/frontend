@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { format } from 'date-fns'
 import { useRecoilValue } from 'recoil'
 import Page from '../components/Page'

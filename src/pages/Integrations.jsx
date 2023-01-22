@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { IconBrandSteam, IconCheck } from '@tabler/icons'
 import { useRecoilValue } from 'recoil'

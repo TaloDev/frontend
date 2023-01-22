@@ -7,7 +7,7 @@ import isGroupRuleValid from '../utils/group-rules/isGroupRuleValid'
 import { useMemo } from 'react'
 
 const useGroupPreviewCount = (activeGame, ruleMode, rules) => {
-  const fetcher = async (url) => {
+  const fetcher = async ([url]) => {
     const qs = stringify({
       ruleMode,
       rules: JSON.stringify(rules.map(prepareRule))

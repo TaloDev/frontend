@@ -5,6 +5,9 @@ module.exports = {
     es2021: true,
     jest: true
   },
+  globals: {
+    vi: true
+  },
   parserOptions: {
     ecmaFeatures: {
       jsx: true
@@ -21,13 +24,14 @@ module.exports = {
     'react',
     'jsx-a11y',
     'testing-library',
-    'jest-dom'
+    'jest-dom',
+    'cypress'
   ],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
     'plugin:jsx-a11y/recommended',
-    'plugin:testing-library/react',
     'plugin:jest-dom/recommended'
   ],
   rules: {
@@ -43,5 +47,14 @@ module.exports = {
     'eol-last': ['warn', 'always'],
     'jest-dom/prefer-in-document': ['off'],
     'require-await': ['error']
-  }
+  },
+  overrides: [
+    {
+      files: '**/cypress/**/*',
+      extends: [
+        'eslint:recommended',
+        'plugin:cypress/recommended'
+      ]
+    }
+  ]
 }

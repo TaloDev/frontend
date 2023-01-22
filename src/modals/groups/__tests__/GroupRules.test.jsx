@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import api from '../../../api/api'
@@ -14,7 +13,7 @@ function getLatestChange(changeMock) {
 describe('<GroupRules />', () => {
   const axiosMock = new MockAdapter(api)
   const activeGameValue = { id: 1, name: 'Shattered' }
-  axiosMock.onGet('http://talo.test/games/1/player-groups/rules').reply(200, {
+  axiosMock.onGet('http://talo.api/games/1/player-groups/rules').reply(200, {
     'availableRules': [
       {
         name: 'EQUALS',
@@ -120,7 +119,7 @@ describe('<GroupRules />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
-          ruleModeState={['$and', jest.fn()]}
+          ruleModeState={['$and', vi.fn()]}
           rulesState={[
             [{
               name: 'GT',
@@ -134,7 +133,7 @@ describe('<GroupRules />', () => {
               operandCount: 1,
               mapsTo: 'createdAt'
             }],
-            jest.fn()
+            vi.fn()
           ]}
         />
       </KitchenSink>
@@ -149,7 +148,7 @@ describe('<GroupRules />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
-          ruleModeState={['$and', jest.fn()]}
+          ruleModeState={['$and', vi.fn()]}
           rulesState={[
             [{
               name: 'LTE',
@@ -163,7 +162,7 @@ describe('<GroupRules />', () => {
               operandCount: 1,
               mapsTo: 'props'
             }],
-            jest.fn()
+            vi.fn()
           ]}
         />
       </KitchenSink>
@@ -176,12 +175,12 @@ describe('<GroupRules />', () => {
   })
 
   it('should add rules', async () => {
-    const changeMock = jest.fn()
+    const changeMock = vi.fn()
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
-          ruleModeState={['$and', jest.fn()]}
+          ruleModeState={['$and', vi.fn()]}
           rulesState={[
             [],
             changeMock
@@ -190,7 +189,7 @@ describe('<GroupRules />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(await screen.findByText('Add filter'))
+    await userEvent.click(await screen.findByText('Add filter'))
 
     expect(getLatestChange(changeMock)([])).toStrictEqual([{
       name: 'EQUALS',
@@ -204,7 +203,7 @@ describe('<GroupRules />', () => {
   })
 
   it('should delete rules', async () => {
-    const changeMock = jest.fn()
+    const changeMock = vi.fn()
 
     const rules = [
       {
@@ -236,7 +235,7 @@ describe('<GroupRules />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
-          ruleModeState={['$and', jest.fn()]}
+          ruleModeState={['$and', vi.fn()]}
           rulesState={[
             rules,
             changeMock
@@ -245,13 +244,13 @@ describe('<GroupRules />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(await screen.findByLabelText('Delete rule 1'))
+    await userEvent.click(await screen.findByLabelText('Delete rule 1'))
 
     expect(getLatestChange(changeMock)(rules)).toStrictEqual([rules[1]])
   })
 
   it('should update operands', async () => {
-    const changeMock = jest.fn()
+    const changeMock = vi.fn()
 
     const initialRule = {
       name: 'LT',
@@ -280,7 +279,7 @@ describe('<GroupRules />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
-          ruleModeState={['$and', jest.fn()]}
+          ruleModeState={['$and', vi.fn()]}
           rulesState={[
             [initialRule, irrelevantRule],
             changeMock
@@ -289,7 +288,7 @@ describe('<GroupRules />', () => {
       </KitchenSink>
     )
 
-    userEvent.type(await screen.findByDisplayValue('5'), '6')
+    await userEvent.type(await screen.findByDisplayValue('5'), '6')
 
     expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
       name: 'LT',
@@ -306,7 +305,7 @@ describe('<GroupRules />', () => {
   })
 
   it('should update rule names', async () => {
-    const changeMock = jest.fn()
+    const changeMock = vi.fn()
 
     const initialRule = {
       name: 'LT',
@@ -335,7 +334,7 @@ describe('<GroupRules />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
-          ruleModeState={['$and', jest.fn()]}
+          ruleModeState={['$and', vi.fn()]}
           rulesState={[
             [initialRule, irrelevantRule],
             changeMock
@@ -344,8 +343,8 @@ describe('<GroupRules />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(await screen.findByText('is less than'))
-    userEvent.click(await screen.findByText('is greater than'))
+    await userEvent.click(await screen.findByText('is less than'))
+    await userEvent.click(await screen.findByText('is greater than'))
 
     expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
       name: 'GT',
@@ -362,7 +361,7 @@ describe('<GroupRules />', () => {
   })
 
   it('should update rule mode to $or', async () => {
-    const changeMock = jest.fn()
+    const changeMock = vi.fn()
 
     const rules = [
       {
@@ -397,20 +396,20 @@ describe('<GroupRules />', () => {
           ruleModeState={['$and', changeMock]}
           rulesState={[
             rules,
-            jest.fn()
+            vi.fn()
           ]}
         />
       </KitchenSink>
     )
 
-    userEvent.click(await screen.findByText('and'))
-    userEvent.click(await screen.findByText('or'))
+    await userEvent.click(await screen.findByText('and'))
+    await userEvent.click(await screen.findByText('or'))
 
     expect(changeMock).toHaveBeenCalledWith('$or')
   })
 
   it('should update rule mode to $and', async () => {
-    const changeMock = jest.fn()
+    const changeMock = vi.fn()
 
     const rules = [
       {
@@ -445,20 +444,20 @@ describe('<GroupRules />', () => {
           ruleModeState={['$or', changeMock]}
           rulesState={[
             rules,
-            jest.fn()
+            vi.fn()
           ]}
         />
       </KitchenSink>
     )
 
-    userEvent.click(await screen.findByText('or'))
-    userEvent.click(await screen.findByText('and'))
+    await userEvent.click(await screen.findByText('or'))
+    await userEvent.click(await screen.findByText('and'))
 
     expect(changeMock).toHaveBeenCalledWith('$and')
   })
 
   it('should update fields', async () => {
-    const changeMock = jest.fn()
+    const changeMock = vi.fn()
 
     const initialRule = {
       name: 'LT',
@@ -487,7 +486,7 @@ describe('<GroupRules />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
-          ruleModeState={['$and', jest.fn()]}
+          ruleModeState={['$and', vi.fn()]}
           rulesState={[
             [initialRule, irrelevantRule],
             changeMock
@@ -496,8 +495,8 @@ describe('<GroupRules />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(await screen.findByText('first login'))
-    userEvent.click(await screen.findByText('latest login'))
+    await userEvent.click(await screen.findByText('first login'))
+    await userEvent.click(await screen.findByText('latest login'))
 
     expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
       name: 'EQUALS',
@@ -514,7 +513,7 @@ describe('<GroupRules />', () => {
   })
 
   it('should update prop key names', async () => {
-    const changeMock = jest.fn()
+    const changeMock = vi.fn()
 
     const initialRule = {
       name: 'SET',
@@ -543,7 +542,7 @@ describe('<GroupRules />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
-          ruleModeState={['$and', jest.fn()]}
+          ruleModeState={['$and', vi.fn()]}
           rulesState={[
             [initialRule, irrelevantRule],
             changeMock
@@ -552,7 +551,7 @@ describe('<GroupRules />', () => {
       </KitchenSink>
     )
 
-    userEvent.type(await screen.findByDisplayValue('hasLoggedIn'), '1')
+    await userEvent.type(await screen.findByDisplayValue('hasLoggedIn'), '1')
 
     expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
       name: 'SET',
@@ -567,7 +566,7 @@ describe('<GroupRules />', () => {
   })
 
   it('should update the cast type', async () => {
-    const changeMock = jest.fn()
+    const changeMock = vi.fn()
 
     const initialRule = {
       name: 'SET',
@@ -594,7 +593,7 @@ describe('<GroupRules />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
-          ruleModeState={['$and', jest.fn()]}
+          ruleModeState={['$and', vi.fn()]}
           rulesState={[
             [initialRule, irrelevantRule],
             changeMock
@@ -603,8 +602,8 @@ describe('<GroupRules />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(await screen.findByText('text'))
-    userEvent.click(await screen.findByText('number'))
+    await userEvent.click(await screen.findByText('text'))
+    await userEvent.click(await screen.findByText('number'))
 
     expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
       name: 'SET',
@@ -618,7 +617,7 @@ describe('<GroupRules />', () => {
   })
 
   it('should select meta props', async () => {
-    const changeMock = jest.fn()
+    const changeMock = vi.fn()
 
     const initialRule = {
       name: 'LT',
@@ -647,7 +646,7 @@ describe('<GroupRules />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
-          ruleModeState={['$and', jest.fn()]}
+          ruleModeState={['$and', vi.fn()]}
           rulesState={[
             [initialRule, irrelevantRule],
             changeMock
@@ -656,8 +655,8 @@ describe('<GroupRules />', () => {
       </KitchenSink>
     )
 
-    userEvent.click(await screen.findByText('first login'))
-    userEvent.click(await screen.findByText('window mode'))
+    await userEvent.click(await screen.findByText('first login'))
+    await userEvent.click(await screen.findByText('window mode'))
 
     expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
       name: 'EQUALS',
@@ -675,13 +674,13 @@ describe('<GroupRules />', () => {
 
   it('should render errors', async () => {
     axiosMock.reset()
-    axiosMock.onGet('http://talo.test/games/1/player-groups/rules').networkErrorOnce()
+    axiosMock.onGet('http://talo.api/games/1/player-groups/rules').networkErrorOnce()
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
-          ruleModeState={['$and', jest.fn()]}
-          rulesState={[[], jest.fn()]}
+          ruleModeState={['$and', vi.fn()]}
+          rulesState={[[], vi.fn()]}
         />
       </KitchenSink>
     )

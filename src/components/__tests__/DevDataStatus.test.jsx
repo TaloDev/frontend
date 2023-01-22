@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
 import devDataState from '../../state/devDataState'
 import DevDataStatus from '../DevDataStatus'

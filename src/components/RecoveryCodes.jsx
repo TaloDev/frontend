@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { IconCheck, IconCopy, IconDownload } from '@tabler/icons'
 import Button from './Button'
@@ -40,7 +40,7 @@ function RecoveryCodes({ codes, showCreateButton, withBackground }) {
 
   const Container = withBackground
     ? ({ children }) => <div className='bg-gray-900 p-4 rounded space-y-4'>{children}</div>
-    : ({ children }) => <React.Fragment>{children}</React.Fragment>
+    : ({ children }) => <>{children}</>
 
   return (
     <Container>

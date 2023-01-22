@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import TextInput from './TextInput'
 import Tippy from '@tippyjs/react'
@@ -39,7 +39,6 @@ export default function DateInput({ id, value, onChange }) {
             id={id}
             variant='modal'
             containerClassName='w-28'
-            onChange={() => {}}
             value={format(date, 'dd MMM Y')}
             inputExtra={{
               onFocus: () => setOpen(true)

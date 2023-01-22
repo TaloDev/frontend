@@ -1,4 +1,4 @@
-import React, { lazy } from 'react'
+import { lazy } from 'react'
 import PropTypes from 'prop-types'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
