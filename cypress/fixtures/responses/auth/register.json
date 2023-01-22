@@ -1,0 +1,11 @@
+{
+  "accessToken": "ey...",
+  "user": {
+    "id": 1,
+    "type": 2,
+    "username": "sleepy",
+    "organisation": {
+      "games": []
+    }
+  }
+}
