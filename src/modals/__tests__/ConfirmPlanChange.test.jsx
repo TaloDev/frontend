@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import ConfirmPlanChange from '../ConfirmPlanChange'
@@ -78,8 +77,7 @@ describe('<ConfirmPlanChange />', () => {
     axiosMock.onPost('http://talo.test/billing/confirm-plan').replyOnce(replyMock)
 
     const reloadMock = vi.fn()
-    delete window.location
-    window.location = { reload: reloadMock }
+    vi.stubGlobal('location', { reload: reloadMock })
 
     render(
       <ConfirmPlanChange
@@ -110,8 +108,7 @@ describe('<ConfirmPlanChange />', () => {
     axiosMock.onPost('http://talo.test/billing/confirm-plan').replyOnce(400)
 
     const reloadMock = vi.fn()
-    delete window.location
-    window.location = { reload: reloadMock }
+    vi.stubGlobal('location', { reload: reloadMock })
 
     render(
       <ConfirmPlanChange

@@ -8,7 +8,8 @@ const userTypes = {
 export const userTypeMap = {
   [userTypes.OWNER]: 'Owner',
   [userTypes.ADMIN]: 'Admin',
-  [userTypes.DEV]: 'Dev'
+  [userTypes.DEV]: 'Dev',
+  [userTypes.DEMO]: 'Demo'
 }
 
 export default userTypes

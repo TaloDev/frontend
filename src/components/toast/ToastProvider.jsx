@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { AnimatePresence, motion } from 'framer-motion'
 import ToastContext from './ToastContext'
 import { IconCheck } from '@tabler/icons'
 import { useEffect } from 'react'
 
-export default function ToastProvider({ children }) {
+export default function ToastProvider({ children, lifetime }) {
   const [text, setText] = useState('')
   const [type, setType] = useState('')
   const [show, setShow] = useState(false)
@@ -33,7 +33,7 @@ export default function ToastProvider({ children }) {
 
     const id = setTimeout(() => {
       setShow(false)
-    }, 2000)
+    }, lifetime)
     setTimeoutId(id)
   }, [])
 
@@ -86,5 +86,11 @@ export default function ToastProvider({ children }) {
 }
 
 ToastProvider.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  lifetime: PropTypes.number
 }
+
+ToastProvider.defaultProps = {
+  lifetime: 2000
+}
+

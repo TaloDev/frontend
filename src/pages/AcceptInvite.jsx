@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Loading from '../components/Loading'
 import Link from '../components/Link'
 import ErrorMessage from '../components/ErrorMessage'
@@ -8,7 +8,7 @@ import getInvite from '../api/getInvite'
 import { useParams, useNavigate } from 'react-router-dom'
 import routes from '../constants/routes'
 
-const AcceptInvite = () => {
+export default function AcceptInvite() {
   const { token } = useParams()
 
   const [error, setError] = useState(null)
@@ -54,5 +54,3 @@ const AcceptInvite = () => {
     </div>
   )
 }
-
-export default AcceptInvite

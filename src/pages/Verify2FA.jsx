@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import { useSetRecoilState } from 'recoil'
@@ -13,7 +13,7 @@ import Title from '../components/Title'
 import verify2FA from '../api/verify2FA'
 import Link from '../components/Link'
 
-const Verify2FA = () => {
+export default function Verify2FA() {
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -87,16 +87,13 @@ const Verify2FA = () => {
         <p className='mt-4 text-white'>
           <span>Or, </span>
           <Link
-            to={{
-              pathname: routes.recover,
-              state: { userId }
-            }}>
-              use a recovery code
+            to={routes.recover}
+            state={{ userId }}
+          >
+            use a recovery code
           </Link>
         </p>
       </div>
     </div>
   )
 }
-
-export default Verify2FA

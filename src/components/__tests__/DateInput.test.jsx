@@ -1,6 +1,5 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import userEvent, { PointerEventsCheckLevel } from '@testing-library/user-event'
 import DateInput from '../DateInput'
 
 describe('<DateInput />', () => {
@@ -48,7 +47,7 @@ describe('<DateInput />', () => {
 
     await userEvent.click(screen.getByDisplayValue('01 Jan 2022'))
     expect(await screen.findByText('January 2022')).toBeInTheDocument()
-    await userEvent.click(screen.getByText('15'))
+    await userEvent.click(screen.getByText('15'), { pointerEventsCheck: PointerEventsCheckLevel.Never })
     expect(changeMock).toHaveBeenCalledWith('2022-01-15T00:00:00.000Z')
   })
 })

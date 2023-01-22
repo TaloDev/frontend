@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Page from '../components/Page'
 import ErrorMessage from '../components/ErrorMessage'
 import SecondaryNav from '../components/SecondaryNav'
@@ -14,10 +14,13 @@ import { format } from 'date-fns'
 import { IconAlertCircle } from '@tabler/icons'
 import Loading from '../components/Loading'
 import SecondaryTitle from '../components/SecondaryTitle'
+import usePricingPlanUsage from '../api/usePricingPlanUsage'
 
 export default function Billing() {
   const { plan: orgPlan, loading: orgPlanLoading, error: orgPlanError } = useOrganisationPricingPlan()
   const { plans, loading: allPlansLoading, error: allPlansError } = usePricingPlans()
+  const { usage, loading: usageLoading, error: usageError } = usePricingPlanUsage()
+
   const [yearlyPricing, setYearlyPricing] = useState(false)
 
   const [planLoading, setPlanLoading] = useState(null)
@@ -26,7 +29,7 @@ export default function Billing() {
   const currentPlanPrice = currentPlan?.prices.find((price) => price.current) ?? currentPlan?.prices[0]
   const otherPlans = plans.filter((plan) => plan.id !== orgPlan.pricingPlan?.id)
 
-  if (orgPlanLoading || allPlansLoading) {
+  if (orgPlanLoading || allPlansLoading || usageLoading) {
     return (
       <div className='flex items-center justify-center'>
         <Loading />
@@ -74,7 +77,7 @@ export default function Billing() {
               </li>
             }
 
-            <BillingUsageTile />
+            <BillingUsageTile usage={usage} usageError={usageError} />
 
             {orgPlan.canViewBillingPortal &&
               <BillingPortalTile />

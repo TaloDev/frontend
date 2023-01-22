@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import Modal from '../components/Modal'
 import Button from '../components/Button'
@@ -10,7 +10,7 @@ import { USD } from '@dinero.js/currencies'
 import { groupBy } from 'lodash-es'
 import { format } from 'date-fns'
 
-const ConfirmPlanChange = ({ modalState, plan, pricingInterval, invoice }) => {
+export default function ConfirmPlanChange({ modalState, plan, pricingInterval, invoice }) {
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -26,7 +26,7 @@ const ConfirmPlanChange = ({ modalState, plan, pricingInterval, invoice }) => {
       await confirmPlan(prorationDate, plan.id, pricingInterval)
       setTimeout(() => {
         window.location.reload()
-      }, 1000)
+      }, 500)
     } catch (err) {
       if (err.response?.status === 400) {
         window.location.reload()
@@ -131,5 +131,3 @@ ConfirmPlanChange.propTypes = {
     collectionDate: PropTypes.number.isRequired
   }).isRequired
 }
-
-export default ConfirmPlanChange

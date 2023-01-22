@@ -1,23 +1,15 @@
-import React from 'react'
+import PropTypes from 'prop-types'
 import Tile from '../Tile'
 import ErrorMessage from '../ErrorMessage'
-import usePricingPlanUsage from '../../api/usePricingPlanUsage'
-import Loading from '../Loading'
 import pricingPlanActionTypes from '../../constants/pricingPlanActionTypes'
 import classNames from 'classnames'
 
-export default function BillingUsageTile() {
-  const { usage, loading: usageLoading, error: usageError } = usePricingPlanUsage()
-
+export default function BillingUsageTile({ usage, usageError }) {
   return (
     <li>
       <Tile
         header={<h2 className='text-xl font-semibold'>Usage</h2>}
-        content={usageLoading ? (
-          <div className='w-full flex justify-center'>
-            <Loading size={24} thickness={180} />
-          </div>
-        ) : (
+        content={
           <>
             {!usageError &&
               <ul className='w-full space-y-2'>
@@ -42,7 +34,7 @@ export default function BillingUsageTile() {
               </ul>
             }
           </>
-        )}
+        }
         footer={(
           <>
             {usageError &&
@@ -53,4 +45,9 @@ export default function BillingUsageTile() {
       />
     </li>
   )
+}
+
+BillingUsageTile.propTypes = {
+  usage: PropTypes.object.isRequired,
+  usageError: PropTypes.object
 }

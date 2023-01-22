@@ -1,8 +1,7 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { SpinnerCircularFixed } from 'spinners-react'
 
-const Loading = (props) => {
+export default function Loading(props) {
   return (
     <span data-testid='loading'>
       <SpinnerCircularFixed
@@ -25,5 +24,3 @@ Loading.defaultProps = {
   size: 80,
   thickness: 160
 }
-
-export default Loading
