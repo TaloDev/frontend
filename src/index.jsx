@@ -1,4 +1,5 @@
-import React, { createRoot } from 'react-dom/client'
+import React from 'react'
+import { createRoot } from 'react-dom/client'
 import './styles/index.css'
 import 'tippy.js/dist/tippy.css'
 import 'react-day-picker/dist/style.css'
