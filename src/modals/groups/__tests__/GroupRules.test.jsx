@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import api from '../../../api/api'
@@ -14,7 +13,7 @@ function getLatestChange(changeMock) {
 describe('<GroupRules />', () => {
   const axiosMock = new MockAdapter(api)
   const activeGameValue = { id: 1, name: 'Shattered' }
-  axiosMock.onGet('http://talo.test/games/1/player-groups/rules').reply(200, {
+  axiosMock.onGet('http://talo.api/games/1/player-groups/rules').reply(200, {
     'availableRules': [
       {
         name: 'EQUALS',
@@ -675,7 +674,7 @@ describe('<GroupRules />', () => {
 
   it('should render errors', async () => {
     axiosMock.reset()
-    axiosMock.onGet('http://talo.test/games/1/player-groups/rules').networkErrorOnce()
+    axiosMock.onGet('http://talo.api/games/1/player-groups/rules').networkErrorOnce()
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>

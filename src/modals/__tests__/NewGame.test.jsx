@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import NewGame from '../NewGame'
@@ -11,7 +10,7 @@ describe('<NewGame />', () => {
   const axiosMock = new MockAdapter(api)
 
   it('should create a game', async () => {
-    axiosMock.onPost('http://talo.test/games').replyOnce(200, { game: { id: 1, name: 'Shattered' } })
+    axiosMock.onPost('http://talo.api/games').replyOnce(200, { game: { id: 1, name: 'Shattered' } })
 
     const closeMock = vi.fn()
     const userChangeMock = vi.fn()
@@ -38,7 +37,7 @@ describe('<NewGame />', () => {
   })
 
   it('should handle creation errors', async () => {
-    axiosMock.onPost('http://talo.test/games').networkErrorOnce()
+    axiosMock.onPost('http://talo.api/games').networkErrorOnce()
 
     const closeMock = vi.fn()
     const userChangeMock = vi.fn()

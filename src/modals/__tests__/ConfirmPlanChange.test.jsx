@@ -74,7 +74,7 @@ describe('<ConfirmPlanChange />', () => {
 
   it('should reload the page on success', async () => {
     const replyMock = vi.fn(() => [200])
-    axiosMock.onPost('http://talo.test/billing/confirm-plan').replyOnce(replyMock)
+    axiosMock.onPost('http://talo.api/billing/confirm-plan').replyOnce(replyMock)
 
     const reloadMock = vi.fn()
     vi.stubGlobal('location', { reload: reloadMock })
@@ -105,7 +105,7 @@ describe('<ConfirmPlanChange />', () => {
   })
 
   it('should reload the page on receiving a 400', async () => {
-    axiosMock.onPost('http://talo.test/billing/confirm-plan').replyOnce(400)
+    axiosMock.onPost('http://talo.api/billing/confirm-plan').replyOnce(400)
 
     const reloadMock = vi.fn()
     vi.stubGlobal('location', { reload: reloadMock })
@@ -132,7 +132,7 @@ describe('<ConfirmPlanChange />', () => {
   })
 
   it('should render an error if the status code was not a 200 or 400', async () => {
-    axiosMock.onPost('http://talo.test/billing/confirm-plan').replyOnce(403)
+    axiosMock.onPost('http://talo.api/billing/confirm-plan').replyOnce(403)
 
     render(
       <ConfirmPlanChange

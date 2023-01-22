@@ -25,7 +25,7 @@ describe('<Register />', () => {
 
     const changeMock = vi.fn()
 
-    axiosMock.onPost('http://talo.test/public/users/register').replyOnce(postMock)
+    axiosMock.onPost('http://talo.api/public/users/register').replyOnce(postMock)
 
     render(
       <KitchenSink states={[{ node: userState, onChange: changeMock }]}>
@@ -109,7 +109,7 @@ describe('<Register />', () => {
 
     const changeMock = vi.fn()
 
-    axiosMock.onPost('http://talo.test/public/users/register').replyOnce(postMock)
+    axiosMock.onPost('http://talo.api/public/users/register').replyOnce(postMock)
 
     render(
       <KitchenSink
@@ -156,7 +156,7 @@ describe('<Register />', () => {
 
 
   it('should render registration errors', async () => {
-    axiosMock.onPost('http://talo.test/public/users/register').networkErrorOnce()
+    axiosMock.onPost('http://talo.api/public/users/register').networkErrorOnce()
 
     render(
       <KitchenSink>

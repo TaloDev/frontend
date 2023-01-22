@@ -9,7 +9,7 @@ import Link from '../Link'
 
 describe('<ConfirmEmailBanner />', () => {
   const axiosMock = new MockAdapter(api)
-  axiosMock.onPost('http://talo.test/users/confirm_email').reply(200, { user: { emailConfirmed: true } })
+  axiosMock.onPost('http://talo.api/users/confirm_email').reply(200, { user: { emailConfirmed: true } })
 
   it('should render if the user hasn\'t confirmed their email', () => {
     render(
@@ -41,7 +41,7 @@ describe('<ConfirmEmailBanner />', () => {
   })
 
   it('should render errors', async () => {
-    axiosMock.onPost('http://talo.test/users/confirm_email').networkError()
+    axiosMock.onPost('http://talo.api/users/confirm_email').networkError()
 
     render(
       <KitchenSink states={[{ node: userState, initialValue: {} }]}>

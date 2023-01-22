@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import api from '../../api/api'
@@ -12,7 +11,7 @@ describe('<IntegrationDetails />', () => {
   const axiosMock = new MockAdapter(api)
 
   it('should enable a steamworks integration', async () => {
-    axiosMock.onPost('http://talo.test/games/1/integrations').replyOnce(200, { integration: { id: 1 } })
+    axiosMock.onPost('http://talo.api/games/1/integrations').replyOnce(200, { integration: { id: 1 } })
 
     const closeMock = vi.fn()
     const mutateMock = vi.fn()
@@ -54,7 +53,7 @@ describe('<IntegrationDetails />', () => {
   })
 
   it('should handle enabling errors', async () => {
-    axiosMock.onPost('http://talo.test/games/1/integrations').networkErrorOnce()
+    axiosMock.onPost('http://talo.api/games/1/integrations').networkErrorOnce()
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
@@ -152,7 +151,7 @@ describe('<IntegrationDetails />', () => {
   })
 
   it('should disable an enabled steamworks integration', async () => {
-    axiosMock.onDelete('http://talo.test/games/1/integrations/1').replyOnce(204)
+    axiosMock.onDelete('http://talo.api/games/1/integrations/1').replyOnce(204)
 
     const closeMock = vi.fn()
     const mutateMock = vi.fn()
@@ -194,7 +193,7 @@ describe('<IntegrationDetails />', () => {
   })
 
   it('should handle disabling errors', async () => {
-    axiosMock.onDelete('http://talo.test/games/1/integrations/1').networkErrorOnce()
+    axiosMock.onDelete('http://talo.api/games/1/integrations/1').networkErrorOnce()
 
     const closeMock = vi.fn()
     const mutateMock = vi.fn()
@@ -224,7 +223,7 @@ describe('<IntegrationDetails />', () => {
   })
 
   it('should update the steamworks integration api key', async () => {
-    axiosMock.onPatch('http://talo.test/games/1/integrations/1').replyOnce(200, { integration: { id: 1 } })
+    axiosMock.onPatch('http://talo.api/games/1/integrations/1').replyOnce(200, { integration: { id: 1 } })
 
     const mutateMock = vi.fn()
 
@@ -263,7 +262,7 @@ describe('<IntegrationDetails />', () => {
   })
 
   it('should update the steamworks integration app id', async () => {
-    axiosMock.onPatch('http://talo.test/games/1/integrations/1').replyOnce(200, { integration: { id: 1, config: { appId: '375299' } } })
+    axiosMock.onPatch('http://talo.api/games/1/integrations/1').replyOnce(200, { integration: { id: 1, config: { appId: '375299' } } })
 
     const mutateMock = vi.fn()
 
@@ -303,7 +302,7 @@ describe('<IntegrationDetails />', () => {
   })
 
   it('should update the steamworks integration leaderboard syncing', async () => {
-    axiosMock.onPatch('http://talo.test/games/1/integrations/1').replyOnce(200, { integration: { id: 1, config: { syncLeaderboards: false } } })
+    axiosMock.onPatch('http://talo.api/games/1/integrations/1').replyOnce(200, { integration: { id: 1, config: { syncLeaderboards: false } } })
 
     const mutateMock = vi.fn()
 
@@ -342,7 +341,7 @@ describe('<IntegrationDetails />', () => {
   })
 
   it('should update the steamworks integration stat syncing', async () => {
-    axiosMock.onPatch('http://talo.test/games/1/integrations/1').replyOnce(200, { integration: { id: 1, config: { syncStats: true } } })
+    axiosMock.onPatch('http://talo.api/games/1/integrations/1').replyOnce(200, { integration: { id: 1, config: { syncStats: true } } })
 
     const mutateMock = vi.fn()
 
@@ -381,7 +380,7 @@ describe('<IntegrationDetails />', () => {
   })
 
   it('should handle updating errors', async () => {
-    axiosMock.onPatch('http://talo.test/games/1/integrations/1').networkErrorOnce()
+    axiosMock.onPatch('http://talo.api/games/1/integrations/1').networkErrorOnce()
 
     const mutateMock = vi.fn()
 

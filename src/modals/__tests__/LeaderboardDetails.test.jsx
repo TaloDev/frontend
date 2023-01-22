@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import LeaderboardDetails from '../LeaderboardDetails'
@@ -14,7 +13,7 @@ describe('<LeaderboardDetails />', () => {
   const activeGameValue = { id: 1, name: 'Shattered' }
 
   it('should create a leaderboard', async () => {
-    axiosMock.onPost('http://talo.test/games/1/leaderboards').replyOnce(200, { leaderboard: { id: 4 } })
+    axiosMock.onPost('http://talo.api/games/1/leaderboards').replyOnce(200, { leaderboard: { id: 4 } })
 
     const closeMock = vi.fn()
     const mutateMock = vi.fn()
@@ -58,7 +57,7 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should handle creation errors', async () => {
-    axiosMock.onPost('http://talo.test/games/1/leaderboards').networkErrorOnce()
+    axiosMock.onPost('http://talo.api/games/1/leaderboards').networkErrorOnce()
 
     const closeMock = vi.fn()
 
@@ -137,7 +136,7 @@ describe('<LeaderboardDetails />', () => {
       unique: false
     }
 
-    axiosMock.onPut('http://talo.test/games/1/leaderboards/1').replyOnce(200, {
+    axiosMock.onPut('http://talo.api/games/1/leaderboards/1').replyOnce(200, {
       leaderboard: {
         ...initialLeaderboard, unique: true
       }
@@ -172,7 +171,7 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should handle updating errors', async () => {
-    axiosMock.onPut('http://talo.test/games/1/leaderboards/1').networkErrorOnce()
+    axiosMock.onPut('http://talo.api/games/1/leaderboards/1').networkErrorOnce()
 
     const closeMock = vi.fn()
 
@@ -214,7 +213,7 @@ describe('<LeaderboardDetails />', () => {
       unique: false
     }
 
-    axiosMock.onDelete('http://talo.test/games/1/leaderboards/1').replyOnce(200)
+    axiosMock.onDelete('http://talo.api/games/1/leaderboards/1').replyOnce(200)
     window.confirm = vi.fn(() => true)
 
     render(
@@ -270,7 +269,7 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should handle deleting errors', async () => {
-    axiosMock.onDelete('http://talo.test/games/1/leaderboards/1').networkErrorOnce()
+    axiosMock.onDelete('http://talo.api/games/1/leaderboards/1').networkErrorOnce()
 
     const closeMock = vi.fn()
 

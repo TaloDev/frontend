@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, within } from '@testing-library/react'
 import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
@@ -28,7 +27,7 @@ describe('<NavBar />', () => {
   })
 
   it('should log users out', async () => {
-    axiosMock.onPost('http://talo.test/users/logout').replyOnce(200)
+    axiosMock.onPost('http://talo.api/users/logout').replyOnce(200)
 
     render(
       <KitchenSink states={[{ node: activeGameState }]}>
@@ -44,7 +43,7 @@ describe('<NavBar />', () => {
   })
 
   it('should reload after logging out even if there is an error', async () => {
-    axiosMock.onPost('http://talo.test/users/logout').networkErrorOnce()
+    axiosMock.onPost('http://talo.api/users/logout').networkErrorOnce()
 
     render(
       <KitchenSink states={[{ node: activeGameState }]}>

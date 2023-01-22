@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
 import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
@@ -12,7 +11,7 @@ describe('<Integrations />', () => {
   const axiosMock = new MockAdapter(api)
 
   it('should render the not-enabled state for the steamworks integration', async () => {
-    axiosMock.onGet('http://talo.test/games/1/integrations').replyOnce(200, { integrations: [] })
+    axiosMock.onGet('http://talo.api/games/1/integrations').replyOnce(200, { integrations: [] })
 
     render(
       <KitchenSink states={[
@@ -31,7 +30,7 @@ describe('<Integrations />', () => {
   })
 
   it('should render the enabled state for the steamworks integration', async () => {
-    axiosMock.onGet('http://talo.test/games/1/integrations').replyOnce(200, {
+    axiosMock.onGet('http://talo.api/games/1/integrations').replyOnce(200, {
       integrations: [{
         id: 1,
         type: 'steamworks',
@@ -65,7 +64,7 @@ describe('<Integrations />', () => {
   })
 
   it('should render the error state', async () => {
-    axiosMock.onGet('http://talo.test/games/1/integrations').networkErrorOnce()
+    axiosMock.onGet('http://talo.api/games/1/integrations').networkErrorOnce()
 
     render(
       <KitchenSink states={[
@@ -85,7 +84,7 @@ describe('<Integrations />', () => {
     [true, false],
     [true, true]
   ])('should handle steamworks syncing when leaderboard syncing is %p and stat syncing is %p', async (syncLeaderboards, syncStats) => {
-    axiosMock.onGet('http://talo.test/games/1/integrations').replyOnce(200, {
+    axiosMock.onGet('http://talo.api/games/1/integrations').replyOnce(200, {
       integrations: [{
         id: 1,
         type: 'steamworks',
@@ -99,8 +98,8 @@ describe('<Integrations />', () => {
       }]
     })
 
-    if (syncLeaderboards) axiosMock.onPost('http://talo.test/games/1/integrations/1/sync-leaderboards').replyOnce(204)
-    if (syncStats) axiosMock.onPost('http://talo.test/games/1/integrations/1/sync-stats').replyOnce(204)
+    if (syncLeaderboards) axiosMock.onPost('http://talo.api/games/1/integrations/1/sync-leaderboards').replyOnce(204)
+    if (syncStats) axiosMock.onPost('http://talo.api/games/1/integrations/1/sync-stats').replyOnce(204)
 
     render(
       <KitchenSink states={[
@@ -125,7 +124,7 @@ describe('<Integrations />', () => {
   })
 
   it('should handle steamworks leaderboards syncing errors', async () => {
-    axiosMock.onGet('http://talo.test/games/1/integrations').replyOnce(200, {
+    axiosMock.onGet('http://talo.api/games/1/integrations').replyOnce(200, {
       integrations: [{
         id: 1,
         type: 'steamworks',
@@ -139,7 +138,7 @@ describe('<Integrations />', () => {
       }]
     })
 
-    axiosMock.onPost('http://talo.test/games/1/integrations/1/sync-leaderboards').networkErrorOnce()
+    axiosMock.onPost('http://talo.api/games/1/integrations/1/sync-leaderboards').networkErrorOnce()
 
     render(
       <KitchenSink states={[
@@ -155,7 +154,7 @@ describe('<Integrations />', () => {
   })
 
   it('should handle steamworks stats syncing errors', async () => {
-    axiosMock.onGet('http://talo.test/games/1/integrations').replyOnce(200, {
+    axiosMock.onGet('http://talo.api/games/1/integrations').replyOnce(200, {
       integrations: [{
         id: 1,
         type: 'steamworks',
@@ -169,7 +168,7 @@ describe('<Integrations />', () => {
       }]
     })
 
-    axiosMock.onPost('http://talo.test/games/1/integrations/1/sync-stats').networkErrorOnce()
+    axiosMock.onPost('http://talo.api/games/1/integrations/1/sync-stats').networkErrorOnce()
 
     render(
       <KitchenSink states={[

@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import GroupDetails from '../GroupDetails'
@@ -15,7 +14,7 @@ describe('<GroupDetails />', () => {
   axiosMock.onGet(/(.*)preview-count(.*)/).reply(200, { count: 8 })
 
   it('should create a group', async () => {
-    axiosMock.onPost('http://talo.test/games/1/player-groups').replyOnce(200, { group: { id: 2 } })
+    axiosMock.onPost('http://talo.api/games/1/player-groups').replyOnce(200, { group: { id: 2 } })
 
     const closeMock = vi.fn()
     const mutateMock = vi.fn()
@@ -54,7 +53,7 @@ describe('<GroupDetails />', () => {
   })
 
   it('should handle creation errors', async () => {
-    axiosMock.onPost('http://talo.test/games/1/player-groups').networkErrorOnce()
+    axiosMock.onPost('http://talo.api/games/1/player-groups').networkErrorOnce()
 
     const closeMock = vi.fn()
 
@@ -139,7 +138,7 @@ describe('<GroupDetails />', () => {
       ruleMode: '$and'
     }
 
-    axiosMock.onPut('http://talo.test/games/1/player-groups/1').replyOnce(200, {
+    axiosMock.onPut('http://talo.api/games/1/player-groups/1').replyOnce(200, {
       group: {
         ...initialGroup, name: 'High level winners'
       }
@@ -176,7 +175,7 @@ describe('<GroupDetails />', () => {
   })
 
   it('should handle updating errors', async () => {
-    axiosMock.onPut('http://talo.test/games/1/player-groups/1').networkErrorOnce()
+    axiosMock.onPut('http://talo.api/games/1/player-groups/1').networkErrorOnce()
 
     const closeMock = vi.fn()
 
@@ -219,7 +218,7 @@ describe('<GroupDetails />', () => {
       ruleMode: '$and'
     }
 
-    axiosMock.onDelete('http://talo.test/games/1/player-groups/1').replyOnce(200)
+    axiosMock.onDelete('http://talo.api/games/1/player-groups/1').replyOnce(200)
     window.confirm = vi.fn(() => true)
 
     render(
@@ -275,7 +274,7 @@ describe('<GroupDetails />', () => {
   })
 
   it('should handle deleting errors', async () => {
-    axiosMock.onDelete('http://talo.test/games/1/player-groups/1').networkErrorOnce()
+    axiosMock.onDelete('http://talo.api/games/1/player-groups/1').networkErrorOnce()
 
     const closeMock = vi.fn()
 

@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import api from '../../../api/api'
 import MockAdapter from 'axios-mock-adapter'
@@ -168,7 +167,7 @@ describe('<PricingPlanTile />', () => {
   })
 
   it('should redirect after clicking upgrade', async () => {
-    axiosMock.onPost('http://talo.test/billing/checkout-session').replyOnce(200, {
+    axiosMock.onPost('http://talo.api/billing/checkout-session').replyOnce(200, {
       redirect: 'http://stripe.com/portal'
     })
 
@@ -204,7 +203,7 @@ describe('<PricingPlanTile />', () => {
   })
 
   it('should render the confirm plan change modal if an invoice is returned after clicking upgrade', async () => {
-    axiosMock.onPost('http://talo.test/billing/checkout-session').replyOnce(200, {
+    axiosMock.onPost('http://talo.api/billing/checkout-session').replyOnce(200, {
       invoice: {
         lines: [],
         total: 13300,
@@ -243,7 +242,7 @@ describe('<PricingPlanTile />', () => {
   })
 
   it('should render the confirm plan change modal if an invoice is returned after clicking upgrade', async () => {
-    axiosMock.onPost('http://talo.test/billing/checkout-session').networkErrorOnce()
+    axiosMock.onPost('http://talo.api/billing/checkout-session').networkErrorOnce()
 
     const assignMock = vi.fn()
     delete window.location
