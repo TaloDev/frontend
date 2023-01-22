@@ -5,7 +5,7 @@ RUN yarn
 RUN yarn build
 
 FROM nginx:stable-alpine
-COPY --from=build /usr/frontend/build /bin/www
+COPY --from=build /usr/frontend/dist /bin/www
 COPY /config/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /usr/frontend/config/entrypoint.sh /bin
 

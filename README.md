@@ -16,7 +16,7 @@ You will also see any lint errors in the console.
 
 ### yarn build
 
-Builds a static copy of your site to the `build/` folder.
+Builds a static copy of your site to the `dist/` folder.
 
 ## Docker?
 
