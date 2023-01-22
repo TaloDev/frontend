@@ -1,10 +1,10 @@
 {
   "scripts": {
     "dev": "vite",
-    "dev:test": "vite --mode test",
+    "dev:e2e": "vite --mode e2e",
     "build": "vite build",
     "test": "vitest",
-    "test:e2e": "start-server-and-test dev:test http://localhost:8080 cypress:open",
+    "test:e2e": "start-server-and-test dev:e2e http://localhost:8080 cypress:open",
     "cypress:open": "cypress open",
     "prepare": "husky install",
     "lint": "eslint src/**/*.{js,jsx}"
