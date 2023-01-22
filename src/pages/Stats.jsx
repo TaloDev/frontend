@@ -1,6 +1,6 @@
 import { IconPlus } from '@tabler/icons'
 import { format } from 'date-fns'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import useStats from '../api/useStats'
 import Button from '../components/Button'

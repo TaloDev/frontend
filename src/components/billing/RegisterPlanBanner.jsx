@@ -1,5 +1,4 @@
 import { IconInfoCircle } from '@tabler/icons'
-import React from 'react'
 import AlertBanner from '../AlertBanner'
 import { capitalize } from 'lodash-es'
 

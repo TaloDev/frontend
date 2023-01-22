@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
 import activeGameState from '../state/activeGameState'
 import ErrorMessage from '../components/ErrorMessage'

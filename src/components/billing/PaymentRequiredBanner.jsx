@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import buildError from '../../utils/buildError'
 import Button from '../Button'
 import ErrorMessage from '../ErrorMessage'

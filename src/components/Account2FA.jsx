@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import confirmEnable2FA from '../api/confirmEnable2FA'
 import enable2FA from '../api/enable2FA'
 import ErrorMessage from '../components/ErrorMessage'

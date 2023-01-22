@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { focusStyle } from '../styles/theme'
 import classNames from 'classnames'
@@ -42,7 +42,7 @@ function TextInput(props) {
             className={inputClassName}
             type={props.type ?? 'text'}
             placeholder={props.placeholder}
-            onChange={(e) => props.onChange(e.target.value, e)}
+            onChange={(e) => props.onChange?.(e.target.value, e)}
             value={props.value}
             disabled={props.disabled}
             {...props.inputExtra}

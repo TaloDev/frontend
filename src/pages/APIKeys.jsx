@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import getAPIKeys from '../api/getAPIKeys'
 import activeGameState from '../state/activeGameState'

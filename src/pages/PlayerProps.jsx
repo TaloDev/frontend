@@ -1,4 +1,3 @@
-import React from 'react'
 import Page from '../components/Page'
 import updatePlayer from '../api/updatePlayer'
 import Loading from '../components/Loading'

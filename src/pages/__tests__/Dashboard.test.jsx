@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
 import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'

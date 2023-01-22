@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { focusStyle } from '../styles/theme'
 import Loading from './Loading'

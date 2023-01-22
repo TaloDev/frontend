@@ -1,5 +1,4 @@
 import classNames from 'classnames'
-import React from 'react'
 import { useRecoilValue } from 'recoil'
 import devDataState from '../state/devDataState'
 import SecondaryTitle from './SecondaryTitle'

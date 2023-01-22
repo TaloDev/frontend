@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import useEvents from '../../api/useEvents'
 import ErrorMessage from '../../components/ErrorMessage'

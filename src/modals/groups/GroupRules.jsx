@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { IconPlus, IconTrash } from '@tabler/icons'
 import Button from '../../components/Button'
