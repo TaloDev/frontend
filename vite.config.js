@@ -11,6 +11,16 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './setup-tests.js',
-    css: false
+    css: false,
+    coverage: {
+      provider: 'c8',
+      reporter: 'lcov',
+      exclude: [
+        'src/api',
+        'src/constants',
+        'src/utils/canViewPage.js',
+        '**/__tests__'
+      ]
+    }
   }
 })

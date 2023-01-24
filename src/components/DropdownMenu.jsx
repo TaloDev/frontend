@@ -12,7 +12,7 @@ export default function DropdownMenu({ options, children }) {
       <Tippy
         placement='bottom-start'
         visible={isOpen}
-        onClickOutside={/* istanbul ignore next */ () => setOpen(false)}
+        onClickOutside={/* c8 ignore next */ () => setOpen(false)}
         offset={[0, 8]}
         interactive={true}
         arrow={false}

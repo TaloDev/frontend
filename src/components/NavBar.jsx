@@ -18,7 +18,7 @@ const NavBar = () => {
 
   const onLogoutClick = async () => {
     try {
-      /* istanbul ignore next */
+      /* c8 ignore next */
       Sentry.configureScope((scope) => scope.setUser(null))
       setActiveGame(null)
       window.localStorage.removeItem('loggedOut')

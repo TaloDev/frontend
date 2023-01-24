@@ -38,8 +38,8 @@ export default function ToastProvider({ children, lifetime }) {
   }, [])
 
   const trigger = useCallback((text, type = '') => {
-    /* istanbul ignore if */
     // test shows the if working, coverage doesnt pick it up for some reason
+    /* c8 ignore start */
     if (show) {
       clearTimeout(timeoutId)
       setShow(false)
@@ -48,6 +48,7 @@ export default function ToastProvider({ children, lifetime }) {
         showToast(text, type)
       }, 200)
     } else {
+    /* c8 ignore stop */
       showToast(text, type)
     }
   }, [show, timeoutId])
