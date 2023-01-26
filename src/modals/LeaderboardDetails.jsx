@@ -80,7 +80,7 @@ const LeaderboardDetails = ({ modalState, mutate, editingLeaderboard }) => {
   }
 
   const onDeleteClick = async () => {
-    /* istanbul ignore if */
+    /* c8 ignore next */
     if (!window.confirm('Are you sure you want to delete this leaderboard?')) return
 
     setDeleting(true)

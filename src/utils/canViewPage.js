@@ -1,7 +1,6 @@
 import routes from '../constants/routes'
 import userTypes from '../constants/userTypes'
 
-/* istanbul ignore file */
 export default function canViewPage(user, route) {
   if (user.type === userTypes.OWNER) return true
 
