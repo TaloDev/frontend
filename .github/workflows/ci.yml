@@ -41,7 +41,7 @@ jobs:
           cache-key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
           install-command: yarn --prefer-offline
           start: yarn dev:e2e
-          wait-on: 'http://[::1]:8080'
+          wait-on: 'http://127.0.0.1:8080'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
