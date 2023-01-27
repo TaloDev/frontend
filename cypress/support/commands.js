@@ -24,7 +24,7 @@ Cypress.Commands.add('visitAsGuest', (url = '/') => {
   cy.visit(url)
 })
 
-Cypress.Commands.add('login', (userType = 'dev') => {
+Cypress.Commands.add('login', (userType = 'dev', url = '/') => {
   cy.intercept('GET', 'http://talo.api/public/users/refresh', {
     statusCode: 200,
     fixture: `responses/auth/${userType}`
@@ -32,5 +32,5 @@ Cypress.Commands.add('login', (userType = 'dev') => {
 
   cy.stubDashboardCalls()
 
-  cy.visit('/')
+  cy.visit(url)
 })

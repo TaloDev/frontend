@@ -1,0 +1,13 @@
+{
+  "pricingPlan": {
+    "pricingPlan": {
+      "id": 1,
+      "hidden": false,
+      "default": true,
+      "actions": []
+    },
+    "status": "active",
+    "endDate": null,
+    "canViewBillingPortal": true
+  }
+}

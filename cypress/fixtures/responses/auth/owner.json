@@ -1,0 +1,22 @@
+{
+  "accessToken": "ey...",
+  "user": {
+    "id": 1,
+    "type": 0,
+    "username": "Owner",
+    "organisation": {
+      "games": [
+        {
+          "id": 1,
+          "name": "Superstatic",
+          "props": [],
+          "playerCount": 0,
+          "createdAt": "2023-01-01 00:00:00"
+        }
+      ],
+      "pricingPlan": {
+        "status": "active"
+      }
+    }
+  }
+}
