@@ -1,4 +1,4 @@
-FROM node:lts-alpine AS build
+FROM node:16-alpine AS build
 WORKDIR /usr/frontend
 COPY . .
 RUN yarn
