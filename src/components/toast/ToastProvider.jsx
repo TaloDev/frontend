@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { AnimatePresence, motion } from 'framer-motion'
 import ToastContext from './ToastContext'
-import { IconCheck } from '@tabler/icons'
+import { IconCheck } from '@tabler/icons-react'
 import { useEffect } from 'react'
 
 export default function ToastProvider({ children, lifetime }) {

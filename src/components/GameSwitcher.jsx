@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IconChevronDown, IconPlus } from '@tabler/icons'
+import { IconChevronDown, IconPlus } from '@tabler/icons-react'
 import Button from './Button'
 import classNames from 'classnames'
 import NewGame from '../modals/NewGame'

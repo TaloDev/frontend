@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { IconCheck } from '@tabler/icons'
+import { IconCheck } from '@tabler/icons-react'
 import { labelFocusStyle } from '../styles/theme'
 
 const ColourfulCheckbox = (props) => {

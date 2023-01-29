@@ -1,4 +1,4 @@
-import { IconInfoCircle } from '@tabler/icons'
+import { IconInfoCircle } from '@tabler/icons-react'
 import AlertBanner from '../AlertBanner'
 import { capitalize } from 'lodash-es'
 

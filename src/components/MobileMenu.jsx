@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { IconArrowLeft } from '@tabler/icons'
+import { IconArrowLeft } from '@tabler/icons-react'
 import Button from './Button'
 import { useLocation } from 'react-router-dom'
 

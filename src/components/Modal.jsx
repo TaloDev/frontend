@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { IconX } from '@tabler/icons'
+import { IconX } from '@tabler/icons-react'
 import Button from './Button'
 import classNames from 'classnames'
 import usePortal from '../utils/usePortal'

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import { IconArrowLeft } from '@tabler/icons'
+import { IconArrowLeft } from '@tabler/icons-react'
 import Button from './Button'
 import { useNavigate } from 'react-router-dom'
 import classNames from 'classnames'

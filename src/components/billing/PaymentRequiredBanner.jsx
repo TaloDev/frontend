@@ -3,7 +3,7 @@ import buildError from '../../utils/buildError'
 import Button from '../Button'
 import ErrorMessage from '../ErrorMessage'
 import createPortalSession from '../../api/createPortalSession'
-import { IconAlertCircle } from '@tabler/icons'
+import { IconAlertCircle } from '@tabler/icons-react'
 
 const PaymentRequiredBanner = () => {
   const [isLoading, setLoading] = useState(false)

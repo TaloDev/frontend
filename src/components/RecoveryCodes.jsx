@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import { IconCheck, IconCopy, IconDownload } from '@tabler/icons'
+import { IconCheck, IconCopy, IconDownload } from '@tabler/icons-react'
 import Button from './Button'
 import AlertBanner from './AlertBanner'
 import routes from '../constants/routes'

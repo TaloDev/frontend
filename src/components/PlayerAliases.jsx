@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import { IconBrandSteam, IconMail, IconQuestionMark, IconUser } from '@tabler/icons'
+import { IconBrandSteam, IconMail, IconQuestionMark, IconUser } from '@tabler/icons-react'
 import Tippy from '@tippyjs/react'
 import useSortedItems from '../utils/useSortedItems'
 

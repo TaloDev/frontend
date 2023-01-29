@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import { IconBrandSteam, IconCheck } from '@tabler/icons'
+import { IconBrandSteam, IconCheck } from '@tabler/icons-react'
 import { useRecoilValue } from 'recoil'
 import useIntegrations from '../api/useIntegrations'
 import Button from '../components/Button'
