@@ -11,7 +11,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import requestNewPassword from '../api/requestNewPassword'
-import { IconCheck } from '@tabler/icons'
+import { IconCheck } from '@tabler/icons-react'
 import AlertBanner from '../components/AlertBanner'
 
 const validationSchema = yup.object({

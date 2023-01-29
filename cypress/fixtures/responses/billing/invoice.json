@@ -1,0 +1,36 @@
+{
+  "invoice": {
+    "lines": [
+      {
+        "id": 1,
+        "period": {
+          "start": 1655024400,
+          "end": 1657616400
+        },
+        "description": "Team plan usage",
+        "amount": 5000
+      },
+      {
+        "id": 2,
+        "period": {
+          "start": 1655024400,
+          "end": 1657666799
+        },
+        "description": "Team plan proration",
+        "amount": -300
+      },
+      {
+        "id": 3,
+        "period": {
+          "start": 1657670400,
+          "end": 1660345199
+        },
+        "description": "Business plan usage",
+        "amount": 8000
+      }
+    ],
+    "total": 13300,
+    "prorationDate": 1655024400,
+    "collectionDate": 1660345199
+  }  
+}

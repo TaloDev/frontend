@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { IconCheck } from '@tabler/icons'
+import { IconCheck } from '@tabler/icons-react'
 import { focusStyle } from '../styles/theme'
 
 export default function Checkbox({ id, checked, onChange, labelContent, inputRef }) {

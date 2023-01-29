@@ -1,4 +1,4 @@
-import { IconPlus } from '@tabler/icons'
+import { IconPlus } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'

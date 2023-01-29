@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import { IconAlertCircle } from '@tabler/icons'
+import { IconAlertCircle } from '@tabler/icons-react'
 
 function ErrorMessage({ error, children }) {
   return (

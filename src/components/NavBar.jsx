@@ -6,7 +6,7 @@ import Link from './Link'
 import routes from '../constants/routes'
 import GameSwitcher from './GameSwitcher'
 import activeGameState from '../state/activeGameState'
-import { IconMenu2 } from '@tabler/icons'
+import { IconMenu2 } from '@tabler/icons-react'
 import MobileMenu from './MobileMenu'
 import Button from './Button'
 import ServicesLink from './ServicesLink'
@@ -18,7 +18,7 @@ const NavBar = () => {
 
   const onLogoutClick = async () => {
     try {
-      /* istanbul ignore next */
+      /* c8 ignore next */
       Sentry.configureScope((scope) => scope.setUser(null))
       setActiveGame(null)
       window.localStorage.removeItem('loggedOut')

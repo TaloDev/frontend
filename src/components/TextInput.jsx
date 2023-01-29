@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { focusStyle } from '../styles/theme'
 import classNames from 'classnames'
-import { IconAlertCircle } from '@tabler/icons'
+import { IconAlertCircle } from '@tabler/icons-react'
 import requiredIf from 'react-required-if'
 
 function TextInput(props) {

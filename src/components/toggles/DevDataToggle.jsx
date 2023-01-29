@@ -2,7 +2,7 @@ import { useState } from 'react'
 import classNames from 'classnames'
 import { motion } from 'framer-motion'
 import { labelFocusStyle } from '../../styles/theme'
-import { IconCheck, IconX } from '@tabler/icons'
+import { IconCheck, IconX } from '@tabler/icons-react'
 import { useRecoilState } from 'recoil'
 import devDataState from '../../state/devDataState'
 

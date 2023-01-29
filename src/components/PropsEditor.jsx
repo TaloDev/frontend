@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
-import { IconPlus, IconTrash } from '@tabler/icons'
+import { IconPlus, IconTrash } from '@tabler/icons-react'
 import Button from './Button'
 import TextInput from './TextInput'
 import ErrorMessage from './ErrorMessage'

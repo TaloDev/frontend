@@ -20,7 +20,12 @@ export default function BillingUsageTile({ usage, usageError }) {
                   return (
                     <li key={idx} className='flex items-center'>
                       <p className='w-40'>{name}</p>
-                      <p className={classNames('w-20 font-semibold font-mono text-right', { 'text-orange-400': used >= limit })}>{used}/{limit}</p>
+                      <p
+                        data-testid={name + '-usage'}
+                        className={classNames('w-20 font-semibold font-mono text-right', { 'text-orange-400': used >= limit })}
+                      >
+                        {used}/{limit}
+                      </p>
 
                       <div className='h-3 w-full bg-gray-900 rounded-sm relative ml-4'>
                         <div

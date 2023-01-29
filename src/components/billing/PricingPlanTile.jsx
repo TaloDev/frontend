@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
-import { IconArrowUp } from '@tabler/icons'
+import { IconArrowUp } from '@tabler/icons-react'
 import { dinero, toDecimal } from 'dinero.js'
 import { USD } from '@dinero.js/currencies'
 import Button from '../Button'
@@ -106,7 +106,7 @@ export default function PricingPlanTile({ plan, displayInterval, custom, current
               <ConfirmPlanChange
                 modalState={[
                   Boolean(invoice),
-                  /* istanbul ignore next */
+                  /* c8 ignore next */
                   () => {
                     setInvoice(null)
                     setPlanLoading(null)

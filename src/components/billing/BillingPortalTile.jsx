@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Button from '../Button'
 import buildError from '../../utils/buildError'
 import createPortalSession from '../../api/createPortalSession'
-import { IconExternalLink } from '@tabler/icons'
+import { IconExternalLink } from '@tabler/icons-react'
 import ErrorMessage from '../ErrorMessage'
 import Tile from '../Tile'
 

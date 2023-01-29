@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types'
-import { IconBrandSteam, IconMail, IconQuestionMark, IconUser } from '@tabler/icons'
+import { IconBrandSteam, IconMail, IconQuestionMark, IconUser } from '@tabler/icons-react'
 import Tippy from '@tippyjs/react'
 import useSortedItems from '../utils/useSortedItems'
 
 export default function PlayerAliases({ aliases }) {
   const getIcon = (alias) => {
-    /* istanbul ignore next */
+    /* c8 ignore next */
     switch (alias.service) {
       case 'steam': return <IconBrandSteam size={16} />
       case 'username': return <IconUser size={16} />
