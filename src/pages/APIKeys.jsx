@@ -115,13 +115,13 @@ const APIKeys = () => {
         }
 
         {user.emailConfirmed && keys.length > 0 &&
-          <Table columns={['Ending in', 'Created by', 'Created at', 'Scopes', '']}>
+          <Table columns={['Created by', 'Created at', 'Last used', 'Scopes', '']}>
             <TableBody iterator={keys}>
               {(key) => (
                 <>
-                  <TableCell>…{key.token}</TableCell>
                   <TableCell>{key.createdBy === user.username ? 'You' : key.createdBy}</TableCell>
                   <DateCell>{format(new Date(key.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
+                  <DateCell>{key.lastUsedAt ? format(new Date(key.lastUsedAt), 'dd MMM Y, HH:mm') : 'Never used'}</DateCell>
                   <TableCell className='flex'>
                     <div>
                       <Button variant='grey' onClick={() => setSelectedKey(key)}>View scopes</Button>

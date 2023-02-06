@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import Modal from '../components/Modal'
 import Button from '../components/Button'
 
-const Scopes = (props) => {
+export default function Scopes(props) {
   const [, setOpen] = props.modalState
 
   return (
@@ -13,7 +13,6 @@ const Scopes = (props) => {
     >
       <div>
         <div className='p-4 space-y-4'>
-          <p>Key ending in <span className='font-semibold'>{props.selectedKey?.token}</span></p>
           <div className='text-white'>
             <div className='flex flex-wrap -mb-2'>
               {props.selectedKey?.scopes.sort((a, b) => {
@@ -40,5 +39,3 @@ Scopes.propTypes = {
   modalState: PropTypes.array.isRequired,
   selectedKey: PropTypes.object
 }
-
-export default Scopes

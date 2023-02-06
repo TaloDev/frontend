@@ -14,7 +14,7 @@ const AlertBanner = (props) => {
 AlertBanner.propTypes = {
   text: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
   className: PropTypes.string,
-  icon: PropTypes.func
+  icon: PropTypes.object
 }
 
 AlertBanner.defaultProps = {
