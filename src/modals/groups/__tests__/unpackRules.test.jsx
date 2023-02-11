@@ -20,7 +20,8 @@ describe('unpackRules', () => {
         operands: {
           0: '2022-03-03'
         },
-        operandCount: 1
+        operandCount: 1,
+        mapsTo: 'createdAt'
       }
     ])
   })
@@ -44,7 +45,33 @@ describe('unpackRules', () => {
         operands: {
           0: '70'
         },
-        operandCount: 1
+        operandCount: 1,
+        mapsTo: 'props'
+      }
+    ])
+  })
+
+  it('should unpack a meta prop rule', () => {
+    expect(unpackRules([
+      {
+        name: 'EQUALS',
+        negate: true,
+        castType: 'CHAR',
+        field: 'props.META_OS',
+        operands: ['macOS']
+      }
+    ])).toStrictEqual([
+      {
+        name: 'EQUALS',
+        negate: true,
+        castType: 'CHAR',
+        field: 'operating system',
+        propKey: '',
+        operands: {
+          0: 'macOS'
+        },
+        operandCount: 1,
+        mapsTo: 'props.META_OS'
       }
     ])
   })

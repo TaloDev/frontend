@@ -94,12 +94,15 @@ export default function GroupRules({ ruleModeState, rulesState }) {
 
           if (Object.keys(partial).includes('name')) {
             updatedRule.operandCount = availableRule.operandCount
+            if (updatedRule.operandCount === 0) {
+              updatedRule.operands = {}
+            }
           } else if (Object.keys(partial).includes('field')) {
             const availableField = availableFields.find((f) => f.field === partial.field)
 
             updatedRule.name = findRuleByName('EQUALS').name
             updatedRule.propKey = availableField.mapsTo.startsWith('META_') ? availableField.mapsTo : ''
-            updatedRule.mapsTo = availableField.mapsTo
+            updatedRule.mapsTo = availableField.mapsTo.startsWith('META_') ? 'props' : availableField.mapsTo
             updatedRule.castType = availableField.defaultCastType
             for (const key in updatedRule.operands) {
               updatedRule.operands[key] = ''
@@ -142,84 +145,40 @@ export default function GroupRules({ ruleModeState, rulesState }) {
       <p className='text-sm'>All players</p>
 
       {rules.length > 0 &&
-      <div className='divide-y space-y-4'>
-        {rules.map((rule, idx) => (
-          <div key={idx} className='text-sm space-y-2 pt-4 first:pt-0'>
-            <div className='flex items-center space-x-2'>
-              <div className='-translate-y-0.5 w-[12px] h-[8px] border-l border-b border-gray-300' />
+        <div className='divide-y space-y-4'>
+          {rules.map((rule, idx) => (
+            <div key={idx} className='text-sm space-y-2 pt-4 first:pt-0'>
+              <div className='flex items-center space-x-2'>
+                <div className='-translate-y-0.5 w-[12px] h-[8px] border-l border-b border-gray-300' />
 
-              <div>
-                {idx === 0 && <span className='text-gray-500'>where</span>}
+                <div>
+                  {idx === 0 && <span className='text-gray-500'>where</span>}
 
-                {idx > 0 &&
-                  <DropdownMenu
-                    options={[
-                      { label: 'and', onClick: () => setRuleMode('$and') },
-                      { label: 'or', onClick: () => setRuleMode('$or') }
-                    ]}
-                  >
-                    {(setOpen) => (
-                      <Button
-                        type='button'
-                        onClick={setOpen}
-                        variant='small'
-                      >
-                        {ruleMode.substring(1, ruleMode.length)}
-                      </Button>
-                    )}
-                  </DropdownMenu>
-                }
-              </div>
-
-              <DropdownMenu
-                options={availableFields.map(({ field }) => ({
-                  label: field,
-                  onClick: () => {
-                    updateRule(idx, { field })
+                  {idx > 0 &&
+                    <DropdownMenu
+                      options={[
+                        { label: 'and', onClick: () => setRuleMode('$and') },
+                        { label: 'or', onClick: () => setRuleMode('$or') }
+                      ]}
+                    >
+                      {(setOpen) => (
+                        <Button
+                          type='button'
+                          onClick={setOpen}
+                          variant='small'
+                        >
+                          {ruleMode.substring(1, ruleMode.length)}
+                        </Button>
+                      )}
+                    </DropdownMenu>
                   }
-                }))}
-              >
-                {(setOpen) => (
-                  <Button
-                    type='button'
-                    onClick={setOpen}
-                    variant='small'
-                  >
-                    {rule.field}
-                  </Button>
-                )}
-              </DropdownMenu>
-
-              {rule.field === groupPropKeyField &&
-                <TextInput
-                  id='prop-key'
-                  variant='modal'
-                  containerClassName='w-24 md:w-32'
-                  onChange={(propKey) => updateRule(idx, { propKey })}
-                  value={rule.propKey ?? ''}
-                />
-              }
-
-              <div className='!ml-auto'>
-                <Button
-                  type='button'
-                  onClick={() => onDeleteClick(idx)}
-                  variant='small'
-                  icon={<IconTrash size={16} />}
-                  extra={{ 'aria-label': `Delete rule ${idx + 1}` }}
-                />
-              </div>
-            </div>
-
-            {rule.field === groupPropKeyField &&
-              <div className='flex items-center space-x-2 ml-5'>
-                <span>value as</span>
+                </div>
 
                 <DropdownMenu
-                  options={['CHAR', 'DOUBLE', 'DATETIME'].map((castType) => ({
-                    label: getCastTypeDescription(castType),
+                  options={availableFields.map(({ field }) => ({
+                    label: field,
                     onClick: () => {
-                      updateRule(idx, { castType })
+                      updateRule(idx, { field })
                     }
                   }))}
                 >
@@ -229,61 +188,105 @@ export default function GroupRules({ ruleModeState, rulesState }) {
                       onClick={setOpen}
                       variant='small'
                     >
-                      <span>{getCastTypeDescription(rule.castType)}</span>
+                      {rule.field}
                     </Button>
                   )}
                 </DropdownMenu>
-              </div>
-            }
 
-            <div className='flex items-center space-x-2 ml-5'>
-              <DropdownMenu
-                options={availableRules.filter((availableRule) => availableRule.castTypes.includes(rule.castType)).map(({ name, negate }) => ({
-                  label: getRuleDescription(name, negate),
-                  onClick: () => {
-                    updateRule(idx, { name, negate })
-                  }
-                }))}
-              >
-                {(setOpen) => (
+                {rule.field === groupPropKeyField &&
+                  <TextInput
+                    id='prop-key'
+                    variant='modal'
+                    containerClassName='w-24 md:w-32'
+                    onChange={(propKey) => updateRule(idx, { propKey })}
+                    value={rule.propKey ?? ''}
+                  />
+                }
+
+                <div className='!ml-auto'>
                   <Button
                     type='button'
-                    onClick={setOpen}
+                    onClick={() => onDeleteClick(idx)}
                     variant='small'
-                  >
-                    {getRuleDescription(rule.name, rule.negate)}
-                  </Button>
-                )}
-              </DropdownMenu>
+                    icon={<IconTrash size={16} />}
+                    extra={{ 'aria-label': `Delete rule ${idx + 1}` }}
+                  />
+                </div>
+              </div>
 
-              {[...new Array(findRuleByName(rule.name).operandCount)].map((_, operandIdx) => {
-                if (rule.castType === 'DATETIME') {
-                  return (
-                    <DateInput
-                      key={operandIdx}
-                      id={`operand-${operandIdx}`}
-                      mode='single'
-                      onChange={(value) => updateOperands(idx, operandIdx, value)}
-                      value={rule.operands[operandIdx]}
-                    />
-                  )
-                } else {
-                  return (
-                    <TextInput
-                      key={operandIdx}
-                      id={`operand-${operandIdx}`}
-                      variant='modal'
-                      containerClassName='w-14 md:w-20'
-                      onChange={(value) => updateOperands(idx, operandIdx, value)}
-                      value={rule.operands[operandIdx] ?? ''}
-                    />
-                  )
-                }
-              })}
+              {rule.field === groupPropKeyField &&
+                <div className='flex items-center space-x-2 ml-5'>
+                  <span>value as</span>
+
+                  <DropdownMenu
+                    options={['CHAR', 'DOUBLE', 'DATETIME'].map((castType) => ({
+                      label: getCastTypeDescription(castType),
+                      onClick: () => {
+                        updateRule(idx, { castType })
+                      }
+                    }))}
+                  >
+                    {(setOpen) => (
+                      <Button
+                        type='button'
+                        onClick={setOpen}
+                        variant='small'
+                      >
+                        <span>{getCastTypeDescription(rule.castType)}</span>
+                      </Button>
+                    )}
+                  </DropdownMenu>
+                </div>
+              }
+
+              <div className='flex items-center space-x-2 ml-5'>
+                <DropdownMenu
+                  options={availableRules.filter((availableRule) => availableRule.castTypes.includes(rule.castType)).map(({ name, negate }) => ({
+                    label: getRuleDescription(name, negate),
+                    onClick: () => {
+                      updateRule(idx, { name, negate })
+                    }
+                  }))}
+                >
+                  {(setOpen) => (
+                    <Button
+                      type='button'
+                      onClick={setOpen}
+                      variant='small'
+                    >
+                      {getRuleDescription(rule.name, rule.negate)}
+                    </Button>
+                  )}
+                </DropdownMenu>
+
+                {[...new Array(findRuleByName(rule.name).operandCount)].map((_, operandIdx) => {
+                  if (rule.castType === 'DATETIME') {
+                    return (
+                      <DateInput
+                        key={operandIdx}
+                        id={`operand-${operandIdx}`}
+                        mode='single'
+                        onChange={(value) => updateOperands(idx, operandIdx, value)}
+                        value={rule.operands[operandIdx]}
+                      />
+                    )
+                  } else {
+                    return (
+                      <TextInput
+                        key={operandIdx}
+                        id={`operand-${operandIdx}`}
+                        variant='modal'
+                        containerClassName='w-14 md:w-20'
+                        onChange={(value) => updateOperands(idx, operandIdx, value)}
+                        value={rule.operands[operandIdx] ?? ''}
+                      />
+                    )
+                  }
+                })}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
       }
 
       <div className='w-32'>
