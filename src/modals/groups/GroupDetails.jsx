@@ -22,6 +22,7 @@ import { useDebounce } from 'use-debounce'
 import prepareRule from '../../utils/group-rules/prepareRule'
 import isGroupRuleValid from '../../utils/group-rules/isGroupRuleValid'
 import { useEffect } from 'react'
+import { metaGroupFields } from '../../constants/metaProps'
 
 const validationSchema = yup.object({
   name: yup.string().label('Name').required(),
@@ -31,17 +32,21 @@ const validationSchema = yup.object({
 export function unpackRules(rules) {
   if (!rules) return rules
   return rules.map((rule) => {
+    const metaField = metaGroupFields.find((f) => `props.${f.mapsTo}` === rule.field)
+    const isUserDefinedProp = rule.field.startsWith('props.') && !metaField
+
     return {
       name: rule.name,
       negate: rule.negate,
       castType: rule.castType,
-      field: rule.field.startsWith('props.') ? groupPropKeyField : rule.field,
-      propKey: rule.field.startsWith('props.') ? rule.field.split('props.')[1] : '',
+      field: rule.field.startsWith('props.') ? (metaField?.field ?? groupPropKeyField) : rule.field,
+      propKey: isUserDefinedProp ? rule.field.split('props.')[1] : '',
       operands: rule.operands.reduce((acc, curr, idx) => ({
         ...acc,
         [idx]: curr
       }), {}),
-      operandCount: rule.operands.length
+      operandCount: rule.operands.length,
+      mapsTo: isUserDefinedProp ? 'props' : rule.field
     }
   })
 }
