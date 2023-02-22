@@ -668,8 +668,51 @@ describe('<GroupRules />', () => {
         0: ''
       },
       operandCount: 1,
-      mapsTo: 'META_WINDOW_MODE'
+      mapsTo: 'props'
     }, irrelevantRule])
+  })
+
+  it('should remove operands for a rule with no operands', async () => {
+    const changeMock = vi.fn()
+
+    const initialRule = {
+      name: 'LT',
+      negate: false,
+      castType: 'DOUBLE',
+      field: 'prop with key',
+      propKey: 'pos.x',
+      operands: {
+        0: '5'
+      },
+      operandCount: 1,
+      mapsTo: 'props'
+    }
+
+    render(
+      <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
+        <GroupRules
+          ruleModeState={['$and', vi.fn()]}
+          rulesState={[
+            [initialRule],
+            changeMock
+          ]}
+        />
+      </KitchenSink>
+    )
+
+    await userEvent.click(await screen.findByText('is less than'))
+    await userEvent.click(await screen.findByText('is set'))
+
+    expect(getLatestChange(changeMock)([initialRule])).toStrictEqual([{
+      name: 'SET',
+      negate: false,
+      castType: 'DOUBLE',
+      field: 'prop with key',
+      propKey: 'pos.x',
+      operands: {},
+      operandCount: 0,
+      mapsTo: 'props'
+    }])
   })
 
   it('should render errors', async () => {

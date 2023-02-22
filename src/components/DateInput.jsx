@@ -29,6 +29,7 @@ export default function DateInput({ id, value, onChange }) {
             mode='single'
             selected={date}
             onSelect={setDate}
+            defaultMonth={date}
           />
         )}
         visible={isOpen}
@@ -41,7 +42,8 @@ export default function DateInput({ id, value, onChange }) {
             containerClassName='w-28'
             value={format(date, 'dd MMM Y')}
             inputExtra={{
-              onFocus: () => setOpen(true)
+              onFocus: () => setOpen(true),
+              name: id
             }}
           />
         </div>

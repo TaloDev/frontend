@@ -108,7 +108,7 @@ export default function ConfirmPlanChange({ modalState, plan, pricingInterval, i
               isLoading={isLoading}
               onClick={onConfirmClick}
               extra={{
-                'data-testId': 'confirm-plan-change'
+                'data-testid': 'confirm-plan-change'
               }}
             >
               Confirm
