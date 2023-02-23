@@ -61,7 +61,7 @@ export default function Groups() {
               {(group) => (
                 <>
                   <TableCell className='min-w-80'>
-                    <Identifier id='ccb3226c-54ac-4e8d-af27-6154a6315f2f' />
+                    <Identifier id={group.id} />
                   </TableCell>
                   <TableCell className='min-w-[320px] max-w-[320px] lg:min-w-0'>
                     {group.name}
