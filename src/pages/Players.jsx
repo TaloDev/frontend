@@ -18,7 +18,9 @@ import Page from '../components/Page'
 import Table from '../components/tables/Table'
 
 const Players = () => {
-  const [search, setSearch] = useState(new URLSearchParams(window.location.search).get('search') ?? '')
+  const initialSearch = new URLSearchParams(window.location.search).get('search')
+
+  const [search, setSearch] = useState(initialSearch ?? '')
   const [debouncedSearch] = useDebounce(search, 300)
   const activeGame = useRecoilValue(activeGameState)
   const navigate = useNavigate()
@@ -36,7 +38,7 @@ const Players = () => {
   }, [page])
 
   return (
-    <Page title='Players' isLoading={loading}>
+    <Page title='Players' isLoading={loading} showBackButton={Boolean(initialSearch)}>
       {(players.length > 0 || debouncedSearch.length > 0) &&
         <div className='flex items-center'>
           <div className='w-1/2 flex-grow md:flex-grow-0 lg:w-1/4'>

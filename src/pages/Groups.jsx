@@ -14,6 +14,8 @@ import useGroups from '../api/useGroups'
 import GroupDetails from '../modals/groups/GroupDetails'
 import useSortedItems from '../utils/useSortedItems'
 import Identifier from '../components/Identifier'
+import { useNavigate } from 'react-router-dom'
+import routes from '../constants/routes'
 
 export default function Groups() {
   const activeGame = useRecoilValue(activeGameState)
@@ -24,6 +26,8 @@ export default function Groups() {
   const { groups, loading, error, mutate } = useGroups(activeGame)
   const sortedGroups = useSortedItems(groups, 'name', 'asc')
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     if (!showModal) setEditingGroup(null)
   }, [showModal, editingGroup])
@@ -31,6 +35,10 @@ export default function Groups() {
   const onEditGroupClick = (group) => {
     setEditingGroup(group)
     setShowModal(true)
+  }
+
+  const goToPlayersForGroup = (group) => {
+    navigate(`${routes.players}?search=group:${group.id}`)
   }
 
   return (
@@ -56,7 +64,7 @@ export default function Groups() {
 
       {groups.length > 0 &&
         <>
-          <Table columns={['ID', 'Name', 'Players', 'Last updated', '']}>
+          <Table columns={['ID', 'Name', 'Players', 'Last updated', '', '']}>
             <TableBody iterator={sortedGroups}>
               {(group) => (
                 <>
@@ -77,6 +85,14 @@ export default function Groups() {
                       onClick={() => onEditGroupClick(group)}
                     >
                       Edit
+                    </Button>
+                  </TableCell>
+                  <TableCell className='w-48'>
+                    <Button
+                      variant='grey'
+                      onClick={() => goToPlayersForGroup(group)}
+                    >
+                      View players
                     </Button>
                   </TableCell>
                 </>
