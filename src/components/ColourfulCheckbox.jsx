@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { IconCheck } from '@tabler/icons-react'
-import { labelFocusStyle } from '../styles/theme'
+import { hiddenInputStyle, labelFocusStyle } from '../styles/theme'
 
 const ColourfulCheckbox = (props) => {
   const [focus, setFocus] = useState(false)
@@ -12,7 +12,7 @@ const ColourfulCheckbox = (props) => {
       <input
         id={props.id}
         type='checkbox'
-        className='absolute inset-0 opacity-0'
+        className={hiddenInputStyle}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
         {...props}

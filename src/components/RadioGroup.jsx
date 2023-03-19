@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { labelFocusStyle } from '../styles/theme'
+import { hiddenInputStyle, labelFocusStyle } from '../styles/theme'
 
 function RadioGroup({ label, name, options, onChange, value, info }) {
   const [focusedValue, setFocusedValue] = useState()
@@ -18,7 +18,7 @@ function RadioGroup({ label, name, options, onChange, value, info }) {
             <div key={option.value} className='min-w-[96px]'>
               <input
                 id={`${name}${idx}`}
-                className='absolute inset-0 opacity-0'
+                className={hiddenInputStyle}
                 type='radio'
                 name={name}
                 onChange={() => onChange(option.value)}

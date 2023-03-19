@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { motion } from 'framer-motion'
-import { labelFocusStyle } from '../../styles/theme'
+import { hiddenInputStyle, labelFocusStyle } from '../../styles/theme'
 
 function Toggle({ id, enabled, onToggle, disabled, inputRef }) {
   const [focus, setFocus] = useState(false)
@@ -25,7 +25,7 @@ function Toggle({ id, enabled, onToggle, disabled, inputRef }) {
         data-testid={id}
         ref={inputRef}
         type='checkbox'
-        className='absolute inset-0 opacity-0'
+        className={hiddenInputStyle}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
         onChange={() => setInnerEnabled(!innerEnabled)}

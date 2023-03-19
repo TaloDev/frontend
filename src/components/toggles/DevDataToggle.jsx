@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import classNames from 'classnames'
 import { motion } from 'framer-motion'
-import { labelFocusStyle } from '../../styles/theme'
+import { hiddenInputStyle, labelFocusStyle } from '../../styles/theme'
 import { IconCheck, IconX } from '@tabler/icons-react'
 import { useRecoilState } from 'recoil'
 import devDataState from '../../state/devDataState'
@@ -23,7 +23,7 @@ function DevDataToggle() {
       <input
         id='dev-data'
         type='checkbox'
-        className='absolute inset-0 opacity-0'
+        className={hiddenInputStyle}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
         onChange={() => setInnerEnabled(!innerEnabled)}
