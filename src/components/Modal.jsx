@@ -29,8 +29,8 @@ const Modal = (props) => {
       <div className='fixed w-screen md:p-4 bg-gray-900 bg-opacity-60 flex items-start md:items-center justify-center inset-0 z-50 text-black transition-colors'>
         <dialog
           className={classNames('block w-full h-full md:h-auto md:w-[640px] bg-white md:rounded p-0', {
-            'overflow-scroll': props.scroll,
-            'overflow-visible': !props.scroll
+            'overflow-y-scroll': props.scroll,
+            'overflow-y-visible': !props.scroll
           })}
           aria-modal='true'
           aria-labelledby={`modal-${props.id}-label`}
