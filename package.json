@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@dinero.js/currencies": "^2.0.0-alpha.11",
-    "@hookform/resolvers": "^2.8.8",
+    "@hookform/resolvers": "^3.0.0",
     "@sentry/react": "^7.0.0",
     "@tabler/icons-react": "^2.1.2",
     "@tippyjs/react": "^4.2.5",
