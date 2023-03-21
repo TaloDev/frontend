@@ -37,7 +37,7 @@
     "spinners-react": "^1.0.6",
     "swr": "^2.0.0",
     "use-debounce": "^9.0.0",
-    "yup": "^0.32.11"
+    "yup": "^1.0.0"
   },
   "devDependencies": {
     "@testing-library/cypress": "^9.0.0",
