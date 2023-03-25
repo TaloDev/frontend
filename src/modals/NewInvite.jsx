@@ -14,7 +14,7 @@ import userTypes from '../constants/userTypes'
 import emailRegex from '../utils/validation/emailRegex'
 
 const validationSchema = yup.object({
-  email: yup.string().matches(emailRegex).label('Email').required(),
+  email: yup.string().matches(emailRegex, 'Please enter a valid email address').label('Email').required(),
   userType: yup.object().label('User type').required()
 })
 
