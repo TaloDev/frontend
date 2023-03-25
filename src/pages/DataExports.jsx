@@ -47,7 +47,7 @@ const DataExports = () => {
       setCreatedExportId(res.data.dataExport.id)
     } catch (err) {
       if (err.response?.status === 402) {
-        setCreateError(buildError('You have reached the data export limit for this month, contact the account owner to upgrade the pricing plan'))
+        setCreateError(buildError('You have reached the data export limit for this month, please contact the account owner about upgrading the pricing plan'))
       } else {
         setCreateError(buildError(err))
       }
