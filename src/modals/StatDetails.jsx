@@ -15,7 +15,7 @@ import deleteStat from '../api/deleteStat'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import nullableNumber from '../utils/nullableNumber'
+import nullableNumber from '../utils/validation/nullableNumber'
 import canPerformAction, { permissionBasedActions } from '../utils/canPerformAction'
 
 const StatDetails = ({ modalState, mutate, editingStat }) => {
