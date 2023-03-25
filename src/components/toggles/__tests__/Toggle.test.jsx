@@ -8,11 +8,14 @@ describe('<Toggle />', () => {
     render(<Toggle id='test' enabled={false} onToggle={toggleMock} />)
 
     const { click } = userEvent.setup()
-    await click(screen.getByRole('checkbox'))
-    await waitFor(() => expect(toggleMock).toHaveBeenLastCalledWith(true))
 
     await click(screen.getByRole('checkbox'))
-    await waitFor(() => expect(toggleMock).toHaveBeenLastCalledWith(false))
+    await waitFor(() => expect(screen.getByRole('checkbox')).toBeChecked())
+    expect(toggleMock).toHaveBeenLastCalledWith(true)
+
+    await click(screen.getByRole('checkbox'))
+    await waitFor(() => expect(screen.getByRole('checkbox')).not.toBeChecked())
+    expect(toggleMock).toHaveBeenLastCalledWith(false)
   })
 
   it('should correctly render the disabled state', () => {
