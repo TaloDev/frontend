@@ -78,7 +78,7 @@ function Organisation() {
             }
 
             <Button
-              className='w-auto'
+              className='w-full md:w-auto'
               onClick={() => setShowModal(true)}
               icon={<IconPlus />}
               disabled={!user.emailConfirmed}

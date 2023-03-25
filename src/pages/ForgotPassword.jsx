@@ -13,9 +13,10 @@ import { useForm } from 'react-hook-form'
 import requestNewPassword from '../api/requestNewPassword'
 import { IconCheck } from '@tabler/icons-react'
 import AlertBanner from '../components/AlertBanner'
+import emailRegex from '../utils/validation/emailRegex'
 
 const validationSchema = yup.object({
-  email: yup.string().label('Email').email('Please enter a valid email address').required()
+  email: yup.string().label('Email').matches(emailRegex, 'Please enter a valid email address').required()
 })
 
 export default function ForgotPassword() {

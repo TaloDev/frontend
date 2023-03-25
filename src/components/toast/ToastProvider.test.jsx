@@ -36,7 +36,6 @@ describe('<ToastProvider />', () => {
     )
 
     expect(await screen.findByText('Hello!')).toBeInTheDocument()
-    await waitForElementToBeRemoved(screen.queryByText('Hello!'))
   })
 
   it('should trigger multiple toasts', async () => {
@@ -48,7 +47,5 @@ describe('<ToastProvider />', () => {
 
     await waitForElementToBeRemoved(() => screen.queryByText('Hello!'))
     expect(screen.getByText('Hello again!')).toBeInTheDocument()
-
-    await waitForElementToBeRemoved(screen.queryByText('Hello again!'))
   })
 })

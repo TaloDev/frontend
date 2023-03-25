@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@dinero.js/currencies": "^2.0.0-alpha.11",
-    "@hookform/resolvers": "^2.8.8",
+    "@hookform/resolvers": "^3.0.0",
     "@sentry/react": "^7.0.0",
     "@tabler/icons-react": "^2.1.2",
     "@tippyjs/react": "^4.2.5",
@@ -19,7 +19,7 @@
     "classnames": "^2.3.2",
     "date-fns": "^2.29.3",
     "dinero.js": "^2.0.0-alpha.11",
-    "framer-motion": "^10.0.0",
+    "framer-motion": "^10.9.1",
     "lodash-es": "^4.17.21",
     "prop-types": "^15.7.2",
     "querystring": "^0.2.1",
@@ -28,7 +28,7 @@
     "react-day-picker": "^8.3.5",
     "react-dom": "^18.2.0",
     "react-focus-lock": "^2.9.2",
-    "react-hook-form": "^7.42.1",
+    "react-hook-form": "^7.43.8",
     "react-required-if": "^1.0.3",
     "react-router-dom": "^6.7.0",
     "react-select": "^5.7.0",
@@ -37,7 +37,7 @@
     "spinners-react": "^1.0.6",
     "swr": "^2.0.0",
     "use-debounce": "^9.0.0",
-    "yup": "^0.32.11"
+    "yup": "^1.0.2"
   },
   "devDependencies": {
     "@testing-library/cypress": "^9.0.0",
@@ -71,7 +71,7 @@
   "lint-staged": {
     "*.{js,jsx}": "eslint --fix"
   },
-  "version": "0.25.0",
+  "version": "0.25.1",
   "engines": {
     "node": "16.x"
   }

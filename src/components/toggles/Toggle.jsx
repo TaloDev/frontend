@@ -30,7 +30,7 @@ function Toggle({ id, enabled, onToggle, disabled, inputRef }) {
         onBlur={() => setFocus(false)}
         onChange={() => setInnerEnabled(!innerEnabled)}
         disabled={disabled}
-        checked={enabled}
+        checked={innerEnabled}
       />
 
       <motion.label
@@ -50,7 +50,7 @@ function Toggle({ id, enabled, onToggle, disabled, inputRef }) {
           initial={false}
           transition={{ duration: 0.2 }}
           className='h-8 w-8 rounded-full relative shadow !bg-white border border-gray-200'
-          onAnimationComplete={() => onToggle(innerEnabled)}
+          onAnimationStart={() => onToggle(innerEnabled)}
         />
       </motion.label>
     </>

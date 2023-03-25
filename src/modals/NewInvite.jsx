@@ -11,9 +11,10 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import createInvite from '../api/createInvite'
 import Select from '../components/Select'
 import userTypes from '../constants/userTypes'
+import emailRegex from '../utils/validation/emailRegex'
 
 const validationSchema = yup.object({
-  email: yup.string().email().label('Email').required(),
+  email: yup.string().matches(emailRegex, 'Please enter a valid email address').label('Email').required(),
   userType: yup.object().label('User type').required()
 })
 

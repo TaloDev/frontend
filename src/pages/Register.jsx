@@ -18,6 +18,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import classNames from 'classnames'
 import routes from '../constants/routes'
+import emailRegex from '../utils/validation/emailRegex'
 
 const validationSchema = yup.object({
   organisationName: yup
@@ -28,7 +29,7 @@ const validationSchema = yup.object({
       then: (schema) => schema.required()
     }),
   username: yup.string().label('Username').required(),
-  email: yup.string().label('Email').email('Please enter a valid email address').required(),
+  email: yup.string().label('Email').matches(emailRegex, 'Please enter a valid email address').required(),
   password: yup.string().label('Password').required(),
   termsAccepted: yup.boolean().label('Terms').oneOf([true])
 })

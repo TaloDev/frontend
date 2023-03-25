@@ -27,6 +27,7 @@ function DevDataToggle() {
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
         onChange={() => setInnerEnabled(!innerEnabled)}
+        checked={innerEnabled}
       />
 
       <label
@@ -41,7 +42,7 @@ function DevDataToggle() {
           initial={false}
           transition={{ duration: 0.2 }}
           className='h-full w-8 rounded-md relative'
-          onAnimationComplete={() => setIncludeDevData(innerEnabled)}
+          onAnimationStart={() => setIncludeDevData(innerEnabled)}
         >
           <motion.span {...sharedIconProps} animate={{ opacity: innerEnabled ? 1 : 0 }}>
             <IconCheck size={24} stroke={3} />
