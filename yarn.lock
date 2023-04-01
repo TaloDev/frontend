@@ -654,17 +654,17 @@
     "@swc/core-win32-x64-msvc" "1.3.40"
 
 "@tabler/icons-react@^2.1.2":
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/@tabler/icons-react/-/icons-react-2.11.0.tgz#18d512830e4e9fabe425177fa968136efa7ea372"
-  integrity sha512-Mbie8IFLrtI0sGm802Bmierle0ixIi7FVczShoLjPZwRM0da1HcD588TF7oMuQ09zd241BY+L7M/f0Q6lquBng==
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/@tabler/icons-react/-/icons-react-2.13.0.tgz#2396687e9f5a20912c465f39bb291e1bc719365d"
+  integrity sha512-d1eAnD4+JhFxLnRFwE1h0ukt7el0/KnbqTZ4acSvtZ8yuHuqff266yZU587aCU3ovaX/6zxkgaxJsDnBXiLTEw==
   dependencies:
-    "@tabler/icons" "2.11.0"
+    "@tabler/icons" "2.13.0"
     prop-types "^15.7.2"
 
-"@tabler/icons@2.11.0":
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-2.11.0.tgz#9767f2bb57a716ed71fdc5019ca534d5fddcc816"
-  integrity sha512-KPESQnvHoSpbAdgzDdrSmeZ9AE8fSU12fU3Cag79uXJCUkC8f741fcvPJPsFMDe0S96VSq3mMYF8JnA7a570uQ==
+"@tabler/icons@2.13.0":
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-2.13.0.tgz#46d1f3b0ab50c01928204302ce0a2f3e2d70b1d4"
+  integrity sha512-YF1cl17cdhaAHQayv3zDRzYLT6AX49gm6RGTNkIfFiEcefMsJtyCt1qXbI/mxzFCugrb3LdlPmZPLceYl9kn8A==
 
 "@testing-library/cypress@^9.0.0":
   version "9.0.0"
