@@ -12,7 +12,7 @@ import Table from '../components/tables/Table'
 import SecondaryTitle from '../components/SecondaryTitle'
 import PlayerAliases from '../components/PlayerAliases'
 import Identifier from '../components/Identifier'
-import { IconBolt, IconChartBar, IconSettings, IconTrophy } from '@tabler/icons-react'
+import { IconBolt, IconChartBar, IconDeviceFloppy, IconSettings, IconTrophy } from '@tabler/icons-react'
 import Button from '../components/Button'
 import Loading from '../components/Loading'
 
@@ -36,6 +36,11 @@ const links = [
     name: 'Entries',
     icon: IconTrophy,
     route: routes.playerLeaderboardEntries
+  },
+  {
+    name: 'Saves',
+    icon: IconDeviceFloppy,
+    route: routes.playerSaves
   }
 ]
 
