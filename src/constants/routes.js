@@ -22,6 +22,8 @@ export default {
   playerLeaderboardEntries: '/players/:id/leaderboard-entries',
   playerProfile: '/players/:id/profile',
   playerProps: '/players/:id/props',
+  playerSaves: '/players/:id/saves',
+  playerSaveContent: '/players/:id/saves/:saveId',
   playerStats: '/players/:id/stats',
   recover: '/recover',
   register: '/register',
