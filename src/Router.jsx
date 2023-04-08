@@ -38,6 +38,8 @@ const PlayerProfile = lazy(() => import(/* webpackChunkName: 'player-profile' */
 const PlayerLeaderboardEntries = lazy(() => import(/* webpackChunkName: 'player-leaderboard-entries' */ './pages/PlayerLeaderboardEntries'))
 const ForgotPassword = lazy(() => import(/* webpackChunkName: 'forgot-password' */ './pages/ForgotPassword'))
 const ResetPassword = lazy(() => import(/* webpackChunkName: 'reset-password' */ './pages/ResetPassword'))
+const PlayerSaves = lazy(() => import(/* webpackChunkName: 'player-saves' */ './pages/PlayerSaves'))
+const PlayerSaveContent = lazy(() => import(/* webpackChunkName: 'player-save-content' */ './pages/PlayerSaveContent'))
 
 function Router({ intendedUrl }) {
   const user = useRecoilValue(userState)
@@ -91,6 +93,8 @@ function Router({ intendedUrl }) {
                   {canViewPage(user, routes.gameProps) && <Route exact path={routes.gameProps} element={<GameProps />} />}
                   <Route exact path={routes.playerProfile} element={<PlayerProfile />} />
                   <Route exact path={routes.playerLeaderboardEntries} element={<PlayerLeaderboardEntries />} />
+                  <Route exact path={routes.playerSaveContent} element={<PlayerSaveContent />} />
+                  <Route exact path={routes.playerSaves} element={<PlayerSaves />} />
                 </>
               }
 
