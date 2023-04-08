@@ -11,17 +11,6 @@ export default function PlayerSaveContent() {
 
   const [isLoading, setLoading] = useState(true)
 
-  useEffect(() => {
-    console.log(save)
-    if (!save) {
-      navigate(routes.playerSaves.replace(':id', playerId))
-    } else {
-      setTimeout(() => {
-        setContent()
-      }, 200)
-    }
-  }, [save])
-
   const navigate = useNavigate()
 
   const embedRef = useRef()
@@ -37,6 +26,16 @@ export default function PlayerSaveContent() {
 
     setLoading(false)
   }, [])
+
+  useEffect(() => {
+    if (!save) {
+      navigate(routes.playerSaves.replace(':id', playerId))
+    } else {
+      setTimeout(() => {
+        setContent()
+      }, 300)
+    }
+  }, [save])
 
   return (
     <Page
