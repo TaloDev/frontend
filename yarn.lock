@@ -1309,9 +1309,9 @@ axe-core@^4.6.2:
   integrity sha512-zIURGIS1E1Q4pcrMjp+nnEh+16G56eG/MUllJH8yEvw7asDo7Ac9uhC9KIH5jzpITueEZolfYglnCGIuSBz39g==
 
 axios-mock-adapter@^1.20.0:
-  version "1.21.4"
-  resolved "https://registry.yarnpkg.com/axios-mock-adapter/-/axios-mock-adapter-1.21.4.tgz#ced09b54b245b338422e3af425ae529bfa26e051"
-  integrity sha512-ztnENm28ONAKeRXC/6SUW6pcsaXbThKq93MRDRAA47LYTzrGSDoO/DCr1NHz7jApEl95DrBoGPvZ0r9xtSbjqw==
+  version "1.21.5"
+  resolved "https://registry.yarnpkg.com/axios-mock-adapter/-/axios-mock-adapter-1.21.5.tgz#dd85081717a759f88509c20515082dc09c1cedd7"
+  integrity sha512-5NI1V/VK+8+JeTF8niqOowuysA4b8mGzdlMN/QnTnoXbYh4HZSNiopsDclN2g/m85+G++IrEtUdZaQ3GnaMsSA==
   dependencies:
     fast-deep-equal "^3.1.3"
     is-buffer "^2.0.5"
