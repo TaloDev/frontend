@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
+import clsx from 'clsx'
 
 const TableCell = (props) => {
   return (
     <td
-      className={classNames(
+      className={clsx(
         'p-4',
         props.className,
         {

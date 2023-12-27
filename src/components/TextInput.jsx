@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { focusStyle } from '../styles/theme'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { IconAlertCircle } from '@tabler/icons-react'
 import requiredIf from 'react-required-if'
 
@@ -11,7 +11,7 @@ function TextInput(props) {
   const errors = props.errors?.filter((err) => err !== null && err !== undefined) ?? []
   const showErrorHighlight = !hasFocus && errors.length > 0
 
-  const inputClassName = classNames(`
+  const inputClassName = clsx(`
     block
     p-2
     w-full
@@ -28,7 +28,7 @@ function TextInput(props) {
 
   return (
     <div>
-      <div className={classNames('w-full inline-block', props.containerClassName)}>
+      <div className={clsx('w-full inline-block', props.containerClassName)}>
         {props.label &&
           <label htmlFor={props.id} className='flex justify-between items-end font-semibold mb-2'>
             {props.label}
@@ -62,7 +62,7 @@ function TextInput(props) {
 
       {errors.filter((err) => {
         // filter out empty string errors so they dont render and create dead space
-        return  Boolean(err)
+        return Boolean(err)
       }).map((error, idx) => (
         <p role='alert' key={idx} className='text-red-500 font-medium mt-2'>{error}</p>
       ))}

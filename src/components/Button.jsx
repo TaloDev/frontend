@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types'
 import { focusStyle } from '../styles/theme'
 import Loading from './Loading'
-import classNames from 'classnames'
+import clsx from 'clsx'
 
 const Button = (props) => {
   const colourVariants = ['grey', 'red', 'green', 'black']
 
-  const className = classNames(`
+  const className = clsx(`
     disabled:opacity-40
     disabled:cursor-not-allowed
     transition-colors

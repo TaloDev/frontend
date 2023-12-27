@@ -16,7 +16,7 @@ import Checkbox from '../components/Checkbox'
 import { Controller, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import routes from '../constants/routes'
 import emailRegex from '../utils/validation/emailRegex'
 
@@ -70,7 +70,7 @@ export default function Register() {
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={classNames(unauthedContainerStyle, 'text-white space-y-8')} onSubmit={handleSubmit(onRegisterClick)}>
+      <form className={clsx(unauthedContainerStyle, 'text-white space-y-8')} onSubmit={handleSubmit(onRegisterClick)}>
         <h1 className='text-4xl font-bold'>Let&apos;s get started</h1>
 
         <RegisterPlanBanner />

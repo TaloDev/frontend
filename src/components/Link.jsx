@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 import { Link as RouterLink } from 'react-router-dom'
 import { focusStyle, linkStyle } from '../styles/theme'
-import classNames from 'classnames'
+import clsx from 'clsx'
 
 function Link({ to, state, className, children }) {
-  const linkClass = classNames(linkStyle, focusStyle, className ?? '')
+  const linkClass = clsx(linkStyle, focusStyle, className ?? '')
 
   if (to.startsWith('http')) {
     return (

@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
 import { IconAlertCircle } from '@tabler/icons-react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 
 const AlertBanner = (props) => {
   return (
-    <div className={classNames('bg-yellow-600 p-4 rounded flex items-center space-x-4', props.className)} data-testid='alert-banner'>
+    <div className={clsx('bg-yellow-600 p-4 rounded flex items-center space-x-4', props.className)} data-testid='alert-banner'>
       <props.icon size={24} className='shrink-0' />
       <span>{props.text}</span>
     </div>

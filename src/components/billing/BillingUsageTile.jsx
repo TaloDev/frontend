@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import Tile from '../Tile'
 import ErrorMessage from '../ErrorMessage'
 import pricingPlanActionTypes from '../../constants/pricingPlanActionTypes'
-import classNames from 'classnames'
+import clsx from 'clsx'
 
 export default function BillingUsageTile({ usage, usageError }) {
   return (
@@ -22,15 +22,15 @@ export default function BillingUsageTile({ usage, usageError }) {
                       <p className='w-40'>{name}</p>
                       <p
                         data-testid={name + '-usage'}
-                        className={classNames('w-20 font-semibold font-mono text-right', { 'text-orange-400': used >= limit })}
+                        className={clsx('w-20 font-semibold font-mono text-right', { 'text-orange-400': used >= limit })}
                       >
                         {used}/{limit}
                       </p>
 
                       <div className='h-3 w-full bg-gray-900 rounded-sm relative ml-4'>
                         <div
-                          className={classNames('absolute h-3 bg-white rounded-sm', { '!bg-orange-400': used >= limit })}
-                          style={{ width: `${Math.min(100, used/limit * 100)}%` }}
+                          className={clsx('absolute h-3 bg-white rounded-sm', { '!bg-orange-400': used >= limit })}
+                          style={{ width: `${Math.min(100, used / limit * 100)}%` }}
                         />
                       </div>
                     </li>

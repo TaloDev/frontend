@@ -7,7 +7,7 @@ import ErrorMessage from './ErrorMessage'
 import buildError from '../utils/buildError'
 import TableCell from './tables/TableCell'
 import TableBody from './tables/TableBody'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import Table from './tables/Table'
 import SecondaryTitle from './SecondaryTitle'
 import { isMetaProp, metaPropKeyMap } from '../constants/metaProps'
@@ -103,7 +103,7 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }) {
           <Table columns={['Property', 'Value', '']}>
             <TableBody
               iterator={metaProps}
-              configureClassNames={(prop, idx) => ({
+              configureClassnames={(prop, idx) => ({
                 'bg-orange-600': prop.key === 'META_DEV_BUILD' && idx % 2 !== 0,
                 'bg-orange-500': prop.key === 'META_DEV_BUILD' && idx % 2 === 0
               })}
@@ -131,7 +131,7 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }) {
             <TableBody iterator={existingProps}>
               {(prop) => (
                 <>
-                  <TableCell className={classNames('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}>{prop.key}</TableCell>
+                  <TableCell className={clsx('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}>{prop.key}</TableCell>
                   <TableCell className='min-w-80'>
                     <TextInput
                       id={`edit-${prop.key}`}
@@ -141,7 +141,7 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }) {
                       value={prop.value}
                     />
                   </TableCell>
-                  <TableCell className={classNames({ '!rounded-br-none': newProps.length > 0 })}>
+                  <TableCell className={clsx({ '!rounded-br-none': newProps.length > 0 })}>
                     <Button
                       variant='icon'
                       className='p-1 rounded-full bg-indigo-900 ml-auto'

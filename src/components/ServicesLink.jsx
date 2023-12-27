@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 import { focusStyle } from '../styles/theme'
 import canViewPage from '../utils/canViewPage'
@@ -100,7 +100,7 @@ function ServicesLink() {
             {services.filter(({ route }) => canViewPage(user, route)).map(({ name, desc, icon: Icon, route }) => (
               <li key={name}>
                 {showServicesMenu &&
-                  <RouterLink to={route} className={classNames('group block p-4 rounded transition-colors hover:bg-gray-700 focus:bg-gray-700 space-y-2', focusStyle)}>
+                  <RouterLink to={route} className={clsx('group block p-4 rounded transition-colors hover:bg-gray-700 focus:bg-gray-700 space-y-2', focusStyle)}>
                     <p className='font-bold text-white group-hover:text-indigo-300 group-focus:text-indigo-300 text-sm md:text-base'>
                       <Icon size={16} className='inline-block mb-1 mr-1' />
                       {name}
@@ -117,7 +117,7 @@ function ServicesLink() {
           <LinkButton onClick={() => setShowServicesMenu(!showServicesMenu)}>
             <div className='flex sm:flex-row-reverse items-center'>
               Services
-              <IconCaretDown size={20} className={classNames('ml-1 sm:ml-0 sm:mr-1 fill-current transform transition-transform', { 'rotate-180': showServicesMenu })} />
+              <IconCaretDown size={20} className={clsx('ml-1 sm:ml-0 sm:mr-1 fill-current transform transition-transform', { 'rotate-180': showServicesMenu })} />
             </div>
           </LinkButton>
         </div>

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { format } from 'date-fns'
 import { uniqBy } from 'lodash-es'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import getEventColour from '../../utils/getEventColour'
 
 const ChartTooltip = (props) => {
@@ -21,7 +21,7 @@ const ChartTooltip = (props) => {
                 <span className='mr-2 w-4 h-4 rounded inline-block align-text-bottom' style={{ backgroundColor: getEventColour(item.payload.name) }} />
                 {item.payload.name}: {item.payload.count}
 
-                <span className={classNames(
+                <span className={clsx(
                   'p-1 rounded ml-2 text-xs',
                   {
                     'bg-red-100': item.payload.change < 0,

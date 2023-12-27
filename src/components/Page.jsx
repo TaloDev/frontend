@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import Title from './Title'
 import Loading from './Loading'
 import GlobalBanners from './GlobalBanners'
@@ -11,7 +11,7 @@ function Page({ title, showBackButton, isLoading, containerClassName, extraTitle
 
       <GlobalBanners />
 
-      <div className={classNames('space-y-8', containerClassName)}>
+      <div className={clsx('space-y-8', containerClassName)}>
         <div className='flex items-center'>
           <Title showBackButton={showBackButton}>{title}</Title>
 

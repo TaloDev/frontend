@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { IconX } from '@tabler/icons-react'
 import Button from './Button'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import usePortal from '../utils/usePortal'
 import { createPortal } from 'react-dom'
 import FocusLock from 'react-focus-lock'
@@ -28,7 +28,7 @@ const Modal = (props) => {
     <FocusLock>
       <div className='fixed w-screen md:p-4 bg-gray-900 bg-opacity-60 flex items-start md:items-center justify-center inset-0 z-50 text-black transition-colors'>
         <dialog
-          className={classNames('block w-full h-full md:h-auto md:w-[640px] bg-white md:rounded p-0', {
+          className={clsx('block w-full h-full md:h-auto md:w-[640px] bg-white md:rounded p-0', {
             'overflow-y-scroll': props.scroll,
             'overflow-y-visible': !props.scroll
           })}
@@ -38,7 +38,7 @@ const Modal = (props) => {
           <div className='p-4 border-b border-gray-200 flex items-center justify-between'>
             <h2
               id={`modal-${props.id}-label`}
-              className={classNames('text-xl font-semibold', { 'hidden': props.hideTitle })}
+              className={clsx('text-xl font-semibold', { 'hidden': props.hideTitle })}
             >
               {props.title}
             </h2>

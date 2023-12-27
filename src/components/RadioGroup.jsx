@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { hiddenInputStyle, labelFocusStyle } from '../styles/theme'
 
 function RadioGroup({ label, name, options, onChange, value, info }) {
@@ -30,19 +30,19 @@ function RadioGroup({ label, name, options, onChange, value, info }) {
 
               <label
                 htmlFor={`${name}${idx}`}
-                className={classNames(
+                className={clsx(
                   'block font-semibold border border-gray-300 p-2 rounded cursor-pointer transition-colors hover:bg-gray-100',
                   { 'bg-indigo-500 hover:!bg-indigo-500 border-indigo-500': selected },
                   { [labelFocusStyle]: option.value === focusedValue }
                 )}
               >
-                <span className={classNames('inline-block relative rounded-full w-4 h-4 bg-white align-text-bottom border border-gray-300', { 'border-indigo-500': selected })}>
+                <span className={clsx('inline-block relative rounded-full w-4 h-4 bg-white align-text-bottom border border-gray-300', { 'border-indigo-500': selected })}>
                   {selected &&
                     <span className='absolute inset-0 rounded-full bg-indigo-300 m-0.5' />
                   }
                 </span>
 
-                <span className={classNames('ml-1', { 'text-white': selected })}>{option.label}</span>
+                <span className={clsx('ml-1', { 'text-white': selected })}>{option.label}</span>
               </label>
             </div>
           )

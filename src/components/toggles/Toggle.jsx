@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { motion } from 'framer-motion'
 import { hiddenInputStyle, labelFocusStyle } from '../../styles/theme'
 
@@ -35,7 +35,7 @@ function Toggle({ id, enabled, onToggle, disabled, inputRef }) {
 
       <motion.label
         htmlFor={id}
-        className={classNames('block h-8 w-16 p-2 border-2 rounded-full cursor-pointer', { [labelFocusStyle]: focus, '!cursor-not-allowed': disabled })}
+        className={clsx('block h-8 w-16 p-2 border-2 rounded-full cursor-pointer', { [labelFocusStyle]: focus, '!cursor-not-allowed': disabled })}
         animate={{
           backgroundColor: getBackgroundColour(),
           borderColor: getBorderColour()

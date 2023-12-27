@@ -70,7 +70,7 @@ const Players = () => {
           <Table columns={['Aliases', 'Registered', 'Last seen', '']}>
             <TableBody
               iterator={players}
-              configureClassNames={(player, idx) => ({
+              configureClassnames={(player, idx) => ({
                 'bg-orange-600': player.devBuild && idx % 2 !== 0,
                 'bg-orange-500': player.devBuild && idx % 2 === 0
               })}

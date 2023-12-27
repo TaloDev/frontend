@@ -1,16 +1,16 @@
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
+import clsx from 'clsx'
 
-function TableBody({ iterator, children, startIdx, configureClassNames }) {
+function TableBody({ iterator, children, startIdx, configureClassnames }) {
   return (
     <tbody>
       {iterator.map((iteraee, idx) => (
         <tr
           key={idx}
-          className={classNames({
+          className={clsx({
             'bg-indigo-600': (startIdx + idx) % 2 !== 0,
             'bg-indigo-500': (startIdx + idx) % 2 === 0,
-            ...configureClassNames?.(iteraee, startIdx + idx)
+            ...configureClassnames?.(iteraee, startIdx + idx)
           })}
         >
           {children(iteraee, idx)}
@@ -28,7 +28,7 @@ TableBody.propTypes = {
   iterator: PropTypes.array.isRequired,
   children: PropTypes.func.isRequired,
   startIdx: PropTypes.number,
-  configureClassNames: PropTypes.func
+  configureClassnames: PropTypes.func
 }
 
 export default TableBody

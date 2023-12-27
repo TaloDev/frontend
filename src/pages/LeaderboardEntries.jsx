@@ -13,7 +13,7 @@ import { IconArrowRight } from '@tabler/icons-react'
 import Button from '../components/Button'
 import updateLeaderboardEntry from '../api/updateLeaderboardEntry'
 import buildError from '../utils/buildError'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import Page from '../components/Page'
 import Table from '../components/tables/Table'
 import { useRecoilValue } from 'recoil'
@@ -105,7 +105,7 @@ const LeaderboardEntries = () => {
           <Table columns={['#', 'Player', 'Score', 'Submitted at', '']}>
             <TableBody
               iterator={entries}
-              configureClassNames={(entry, idx) => ({
+              configureClassnames={(entry, idx) => ({
                 'bg-orange-600': entry.playerAlias.player.devBuild && idx % 2 !== 0,
                 'bg-orange-500': entry.playerAlias.player.devBuild && idx % 2 === 0
               })}
@@ -118,7 +118,7 @@ const LeaderboardEntries = () => {
                       <span>{entry.playerAlias.identifier}</span>
                       <Button
                         variant='icon'
-                        className={classNames('ml-2 p-1 rounded-full bg-indigo-900', { 'bg-orange-900': entry.playerAlias.player.devBuild })}
+                        className={clsx('ml-2 p-1 rounded-full bg-indigo-900', { 'bg-orange-900': entry.playerAlias.player.devBuild })}
                         onClick={() => goToPlayer(entry.playerAlias.identifier)}
                         icon={<IconArrowRight size={16} />}
                       />

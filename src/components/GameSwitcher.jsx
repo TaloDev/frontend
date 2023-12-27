@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { IconChevronDown, IconPlus } from '@tabler/icons-react'
 import Button from './Button'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import NewGame from '../modals/NewGame'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import gamesState from '../state/gamesState'
@@ -53,7 +53,7 @@ const GameSwitcher = () => {
                 const disabled = activeGame.id === game.id
 
                 return (
-                  <li key={game.name} className={classNames('border-b border-gray-300', dropdownButtonStyle, { ['!bg-transparent']: disabled })}>
+                  <li key={game.name} className={clsx('border-b border-gray-300', dropdownButtonStyle, { ['!bg-transparent']: disabled })}>
                     <Button
                       variant='bare'
                       disabled={disabled}
@@ -77,7 +77,7 @@ const GameSwitcher = () => {
             </motion.ul>
           )}
         >
-          <div className={classNames('bg-indigo-300 rounded p-2 flex items-center justify-between w-60 lg:w-80', { 'rounded-b-none': isOpen })}>
+          <div className={clsx('bg-indigo-300 rounded p-2 flex items-center justify-between w-60 lg:w-80', { 'rounded-b-none': isOpen })}>
             <div className='flex items-center'>
               <span
                 style={{ backgroundColor: randomColor({ seed: activeGame.name, luminosity: 'dark' }) }}
@@ -90,7 +90,7 @@ const GameSwitcher = () => {
 
             <div className='ml-2 md:ml-8 flex items-center'>
               <Button variant='icon' onClick={() => setOpen(!isOpen)} extra={{ 'aria-label': 'Switch games or create a new one' }}>
-                <div className={classNames('transform transition-transform', { 'rotate-180': isOpen })}>
+                <div className={clsx('transform transition-transform', { 'rotate-180': isOpen })}>
                   <IconChevronDown size={24} />
                 </div>
               </Button>

@@ -2,13 +2,13 @@ import PropTypes from 'prop-types'
 import { IconArrowLeft } from '@tabler/icons-react'
 import Button from './Button'
 import { useNavigate } from 'react-router-dom'
-import classNames from 'classnames'
+import clsx from 'clsx'
 
 function Title({ children, showBackButton, className }) {
   const navigate = useNavigate()
 
   return (
-    <header className={classNames('flex items-center', className)}>
+    <header className={clsx('flex items-center', className)}>
       {showBackButton &&
         <Button
           variant='bare'
