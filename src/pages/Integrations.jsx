@@ -29,7 +29,7 @@ function ManualSyncSection({ loading, error, onClick, title, docs, cta, successT
         <>
           <div>
             {title}
-            <br/>
+            <br />
             <Link to={docs}>Learn more about how it works</Link>
 
             {error &&
@@ -133,7 +133,7 @@ export default function Integrations() {
               {!loading &&
                 <Button
                   variant='grey'
-                  className='w-auto'
+                  className='!w-auto'
                   onClick={onSteamIntegrationClick}
                 >
                   {!steamIntegration && <span>Enable integration</span>}
