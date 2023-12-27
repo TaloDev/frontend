@@ -71,8 +71,8 @@
   "lint-staged": {
     "*.{js,jsx}": "eslint --fix"
   },
-  "version": "0.26.2",
+  "version": "0.26.3",
   "engines": {
-    "node": "16.x"
+    "node": "20.x"
   }
 }
