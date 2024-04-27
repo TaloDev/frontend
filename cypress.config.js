@@ -1,7 +1,6 @@
-const { defineConfig } = require('cypress')
+import { defineConfig } from 'cypress'
 
-// eslint-disable-next-line no-undef
-module.exports = defineConfig({
+export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:8080',
     setupNodeEvents(on, config) {

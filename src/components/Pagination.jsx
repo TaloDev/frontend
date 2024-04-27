@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import Button from './Button'
 
-const Pagination = ({ count, pageState, itemsPerPage }) => {
+export default function Pagination({ count, pageState, itemsPerPage = 25 }) {
   const totalPages = Math.ceil(count / itemsPerPage)
 
   if (totalPages === 1) return null
@@ -39,9 +39,3 @@ Pagination.propTypes = {
   pageState: PropTypes.array.isRequired,
   itemsPerPage: PropTypes.number
 }
-
-Pagination.defaultProps = {
-  itemsPerPage: 25
-}
-
-export default Pagination

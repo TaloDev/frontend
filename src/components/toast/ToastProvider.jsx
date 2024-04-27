@@ -5,7 +5,7 @@ import ToastContext from './ToastContext'
 import { IconCheck } from '@tabler/icons-react'
 import { useEffect } from 'react'
 
-export default function ToastProvider({ children, lifetime }) {
+export default function ToastProvider({ children, lifetime = 2000 }) {
   const [text, setText] = useState('')
   const [type, setType] = useState('')
   const [show, setShow] = useState(false)
@@ -90,8 +90,3 @@ ToastProvider.propTypes = {
   children: PropTypes.node.isRequired,
   lifetime: PropTypes.number
 }
-
-ToastProvider.defaultProps = {
-  lifetime: 2000
-}
-

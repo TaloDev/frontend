@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
-function TableBody({ iterator, children, startIdx, configureClassnames }) {
+export default function TableBody({ iterator, children, startIdx = 0, configureClassnames }) {
   return (
     <tbody>
       {iterator.map((iteraee, idx) => (
@@ -20,15 +20,9 @@ function TableBody({ iterator, children, startIdx, configureClassnames }) {
   )
 }
 
-TableBody.defaultProps = {
-  startIdx: 0
-}
-
 TableBody.propTypes = {
   iterator: PropTypes.array.isRequired,
   children: PropTypes.func.isRequired,
   startIdx: PropTypes.number,
   configureClassnames: PropTypes.func
 }
-
-export default TableBody

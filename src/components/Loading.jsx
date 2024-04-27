@@ -1,14 +1,15 @@
 import PropTypes from 'prop-types'
 import { SpinnerCircularFixed } from 'spinners-react'
+import colors from 'tailwindcss/colors'
 
-export default function Loading(props) {
+export default function Loading({ size = 80, thickness = 160 }) {
   return (
     <span data-testid='loading'>
       <SpinnerCircularFixed
         color='white'
-        secondaryColor='#6366F1' // TODO use tailwind colour
-        size={props.size}
-        thickness={props.thickness}
+        secondaryColor={colors.indigo[500]}
+        size={size}
+        thickness={thickness}
       />
     </span>
   )
@@ -18,9 +19,4 @@ Loading.propTypes = {
   colour: PropTypes.string,
   size: PropTypes.number,
   thickness: PropTypes.number
-}
-
-Loading.defaultProps = {
-  size: 80,
-  thickness: 160
 }

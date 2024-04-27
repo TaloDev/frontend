@@ -5,13 +5,13 @@ import clsx from 'clsx'
 import { IconAlertCircle } from '@tabler/icons-react'
 import requiredIf from 'react-required-if'
 
-function TextInput(props) {
+export default function TextInput({ id, onChange, value, label, placeholder = '', type, variant, inputClassName, disabled, errors, containerClassName, inputExtra = {}, startFocused }) {
   const [hasFocus, setHasFocus] = useState(false)
 
-  const errors = props.errors?.filter((err) => err !== null && err !== undefined) ?? []
+  const errosToShow = errors?.filter((err) => Boolean(err)) ?? []
   const showErrorHighlight = !hasFocus && errors.length > 0
 
-  const inputClassName = clsx(`
+  const finalClassName = clsx(`
     block
     p-2
     w-full
@@ -19,39 +19,39 @@ function TextInput(props) {
     disabled:bg-gray-300
     disabled:text-gray-700
     ${focusStyle}
-    ${props.inputClassName ?? ''}
+    ${inputClassName ?? ''}
   `, {
-    'bg-gray-600': !props.variant,
-    'bg-gray-100 text-black': props.variant === 'light',
-    'bg-white border border-gray-300 focus:border-opacity-0': props.variant === 'modal'
+    'bg-gray-600': !variant,
+    'bg-gray-100 text-black': variant === 'light',
+    'bg-white border border-gray-300 focus:border-opacity-0': variant === 'modal'
   })
 
   return (
     <div>
-      <div className={clsx('w-full inline-block', props.containerClassName)}>
-        {props.label &&
-          <label htmlFor={props.id} className='flex justify-between items-end font-semibold mb-2'>
-            {props.label}
-            {errors.length > 0 && <span><IconAlertCircle className='inline -mt-0.5 text-red-500' size={20} /></span>}
+      <div className={clsx('w-full inline-block', containerClassName)}>
+        {label &&
+          <label htmlFor={id} className='flex justify-between items-end font-semibold mb-2'>
+            {label}
+            {errosToShow.length > 0 && <span><IconAlertCircle className='inline -mt-0.5 text-red-500' size={20} /></span>}
           </label>
         }
 
         <div className='relative'>
           <input
-            id={props.id}
-            className={inputClassName}
-            type={props.type ?? 'text'}
-            placeholder={props.placeholder}
-            onChange={(e) => props.onChange?.(e.target.value, e)}
-            value={props.value}
-            disabled={props.disabled}
-            {...props.inputExtra}
+            id={id}
+            className={finalClassName}
+            type={type ?? 'text'}
+            placeholder={placeholder}
+            onChange={(e) => onChange?.(e.target.value, e)}
+            value={value}
+            disabled={disabled}
+            {...inputExtra}
             onFocus={(e) => {
-              props.inputExtra.onFocus?.(e)
+              inputExtra.onFocus?.(e)
               setHasFocus(true)
             }}
             onBlur={(e) => {
-              props.inputExtra.onBlur?.(e)
+              inputExtra.onBlur?.(e)
               setHasFocus(false)
             }}
           />
@@ -60,10 +60,7 @@ function TextInput(props) {
         </div>
       </div>
 
-      {errors.filter((err) => {
-        // filter out empty string errors so they dont render and create dead space
-        return Boolean(err)
-      }).map((error, idx) => (
+      {errosToShow.map((error, idx) => (
         <p role='alert' key={idx} className='text-red-500 font-medium mt-2'>{error}</p>
       ))}
     </div>
@@ -85,10 +82,3 @@ TextInput.propTypes = {
   inputExtra: PropTypes.object,
   startFocused: PropTypes.bool
 }
-
-TextInput.defaultProps = {
-  inputExtra: {},
-  placeholder: ''
-}
-
-export default TextInput

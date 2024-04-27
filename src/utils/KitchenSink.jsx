@@ -46,7 +46,7 @@ Renderer.propTypes = {
   children: PropTypes.node.isRequired
 }
 
-function KitchenSink({ states, children, initialEntries, setLocation, routePath }) {
+export default function KitchenSink({ states = [], children, initialEntries = ['/'], setLocation, routePath = '/' }) {
   return (
     <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0 }}>
       <RecoilRoot
@@ -81,11 +81,3 @@ KitchenSink.propTypes = {
   setLocation: PropTypes.func,
   routePath: PropTypes.string
 }
-
-KitchenSink.defaultProps = {
-  states: [],
-  initialEntries: ['/'],
-  routePath: '/'
-}
-
-export default KitchenSink

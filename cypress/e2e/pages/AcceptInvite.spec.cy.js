@@ -37,7 +37,7 @@ describe('AcceptInvite', () => {
     cy.findByText('Superstatic dashboard').should('exist')
   })
 
-  it('should let users accept an invite', () => {
+  it('should handle missing invites', () => {
     cy.intercept('GET', /http:\/\/talo\.api\/public\/invites\/(.*)/, {
       statusCode: 404,
       body: {
