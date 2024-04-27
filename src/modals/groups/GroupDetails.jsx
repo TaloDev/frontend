@@ -137,7 +137,7 @@ export default function GroupDetails({ modalState, mutate, editingGroup }) {
   }
 
   const onDeleteClick = async () => {
-    /* c8 ignore next */
+    /* v8ignore next */
     if (!window.confirm('Are you sure you want to delete this group?')) return
 
     setDeleting(true)

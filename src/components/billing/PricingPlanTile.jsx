@@ -106,7 +106,7 @@ export default function PricingPlanTile({ plan, displayInterval, custom, current
               <ConfirmPlanChange
                 modalState={[
                   Boolean(invoice),
-                  /* c8 ignore next */
+                  /* v8ignore next */
                   () => {
                     setInvoice(null)
                     setPlanLoading(null)

@@ -96,7 +96,7 @@ export default function PlayerProfile() {
       <Table columns={['Alias', 'Created at', 'Updated at']}>
         <TableBody
           iterator={sortedAliases}
-          configureClassNames={(_, idx) => ({
+          configureClassnames={(_, idx) => ({
             'bg-orange-600': player.devBuild && idx % 2 !== 0,
             'bg-orange-500': player.devBuild && idx % 2 === 0
           })}

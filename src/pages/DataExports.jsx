@@ -15,7 +15,7 @@ import useSortedItems from '../utils/useSortedItems'
 import AlertBanner from '../components/AlertBanner'
 import { IconCheck } from '@tabler/icons-react'
 import buildError from '../utils/buildError'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import Page from '../components/Page'
 import DevDataStatus from '../components/DevDataStatus'
 import Table from '../components/tables/Table'
@@ -73,25 +73,25 @@ const DataExports = () => {
       <DevDataStatus />
 
       {!fetchError && dataExports.length > 0 &&
-          <Table columns={['Status', 'Entities', 'Created at', 'Created by']}>
-            <TableBody iterator={sortedDataExports}>
-              {(dataExport) => (
-                <>
-                  <TableCell>
-                    <span className={classNames('bg-gray-900 rounded p-1', {
-                      '!text-red-400': Boolean(dataExport.failedAt),
-                      'text-green-400': dataExport.id === createdExportId
-                    })}>
-                      {dataExport.failedAt ? 'Failed' : dataExportStatuses[dataExport.status]}
-                    </span>
-                  </TableCell>
-                  <TableCell className='capitalize'>{dataExport.entities.join(', ')}</TableCell>
-                  <DateCell>{format(new Date(dataExport.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                  <TableCell>{dataExport.createdBy === user.email ? 'You' : dataExport.createdBy}</TableCell>
-                </>
-              )}
-            </TableBody>
-          </Table>
+        <Table columns={['Status', 'Entities', 'Created at', 'Created by']}>
+          <TableBody iterator={sortedDataExports}>
+            {(dataExport) => (
+              <>
+                <TableCell>
+                  <span className={clsx('bg-gray-900 rounded p-1', {
+                    '!text-red-400': Boolean(dataExport.failedAt),
+                    'text-green-400': dataExport.id === createdExportId
+                  })}>
+                    {dataExport.failedAt ? 'Failed' : dataExportStatuses[dataExport.status]}
+                  </span>
+                </TableCell>
+                <TableCell className='capitalize'>{dataExport.entities.join(', ')}</TableCell>
+                <DateCell>{format(new Date(dataExport.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
+                <TableCell>{dataExport.createdBy === user.email ? 'You' : dataExport.createdBy}</TableCell>
+              </>
+            )}
+          </TableBody>
+        </Table>
       }
 
       {fetchError && <ErrorMessage error={fetchError} />}

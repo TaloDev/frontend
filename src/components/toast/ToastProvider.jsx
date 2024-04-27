@@ -5,7 +5,7 @@ import ToastContext from './ToastContext'
 import { IconCheck } from '@tabler/icons-react'
 import { useEffect } from 'react'
 
-export default function ToastProvider({ children, lifetime }) {
+export default function ToastProvider({ children, lifetime = 2000 }) {
   const [text, setText] = useState('')
   const [type, setType] = useState('')
   const [show, setShow] = useState(false)
@@ -39,7 +39,7 @@ export default function ToastProvider({ children, lifetime }) {
 
   const trigger = useCallback((text, type = '') => {
     // test shows the if working, coverage doesnt pick it up for some reason
-    /* c8 ignore start */
+    /* v8ignore start */
     if (show) {
       clearTimeout(timeoutId)
       setShow(false)
@@ -48,7 +48,7 @@ export default function ToastProvider({ children, lifetime }) {
         showToast(text, type)
       }, 200)
     } else {
-    /* c8 ignore stop */
+    /* v8ignore stop */
       showToast(text, type)
     }
   }, [show, timeoutId])
@@ -90,8 +90,3 @@ ToastProvider.propTypes = {
   children: PropTypes.node.isRequired,
   lifetime: PropTypes.number
 }
-
-ToastProvider.defaultProps = {
-  lifetime: 2000
-}
-

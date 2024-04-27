@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { motion } from 'framer-motion'
 import { hiddenInputStyle, labelFocusStyle } from '../../styles/theme'
 import { IconCheck, IconX } from '@tabler/icons-react'
@@ -13,7 +13,7 @@ function DevDataToggle() {
   const [innerEnabled, setInnerEnabled] = useState(includeDevData)
 
   const sharedIconProps = {
-    className:'flex items-center justify-center h-full absolute left-0 right-0',
+    className: 'flex items-center justify-center h-full absolute left-0 right-0',
     initial: false,
     transition: { duration: 0.3 }
   }
@@ -32,7 +32,7 @@ function DevDataToggle() {
 
       <label
         htmlFor='dev-data'
-        className={classNames('block h-12 w-24 p-2 bg-gray-900 border-2 border-gray-700 rounded-lg cursor-pointer', { [labelFocusStyle]: focus })}
+        className={clsx('block h-12 w-24 p-2 bg-gray-900 border-2 border-gray-700 rounded-lg cursor-pointer', { [labelFocusStyle]: focus })}
       >
         <motion.div
           animate={{

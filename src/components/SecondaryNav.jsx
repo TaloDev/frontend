@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import Link from './Link'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { useLocation } from 'react-router-dom'
 import canViewPage from '../utils/canViewPage'
 import userState from '../state/userState'
@@ -21,14 +21,14 @@ function SecondaryNav({ routes }) {
 
           return <li
             key={to}
-            className={classNames('shrink-0 relative after:content-[""] after:absolute after:top-[38px] after:left-0 after:h-0.5 after:w-full', {
+            className={clsx('shrink-0 relative after:content-[""] after:absolute after:top-[38px] after:left-0 after:h-0.5 after:w-full', {
               'after:bg-white': active,
               'hover:after:bg-indigo-300': !active
             })}
           >
             <Link
               to={to}
-              className={classNames('!no-underline', { '!text-white': active, '!text-indigo-300': !active })}
+              className={clsx('!no-underline', { '!text-white': active, '!text-indigo-300': !active })}
             >
               {title}
             </Link>

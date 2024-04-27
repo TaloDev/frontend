@@ -61,7 +61,7 @@ const Dashboard = () => {
   if (!activeGame) {
     return (
       <div>
-        <h1 className='text-4xl font-bold'>Hey there</h1>
+        <h1 className='text-4xl font-bold'>Let&apos;s get started!</h1>
         <p className='mt-2'>Welcome to Talo! To get started, create a new game using the button in the top right</p>
       </div>
     )

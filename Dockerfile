@@ -1,8 +1,8 @@
 FROM node:20-alpine AS build
 WORKDIR /usr/frontend
 COPY . .
-RUN yarn
-RUN yarn build
+RUN npm install
+RUN npm run build
 
 FROM nginx:stable-alpine
 COPY --from=build /usr/frontend/dist /bin/www

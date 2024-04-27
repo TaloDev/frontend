@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import Button from './Button'
 
-const Pagination = ({ count, pageState, itemsPerPage }) => {
+export default function Pagination({ count, pageState, itemsPerPage = 25 }) {
   const totalPages = Math.ceil(count / itemsPerPage)
 
   if (totalPages === 1) return null
@@ -17,10 +17,11 @@ const Pagination = ({ count, pageState, itemsPerPage }) => {
           <li key={val}>
             <Button
               variant='bare'
-              className={classNames(
+              className={clsx(
                 'py-2 w-8 ml-1 text-black text-center rounded-sm',
                 { 'bg-white': page !== idx },
-                { 'bg-indigo-500 !text-white': page === idx
+                {
+                  'bg-indigo-500 !text-white': page === idx
                 })}
               onClick={() => setPage(idx)}
             >
@@ -38,9 +39,3 @@ Pagination.propTypes = {
   pageState: PropTypes.array.isRequired,
   itemsPerPage: PropTypes.number
 }
-
-Pagination.defaultProps = {
-  itemsPerPage: 25
-}
-
-export default Pagination

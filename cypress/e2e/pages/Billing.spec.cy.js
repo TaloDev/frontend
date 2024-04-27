@@ -32,7 +32,7 @@ describe('Billing', () => {
     cy.intercept('POST', 'http://talo.api/billing/portal-session', {
       statusCode: 200,
       body: {
-        redirect: 'https://trytalo.com'
+        redirect: '/portal-session-page'
       }
     }).as('portalSession')
 
@@ -40,9 +40,7 @@ describe('Billing', () => {
     cy.findByText('Billing Portal').click()
 
     cy.wait('@portalSession').then(() => {
-      cy.on('url:changed', (newUrl) => {
-        expect(newUrl).to.eq('https://trytalo.com')
-      })
+      cy.url().should('include', 'portal-session-page')
     })
   })
 
@@ -52,7 +50,7 @@ describe('Billing', () => {
     cy.intercept('POST', 'http://talo.api/billing/checkout-session', {
       statusCode: 200,
       body: {
-        redirect: 'https://trytalo.com'
+        redirect: '/checkout-session-page'
       }
     }).as('checkoutSession')
 
@@ -60,9 +58,7 @@ describe('Billing', () => {
     cy.findAllByText('Upgrade').spread((button) => button.click())
 
     cy.wait('@checkoutSession').then(() => {
-      cy.on('url:changed', (newUrl) => {
-        expect(newUrl).to.eq('https://trytalo.com')
-      })
+      cy.url().should('include', 'checkout-session-page')
     })
   })
 

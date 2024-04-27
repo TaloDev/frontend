@@ -7,22 +7,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install deps
-        run: yarn --prefer-offline
+        run: npm ci --prefer-offline
 
-      - run: yarn test --silent --coverage
+      - run: npm test -- --silent --coverage
 
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -30,17 +30,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
       - name: Run Cypress
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
-          cache-key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-          install-command: yarn --prefer-offline
-          start: yarn dev:e2e
+          cache-key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          install-command: npm ci --prefer-offline
+          start: npm run dev:e2e
           wait-on: 'http://127.0.0.1:8080'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,38 +49,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install deps
-        run: yarn --prefer-offline
+        run: npm ci --prefer-offline
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
   lint:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install deps
-        run: yarn --prefer-offline
+        run: npm ci --prefer-offline
 
       - name: Lint
-        run: yarn eslint
+        run: npx eslint

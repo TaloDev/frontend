@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { IconArrowLeft } from '@tabler/icons-react'
 import Button from './Button'
 import { useLocation } from 'react-router-dom'
@@ -20,7 +20,7 @@ const MobileMenu = (props) => {
   }, [location.pathname, pathname, props.visible])
 
   return (
-    <div data-testid='mobile-menu' className={classNames(
+    <div data-testid='mobile-menu' className={clsx(
       'fixed transition-transform transform top-0 left-0 bg-gray-900 p-4 w-full h-full z-[999] md:hidden overflow-y-scroll',
       {
         'translate-x-0': props.visible,

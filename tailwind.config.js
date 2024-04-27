@@ -1,5 +1,4 @@
-// eslint-disable-next-line no-undef
-module.exports = {
+export default {
   content: [
     './public/**/*.html',
     './src/**/*.{js,jsx}'

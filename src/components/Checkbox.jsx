@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { IconCheck } from '@tabler/icons-react'
 import { focusStyle } from '../styles/theme'
 
@@ -10,7 +10,7 @@ export default function Checkbox({ id, checked, onChange, labelContent, inputRef
         <input
           id={id}
           ref={inputRef}
-          className={classNames(focusStyle, 'peer appearance-none align-text-top h-[20px] w-[20px] rounded-sm border border-gray-500 checked:border-indigo-400 bg-gray-600 checked:bg-indigo-500')}
+          className={clsx(focusStyle, 'peer appearance-none align-text-top h-[20px] w-[20px] rounded-sm border border-gray-500 checked:border-indigo-400 bg-gray-600 checked:bg-indigo-500')}
           type='checkbox'
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}

@@ -31,7 +31,7 @@ export default function BillingPortalTile() {
             <h2 className='text-xl font-semibold'>Billing details</h2>
             <Button
               variant='grey'
-              className='w-auto'
+              className='!w-auto'
               onClick={onBillingPortalClick}
               isLoading={portalLoading}
               icon={<IconExternalLink />}

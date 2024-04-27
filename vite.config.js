@@ -14,7 +14,6 @@ export default defineConfig({
     setupFiles: './setup-tests.js',
     css: false,
     coverage: {
-      provider: 'c8',
       reporter: 'lcov',
       exclude: [
         'src/api',

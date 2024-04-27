@@ -150,7 +150,7 @@ const StatDetails = ({ modalState, mutate, editingStat }) => {
   }
 
   const onDeleteClick = async () => {
-    /* c8 ignore next */
+    /* v8ignore next */
     if (!window.confirm('Are you sure you want to delete this stat?')) return
 
     setDeleting(true)

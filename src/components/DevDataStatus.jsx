@@ -1,4 +1,4 @@
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { useRecoilValue } from 'recoil'
 import devDataState from '../state/devDataState'
 import SecondaryTitle from './SecondaryTitle'
@@ -10,7 +10,7 @@ function DevDataStatus() {
   return (
     <div className='space-y-4'>
       <SecondaryTitle className='mt-4 md:mt-0'>Dev data is currently
-        <span className={classNames('font-semibold', { 'text-orange-500': includeDevData })}>
+        <span className={clsx('font-semibold', { 'text-orange-500': includeDevData })}>
           {' '}{includeDevData ? 'enabled' : 'not enabled'}
         </span>
       </SecondaryTitle>
