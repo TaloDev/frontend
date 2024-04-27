@@ -8,8 +8,8 @@ import requiredIf from 'react-required-if'
 export default function TextInput({ id, onChange, value, label, placeholder = '', type, variant, inputClassName, disabled, errors, containerClassName, inputExtra = {}, startFocused }) {
   const [hasFocus, setHasFocus] = useState(false)
 
-  const errosToShow = errors?.filter((err) => Boolean(err)) ?? []
-  const showErrorHighlight = !hasFocus && errors.length > 0
+  const errorsToShow = errors?.filter((err) => err !== null && err !== undefined) ?? []
+  const showErrorHighlight = !hasFocus && errorsToShow.length > 0
 
   const finalClassName = clsx(`
     block
@@ -32,7 +32,7 @@ export default function TextInput({ id, onChange, value, label, placeholder = ''
         {label &&
           <label htmlFor={id} className='flex justify-between items-end font-semibold mb-2'>
             {label}
-            {errosToShow.length > 0 && <span><IconAlertCircle className='inline -mt-0.5 text-red-500' size={20} /></span>}
+            {errorsToShow.length > 0 && <span><IconAlertCircle className='inline -mt-0.5 text-red-500' size={20} /></span>}
           </label>
         }
 
@@ -60,7 +60,10 @@ export default function TextInput({ id, onChange, value, label, placeholder = ''
         </div>
       </div>
 
-      {errosToShow.map((error, idx) => (
+      {errorsToShow.filter((err) => {
+        // filter out empty string errors so they dont render and create dead space
+        return Boolean(err)
+      }).map((error, idx) => (
         <p role='alert' key={idx} className='text-red-500 font-medium mt-2'>{error}</p>
       ))}
     </div>
