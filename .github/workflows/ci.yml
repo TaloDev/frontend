@@ -36,7 +36,7 @@ jobs:
           node-version: 20
 
       - name: Run Cypress
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
           cache-key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
           install-command: npm ci --prefer-offline
