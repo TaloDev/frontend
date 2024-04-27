@@ -33,7 +33,7 @@ export default function DateInput({ id, value, onChange }) {
           />
         )}
         visible={isOpen}
-        onClickOutside={/* c8 ignore next */ () => setOpen(false)}
+        onClickOutside={/* v8ignore next */ () => setOpen(false)}
       >
         <div>
           <TextInput

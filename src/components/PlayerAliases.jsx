@@ -5,7 +5,7 @@ import useSortedItems from '../utils/useSortedItems'
 
 export default function PlayerAliases({ aliases }) {
   const getIcon = (alias) => {
-    /* c8 ignore next */
+    /* v8ignore next */
     switch (alias.service) {
       case 'steam': return <IconBrandSteam size={16} />
       case 'username': return <IconUser size={16} />

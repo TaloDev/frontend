@@ -20,7 +20,7 @@ jobs:
       - name: Install deps
         run: npm ci --prefer-offline
 
-      - run: npm test --silent --coverage
+      - run: npm test -- --silent --coverage
 
       - uses: codecov/codecov-action@v4
         with:
