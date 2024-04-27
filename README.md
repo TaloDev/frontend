@@ -27,14 +27,14 @@ For help and support, [join our Discord](https://discord.gg/2RWwxXVY3v).
 
 ## Installing, building & running
 
-Run `yarn` or `npm install` to install the dependencies.
+Run `npm install` to install the dependencies.
 
-### yarn dev
+### npm run dev
 
 Runs the app in the development mode.
 Open http://localhost:8080 to view it in the browser.
 
-### yarn build
+### npm run build
 
 Builds a static copy of the site to the `dist/` folder.
 
