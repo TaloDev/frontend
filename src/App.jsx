@@ -62,7 +62,6 @@ function App() {
     if (!activeGame && games.length > 0) setActiveGame(games[0])
   }, [activeGame, games])
 
-
   if (isRefreshing) return <AppLoading />
 
   return (
