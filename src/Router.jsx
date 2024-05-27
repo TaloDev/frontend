@@ -1,6 +1,6 @@
 import { lazy } from 'react'
 import PropTypes from 'prop-types'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import userState from './state/userState'
 import NavBar from './components/NavBar'
@@ -8,6 +8,7 @@ import routes from './constants/routes'
 import activeGameState from './state/activeGameState'
 import AuthService from './services/AuthService'
 import canViewPage from './utils/canViewPage'
+import NotFoundHandler from './components/NotFoundHandler'
 
 const Login = lazy(() => import(/* webpackChunkName: 'login' */ './pages/Login'))
 const Dashboard = lazy(() => import(/* webpackChunkName: 'dashboard' */ './pages/Dashboard'))
@@ -59,7 +60,7 @@ function Router({ intendedUrl }) {
             <Route exact path={routes.forgotPassword} element={<ForgotPassword />} />
             <Route exact path={routes.resetPassword} element={<ResetPassword />} />
 
-            <Route path='*' element={<Navigate to={`${routes.login}?next=${encodeURIComponent(intendedUrl)}`} replace />} />
+            <Route path='*' element={<NotFoundHandler baseRoute={routes.login} intendedUrl={intendedUrl} />} />
           </Routes>
         </main>
       }
@@ -98,7 +99,7 @@ function Router({ intendedUrl }) {
                 </>
               }
 
-              <Route path='*' element={<Navigate to={routes.dashboard} replace />} />
+              <Route path='*' element={<NotFoundHandler baseRoute={routes.dashboard} intendedUrl={intendedUrl} />} />
             </Routes>
           </main>
         </div>

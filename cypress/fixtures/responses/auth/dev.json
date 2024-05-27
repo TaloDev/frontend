@@ -4,6 +4,7 @@
     "id": 1,
     "type": 2,
     "username": "Dev",
+    "email": "dev@trytalo.com",
     "organisation": {
       "games": [
         {

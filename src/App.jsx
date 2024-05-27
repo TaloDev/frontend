@@ -1,5 +1,4 @@
 import { useState, useEffect, Suspense } from 'react'
-import { useNavigate } from 'react-router-dom'
 import * as Sentry from '@sentry/react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import refreshAccess from './api/refreshAccess'
@@ -28,8 +27,6 @@ function App() {
   const games = useRecoilValue(gamesState)
   const [activeGame, setActiveGame] = useRecoilState(activeGameState)
 
-  const navigate = useNavigate()
-
   const handleRefreshSession = async () => {
     try {
       const res = await refreshAccess()
@@ -53,8 +50,6 @@ function App() {
   useEffect(() => {
     if (!hasTriedRefreshing && intendedUrl) {
       handleRefreshSession()
-    } else if (hasTriedRefreshing) {
-      navigate(intendedUrl, { replace: true })
     }
   }, [intendedUrl, hasTriedRefreshing])
 
