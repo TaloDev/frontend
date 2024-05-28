@@ -26,17 +26,6 @@ const Login = () => {
   const location = useLocation()
 
   useEffect(() => {
-    const intendedRoute = new URLSearchParams(window.location.search).get('next')
-
-    if (intendedRoute) {
-      window.localStorage.setItem('intendedRoute', intendedRoute)
-      navigate(window.location.pathname, { replace: true })
-    } else {
-      window.localStorage.removeItem('intendedRoute')
-    }
-  }, [])
-
-  useEffect(() => {
     if (wasLoggedOut) {
       setTimeout(() => {
         window.localStorage.removeItem('loggedOut')
