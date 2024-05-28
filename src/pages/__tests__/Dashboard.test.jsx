@@ -138,6 +138,9 @@ describe('<Dashboard />', () => {
     const locationMock = vi.fn()
     window.localStorage.setItem('intendedRoute', '/players')
 
+    // easier to mock localStorage
+    window.sessionStorage = window.localStorage
+
     render(
       <KitchenSink
         states={[

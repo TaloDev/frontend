@@ -1,6 +1,4 @@
 
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import useHeadlines from '../api/useHeadlines'
 import ErrorMessage from '../components/ErrorMessage'
@@ -16,6 +14,7 @@ import devDataState from '../state/devDataState'
 import SecondaryNav from '../components/SecondaryNav'
 import DevDataStatus from '../components/DevDataStatus'
 import SecondaryTitle from '../components/SecondaryTitle'
+import useIntendedRoute from '../utils/useIntendedRoute'
 
 export const secondaryNavRoutes = [
   { title: 'Dashboard', to: routes.dashboard },
@@ -25,21 +24,7 @@ export const secondaryNavRoutes = [
 ]
 
 const Dashboard = () => {
-  const navigate = useNavigate()
-
-  const [intendedRouteChecked, setIntendedRouteChecked] = useState(false)
-
   const includeDevData = useRecoilValue(devDataState)
-
-  useEffect(() => {
-    const intended = window.localStorage.getItem('intendedRoute')
-    if (intended) {
-      window.localStorage.removeItem('intendedRoute')
-      navigate(intended, { replace: true })
-    } else {
-      setIntendedRouteChecked(true)
-    }
-  }, [])
 
   const activeGame = useRecoilValue(activeGameState)
 
@@ -55,6 +40,8 @@ const Dashboard = () => {
   const { startDate, endDate } = useTimePeriod(timePeriod)
   const { headlines, loading: headlinesLoading, error: headlinesError } = useHeadlines(activeGame, startDate, endDate, includeDevData)
   const { stats, loading: statsLoading, error: statsError } = useStats(activeGame, includeDevData)
+
+  const intendedRouteChecked = useIntendedRoute()
 
   if (!intendedRouteChecked) return null
 

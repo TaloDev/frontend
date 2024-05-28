@@ -19,9 +19,12 @@ const NavBar = () => {
   const onLogoutClick = async () => {
     try {
       /* v8ignore next */
-      Sentry.configureScope((scope) => scope.setUser(null))
+      Sentry.setUser(null)
       setActiveGame(null)
+
       window.localStorage.removeItem('loggedOut')
+      window.sessionStorage.removeItem('intendedRouteChecked')
+
       await logout()
     } catch (err) {
       console.warn('Logout failed:', err.message)
