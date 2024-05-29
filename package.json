@@ -6,7 +6,7 @@
     "test": "vitest",
     "test:e2e": "start-server-and-test dev:e2e http://localhost:8080 cypress:open",
     "cypress:open": "cypress open",
-    "prepare": "husky install",
+    "prepare": "husky",
     "lint": "eslint src/**/*.{js,jsx}"
   },
   "dependencies": {
@@ -57,7 +57,7 @@
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-testing-library": "^6.2.2",
-    "husky": ">=6",
+    "husky": "^9.0.11",
     "jsdom": "^24.0.0",
     "lint-staged": ">=10",
     "postcss": "^8.4.38",
@@ -71,7 +71,7 @@
   "lint-staged": {
     "*.{js,jsx}": "eslint --fix"
   },
-  "version": "0.28.0",
+  "version": "0.28.1",
   "engines": {
     "node": "20.x"
   },
