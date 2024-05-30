@@ -47,7 +47,7 @@ describe('Login', () => {
     cy.location('pathname').should('eq', '/account')
   })
 
-  it('should redirect to the dashboard after logging in if the intended route does not exist', () => {
+  it('should redirect to the 404 page after logging in if the intended route does not exist', () => {
     cy.intercept('POST', 'http://talo.api/public/users/login', {
       statusCode: 200,
       fixture: 'responses/auth/dev'
@@ -58,7 +58,6 @@ describe('Login', () => {
     cy.findByLabelText('Password').type('password')
     cy.findByText('Login').click()
 
-    cy.findByText('Superstatic dashboard').should('exist')
-    cy.location('pathname').should('eq', '/')
+    cy.findByText('404 Not Found').should('exist')
   })
 })

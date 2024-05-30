@@ -15,13 +15,6 @@ export default function useIntendedRoute() {
   useEffect(() => {
     const intended = window.sessionStorage.getItem('intendedRoute')
 
-    if (intendedRouteChecked() && intended) {
-      // we hit a 404 after routing to the intended page
-      window.sessionStorage.removeItem('intendedRoute')
-      navigate(window.location.pathname, { replace: true })
-      return
-    }
-
     if (intended) {
       window.sessionStorage.removeItem('intendedRoute')
       navigate(intended, { replace: true })
