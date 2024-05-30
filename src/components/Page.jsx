@@ -4,12 +4,12 @@ import Title from './Title'
 import Loading from './Loading'
 import GlobalBanners from './GlobalBanners'
 
-export default function Page({ title, showBackButton = false, isLoading = false, containerClassName = '', extraTitleComponent, children, secondaryNav }) {
+export default function Page({ title, showBackButton = false, isLoading = false, containerClassName = '', extraTitleComponent, children, secondaryNav, disableBanners }) {
   return (
     <div className='space-y-8'>
       {secondaryNav}
 
-      <GlobalBanners />
+      {!disableBanners && <GlobalBanners />}
 
       <div className={clsx('space-y-8', containerClassName)}>
         <div className='flex items-center'>
@@ -37,5 +37,6 @@ Page.propTypes = {
   containerClassName: PropTypes.string,
   children: PropTypes.node.isRequired,
   extraTitleComponent: PropTypes.node,
-  secondaryNav: PropTypes.node
+  secondaryNav: PropTypes.node,
+  disableBanners: PropTypes.bool
 }

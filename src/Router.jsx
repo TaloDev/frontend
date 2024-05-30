@@ -8,7 +8,7 @@ import routes from './constants/routes'
 import activeGameState from './state/activeGameState'
 import AuthService from './services/AuthService'
 import canViewPage from './utils/canViewPage'
-import NotFoundHandler from './components/NotFoundHandler'
+import IntendedRouteHandler from './components/IntendedRouteHandler'
 
 const Login = lazy(() => import(/* webpackChunkName: 'login' */ './pages/Login'))
 const Dashboard = lazy(() => import(/* webpackChunkName: 'dashboard' */ './pages/Dashboard'))
@@ -41,8 +41,9 @@ const ForgotPassword = lazy(() => import(/* webpackChunkName: 'forgot-password' 
 const ResetPassword = lazy(() => import(/* webpackChunkName: 'reset-password' */ './pages/ResetPassword'))
 const PlayerSaves = lazy(() => import(/* webpackChunkName: 'player-saves' */ './pages/PlayerSaves'))
 const PlayerSaveContent = lazy(() => import(/* webpackChunkName: 'player-save-content' */ './pages/PlayerSaveContent'))
+const NotFound = lazy(() => import(/* webpackChunkName: 'not-found' */ './pages/NotFound'))
 
-function Router({ intendedUrl }) {
+function Router({ intendedRoute }) {
   const user = useRecoilValue(userState)
   const activeGame = useRecoilValue(activeGameState)
 
@@ -60,7 +61,7 @@ function Router({ intendedUrl }) {
             <Route exact path={routes.forgotPassword} element={<ForgotPassword />} />
             <Route exact path={routes.resetPassword} element={<ResetPassword />} />
 
-            <Route path='*' element={<NotFoundHandler baseRoute={routes.login} intendedUrl={intendedUrl} />} />
+            <Route path='*' element={<IntendedRouteHandler intendedRoute={intendedRoute} />} />
           </Routes>
         </main>
       }
@@ -99,7 +100,7 @@ function Router({ intendedUrl }) {
                 </>
               }
 
-              <Route path='*' element={<NotFoundHandler baseRoute={routes.dashboard} intendedUrl={intendedUrl} />} />
+              <Route path='*' element={<NotFound />} />
             </Routes>
           </main>
         </div>
@@ -109,7 +110,7 @@ function Router({ intendedUrl }) {
 }
 
 Router.propTypes = {
-  intendedUrl: PropTypes.string
+  intendedRoute: PropTypes.string
 }
 
 export default Router

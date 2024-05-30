@@ -20,9 +20,8 @@ function AppLoading() {
 function App() {
   const setUser = useSetRecoilState(userState)
 
-  const [isRefreshing, setRefreshing] = useState(true)
   const [hasTriedRefreshing, setTriedRefreshing] = useState(false)
-  const [intendedUrl, setIntendedUrl] = useState(null)
+  const [intendedRoute, setIntendedRoute] = useState(null)
 
   const games = useRecoilValue(gamesState)
   const [activeGame, setActiveGame] = useRecoilState(activeGameState)
@@ -38,30 +37,34 @@ function App() {
     } catch (err) {
       setActiveGame(null)
     } finally {
-      setRefreshing(false)
       setTriedRefreshing(true)
     }
   }
 
   useEffect(() => {
-    setIntendedUrl(window.location.pathname + window.location.search)
+    const location = window.location.pathname + window.location.search
+    if (location !== '/') {
+      setIntendedRoute(location)
+    } else {
+      setTriedRefreshing(true)
+    }
   }, [])
 
   useEffect(() => {
-    if (!hasTriedRefreshing && intendedUrl) {
+    if (!hasTriedRefreshing && intendedRoute) {
       handleRefreshSession()
     }
-  }, [intendedUrl, hasTriedRefreshing])
+  }, [intendedRoute, hasTriedRefreshing])
 
   useEffect(() => {
     if (!activeGame && games.length > 0) setActiveGame(games[0])
   }, [activeGame, games])
 
-  if (isRefreshing) return <AppLoading />
+  if (!hasTriedRefreshing) return <AppLoading />
 
   return (
     <Suspense fallback={<AppLoading />}>
-      <Router intendedUrl={intendedUrl} />
+      <Router intendedRoute={intendedRoute} />
     </Suspense>
   )
 }
