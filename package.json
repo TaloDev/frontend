@@ -6,7 +6,7 @@
     "test": "vitest",
     "test:e2e": "start-server-and-test dev:e2e http://localhost:8080 cypress:open",
     "cypress:open": "cypress open",
-    "prepare": "husky",
+    "prepare": "husky || true",
     "lint": "eslint src/**/*.{js,jsx}"
   },
   "dependencies": {
