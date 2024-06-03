@@ -45,13 +45,11 @@ function App() {
     const location = window.location.pathname + window.location.search
     if (location !== '/') {
       setIntendedRoute(location)
-    } else {
-      setTriedRefreshing(true)
     }
   }, [])
 
   useEffect(() => {
-    if (!hasTriedRefreshing && intendedRoute) {
+    if (!hasTriedRefreshing) {
       handleRefreshSession()
     }
   }, [intendedRoute, hasTriedRefreshing])

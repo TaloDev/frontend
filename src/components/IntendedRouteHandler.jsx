@@ -25,5 +25,5 @@ export default function IntendedRouteHandler({ intendedRoute }) {
 }
 
 IntendedRouteHandler.propTypes = {
-  intendedRoute: PropTypes.string.isRequired
+  intendedRoute: PropTypes.string
 }
