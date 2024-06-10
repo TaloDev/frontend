@@ -26,6 +26,7 @@ function Select(props, ref) {
     option: (provided, state) => ({
       ...provided,
       backgroundColor: state.isSelected && '#6366F1',
+      color: state.isSelected ? '#FFF' : '#000',
       ':hover': {
         backgroundColor: !state.isSelected && '#E0E7FF'
       }

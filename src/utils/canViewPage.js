@@ -17,6 +17,8 @@ export default function canViewPage(user, route) {
       return user.type === userTypes.ADMIN
     case routes.billing:
       return false
+    case routes.feedbackCategories:
+      return [userTypes.ADMIN, userTypes.DEV].includes(user.type)
     default:
       return true
   }

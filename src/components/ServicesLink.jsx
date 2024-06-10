@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 import { focusStyle } from '../styles/theme'
 import canViewPage from '../utils/canViewPage'
-import { IconCaretDown, IconBolt, IconUser, IconFileExport, IconTrophy, IconKey, IconChartBar, IconExchange, IconSocial, IconSettings } from '@tabler/icons-react'
+import { IconCaretDown, IconBolt, IconUser, IconFileExport, IconTrophy, IconKey, IconChartBar, IconExchange, IconSocial, IconSettings, IconMessages } from '@tabler/icons-react'
 import LinkButton from './LinkButton'
 import routes from '../constants/routes'
 import userState from '../state/userState'
@@ -81,6 +81,12 @@ function ServicesLink() {
       desc: 'Push state directly to your game',
       icon: IconSettings,
       route: routes.gameProps
+    },
+    {
+      name: 'Feedback',
+      desc: 'Receive feedback from your players',
+      icon: IconMessages,
+      route: routes.feedback
     }
   ]
 
