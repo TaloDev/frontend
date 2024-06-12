@@ -5,11 +5,11 @@ export default function useIntendedRoute() {
   const navigate = useNavigate()
 
   const intendedRouteChecked = useCallback(() => {
-    return window.sessionStorage.getItem('intendedRouteChecked') === '1'
+    return window.sessionStorage.getItem('intendedRouteChecked') === 'true'
   }, [])
 
   const setIntendedRouteChecked = useCallback(() => {
-    window.sessionStorage.setItem('intendedRouteChecked', '1')
+    window.sessionStorage.setItem('intendedRouteChecked', 'true')
   }, [])
 
   useEffect(() => {
