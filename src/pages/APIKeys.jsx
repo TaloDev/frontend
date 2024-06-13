@@ -18,7 +18,7 @@ import Scopes from '../modals/Scopes'
 import Page from '../components/Page'
 import Table from '../components/tables/Table'
 
-const APIKeys = () => {
+export default function APIKeys() {
   const [isLoading, setLoading] = useState(true)
   const [keys, setKeys] = useState([])
   const [error, setError] = useState(null)
@@ -124,7 +124,7 @@ const APIKeys = () => {
                   <DateCell>{key.lastUsedAt ? format(new Date(key.lastUsedAt), 'dd MMM Y, HH:mm') : 'Never used'}</DateCell>
                   <TableCell className='flex'>
                     <div>
-                      <Button variant='grey' onClick={() => setSelectedKey(key)}>View scopes</Button>
+                      <Button variant='grey' onClick={() => setSelectedKey(key)}>Modify scopes</Button>
                     </div>
                   </TableCell>
                   <TableCell className='w-40'>
@@ -207,10 +207,9 @@ const APIKeys = () => {
         <Scopes
           modalState={[showScopesModal, setShowScopesModal]}
           selectedKey={selectedKey}
+          availableScopes={availableScopes}
         />
       }
     </>
   )
 }
-
-export default APIKeys
