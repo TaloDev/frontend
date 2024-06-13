@@ -42,6 +42,8 @@ const ResetPassword = lazy(() => import(/* webpackChunkName: 'reset-password' */
 const PlayerSaves = lazy(() => import(/* webpackChunkName: 'player-saves' */ './pages/PlayerSaves'))
 const PlayerSaveContent = lazy(() => import(/* webpackChunkName: 'player-save-content' */ './pages/PlayerSaveContent'))
 const NotFound = lazy(() => import(/* webpackChunkName: 'not-found' */ './pages/NotFound'))
+const Feedback = lazy(() => import(/* webpackChunkName: 'feedback' */ './pages/Feedback'))
+const FeedbackCategories = lazy(() => import(/* webpackChunkName: 'feedback-categories' */ './pages/FeedbackCategories'))
 
 function Router({ intendedRoute }) {
   const user = useRecoilValue(userState)
@@ -97,6 +99,8 @@ function Router({ intendedRoute }) {
                   <Route exact path={routes.playerLeaderboardEntries} element={<PlayerLeaderboardEntries />} />
                   <Route exact path={routes.playerSaveContent} element={<PlayerSaveContent />} />
                   <Route exact path={routes.playerSaves} element={<PlayerSaves />} />
+                  <Route exact path={routes.feedback} element={<Feedback />} />
+                  {canViewPage(user, routes.feedbackCategories) && <Route exact path={routes.feedbackCategories} element={<FeedbackCategories />} />}
                 </>
               }
 

@@ -9,6 +9,8 @@ export default {
   dataExports: '/exports',
   demo: '/demo',
   events: '/events',
+  feedback: '/feedback',
+  feedbackCategories: '/feedback-categories',
   forgotPassword: '/forgot-password',
   gameProps: '/game-config',
   groups: '/groups',
