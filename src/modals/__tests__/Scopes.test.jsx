@@ -69,6 +69,42 @@ describe('<Scopes />', () => {
     expect(screen.getByText('Update')).toBeInTheDocument()
   })
 
+  it('should check and uncheck scopes', async () => {
+    render(
+      <KitchenSink states={[
+        { node: userState, initialValue: { type: userTypes.ADMIN } },
+        { node: activeGameState, initialValue: activeGameValue }
+      ]}>
+        <ToastProvider>
+          <Scopes
+            modalState={[true, vi.fn()]}
+            mutate={vi.fn()}
+            selectedKey={{
+              id: 1,
+              scopes: [
+                'read:leaderboards',
+                'read:players',
+                'write:players'
+              ]
+            }}
+            availableScopes={{
+              leaderboards: ['read:leaderboards', 'write:leaderboards'],
+              players: ['read:players', 'write:players']
+            }}
+          />
+        </ToastProvider>
+      </KitchenSink>
+    )
+
+    expect(screen.getByDisplayValue('write:leaderboards')).not.toBeChecked()
+    await userEvent.click(screen.getByDisplayValue('write:leaderboards'))
+    expect(screen.getByDisplayValue('write:leaderboards')).toBeChecked()
+
+    expect(screen.getByDisplayValue('read:players')).toBeChecked()
+    await userEvent.click(screen.getByDisplayValue('read:players'))
+    expect(screen.getByDisplayValue('read:players')).not.toBeChecked()
+  })
+
   it('should update a key\'s scopes', async () => {
     const closeMock = vi.fn()
     const mutateMock = vi.fn()
