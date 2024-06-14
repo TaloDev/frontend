@@ -10,7 +10,7 @@ import ErrorMessage from '../components/ErrorMessage'
 import buildError from '../utils/buildError'
 import ToastContext from '../components/toast/ToastContext'
 
-export default function Scopes({ modalState, selectedKey, availableScopes }) {
+export default function Scopes({ modalState, selectedKey, availableScopes, mutate }) {
   const [, setOpen] = modalState
 
   const toast = useContext(ToastContext)
@@ -40,8 +40,22 @@ export default function Scopes({ modalState, selectedKey, availableScopes }) {
     setError(null)
 
     try {
-      await updateAPIKey(activeGame.id, selectedKey.id, { scopes: selectedScopes })
+      const res = await updateAPIKey(activeGame.id, selectedKey.id, { scopes: selectedScopes })
+      mutate((data) => {
+        return {
+          ...data,
+          apiKeys: data.apiKeys.map((k) => {
+            if (k.id === selectedKey.id) {
+              return res.data.apiKey
+            }
+
+            return k
+          })
+        }
+      })
+
       toast.trigger('Access key scopes updated', 'success')
+      setOpen(false)
     } catch (err) {
       setError(buildError(err))
     } finally {
@@ -104,5 +118,6 @@ export default function Scopes({ modalState, selectedKey, availableScopes }) {
 Scopes.propTypes = {
   modalState: PropTypes.array.isRequired,
   selectedKey: PropTypes.object,
-  availableScopes: PropTypes.object.isRequired
+  availableScopes: PropTypes.object,
+  mutate: PropTypes.func.isRequired
 }
