@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import getAPIKeys from '../api/getAPIKeys'
 import activeGameState from '../state/activeGameState'
 import ErrorMessage from '../components/ErrorMessage'
 import buildError from '../utils/buildError'
 import { format } from 'date-fns'
 import Button from '../components/Button'
 import deleteAPIKey from '../api/deleteAPIKey'
-import getAPIKeyScopes from '../api/getAPIKeyScopes'
 import createAPIKey from '../api/createAPIKey'
 import userState from '../state/userState'
 import TableCell from '../components/tables/TableCell'
@@ -17,41 +15,21 @@ import DateCell from '../components/tables/cells/DateCell'
 import Scopes from '../modals/Scopes'
 import Page from '../components/Page'
 import Table from '../components/tables/Table'
+import useAPIKeys from '../api/useAPIKeys'
 
-const APIKeys = () => {
-  const [isLoading, setLoading] = useState(true)
-  const [keys, setKeys] = useState([])
-  const [error, setError] = useState(null)
+export default function APIKeys() {
   const activeGame = useRecoilValue(activeGameState)
+  const { apiKeys, scopes: availableScopes, loading, error: fetchError, mutate } = useAPIKeys(activeGame)
+
   const [deletingKeys, setDeletingKeys] = useState([])
-  const [availableScopes, setAvailableScopes] = useState(null)
+  const [error, setError] = useState(null)
+
   const [selectedScopes, setSelectedScopes] = useState([])
   const [isCreating, setCreating] = useState(false)
   const [createdKey, setCreatedKey] = useState(null)
   const user = useRecoilValue(userState)
   const [selectedKey, setSelectedKey] = useState(null)
   const [showScopesModal, setShowScopesModal] = useState(false)
-
-  useEffect(() => {
-    if (activeGame) {
-      (async () => {
-        setError(null)
-        setCreatedKey(null)
-
-        try {
-          let res = await getAPIKeyScopes(activeGame.id)
-          setAvailableScopes(res.data.scopes)
-
-          res = await getAPIKeys(activeGame.id)
-          setKeys(res.data.apiKeys)
-        } catch (err) {
-          setError(buildError(err))
-        } finally {
-          setLoading(false)
-        }
-      })()
-    }
-  }, [activeGame])
 
   useEffect(() => {
     setShowScopesModal(Boolean(selectedKey))
@@ -68,7 +46,13 @@ const APIKeys = () => {
 
       try {
         await deleteAPIKey(activeGame.id, apiKey.id)
-        setKeys(keys.filter((k) => k.id !== apiKey.id))
+        mutate((data) => {
+          return {
+            ...data,
+            apiKeys: data.apiKeys.filter((k) => k.id !== apiKey.id)
+          }
+        })
+
         setError(null)
         setCreatedKey(null)
       } catch (err) {
@@ -86,8 +70,17 @@ const APIKeys = () => {
 
     try {
       const res = await createAPIKey(activeGame.id, selectedScopes)
+      mutate((data) => {
+        return {
+          ...data,
+          apiKeys: [
+            ...data.apiKeys,
+            res.data.apiKey
+          ]
+        }
+      })
+
       setCreatedKey(res.data.token)
-      setKeys([...keys, res.data.apiKey])
       setSelectedScopes([])
     } catch (err) {
       setError(buildError(err))
@@ -107,16 +100,16 @@ const APIKeys = () => {
 
   return (
     <>
-      <Page title='Access keys' isLoading={isLoading}>
-        {error && <ErrorMessage error={error} />}
+      <Page title='Access keys' isLoading={loading}>
+        {Boolean(error ?? fetchError) && <ErrorMessage error={error ?? fetchError} />}
 
         {!user.emailConfirmed &&
-          <AlertBanner className='lg:w-max' text='You need to confirm your email address to manage API keys' />
+          <AlertBanner className='lg:w-max' text='You need to confirm your email address to manage access keys' />
         }
 
-        {user.emailConfirmed && keys.length > 0 &&
+        {user.emailConfirmed && apiKeys.length > 0 &&
           <Table columns={['Created by', 'Created at', 'Last used', 'Scopes', '']}>
-            <TableBody iterator={keys}>
+            <TableBody iterator={apiKeys}>
               {(key) => (
                 <>
                   <TableCell>{key.createdBy === user.username ? 'You' : key.createdBy}</TableCell>
@@ -124,7 +117,7 @@ const APIKeys = () => {
                   <DateCell>{key.lastUsedAt ? format(new Date(key.lastUsedAt), 'dd MMM Y, HH:mm') : 'Never used'}</DateCell>
                   <TableCell className='flex'>
                     <div>
-                      <Button variant='grey' onClick={() => setSelectedKey(key)}>View scopes</Button>
+                      <Button variant='grey' onClick={() => setSelectedKey(key)}>Modify scopes</Button>
                     </div>
                   </TableCell>
                   <TableCell className='w-40'>
@@ -136,7 +129,7 @@ const APIKeys = () => {
           </Table>
         }
 
-        {keys.length > 0 && <div className='h-1 rounded bg-gray-700' />}
+        {apiKeys.length > 0 && <div className='h-1 rounded bg-gray-700' />}
 
         {!createdKey &&
           <form className='w-full lg:2/3 xl:w-1/2'>
@@ -169,7 +162,7 @@ const APIKeys = () => {
                 ))}
               </div>
 
-              {!isLoading && !availableScopes && <ErrorMessage className='mt-4' error={{ message: 'Couldn\'t fetch scopes' }} />}
+              {!loading && !availableScopes && <ErrorMessage className='mt-4' error={{ message: 'Couldn\'t fetch scopes' }} />}
             </div>
 
             <Button
@@ -207,10 +200,10 @@ const APIKeys = () => {
         <Scopes
           modalState={[showScopesModal, setShowScopesModal]}
           selectedKey={selectedKey}
+          availableScopes={availableScopes}
+          mutate={mutate}
         />
       }
     </>
   )
 }
-
-export default APIKeys
