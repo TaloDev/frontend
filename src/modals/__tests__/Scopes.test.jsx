@@ -59,12 +59,12 @@ describe('<Scopes />', () => {
       </KitchenSink>
     )
 
+    expect(screen.getAllByRole('checkbox', { hidden: true })).toHaveLength(4)
+
     expect(screen.getByDisplayValue('read:leaderboards')).toBeChecked()
     expect(screen.getByDisplayValue('write:leaderboards')).not.toBeChecked()
     expect(screen.getByDisplayValue('read:players')).toBeChecked()
     expect(screen.getByDisplayValue('write:players')).toBeChecked()
-
-    expect(screen.getAllByRole('checkbox', { hidden: true })).toHaveLength(4)
 
     expect(screen.getByText('Update')).toBeInTheDocument()
   })
@@ -123,6 +123,42 @@ describe('<Scopes />', () => {
     expect(mutator({ apiKeys: [initialKey, { id: 2 }] })).toStrictEqual({
       apiKeys: [{ ...initialKey, scopes: newScopes }, { id: 2 }]
     })
+  })
+
+  it('should be able to select all scopes', async () => {
+    const closeMock = vi.fn()
+    const mutateMock = vi.fn()
+
+    render(
+      <KitchenSink states={[
+        { node: userState, initialValue: { type: userTypes.ADMIN, emailConfirmed: true } },
+        { node: activeGameState, initialValue: activeGameValue }
+      ]}>
+        <ToastProvider>
+          <Scopes
+            modalState={[true, closeMock]}
+            mutate={mutateMock}
+            selectedKey={{
+              id: 1,
+              scopes: []
+            }}
+            availableScopes={{
+              leaderboards: ['read:leaderboards', 'write:leaderboards'],
+              players: ['read:players', 'write:players']
+            }}
+          />
+        </ToastProvider>
+      </KitchenSink>
+    )
+
+    await userEvent.click(screen.getByText('Select all scopes'))
+
+    expect(screen.getAllByRole('checkbox', { hidden: true })).toHaveLength(4)
+
+    expect(screen.getByDisplayValue('read:leaderboards')).toBeChecked()
+    expect(screen.getByDisplayValue('write:leaderboards')).toBeChecked()
+    expect(screen.getByDisplayValue('read:players')).toBeChecked()
+    expect(screen.getByDisplayValue('write:players')).toBeChecked()
   })
 
   it('should handle updating errors', async () => {
