@@ -177,15 +177,13 @@ describe('<GroupDetails />', () => {
   it('should handle updating errors', async () => {
     axiosMock.onPut('http://talo.api/games/1/player-groups/1').networkErrorOnce()
 
-    const closeMock = vi.fn()
-
     render(
       <KitchenSink states={[
         { node: userState, initialValue: { type: userTypes.ADMIN } },
         { node: activeGameState, initialValue: activeGameValue }
       ]}>
         <GroupDetails
-          modalState={[true, closeMock]}
+          modalState={[true, vi.fn()]}
           mutate={vi.fn()}
           editingGroup={{
             id: '1',

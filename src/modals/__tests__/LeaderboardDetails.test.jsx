@@ -173,15 +173,13 @@ describe('<LeaderboardDetails />', () => {
   it('should handle updating errors', async () => {
     axiosMock.onPut('http://talo.api/games/1/leaderboards/1').networkErrorOnce()
 
-    const closeMock = vi.fn()
-
     render(
       <KitchenSink states={[
         { node: userState, initialValue: { type: userTypes.ADMIN } },
         { node: activeGameState, initialValue: activeGameValue }
       ]}>
         <LeaderboardDetails
-          modalState={[true, closeMock]}
+          modalState={[true, vi.fn()]}
           mutate={vi.fn()}
           editingLeaderboard={{
             id: 1,
