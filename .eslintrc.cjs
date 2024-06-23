@@ -20,6 +20,7 @@ module.exports = {
       version: 'detect'
     }
   },
+  parser: '@typescript-eslint/parser',
   plugins: [
     'react',
     'jsx-a11y',
@@ -32,7 +33,9 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'plugin:jsx-a11y/recommended',
-    'plugin:jest-dom/recommended'
+    'plugin:jest-dom/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react-hooks/recommended'
   ],
   rules: {
     'indent': ['error', 2, { 'SwitchCase': 1 }],
@@ -40,13 +43,13 @@ module.exports = {
     'semi': ['error', 'never'],
     'comma-dangle': ['error', 'never'],
     'no-trailing-spaces': ['warn'],
-    'no-unused-vars': ['error', { 'args': 'none' }],
     'object-curly-spacing': [2, 'always'],
     'arrow-parens': ['error', 'always'],
     'keyword-spacing': ['error', { 'before': true, 'after': true }],
     'eol-last': ['warn', 'always'],
     'jest-dom/prefer-in-document': ['off'],
-    'require-await': ['error']
+    'require-await': ['error'],
+    'react/prop-types': ['off']
   },
   overrides: [
     {
