@@ -1,6 +1,5 @@
 import useSWR from 'swr'
 import buildError from '../utils/buildError'
-import { stringify } from 'querystring'
 import { Game } from '../entities/game'
 import { z } from 'zod'
 import { playerSchema } from '../entities/player'
@@ -8,10 +7,10 @@ import makeValidatedGetRequest from './makeValidatedGetRequest'
 
 export default function usePlayers(activeGame: Game, search: string, page: number) {
   const fetcher = async ([url, search, page]: [string, string, number]) => {
-    const qs = stringify({
+    const qs = new URLSearchParams({
       search,
-      page
-    })
+      page: String(page)
+    }).toString()
 
     const res = await makeValidatedGetRequest(`${url}?${qs}`, z.object({
       players: z.array(playerSchema),

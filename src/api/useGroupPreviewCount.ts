@@ -1,6 +1,5 @@
 import useSWR from 'swr'
 import buildError from '../utils/buildError'
-import { stringify } from 'querystring'
 import prepareRule from '../utils/group-rules/prepareRule'
 import isGroupRuleValid from '../utils/group-rules/isGroupRuleValid'
 import { useMemo } from 'react'
@@ -12,10 +11,10 @@ import { z } from 'zod'
 
 export default function useGroupPreviewCount(activeGame: Game, ruleMode: PlayerGroupRuleMode, rules: UnpackedGroupRule[]) {
   const fetcher = async ([url]: [string]) => {
-    const qs = stringify({
+    const qs = new URLSearchParams({
       ruleMode,
       rules: JSON.stringify(rules.map(prepareRule))
-    })
+    }).toString()
 
     const res = await makeValidatedGetRequest(`${url}?${qs}`, z.object({
       count: z.number()

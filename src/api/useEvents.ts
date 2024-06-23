@@ -1,16 +1,15 @@
 import useSWR from 'swr'
 import buildError from '../utils/buildError'
-import { stringify } from 'querystring'
 import { Game } from '../entities/game'
 import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
 
 export default function useEvents(activeGame: Game, startDate: string, endDate: string) {
   const fetcher = async ([url]: [string]) => {
-    const qs = stringify({
+    const qs = new URLSearchParams({
       startDate,
       endDate
-    })
+    }).toString()
 
     const res = await makeValidatedGetRequest(`${url}?${qs}`, z.object({
       events: z.record(

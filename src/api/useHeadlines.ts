@@ -1,6 +1,5 @@
 import useSWR from 'swr'
 import buildError from '../utils/buildError'
-import { stringify } from 'querystring'
 import { Game } from '../entities/game'
 import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
@@ -15,10 +14,10 @@ const defaultHeadlines: Headlines = {
 
 export default function useHeadlines(activeGame: Game | null, startDate: string, endDate: string, includeDevData: boolean) {
   const fetcher = async ([url]: [string]) => {
-    const qs = stringify({
+    const qs = new URLSearchParams({
       startDate,
       endDate
-    })
+    }).toString()
 
     const headlines: (keyof Headlines)[] = ['new_players', 'returning_players', 'events', 'unique_event_submitters']
     const res = await Promise.all(headlines.map((headline) => makeValidatedGetRequest(`${url}/${headline}?${qs}`, z.object({
