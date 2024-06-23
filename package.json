@@ -73,7 +73,7 @@
   "license": "MIT",
   "browserslist": ">0.75%",
   "lint-staged": {
-    "*.{js,jsx}": "eslint --fix"
+    "*.{ts,js,tsx,jsx}": "eslint --fix"
   },
   "version": "0.31.0",
   "engines": {
