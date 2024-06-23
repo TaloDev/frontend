@@ -3,6 +3,8 @@ import { focusStyle } from '../styles/theme'
 import clsx from 'clsx'
 import { IconAlertCircle } from '@tabler/icons-react'
 
+export type TextInputVariant = 'light' | 'modal'
+
 type TextInputProps = {
   id: string
   onChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void
@@ -10,7 +12,7 @@ type TextInputProps = {
   label?: string
   placeholder?: string
   type?: string
-  variant?: string
+  variant?: TextInputVariant
   inputClassName?: string
   disabled?: boolean
   errors?: (string | undefined)[]

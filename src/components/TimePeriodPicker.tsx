@@ -10,7 +10,7 @@ export type LabelledTimePeriod = {
 type TimePeriodPickerProps = {
   periods: LabelledTimePeriod[]
   onPick: (period: LabelledTimePeriod) => void
-  selectedPeriod: string | null
+  selectedPeriod: TimePeriod | null
 }
 
 export default function TimePeriodPicker({ periods, onPick, selectedPeriod }: TimePeriodPickerProps) {

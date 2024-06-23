@@ -11,7 +11,6 @@ describe('<DateInput />', () => {
     render(
       <DateInput
         id='test'
-        onChange={() => vi.fn()}
         value='2022-03-03'
       />
     )
@@ -23,7 +22,6 @@ describe('<DateInput />', () => {
     render(
       <DateInput
         id='test'
-        onChange={() => vi.fn()}
         value=''
       />
     )
@@ -37,7 +35,7 @@ describe('<DateInput />', () => {
     render(
       <DateInput
         id='test'
-        onChange={(value) => changeMock(value)}
+        onDateTimeStringChange={(value) => changeMock(value)}
         value=''
       />
     )

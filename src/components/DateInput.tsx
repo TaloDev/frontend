@@ -1,29 +1,33 @@
-import { useState, useEffect } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import TextInput from './TextInput'
 import Tippy from '@tippyjs/react'
 import { DayPicker } from 'react-day-picker'
-import { format, isValid } from 'date-fns'
+import { addHours, format, isValid } from 'date-fns'
 
 type DateInputProps = {
   id: string
   value: string
-  onChange: (val: string) => void
+  onDateChange?: (val: Date) => void,
+  onDateTimeStringChange?: (val: string) => void,
+  textInputProps?: Partial<React.ComponentProps<typeof TextInput>>
 }
 
 export default function DateInput({
   id,
   value,
-  onChange
+  onDateChange,
+  onDateTimeStringChange,
+  textInputProps
 }: DateInputProps) {
-  const [date, setDate] = useState(isValid(new Date(value)) ? new Date(value) : new Date())
   const [isOpen, setOpen] = useState(false)
 
-  useEffect(() => {
-    onChange(date.toISOString())
-    setTimeout(() => {
-      setOpen(false)
-    }, 100)
-  }, [date])
+  const date = useMemo(() => {
+    return isValid(new Date(value)) ? new Date(value) : new Date()
+  }, [value])
+
+  const getDateTimeStringForValue = useCallback((value: Date): string => {
+    return addHours(value, (value.getTimezoneOffset() / 60) * -1).toISOString()
+  }, [])
 
   return (
     <div>
@@ -37,7 +41,13 @@ export default function DateInput({
           <DayPicker
             mode='single'
             selected={date}
-            onSelect={(date) => setDate(date ?? new Date())}
+            onSelect={(selectedDate) => {
+              const newDate = selectedDate ?? new Date()
+              onDateChange?.(newDate)
+              onDateTimeStringChange?.(getDateTimeStringForValue(newDate))
+
+              setOpen(false)
+            }}
             defaultMonth={date}
           />
         )}
@@ -48,12 +58,12 @@ export default function DateInput({
           <TextInput
             id={id}
             variant='modal'
-            containerClassName='w-28'
             value={format(date, 'dd MMM Y')}
             inputExtra={{
               onFocus: () => setOpen(true),
               name: id
             }}
+            {...textInputProps}
           />
         </div>
       </Tippy>

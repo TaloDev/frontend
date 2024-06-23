@@ -280,8 +280,11 @@ export default function GroupRules({
                       <DateInput
                         key={operandIdx}
                         id={`operand-${operandIdx}`}
-                        onChange={(value) => updateOperands(idx, operandIdx, value)}
+                        onDateTimeStringChange={(value) => updateOperands(idx, operandIdx, value)}
                         value={rule.operands[operandIdx]}
+                        textInputProps={{
+                          containerClassName: '!w-28'
+                        }}
                       />
                     )
                   } else {

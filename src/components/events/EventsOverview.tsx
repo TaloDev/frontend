@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import useEvents from '../../api/useEvents'
 import ErrorMessage from '../../components/ErrorMessage'
@@ -8,13 +8,13 @@ import ChartTooltip from '../../components/charts/ChartTooltip'
 import ChartTick from '../../components/charts/ChartTick'
 import { format } from 'date-fns'
 import ColourfulCheckbox from '../../components/ColourfulCheckbox'
-import TextInput from '../../components/TextInput'
 import getEventColour from '../../utils/getEventColour'
 import { useDebounce } from 'use-debounce'
 import useLocalStorage from '../../utils/useLocalStorage'
 import TimePeriodPicker from '../TimePeriodPicker'
 import useTimePeriod, { TimePeriod } from '../../utils/useTimePeriod'
 import Page from '../Page'
+import DateInput from '../DateInput'
 
 export default function EventsOverview() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
@@ -43,9 +43,11 @@ export default function EventsOverview() {
   const { events, eventNames, loading, error } = useEvents(activeGame, debouncedStartDate, debouncedEndDate)
 
   useEffect(() => {
-    if (startDate) setSelectedStartDate(startDate)
-    if (endDate) setSelectedEndDate(endDate)
-  }, [startDate, endDate, setSelectedStartDate, setSelectedEndDate])
+    if (timePeriod && startDate && endDate) {
+      setSelectedStartDate(startDate)
+      setSelectedEndDate(endDate)
+    }
+  }, [timePeriod, startDate, endDate, setSelectedStartDate, setSelectedEndDate])
 
   useEffect(() => {
     if (eventNames.length > 0) {
@@ -64,6 +66,16 @@ export default function EventsOverview() {
     }
   }
 
+  const onStartDateChange = useCallback((date: string) => {
+    setTimePeriod(null)
+    setSelectedStartDate(date.split('T')[0])
+  }, [setSelectedStartDate, setTimePeriod])
+
+  const onEndDateChange = useCallback((date: string) => {
+    setTimePeriod(null)
+    setSelectedEndDate(date.split('T')[0])
+  }, [setSelectedEndDate, setTimePeriod])
+
   return (
     <Page title='Events overview' isLoading={loading}>
       <div className='justify-between items-start'>
@@ -76,31 +88,33 @@ export default function EventsOverview() {
         </div>
 
         <div className='flex w-full md:w-1/2 space-x-4'>
-          <TextInput
-            id='start-date'
-            type='date'
-            label='Start date'
-            placeholder='Start date'
-            onChange={(e) => {
-              setTimePeriod(null)
-              setSelectedStartDate(e)
-            }}
-            value={selectedStartDate}
-            errors={error?.keys.startDate}
-          />
+          <div className='w-1/2'>
+            <DateInput
+              id='start-date'
+              onDateTimeStringChange={onStartDateChange}
+              value={selectedStartDate}
+              textInputProps={{
+                label: 'Start date',
+                placeholder: 'Start date',
+                errors: error?.keys.startDate,
+                variant: undefined
+              }}
+            />
+          </div>
 
-          <TextInput
-            id='end-date'
-            type='date'
-            label='End date'
-            placeholder='End date'
-            onChange={(e) => {
-              setTimePeriod(null)
-              setSelectedEndDate(e)
-            }}
-            value={selectedEndDate}
-            errors={error?.keys.endDate}
-          />
+          <div className='w-1/2'>
+            <DateInput
+              id='end-date'
+              onDateTimeStringChange={onEndDateChange}
+              value={selectedEndDate}
+              textInputProps={{
+                label: 'End date',
+                placeholder: 'End date',
+                errors: error?.keys.endDate,
+                variant: undefined
+              }}
+            />
+          </div>
         </div>
       </div>
 
