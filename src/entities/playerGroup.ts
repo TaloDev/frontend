@@ -43,7 +43,7 @@ export const playerGroupRuleSchema = z.object({
   operands: z.array(z.string())
 })
 
-export type PlayerGroupRule = z.infer<typeof playerGroupRuleSchema>;
+export type PlayerGroupRule = z.infer<typeof playerGroupRuleSchema>
 
 export const playerGroupSchema = z.object({
   id: z.string(),

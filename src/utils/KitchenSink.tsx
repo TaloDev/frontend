@@ -6,8 +6,10 @@ import { Location, MemoryRouter, Route, Routes, useLocation } from 'react-router
 import { SWRConfig } from 'swr'
 import type { ReactNode } from 'react'
 
+type SetLocationFunction = (location: Partial<Location>) => void
+
 type CatchAllProps = {
-  setLocation?: (...args: unknown[]) => unknown
+  setLocation?: SetLocationFunction
 }
 
 function CatchAll({
@@ -60,7 +62,7 @@ type KitchenSinkProps = {
   }[]
   initialEntries?: (string | Partial<Location>)[]
   children: ReactNode
-  setLocation?: (...args: unknown[]) => unknown
+  setLocation?: SetLocationFunction
   routePath?: string
 }
 

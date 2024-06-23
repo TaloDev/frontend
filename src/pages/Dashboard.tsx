@@ -29,8 +29,8 @@ export default function Dashboard() {
   const activeGame = useRecoilValue(activeGameState)
 
   const timePeriods: {
-    id: TimePeriod,
-    label: string,
+    id: TimePeriod
+    label: string
     titlePrefix: string
   }[] = [
     { id: '7d', label: '7 days', titlePrefix: 'Last 7 days' },

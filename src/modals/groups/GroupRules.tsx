@@ -17,17 +17,17 @@ export const groupPropKeyField = 'prop with key'
 
 function getRuleDescription(ruleName: PlayerGroupRuleName, negate: boolean) {
   switch (ruleName) {
-    case 'EQUALS':
+    case PlayerGroupRuleName.EQUALS:
       return `is ${negate ? 'not ' : ''}equal to`
-    case 'SET':
+    case PlayerGroupRuleName.SET:
       return `is ${negate ? 'not ' : ''}set`
-    case 'GT':
+    case PlayerGroupRuleName.GT:
       return `is ${negate ? 'not ' : ''}greater than`
-    case 'GTE':
+    case PlayerGroupRuleName.GTE:
       return `is ${negate ? 'not ' : ''}greater than or equal to`
-    case 'LT':
+    case PlayerGroupRuleName.LT:
       return `is ${negate ? 'not ' : ''}less than`
-    case 'LTE':
+    case PlayerGroupRuleName.LTE:
       return `is ${negate ? 'not ' : ''}less than or equal to`
     default:
       return ruleName
@@ -36,11 +36,11 @@ function getRuleDescription(ruleName: PlayerGroupRuleName, negate: boolean) {
 
 function getCastTypeDescription(castType: PlayerGroupRuleCastType) {
   switch (castType) {
-    case 'CHAR':
+    case PlayerGroupRuleCastType.CHAR:
       return 'text'
-    case 'DOUBLE':
+    case PlayerGroupRuleCastType.DOUBLE:
       return 'number'
-    case 'DATETIME':
+    case PlayerGroupRuleCastType.DATETIME:
       return 'date'
     default:
       return castType
@@ -76,7 +76,7 @@ export default function GroupRules({
   }
 
   const onAddFilterClick = () => {
-    const rule = findRuleByName(PlayerGroupRuleName.EQUALS)!
+    const rule = findRuleByName(PlayerGroupRuleName.EQUALS)
 
     const newRule: UnpackedGroupRule = {
       name: rule.name,

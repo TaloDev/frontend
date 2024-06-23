@@ -30,7 +30,7 @@ const userTypeOptions = [
 ]
 
 type NewInviteProps = {
-  modalState: [boolean, Dispatch<React.SetStateAction<boolean>>],
+  modalState: [boolean, Dispatch<React.SetStateAction<boolean>>]
   mutate: KeyedMutator<z.infer<typeof currentOrganisationSchema>>
 }
 

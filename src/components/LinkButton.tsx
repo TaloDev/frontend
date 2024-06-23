@@ -1,20 +1,19 @@
+import { MouseEvent, ReactNode } from 'react'
 import { linkStyle, focusStyle } from '../styles/theme'
 
 type LinkButtonProps = {
-  onClick: (...args: unknown[]) => unknown
-  children: any
+  onClick: (e: MouseEvent<HTMLElement>) => void
+  children: ReactNode
 }
 
-const LinkButton = (props: LinkButtonProps) => {
+export default function LinkButton({ onClick, children }: LinkButtonProps) {
   return (
     <button
       type='button'
       className={`${linkStyle} ${focusStyle}`}
-      onClick={props.onClick}
+      onClick={onClick}
     >
-      {props.children}
+      {children}
     </button>
   )
 }
-
-export default LinkButton

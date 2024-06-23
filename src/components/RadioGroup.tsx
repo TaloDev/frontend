@@ -10,7 +10,7 @@ type RadioGroupProps<T> = {
     value: T
   }[]
   onChange: (value: T) => void
-  value?: unknown
+  value?: T
   info?: string
 }
 
@@ -22,7 +22,7 @@ function RadioGroup<T>({
   value,
   info
 }: RadioGroupProps<T>) {
-  const [focusedValue, setFocusedValue] = useState<unknown | null>(null)
+  const [focusedValue, setFocusedValue] = useState<T | null>(null)
 
   return (
     <fieldset className='w-full'>

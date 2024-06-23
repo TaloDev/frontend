@@ -3,9 +3,9 @@ import clsx from 'clsx'
 import type { ReactNode } from 'react'
 
 export type TaloError = {
-  message: string,
-  keys?: { [key: string]: string[] },
-  hasKeys?: boolean,
+  message: string
+  keys?: { [key: string]: string[] }
+  hasKeys?: boolean
   extra?: { [key: string]: string[] }
 }
 

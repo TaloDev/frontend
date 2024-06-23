@@ -19,7 +19,7 @@ type PropsEditorProps = {
 }
 
 type MetaProp = {
-  key: keyof typeof metaPropKeyMap,
+  key: keyof typeof metaPropKeyMap
   value: string
 }
 

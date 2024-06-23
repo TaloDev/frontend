@@ -25,7 +25,7 @@ const syncingState = {
 type ManualSyncSectionProps = {
   loading: string
   error: TaloError | null
-  onClick: (...args: unknown[]) => unknown
+  onClick: () => void
   title: string
   docs: string
   cta: string
@@ -89,7 +89,7 @@ export default function Integrations() {
   const { integrations, loading, error, mutate } = useIntegrations(activeGame)
   const [editingIntegration, setEditingIntegration] = useState<Partial<Integration> | null>(null)
 
-  const steamIntegration = error ? null : integrations.find((integration) => integration.type === 'steamworks')
+  const steamIntegration = error ? null : integrations.find((integration) => integration.type === IntegrationType.STEAMWORKS)
 
   const [isSyncingSteamworksLeaderboards, setSyncingSteamworksLeaderboards] = useState(syncingState.INACTIVE)
   const [syncingSteamworksLeaderboardsError, setSyncingSteamworksLeaderboardsError] = useState<TaloError | null>(null)

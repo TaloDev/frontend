@@ -7,8 +7,8 @@ import { addHours, format, isValid } from 'date-fns'
 type DateInputProps = {
   id: string
   value: string
-  onDateChange?: (val: Date) => void,
-  onDateTimeStringChange?: (val: string) => void,
+  onDateChange?: (val: Date) => void
+  onDateTimeStringChange?: (val: string) => void
   textInputProps?: Partial<React.ComponentProps<typeof TextInput>>
 }
 

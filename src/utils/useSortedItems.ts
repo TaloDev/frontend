@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 
 export default function useSortedItems<T>(items: T[], key: keyof T, direction: 'asc' | 'desc' = 'desc'): T[] {
   const getComparator = useCallback(() => {
-    const valForKey = items[0][key] as unknown
+    const valForKey = items[0][key] as T
 
     switch (typeof valForKey) {
       case 'string':

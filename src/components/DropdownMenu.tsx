@@ -6,7 +6,7 @@ import Tippy from '@tippyjs/react'
 type DropdownMenuProps = {
   options: {
     label: string
-    onClick: (...args: unknown[]) => unknown
+    onClick: () => void
   }[]
   children: (setOpen: (val: boolean) => void) => ReactNode
 }
