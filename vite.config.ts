@@ -18,6 +18,7 @@ export default defineConfig({
       reporter: 'lcov',
       exclude: [
         'src/api',
+        'src/entities',
         'src/constants',
         'src/utils/canViewPage.js',
         '**/__tests__'
