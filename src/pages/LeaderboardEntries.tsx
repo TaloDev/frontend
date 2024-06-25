@@ -30,7 +30,7 @@ export default function LeaderboardEntries() {
   const [leaderboard, setLeaderboard] = useState(location.state?.leaderboard)
 
   const [page, setPage] = useState(0)
-  const { entries, count, loading, error: fetchError, mutate } = useLeaderboardEntries(activeGame, leaderboard?.id, page)
+  const { entries, count, itemsPerPage, loading, error: fetchError, mutate } = useLeaderboardEntries(activeGame, leaderboard?.id, page)
 
   const [error, setError] = useState<TaloError | null>(null)
 
@@ -143,7 +143,7 @@ export default function LeaderboardEntries() {
             </TableBody>
           </Table>
 
-          {Boolean(count) && <Pagination count={count!} pageState={[page, setPage]} itemsPerPage={50} />}
+          {Boolean(count) && <Pagination count={count!} pageState={[page, setPage]} itemsPerPage={itemsPerPage!} />}
         </>
       }
     </Page>

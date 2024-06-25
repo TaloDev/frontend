@@ -16,16 +16,29 @@ import useFeedback from '../api/useFeedback'
 import useFeedbackCategories from '../api/useFeedbackCategories'
 import { IconArrowRight } from '@tabler/icons-react'
 import clsx from 'clsx'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import canViewPage from '../utils/canViewPage'
 import userState from '../state/userState'
+import Pagination from '../components/Pagination'
+import TextInput from '../components/TextInput'
+import { useDebounce } from 'use-debounce'
 
 export default function Feedback() {
   const user = useRecoilValue(userState)
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
 
   const [categoryInternalNameFilter, setCategoryInternalNameFilter] = useState<string | null>(null)
-  const { feedback, loading: feedbackLoading, error: feedbackError } = useFeedback(activeGame, categoryInternalNameFilter)
+  const [page, setPage] = useState(0)
+  const [search, setSearch] = useState('')
+  const [debouncedSearch] = useDebounce(search, 300)
+
+  const {
+    feedback,
+    loading: feedbackLoading,
+    count,
+    itemsPerPage,
+    error: feedbackError
+  } = useFeedback(activeGame, categoryInternalNameFilter, debouncedSearch, page)
   const { feedbackCategories, loading: categoriesLoading, error: categoriesError } = useFeedbackCategories(activeGame)
 
   const sortedFeedback = useSortedItems(feedback, 'createdAt', 'asc')
@@ -36,39 +49,46 @@ export default function Feedback() {
     navigate(`${routes.players}?search=${identifier}`)
   }
 
-  const categoryFromFilter = useMemo(() => {
-    if (!categoryInternalNameFilter) return null
-    return feedbackCategories.find((category) => category.internalName === categoryInternalNameFilter)
-  }, [categoryInternalNameFilter, feedbackCategories])
-
   return (
     <Page
       title='Feedback'
       isLoading={feedbackLoading}
     >
       {!categoriesError &&
-        <div>
-          <label htmlFor='sort-mode' className='block font-semibold'>Filter by category</label>
+        <div className='space-y-4'>
+          <div>
+            <div className='flex items-center'>
+              <div className='w-1/2 flex-grow md:flex-grow-0 md:w-[400px]'>
+                <Select
+                  inputId='sort-mode'
+                  options={feedbackCategories.map((category) => ({ label: category.name, value: category.internalName, desc: category.description }))}
+                  isLoading={categoriesLoading}
+                  onChange={(option) => setCategoryInternalNameFilter(option?.value ?? null)}
+                  placeholder='Filter by category'
+                  isClearable
+                />
+              </div>
 
-          <div className='flex items-center mt-1'>
-            <div className='md:w-[400px]'>
-              <Select
-                inputId='sort-mode'
-                options={feedbackCategories.map((category) => ({ label: category.name, value: category.internalName, desc: category.description }))}
-                isLoading={categoriesLoading}
-                onChange={(option) => setCategoryInternalNameFilter(option?.value ?? null)}
-                isClearable
+              {canViewPage(user, routes.feedbackCategories) &&
+                <Button
+                  onClick={() => navigate(routes.feedbackCategories)}
+                  className='ml-4 !w-auto'
+                >
+                  Edit categories
+                </Button>
+              }
+            </div>
+          </div>
+          <div className='flex items-center'>
+            <div className='w-1/2 flex-grow md:flex-grow-0 md:w-[400px]'>
+              <TextInput
+                id='feedback-search'
+                placeholder='Search...'
+                onChange={setSearch}
+                value={search}
               />
             </div>
-
-            {canViewPage(user, routes.feedbackCategories) &&
-              <Button
-                onClick={() => navigate(routes.feedbackCategories)}
-                className='ml-4 !w-auto'
-              >
-                Edit categories
-              </Button>
-            }
+            {Boolean(count) && <span className='ml-4'>{count} {count === 1 ? 'comment' : 'comments'}</span>}
           </div>
         </div>
       }
@@ -76,37 +96,51 @@ export default function Feedback() {
 
       {!feedbackError && !feedbackLoading && sortedFeedback.length === 0 &&
         <>
-          {categoryInternalNameFilter && <p>{activeGame.name} doesn&apos;t have any feedback in the {categoryFromFilter!.name} category yet</p>}
-          {!categoryInternalNameFilter && <p>{activeGame.name} doesn&apos;t have any feedback yet</p>}
+          {!categoryInternalNameFilter && debouncedSearch.length === 0 &&
+            <p>{activeGame.name} doesn&apos;t have any feedback yet</p>
+          }
+          {(categoryInternalNameFilter || debouncedSearch.length > 0) &&
+            <p>No feedback matches your query</p>
+          }
         </>
       }
 
       {!feedbackError && sortedFeedback.length > 0 &&
-        <Table columns={['Submitted at', 'Category', 'Comment', 'Player']}>
-          <TableBody iterator={sortedFeedback}>
-            {(feedback) => (
-              <>
-                <DateCell>{format(new Date(feedback.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                <TableCell>{feedback.category.name}</TableCell>
-                <TableCell className='min-w-[320px] max-w-[320px]'>{feedback.comment}</TableCell>
-                <TableCell>
-                  {feedback.playerAlias &&
-                    <div className='flex items-center'>
-                      <span>{feedback.playerAlias.identifier}</span>
-                      <Button
-                        variant='icon'
-                        className={clsx('ml-2 p-1 rounded-full bg-indigo-900', { 'bg-orange-900': feedback.playerAlias.player.devBuild })}
-                        onClick={() => goToPlayer(feedback.playerAlias!.identifier)}
-                        icon={<IconArrowRight size={16} />}
-                      />
-                    </div>
-                  }
-                  {!feedback.playerAlias && 'Anonymous'}
-                </TableCell>
-              </>
-            )}
-          </TableBody>
-        </Table>
+        <>
+          <Table columns={['Submitted at', 'Category', 'Comment', 'Player']}>
+            <TableBody
+              iterator={sortedFeedback}
+              configureClassnames={(feedback, idx) => ({
+                'bg-orange-600': feedback.devBuild && idx % 2 !== 0,
+                'bg-orange-500': feedback.devBuild && idx % 2 === 0
+              })}
+            >
+              {(feedback) => (
+                <>
+                  <DateCell>{format(new Date(feedback.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
+                  <TableCell>{feedback.category.name}</TableCell>
+                  <TableCell className='min-w-[320px] max-w-[320px]'>{feedback.comment}</TableCell>
+                  <TableCell>
+                    {feedback.playerAlias &&
+                      <div className='flex items-center'>
+                        <span>{feedback.playerAlias.identifier}</span>
+                        <Button
+                          variant='icon'
+                          className={clsx('ml-2 p-1 rounded-full bg-indigo-900', { 'bg-orange-900': feedback.playerAlias.player.devBuild })}
+                          onClick={() => goToPlayer(feedback.playerAlias!.identifier)}
+                          icon={<IconArrowRight size={16} />}
+                        />
+                      </div>
+                    }
+                    {!feedback.playerAlias && 'Anonymous'}
+                  </TableCell>
+                </>
+              )}
+            </TableBody>
+          </Table>
+
+          {Boolean(count) && <Pagination count={count!} pageState={[page, setPage]} itemsPerPage={itemsPerPage!} />}
+        </>
       }
 
       {feedbackError && <ErrorMessage error={feedbackError} />}

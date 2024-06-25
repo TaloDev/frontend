@@ -14,7 +14,8 @@ export default function usePlayers(activeGame: Game, search: string, page: numbe
 
     const res = await makeValidatedGetRequest(`${url}?${qs}`, z.object({
       players: z.array(playerSchema),
-      count: z.number()
+      count: z.number(),
+      itemsPerPage: z.number()
     }))
 
     return res
@@ -28,6 +29,7 @@ export default function usePlayers(activeGame: Game, search: string, page: numbe
   return {
     players: data?.players ?? [],
     count: data?.count,
+    itemsPerPage: data?.itemsPerPage,
     loading: !data && !error,
     error: error && buildError(error)
   }

@@ -11,7 +11,8 @@ export default function useLeaderboardEntries(activeGame: Game, leaderboardId: n
 
     const res = await makeValidatedGetRequest(`${url}?${qs}`, z.object({
       entries: z.array(leaderboardEntrySchema),
-      count: z.number()
+      count: z.number(),
+      itemsPerPage: z.number()
     }))
 
     return res
@@ -25,6 +26,7 @@ export default function useLeaderboardEntries(activeGame: Game, leaderboardId: n
   return {
     entries: data?.entries ?? [],
     count: data?.count,
+    itemsPerPage: data?.itemsPerPage,
     loading: !data && !error,
     error: error && buildError(error),
     mutate
