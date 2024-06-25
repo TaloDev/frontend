@@ -11,7 +11,8 @@ export default function usePlayerEvents(activeGame: Game, playerId: string, sear
 
     const res = await makeValidatedGetRequest(`${url}?${qs}`, z.object({
       events: z.array(eventSchema),
-      count: z.number()
+      count: z.number(),
+      itemsPerPage: z.number()
     }))
 
     return res
@@ -25,6 +26,7 @@ export default function usePlayerEvents(activeGame: Game, playerId: string, sear
   return {
     events: data?.events ?? [],
     count: data?.count,
+    itemsPerPage: data?.itemsPerPage,
     loading: !data && !error,
     error: error && buildError(error),
     errorStatusCode: error && error.response?.status

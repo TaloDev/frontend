@@ -7,7 +7,8 @@ export const gameFeedbackSchema = z.object({
   category: gameFeedbackCategorySchema,
   comment: z.string(),
   anonymised: z.boolean(),
-  playerAlias: z.union([playerAliasSchema, z.null()]),
+  playerAlias: playerAliasSchema.nullable(),
+  devBuild: z.boolean(),
   createdAt: z.string().datetime()
 })
 

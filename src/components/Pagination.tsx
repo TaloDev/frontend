@@ -5,13 +5,13 @@ import { Dispatch, SetStateAction } from 'react'
 type PaginationProps = {
   count: number
   pageState: [number, Dispatch<SetStateAction<number>>]
-  itemsPerPage?: number
+  itemsPerPage: number
 }
 
 export default function Pagination({
   count,
   pageState,
-  itemsPerPage = 25
+  itemsPerPage
 }: PaginationProps) {
   const totalPages = Math.ceil(count / itemsPerPage)
 

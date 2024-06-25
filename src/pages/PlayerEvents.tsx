@@ -46,7 +46,7 @@ export default function PlayerEvents() {
   const [search, setSearch] = useState('')
   const [debouncedSearch] = useDebounce(search, 300)
   const [page, setPage] = useState(0)
-  const { events, count, loading: eventsLoading, error, errorStatusCode } = usePlayerEvents(activeGame, playerId!, debouncedSearch, page)
+  const { events, count, itemsPerPage, loading: eventsLoading, error, errorStatusCode } = usePlayerEvents(activeGame, playerId!, debouncedSearch, page)
   const sortedEvents = useSortedItems(events, 'createdAt')
 
   const navigate = useNavigate()
@@ -108,7 +108,7 @@ export default function PlayerEvents() {
             </TableBody>
           </Table>
 
-          {Boolean(count) && <Pagination count={count!} pageState={[page, setPage]} />}
+          {Boolean(count) && <Pagination count={count!} pageState={[page, setPage]} itemsPerPage={itemsPerPage!} />}
         </>
       }
 

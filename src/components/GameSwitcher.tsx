@@ -28,6 +28,7 @@ export default function GameSwitcher() {
 
   const switchToGame = (game: Game) => {
     setActiveGame(game)
+    setOpen(false)
     navigate(routes.dashboard)
   }
 

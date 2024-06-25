@@ -25,7 +25,7 @@ export default function Players() {
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
   const [page, setPage] = useState(0)
-  const { players, count, loading, error } = usePlayers(activeGame, debouncedSearch, page)
+  const { players, count, itemsPerPage, loading, error } = usePlayers(activeGame, debouncedSearch, page)
 
   const navigate = useNavigate()
 
@@ -94,7 +94,7 @@ export default function Players() {
             </TableBody>
           </Table>
 
-          {Boolean(count) && <Pagination count={count!} pageState={[page, setPage]} />}
+          {Boolean(count) && <Pagination count={count!} pageState={[page, setPage]} itemsPerPage={itemsPerPage!} />}
         </>
       }
     </Page>
