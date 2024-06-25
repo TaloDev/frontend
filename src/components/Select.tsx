@@ -1,0 +1,61 @@
+import ReactSelect, { components, Props as ReactSelectProps, OptionProps, GroupBase, SelectInstance, StylesConfig, SingleValue } from 'react-select'
+import typedForwardRef from '../utils/typedForwardRef'
+
+export type SelectOption<T> = {
+  label: string
+  value: T
+  desc?: string
+}
+
+function Option<T>(props: OptionProps<T, boolean, GroupBase<T>>) {
+  const { label, desc } = props.data as SelectOption<T>
+
+  return (
+    <components.Option {...props}>
+      <p className='font-medium'>{label}</p>
+      {desc && <p className='text-sm mt-2'>{desc}</p>}
+    </components.Option>
+  )
+}
+
+type SelectProps<T> = {
+  onChange: (option: SelectOption<T> | null) => void
+} & Omit<ReactSelectProps<SelectOption<T>, boolean, GroupBase<SelectOption<T>>>, 'onChange'>
+
+function Select<T>({ onChange, ...props }: SelectProps<T>, ref: React.Ref<SelectInstance<SelectOption<T>, boolean, GroupBase<SelectOption<T>>>>) {
+  const styles: StylesConfig<SelectOption<T>, boolean, GroupBase<SelectOption<T>>> = {
+    control: (provided, state) => ({
+      ...provided,
+      border: `1px solid ${state.isFocused ? 'transparent' : '#D1D5DB'} !important`,
+      boxShadow: state.isFocused ? 'rgb(255, 255, 255) 0px 0px 0px 0px, rgb(236, 72, 153) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px' : 'none',
+      paddingTop: '2px',
+      paddingBottom: '2px',
+      transition: 'none'
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? '#6366F1' : provided.backgroundColor,
+      color: state.isSelected ? '#FFF' : '#000',
+      ':hover': {
+        backgroundColor: !state.isSelected ? '' : '#E0E7FF'
+      }
+    }),
+    singleValue: (provided) => ({
+      ...provided,
+      color: '#000',
+      padding: '0px'
+    })
+  }
+
+  return (
+    <ReactSelect
+      {...props}
+      ref={ref}
+      components={{ Option }}
+      onChange={(option) => onChange((option as SingleValue<SelectOption<T>>))}
+      styles={styles}
+    />
+  )
+}
+
+export default typedForwardRef(Select)
