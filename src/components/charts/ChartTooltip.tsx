@@ -2,12 +2,10 @@ import { format } from 'date-fns'
 import { uniqBy } from 'lodash-es'
 import clsx from 'clsx'
 import getEventColour from '../../utils/getEventColour'
+import { z } from 'zod'
+import { eventsVisualisationPayloadSchema } from '../../api/useEvents'
 
-type Payload = {
-  count: number
-  name: string
-  change: number
-}
+type Payload = z.infer<typeof eventsVisualisationPayloadSchema>
 
 type ChartTooltipProps = {
   active?: boolean

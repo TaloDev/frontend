@@ -1,7 +1,5 @@
 import EventsOverview from '../components/events/EventsOverview'
 
-const Events = () => {
+export default function Events() {
   return <EventsOverview />
 }
-
-export default Events
