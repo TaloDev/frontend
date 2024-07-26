@@ -6,7 +6,8 @@ export enum PlayerAliasService {
   EPIC = 'epic',
   USERNAME = 'username',
   EMAIL = 'email',
-  CUSTOM = 'custom'
+  CUSTOM = 'custom',
+  TALO = 'talo'
 }
 
 export const playerAliasSchema = z.object({

@@ -15,6 +15,11 @@ import Identifier from '../components/Identifier'
 import { IconBolt, IconChartBar, IconDeviceFloppy, IconSettings, IconTrophy } from '@tabler/icons-react'
 import Button from '../components/Button'
 import Loading from '../components/Loading'
+import usePlayerAuthActivities from '../api/usePlayerAuthActivities'
+import { useRecoilValue } from 'recoil'
+import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import useDaySections from '../utils/useDaySections'
+import ActivityRenderer from '../components/ActivityRenderer'
 
 const links = [
   {
@@ -49,6 +54,11 @@ export default function PlayerProfile() {
   const navigate = useNavigate()
 
   const sortedAliases = useSortedItems(player?.aliases ?? [], 'updatedAt')
+
+  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const { activities } = usePlayerAuthActivities(activeGame, player.id)
+
+  const sections = useDaySections(activities)
 
   const goToPlayerRoute = (route: string) => {
     navigate(route.replace(':id', player.id), {
@@ -110,6 +120,16 @@ export default function PlayerProfile() {
           )}
         </TableBody>
       </Table>
+
+      {activities.length > 0 &&
+        <>
+          <SecondaryTitle>Authentication activities</SecondaryTitle>
+
+          {sections.map((section, sectionIdx) => (
+            <ActivityRenderer key={sectionIdx} section={section} />
+          ))}
+        </>
+      }
     </Page>
   )
 }

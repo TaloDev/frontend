@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const gameActivitySchema = z.object({
+export const playerAuthActivitySchema = z.object({
   id: z.number(),
   type: z.number(),
   description: z.string(),
@@ -8,4 +8,4 @@ export const gameActivitySchema = z.object({
   createdAt: z.string().datetime()
 })
 
-export type GameActivity = z.infer<typeof gameActivitySchema>
+export type PlayerAuthActivity = z.infer<typeof playerAuthActivitySchema>

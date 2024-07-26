@@ -2,6 +2,7 @@ import { IconBrandSteam, IconMail, IconQuestionMark, IconUser } from '@tabler/ic
 import Tippy from '@tippyjs/react'
 import useSortedItems from '../utils/useSortedItems'
 import { PlayerAlias } from '../entities/playerAlias'
+import taloIcon from '../assets/talo-service.svg'
 
 type PlayerAliasesProps = {
   aliases: PlayerAlias[]
@@ -18,6 +19,7 @@ export default function PlayerAliases({
       case 'steam': return <IconBrandSteam size={16} />
       case 'username': return <IconUser size={16} />
       case 'email': return <IconMail size={16} />
+      case 'talo': return <img src={taloIcon} alt='Talo' className='w-[16px] h-[16px]' />
       default: return <IconQuestionMark size={16} />
     }
   }
