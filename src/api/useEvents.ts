@@ -4,6 +4,13 @@ import { Game } from '../entities/game'
 import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
 
+export const eventsVisualisationPayloadSchema = z.object({
+  name: z.string(),
+  date: z.number(),
+  count: z.number(),
+  change: z.number()
+})
+
 export default function useEvents(activeGame: Game, startDate: string, endDate: string) {
   const fetcher = async ([url]: [string]) => {
     const qs = new URLSearchParams({
@@ -13,11 +20,7 @@ export default function useEvents(activeGame: Game, startDate: string, endDate: 
 
     const res = await makeValidatedGetRequest(`${url}?${qs}`, z.object({
       events: z.record(
-        z.object({
-          name: z.string(),
-          date: z.number(),
-          count: z.number()
-        })
+        z.array(eventsVisualisationPayloadSchema)
       ),
       eventNames: z.array(z.string())
     }))
