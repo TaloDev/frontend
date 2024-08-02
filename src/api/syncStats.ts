@@ -4,7 +4,7 @@ import makeValidatedRequest from './makeValidatedRequest'
 
 const syncStats = makeValidatedRequest(
   (gameId: number, integrationId: number) => api.post(`/games/${gameId}/integrations/${integrationId}/sync-stats`),
-  z.object({}).strict()
+  z.literal('')
 )
 
 export default syncStats

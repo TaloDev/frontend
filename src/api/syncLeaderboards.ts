@@ -4,7 +4,7 @@ import makeValidatedRequest from './makeValidatedRequest'
 
 const syncLeaderboards = makeValidatedRequest(
   (gameId: number, integrationId: number) => api.post(`/games/${gameId}/integrations/${integrationId}/sync-leaderboards`),
-  z.object({}).strict()
+  z.literal('')
 )
 
 export default syncLeaderboards
