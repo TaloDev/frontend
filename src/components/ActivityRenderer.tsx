@@ -7,7 +7,7 @@ type ActivityRendererProps = {
     items: {
       createdAt: string
       description: string
-      extra: Record<string, unknown>
+      extra?: Record<string, unknown>
     }[]
   }
 }
@@ -28,7 +28,7 @@ export default function ActivityRenderer({ section }: ActivityRendererProps) {
 
                 return a.localeCompare(b)
               }).map((key) => (
-                <code key={key} className='bg-gray-900 rounded p-2 text-xs md:text-sm ml-2 mt-2'>{key} = {String(item.extra[key])}</code>
+                <code key={key} className='bg-gray-900 rounded p-2 text-xs md:text-sm ml-2 mt-2'>{key} = {String((item.extra ?? {})[key])}</code>
               ))}
             </div>
           }
