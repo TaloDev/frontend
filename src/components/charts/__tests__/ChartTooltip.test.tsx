@@ -11,14 +11,16 @@ describe('<ChartTooltip />', () => {
             payload: {
               count: 0,
               name: 'Treasure discovered',
-              change: 0
+              change: 0,
+              date: 1612147200000
             }
           },
           {
             payload: {
               count: 3,
               name: 'Item looted',
-              change: 1
+              change: 1,
+              date: 1612147200000
             }
           }
         ]}
@@ -38,21 +40,24 @@ describe('<ChartTooltip />', () => {
             payload: {
               count: 0,
               name: 'Treasure discovered',
-              change: 0
+              change: 0,
+              date: 1612147200000
             }
           },
           {
             payload: {
               count: 2,
               name: 'Treasure discovered',
-              change: 0
+              change: 0,
+              date: 1612147200000
             }
           },
           {
             payload: {
               count: 3,
               name: 'Item looted',
-              change: 0
+              change: 0,
+              date: 1612147200000
             }
           }
         ]}
@@ -72,14 +77,16 @@ describe('<ChartTooltip />', () => {
             payload: {
               count: 0,
               name: 'Treasure discovered',
-              change: 0
+              change: 0,
+              date: 1612147200000
             }
           },
           {
             payload: {
               count: 0,
               name: 'Item looted',
-              change: 0
+              change: 0,
+              date: 1612147200000
             }
           }
         ]}

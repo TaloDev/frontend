@@ -4,7 +4,7 @@ import makeValidatedRequest from './makeValidatedRequest'
 
 const deleteLeaderboard = makeValidatedRequest(
   (gameId: number, leaderboardId: number) => api.delete(`/games/${gameId}/leaderboards/${leaderboardId}`),
-  z.object({}).strict()
+  z.literal('')
 )
 
 export default deleteLeaderboard

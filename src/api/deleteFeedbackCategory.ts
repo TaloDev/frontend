@@ -4,7 +4,7 @@ import makeValidatedRequest from './makeValidatedRequest'
 
 const deleteFeedbackCategory = makeValidatedRequest(
   (gameId: number, feedbackCategoryId: number) => api.delete(`/games/${gameId}/game-feedback/categories/${feedbackCategoryId}`),
-  z.object({}).strict()
+  z.literal('')
 )
 
 export default deleteFeedbackCategory

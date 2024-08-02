@@ -5,7 +5,7 @@ import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
 import { leaderboardEntrySchema } from '../entities/leaderboardEntry'
 
-export default function useLeaderboardEntries(activeGame: Game, leaderboardId: number, page: number) {
+export default function useLeaderboardEntries(activeGame: Game, leaderboardId: number | undefined, page: number) {
   const fetcher = async ([url]: [string]) => {
     const qs = new URLSearchParams({ page: String(page) }).toString()
 
@@ -19,7 +19,7 @@ export default function useLeaderboardEntries(activeGame: Game, leaderboardId: n
   }
 
   const { data, error, mutate } = useSWR(
-    [`/games/${activeGame.id}/leaderboards/${leaderboardId}/entries`, page],
+    leaderboardId ? [`/games/${activeGame.id}/leaderboards/${leaderboardId}/entries`, page] : null,
     fetcher
   )
 
