@@ -20,6 +20,7 @@ import { useRecoilValue } from 'recoil'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import findLeaderboard from '../api/findLeaderboard'
 import { LeaderboardEntry } from '../entities/leaderboardEntry'
+import { Leaderboard } from '../entities/leaderboard'
 
 export default function LeaderboardEntries() {
   const location = useLocation()
@@ -27,7 +28,7 @@ export default function LeaderboardEntries() {
 
   const [isLoading, setLoading] = useState(!location.state?.leaderboard)
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
-  const [leaderboard, setLeaderboard] = useState(location.state?.leaderboard)
+  const [leaderboard, setLeaderboard] = useState<Leaderboard | undefined>(location.state?.leaderboard)
 
   const [page, setPage] = useState(0)
   const { entries, count, itemsPerPage, loading, error: fetchError, mutate } = useLeaderboardEntries(activeGame, leaderboard?.id, page)
@@ -64,7 +65,7 @@ export default function LeaderboardEntries() {
 
   const onHideToggle = async (entry: LeaderboardEntry) => {
     try {
-      const { entry: updatedEntry } = await updateLeaderboardEntry(activeGame.id, leaderboard?.id, entry.id, { hidden: !entry.hidden })
+      const { entry: updatedEntry } = await updateLeaderboardEntry(activeGame.id, leaderboard!.id, entry.id, { hidden: !entry.hidden })
 
       mutate((data) => {
         if (!data) {
@@ -95,7 +96,7 @@ export default function LeaderboardEntries() {
   return (
     <Page
       showBackButton
-      title={`${leaderboard.name} entries`}
+      title={leaderboard ? `${leaderboard.name} entries` : ''}
       isLoading={loading}
     >
       {error && <ErrorMessage error={error} />}
