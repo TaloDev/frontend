@@ -8,7 +8,6 @@ import userState from '../../../state/userState'
 import KitchenSink from '../../../utils/KitchenSink'
 import { UserType } from '../../../entities/user'
 import { PlayerGroupRuleCastType, PlayerGroupRuleMode, PlayerGroupRuleName } from '../../../entities/playerGroup'
-import gameMock from '../../../__mocks__/gameMock'
 
 describe('<GroupDetails />', () => {
   const axiosMock = new MockAdapter(api)
@@ -114,9 +113,7 @@ describe('<GroupDetails />', () => {
               { name: PlayerGroupRuleName.GTE, negate: false, operands: ['70'], field: 'props.currentLevel', castType: PlayerGroupRuleCastType.DOUBLE }
             ],
             ruleMode: PlayerGroupRuleMode.AND,
-            game: gameMock(activeGameValue),
             count: 0,
-            createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
           }}
         />
@@ -142,9 +139,7 @@ describe('<GroupDetails />', () => {
         { name: PlayerGroupRuleName.GTE, negate: false, operands: ['70'], field: 'props.currentLevel', castType: PlayerGroupRuleCastType.DOUBLE }
       ],
       ruleMode: PlayerGroupRuleMode.AND,
-      game: gameMock(activeGameValue),
       count: 0,
-      createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     }
 
@@ -201,9 +196,7 @@ describe('<GroupDetails />', () => {
             description: 'Players who have won the game',
             rules: [],
             ruleMode: PlayerGroupRuleMode.AND,
-            game: gameMock(activeGameValue),
             count: 0,
-            createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
           }}
         />
@@ -228,9 +221,7 @@ describe('<GroupDetails />', () => {
       description: 'Players who have won the game',
       rules: [],
       ruleMode: PlayerGroupRuleMode.AND,
-      game: gameMock(activeGameValue),
       count: 0,
-      createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     }
 
@@ -271,9 +262,7 @@ describe('<GroupDetails />', () => {
       description: 'Players who have won the game',
       rules: [],
       ruleMode: PlayerGroupRuleMode.AND,
-      game: gameMock(activeGameValue),
       count: 0,
-      createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     }
 
@@ -312,9 +301,7 @@ describe('<GroupDetails />', () => {
             description: 'Players who have won the game',
             rules: [],
             ruleMode: PlayerGroupRuleMode.AND,
-            game: gameMock(activeGameValue),
             count: 0,
-            createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
           }}
         />

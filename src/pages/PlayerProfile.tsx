@@ -20,6 +20,7 @@ import { useRecoilValue } from 'recoil'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import useDaySections from '../utils/useDaySections'
 import ActivityRenderer from '../components/ActivityRenderer'
+import userState, { AuthedUser } from '../state/userState'
 
 const links = [
   {
@@ -56,7 +57,8 @@ export default function PlayerProfile() {
   const sortedAliases = useSortedItems(player?.aliases ?? [], 'updatedAt')
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
-  const { activities } = usePlayerAuthActivities(activeGame, player.id)
+  const user = useRecoilValue(userState) as AuthedUser
+  const { activities } = usePlayerAuthActivities(activeGame, player.id, user)
 
   const sections = useDaySections(activities)
 

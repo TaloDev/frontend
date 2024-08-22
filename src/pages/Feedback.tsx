@@ -21,16 +21,14 @@ import canViewPage from '../utils/canViewPage'
 import userState from '../state/userState'
 import Pagination from '../components/Pagination'
 import TextInput from '../components/TextInput'
-import { useDebounce } from 'use-debounce'
+import useSearch from '../utils/useSearch'
 
 export default function Feedback() {
   const user = useRecoilValue(userState)
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
 
   const [categoryInternalNameFilter, setCategoryInternalNameFilter] = useState<string | null>(null)
-  const [page, setPage] = useState(0)
-  const [search, setSearch] = useState('')
-  const [debouncedSearch] = useDebounce(search, 300)
+  const { search, setSearch, page, setPage, debouncedSearch } = useSearch()
 
   const {
     feedback,

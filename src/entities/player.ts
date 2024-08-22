@@ -3,7 +3,7 @@ import { propSchema } from './prop'
 import { playerAliasSchema, PlayerAlias } from './playerAlias'
 
 export const basePlayerSchema = z.object({
-  id: z.string(),
+  id: z.string().uuid(),
   props: z.array(propSchema),
   devBuild: z.boolean(),
   createdAt: z.string().datetime(),

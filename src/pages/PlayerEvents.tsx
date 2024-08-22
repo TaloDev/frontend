@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
@@ -7,7 +7,6 @@ import routes from '../constants/routes'
 import usePlayerEvents from '../api/usePlayerEvents'
 import { format } from 'date-fns'
 import TextInput from '../components/TextInput'
-import { useDebounce } from 'use-debounce'
 import Pagination from '../components/Pagination'
 import DateCell from '../components/tables/cells/DateCell'
 import useSortedItems from '../utils/useSortedItems'
@@ -19,6 +18,7 @@ import { isMetaProp } from '../constants/metaProps'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import { useRecoilValue } from 'recoil'
 import { Prop } from '../entities/prop'
+import useSearch from '../utils/useSearch'
 
 type EventPropsProps = {
   props: Prop[]
@@ -43,9 +43,7 @@ export default function PlayerEvents() {
   const { id: playerId } = useParams()
   const [player] = usePlayer()
 
-  const [search, setSearch] = useState('')
-  const [debouncedSearch] = useDebounce(search, 300)
-  const [page, setPage] = useState(0)
+  const { search, setSearch, page, setPage, debouncedSearch } = useSearch()
   const { events, count, itemsPerPage, loading: eventsLoading, error, errorStatusCode } = usePlayerEvents(activeGame, playerId!, debouncedSearch, page)
   const sortedEvents = useSortedItems(events, 'createdAt')
 
@@ -58,10 +56,6 @@ export default function PlayerEvents() {
       navigate(routes.players, { replace: true })
     }
   }, [errorStatusCode, navigate])
-
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [page])
 
   return (
     <Page
