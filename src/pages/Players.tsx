@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import ErrorMessage from '../components/ErrorMessage'
@@ -11,20 +10,18 @@ import TextInput from '../components/TextInput'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
 import usePlayers from '../api/usePlayers'
-import { useDebounce } from 'use-debounce'
 import Pagination from '../components/Pagination'
 import DateCell from '../components/tables/cells/DateCell'
 import Page from '../components/Page'
 import Table from '../components/tables/Table'
 import { Player } from '../entities/player'
+import useSearch from '../utils/useSearch'
 
 export default function Players() {
   const initialSearch = new URLSearchParams(window.location.search).get('search')
-  const [search, setSearch] = useState(initialSearch ?? '')
-  const [debouncedSearch] = useDebounce(search, 300)
+  const { search, setSearch, page, setPage, debouncedSearch } = useSearch(initialSearch)
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
-  const [page, setPage] = useState(0)
   const { players, count, itemsPerPage, loading, error } = usePlayers(activeGame, debouncedSearch, page)
 
   const navigate = useNavigate()
@@ -34,10 +31,6 @@ export default function Players() {
       state: { player }
     })
   }
-
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [page])
 
   return (
     <Page title='Players' isLoading={loading} showBackButton={Boolean(initialSearch)}>
