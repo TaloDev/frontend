@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { gameSchema } from './game'
 
 export enum PlayerGroupRuleName {
   EQUALS = 'EQUALS',
@@ -51,9 +50,7 @@ export const playerGroupSchema = z.object({
   description: z.string(),
   rules: z.array(playerGroupRuleSchema),
   ruleMode: z.nativeEnum(PlayerGroupRuleMode),
-  game: gameSchema,
   count: z.number(),
-  createdAt: z.string().datetime(),
   updatedAt: z.string().datetime()
 })
 
