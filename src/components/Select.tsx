@@ -1,5 +1,4 @@
 import ReactSelect, { components, Props as ReactSelectProps, OptionProps, GroupBase, SelectInstance, StylesConfig, SingleValue } from 'react-select'
-import typedForwardRef from '../utils/typedForwardRef'
 
 export type SelectOption<T> = {
   label: string
@@ -58,4 +57,4 @@ function Select<T>({ onChange, ...props }: SelectProps<T>, ref: React.Ref<Select
   )
 }
 
-export default typedForwardRef(Select)
+export default Select
