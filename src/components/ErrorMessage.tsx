@@ -24,7 +24,7 @@ function ErrorMessage({
     <div className={clsx('bg-red-500 p-4 rounded w-auto', className)}>
       <div className='flex text-white'>
         <IconAlertCircle />
-        <p className='font-bold w-full ml-2'>
+        <div className='font-bold w-full ml-2'>
           {error?.hasKeys &&
             Object.entries(error.keys!).map(([key, value]) => (
               <p key={key} className='text-sm' role='alert'>
@@ -38,7 +38,7 @@ function ErrorMessage({
           }
 
           {children}
-        </p>
+        </div>
       </div>
     </div>
   )
