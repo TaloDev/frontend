@@ -7,7 +7,7 @@ const localStorageEffect: AtomEffect<boolean> = ({ setSelf, onSet }) => {
   }
 
   onSet((includeDevData: boolean) => {
-    window.localStorage.setItem(key, JSON.stringify(includeDevData))
+    window.localStorage.setItem(key, String(includeDevData))
   })
 }
 
