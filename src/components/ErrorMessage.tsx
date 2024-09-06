@@ -25,7 +25,18 @@ function ErrorMessage({
       <div className='flex text-white'>
         <IconAlertCircle />
         <p className='font-bold w-full ml-2' role='alert'>
-          {error?.message}
+          {error?.hasKeys &&
+            Object.entries(error.keys!).map(([key, value]) => (
+              <p key={key} className='text-sm'>
+                {key}: {value.join(', ')}
+              </p>
+            ))
+          }
+
+          {!error?.hasKeys && error?.message &&
+            <p>{error.message}</p>
+          }
+
           {children}
         </p>
       </div>
