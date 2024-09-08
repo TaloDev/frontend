@@ -1,5 +1,4 @@
-import ReactSelect, { components, Props as ReactSelectProps, OptionProps, GroupBase, SelectInstance, StylesConfig, SingleValue } from 'react-select'
-import typedForwardRef from '../utils/typedForwardRef'
+import ReactSelect, { components, Props as ReactSelectProps, OptionProps, GroupBase, StylesConfig, SingleValue, SelectInstance } from 'react-select'
 
 export type SelectOption<T> = {
   label: string
@@ -19,10 +18,11 @@ function Option<T>(props: OptionProps<T, boolean, GroupBase<T>>) {
 }
 
 type SelectProps<T> = {
+  innerRef?: React.Ref<SelectInstance<SelectOption<T>, boolean, GroupBase<SelectOption<T>>>>
   onChange: (option: SelectOption<T> | null) => void
 } & Omit<ReactSelectProps<SelectOption<T>, boolean, GroupBase<SelectOption<T>>>, 'onChange'>
 
-function Select<T>({ onChange, ...props }: SelectProps<T>, ref: React.Ref<SelectInstance<SelectOption<T>, boolean, GroupBase<SelectOption<T>>>>) {
+function Select<T>({ innerRef, onChange, ...props }: SelectProps<T>) {
   const styles: StylesConfig<SelectOption<T>, boolean, GroupBase<SelectOption<T>>> = {
     control: (provided, state) => ({
       ...provided,
@@ -50,7 +50,7 @@ function Select<T>({ onChange, ...props }: SelectProps<T>, ref: React.Ref<Select
   return (
     <ReactSelect
       {...props}
-      ref={ref}
+      ref={innerRef}
       components={{ Option }}
       onChange={(option) => onChange((option as SingleValue<SelectOption<T>>))}
       styles={styles}
@@ -58,4 +58,4 @@ function Select<T>({ onChange, ...props }: SelectProps<T>, ref: React.Ref<Select
   )
 }
 
-export default typedForwardRef(Select)
+export default Select

@@ -23,7 +23,7 @@ export const dataExportSchema = z.object({
   createdBy: z.string(),
   status: z.nativeEnum(DataExportStatus),
   createdAt: z.string().datetime(),
-  failedAt: z.string().datetime().optional()
+  failedAt: z.string().datetime().nullable()
 })
 
 export type DataExport = z.infer<typeof dataExportSchema>

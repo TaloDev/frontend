@@ -104,9 +104,10 @@ export default function NewInvite({
             <Controller
               name='userType'
               control={control}
-              render={({ field }) => (
+              render={({ field: { ref, ...field } }) => (
                 <Select
                   {...field}
+                  innerRef={ref}
                   inputId='sort-mode'
                   options={userTypeOptions}
                 />

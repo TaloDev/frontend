@@ -42,7 +42,12 @@ function DevDataToggle() {
           initial={false}
           transition={{ duration: 0.2 }}
           className='h-full w-8 rounded-md relative'
-          onAnimationStart={() => setIncludeDevData(innerEnabled)}
+          onAnimationStart={() => {
+            window.localStorage.setItem('includeDevDataOptimistic', String(innerEnabled))
+          }}
+          onAnimationComplete={() => {
+            setIncludeDevData(innerEnabled)
+          }}
         >
           <motion.span {...sharedIconProps} animate={{ opacity: innerEnabled ? 1 : 0 }}>
             <IconCheck size={24} stroke={3} />
