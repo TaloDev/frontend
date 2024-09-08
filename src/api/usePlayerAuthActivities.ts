@@ -17,7 +17,7 @@ export default function usePlayerAuthActivities(activeGame: Game, playerId: stri
   }
 
   const { data, error } = useSWR(
-    canPerformAction(user, PermissionBasedAction.VIEW_PLAYER_AUTH_ACTIVITIES)
+    canPerformAction(user, PermissionBasedAction.VIEW_PLAYER_AUTH_ACTIVITIES) && playerId
       ? [`/games/${activeGame.id}/players/${playerId}/auth-activities`]
       : null,
     fetcher
