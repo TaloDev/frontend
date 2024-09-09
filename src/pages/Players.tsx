@@ -39,6 +39,7 @@ export default function Players() {
           <div className='w-1/2 flex-grow md:flex-grow-0 lg:w-1/4'>
             <TextInput
               id='players-search'
+              type='search'
               placeholder='Search...'
               onChange={setSearch}
               value={search}
