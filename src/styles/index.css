@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --xy-node-border: none;
+  --xy-attribution-background-color: none;
+  --xy-edge-stroke: theme('colors.gray.500');
+  --xy-edge-stroke-width: 2;
+}
+
 html {
   @apply bg-gray-800;
   scroll-behavior: smooth;
