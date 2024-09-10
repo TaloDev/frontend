@@ -1,7 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import routes from '../constants/routes'
 import Page from '../components/Page'
+import useNodeGraph from '../utils/useNodeGraph'
+import TextInput from '../components/TextInput'
+import { Background, BackgroundVariant, Controls, ReactFlow } from '@xyflow/react'
+import SaveDataNode from '../components/saves/SaveDataNode'
+import SaveContentFitManager from '../components/saves/SaveContentFitManager'
 
 export default function PlayerSaveContent() {
   const { id: playerId } = useParams()
@@ -13,29 +18,16 @@ export default function PlayerSaveContent() {
 
   const navigate = useNavigate()
 
-  const embedRef = useRef<HTMLIFrameElement | null>(null)
-
-  const setContent = useCallback(() => {
-    embedRef.current?.contentWindow?.postMessage({
-      json: save.content,
-      options: {
-        theme: 'dark',
-        direction: 'RIGHT'
-      }
-    }, '*')
-
-    setLoading(false)
-  }, [save.content])
-
   useEffect(() => {
     if (!save) {
       navigate(routes.playerSaves.replace(':id', playerId!))
     } else {
-      setTimeout(() => {
-        setContent()
-      }, 300)
+      setLoading(false)
     }
-  }, [navigate, playerId, save, setContent])
+  }, [navigate, playerId, save])
+
+  const [search, setSearch] = useState('')
+  const { nodes, edges } = useNodeGraph(save?.content, search)
 
   return (
     <Page
@@ -43,12 +35,30 @@ export default function PlayerSaveContent() {
       title={save?.name ?? 'Save content'}
       isLoading={isLoading}
     >
-      <iframe
-        ref={embedRef}
-        src='https://jsoncrack.com/widget'
-        title='save-content'
-        className='w-full h-[75vh] lg:h-[66vh] xl:h-[75vh] rounded border-2 border-gray-700 overflow-hidden'
-      />
+      <div className='w-full md:w-[400px]'>
+        <TextInput
+          id='node-search'
+          type='search'
+          placeholder='Search...'
+          onChange={setSearch}
+          value={search}
+        />
+      </div>
+
+      <div className='w-full h-[68vh] rounded overflow-hidden'>
+        <ReactFlow
+          fitView
+          className='!bg-gray-700'
+          nodes={nodes}
+          edges={edges}
+          nodeTypes={{ default: SaveDataNode }}
+          elementsSelectable={false}
+        >
+          <SaveContentFitManager />
+          <Controls showInteractive={false} />
+          <Background variant={BackgroundVariant.Dots} gap={32} size={1} />
+        </ReactFlow>
+      </div>
     </Page>
   )
 }

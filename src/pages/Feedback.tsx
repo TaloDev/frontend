@@ -81,6 +81,7 @@ export default function Feedback() {
             <div className='w-1/2 flex-grow md:flex-grow-0 md:w-[400px]'>
               <TextInput
                 id='feedback-search'
+                type='search'
                 placeholder='Search...'
                 onChange={setSearch}
                 value={search}

@@ -69,8 +69,8 @@ export default function PlayerEvents() {
         <div className='flex items-center'>
           <div className='w-1/2 flex-grow md:flex-grow-0 lg:w-1/4'>
             <TextInput
-              type='search'
               id='events-search'
+              type='search'
               placeholder='Search...'
               onChange={setSearch}
               value={search}
