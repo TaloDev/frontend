@@ -6,6 +6,7 @@ import useNodeGraph from '../utils/useNodeGraph'
 import TextInput from '../components/TextInput'
 import { Background, BackgroundVariant, Controls, ReactFlow } from '@xyflow/react'
 import SaveDataNode from '../components/saves/SaveDataNode'
+import SaveContentFitManager from '../components/saves/SaveContentFitManager'
 
 export default function PlayerSaveContent() {
   const { id: playerId } = useParams()
@@ -53,6 +54,7 @@ export default function PlayerSaveContent() {
           nodeTypes={{ default: SaveDataNode }}
           elementsSelectable={false}
         >
+          <SaveContentFitManager />
           <Controls showInteractive={false} />
           <Background variant={BackgroundVariant.Dots} gap={32} size={1} />
         </ReactFlow>
