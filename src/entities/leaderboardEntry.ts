@@ -3,7 +3,7 @@ import { playerAliasSchema } from './playerAlias'
 
 export const leaderboardEntrySchema = z.object({
   id: z.number(),
-  position: z.number(),
+  position: z.number().optional(),
   score: z.number(),
   leaderboardName: z.string(),
   leaderboardInternalName: z.string(),
