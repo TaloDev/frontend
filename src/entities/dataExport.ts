@@ -14,7 +14,8 @@ export enum DataExportAvailableEntities {
   LEADERBOARD_ENTRIES = 'leaderboardEntries',
   GAME_STATS = 'gameStats',
   PLAYER_GAME_STATS = 'playerGameStats',
-  GAME_ACTIVITIES = 'gameActivities'
+  GAME_ACTIVITIES = 'gameActivities',
+  GAME_FEEDBACK = 'gameFeedback'
 }
 
 export const dataExportSchema = z.object({
