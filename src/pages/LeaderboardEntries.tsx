@@ -117,7 +117,7 @@ export default function LeaderboardEntries() {
             >
               {(entry) => (
                 <>
-                  <TableCell><span className='font-semibold'>{entry.position + 1}</span></TableCell>
+                  <TableCell><span className='font-semibold'>{entry.position! + 1}</span></TableCell>
                   <TableCell>
                     <div className='flex items-center'>
                       <span>{entry.playerAlias.identifier}</span>
