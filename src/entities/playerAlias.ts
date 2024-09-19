@@ -12,7 +12,7 @@ export enum PlayerAliasService {
 
 export const playerAliasSchema = z.object({
   id: z.number(),
-  service: z.nativeEnum(PlayerAliasService),
+  service: z.string(),
   identifier: z.string(),
   player: z.lazy(() => basePlayerSchema),
   createdAt: z.string().datetime(),
