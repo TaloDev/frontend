@@ -154,7 +154,7 @@ export default function Integrations() {
           )}
           content={(
             <div className='leading-relaxed'>
-              {!steamIntegration && <p>Sync your leaderboards and stats in Steamworks</p>}
+              {!steamIntegration && <p>Authenticate Steam players and sync your leaderboards and stats from Steamworks</p>}
               {!steamIntegration && <p>Requires a <Link to='https://partner.steamgames.com/doc/webapi_overview/auth'>Web API Publisher key</Link></p>}
               {steamIntegration && <p className='font-bold'>Enabled {format(new Date(steamIntegration.createdAt), 'do MMM yyyy')}</p>}
               {steamIntegration && <p>Last updated {format(new Date(steamIntegration.updatedAt), 'do MMM yyyy HH:mm')}</p>}
@@ -167,7 +167,7 @@ export default function Integrations() {
                   loading={isSyncingSteamworksLeaderboards}
                   error={syncingSteamworksLeaderboardsError}
                   title='Sync your Talo and Steamworks leaderboards'
-                  docs='https://docs.trytalo.com/integrations/steam#manually-syncing-leaderboards'
+                  docs='https://docs.trytalo.com/docs/integrations/steamworks#manually-syncing-leaderboards'
                   onClick={onSyncSteamworksLeaderboardsClick}
                   cta='Sync leaderboards'
                   successTitle='Leaderboards syncing'
@@ -180,7 +180,7 @@ export default function Integrations() {
                   loading={isSyncingSteamworksStats}
                   error={syncingSteamworksStatsError}
                   title='Sync your Talo and Steamworks global stats'
-                  docs='https://docs.trytalo.com/integrations/steam#manually-syncing-stats'
+                  docs='https://docs.trytalo.com/docs/integrations/steamworks#manually-syncing-stats'
                   onClick={onSyncSteamworksStatsClick}
                   cta='Sync stats'
                   successTitle='Stats syncing'
