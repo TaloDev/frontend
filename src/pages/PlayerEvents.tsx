@@ -20,13 +20,7 @@ import { useRecoilValue } from 'recoil'
 import { Prop } from '../entities/prop'
 import useSearch from '../utils/useSearch'
 
-type EventPropsProps = {
-  props: Prop[]
-}
-
-const EventProps = ({
-  props
-}: EventPropsProps) => {
+function EventProps({ props }: { props: Prop[] }) {
   return props.filter((prop) => !isMetaProp(prop)).map(({ key, value }) => (
     <code
       key={`${key}-${value}`}

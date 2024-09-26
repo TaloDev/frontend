@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { playerAliasSchema } from './playerAlias'
+import { propSchema } from './prop'
 
 export const leaderboardEntrySchema = z.object({
   id: z.number(),
@@ -9,6 +10,7 @@ export const leaderboardEntrySchema = z.object({
   leaderboardInternalName: z.string(),
   playerAlias: playerAliasSchema,
   hidden: z.boolean(),
+  props: z.array(propSchema),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime()
 })

@@ -21,6 +21,18 @@ import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import findLeaderboard from '../api/findLeaderboard'
 import { LeaderboardEntry } from '../entities/leaderboardEntry'
 import { Leaderboard } from '../entities/leaderboard'
+import { Prop } from '../entities/prop'
+
+function LeaderboardEntryProps({ props }: { props: Prop[] }) {
+  return props.map(({ key, value }) => (
+    <code
+      key={`${key}-${value}`}
+      className='bg-gray-900 rounded p-2 mr-2 mb-2 text-xs inline-block'
+    >
+      {key} = {value}
+    </code>
+  ))
+}
 
 export default function LeaderboardEntries() {
   const location = useLocation()
@@ -107,7 +119,7 @@ export default function LeaderboardEntries() {
 
       {!fetchError && entries.length > 0 &&
         <>
-          <Table columns={['#', 'Player', 'Score', 'Submitted at', '']}>
+          <Table columns={['#', 'Player', 'Score', 'Props', 'Submitted at', '']}>
             <TableBody
               iterator={entries}
               configureClassnames={(entry, idx) => ({
@@ -130,6 +142,11 @@ export default function LeaderboardEntries() {
                     </div>
                   </TableCell>
                   <TableCell>{entry.score}</TableCell>
+                  <TableCell className='min-w-80'>
+                    <div className='-mb-2'>
+                      <LeaderboardEntryProps props={entry.props} />
+                    </div>
+                  </TableCell>
                   <DateCell>{format(new Date(entry.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
                   <TableCell className='w-40'>
                     <Button
