@@ -15,6 +15,7 @@ import SecondaryNav from '../components/SecondaryNav'
 import DevDataStatus from '../components/DevDataStatus'
 import SecondaryTitle from '../components/SecondaryTitle'
 import useIntendedRoute from '../utils/useIntendedRoute'
+import usePinnedGroups from '../api/usePinnedGroups'
 
 export const secondaryNavRoutes = [
   { title: 'Dashboard', to: routes.dashboard },
@@ -44,6 +45,7 @@ export default function Dashboard() {
   const { startDate, endDate } = useTimePeriod(timePeriod)
   const { headlines, loading: headlinesLoading, error: headlinesError } = useHeadlines(activeGame, startDate, endDate, includeDevData)
   const { stats, loading: statsLoading, error: statsError } = useStats(activeGame, includeDevData)
+  const { groups: pinnedGroups, loading: pinnedGroupsLoading, error: pinnedGroupsError } = usePinnedGroups(activeGame)
 
   const intendedRouteChecked = useIntendedRoute()
 
@@ -86,6 +88,20 @@ export default function Dashboard() {
           <HeadlineStat title='Returning players' stat={headlines.returning_players.count} />
           <HeadlineStat title='New events' stat={headlines.events.count} />
           <HeadlineStat title='Unique event submitters' stat={headlines.unique_event_submitters.count} />
+        </div>
+      }
+
+      {pinnedGroups.length > 0 && <SecondaryTitle>Pinned groups</SecondaryTitle>}
+
+      {pinnedGroupsError &&
+        <ErrorMessage error={{ message: 'Couldn\'t fetch pinned groups' }} />
+      }
+
+      {!pinnedGroupsLoading &&
+        <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-4'>
+          {pinnedGroups.map((group) => (
+            <HeadlineStat key={group.id} title={group.name} stat={group.count} />
+          ))}
         </div>
       }
 

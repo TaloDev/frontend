@@ -7,7 +7,7 @@ import activeGameState from '../../../state/activeGameState'
 import userState from '../../../state/userState'
 import KitchenSink from '../../../utils/KitchenSink'
 import { UserType } from '../../../entities/user'
-import { PlayerGroupRuleCastType, PlayerGroupRuleMode, PlayerGroupRuleName } from '../../../entities/playerGroup'
+import { PlayerGroup, PlayerGroupRuleCastType, PlayerGroupRuleMode, PlayerGroupRuleName } from '../../../entities/playerGroup'
 
 describe('<GroupDetails />', () => {
   const axiosMock = new MockAdapter(api)
@@ -15,7 +15,17 @@ describe('<GroupDetails />', () => {
   axiosMock.onGet(/(.*)preview-count(.*)/).reply(200, { count: 8 })
 
   it('should create a group', async () => {
-    axiosMock.onPost('http://talo.api/games/1/player-groups').replyOnce(200, { group: { id: 2 } })
+    const secondGroup = {
+      id: '1',
+      name: 'Losers',
+      description: 'Players who have lost the game',
+      rules: [],
+      ruleMode: PlayerGroupRuleMode.AND,
+      count: 0,
+      updatedAt: new Date().toISOString()
+    }
+
+    axiosMock.onPost('http://talo.api/games/1/player-groups').replyOnce(200, { group: secondGroup })
 
     const closeMock = vi.fn()
     const mutateMock = vi.fn()
@@ -43,13 +53,21 @@ describe('<GroupDetails />', () => {
 
     expect(mutateMock).toHaveBeenCalled()
 
-    const groups = [
-      { id: '1' }
+    const groups: PlayerGroup[] = [
+      {
+        id: '1',
+        name: 'Winners',
+        description: 'Players who have won the game',
+        rules: [],
+        ruleMode: PlayerGroupRuleMode.AND,
+        count: 0,
+        updatedAt: new Date().toISOString()
+      }
     ]
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ groups })).toStrictEqual({
-      groups: [...groups, { id: 2 }]
+      groups: [...groups, secondGroup]
     })
   })
 
