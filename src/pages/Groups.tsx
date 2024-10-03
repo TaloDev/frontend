@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import ErrorMessage from '../components/ErrorMessage'
 import { format } from 'date-fns'
-import { IconPlus } from '@tabler/icons-react'
+import { IconPinned, IconPinnedFilled, IconPlus } from '@tabler/icons-react'
 import Button from '../components/Button'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
@@ -17,6 +17,10 @@ import Identifier from '../components/Identifier'
 import { useNavigate } from 'react-router-dom'
 import routes from '../constants/routes'
 import { PlayerGroup } from '../entities/playerGroup'
+import Tippy from '@tippyjs/react'
+import usePinnedGroups from '../api/usePinnedGroups'
+import ToastContext, { ToastType } from '../components/toast/ToastContext'
+import togglePinnedGroup from '../api/toggledPinnedGroup'
 
 export default function Groups() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
@@ -27,7 +31,11 @@ export default function Groups() {
   const { groups, loading, error, mutate } = useGroups(activeGame)
   const sortedGroups = useSortedItems(groups, 'name', 'asc')
 
+  const { groups: pinnedGroups, mutate: mutatePinnedGroups } = usePinnedGroups(activeGame)
+
   const navigate = useNavigate()
+
+  const toast = useContext(ToastContext)
 
   useEffect(() => {
     if (!showModal) setEditingGroup(null)
@@ -41,6 +49,25 @@ export default function Groups() {
   const goToPlayersForGroup = (group: PlayerGroup) => {
     navigate(`${routes.players}?search=group:${group.id}`)
   }
+
+  const isPinned = useCallback((group: PlayerGroup) => {
+    return pinnedGroups.find((pg) => pg.id === group.id)
+  }, [pinnedGroups])
+
+  const togglePinned = useCallback(async (group: PlayerGroup) => {
+    try {
+      await togglePinnedGroup(activeGame.id, group.id, !isPinned(group))
+      mutatePinnedGroups((data) => ({
+        ...data,
+        groups: isPinned(group)
+          ? data!.groups.filter((pg) => pg.id !== group.id)
+          : [...data!.groups, group]
+      }), false)
+      toast.trigger(isPinned(group) ? 'Group unpinned' : 'Group pinned to your dashboard', ToastType.SUCCESS)
+    } catch (err) {
+      toast.trigger('Failed to pin group', ToastType.ERROR)
+    }
+  }, [activeGame.id, isPinned, mutatePinnedGroups, toast])
 
   return (
     <Page
@@ -70,7 +97,31 @@ export default function Groups() {
               {(group) => (
                 <>
                   <TableCell className='min-w-80'>
-                    <Identifier id={group.id} />
+                    <div className='flex flex-row items-center space-x-4'>
+                      {pinnedGroups &&
+                        <Tippy content={<p>{isPinned(group) ? 'Unpin group' : 'Pin group to dashboard'}</p>}>
+                          <div className='inline-block'>
+                            {isPinned(group) &&
+                              <Button
+                                variant='icon'
+                                className='p-1 rounded-full bg-indigo-900'
+                                icon={<IconPinnedFilled />}
+                                onClick={() => togglePinned(group)}
+                              />
+                            }
+                            {!isPinned(group) &&
+                              <Button
+                                variant='icon'
+                                className='p-1 rounded-full bg-indigo-900'
+                                icon={<IconPinned />}
+                                onClick={() => togglePinned(group)}
+                              />
+                            }
+                          </div>
+                        </Tippy>
+                      }
+                      <Identifier id={group.id} />
+                    </div>
                   </TableCell>
                   <TableCell className='min-w-[320px] max-w-[320px] lg:min-w-0'>
                     {group.name}

@@ -7,6 +7,7 @@ import activeGameState from '../../state/activeGameState'
 import devDataState from '../../state/devDataState'
 import Dashboard from '../Dashboard'
 import userEvent from '@testing-library/user-event'
+import { PlayerGroupRuleMode } from '../../entities/playerGroup'
 
 describe('<Dashboard />', () => {
   const axiosMock = new MockAdapter(api)
@@ -23,6 +24,20 @@ describe('<Dashboard />', () => {
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/unique_event_submitters/).replyOnce(200, {
       count: 8
+    })
+
+    axiosMock.onGet(/\/games\/\d\/player-groups\/pinned/).replyOnce(200, {
+      groups: [
+        {
+          id: '1',
+          name: 'Winners',
+          description: 'Players who have won the game',
+          rules: [],
+          ruleMode: PlayerGroupRuleMode.AND,
+          count: 0,
+          updatedAt: new Date().toISOString()
+        }
+      ]
     })
   })
 
@@ -108,12 +123,13 @@ describe('<Dashboard />', () => {
     expect(await screen.findByText('2103')).toBeInTheDocument()
   })
 
-  it('should render headline and stat errors', async () => {
+  it('should render headline, pinned group and stat errors', async () => {
     axiosMock.reset()
     axiosMock.onGet(/\/games\/\d\/headlines\/new_players/).networkErrorOnce()
     axiosMock.onGet(/\/games\/\d\/headlines\/returning_players/).networkErrorOnce()
     axiosMock.onGet(/\/games\/\d\/headlines\/events/).networkErrorOnce()
     axiosMock.onGet(/\/games\/\d\/headlines\/unique_event_submitters/).networkErrorOnce()
+    axiosMock.onGet(/\/games\/\d\/player-groups\/pinned/).networkErrorOnce()
     axiosMock.onGet(/\/games\/\d\/game-stats/).networkErrorOnce()
 
     render(
