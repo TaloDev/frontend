@@ -1,9 +1,10 @@
 import { useCallback, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import ToastContext, { ToastType } from './ToastContext.ts'
-import { IconCheck } from '@tabler/icons-react'
+import { IconCheck, IconX } from '@tabler/icons-react'
 import { useEffect } from 'react'
 import type { ReactNode } from 'react'
+import clsx from 'clsx'
 
 type ToastProviderProps = {
   children: ReactNode
@@ -29,6 +30,8 @@ export default function ToastProvider({
     switch (type) {
       case ToastType.SUCCESS:
         return <IconCheck size={24} />
+      case ToastType.ERROR:
+        return <IconX size={24} />
       default:
         return null
     }
@@ -70,7 +73,7 @@ export default function ToastProvider({
         <AnimatePresence>
           {show &&
             <motion.div
-              className='fixed bottom-0 md:bottom-8 md:left-8 z-[51] w-full md:w-auto md:min-w-80 space-x-2 flex items-center md:rounded p-4 md:pr-8 shadow-md bg-indigo-500 text-white'
+              className={clsx('fixed bottom-0 md:bottom-8 md:left-8 z-[51] w-full md:w-auto md:min-w-80 space-x-2 flex items-center md:rounded p-4 md:pr-8 shadow-md bg-indigo-500 text-white', { 'bg-red-500': type === ToastType.ERROR })}
               initial={{ opacity: 0, scale: 0.95, y: 40 }}
               animate={{
                 opacity: 1,

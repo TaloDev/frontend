@@ -2,7 +2,8 @@ import React from 'react'
 
 export enum ToastType {
   NONE = '',
-  SUCCESS = 'success'
+  SUCCESS = 'success',
+  ERROR = 'error'
 }
 
 export type ToastContextType = {
