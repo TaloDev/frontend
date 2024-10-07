@@ -1,5 +1,5 @@
 #!/bin/sh
-for filename in /bin/www/js/*.js; do
+for filename in /bin/www/assets/*.js; do
   envsub $filename $filename
 done
 
