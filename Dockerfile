@@ -1,6 +1,11 @@
 FROM node:20-alpine AS build
 WORKDIR /usr/frontend
 COPY . .
+
+# prepend \ to variables that need to be substituted
+# this prevents them from being substituted with empty values
+RUN sed -i 's/\${/\\${/g' .env.production
+
 RUN npm install
 RUN npm run build
 
