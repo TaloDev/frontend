@@ -51,6 +51,7 @@ export const playerGroupSchema = z.object({
   rules: z.array(playerGroupRuleSchema),
   ruleMode: z.nativeEnum(PlayerGroupRuleMode),
   count: z.number(),
+  membersVisible: z.boolean(),
   updatedAt: z.string().datetime()
 })
 
