@@ -4,7 +4,7 @@ import TextInput from '../../components/TextInput'
 import Button from '../../components/Button'
 import buildError from '../../utils/buildError'
 import ErrorMessage, { TaloError } from '../../components/ErrorMessage'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import createGroup from '../../api/createGroup'
 import activeGameState, { SelectedActiveGame } from '../../state/activeGameState'
@@ -24,10 +24,13 @@ import { metaGroupFields } from '../../constants/metaProps'
 import { PlayerGroup, PlayerGroupRule, PlayerGroupRuleCastType, PlayerGroupRuleName, PlayerGroupRuleMode } from '../../entities/playerGroup'
 import { KeyedMutator } from 'swr'
 import { z } from 'zod'
+import Toggle from '../../components/toggles/Toggle'
+import Link from '../../components/Link'
 
 const validationSchema = z.object({
   name: z.string(),
-  description: z.string()
+  description: z.string(),
+  membersVisible: z.boolean()
 })
 
 type FormValues = z.infer<typeof validationSchema>
@@ -101,11 +104,12 @@ export default function GroupDetails({
     return rules.every(isGroupRuleValid)
   }, [rules])
 
-  const { register, handleSubmit, formState: { isValid, errors } } = useForm<FormValues>({
+  const { register, handleSubmit, formState: { isValid, errors }, control } = useForm<FormValues>({
     resolver: zodResolver(validationSchema),
     defaultValues: {
       name: editingGroup?.name ?? '',
-      description: editingGroup?.description ?? ''
+      description: editingGroup?.description ?? '',
+      membersVisible: editingGroup?.membersVisible ?? false
     },
     mode: 'onChange'
   })
@@ -211,6 +215,29 @@ export default function GroupDetails({
             placeholder='Group description'
             inputExtra={{ ...register('description') }}
             errors={[errors.description?.message]}
+          />
+
+          <Controller
+            control={control}
+            name='membersVisible'
+            render={({
+              field: { onChange, value, ref }
+            }) => (
+              <div className='flex justify-between items-start'>
+                <div>
+                  <label htmlFor='members-visible' className='font-semibold'>Members visible</label>
+                  <p className='text-sm text-gray-500'>If enabled, player data will be returned in the <Link to='https://docs.trytalo.com/docs/http/player-group-api'>player group API</Link></p>
+                </div>
+                <div className='flex items-center space-x-4'>
+                  <Toggle
+                    id='members-visible'
+                    inputRef={ref}
+                    enabled={value}
+                    onToggle={onChange}
+                  />
+                </div>
+              </div>
+            )}
           />
 
           <div>

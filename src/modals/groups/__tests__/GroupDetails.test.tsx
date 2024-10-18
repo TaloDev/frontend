@@ -61,6 +61,7 @@ describe('<GroupDetails />', () => {
         rules: [],
         ruleMode: PlayerGroupRuleMode.AND,
         count: 0,
+        membersVisible: false,
         updatedAt: new Date().toISOString()
       }
     ]
@@ -132,6 +133,7 @@ describe('<GroupDetails />', () => {
             ],
             ruleMode: PlayerGroupRuleMode.AND,
             count: 0,
+            membersVisible: true,
             updatedAt: new Date().toISOString()
           }}
         />
@@ -140,6 +142,7 @@ describe('<GroupDetails />', () => {
 
     expect(screen.getByLabelText('Name')).toHaveValue('Winners')
     expect(screen.getByLabelText('Description')).toHaveValue('Players who have won the game')
+    expect(screen.getByLabelText('Members visible')).toBeEnabled()
 
     expect(screen.getByText('Update')).toBeInTheDocument()
   })
@@ -158,6 +161,7 @@ describe('<GroupDetails />', () => {
       ],
       ruleMode: PlayerGroupRuleMode.AND,
       count: 0,
+      membersVisible: false,
       updatedAt: new Date().toISOString()
     }
 
@@ -215,6 +219,7 @@ describe('<GroupDetails />', () => {
             rules: [],
             ruleMode: PlayerGroupRuleMode.AND,
             count: 0,
+            membersVisible: false,
             updatedAt: new Date().toISOString()
           }}
         />
@@ -240,6 +245,7 @@ describe('<GroupDetails />', () => {
       rules: [],
       ruleMode: PlayerGroupRuleMode.AND,
       count: 0,
+      membersVisible: false,
       updatedAt: new Date().toISOString()
     }
 
@@ -281,6 +287,7 @@ describe('<GroupDetails />', () => {
       rules: [],
       ruleMode: PlayerGroupRuleMode.AND,
       count: 0,
+      membersVisible: false,
       updatedAt: new Date().toISOString()
     }
 
@@ -320,6 +327,7 @@ describe('<GroupDetails />', () => {
             rules: [],
             ruleMode: PlayerGroupRuleMode.AND,
             count: 0,
+            membersVisible: false,
             updatedAt: new Date().toISOString()
           }}
         />

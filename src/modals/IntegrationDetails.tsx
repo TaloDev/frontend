@@ -233,7 +233,7 @@ export default function IntegrationDetails({
 
           <div className='flex justify-between items-start'>
             <div>
-              <p className='font-medium'>Sync leaderboards</p>
+              <label htmlFor='sync-leaderboards' className='font-semibold'>Sync leaderboards</label>
               <p className='text-sm text-gray-500'>Push leaderboard entries to Steam</p>
             </div>
             <div className='flex items-center space-x-4'>
@@ -258,7 +258,7 @@ export default function IntegrationDetails({
 
           <div className='flex justify-between items-start'>
             <div>
-              <p className='font-medium'>Sync stats</p>
+              <label htmlFor='sync-stats' className='font-semibold'>Sync stats</label>
               <p className='text-sm text-gray-500'>Push individual and global values to Steam</p>
             </div>
             <div className='flex items-center space-x-4'>
