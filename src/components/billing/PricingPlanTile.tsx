@@ -62,7 +62,7 @@ export default function PricingPlanTile({
       const { redirect, invoice } = await createCheckoutSession(plan!.id, displayInterval)
       if (redirect) {
         window.location.assign(redirect)
-      } else {
+      } else if (invoice) {
         setInvoice(invoice)
       }
     } catch (err) {
