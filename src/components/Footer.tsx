@@ -7,7 +7,7 @@ export default function Footer() {
         <div>
           <strong>&copy; Talo Platform Ltd {new Date().getFullYear()}</strong>
           <p className='mt-2'>Self-funded and independent</p>
-          <Link to='https://trytalo.com/about'>About us</Link>
+          <Link to='https://trytalo.com/about?utm_source=dashboard&utm_medium=footer'>About us</Link>
         </div>
 
         <div>
@@ -23,14 +23,14 @@ export default function Footer() {
       <div>
         <h3 className='font-semibold'>Features</h3>
         <ul className='mt-2 space-y-1'>
-          <li><Link to='https://trytalo.com/players'>Player management</Link></li>
-          <li><Link to='https://trytalo.com/events'>Event tracking</Link></li>
-          <li><Link to='https://trytalo.com/leaderboards'>Leaderboards</Link></li>
-          <li><Link to='https://trytalo.com/saves'>Game saves</Link></li>
-          <li><Link to='https://trytalo.com/stats'>Game stats</Link></li>
-          <li><Link to='https://trytalo.com/feedback'>Game feedback</Link></li>
-          <li><Link to='https://trytalo.com/live-config'>Live config</Link></li>
-          <li><Link to='https://trytalo.com/open-source'>Open source</Link></li>
+          <li><Link to='https://trytalo.com/players?utm_source=dashboard&utm_medium=footer'>Player management</Link></li>
+          <li><Link to='https://trytalo.com/events?utm_source=dashboard&utm_medium=footer'>Event tracking</Link></li>
+          <li><Link to='https://trytalo.com/leaderboards?utm_source=dashboard&utm_medium=footer'>Leaderboards</Link></li>
+          <li><Link to='https://trytalo.com/saves?utm_source=dashboard&utm_medium=footer'>Game saves</Link></li>
+          <li><Link to='https://trytalo.com/stats?utm_source=dashboard&utm_medium=footer'>Game stats</Link></li>
+          <li><Link to='https://trytalo.com/feedback?utm_source=dashboard&utm_medium=footer'>Game feedback</Link></li>
+          <li><Link to='https://trytalo.com/live-config?utm_source=dashboard&utm_medium=footer'>Live config</Link></li>
+          <li><Link to='https://trytalo.com/open-source?utm_source=dashboard&utm_medium=footer'>Open source</Link></li>
         </ul>
       </div>
 
@@ -38,9 +38,9 @@ export default function Footer() {
         <div>
           <h3 className='font-semibold'>Integrations</h3>
           <ul className='mt-2 space-y-1'>
-            <li><Link to='https://trytalo.com/steamworks-integration'>Steamworks integration</Link></li>
-            <li><Link to='https://trytalo.com/unity'>Unity package</Link></li>
-            <li><Link to='https://trytalo.com/godot'>Godot plugin</Link></li>
+            <li><Link to='https://trytalo.com/steamworks-integration?utm_source=dashboard&utm_medium=footer'>Steamworks integration</Link></li>
+            <li><Link to='https://trytalo.com/unity?utm_source=dashboard&utm_medium=footer'>Unity package</Link></li>
+            <li><Link to='https://trytalo.com/godot?utm_source=dashboard&utm_medium=footer'>Godot plugin</Link></li>
           </ul>
         </div>
 
@@ -48,11 +48,11 @@ export default function Footer() {
           <h3 className='font-semibold'>Links</h3>
           <ul className='mt-2 space-y-1'>
             <li><Link to='https://github.com/TaloDev'>GitHub</Link></li>
-            <li><Link to='https://docs.trytalo.com'>Docs</Link></li>
-            <li><Link to='https://trytalo.com/blog'>Blog</Link></li>
-            <li><Link to='https://trytalo.com/pricing'>Pricing</Link></li>
-            <li><Link to='https://trytalo.com/privacy'>Privacy</Link></li>
-            <li><Link to='https://trytalo.com/terms'>Terms</Link></li>
+            <li><Link to='https://docs.trytalo.com?utm_source=dashboard&utm_medium=footer'>Docs</Link></li>
+            <li><Link to='https://trytalo.com/blog?utm_source=dashboard&utm_medium=footer'>Blog</Link></li>
+            <li><Link to='https://trytalo.com/pricing?utm_source=dashboard&utm_medium=footer'>Pricing</Link></li>
+            <li><Link to='https://trytalo.com/privacy?utm_source=dashboard&utm_medium=footer'>Privacy</Link></li>
+            <li><Link to='https://trytalo.com/terms?utm_source=dashboard&utm_medium=footer'>Terms</Link></li>
           </ul>
         </div>
       </div>

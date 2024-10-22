@@ -167,7 +167,7 @@ export default function Integrations() {
                   loading={isSyncingSteamworksLeaderboards}
                   error={syncingSteamworksLeaderboardsError}
                   title='Sync your Talo and Steamworks leaderboards'
-                  docs='https://docs.trytalo.com/docs/integrations/steamworks#manually-syncing-leaderboards'
+                  docs='https://docs.trytalo.com/docs/integrations/steamworks#manually-syncing-leaderboards?utm_source=dashboard&utm_medium=integrations'
                   onClick={onSyncSteamworksLeaderboardsClick}
                   cta='Sync leaderboards'
                   successTitle='Leaderboards syncing'
@@ -180,7 +180,7 @@ export default function Integrations() {
                   loading={isSyncingSteamworksStats}
                   error={syncingSteamworksStatsError}
                   title='Sync your Talo and Steamworks global stats'
-                  docs='https://docs.trytalo.com/docs/integrations/steamworks#manually-syncing-stats'
+                  docs='https://docs.trytalo.com/docs/integrations/steamworks#manually-syncing-stats?utm_source=dashboard&utm_medium=integrations'
                   onClick={onSyncSteamworksStatsClick}
                   cta='Sync stats'
                   successTitle='Stats syncing'
