@@ -99,7 +99,7 @@ export default function Login() {
             value={password}
           />
 
-          <Link to={routes.forgotPassword} className='block mt-4'>Forgot your password?</Link>
+          <Link to={routes.forgotPassword} className='inline-block mt-4'>Forgot your password?</Link>
         </div>
 
         {error && <ErrorMessage error={error} />}
