@@ -5,7 +5,7 @@ import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { playerGroupSchema } from '../entities/playerGroup'
 import { z } from 'zod'
 
-export default function usePinnedGroups(activeGame: Game | null, includeDevData: boolean) {
+export default function usePinnedGroups(activeGame: Game | null, includeDevData?: boolean) {
   const fetcher = async ([url]: [string]) => {
     const res = await makeValidatedGetRequest(url, z.object({
       groups: z.array(playerGroupSchema)
