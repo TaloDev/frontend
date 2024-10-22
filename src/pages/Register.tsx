@@ -136,7 +136,7 @@ export default function Register() {
               inputRef={ref}
               checked={value}
               onChange={onChange}
-              labelContent={<>I agree to the <Link to='https://trytalo.com/terms'>Terms of Use</Link> and <Link to='https://trytalo.com/privacy'>Privacy Policy</Link></>}
+              labelContent={<>I agree to the <Link to='https://trytalo.com/terms'>terms of use</Link> and <Link to='https://trytalo.com/privacy'>privacy policy</Link></>}
             />
           )}
         />
