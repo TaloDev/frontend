@@ -226,7 +226,7 @@ export default function GroupDetails({
               <div className='flex justify-between items-start'>
                 <div>
                   <label htmlFor='members-visible' className='font-semibold'>Members visible</label>
-                  <p className='text-sm text-gray-500'>If enabled, player data will be returned in the <Link to='https://docs.trytalo.com/docs/http/player-group-api'>player group API</Link></p>
+                  <p className='text-sm text-gray-500'>If enabled, player data will be returned in the <Link to='https://docs.trytalo.com/docs/http/player-group-api?utm_source=dashboard&utm_medium=group-details-modal'>player group API</Link></p>
                 </div>
                 <div className='flex items-center space-x-4'>
                   <Toggle

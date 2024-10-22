@@ -14,6 +14,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import * as Sentry from '@sentry/react'
 import type { MouseEvent } from 'react'
 import userState from '../state/userState'
+import taloIcon from '../assets/talo-icon.svg'
+import TaloInfoCard from '../components/TaloInfoCard'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -62,7 +64,12 @@ export default function Login() {
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
       <form className={`text-white space-y-8 ${unauthedContainerStyle}`}>
         <div className='space-y-4'>
-          <h1 className='text-4xl font-bold'>Welcome back</h1>
+          <h1 className='text-4xl font-mono font-bold flex items-center space-x-4'>
+            <img src={taloIcon} alt='Talo' className='w-[32px] h-[32px]' />
+            <span>Talo Game Services</span>
+          </h1>
+
+          <TaloInfoCard />
 
           {wasLoggedOut &&
             <AlertBanner text='You were logged out' />
@@ -92,7 +99,7 @@ export default function Login() {
             value={password}
           />
 
-          <Link to={routes.forgotPassword} className='block mt-4'>Forgot your password?</Link>
+          <Link to={routes.forgotPassword} className='inline-block mt-4'>Forgot your password?</Link>
         </div>
 
         {error && <ErrorMessage error={error} />}
