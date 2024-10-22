@@ -26,7 +26,7 @@ export default function Footer() {
           <li><Link to='https://trytalo.com/players'>Player management</Link></li>
           <li><Link to='https://trytalo.com/events'>Event tracking</Link></li>
           <li><Link to='https://trytalo.com/leaderboards'>Leaderboards</Link></li>
-          <li><Link to='/https://trytalo.comsaves'>Game saves</Link></li>
+          <li><Link to='https://trytalo.com/saves'>Game saves</Link></li>
           <li><Link to='https://trytalo.com/stats'>Game stats</Link></li>
           <li><Link to='https://trytalo.com/feedback'>Game feedback</Link></li>
           <li><Link to='https://trytalo.com/live-config'>Live config</Link></li>
