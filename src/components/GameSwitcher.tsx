@@ -49,13 +49,13 @@ export default function GameSwitcher() {
             <motion.ul
               animate={{ opacity: isOpen ? 1 : 0 }}
               transition={{ duration: 0.2 }}
-              className='bg-white text-black rounded-b w-60 md:w-80 shadow'
+              className='bg-white text-black rounded-b w-60 md:w-80 shadow divide-y divide-gray-300'
             >
               {games.map((game) => {
                 const disabled = activeGame.id === game.id
 
                 return (
-                  <li key={game.name} className={clsx('border-b border-gray-300', dropdownButtonStyle, { ['!bg-transparent']: disabled })}>
+                  <li key={game.name} className={clsx(dropdownButtonStyle, { ['!bg-transparent']: disabled })}>
                     <Button
                       variant='bare'
                       disabled={disabled}
