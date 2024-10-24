@@ -8,6 +8,7 @@ import canViewPage from './utils/canViewPage'
 import IntendedRouteHandler from './components/IntendedRouteHandler'
 import userState from './state/userState'
 import activeGameState from './state/activeGameState'
+import Footer from './components/Footer'
 
 const Login = lazy(() => import(/* webpackChunkName: 'login' */ './pages/Login'))
 const Dashboard = lazy(() => import(/* webpackChunkName: 'dashboard' */ './pages/Dashboard'))
@@ -57,26 +58,29 @@ function Router({
   return (
     <>
       {!AuthService.getToken() &&
-        <main className='bg-gray-800 w-full'>
-          <Routes>
-            <Route path={routes.login} element={<Login />} />
-            <Route path={routes.register} element={<Register />} />
-            <Route path={routes.demo} element={<Demo />} />
-            <Route path={routes.verify2FA} element={<Verify2FA />} />
-            <Route path={routes.recover} element={<RecoverAccount />} />
-            <Route path={routes.acceptInvite} element={<AcceptInvite />} />
-            <Route path={routes.forgotPassword} element={<ForgotPassword />} />
-            <Route path={routes.resetPassword} element={<ResetPassword />} />
+        <div className='w-full flex flex-col'>
+          <main className='bg-gray-800 w-full md:py-16 lg:py-32'>
+            <Routes>
+              <Route path={routes.login} element={<Login />} />
+              <Route path={routes.register} element={<Register />} />
+              <Route path={routes.demo} element={<Demo />} />
+              <Route path={routes.verify2FA} element={<Verify2FA />} />
+              <Route path={routes.recover} element={<RecoverAccount />} />
+              <Route path={routes.acceptInvite} element={<AcceptInvite />} />
+              <Route path={routes.forgotPassword} element={<ForgotPassword />} />
+              <Route path={routes.resetPassword} element={<ResetPassword />} />
 
-            <Route path='*' element={<IntendedRouteHandler intendedRoute={intendedRoute} />} />
-          </Routes>
-        </main>
+              <Route path='*' element={<IntendedRouteHandler intendedRoute={intendedRoute} />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
       }
 
       {AuthService.getToken() &&
         <div className='w-full flex flex-col'>
           <NavBar />
-          <main className='bg-gray-800 p-4 md:p-8 text-white'>
+          <main className='bg-gray-800 p-4 md:p-8 md:pb-16 lg:pb-32 text-white'>
             <Routes>
               <Route path={routes.dashboard} element={<Dashboard />} />
               <Route path={routes.account} element={<Account />} />
@@ -112,6 +116,7 @@ function Router({
               <Route path='*' element={<NotFound />} />
             </Routes>
           </main>
+          <Footer />
         </div>
       }
     </>

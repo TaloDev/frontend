@@ -17,7 +17,7 @@ describe('ResetPassword', () => {
 
     cy.findByText('Success! Your password has been reset').should('exist')
     cy.findByText('Go to Login').click()
-    cy.findByText('Welcome back').should('exist')
+    cy.findByText('Talo Game Services').should('exist')
   })
 
   it('should let users login with valid credentials', () => {

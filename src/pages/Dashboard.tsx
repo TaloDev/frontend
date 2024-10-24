@@ -45,7 +45,7 @@ export default function Dashboard() {
   const { startDate, endDate } = useTimePeriod(timePeriod)
   const { headlines, loading: headlinesLoading, error: headlinesError } = useHeadlines(activeGame, startDate, endDate, includeDevData)
   const { stats, loading: statsLoading, error: statsError } = useStats(activeGame, includeDevData)
-  const { groups: pinnedGroups, loading: pinnedGroupsLoading, error: pinnedGroupsError } = usePinnedGroups(activeGame)
+  const { groups: pinnedGroups, loading: pinnedGroupsLoading, error: pinnedGroupsError } = usePinnedGroups(activeGame, includeDevData)
 
   const intendedRouteChecked = useIntendedRoute()
 

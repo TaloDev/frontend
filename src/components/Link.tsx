@@ -10,7 +10,7 @@ type LinkProps = {
   children: ReactNode
 }
 
-function Link({
+export default function Link({
   to,
   state,
   className,
@@ -34,5 +34,3 @@ function Link({
     </RouterLink>
   )
 }
-
-export default Link

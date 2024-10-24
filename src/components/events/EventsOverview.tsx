@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useRecoilValue } from 'recoil'
 import useEvents from '../../api/useEvents'
 import ErrorMessage from '../../components/ErrorMessage'
@@ -7,7 +7,6 @@ import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YA
 import ChartTooltip from '../../components/charts/ChartTooltip'
 import ChartTick from '../../components/charts/ChartTick'
 import { format } from 'date-fns'
-import ColourfulCheckbox from '../../components/ColourfulCheckbox'
 import getEventColour from '../../utils/getEventColour'
 import { useDebounce } from 'use-debounce'
 import useLocalStorage from '../../utils/useLocalStorage'
@@ -15,10 +14,12 @@ import TimePeriodPicker from '../TimePeriodPicker'
 import useTimePeriod, { TimePeriod } from '../../utils/useTimePeriod'
 import Page from '../Page'
 import DateInput from '../DateInput'
+import { IconAlertCircle } from '@tabler/icons-react'
+import EventsFilter from './EventsFilter'
 
 export default function EventsOverview() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
-  const [selectedEventNames, setSelectedEventNames] = useState<string[]>([])
+  const [selectedEventNames, setSelectedEventNames] = useLocalStorage<string[]>('eventsOverviewSelectedEvents', [])
 
   const timePeriods: {
     id: TimePeriod
@@ -42,6 +43,8 @@ export default function EventsOverview() {
 
   const { events, eventNames, loading, error } = useEvents(activeGame, debouncedStartDate, debouncedEndDate)
 
+  const canSelectAllEventNamesRef = useRef(false)
+
   useEffect(() => {
     if (timePeriod && startDate && endDate) {
       setSelectedStartDate(startDate)
@@ -50,21 +53,23 @@ export default function EventsOverview() {
   }, [timePeriod, startDate, endDate, setSelectedStartDate, setSelectedEndDate])
 
   useEffect(() => {
-    if (eventNames.length > 0) {
-      if (selectedEventNames.length === 0) {
-        setSelectedEventNames(eventNames)
-      }
+    // filter out any events that were previously selected but are no longer available
+    if (selectedEventNames.some((name) => !eventNames.includes(name))) {
+      setSelectedEventNames(selectedEventNames.filter((name) => eventNames.includes(name)))
     }
-  }, [eventNames, selectedEventNames])
+  }, [eventNames, selectedEventNames, setSelectedEventNames])
 
-  const onCheckEventName = (checked: boolean, name: string) => {
-    if (checked) {
-      setSelectedEventNames([...selectedEventNames, name])
-    } else {
-      if (selectedEventNames.length === 1) return
-      setSelectedEventNames(selectedEventNames.filter((selected) => selected !== name))
+  useEffect(() => {
+    canSelectAllEventNamesRef.current = true
+  }, [eventNames])
+
+  useEffect(() => {
+    // try to select all events when there aren't any currently selected but the time period changes
+    if (canSelectAllEventNamesRef.current) {
+      setSelectedEventNames((curr) => curr.length === 0 ? eventNames : curr)
+      canSelectAllEventNamesRef.current = false
     }
-  }
+  }, [eventNames, setSelectedEventNames])
 
   const onStartDateChange = useCallback((date: string) => {
     setTimePeriod(null)
@@ -75,6 +80,19 @@ export default function EventsOverview() {
     setTimePeriod(null)
     setSelectedEndDate(date.split('T')[0])
   }, [setSelectedEndDate, setTimePeriod])
+
+  const getEventCount = useCallback((eventNames: string[]): string => {
+    if (!events) return '0'
+
+    const count = Object.keys(events).reduce((acc, eventName) => {
+      if (eventNames.includes(eventName)) {
+        return acc + events[eventName].reduce((acc, event) => acc + event.count, 0)
+      }
+      return acc
+    }, 0)
+
+    return new Intl.NumberFormat('en-GB').format(count)
+  }, [events])
 
   return (
     <Page title='Events overview' isLoading={loading}>
@@ -87,8 +105,8 @@ export default function EventsOverview() {
           />
         </div>
 
-        <div className='flex w-full md:w-1/2 space-x-4'>
-          <div className='w-1/2'>
+        <div className='flex items-end w-full md:w-1/2 space-x-4'>
+          <div className='w-1/3'>
             <DateInput
               id='start-date'
               onDateTimeStringChange={onStartDateChange}
@@ -102,7 +120,7 @@ export default function EventsOverview() {
             />
           </div>
 
-          <div className='w-1/2'>
+          <div className='w-1/3'>
             <DateInput
               id='end-date'
               onDateTimeStringChange={onEndDateChange}
@@ -115,6 +133,12 @@ export default function EventsOverview() {
               }}
             />
           </div>
+
+          <EventsFilter
+            eventNames={eventNames}
+            selectedEventNames={selectedEventNames}
+            setSelectedEventNames={setSelectedEventNames}
+          />
         </div>
       </div>
 
@@ -159,7 +183,7 @@ export default function EventsOverview() {
                   )}
                 />
 
-                <Tooltip content={<ChartTooltip />} />
+                {selectedEventNames.length > 0 && <Tooltip content={<ChartTooltip />} />}
 
                 {Object.keys(events!)
                   .filter((eventName) => selectedEventNames.includes(eventName))
@@ -179,18 +203,17 @@ export default function EventsOverview() {
             </ResponsiveContainer>
           </div>
 
-          <div className='p-4 space-y-4 border-l-2 border-gray-700 min-w-60'>
-            <h2 className='text-lg'>{eventNames.length} events</h2>
-            <ul>
-              {eventNames.sort((a, b) => a.localeCompare(b)).map((name) => (
+          <div className='p-4 space-y-4 border-l-2 border-gray-700 min-w-80'>
+            <h2 className='font-medium flex space-x-2'>
+              {selectedEventNames.length > 0 ? `${getEventCount(selectedEventNames)} events` : <><IconAlertCircle /><span>No events selected</span></>}
+            </h2>
+            <ul className='space-y-2'>
+              {selectedEventNames.sort((a, b) => a.localeCompare(b)).map((name) => (
                 <li key={name}>
-                  <ColourfulCheckbox
-                    id={`${name}-checkbox`}
-                    colour={getEventColour(name)}
-                    checked={Boolean(selectedEventNames.find((selected) => selected === name))}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => onCheckEventName(e.target.checked, name)}
-                    label={name}
-                  />
+                  <p className='text-sm'>
+                    <span className='w-4 h-4 rounded inline-block align-text-bottom' style={{ backgroundColor: getEventColour(name) }} />
+                    <span className='ml-2'>{name} ({getEventCount([name])})</span>
+                  </p>
                 </li>
               ))}
             </ul>

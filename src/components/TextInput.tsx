@@ -52,7 +52,7 @@ export default function TextInput({
   `, {
     'bg-gray-600': !variant,
     'bg-gray-100 text-black': variant === 'light',
-    'bg-white border border-gray-300 focus:border-opacity-0': variant === 'modal'
+    'bg-white border border-black/30 focus:border-black/0': variant === 'modal'
   })
 
   return (

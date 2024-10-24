@@ -81,7 +81,7 @@ table {
   @apply bg-white;
   @apply text-black;
   @apply p-2;
-  @apply m-0;
+  @apply !m-0;
   @apply rounded;
   @apply border;
   @apply border-gray-300;
@@ -102,6 +102,11 @@ table {
 
 .rdp-day_selected:hover {
   @apply bg-indigo-600 !important;
+}
+
+.rdp-caption_label {
+  @apply !text-lg;
+  @apply !font-semibold;
 }
 
 @keyframes spinners-react-circular-fixed {

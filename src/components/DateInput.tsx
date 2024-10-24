@@ -63,6 +63,7 @@ export default function DateInput({
               onFocus: () => setOpen(true),
               name: id
             }}
+            inputClassName='caret-transparent cursor-pointer'
             {...textInputProps}
           />
         </div>
