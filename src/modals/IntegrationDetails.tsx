@@ -177,7 +177,7 @@ export default function IntegrationDetails({
     >
       <form onSubmit={handleSubmit(onEnableClick)}>
         <div className='p-4 space-y-4'>
-          <span>To learn more about how the integration works, <Link to='https://docs.trytalo.com/docs/integrations/steamworks'>visit the docs</Link></span>
+          <span>To learn more about how the integration works, <Link to='https://docs.trytalo.com/docs/integrations/steamworks?utm_source=dashboard&utm_medium=integration-modal'>visit the docs</Link></span>
 
           <hr />
 

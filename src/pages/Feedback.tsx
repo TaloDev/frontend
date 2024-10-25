@@ -39,7 +39,7 @@ export default function Feedback() {
   } = useFeedback(activeGame, categoryInternalNameFilter, debouncedSearch, page)
   const { feedbackCategories, loading: categoriesLoading, error: categoriesError } = useFeedbackCategories(activeGame)
 
-  const sortedFeedback = useSortedItems(feedback, 'createdAt', 'asc')
+  const sortedFeedback = useSortedItems(feedback, 'createdAt')
 
   const navigate = useNavigate()
 
