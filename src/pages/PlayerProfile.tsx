@@ -54,7 +54,7 @@ export default function PlayerProfile() {
   const [player] = usePlayer()
   const navigate = useNavigate()
 
-  const sortedAliases = useSortedItems(player?.aliases ?? [], 'updatedAt')
+  const sortedAliases = useSortedItems(player?.aliases ?? [], 'createdAt')
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
   const user = useRecoilValue(userState) as AuthedUser
