@@ -26,7 +26,7 @@ function Select<T>({ innerRef, onChange, ...props }: SelectProps<T>) {
   const styles: StylesConfig<SelectOption<T>, boolean, GroupBase<SelectOption<T>>> = {
     control: (provided, state) => ({
       ...provided,
-      border: `1px solid ${state.isFocused ? 'transparent' : '#D1D5DB'} !important`,
+      border: `1px solid ${state.isFocused ? 'transparent' : 'rgba(0, 0, 0, 0.3)'} !important`,
       boxShadow: state.isFocused ? 'rgb(255, 255, 255) 0px 0px 0px 0px, rgb(236, 72, 153) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px' : 'none',
       paddingTop: '2px',
       paddingBottom: '2px',
