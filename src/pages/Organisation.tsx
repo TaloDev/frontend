@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { useRecoilValue } from 'recoil'
 import Page from '../components/Page'
@@ -8,8 +8,8 @@ import TableCell from '../components/tables/TableCell'
 import organisationState from '../state/organisationState'
 import useOrganisation from '../api/useOrganisation'
 import Button from '../components/Button'
-import { IconPlus } from '@tabler/icons-react'
-import ErrorMessage from '../components/ErrorMessage'
+import { IconCheck, IconPencil, IconPlus, IconX } from '@tabler/icons-react'
+import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import NewInvite from '../modals/NewInvite'
 import SecondaryNav from '../components/SecondaryNav'
 import { secondaryNavRoutes } from './Dashboard'
@@ -19,12 +19,49 @@ import userState, { AuthedUser } from '../state/userState'
 import SecondaryTitle from '../components/SecondaryTitle'
 import { UserType } from '../entities/user'
 import userTypeMap from '../constants/userTypeMap'
+import TextInput from '../components/TextInput'
+import updateGame from '../api/updateGame'
+import buildError from '../utils/buildError'
 
 function Organisation() {
   const organisation = useRecoilValue(organisationState)
   const { games, members, pendingInvites, loading, error, mutate } = useOrganisation()
   const [showModal, setShowModal] = useState(false)
   const user = useRecoilValue(userState) as AuthedUser
+
+  const [editingGameId, setEditingGameId] = useState<number | null>(null)
+  const [editingGameName, setEditingGameName] = useState('')
+  const [editingGameNameError, setEditingGameNameError] = useState<TaloError | null>(null)
+
+  useEffect(() => {
+    if (editingGameId) {
+      setEditingGameName(games.find((game) => game.id === editingGameId)!.name)
+    } else {
+      setEditingGameName('')
+    }
+
+    setEditingGameNameError(null)
+  }, [editingGameId, games])
+
+  const onUpdateGameName = useCallback(async () => {
+    try {
+      const { game } = await updateGame(editingGameId!, { name: editingGameName })
+
+      mutate((data) => {
+        return {
+          ...data!,
+          games: data!.games.map((existingGame) => {
+            if (existingGame.id === editingGameId) return { ...existingGame, name: game.name }
+            return existingGame
+          })
+        }
+      }, false)
+
+      setEditingGameId(null)
+    } catch (err) {
+      setEditingGameNameError(buildError(err))
+    }
+  }, [editingGameId, editingGameName, mutate])
 
   return (
     <Page
@@ -38,11 +75,51 @@ function Organisation() {
             <>
               <SecondaryTitle>Games</SecondaryTitle>
 
+              {editingGameNameError && <ErrorMessage error={editingGameNameError} />}
+
               <Table columns={['Game', 'Player count', 'Created at']}>
                 <TableBody iterator={games}>
                   {(game) => (
                     <>
-                      <TableCell>{game.name}</TableCell>
+                      <TableCell className='flex items-center space-x-4'>
+                        {editingGameId === game.id &&
+                          <>
+                            <TextInput
+                              id={`edit-name-${game.id}`}
+                              variant='light'
+                              placeholder='Name'
+                              onChange={setEditingGameName}
+                              value={editingGameName}
+                            />
+                            <Button
+                              variant='icon'
+                              className='p-1 rounded-full bg-indigo-900'
+                              onClick={onUpdateGameName}
+                              icon={<IconCheck size={16} />}
+                              extra={{ 'aria-label': 'Update game name' }}
+                            />
+                            <Button
+                              variant='icon'
+                              className='p-1 rounded-full bg-indigo-900'
+                              onClick={() => setEditingGameId(null)}
+                              icon={<IconX size={16} />}
+                              extra={{ 'aria-label': 'Cancel editing game name' }}
+                            />
+                          </>
+                        }
+                        {editingGameId !== game.id &&
+                          <>
+                            <span>{game.name}</span>
+                            <Button
+                              variant='icon'
+                              className='p-1 rounded-full bg-indigo-900'
+                              onClick={() => setEditingGameId(game.id)}
+                              icon={<IconPencil size={16} />}
+                              extra={{ 'aria-label': 'Edit game name' }}
+                            />
+                          </>
+                        }
+                      </TableCell>
                       <TableCell>{game.playerCount}</TableCell>
                       <DateCell>{format(new Date(game.createdAt), 'do MMM Y')}</DateCell>
                     </>
