@@ -7,6 +7,7 @@ export default function playerAliasMock(extra: Partial<PlayerAlias> = {}): Playe
     service: PlayerAliasService.STEAM,
     identifier: 'yxre12',
     player: playerMock(),
+    lastSeenAt: new Date().toISOString(),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     ...extra
