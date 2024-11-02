@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { format } from 'date-fns'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import Page from '../components/Page'
 import DateCell from '../components/tables/cells/DateCell'
 import TableBody from '../components/tables/TableBody'
@@ -22,6 +22,7 @@ import userTypeMap from '../constants/userTypeMap'
 import TextInput from '../components/TextInput'
 import updateGame from '../api/updateGame'
 import buildError from '../utils/buildError'
+import activeGameState, { SelectedActiveGameState } from '../state/activeGameState'
 
 function Organisation() {
   const organisation = useRecoilValue(organisationState)
@@ -32,6 +33,8 @@ function Organisation() {
   const [editingGameId, setEditingGameId] = useState<number | null>(null)
   const [editingGameName, setEditingGameName] = useState('')
   const [editingGameNameError, setEditingGameNameError] = useState<TaloError | null>(null)
+  const setUser = useSetRecoilState(userState)
+  const [activeGame, setActiveGame] = useRecoilState(activeGameState) as SelectedActiveGameState
 
   useEffect(() => {
     if (editingGameId) {
@@ -46,8 +49,7 @@ function Organisation() {
   const onUpdateGameName = useCallback(async () => {
     try {
       const { game } = await updateGame(editingGameId!, { name: editingGameName })
-
-      mutate((data) => {
+      const updatedOrg = await mutate((data) => {
         return {
           ...data!,
           games: data!.games.map((existingGame) => {
@@ -57,11 +59,32 @@ function Organisation() {
         }
       }, false)
 
+      // game switcher dropdown
+      setUser({
+        ...user,
+        organisation: {
+          ...user.organisation,
+          games: updatedOrg!.games
+        }
+      })
+      // game switcher active game
+      if (activeGame.id === editingGameId) {
+        setActiveGame({ ...activeGame, name: game.name })
+      }
+
       setEditingGameId(null)
     } catch (err) {
       setEditingGameNameError(buildError(err))
     }
-  }, [editingGameId, editingGameName, mutate])
+  }, [activeGame, editingGameId, editingGameName, mutate, setActiveGame, setUser, user])
+
+  const onGameNameInputKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onUpdateGameName()
+    } else if (e.key === 'Escape') {
+      setEditingGameId(null)
+    }
+  }, [onUpdateGameName])
 
   return (
     <Page
@@ -90,6 +113,7 @@ function Organisation() {
                               placeholder='Name'
                               onChange={setEditingGameName}
                               value={editingGameName}
+                              inputExtra={{ onKeyDown: onGameNameInputKeyDown }}
                             />
                             <Button
                               variant='icon'
