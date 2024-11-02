@@ -81,7 +81,7 @@ function Organisation() {
                 <TableBody iterator={games}>
                   {(game) => (
                     <>
-                      <TableCell className='flex items-center space-x-4'>
+                      <TableCell className='flex items-center space-x-2'>
                         {editingGameId === game.id &&
                           <>
                             <TextInput
