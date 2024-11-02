@@ -13,7 +13,7 @@ type PlayerAliasesProps = {
 export default function PlayerAliases({
   aliases
 }: PlayerAliasesProps) {
-  const sortedAliases = useSortedItems(aliases, 'createdAt')
+  const sortedAliases = useSortedItems(aliases, 'lastSeenAt')
 
   const getIcon = useCallback((alias: PlayerAlias) => {
     /* v8ignore next */

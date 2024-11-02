@@ -54,7 +54,7 @@ export default function PlayerProfile() {
   const [player] = usePlayer()
   const navigate = useNavigate()
 
-  const sortedAliases = useSortedItems(player?.aliases ?? [], 'createdAt')
+  const sortedAliases = useSortedItems(player?.aliases ?? [], 'lastSeenAt')
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
   const user = useRecoilValue(userState) as AuthedUser
@@ -105,7 +105,7 @@ export default function PlayerProfile() {
 
       <SecondaryTitle>Aliases</SecondaryTitle>
 
-      <Table columns={['Alias', 'Created at', 'Updated at']}>
+      <Table columns={['Alias', 'Created at', 'Last seen']}>
         <TableBody
           iterator={sortedAliases}
           configureClassnames={(_, idx) => ({
@@ -117,7 +117,7 @@ export default function PlayerProfile() {
             <>
               <TableCell className='min-w-60'><PlayerAliases aliases={[alias]} /></TableCell>
               <DateCell>{format(new Date(alias.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-              <DateCell>{format(new Date(alias.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
+              <DateCell>{format(new Date(alias.lastSeenAt), 'dd MMM Y, HH:mm')}</DateCell>
             </>
           )}
         </TableBody>
