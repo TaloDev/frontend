@@ -13,7 +13,7 @@ export default function Footer() {
         <div>
           <h3 className='font-semibold'>Contact us</h3>
           <ul className='mt-2 space-y-1'>
-            <li><Link to='https://discord.gg/2RWwxXVY3v'>Discord</Link></li>
+            <li><Link to='https://trytalo.com/discord'>Discord</Link></li>
             <li><Link to='mailto:hello@trytalo.com'>Email</Link></li>
             <li><Link to='https://x.com/trytalo'>Twitter</Link></li>
           </ul>
