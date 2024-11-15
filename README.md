@@ -1,45 +1,41 @@
-# Talo dashboard
+# Talo frontend: self-hostable game dev dashboard
 
-Talo's dashboard lets you see your players and interact with your game directly.
+Talo is a collection of tools and APIs designed to make game development easier and to help you make better data-driven decisions.
 
-## Features
-- ⚡️ [Event tracking](https://trytalo.com/events)
-- 👥 [Player management](https://trytalo.com/players) (including cross-session data, groups and identity management)
-- 🎮 [Unity package](https://trytalo.com/unity)
-- 🎮 [Godot plugin](https://trytalo.com/godot)
-- 🗃️ Data exports
-- 🕹️ [Leaderboards](https://trytalo.com/leaderboards)
-- 💾 [Game saves](https://trytalo.com/saves)
-- 📊 [Game stats](https://trytalo.com/stats) (global and per-player)
-- ⚙️ [Live config](https://trytalo.com/live-config) (update your game config from the web, no releases required)
-- 🔧 [Steamworks integration](https://trytalo.com/steamworks-integration)
-- 💬 [Game feedback](https://trytalo.com/feedback)
+The Talo dashboard gives you a visual overview of your game including players, leaderboards, game save data and various analytics.
 
-## Docs
+Talo is available to use via our [Godot plugin](https://github.com/TaloDev/godot), [Unity package](https://github.com/TaloDev/unity) or [REST API](https://docs.trytalo.com/docs/http/authentication).
 
-Our docs are [available here](https://docs.trytalo.com).
+## Talo's key features
 
-## Self-hosting
+- 👥 [Player management](https://trytalo.com/players): Persist player data across sessions, create segments and handle authentication.
+- ⚡️ [Event tracking](https://trytalo.com/events): Track in-game player actions individually and globally.
+- 🎮 [Godot plugin](https://trytalo.com/godot): Easily integrate Talo into your Godot game.
+- 🎮 [Unity package](https://trytalo.com/unity): Easily integrate Talo into your Unity game.
+- 🗃️ **Data exports**: Create CSVs of your Talo data like players, events and feedback.
+- 🕹️ [Leaderboards](https://trytalo.com/leaderboards): Highly customisable leaderboards that can sync with Steamworks.
+- 💾 [Game saves](https://trytalo.com/saves): A simple and flexible way to load/save game state; also works offline.
+- 📊 [Game stats](https://trytalo.com/stats): Track global or per-player stats across your game; also syncs with Steamworks.
+- ⚙️ [Live config](https://trytalo.com/live-config): Update game settings from the web with zero downtime.
+- 🔧 [Steamworks integration](https://trytalo.com/steamworks-integration): Hook into Steamworks for authentication and ownership checks.
+- 💬 [Game feedback](https://trytalo.com/feedback): Collect and manage feedback from your players.
 
-See the [self-hosting docs](https://docs.trytalo.com/docs/selfhosting/overview) and the [self-hosting example repo](https://github.com/TaloDev/hosting).
+## Documentation
 
-## Discord
+Check out the [full Talo docs](https://docs.trytalo.com) for setup instructions, detailed API docs/examples and configuration options.
 
-For help and support, [join our Discord](https://discord.gg/2RWwxXVY3v).
+## Self-hosting your own Talo instance
 
-## Installing, building & running
+Talo is designed to be easily self-hosted. Take a look at our [self-hosting guide](https://docs.trytalo.com/docs/selfhosting/overview) and the [GitHub repo](https://github.com/TaloDev/hosting) for examples on how to get started.
 
-Run `npm install` to install the dependencies.
+## Contributing to Talo
 
-### npm run dev
+Thinking about contributing to Talo? We’d love the help! Head over to our [contribution guide](CONTRIBUTING.md) to learn how to set up the project, run tests, and start adding new features.
 
-Runs the app in the development mode.
-Open http://localhost:8080 to view it in the browser.
+## Join our community
 
-### npm run build
+Have questions, want to share feedback or show off your game? [Join us on Discord](https://trytalo.com/discord) to connect with other developers and get help from the Talo team.
 
-Builds a static copy of the site to the `dist/` folder.
+---
 
-## Docker?
-
-We use Docker to build a production image of the dashboard (which is a simple NGINX server that hosts the static build files). It's not needed for development.
+Find all the details about Talo on our [website](https://trytalo.com)!
