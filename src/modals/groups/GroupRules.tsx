@@ -159,8 +159,8 @@ export default function GroupRules({
   }
 
   const getNamespacedRulePlaceholder = useCallback((field: string) => {
-    if (field.includes('stat') || field.includes('leaderboard')) return 'internal name'
-    return 'key' // prop with key
+    if (field.includes('stat') || field.includes('leaderboard')) return 'Internal name'
+    return 'Key' // prop with key
   }, [])
 
   if (loading) {
@@ -236,6 +236,7 @@ export default function GroupRules({
                     onChange={(namespacedValue) => updateRule(idx, { namespacedValue })}
                     value={rule.namespacedValue ?? ''}
                     placeholder={getNamespacedRulePlaceholder(getFieldDisplayNameForRule(rule))}
+                    data-testid='namespaced-value'
                   />
                 }
 

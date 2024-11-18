@@ -117,7 +117,19 @@ describe('<GroupRules />', () => {
         defaultCastType: 'DATETIME',
         mapsTo: 'createdAt',
         namespaced: false
-      } // todo stats, leaderboards
+      },
+      {
+        fieldDisplayName: 'value for stat',
+        defaultCastType: 'DOUBLE',
+        mapsTo: 'statValue',
+        namespaced: true
+      },
+      {
+        fieldDisplayName: 'score in leaderboard',
+        defaultCastType: 'DOUBLE',
+        mapsTo: 'leaderboardEntryScore',
+        namespaced: true
+      }
     ]
   })
 
@@ -723,6 +735,212 @@ describe('<GroupRules />', () => {
       operandCount: 0,
       mapsTo: 'props'
     }])
+  })
+
+  it('should select the stat value rule', async () => {
+    const changeMock = vi.fn()
+
+    const initialRule: UnpackedGroupRule = {
+      name: PlayerGroupRuleName.GTE,
+      negate: false,
+      castType: PlayerGroupRuleCastType.DOUBLE,
+      namespaced: true,
+      namespacedValue: 'pos.x',
+      operands: {
+        0: '5'
+      },
+      operandCount: 1,
+      mapsTo: 'props'
+    }
+
+    render(
+      <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
+        <GroupRules
+          ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
+          rulesState={[
+            [initialRule],
+            changeMock
+          ]}
+        />
+      </KitchenSink>
+    )
+
+    await userEvent.click(await screen.findByText('prop with key'))
+    await userEvent.click(await screen.findByText('value for stat'))
+
+    expect(getLatestChange(changeMock)([initialRule])).toStrictEqual([{
+      name: 'EQUALS',
+      negate: false,
+      castType: 'DOUBLE',
+      namespaced: true,
+      namespacedValue: '',
+      operands: {
+        0: ''
+      },
+      operandCount: 1,
+      mapsTo: 'statValue'
+    }])
+  })
+
+  it('should select the leaderboard entry score rule', async () => {
+    const changeMock = vi.fn()
+
+    const initialRule: UnpackedGroupRule = {
+      name: PlayerGroupRuleName.GTE,
+      negate: false,
+      castType: PlayerGroupRuleCastType.DOUBLE,
+      namespaced: true,
+      namespacedValue: 'pos.x',
+      operands: {
+        0: '5'
+      },
+      operandCount: 1,
+      mapsTo: 'props'
+    }
+
+    render(
+      <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
+        <GroupRules
+          ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
+          rulesState={[
+            [initialRule],
+            changeMock
+          ]}
+        />
+      </KitchenSink>
+    )
+
+    await userEvent.click(await screen.findByText('prop with key'))
+    await userEvent.click(await screen.findByText('score in leaderboard'))
+
+    expect(getLatestChange(changeMock)([initialRule])).toStrictEqual([{
+      name: 'EQUALS',
+      negate: false,
+      castType: 'DOUBLE',
+      namespaced: true,
+      namespacedValue: '',
+      operands: {
+        0: ''
+      },
+      operandCount: 1,
+      mapsTo: 'leaderboardEntryScore'
+    }])
+  })
+
+  it('should render the correct placeholder for the namespacedValue of the stat value rule', async () => {
+    const initialRule: UnpackedGroupRule = {
+      name: PlayerGroupRuleName.GTE,
+      negate: false,
+      castType: PlayerGroupRuleCastType.DOUBLE,
+      namespaced: true,
+      namespacedValue: '',
+      operands: {
+        0: '5'
+      },
+      operandCount: 1,
+      mapsTo: 'statValue'
+    }
+
+    render(
+      <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
+        <GroupRules
+          ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
+          rulesState={[
+            [initialRule],
+            vi.fn()
+          ]}
+        />
+      </KitchenSink>
+    )
+
+    expect(await screen.findByPlaceholderText('Internal name')).toBeInTheDocument()
+  })
+
+  it('should render the correct placeholder for the namespacedValue of the leaderboard entry score rule', async () => {
+    const initialRule: UnpackedGroupRule = {
+      name: PlayerGroupRuleName.GTE,
+      negate: false,
+      castType: PlayerGroupRuleCastType.DOUBLE,
+      namespaced: true,
+      namespacedValue: '',
+      operands: {
+        0: '5'
+      },
+      operandCount: 1,
+      mapsTo: 'leaderboardEntryScore'
+    }
+
+    render(
+      <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
+        <GroupRules
+          ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
+          rulesState={[
+            [initialRule],
+            vi.fn()
+          ]}
+        />
+      </KitchenSink>
+    )
+
+    expect(await screen.findByPlaceholderText('Internal name')).toBeInTheDocument()
+  })
+
+  it('should render the correct placeholder for the namespacedValue of the prop with key rule', async () => {
+    const initialRule: UnpackedGroupRule = {
+      name: PlayerGroupRuleName.GTE,
+      negate: false,
+      castType: PlayerGroupRuleCastType.DOUBLE,
+      namespaced: true,
+      namespacedValue: '',
+      operands: {
+        0: '5'
+      },
+      operandCount: 1,
+      mapsTo: 'props'
+    }
+
+    render(
+      <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
+        <GroupRules
+          ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
+          rulesState={[
+            [initialRule],
+            vi.fn()
+          ]}
+        />
+      </KitchenSink>
+    )
+
+    expect(await screen.findByPlaceholderText('Key')).toBeInTheDocument()
+  })
+
+  it('should not render the namespacedValue input for a meta prop', () => {
+    const initialRule: UnpackedGroupRule = {
+      name: PlayerGroupRuleName.EQUALS,
+      negate: false,
+      castType: PlayerGroupRuleCastType.DOUBLE,
+      namespaced: true,
+      namespacedValue: 'META_DEV_BUILD',
+      operands: {
+        0: '1'
+      },
+      operandCount: 1,
+      mapsTo: 'props'
+    }
+
+    render(
+      <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
+        <GroupRules
+          ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
+          rulesState={[
+            [initialRule],
+            vi.fn()
+          ]}
+        />
+      </KitchenSink>
+    )
+
+    expect(screen.queryByTestId('namespaced-value')).not.toBeInTheDocument()
   })
 
   it('should render errors', async () => {
