@@ -23,23 +23,28 @@ export enum PlayerGroupRuleMode {
 export enum PlayerField {
   PROPS = 'props',
   LAST_SEEN_AT = 'lastSeenAt',
-  CREATED_AT = 'createdAt'
+  CREATED_AT = 'createdAt',
+  STAT_VALUE = 'statValue',
+  LEADERBOARD_ENTRY_SCORE = 'leaderboardEntryScore'
 }
 
-export const playerGroupRuleFieldSchema = z.object({
-  field: z.string(),
+export const availablePlayerGroupFieldSchema = z.object({
+  fieldDisplayName: z.string(),
   defaultCastType: z.nativeEnum(PlayerGroupRuleCastType),
-  mapsTo: z.nativeEnum(PlayerField)
+  mapsTo: z.union([z.nativeEnum(PlayerField), z.string().startsWith('META_')]),
+  namespaced: z.boolean(),
+  metaProp: z.string().optional() // client-side only
 })
 
-export type PlayerGroupRuleField = z.infer<typeof playerGroupRuleFieldSchema>
+export type AvailablePlayerGroupField = z.infer<typeof availablePlayerGroupFieldSchema>
 
 export const playerGroupRuleSchema = z.object({
   name: z.nativeEnum(PlayerGroupRuleName),
   negate: z.boolean(),
   field: z.string(),
   castType: z.nativeEnum(PlayerGroupRuleCastType),
-  operands: z.array(z.string())
+  operands: z.array(z.string()),
+  namespaced: z.boolean()
 })
 
 export type PlayerGroupRule = z.infer<typeof playerGroupRuleSchema>

@@ -1,5 +1,5 @@
 import { PlayerGroupRuleCastType, PlayerGroupRuleName } from '../../../entities/playerGroup'
-import { unpackRules } from '../GroupDetails'
+import { unpackRules } from '../../../utils/group-rules/unpackRules'
 
 describe('unpackRules', () => {
   it('should unpack a non-prop rule', () => {
@@ -9,15 +9,16 @@ describe('unpackRules', () => {
         negate: false,
         castType: PlayerGroupRuleCastType.DATETIME,
         field: 'createdAt',
-        operands: ['2022-03-03']
+        operands: ['2022-03-03'],
+        namespaced: false
       }
     ])).toStrictEqual([
       {
         name: 'GT',
         negate: false,
         castType: 'DATETIME',
-        field: 'createdAt',
-        propKey: '',
+        namespaced: false,
+        namespacedValue: '',
         operands: {
           0: '2022-03-03'
         },
@@ -34,15 +35,16 @@ describe('unpackRules', () => {
         negate: true,
         castType: PlayerGroupRuleCastType.DOUBLE,
         field: 'props.currentLevel',
-        operands: ['70']
+        operands: ['70'],
+        namespaced: true
       }
     ])).toStrictEqual([
       {
         name: 'GT',
         negate: true,
         castType: 'DOUBLE',
-        field: 'prop with key',
-        propKey: 'currentLevel',
+        namespaced: true,
+        namespacedValue: 'currentLevel',
         operands: {
           0: '70'
         },
@@ -59,20 +61,21 @@ describe('unpackRules', () => {
         negate: true,
         castType: PlayerGroupRuleCastType.CHAR,
         field: 'props.META_OS',
-        operands: ['macOS']
+        operands: ['macOS'],
+        namespaced: true
       }
     ])).toStrictEqual([
       {
         name: 'EQUALS',
         negate: true,
         castType: 'CHAR',
-        field: 'operating system',
-        propKey: '',
+        namespaced: true,
+        namespacedValue: 'META_OS',
         operands: {
           0: 'macOS'
         },
         operandCount: 1,
-        mapsTo: 'props.META_OS'
+        mapsTo: 'props'
       }
     ])
   })

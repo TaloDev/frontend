@@ -9,11 +9,11 @@ import activeGameState, { SelectedActiveGame } from '../../state/activeGameState
 import ErrorMessage from '../../components/ErrorMessage'
 import DateInput from '../../components/DateInput'
 import { metaGroupFields } from '../../constants/metaProps'
-import { PlayerGroupRuleCastType, PlayerGroupRuleMode, PlayerGroupRuleName, PlayerGroupRuleOption } from '../../entities/playerGroup'
+import { AvailablePlayerGroupField, PlayerGroupRuleCastType, PlayerGroupRuleMode, PlayerGroupRuleName, PlayerGroupRuleOption } from '../../entities/playerGroup'
 import { UnpackedGroupRule } from './GroupDetails'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useCallback } from 'react'
 
-export const groupPropKeyField = 'prop with key'
+const groupPropKeyField = 'prop with key'
 
 function getRuleDescription(ruleName: PlayerGroupRuleName, negate: boolean) {
   switch (ruleName) {
@@ -59,34 +59,34 @@ export default function GroupRules({
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
   const { availableRules, availableFields: fields, loading, error } = useGroupRules(activeGame)
 
-  const availableFields = [
+  const availableFields: AvailablePlayerGroupField[] = [
     ...fields,
     ...metaGroupFields
   ].sort((a, b) => {
-    if (a.field === groupPropKeyField) return -1
-    if (b.field === groupPropKeyField) return 1
-    return a.field.localeCompare(b.field)
+    if (a.fieldDisplayName === groupPropKeyField) return -1
+    if (b.fieldDisplayName === groupPropKeyField) return 1
+    return a.fieldDisplayName.localeCompare(b.fieldDisplayName)
   })
 
   const [ruleMode, setRuleMode] = ruleModeState
   const [rules, setRules] = rulesState
 
-  const findRuleByName = (name: PlayerGroupRuleName): PlayerGroupRuleOption => {
+  const findRuleByName = useCallback((name: PlayerGroupRuleName): PlayerGroupRuleOption => {
     return availableRules.find((rule) => rule.name === name)!
-  }
+  }, [availableRules])
 
   const onAddFilterClick = () => {
     const rule = findRuleByName(PlayerGroupRuleName.EQUALS)
 
     const newRule: UnpackedGroupRule = {
       name: rule.name,
-      field: availableFields[0].field,
-      castType: rule.castTypes[0],
+      mapsTo: availableFields[0].mapsTo,
+      castType: availableFields[0].defaultCastType,
       negate: false,
       operands: {},
       operandCount: rule.operandCount,
-      mapsTo: availableFields[0].mapsTo,
-      propKey: ''
+      namespaced: availableFields[0].namespaced,
+      namespacedValue: ''
     }
 
     setRules((rules) => [...rules, newRule])
@@ -96,7 +96,7 @@ export default function GroupRules({
     setRules((rules) => rules.filter((_, idx) => idx !== deleteIdx))
   }
 
-  const updateRule = (ruleIdx: number, partial: Partial<UnpackedGroupRule>) => {
+  const updateRule = useCallback((ruleIdx: number, partial: Partial<UnpackedGroupRule>) => {
     setRules((rules) => {
       return rules.map((rule, idx) => {
         if (idx === ruleIdx) {
@@ -108,23 +108,42 @@ export default function GroupRules({
             if (updatedRule.operandCount === 0) {
               updatedRule.operands = {}
             }
-          } else if (Object.keys(partial).includes('field')) {
-            const availableField = availableFields.find((f) => f.field === partial.field)!
-
-            updatedRule.name = findRuleByName(PlayerGroupRuleName.EQUALS).name
-            updatedRule.propKey = availableField.mapsTo.startsWith('META_') ? availableField.mapsTo : ''
-            updatedRule.mapsTo = availableField.mapsTo.startsWith('META_') ? 'props' : availableField.mapsTo
-            updatedRule.castType = availableField.defaultCastType
-            for (const key in updatedRule.operands) {
-              updatedRule.operands[key] = ''
-            }
           }
+
           return updatedRule
         }
+
         return rule
       })
     })
-  }
+  }, [findRuleByName, setRules])
+
+  const updateRuleName = useCallback((ruleIdx: number, fieldName: string) => {
+    setRules((rules) => {
+      return rules.map((rule, idx) => {
+        if (idx === ruleIdx) {
+          const availableField = availableFields.find((f) => f.fieldDisplayName === fieldName)!
+          rule.name = findRuleByName(PlayerGroupRuleName.EQUALS).name
+          rule.mapsTo = availableField.mapsTo
+          rule.namespaced = availableField.namespaced
+          rule.namespacedValue = availableField.metaProp ?? ''
+          rule.castType = availableField.defaultCastType
+
+          for (const key in rule.operands) {
+            rule.operands[key] = ''
+          }
+
+          return rule
+        }
+
+        return rule
+      })
+    })
+  }, [availableFields, findRuleByName, setRules])
+
+  const getFieldDisplayNameForRule = useCallback((rule: UnpackedGroupRule) => {
+    return availableFields.find((f) => f.mapsTo === rule.mapsTo)!.fieldDisplayName
+  }, [availableFields])
 
   const updateOperands = (ruleIdx: number, operandIdx: number, value: string) => {
     setRules((rules) => rules.map((rule, idx) => {
@@ -138,6 +157,11 @@ export default function GroupRules({
       return rule
     }))
   }
+
+  const getNamespacedRulePlaceholder = useCallback((field: string) => {
+    if (field.includes('stat') || field.includes('leaderboard')) return 'internal name'
+    return 'key' // prop with key
+  }, [])
 
   if (loading) {
     return (
@@ -186,10 +210,10 @@ export default function GroupRules({
                 </div>
 
                 <DropdownMenu
-                  options={availableFields.map(({ field }) => ({
-                    label: field,
+                  options={availableFields.map(({ fieldDisplayName }) => ({
+                    label: fieldDisplayName,
                     onClick: () => {
-                      updateRule(idx, { field })
+                      updateRuleName(idx, fieldDisplayName)
                     }
                   }))}
                 >
@@ -199,18 +223,19 @@ export default function GroupRules({
                       onClick={() => setOpen(true)}
                       variant='small'
                     >
-                      {rule.field}
+                      {getFieldDisplayNameForRule(rule)}
                     </Button>
                   )}
                 </DropdownMenu>
 
-                {rule.field === groupPropKeyField &&
+                {rule.namespaced && !metaGroupFields.some((f) => f.metaProp === rule.namespacedValue) &&
                   <TextInput
-                    id='prop-key'
+                    id='namespaced-value'
                     variant='modal'
                     containerClassName='w-24 md:w-32'
-                    onChange={(propKey) => updateRule(idx, { propKey })}
-                    value={rule.propKey ?? ''}
+                    onChange={(namespacedValue) => updateRule(idx, { namespacedValue })}
+                    value={rule.namespacedValue ?? ''}
+                    placeholder={getNamespacedRulePlaceholder(getFieldDisplayNameForRule(rule))}
                   />
                 }
 
@@ -225,7 +250,7 @@ export default function GroupRules({
                 </div>
               </div>
 
-              {rule.field === groupPropKeyField &&
+              {getFieldDisplayNameForRule(rule) === groupPropKeyField &&
                 <div className='flex items-center space-x-2 ml-5'>
                   <span>value as</span>
 

@@ -11,15 +11,16 @@ describe('prepareRule', () => {
         0: '60'
       },
       operandCount: 1,
-      field: 'prop with key',
-      propKey: 'level',
+      namespaced: true,
+      namespacedValue: 'level',
       mapsTo: 'props'
     })).toStrictEqual({
       name: PlayerGroupRuleName.EQUALS,
       negate: true,
       castType: PlayerGroupRuleCastType.DOUBLE,
       field: 'props.level',
-      operands: ['60']
+      operands: ['60'],
+      namespaced: true
     })
   })
 
@@ -32,15 +33,16 @@ describe('prepareRule', () => {
         0: '60'
       },
       operandCount: 1,
-      field: 'latest login',
       mapsTo: 'lastSeenAt',
-      propKey: ''
+      namespaced: false,
+      namespacedValue: ''
     })).toStrictEqual({
       name: PlayerGroupRuleName.EQUALS,
       negate: true,
       castType: PlayerGroupRuleCastType.DOUBLE,
       field: 'lastSeenAt',
-      operands: ['60']
+      operands: ['60'],
+      namespaced: false
     })
   })
 
@@ -55,15 +57,16 @@ describe('prepareRule', () => {
         2: '80'
       },
       operandCount: 1,
-      field: 'latest login',
       mapsTo: 'lastSeenAt',
-      propKey: ''
+      namespaced: false,
+      namespacedValue: ''
     })).toStrictEqual({
       name: PlayerGroupRuleName.EQUALS,
       negate: true,
       castType: PlayerGroupRuleCastType.DOUBLE,
       field: 'lastSeenAt',
-      operands: ['60']
+      operands: ['60'],
+      namespaced: false
     })
   })
 })

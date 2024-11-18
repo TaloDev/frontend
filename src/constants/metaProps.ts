@@ -1,4 +1,4 @@
-import { PlayerGroupRuleCastType } from '../entities/playerGroup'
+import { AvailablePlayerGroupField, PlayerGroupRuleCastType } from '../entities/playerGroup'
 import { Prop } from '../entities/prop'
 
 const META_DEV_BUILD = 'META_DEV_BUILD'
@@ -32,35 +32,47 @@ export function isMetaProp(prop: Prop) {
   return Object.keys(metaPropKeyMap).includes(prop.key)
 }
 
-export const metaGroupFields = [
+export const metaGroupFields: AvailablePlayerGroupField[] = [
   {
-    field: 'dev build',
+    fieldDisplayName: 'dev build',
     defaultCastType: PlayerGroupRuleCastType.CHAR,
-    mapsTo: META_DEV_BUILD
+    mapsTo: 'props',
+    namespaced: true,
+    metaProp: META_DEV_BUILD
   },
   {
-    field: 'operating system',
+    fieldDisplayName: 'operating system',
     defaultCastType: PlayerGroupRuleCastType.CHAR,
-    mapsTo: META_OS
+    mapsTo: 'props',
+    namespaced: true,
+    metaProp: META_OS
   },
   {
-    field: 'game version',
+    fieldDisplayName: 'game version',
     defaultCastType: PlayerGroupRuleCastType.DOUBLE,
-    mapsTo: META_GAME_VERSION
+    mapsTo: 'props',
+    namespaced: true,
+    metaProp: META_GAME_VERSION
   },
   {
-    field: 'window mode',
+    fieldDisplayName: 'window mode',
     defaultCastType: PlayerGroupRuleCastType.DOUBLE,
-    mapsTo: META_WINDOW_MODE
+    mapsTo: 'props',
+    namespaced: true,
+    metaProp: META_WINDOW_MODE
   },
   {
-    field: 'screen width',
+    fieldDisplayName: 'screen width',
     defaultCastType: PlayerGroupRuleCastType.DOUBLE,
-    mapsTo: META_SCREEN_WIDTH
+    mapsTo: 'props',
+    namespaced: true,
+    metaProp: META_SCREEN_WIDTH
   },
   {
-    field: 'screen height',
+    fieldDisplayName: 'screen height',
     defaultCastType: PlayerGroupRuleCastType.DOUBLE,
-    mapsTo: META_SCREEN_HEIGHT
+    mapsTo: 'props',
+    namespaced: true,
+    metaProp: META_SCREEN_HEIGHT
   }
 ]
