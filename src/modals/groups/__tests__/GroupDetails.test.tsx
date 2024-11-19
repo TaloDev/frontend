@@ -128,8 +128,21 @@ describe('<GroupDetails />', () => {
             name: 'Winners',
             description: 'Players who have won the game',
             rules: [
-              { name: PlayerGroupRuleName.SET, negate: false, operands: [], field: 'props.hasWonGame', castType: PlayerGroupRuleCastType.CHAR },
-              { name: PlayerGroupRuleName.GTE, negate: false, operands: ['70'], field: 'props.currentLevel', castType: PlayerGroupRuleCastType.DOUBLE }
+              {
+                name: PlayerGroupRuleName.SET,
+                negate: false, operands: [],
+                field: 'props.hasWonGame',
+                castType: PlayerGroupRuleCastType.CHAR,
+                namespaced: true
+              },
+              {
+                name: PlayerGroupRuleName.GTE,
+                negate: false,
+                operands: ['70'],
+                field: 'props.currentLevel',
+                castType: PlayerGroupRuleCastType.DOUBLE,
+                namespaced: true
+              }
             ],
             ruleMode: PlayerGroupRuleMode.AND,
             count: 0,
@@ -151,13 +164,26 @@ describe('<GroupDetails />', () => {
     const closeMock = vi.fn()
     const mutateMock = vi.fn()
 
-    const initialGroup = {
+    const initialGroup: PlayerGroup = {
       id: '1',
       name: 'Winners',
       description: 'Players who have won the game',
       rules: [
-        { name: PlayerGroupRuleName.SET, negate: false, operands: [], field: 'props.hasWonGame', castType: PlayerGroupRuleCastType.CHAR },
-        { name: PlayerGroupRuleName.GTE, negate: false, operands: ['70'], field: 'props.currentLevel', castType: PlayerGroupRuleCastType.DOUBLE }
+        {
+          name: PlayerGroupRuleName.SET,
+          negate: false, operands: [],
+          field: 'props.hasWonGame',
+          castType: PlayerGroupRuleCastType.CHAR,
+          namespaced: true
+        },
+        {
+          name: PlayerGroupRuleName.GTE,
+          negate: false,
+          operands: ['70'],
+          field: 'props.currentLevel',
+          castType: PlayerGroupRuleCastType.DOUBLE,
+          namespaced: true
+        }
       ],
       ruleMode: PlayerGroupRuleMode.AND,
       count: 0,
