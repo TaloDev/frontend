@@ -16,6 +16,7 @@ export default function Footer() {
             <li><Link to='https://trytalo.com/discord'>Discord</Link></li>
             <li><Link to='mailto:hello@trytalo.com'>Email</Link></li>
             <li><Link to='https://x.com/trytalo'>Twitter</Link></li>
+            <li><Link to='https://bsky.app/profile/trytalo.com'>Bluesky</Link></li>
           </ul>
         </div>
       </div>
