@@ -7,6 +7,7 @@ import KitchenSink from '../../../utils/KitchenSink'
 import GroupRules from '../GroupRules'
 import { PlayerGroupRuleCastType, PlayerGroupRuleMode, PlayerGroupRuleName } from '../../../entities/playerGroup'
 import { Mock } from 'vitest'
+import { UnpackedGroupRule } from '../GroupDetails'
 
 function getLatestChange(changeMock: Mock) {
   return changeMock.mock.calls[changeMock.mock.calls.length - 1][0]
@@ -100,19 +101,34 @@ describe('<GroupRules />', () => {
     ],
     availableFields: [
       {
-        field: 'prop with key',
+        fieldDisplayName: 'prop with key',
         defaultCastType: 'CHAR',
-        mapsTo: 'props'
+        mapsTo: 'props',
+        namespaced: true
       },
       {
-        field: 'latest login',
+        fieldDisplayName: 'latest login',
         defaultCastType: 'DATETIME',
-        mapsTo: 'lastSeenAt'
+        mapsTo: 'lastSeenAt',
+        namespaced: false
       },
       {
-        field: 'first login',
+        fieldDisplayName: 'first login',
         defaultCastType: 'DATETIME',
-        mapsTo: 'createdAt'
+        mapsTo: 'createdAt',
+        namespaced: false
+      },
+      {
+        fieldDisplayName: 'value for stat',
+        defaultCastType: 'DOUBLE',
+        mapsTo: 'statValue',
+        namespaced: true
+      },
+      {
+        fieldDisplayName: 'score in leaderboard',
+        defaultCastType: 'DOUBLE',
+        mapsTo: 'leaderboardEntryScore',
+        namespaced: true
       }
     ]
   })
@@ -127,8 +143,8 @@ describe('<GroupRules />', () => {
               name: PlayerGroupRuleName.GT,
               negate: false,
               castType: PlayerGroupRuleCastType.DATETIME,
-              field: 'first login',
-              propKey: '',
+              namespaced: false,
+              namespacedValue: '',
               operands: {
                 0: '2022-03-03'
               },
@@ -156,8 +172,8 @@ describe('<GroupRules />', () => {
               name: PlayerGroupRuleName.LTE,
               negate: true,
               castType: PlayerGroupRuleCastType.DOUBLE,
-              field: 'prop with key',
-              propKey: 'currentLevel',
+              namespaced: true,
+              namespacedValue: 'currentLevel',
               operands: {
                 0: '55'
               },
@@ -197,24 +213,24 @@ describe('<GroupRules />', () => {
       name: 'EQUALS',
       negate: false,
       castType: 'CHAR',
-      field: 'prop with key',
       operands: {},
       operandCount: 1,
       mapsTo: 'props',
-      propKey: ''
+      namespaced: true,
+      namespacedValue: ''
     }])
   })
 
   it('should delete rules', async () => {
     const changeMock = vi.fn()
 
-    const rules = [
+    const rules: UnpackedGroupRule[] = [
       {
         name: PlayerGroupRuleName.LT,
         negate: false,
         castType: PlayerGroupRuleCastType.DATETIME,
-        field: 'first login',
-        propKey: '',
+        namespaced: true,
+        namespacedValue: '',
         operands: {
           0: '2022-03-03'
         },
@@ -225,8 +241,8 @@ describe('<GroupRules />', () => {
         name: PlayerGroupRuleName.GT,
         negate: false,
         castType: PlayerGroupRuleCastType.DATETIME,
-        field: 'first login',
-        propKey: '',
+        namespaced: true,
+        namespacedValue: '',
         operands: {
           0: '2022-01-01'
         },
@@ -255,12 +271,12 @@ describe('<GroupRules />', () => {
   it('should update operands', async () => {
     const changeMock = vi.fn()
 
-    const initialRule = {
+    const initialRule: UnpackedGroupRule = {
       name: PlayerGroupRuleName.GT,
       negate: false,
       castType: PlayerGroupRuleCastType.DOUBLE,
-      field: 'prop with key',
-      propKey: 'pos.x',
+      namespaced: true,
+      namespacedValue: 'pos.x',
       operands: {
         0: '5'
       },
@@ -268,12 +284,12 @@ describe('<GroupRules />', () => {
       mapsTo: 'props'
     }
 
-    const irrelevantRule = {
+    const irrelevantRule: UnpackedGroupRule = {
       name: PlayerGroupRuleName.SET,
       negate: false,
       castType: PlayerGroupRuleCastType.CHAR,
-      field: 'prop with key',
-      propKey: 'hasWonGame',
+      namespaced: true,
+      namespacedValue: 'hasWonGame',
       operands: {},
       operandCount: 0,
       mapsTo: 'props'
@@ -297,25 +313,25 @@ describe('<GroupRules />', () => {
       name: 'GT',
       negate: false,
       castType: PlayerGroupRuleCastType.DOUBLE,
-      field: 'prop with key',
-      propKey: 'pos.x',
       operands: {
         0: '56'
       },
       operandCount: 1,
-      mapsTo: 'props'
+      mapsTo: 'props',
+      namespaced: true,
+      namespacedValue: 'pos.x'
     }, irrelevantRule])
   })
 
   it('should update rule names', async () => {
     const changeMock = vi.fn()
 
-    const initialRule = {
+    const initialRule: UnpackedGroupRule = {
       name: PlayerGroupRuleName.LT,
       negate: false,
       castType: PlayerGroupRuleCastType.DOUBLE,
-      field: 'prop with key',
-      propKey: 'pos.x',
+      namespaced: true,
+      namespacedValue: 'pos.x',
       operands: {
         0: '5'
       },
@@ -323,12 +339,12 @@ describe('<GroupRules />', () => {
       mapsTo: 'props'
     }
 
-    const irrelevantRule = {
+    const irrelevantRule: UnpackedGroupRule = {
       name: PlayerGroupRuleName.SET,
       negate: false,
       castType: PlayerGroupRuleCastType.CHAR,
-      field: 'prop with key',
-      propKey: 'hasWonGame',
+      namespaced: true,
+      namespacedValue: 'hasWonGame',
       operands: {},
       operandCount: 0,
       mapsTo: 'props'
@@ -353,8 +369,8 @@ describe('<GroupRules />', () => {
       name: 'GT',
       negate: false,
       castType: 'DOUBLE',
-      field: 'prop with key',
-      propKey: 'pos.x',
+      namespaced: true,
+      namespacedValue: 'pos.x',
       operands: {
         0: '5'
       },
@@ -366,13 +382,13 @@ describe('<GroupRules />', () => {
   it('should update rule mode to $or', async () => {
     const changeMock = vi.fn()
 
-    const rules = [
+    const rules: UnpackedGroupRule[] = [
       {
         name: PlayerGroupRuleName.LT,
         negate: false,
         castType: PlayerGroupRuleCastType.DATETIME,
-        field: 'first login',
-        propKey: '',
+        namespaced: false,
+        namespacedValue: '',
         operands: {
           0: '2022-03-03'
         },
@@ -383,8 +399,8 @@ describe('<GroupRules />', () => {
         name: PlayerGroupRuleName.GT,
         negate: false,
         castType: PlayerGroupRuleCastType.DATETIME,
-        field: 'first login',
-        propKey: '',
+        namespaced: false,
+        namespacedValue: '',
         operands: {
           0: '2022-01-01'
         },
@@ -414,13 +430,13 @@ describe('<GroupRules />', () => {
   it('should update rule mode to $and', async () => {
     const changeMock = vi.fn()
 
-    const rules = [
+    const rules: UnpackedGroupRule[] = [
       {
         name: PlayerGroupRuleName.LT,
         negate: false,
         castType: PlayerGroupRuleCastType.DATETIME,
-        field: 'first login',
-        propKey: '',
+        namespaced: false,
+        namespacedValue: '',
         operands: {
           0: '2022-03-03'
         },
@@ -431,8 +447,8 @@ describe('<GroupRules />', () => {
         name: PlayerGroupRuleName.GT,
         negate: false,
         castType: PlayerGroupRuleCastType.DATETIME,
-        field: 'first login',
-        propKey: '',
+        namespaced: false,
+        namespacedValue: '',
         operands: {
           0: '2022-01-01'
         },
@@ -462,12 +478,12 @@ describe('<GroupRules />', () => {
   it('should update fields', async () => {
     const changeMock = vi.fn()
 
-    const initialRule = {
+    const initialRule: UnpackedGroupRule = {
       name: PlayerGroupRuleName.LT,
       negate: false,
       castType: PlayerGroupRuleCastType.DATETIME,
-      field: 'first login',
-      propKey: '',
+      namespaced: false,
+      namespacedValue: '',
       operands: {
         0: '5'
       },
@@ -475,12 +491,12 @@ describe('<GroupRules />', () => {
       mapsTo: 'createdAt'
     }
 
-    const irrelevantRule = {
+    const irrelevantRule: UnpackedGroupRule = {
       name: PlayerGroupRuleName.SET,
       negate: false,
       castType: PlayerGroupRuleCastType.CHAR,
-      field: 'prop with key',
-      propKey: 'hasWonGame',
+      namespaced: true,
+      namespacedValue: 'hasWonGame',
       operands: {},
       operandCount: 0,
       mapsTo: 'props'
@@ -505,8 +521,8 @@ describe('<GroupRules />', () => {
       name: 'EQUALS',
       negate: false,
       castType: 'DATETIME',
-      field: 'latest login',
-      propKey: '',
+      namespaced: false,
+      namespacedValue: '',
       operands: {
         0: ''
       },
@@ -518,23 +534,23 @@ describe('<GroupRules />', () => {
   it('should update prop key names', async () => {
     const changeMock = vi.fn()
 
-    const initialRule = {
+    const initialRule: UnpackedGroupRule = {
       name: PlayerGroupRuleName.SET,
       negate: false,
       castType: PlayerGroupRuleCastType.CHAR,
-      field: 'prop with key',
-      propKey: 'hasLoggedIn',
+      namespaced: true,
+      namespacedValue: 'hasLoggedIn',
       operands: {},
       operandCount: 0,
       mapsTo: 'props'
     }
 
-    const irrelevantRule = {
+    const irrelevantRule: UnpackedGroupRule = {
       name: PlayerGroupRuleName.LT,
       negate: false,
       castType: PlayerGroupRuleCastType.DATETIME,
-      field: 'first login',
-      propKey: '',
+      namespaced: false,
+      namespacedValue: '',
       operands: {
         0: '5'
       },
@@ -560,8 +576,8 @@ describe('<GroupRules />', () => {
       name: 'SET',
       negate: false,
       castType: 'CHAR',
-      field: 'prop with key',
-      propKey: 'hasLoggedIn1',
+      namespaced: true,
+      namespacedValue: 'hasLoggedIn1',
       operands: {},
       operandCount: 0,
       mapsTo: 'props'
@@ -571,23 +587,23 @@ describe('<GroupRules />', () => {
   it('should update the cast type', async () => {
     const changeMock = vi.fn()
 
-    const initialRule = {
+    const initialRule: UnpackedGroupRule = {
       name: PlayerGroupRuleName.SET,
       negate: false,
       castType: PlayerGroupRuleCastType.CHAR,
-      field: 'prop with key',
-      propKey: 'hasLoggedIn',
+      namespaced: true,
+      namespacedValue: 'hasLoggedIn',
       operands: {},
       operandCount: 0,
       mapsTo: 'props'
     }
 
-    const irrelevantRule = {
+    const irrelevantRule: UnpackedGroupRule = {
       name: PlayerGroupRuleName.LT,
       negate: false,
       castType: PlayerGroupRuleCastType.DATETIME,
-      field: 'createdAt',
-      propKey: '',
+      namespaced: false,
+      namespacedValue: '',
       operands: {
         0: '5'
       },
@@ -614,8 +630,8 @@ describe('<GroupRules />', () => {
       name: 'SET',
       negate: false,
       castType: 'DOUBLE',
-      field: 'prop with key',
-      propKey: 'hasLoggedIn',
+      namespaced: true,
+      namespacedValue: 'hasLoggedIn',
       operands: {},
       operandCount: 0,
       mapsTo: 'props'
@@ -625,12 +641,12 @@ describe('<GroupRules />', () => {
   it('should select meta props', async () => {
     const changeMock = vi.fn()
 
-    const initialRule = {
+    const initialRule: UnpackedGroupRule = {
       name: PlayerGroupRuleName.LT,
       negate: false,
       castType: PlayerGroupRuleCastType.DATETIME,
-      field: 'first login',
-      propKey: '',
+      namespaced: false,
+      namespacedValue: '',
       operands: {
         0: '5'
       },
@@ -638,12 +654,12 @@ describe('<GroupRules />', () => {
       mapsTo: 'createdAt'
     }
 
-    const irrelevantRule = {
+    const irrelevantRule: UnpackedGroupRule = {
       name: PlayerGroupRuleName.SET,
       negate: false,
       castType: PlayerGroupRuleCastType.CHAR,
-      field: 'prop with key',
-      propKey: 'hasWonGame',
+      namespaced: true,
+      namespacedValue: 'hasWonGame',
       operands: {},
       operandCount: 0,
       mapsTo: 'props'
@@ -668,8 +684,8 @@ describe('<GroupRules />', () => {
       name: 'EQUALS',
       negate: false,
       castType: 'DOUBLE',
-      field: 'window mode',
-      propKey: 'META_WINDOW_MODE',
+      namespaced: true,
+      namespacedValue: 'META_WINDOW_MODE',
       operands: {
         0: ''
       },
@@ -681,12 +697,12 @@ describe('<GroupRules />', () => {
   it('should remove operands for a rule with no operands', async () => {
     const changeMock = vi.fn()
 
-    const initialRule = {
+    const initialRule: UnpackedGroupRule = {
       name: PlayerGroupRuleName.LT,
       negate: false,
       castType: PlayerGroupRuleCastType.DOUBLE,
-      field: 'prop with key',
-      propKey: 'pos.x',
+      namespaced: true,
+      namespacedValue: 'pos.x',
       operands: {
         0: '5'
       },
@@ -713,12 +729,218 @@ describe('<GroupRules />', () => {
       name: 'SET',
       negate: false,
       castType: 'DOUBLE',
-      field: 'prop with key',
-      propKey: 'pos.x',
+      namespaced: true,
+      namespacedValue: 'pos.x',
       operands: {},
       operandCount: 0,
       mapsTo: 'props'
     }])
+  })
+
+  it('should select the stat value rule', async () => {
+    const changeMock = vi.fn()
+
+    const initialRule: UnpackedGroupRule = {
+      name: PlayerGroupRuleName.GTE,
+      negate: false,
+      castType: PlayerGroupRuleCastType.DOUBLE,
+      namespaced: true,
+      namespacedValue: 'pos.x',
+      operands: {
+        0: '5'
+      },
+      operandCount: 1,
+      mapsTo: 'props'
+    }
+
+    render(
+      <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
+        <GroupRules
+          ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
+          rulesState={[
+            [initialRule],
+            changeMock
+          ]}
+        />
+      </KitchenSink>
+    )
+
+    await userEvent.click(await screen.findByText('prop with key'))
+    await userEvent.click(await screen.findByText('value for stat'))
+
+    expect(getLatestChange(changeMock)([initialRule])).toStrictEqual([{
+      name: 'EQUALS',
+      negate: false,
+      castType: 'DOUBLE',
+      namespaced: true,
+      namespacedValue: '',
+      operands: {
+        0: ''
+      },
+      operandCount: 1,
+      mapsTo: 'statValue'
+    }])
+  })
+
+  it('should select the leaderboard entry score rule', async () => {
+    const changeMock = vi.fn()
+
+    const initialRule: UnpackedGroupRule = {
+      name: PlayerGroupRuleName.GTE,
+      negate: false,
+      castType: PlayerGroupRuleCastType.DOUBLE,
+      namespaced: true,
+      namespacedValue: 'pos.x',
+      operands: {
+        0: '5'
+      },
+      operandCount: 1,
+      mapsTo: 'props'
+    }
+
+    render(
+      <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
+        <GroupRules
+          ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
+          rulesState={[
+            [initialRule],
+            changeMock
+          ]}
+        />
+      </KitchenSink>
+    )
+
+    await userEvent.click(await screen.findByText('prop with key'))
+    await userEvent.click(await screen.findByText('score in leaderboard'))
+
+    expect(getLatestChange(changeMock)([initialRule])).toStrictEqual([{
+      name: 'EQUALS',
+      negate: false,
+      castType: 'DOUBLE',
+      namespaced: true,
+      namespacedValue: '',
+      operands: {
+        0: ''
+      },
+      operandCount: 1,
+      mapsTo: 'leaderboardEntryScore'
+    }])
+  })
+
+  it('should render the correct placeholder for the namespacedValue of the stat value rule', async () => {
+    const initialRule: UnpackedGroupRule = {
+      name: PlayerGroupRuleName.GTE,
+      negate: false,
+      castType: PlayerGroupRuleCastType.DOUBLE,
+      namespaced: true,
+      namespacedValue: '',
+      operands: {
+        0: '5'
+      },
+      operandCount: 1,
+      mapsTo: 'statValue'
+    }
+
+    render(
+      <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
+        <GroupRules
+          ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
+          rulesState={[
+            [initialRule],
+            vi.fn()
+          ]}
+        />
+      </KitchenSink>
+    )
+
+    expect(await screen.findByPlaceholderText('Internal name')).toBeInTheDocument()
+  })
+
+  it('should render the correct placeholder for the namespacedValue of the leaderboard entry score rule', async () => {
+    const initialRule: UnpackedGroupRule = {
+      name: PlayerGroupRuleName.GTE,
+      negate: false,
+      castType: PlayerGroupRuleCastType.DOUBLE,
+      namespaced: true,
+      namespacedValue: '',
+      operands: {
+        0: '5'
+      },
+      operandCount: 1,
+      mapsTo: 'leaderboardEntryScore'
+    }
+
+    render(
+      <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
+        <GroupRules
+          ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
+          rulesState={[
+            [initialRule],
+            vi.fn()
+          ]}
+        />
+      </KitchenSink>
+    )
+
+    expect(await screen.findByPlaceholderText('Internal name')).toBeInTheDocument()
+  })
+
+  it('should render the correct placeholder for the namespacedValue of the prop with key rule', async () => {
+    const initialRule: UnpackedGroupRule = {
+      name: PlayerGroupRuleName.GTE,
+      negate: false,
+      castType: PlayerGroupRuleCastType.DOUBLE,
+      namespaced: true,
+      namespacedValue: '',
+      operands: {
+        0: '5'
+      },
+      operandCount: 1,
+      mapsTo: 'props'
+    }
+
+    render(
+      <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
+        <GroupRules
+          ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
+          rulesState={[
+            [initialRule],
+            vi.fn()
+          ]}
+        />
+      </KitchenSink>
+    )
+
+    expect(await screen.findByPlaceholderText('Key')).toBeInTheDocument()
+  })
+
+  it('should not render the namespacedValue input for a meta prop', () => {
+    const initialRule: UnpackedGroupRule = {
+      name: PlayerGroupRuleName.EQUALS,
+      negate: false,
+      castType: PlayerGroupRuleCastType.DOUBLE,
+      namespaced: true,
+      namespacedValue: 'META_DEV_BUILD',
+      operands: {
+        0: '1'
+      },
+      operandCount: 1,
+      mapsTo: 'props'
+    }
+
+    render(
+      <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
+        <GroupRules
+          ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
+          rulesState={[
+            [initialRule],
+            vi.fn()
+          ]}
+        />
+      </KitchenSink>
+    )
+
+    expect(screen.queryByTestId('namespaced-value')).not.toBeInTheDocument()
   })
 
   it('should render errors', async () => {

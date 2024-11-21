@@ -13,19 +13,19 @@ import updateGroup from '../../api/updateGroup'
 import deleteGroup from '../../api/deleteGroup'
 import canPerformAction, { PermissionBasedAction } from '../../utils/canPerformAction'
 import userState, { AuthedUser } from '../../state/userState'
-import GroupRules, { groupPropKeyField } from './GroupRules'
+import GroupRules from './GroupRules'
 import useGroupPreviewCount from '../../api/useGroupPreviewCount'
 import Loading from '../../components/Loading'
 import { useDebounce } from 'use-debounce'
 import prepareRule from '../../utils/group-rules/prepareRule'
 import isGroupRuleValid from '../../utils/group-rules/isGroupRuleValid'
 import { useEffect } from 'react'
-import { metaGroupFields } from '../../constants/metaProps'
-import { PlayerGroup, PlayerGroupRule, PlayerGroupRuleCastType, PlayerGroupRuleName, PlayerGroupRuleMode } from '../../entities/playerGroup'
+import { PlayerGroup, PlayerGroupRuleCastType, PlayerGroupRuleName, PlayerGroupRuleMode } from '../../entities/playerGroup'
 import { KeyedMutator } from 'swr'
 import { z } from 'zod'
 import Toggle from '../../components/toggles/Toggle'
 import Link from '../../components/Link'
+import { unpackRules } from '../../utils/group-rules/unpackRules'
 
 const validationSchema = z.object({
   name: z.string(),
@@ -39,33 +39,11 @@ export type UnpackedGroupRule = {
   name: PlayerGroupRuleName
   negate: boolean
   castType: PlayerGroupRuleCastType
-  field: string
-  propKey: string
+  namespaced: boolean
+  namespacedValue: string
   operands: Record<number, string>
   operandCount: number
   mapsTo: string
-}
-
-export function unpackRules(rules?: PlayerGroupRule[]): UnpackedGroupRule[] | undefined {
-  if (!rules) return rules
-  return rules.map((rule) => {
-    const metaField = metaGroupFields.find((f) => `props.${f.mapsTo}` === rule.field)
-    const isUserDefinedProp = rule.field.startsWith('props.') && !metaField
-
-    return {
-      name: rule.name,
-      negate: rule.negate,
-      castType: rule.castType,
-      field: rule.field.startsWith('props.') ? (metaField?.field ?? groupPropKeyField) : rule.field,
-      propKey: isUserDefinedProp ? rule.field.split('props.')[1] : '',
-      operands: rule.operands.reduce((acc, curr, idx) => ({
-        ...acc,
-        [idx]: curr
-      }), {}),
-      operandCount: rule.operands.length,
-      mapsTo: isUserDefinedProp ? 'props' : rule.field
-    }
-  })
 }
 
 type GroupDetailsProps = {

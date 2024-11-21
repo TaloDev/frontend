@@ -3,13 +3,13 @@ import buildError from '../utils/buildError'
 import { Game } from '../entities/game'
 import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
-import { playerGroupRuleFieldSchema, playerGroupRuleOptionSchema } from '../entities/playerGroup'
+import { availablePlayerGroupFieldSchema, playerGroupRuleOptionSchema } from '../entities/playerGroup'
 
 export default function useGroupRules(activeGame: Game) {
   const fetcher = async ([url]: [string]) => {
     const res = await makeValidatedGetRequest(url, z.object({
       availableRules: z.array(playerGroupRuleOptionSchema),
-      availableFields: z.array(playerGroupRuleFieldSchema)
+      availableFields: z.array(availablePlayerGroupFieldSchema)
     }))
 
     return res
