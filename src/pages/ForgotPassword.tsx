@@ -21,7 +21,7 @@ const validationSchema = z.object({
 type FormValues = z.infer<typeof validationSchema>
 
 export default function ForgotPassword() {
-  const [error, setError] = useState<TaloError | null>(null)
+  const [apiError, setAPIError] = useState<TaloError | null>(null)
   const [isLoading, setLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
 
@@ -32,14 +32,14 @@ export default function ForgotPassword() {
   })
 
   const onConfirmClick: SubmitHandler<FormValues> = async ({ email }) => {
-    setError(null)
+    setAPIError(null)
     setLoading(true)
 
     try {
       await requestNewPassword(email)
       setEmailSent(true)
     } catch (err) {
-      setError(buildError(err))
+      setAPIError(buildError(err))
     } finally {
       setLoading(false)
     }
@@ -60,7 +60,7 @@ export default function ForgotPassword() {
           errors={[errors.email?.message]}
         />
 
-        {error && <ErrorMessage error={error} />}
+        {apiError && <ErrorMessage error={apiError} />}
 
         <Button
           disabled={!isValid || emailSent}

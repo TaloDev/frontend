@@ -63,7 +63,7 @@ export default function GroupDetails({
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)
   const [isDeleting, setDeleting] = useState(false)
-  const [error, setError] = useState<TaloError | null>(null)
+  const [apiError, setAPIError] = useState<TaloError | null>(null)
 
   const [ruleMode, setRuleMode] = useState(editingGroup?.ruleMode ?? PlayerGroupRuleMode.AND)
   const [rules, setRules] = useState(unpackRules(editingGroup?.rules) ?? [])
@@ -95,7 +95,7 @@ export default function GroupDetails({
   const onCreateClick: SubmitHandler<FormValues> = async (FormValues, e) => {
     e?.preventDefault()
     setLoading(true)
-    setError(null)
+    setAPIError(null)
 
     try {
       const { group } = await createGroup(activeGame.id, { ...FormValues, ruleMode, rules: rules.map(prepareRule) })
@@ -112,7 +112,7 @@ export default function GroupDetails({
 
       setOpen(false)
     } catch (err) {
-      setError(buildError(err))
+      setAPIError(buildError(err))
       setLoading(false)
     }
   }
@@ -120,7 +120,7 @@ export default function GroupDetails({
   const onUpdateClick: SubmitHandler<FormValues> = async (FormValues, e) => {
     e?.preventDefault()
     setLoading(true)
-    setError(null)
+    setAPIError(null)
 
     try {
       const { group } = await updateGroup(activeGame.id, editingGroup!.id, { ...FormValues, ruleMode, rules: rules.map(prepareRule) })
@@ -137,7 +137,7 @@ export default function GroupDetails({
 
       setOpen(false)
     } catch (err) {
-      setError(buildError(err))
+      setAPIError(buildError(err))
       setLoading(false)
     }
   }
@@ -147,7 +147,7 @@ export default function GroupDetails({
     if (!window.confirm('Are you sure you want to delete this group?')) return
 
     setDeleting(true)
-    setError(null)
+    setAPIError(null)
 
     try {
       await deleteGroup(activeGame.id, editingGroup!.id)
@@ -163,7 +163,7 @@ export default function GroupDetails({
 
       setOpen(false)
     } catch (err) {
-      setError(buildError(err))
+      setAPIError(buildError(err))
       setDeleting(false)
     }
   }
@@ -226,7 +226,7 @@ export default function GroupDetails({
             />
           </div>
 
-          {error && <ErrorMessage error={error} />}
+          {apiError && <ErrorMessage error={apiError} />}
 
           <div className='flex'>
             {countLoading &&
