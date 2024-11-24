@@ -53,7 +53,7 @@ export default function IntegrationDetails({
   const [isLoading, setLoading] = useState(false)
   const [isUpdating, setUpdating] = useState<string | null>(null)
   const [isDeleting, setDeleting] = useState(false)
-  const [error, setError] = useState<TaloError | null>(null)
+  const [apiError, setAPIError] = useState<TaloError | null>(null)
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
 
   const { register, handleSubmit, formState: { isValid, errors }, watch, control } = useForm<FormValues>({
@@ -74,7 +74,7 @@ export default function IntegrationDetails({
   const updateConfig = async (partial: Partial<FormValues>) => {
     const key = Object.keys(partial)[0]
     setUpdating(key)
-    setError(null)
+    setAPIError(null)
 
     try {
       const { integration } = await updateIntegration(activeGame.id, editingIntegration!.id!, { config: partial })
@@ -94,7 +94,7 @@ export default function IntegrationDetails({
       const value = Object.values(partial)[0]
       toast.trigger(toastMessageConfigKeyMap(Boolean(value))[key], ToastType.SUCCESS)
     } catch (err) {
-      setError(buildError(err))
+      setAPIError(buildError(err))
       setUpdating(null)
     }
   }
@@ -118,7 +118,7 @@ export default function IntegrationDetails({
   const onEnableClick: SubmitHandler<SteamIntegrationConfig> = async (formData, e) => {
     e?.preventDefault()
     setLoading(true)
-    setError(null)
+    setAPIError(null)
 
     try {
       const { integration } = await enableIntegration(activeGame.id, {
@@ -140,7 +140,7 @@ export default function IntegrationDetails({
 
       toast.trigger(`${upperFirst(editingIntegration!.type)} integration successfully enabled`, ToastType.SUCCESS)
     } catch (err) {
-      setError(buildError(err))
+      setAPIError(buildError(err))
       setLoading(false)
     }
   }
@@ -148,7 +148,7 @@ export default function IntegrationDetails({
   const onDeleteClick = async (e: MouseEvent<HTMLElement>) => {
     e.preventDefault()
     setDeleting(true)
-    setError(null)
+    setAPIError(null)
 
     try {
       await disableIntegration(activeGame.id, editingIntegration!.id!)
@@ -164,7 +164,7 @@ export default function IntegrationDetails({
 
       toast.trigger(`${upperFirst(editingIntegration!.type)} integration successfully disabled`, ToastType.SUCCESS)
     } catch (err) {
-      setError(buildError(err))
+      setAPIError(buildError(err))
       setDeleting(false)
     }
   }
@@ -281,7 +281,7 @@ export default function IntegrationDetails({
             </div>
           </div>
 
-          {error && <ErrorMessage error={error} />}
+          {apiError && <ErrorMessage error={apiError} />}
         </div>
 
         <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>

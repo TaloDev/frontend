@@ -40,7 +40,7 @@ export default function NewInvite({
 }: NewInviteProps) {
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)
-  const [error, setError] = useState<TaloError | null>(null)
+  const [apiError, setAPIError] = useState<TaloError | null>(null)
 
   const { register, handleSubmit, formState: { isValid, errors }, control } = useForm<FormValues>({
     resolver: zodResolver(validationSchema),
@@ -54,7 +54,7 @@ export default function NewInvite({
   const onCreateClick: SubmitHandler<FormValues> = async (formData, e) => {
     e?.preventDefault()
     setLoading(true)
-    setError(null)
+    setAPIError(null)
 
     try {
       const { invite } = await createInvite(formData.email, formData.userType.value)
@@ -75,7 +75,7 @@ export default function NewInvite({
 
       setOpen(false)
     } catch (err) {
-      setError(buildError(err))
+      setAPIError(buildError(err))
       setLoading(false)
     }
   }
@@ -115,7 +115,7 @@ export default function NewInvite({
             />
           </div>
 
-          {error && <ErrorMessage error={error} />}
+          {apiError && <ErrorMessage error={apiError} />}
         </div>
 
         <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>

@@ -35,7 +35,7 @@ type FormValues = z.infer<typeof validationSchema>
 
 export default function ResetPassword() {
   const [token] = useState(new URLSearchParams(window.location.search).get('token'))
-  const [error, setError] = useState<TaloError | null>(null)
+  const [apiError, setAPIError] = useState<TaloError | null>(null)
   const [isLoading, setLoading] = useState(false)
   const [resetComplete, setResetComplete] = useState(false)
 
@@ -51,14 +51,14 @@ export default function ResetPassword() {
   })
 
   const onConfirmClick: SubmitHandler<FormValues> = async ({ password }) => {
-    setError(null)
+    setAPIError(null)
     setLoading(true)
 
     try {
       await resetPassword(token!, password)
       setResetComplete(true)
     } catch (err) {
-      setError(buildError(err))
+      setAPIError(buildError(err))
     } finally {
       setLoading(false)
     }
@@ -110,9 +110,9 @@ export default function ResetPassword() {
           errors={[errors.confirmPassword?.message]}
         />
 
-        {error &&
-          <ErrorMessage error={error}>
-            {error?.extra?.expired &&
+        {apiError &&
+          <ErrorMessage error={apiError}>
+            {apiError?.extra?.expired &&
               <span> - <Link to={routes.forgotPassword} className='!text-white underline'>please request a new reset link</Link></span>
             }
           </ErrorMessage>

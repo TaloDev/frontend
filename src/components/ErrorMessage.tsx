@@ -22,7 +22,7 @@ function ErrorMessage({
 }: ErrorMessageProps) {
   return (
     <div className={clsx('bg-red-500 p-4 rounded w-auto', className)}>
-      <div className='flex text-white'>
+      <div className='flex items-center text-white'>
         <IconAlertCircle />
         <div className='font-bold w-full ml-2'>
           {error?.hasKeys &&
