@@ -82,7 +82,7 @@ describe('Billing', () => {
     cy.findByText('Team plan usage').should('exist')
     cy.findByText('Team plan proration').should('exist')
     cy.findByText('13 Jul 2022 - 12 Aug 2022').should('exist')
-    cy.findByText('Business plan usage').should('exist')
+    cy.findByText('Studio plan usage').should('exist')
 
     cy.findByTestId('confirm-plan-change').click()
     cy.findByText('Confirm plan change').should('not.exist')

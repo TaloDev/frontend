@@ -98,7 +98,7 @@ describe('<Billing />', () => {
       hidden: false,
       default: false,
       actions: [],
-      name: 'Business Plan',
+      name: 'Studio Plan',
       prices: [
         {
           amount: 21499,
