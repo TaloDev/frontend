@@ -37,7 +37,7 @@ describe('<Register />', () => {
     expect(screen.getByText('Sign up')).toBeDisabled()
 
     const { type, click } = userEvent.setup()
-    await type(screen.getByLabelText('Team name'), 'Sleepy Studios')
+    await type(screen.getByLabelText('Team or studio name'), 'Sleepy Studios')
     await type(screen.getByLabelText('Username'), 'Talo')
     await type(screen.getByLabelText('Email'), 'hello@trytalo.com')
     await type(screen.getByLabelText('Password'), 'p@ssw0rd')
@@ -76,7 +76,7 @@ describe('<Register />', () => {
     expect(screen.getByText('Sign up')).toBeDisabled()
 
     const { type, click } = userEvent.setup()
-    await type(screen.getByLabelText('Team name'), 'Sleepy Studios')
+    await type(screen.getByLabelText('Team or studio name'), 'Sleepy Studios')
     await type(screen.getByLabelText('Username'), 'Talo')
     await type(screen.getByLabelText('Email'), 'hello@trytalo')
     await type(screen.getByLabelText('Password'), 'p@ssw0rd')
@@ -169,7 +169,7 @@ describe('<Register />', () => {
     expect(screen.getByText('Sign up')).toBeDisabled()
 
     const { type, click } = userEvent.setup()
-    await type(screen.getByLabelText('Team name'), 'Sleepy Studios')
+    await type(screen.getByLabelText('Team or studio name'), 'Sleepy Studios')
     await type(screen.getByLabelText('Username'), 'Talo')
     await type(screen.getByLabelText('Email'), 'hello@trytalo.com')
     await type(screen.getByLabelText('Password'), 'p@ssw0rd')

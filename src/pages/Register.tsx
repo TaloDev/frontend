@@ -30,7 +30,7 @@ const validationSchema = z.object({
   if (!hasInvite && !organisationName?.trim()) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      message: 'Team name is required',
+      message: 'Team or studio name is required',
       path: ['organisationName']
     })
     return false
@@ -89,8 +89,8 @@ export default function Register() {
         {!location.state?.invite &&
           <TextInput
             id='name'
-            label='Team name'
-            placeholder={'Your team\'s name'}
+            label='Team or studio name'
+            placeholder={'Your team or studio\'s name'}
             type='text'
             inputExtra={{ ...register('organisationName') }}
             errors={[errors.organisationName?.message]}
