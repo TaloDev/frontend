@@ -44,6 +44,7 @@ const PlayerSaveContent = lazy(() => import(/* webpackChunkName: 'player-save-co
 const NotFound = lazy(() => import(/* webpackChunkName: 'not-found' */ './pages/NotFound'))
 const Feedback = lazy(() => import(/* webpackChunkName: 'feedback' */ './pages/Feedback'))
 const FeedbackCategories = lazy(() => import(/* webpackChunkName: 'feedback-categories' */ './pages/FeedbackCategories'))
+const Channels = lazy(() => import(/* webpackChunkName: 'channels' */ './pages/Channels'))
 
 type RouterProps = {
   intendedRoute: string | null
@@ -110,6 +111,7 @@ function Router({
                   <Route path={routes.playerSaves} element={<PlayerSaves />} />
                   <Route path={routes.feedback} element={<Feedback />} />
                   {canViewPage(user, routes.feedbackCategories) && <Route path={routes.feedbackCategories} element={<FeedbackCategories />} />}
+                  <Route path={routes.channels} element={<Channels />} />
                 </>
               }
 

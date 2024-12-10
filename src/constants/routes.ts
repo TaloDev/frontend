@@ -4,6 +4,7 @@ export default {
   activity: '/activity',
   apiKeys: '/api-keys',
   billing: '/billing',
+  channels: '/channels',
   confirmPassword: '/confirm-password',
   dashboard: '/',
   dataExports: '/exports',
