@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 import { focusStyle } from '../styles/theme'
 import canViewPage from '../utils/canViewPage'
-import { IconCaretDown, IconBolt, IconUser, IconFileExport, IconTrophy, IconKey, IconChartBar, IconExchange, IconSocial, IconSettings, IconMessages } from '@tabler/icons-react'
+import { IconCaretDown, IconBolt, IconUser, IconFileExport, IconTrophy, IconKey, IconChartBar, IconExchange, IconSocial, IconSettings, IconMessages, IconBubbleText } from '@tabler/icons-react'
 import LinkButton from './LinkButton'
 import routes from '../constants/routes'
 import userState from '../state/userState'
@@ -85,8 +85,14 @@ function ServicesLink() {
     {
       name: 'Feedback',
       desc: 'Receive feedback from your players',
-      icon: IconMessages,
+      icon: IconBubbleText,
       route: routes.feedback
+    },
+    {
+      name: 'Channels',
+      desc: 'Manage player chat channels',
+      icon: IconMessages,
+      route: routes.channels
     }
   ]
 
