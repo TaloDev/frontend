@@ -129,7 +129,7 @@ export default function Groups() {
                       {group.description}
                     </div>
                   </TableCell>
-                  <TableCell>{group.count}</TableCell>
+                  <TableCell>{new Intl.NumberFormat('en-GB').format(group.count)}</TableCell>
                   <DateCell>{format(new Date(group.updatedAt), 'do MMM Y')}</DateCell>
                   <TableCell className='w-40'>
                     <Button
