@@ -11,7 +11,7 @@ describe('Register', () => {
     cy.findByText('Register here').click()
 
     cy.findByText('Let\'s get started').should('exist')
-    cy.findByLabelText('Team name').type('Sleepy Studios')
+    cy.findByLabelText('Team or studio name').type('Sleepy Studios')
     cy.findByLabelText('Username').type('sleepy')
     cy.findByLabelText('Email').type('admin@trytalo.com')
     cy.findByLabelText('Password').type('password')

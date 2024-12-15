@@ -20,9 +20,11 @@ function ErrorMessage({
   children,
   className
 }: ErrorMessageProps) {
+  const hasMultipleErrors = error?.hasKeys && Object.keys(error.keys!).length > 1
+
   return (
     <div className={clsx('bg-red-500 p-4 rounded w-auto', className)}>
-      <div className='flex text-white'>
+      <div className={clsx('flex text-white', { 'items-center': !hasMultipleErrors, 'items-start': hasMultipleErrors })}>
         <IconAlertCircle />
         <div className='font-bold w-full ml-2'>
           {error?.hasKeys &&

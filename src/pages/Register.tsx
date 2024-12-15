@@ -30,7 +30,7 @@ const validationSchema = z.object({
   if (!hasInvite && !organisationName?.trim()) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      message: 'Team name is required',
+      message: 'Team or studio name is required',
       path: ['organisationName']
     })
     return false
@@ -44,7 +44,7 @@ export default function Register() {
   const location = useLocation()
 
   const setUser = useSetRecoilState(userState)
-  const [error, setError] = useState<TaloError | null>(null)
+  const [apiError, setAPIError] = useState<TaloError | null>(null)
   const [isLoading, setLoading] = useState(false)
 
   const { register, handleSubmit, formState: { isValid, errors }, control } = useForm<FormValues>({
@@ -58,7 +58,7 @@ export default function Register() {
   })
 
   const onRegisterClick = async ({ email, password, organisationName, username }: FormValues) => {
-    setError(null)
+    setAPIError(null)
     setLoading(true)
 
     try {
@@ -68,7 +68,7 @@ export default function Register() {
 
       Sentry.setUser({ id: user.id, username: user.username })
     } catch (err) {
-      setError(buildError(err))
+      setAPIError(buildError(err))
       setLoading(false)
     }
   }
@@ -89,8 +89,8 @@ export default function Register() {
         {!location.state?.invite &&
           <TextInput
             id='name'
-            label='Team name'
-            placeholder={'Your team\'s name'}
+            label='Team or studio name'
+            placeholder={'Your team or studio\'s name'}
             type='text'
             inputExtra={{ ...register('organisationName') }}
             errors={[errors.organisationName?.message]}
@@ -141,7 +141,7 @@ export default function Register() {
           )}
         />
 
-        {error && <ErrorMessage error={error} />}
+        {apiError && <ErrorMessage error={apiError} />}
 
         <Button
           disabled={!isValid}

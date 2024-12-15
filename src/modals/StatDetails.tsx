@@ -97,7 +97,7 @@ const StatDetails = ({
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)
   const [isDeleting, setDeleting] = useState(false)
-  const [error, setError] = useState<TaloError | null>(null)
+  const [apiError, setAPIError] = useState<TaloError | null>(null)
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
   const user = useRecoilValue(userState) as AuthedUser
@@ -121,7 +121,7 @@ const StatDetails = ({
   const onCreateClick: SubmitHandler<FormValues> = async (FormValues, e) => {
     e?.preventDefault()
     setLoading(true)
-    setError(null)
+    setAPIError(null)
 
     try {
       const { stat } = await createStat(activeGame.id, { ...FormValues, global })
@@ -138,7 +138,7 @@ const StatDetails = ({
 
       setOpen(false)
     } catch (err) {
-      setError(buildError(err))
+      setAPIError(buildError(err))
       setLoading(false)
     }
   }
@@ -146,7 +146,7 @@ const StatDetails = ({
   const onUpdateClick: SubmitHandler<FormValues> = async (FormValues, e) => {
     e?.preventDefault()
     setLoading(true)
-    setError(null)
+    setAPIError(null)
 
     try {
       const { stat } = await updateStat(activeGame.id, editingStat!.id, { ...FormValues, global })
@@ -163,7 +163,7 @@ const StatDetails = ({
 
       setOpen(false)
     } catch (err) {
-      setError(buildError(err))
+      setAPIError(buildError(err))
       setLoading(false)
     }
   }
@@ -173,7 +173,7 @@ const StatDetails = ({
     if (!window.confirm('Are you sure you want to delete this stat?')) return
 
     setDeleting(true)
-    setError(null)
+    setAPIError(null)
 
     try {
       await deleteStat(activeGame.id, editingStat!.id)
@@ -189,7 +189,7 @@ const StatDetails = ({
 
       setOpen(false)
     } catch (err) {
-      setError(buildError(err))
+      setAPIError(buildError(err))
       setDeleting(false)
     }
   }
@@ -324,7 +324,7 @@ const StatDetails = ({
             errors={[errors.maxChange?.message]}
           />
 
-          {error && <ErrorMessage error={error} />}
+          {apiError && <ErrorMessage error={apiError} />}
         </div>
 
         <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>

@@ -33,7 +33,7 @@ describe('<ConfirmPlanChange />', () => {
         start: 1657670400,
         end: 1660345199
       },
-      description: 'Business plan usage',
+      description: 'Studio plan usage',
       amount: 8000
     }
   ]
@@ -67,7 +67,7 @@ describe('<ConfirmPlanChange />', () => {
     expect(screen.getByText('13 Jul 2022 - 12 Aug 2022')).toBeInTheDocument()
 
     table = screen.getByTestId('13 Jul 2022 - 12 Aug 2022')
-    expect(within(table).getByText('Business plan usage')).toBeInTheDocument()
+    expect(within(table).getByText('Studio plan usage')).toBeInTheDocument()
     expect(within(table).getByText('$80.00')).toBeInTheDocument()
 
     expect(screen.getByText('$133.00')).toBeInTheDocument()
