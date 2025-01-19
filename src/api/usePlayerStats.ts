@@ -14,7 +14,7 @@ const usePlayerStats = (activeGame: Game, playerId: string) => {
     return res
   }
 
-  const { data, error } = useSWR(
+  const { data, error, mutate } = useSWR(
     [`/games/${activeGame.id}/players/${playerId}/stats`],
     fetcher
   )
@@ -23,7 +23,8 @@ const usePlayerStats = (activeGame: Game, playerId: string) => {
     stats: data?.stats ?? [],
     loading: !data && !error,
     error: error && buildError(error),
-    errorStatusCode: error && error.response?.status
+    errorStatusCode: error && error.response?.status,
+    mutate
   }
 }
 
