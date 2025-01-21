@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense, useCallback } from 'react'
+import { useState, useEffect, Suspense, useCallback, useRef } from 'react'
 import * as Sentry from '@sentry/react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import refreshAccess from './api/refreshAccess'
@@ -25,9 +25,13 @@ export default function App() {
 
   const games = useRecoilValue(gamesState)
   const [activeGame, setActiveGame] = useRecoilState(activeGameState)
+  const refreshingRef = useRef(false)
 
   const handleRefreshSession = useCallback(async () => {
     try {
+      if (refreshingRef.current) return
+      refreshingRef.current = true
+
       const { accessToken, user } = await refreshAccess()
       AuthService.setToken(accessToken)
       setUser(user)
