@@ -20,7 +20,7 @@ import { PermissionBasedAction } from '../utils/canPerformAction'
 import canPerformAction from '../utils/canPerformAction'
 import userState from '../state/userState'
 import { AuthedUser } from '../state/userState'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { LeaderboardEntry } from '../entities/leaderboardEntry'
 import UpdateEntryScore from '../modals/UpdateEntryScore'
 
@@ -43,6 +43,15 @@ export default function PlayerLeaderboardEntries() {
       state: { player }
     })
   }
+
+  const onEntryUpdated = useCallback((entry: LeaderboardEntry) => {
+    mutate((data) => {
+      return {
+        ...data,
+        entries: data!.entries.map((e) => e.id === entry.id ? entry : e)
+      }
+    })
+  }, [mutate])
 
   return (
     <Page
@@ -95,7 +104,7 @@ export default function PlayerLeaderboardEntries() {
       {editingEntry &&
         <UpdateEntryScore
           modalState={[true, () => setEditingEntry(null)]}
-          mutate={mutate}
+          onEntryUpdated={onEntryUpdated}
           editingEntry={editingEntry}
           leaderboard={leaderboards.find((leaderboard) => {
             return leaderboard.internalName === editingEntry.leaderboardInternalName

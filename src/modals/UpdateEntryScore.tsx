@@ -10,16 +10,15 @@ import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import updateLeaderboardEntry from '../api/updateLeaderboardEntry'
 import { Leaderboard } from '../entities/leaderboard'
 import { upperFirst } from 'lodash-es'
-import { KeyedMutator } from 'swr'
 
 type UpdateEntryScoreProps = {
   modalState: [boolean, (open: boolean) => void]
-  mutate: KeyedMutator<{ entries: LeaderboardEntry[] }>
+  onEntryUpdated: (entry: LeaderboardEntry) => void
   editingEntry: LeaderboardEntry
   leaderboard: Leaderboard
 }
 
-export default function UpdateEntryScore({ modalState, mutate, editingEntry, leaderboard }: UpdateEntryScoreProps) {
+export default function UpdateEntryScore({ modalState, onEntryUpdated, editingEntry, leaderboard }: UpdateEntryScoreProps) {
   const [, setOpen] = modalState
   const [score, setScore] = useState(editingEntry.score.toString())
   const [isLoading, setLoading] = useState(false)
@@ -34,12 +33,7 @@ export default function UpdateEntryScore({ modalState, mutate, editingEntry, lea
 
     try {
       const { entry } = await updateLeaderboardEntry(activeGame.id, leaderboard.id, editingEntry.id, { newScore: Number(score) })
-      mutate((data) => {
-        return {
-          ...data,
-          entries: [...data!.entries.filter((e) => e.id !== editingEntry.id), entry]
-        }
-      }, true)
+      onEntryUpdated(entry)
       setOpen(false)
     } catch (err) {
       setError(buildError(err))
