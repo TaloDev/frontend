@@ -22,6 +22,8 @@ import findLeaderboard from '../api/findLeaderboard'
 import { LeaderboardEntry } from '../entities/leaderboardEntry'
 import { Leaderboard } from '../entities/leaderboard'
 import { Prop } from '../entities/prop'
+import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
+import userState, { AuthedUser } from '../state/userState'
 
 function LeaderboardEntryProps({ props }: { props: Prop[] }) {
   return props.map(({ key, value }) => (
@@ -48,6 +50,8 @@ export default function LeaderboardEntries() {
   const [error, setError] = useState<TaloError | null>(null)
 
   const navigate = useNavigate()
+
+  const user = useRecoilValue(userState) as AuthedUser
 
   useEffect(() => {
     (async () => {
@@ -105,6 +109,8 @@ export default function LeaderboardEntries() {
     )
   }
 
+  const canUpdateEntry = canPerformAction(user, PermissionBasedAction.UPDATE_LEADERBOARD_ENTRY)
+
   return (
     <Page
       showBackButton
@@ -119,7 +125,7 @@ export default function LeaderboardEntries() {
 
       {!fetchError && entries.length > 0 &&
         <>
-          <Table columns={['#', 'Player', 'Score', 'Props', 'Submitted at', '']}>
+          <Table columns={['#', 'Player', 'Score', 'Props', 'Submitted at', ...(canUpdateEntry ? [''] : [])]}>
             <TableBody
               iterator={entries}
               configureClassnames={(entry, idx) => ({
@@ -148,14 +154,16 @@ export default function LeaderboardEntries() {
                     </div>
                   </TableCell>
                   <DateCell>{format(new Date(entry.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                  <TableCell className='w-40'>
-                    <Button
-                      variant={entry.hidden ? 'black' : 'grey'}
-                      onClick={() => onHideToggle(entry)}
-                    >
-                      <span>{entry.hidden ? 'Unhide' : 'Hide'}</span>
-                    </Button>
-                  </TableCell>
+                  {canUpdateEntry &&
+                    <TableCell className='w-40'>
+                      <Button
+                        variant={entry.hidden ? 'black' : 'grey'}
+                        onClick={() => onHideToggle(entry)}
+                      >
+                        <span>{entry.hidden ? 'Unhide' : 'Hide'}</span>
+                      </Button>
+                    </TableCell>
+                  }
                 </>
               )}
             </TableBody>
