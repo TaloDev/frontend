@@ -7,7 +7,6 @@ import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import { PlayerGameStat } from '../entities/playerGameStat'
 import { KeyedMutator } from 'swr'
 import updateStatValue from '../api/updateStatValue'
-import { Player } from '../entities/player'
 import activeGameState from '../state/activeGameState'
 import { useRecoilValue } from 'recoil'
 import { SelectedActiveGame } from '../state/activeGameState'
@@ -17,10 +16,9 @@ type UpdateStatValueProps = {
   modalState: [boolean, (open: boolean) => void]
   mutate: KeyedMutator<{ stats: PlayerGameStat[] }>
   editingStat: PlayerGameStat
-  player: Player
 }
 
-export default function UpdateStatValue({ modalState, mutate, editingStat, player }: UpdateStatValueProps) {
+export default function UpdateStatValue({ modalState, mutate, editingStat }: UpdateStatValueProps) {
   const [, setOpen] = modalState
   const [value, setValue] = useState(editingStat.value.toString())
   const [isLoading, setLoading] = useState(false)
@@ -34,7 +32,7 @@ export default function UpdateStatValue({ modalState, mutate, editingStat, playe
     setError(null)
 
     try {
-      const { playerStat } = await updateStatValue(activeGame.id, player.id, editingStat.id, Number(value))
+      const { playerStat } = await updateStatValue(activeGame.id, editingStat.stat.id, editingStat.id, Number(value))
       mutate((data) => {
         return {
           ...data,
