@@ -18,17 +18,20 @@ export default function usePlayerLeaderboardEntries(activeGame: Game, leaderboar
       entries: z.array(leaderboardEntrySchema)
     }))))
 
-    return res.flatMap((res) => res.entries)
+    return {
+      entries: res.flatMap((res) => res.entries)
+    }
   }
 
-  const { data, error } = useSWR(
+  const { data, error, mutate } = useSWR(
     leaderboards && player ? [activeGame, leaderboards, player.aliases] : null,
     fetcher
   )
 
   return {
-    entries: data ?? [],
+    entries: data?.entries ?? [],
     loading: !data && !error,
-    error: error && buildError(error)
+    error: error && buildError(error),
+    mutate
   }
 }

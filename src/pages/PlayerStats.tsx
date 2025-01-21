@@ -90,7 +90,6 @@ export default function PlayerStats() {
           modalState={[true, () => setEditingStat(null)]}
           mutate={mutate}
           editingStat={editingStat}
-          player={player}
         />
       }
 

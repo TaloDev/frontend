@@ -4,39 +4,40 @@ import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import buildError from '../utils/buildError'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import { PlayerGameStat } from '../entities/playerGameStat'
-import { KeyedMutator } from 'swr'
-import updateStatValue from '../api/updateStatValue'
-import activeGameState from '../state/activeGameState'
+import { LeaderboardEntry } from '../entities/leaderboardEntry'
 import { useRecoilValue } from 'recoil'
-import { SelectedActiveGame } from '../state/activeGameState'
+import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import updateLeaderboardEntry from '../api/updateLeaderboardEntry'
+import { Leaderboard } from '../entities/leaderboard'
 import { upperFirst } from 'lodash-es'
+import { KeyedMutator } from 'swr'
 
-type UpdateStatValueProps = {
+type UpdateEntryScoreProps = {
   modalState: [boolean, (open: boolean) => void]
-  mutate: KeyedMutator<{ stats: PlayerGameStat[] }>
-  editingStat: PlayerGameStat
+  mutate: KeyedMutator<{ entries: LeaderboardEntry[] }>
+  editingEntry: LeaderboardEntry
+  leaderboard: Leaderboard
 }
 
-export default function UpdateStatValue({ modalState, mutate, editingStat }: UpdateStatValueProps) {
+export default function UpdateEntryScore({ modalState, mutate, editingEntry, leaderboard }: UpdateEntryScoreProps) {
   const [, setOpen] = modalState
-  const [value, setValue] = useState(editingStat.value.toString())
+  const [score, setScore] = useState(editingEntry.score.toString())
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState<TaloError | null>(null)
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
 
-  const onCreateClick = async (e: MouseEvent<HTMLElement>) => {
+  const onUpdateClick = async (e: MouseEvent<HTMLElement>) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
 
     try {
-      const { playerStat } = await updateStatValue(activeGame.id, editingStat.stat.id, editingStat.id, Number(value))
+      const { entry } = await updateLeaderboardEntry(activeGame.id, leaderboard.id, editingEntry.id, { newScore: Number(score) })
       mutate((data) => {
         return {
           ...data,
-          stats: [...data!.stats.filter((stat) => stat.id !== editingStat!.id), playerStat]
+          entries: [...data!.entries.filter((e) => e.id !== editingEntry.id), entry]
         }
       }, true)
       setOpen(false)
@@ -48,25 +49,25 @@ export default function UpdateStatValue({ modalState, mutate, editingStat }: Upd
 
   return (
     <Modal
-      id='update-player-stat'
-      title={upperFirst(editingStat.stat.name)}
+      id='update-entry-score'
+      title={upperFirst(editingEntry.leaderboardName)}
       modalState={modalState}
     >
       <form>
         <div className='p-4 space-y-4'>
           <div>
-            <p className='font-semibold'>Current value</p>
-            <p>{editingStat.value}</p>
+            <p className='font-semibold'>Current score</p>
+            <p>{editingEntry.score}</p>
           </div>
 
           <TextInput
-            id='value'
+            id='score'
             variant='light'
             type='number'
-            label='New value'
-            placeholder='Stat value'
-            onChange={setValue}
-            value={value}
+            label='New score'
+            placeholder='Enter new score'
+            onChange={setScore}
+            value={score}
             inputClassName='border border-gray-200 focus:border-opacity-0'
           />
 
@@ -76,9 +77,9 @@ export default function UpdateStatValue({ modalState, mutate, editingStat }: Upd
         <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>
           <div className='w-full md:w-32'>
             <Button
-              disabled={!value}
+              disabled={!score}
               isLoading={isLoading}
-              onClick={onCreateClick}
+              onClick={onUpdateClick}
             >
               Update
             </Button>
