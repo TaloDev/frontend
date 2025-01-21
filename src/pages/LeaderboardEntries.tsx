@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
@@ -9,7 +9,7 @@ import { format } from 'date-fns'
 import Pagination from '../components/Pagination'
 import DateCell from '../components/tables/cells/DateCell'
 import useLeaderboardEntries from '../api/useLeaderboardEntries'
-import { IconArrowRight } from '@tabler/icons-react'
+import { IconArrowRight, IconPencil } from '@tabler/icons-react'
 import Button from '../components/Button'
 import updateLeaderboardEntry from '../api/updateLeaderboardEntry'
 import buildError from '../utils/buildError'
@@ -24,6 +24,7 @@ import { Leaderboard } from '../entities/leaderboard'
 import { Prop } from '../entities/prop'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 import userState, { AuthedUser } from '../state/userState'
+import UpdateEntryScore from '../modals/UpdateEntryScore'
 
 function LeaderboardEntryProps({ props }: { props: Prop[] }) {
   return props.map(({ key, value }) => (
@@ -53,6 +54,8 @@ export default function LeaderboardEntries() {
 
   const user = useRecoilValue(userState) as AuthedUser
 
+  const [editingEntry, setEditingEntry] = useState<LeaderboardEntry | null>(null)
+
   useEffect(() => {
     (async () => {
       if (isLoading) {
@@ -79,7 +82,7 @@ export default function LeaderboardEntries() {
     navigate(`${routes.players}?search=${identifier}`)
   }
 
-  const onHideToggle = async (entry: LeaderboardEntry) => {
+  const onHideToggle = useCallback(async (entry: LeaderboardEntry) => {
     try {
       const { entry: updatedEntry } = await updateLeaderboardEntry(activeGame.id, leaderboard!.id, entry.id, { hidden: !entry.hidden })
 
@@ -99,7 +102,16 @@ export default function LeaderboardEntries() {
     } catch (err) {
       setError(buildError(err))
     }
-  }
+  }, [activeGame.id, leaderboard, mutate])
+
+  const onEntryUpdated = useCallback((entry: LeaderboardEntry) => {
+    mutate((data) => {
+      return {
+        ...data!,
+        entries: data!.entries.map((e) => e.id === entry.id ? entry : e)
+      }
+    })
+  }, [mutate])
 
   if (isLoading) {
     return (
@@ -147,7 +159,20 @@ export default function LeaderboardEntries() {
                       />
                     </div>
                   </TableCell>
-                  <TableCell>{entry.score}</TableCell>
+                  <TableCell>
+                    <div className='flex items-center space-x-2'>
+                      <span>{entry.score}</span>
+                      {canUpdateEntry &&
+                        <Button
+                          variant='icon'
+                          className='p-1 rounded-full bg-indigo-900'
+                          onClick={() => setEditingEntry(entry)}
+                          icon={<IconPencil size={16} />}
+                          extra={{ 'aria-label': 'Edit leaderboard entry' }}
+                        />
+                      }
+                    </div>
+                  </TableCell>
                   <TableCell className='min-w-80'>
                     <div className='-mb-2'>
                       <LeaderboardEntryProps props={entry.props} />
@@ -168,6 +193,15 @@ export default function LeaderboardEntries() {
               )}
             </TableBody>
           </Table>
+
+          {editingEntry &&
+            <UpdateEntryScore
+              modalState={[true, () => setEditingEntry(null)]}
+              onEntryUpdated={onEntryUpdated}
+              editingEntry={editingEntry}
+              leaderboard={leaderboard!}
+            />
+          }
 
           {Boolean(count) && <Pagination count={count!} pageState={[page, setPage]} itemsPerPage={itemsPerPage!} />}
         </>
