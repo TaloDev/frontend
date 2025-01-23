@@ -28,10 +28,10 @@ export default function App() {
   const refreshingRef = useRef(false)
 
   const handleRefreshSession = useCallback(async () => {
-    try {
-      if (refreshingRef.current) return
-      refreshingRef.current = true
+    if (refreshingRef.current) return
+    refreshingRef.current = true
 
+    try {
       const { accessToken, user } = await refreshAccess()
       AuthService.setToken(accessToken)
       setUser(user)
