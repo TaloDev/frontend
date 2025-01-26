@@ -3,7 +3,6 @@ import { PricingPlanProduct } from '../entities/pricingPlan'
 export default function pricingPlanMock(extra: Partial<PricingPlanProduct> = {}): PricingPlanProduct {
   return {
     id: 1,
-    actions: [],
     name: 'Team plan',
     prices: [
       { amount: 5999, currency: 'usd', interval: 'year', current: false },
@@ -12,6 +11,7 @@ export default function pricingPlanMock(extra: Partial<PricingPlanProduct> = {})
     stripeId: 'plan_1',
     hidden: false,
     default: false,
+    playerLimit: 10000,
     ...extra
   }
 }

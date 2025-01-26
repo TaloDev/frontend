@@ -19,7 +19,7 @@ export default function usePricingPlanUsage() {
   )
 
   return {
-    usage: data?.usage ?? {},
+    usage: data?.usage ?? { limit: 0, used: 0 },
     loading: !data && !error,
     error: error && buildError(error)
   }

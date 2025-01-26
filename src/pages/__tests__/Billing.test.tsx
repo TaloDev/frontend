@@ -16,7 +16,6 @@ describe('<Billing />', () => {
       stripeId: 'prod_LcO5U04wEGWgMP',
       hidden: false,
       default: true,
-      actions: [],
       name: 'Indie Plan',
       prices: [
         {
@@ -31,7 +30,8 @@ describe('<Billing />', () => {
           interval: 'month',
           current: false
         }
-      ]
+      ],
+      playerLimit: 10000
     },
     status: 'active',
     endDate: null,
@@ -53,7 +53,6 @@ describe('<Billing />', () => {
       stripeId: 'prod_LcO5U04wEGWgMP',
       hidden: false,
       default: true,
-      actions: [],
       name: 'Indie Plan',
       prices: [
         {
@@ -68,14 +67,14 @@ describe('<Billing />', () => {
           interval: 'month',
           current: false
         }
-      ]
+      ],
+      playerLimit: 10000
     },
     {
       id: 2,
       stripeId: 'prod_LbW295xhmo2bk0',
       hidden: false,
       default: false,
-      actions: [],
       name: 'Team Plan',
       prices: [
         {
@@ -90,14 +89,14 @@ describe('<Billing />', () => {
           interval: 'month',
           current: false
         }
-      ]
+      ],
+      playerLimit: 100000
     },
     {
       id: 3,
       stripeId: 'prod_LcNy4ow2VoJ8kc',
       hidden: false,
       default: false,
-      actions: [],
       name: 'Studio Plan',
       prices: [
         {
@@ -112,19 +111,14 @@ describe('<Billing />', () => {
           interval: 'month',
           current: true
         }
-      ]
+      ],
+      playerLimit: 1000000
     }
   ]
 
   const usage = {
-    0: {
-      limit: 5,
-      used: 3
-    },
-    1: {
-      limit: 8,
-      used: 1
-    }
+    limit: 5,
+    used: 3
   }
 
   it('should render the current plan and the other returned plans', async () => {
