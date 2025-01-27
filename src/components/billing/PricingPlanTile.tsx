@@ -85,7 +85,7 @@ export default function PricingPlanTile({
             <ul>
               {!custom &&
                 <li>
-                  Up to <span className='font-semibold'>{plan?.playerLimit.toLocaleString()}</span> players
+                  Up to <span className='font-semibold'>{(plan?.playerLimit ?? Infinity).toLocaleString()}</span> players
                 </li>
               }
 

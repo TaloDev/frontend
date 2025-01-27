@@ -12,7 +12,7 @@ export default function UsageWarningBanner({ usage }: UsageWarningBannerProps) {
     <AlertBanner
       className='w-full lg:2/3 xl:w-1/2'
       icon={IconInfoCircle}
-      text={<p>You&apos;ve used {Math.round(usage.used / usage.limit * 100)}% of your current plan&apos;s limit. <Link to='/billing' className='font-bold underline'>Upgrade your plan</Link> to avoid any disruption to your game.</p>}
+      text={<p>You&apos;ve used {Math.round(usage.used / usage.limit ?? Infinity * 100)}% of your current plan&apos;s limit. <Link to='/billing' className='font-bold underline'>Upgrade your plan</Link> to avoid any disruption to your game.</p>}
     />
   )
 }

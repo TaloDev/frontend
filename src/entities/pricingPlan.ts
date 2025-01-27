@@ -5,7 +5,7 @@ export const pricingPlanSchema = z.object({
   stripeId: z.string(),
   hidden: z.boolean(),
   default: z.boolean(),
-  playerLimit: z.number()
+  playerLimit: z.number().nullable()
 })
 
 export const pricingPlanUsageSchema = z.object({
