@@ -9,7 +9,7 @@ import ErrorMessage, { TaloError } from './ErrorMessage'
 import TextInput from './TextInput'
 import justConfirmedEmailState from '../state/justConfirmedEmailState'
 
-const ConfirmEmailBanner = () => {
+export default function ConfirmEmailBanner() {
   const [code, setCode] = useState('')
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState<TaloError | null>(null)
@@ -81,5 +81,3 @@ const ConfirmEmailBanner = () => {
     </div>
   )
 }
-
-export default ConfirmEmailBanner
