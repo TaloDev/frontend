@@ -4,7 +4,7 @@
       "id": 1,
       "hidden": false,
       "default": true,
-      "actions": []
+      "playerLimit": 10000
     },
     "status": "active",
     "endDate": null,

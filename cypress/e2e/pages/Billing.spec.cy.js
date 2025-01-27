@@ -22,8 +22,7 @@ describe('Billing', () => {
     stubBillingCalls()
 
     cy.login('owner', '/billing')
-    cy.findByTestId('User seats-usage').should('contain.text', '0/2')
-    cy.findByTestId('Data exports-usage').should('contain.text', '1/3')
+    cy.findByTestId('players-usage').should('contain.text', '0 / 2')
   })
 
   it('should open the billing portal', () => {

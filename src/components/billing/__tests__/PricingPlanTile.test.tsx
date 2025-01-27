@@ -37,24 +37,18 @@ describe('<PricingPlanTile />', () => {
     expect(screen.getByText('Free forever')).toBeInTheDocument()
   })
 
-  it('should render the plan actions correctly', () => {
+  it('should correctly format limits', () => {
     render(
       <PricingPlanTile
         plan={pricingPlanMock({
-          actions: [
-            { id: 1, type: 0, limit: 5, trackedMonthly: false },
-            { id: 2, type: 1, limit: 8, trackedMonthly: true }
-          ]
+          playerLimit: 10000
         })}
         displayInterval='month'
         planLoadingState={[null, vi.fn()]}
       />
     )
 
-    expect(screen.getByText('5 User seats')).toBeInTheDocument()
-
-    expect(screen.getByText('8 Data exports')).toBeInTheDocument()
-    expect(screen.getByText('per month')).toBeInTheDocument()
+    expect(screen.getByText('10,000')).toBeInTheDocument()
   })
 
   it('should render a contact us link for the custom plan', () => {
@@ -75,12 +69,7 @@ describe('<PricingPlanTile />', () => {
   it('should render the cta as upgrade if the plan has a higher price than the current price', () => {
     render(
       <PricingPlanTile
-        plan={pricingPlanMock({
-          actions: [
-            { id: 1, type: 0, limit: 5, trackedMonthly: false },
-            { id: 2, type: 1, limit: 8, trackedMonthly: true }
-          ]
-        })}
+        plan={pricingPlanMock()}
         displayInterval='month'
         planLoadingState={[null, vi.fn()]}
         currentPlanPrice={{ amount: 0, currency: 'usd', interval: 'month', current: true }}
@@ -93,12 +82,7 @@ describe('<PricingPlanTile />', () => {
   it('should fallback the cta to an upgrade if there is no current price', () => {
     render(
       <PricingPlanTile
-        plan={pricingPlanMock({
-          actions: [
-            { id: 1, type: 0, limit: 5, trackedMonthly: false },
-            { id: 2, type: 1, limit: 8, trackedMonthly: true }
-          ]
-        })}
+        plan={pricingPlanMock()}
         displayInterval='month'
         planLoadingState={[null, vi.fn()]}
       />
@@ -110,12 +94,7 @@ describe('<PricingPlanTile />', () => {
   it('should render the cta as change plan if the plan has a higher price than the current price', () => {
     render(
       <PricingPlanTile
-        plan={pricingPlanMock({
-          actions: [
-            { id: 1, type: 0, limit: 5, trackedMonthly: false },
-            { id: 2, type: 1, limit: 8, trackedMonthly: true }
-          ]
-        })}
+        plan={pricingPlanMock()}
         displayInterval='month'
         planLoadingState={[null, vi.fn()]}
         currentPlanPrice={{ amount: 7999, currency: 'usd', interval: 'month', current: false }}
@@ -137,12 +116,7 @@ describe('<PricingPlanTile />', () => {
 
     render(
       <PricingPlanTile
-        plan={pricingPlanMock({
-          actions: [
-            { id: 1, type: 0, limit: 5, trackedMonthly: false },
-            { id: 2, type: 1, limit: 8, trackedMonthly: true }
-          ]
-        })}
+        plan={pricingPlanMock()}
         displayInterval='month'
         planLoadingState={[null, vi.fn()]}
         currentPlanPrice={{ amount: 0, currency: 'usd', interval: 'month', current: true }}
@@ -173,12 +147,7 @@ describe('<PricingPlanTile />', () => {
 
     render(
       <PricingPlanTile
-        plan={pricingPlanMock({
-          actions: [
-            { id: 1, type: 0, limit: 5, trackedMonthly: false },
-            { id: 2, type: 1, limit: 8, trackedMonthly: true }
-          ]
-        })}
+        plan={pricingPlanMock()}
         displayInterval='month'
         planLoadingState={[null, vi.fn()]}
         currentPlanPrice={{ amount: 0, currency: 'usd', interval: 'month', current: true }}
@@ -200,12 +169,7 @@ describe('<PricingPlanTile />', () => {
 
     render(
       <PricingPlanTile
-        plan={pricingPlanMock({
-          actions: [
-            { id: 1, type: 0, limit: 5, trackedMonthly: false },
-            { id: 2, type: 1, limit: 8, trackedMonthly: true }
-          ]
-        })}
+        plan={pricingPlanMock()}
         displayInterval='month'
         planLoadingState={[null, vi.fn()]}
         currentPlanPrice={{ amount: 0, currency: 'usd', interval: 'month', current: true }}

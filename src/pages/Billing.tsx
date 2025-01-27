@@ -92,7 +92,7 @@ export default function Billing() {
             {allPlansError && <div><ErrorMessage error={allPlansError} /></div>}
 
             <div className='md:flex justify-between items-center bg-gray-900 border border-gray-900 rounded p-4 space-y-4 md:space-y-0'>
-              <p className='text-center md:text-left'>Get{' '}<span className='text-sm p-1 rounded bg-indigo-600'>10% off</span> with yearly pricing</p>
+              <p className='text-center md:text-left'>Get <span className='text-sm p-1 mx-0.5 rounded bg-indigo-600'>25% off</span> with yearly pricing</p>
 
               <div className='flex items-center justify-center space-x-4 rounded'>
                 <p className='text-sm font-medium'>Monthly pricing</p>

@@ -9,7 +9,6 @@ import ErrorMessage, { TaloError } from '../ErrorMessage'
 import buildError from '../../utils/buildError'
 import ConfirmPlanChange from '../../modals/ConfirmPlanChange'
 import Tile from '../Tile'
-import pricingPlanActionTypes from '../../constants/pricingPlanActionTypes'
 import { Invoice } from '../../entities/invoice'
 import { PricingPlanProduct, PricingPlanProductPrice } from '../../entities/pricingPlan'
 
@@ -84,17 +83,15 @@ export default function PricingPlanTile({
         content={(
           <>
             <ul>
-              {plan?.actions.map((action) => {
-                return (
-                  <li key={action.id}>
-                    <span className='font-semibold'>{action.limit} {pricingPlanActionTypes[action.type]}</span> {action.trackedMonthly ? 'per month' : ''}
-                  </li>
-                )
-              })}
+              {!custom &&
+                <li>
+                  Up to <span className='font-semibold'>{(plan?.playerLimit ?? Infinity).toLocaleString()}</span> players
+                </li>
+              }
 
               {custom &&
                 <li>
-                  For reduced limits or custom integrations, <a className={`${linkStyle} ${focusStyle}`} href='mailto:hello@trytalo.com?subject=Custom pricing plan'>contact us</a>
+                  For higher limits or custom integrations, <a className={`${linkStyle} ${focusStyle}`} href='mailto:hello@trytalo.com?subject=Custom pricing plan'>contact us</a>
                 </li>
               }
             </ul>
