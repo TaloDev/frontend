@@ -8,6 +8,8 @@ import ConfirmEmailBanner from './ConfirmEmailBanner'
 import PaymentRequiredBanner from './billing/PaymentRequiredBanner'
 import { UserType } from '../entities/user'
 import justConfirmedEmailState from '../state/justConfirmedEmailState'
+import UsageWarningBanner from './UsageWarningBanner'
+import usePricingPlanUsage from '../api/usePricingPlanUsage'
 
 const blocklist = [routes.confirmPassword]
 
@@ -27,12 +29,16 @@ export default function GlobalBanners() {
   const showConfirmEmailBanner = !user.emailConfirmed || justConfirmedEmail
   const showPaymentRequiredBanner = user.type === UserType.OWNER && organisation.pricingPlan.status !== 'active'
 
-  if (!showBanners || !(showConfirmEmailBanner || showPaymentRequiredBanner)) return null
+  const { usage, loading: usageLoading, error: usageError } = usePricingPlanUsage()
+  const showUsageWarningBanner = !usageLoading && !usageError && usage.used >= usage.limit * 0.75
+
+  if (!showBanners || !(showConfirmEmailBanner || showPaymentRequiredBanner || showUsageWarningBanner)) return null
 
   return (
     <div className='space-y-4'>
       {showConfirmEmailBanner && <ConfirmEmailBanner />}
       {showPaymentRequiredBanner && <PaymentRequiredBanner />}
+      {showUsageWarningBanner && <UsageWarningBanner usage={usage} />}
     </div>
   )
 }

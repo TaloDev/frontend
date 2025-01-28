@@ -1,31 +1,17 @@
 import { z } from 'zod'
 
-export enum PricingPlanActionType {
-  USER_INVITE,
-  DATA_EXPORT
-}
-
-export const pricingPlanActionSchema = z.object({
-  id: z.number(),
-  type: z.nativeEnum(PricingPlanActionType),
-  limit: z.number(),
-  trackedMonthly: z.boolean()
-})
-
 export const pricingPlanSchema = z.object({
   id: z.number(),
   stripeId: z.string(),
   hidden: z.boolean(),
   default: z.boolean(),
-  actions: z.array(pricingPlanActionSchema)
+  playerLimit: z.number().nullable()
 })
 
-export const pricingPlanUsageSchema = z.record(
-  z.object({
-    limit: z.number(),
-    used: z.number()
-  })
-)
+export const pricingPlanUsageSchema = z.object({
+  limit: z.number(),
+  used: z.number()
+})
 
 export type PricingPlanUsage = z.infer<typeof pricingPlanUsageSchema>
 

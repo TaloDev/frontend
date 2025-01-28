@@ -7,20 +7,6 @@
       "default": true,
       "createdAt": "2022-06-14T17:13:12.000Z",
       "updatedAt": "2022-06-14T17:13:12.000Z",
-      "actions": [
-        {
-          "id": 1,
-          "type": 0,
-          "limit": 2,
-          "trackedMonthly": false
-        },
-        {
-          "id": 2,
-          "type": 1,
-          "limit": 2,
-          "trackedMonthly": true
-        }
-      ],
       "name": "Indie Plan",
       "prices": [
         {
@@ -35,7 +21,8 @@
           "interval": "year",
           "current": false
         }
-      ]
+      ],
+      "playerLimit": 10000
     },
     {
       "id": 2,
@@ -44,20 +31,6 @@
       "default": false,
       "createdAt": "2022-06-14T17:13:34.000Z",
       "updatedAt": "2022-06-14T17:13:34.000Z",
-      "actions": [
-        {
-          "id": 3,
-          "type": 0,
-          "limit": 10,
-          "trackedMonthly": false
-        },
-        {
-          "id": 4,
-          "type": 1,
-          "limit": 4,
-          "trackedMonthly": true
-        }
-      ],
       "name": "Team Plan",
       "prices": [
         {
@@ -72,7 +45,8 @@
           "interval": "year",
           "current": false
         }
-      ]
+      ],
+      "playerLimit": 100000
     },
     {
       "id": 3,
@@ -81,20 +55,6 @@
       "default": false,
       "createdAt": "2022-06-14T17:13:55.000Z",
       "updatedAt": "2022-06-14T17:13:55.000Z",
-      "actions": [
-        {
-          "id": 5,
-          "type": 0,
-          "limit": 50,
-          "trackedMonthly": false
-        },
-        {
-          "id": 6,
-          "type": 1,
-          "limit": 10,
-          "trackedMonthly": true
-        }
-      ],
       "name": "Studio Plan",
       "prices": [
         {
@@ -109,7 +69,8 @@
           "interval": "year",
           "current": false
         }
-      ]
+      ],
+      "playerLimit": 1000000
     }
   ]
 }

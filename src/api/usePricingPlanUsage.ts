@@ -2,7 +2,7 @@ import useSWR from 'swr'
 import buildError from '../utils/buildError'
 import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
-import { pricingPlanUsageSchema } from '../entities/pricingPlan'
+import { PricingPlanUsage, pricingPlanUsageSchema } from '../entities/pricingPlan'
 
 export default function usePricingPlanUsage() {
   const fetcher = async ([url]: [string]) => {
@@ -18,8 +18,11 @@ export default function usePricingPlanUsage() {
     fetcher
   )
 
+  const limit = data?.usage.limit ?? (typeof data === 'undefined' ? 0 : Infinity)
+  const used = data?.usage.used ?? 0
+
   return {
-    usage: data?.usage ?? {},
+    usage: { limit, used } satisfies PricingPlanUsage,
     loading: !data && !error,
     error: error && buildError(error)
   }

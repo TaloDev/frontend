@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^2.2.2",
-    "@testing-library/cypress": "^10.0.1",
+    "@testing-library/cypress": "^10.0.3",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^15.0.4",
     "@testing-library/user-event": "^14.5.2",
@@ -55,7 +55,7 @@
     "@vitest/coverage-v8": "^1.5.2",
     "autoprefixer": "^10.4.19",
     "axios-mock-adapter": "^1.20.0",
-    "cypress": "^13.8.1",
+    "cypress": "^14.0.0",
     "eslint": "^8.57.0",
     "eslint-plugin-cypress": "^3.3.0",
     "eslint-plugin-jest-dom": "^5.4.0",
@@ -78,7 +78,7 @@
   "lint-staged": {
     "*.{ts,js,tsx,jsx}": "eslint --fix"
   },
-  "version": "0.43.2",
+  "version": "0.44.0",
   "engines": {
     "node": "20.x"
   },
