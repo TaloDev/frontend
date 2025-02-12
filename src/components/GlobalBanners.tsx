@@ -29,7 +29,7 @@ export default function GlobalBanners() {
   const showConfirmEmailBanner = !user.emailConfirmed || justConfirmedEmail
   const showPaymentRequiredBanner = user.type === UserType.OWNER && organisation.pricingPlan.status !== 'active'
 
-  const { usage, loading: usageLoading, error: usageError } = usePricingPlanUsage()
+  const { usage, loading: usageLoading, error: usageError } = usePricingPlanUsage(showBanners && user.type === UserType.OWNER)
   const showUsageWarningBanner = !usageLoading && !usageError && usage.used >= usage.limit * 0.75
 
   if (!showBanners || !(showConfirmEmailBanner || showPaymentRequiredBanner || showUsageWarningBanner)) return null
