@@ -7,7 +7,7 @@ import activeGameState from '../../state/activeGameState'
 import userState from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
 import { UserType } from '../../entities/user'
-import { LeaderboardSortMode } from '../../entities/leaderboard'
+import { LeaderboardSortMode, LeaderboardRefreshInterval } from '../../entities/leaderboard'
 import leaderboardMock from '../../__mocks__/leaderboardMock'
 
 describe('<LeaderboardDetails />', () => {
@@ -30,14 +30,12 @@ describe('<LeaderboardDetails />', () => {
     )
 
     await userEvent.type(screen.getByLabelText('Internal name'), 'score')
-
     await userEvent.type(screen.getByLabelText('Display name'), 'Score')
 
     await userEvent.click(screen.getByLabelText('Sort mode'))
     await userEvent.click(screen.getByText('Ascending'))
 
     await userEvent.click(screen.getByText('Yes'))
-
     await userEvent.click(screen.getByText('Create'))
 
     await waitFor(() => {
@@ -108,7 +106,11 @@ describe('<LeaderboardDetails />', () => {
         <LeaderboardDetails
           modalState={[true, vi.fn()]}
           mutate={vi.fn()}
-          editingLeaderboard={leaderboardMock({ sortMode: LeaderboardSortMode.ASC, unique: true })}
+          editingLeaderboard={leaderboardMock({
+            sortMode: LeaderboardSortMode.ASC,
+            unique: true,
+            refreshInterval: LeaderboardRefreshInterval.WEEKLY
+          })}
         />
       </KitchenSink>
     )
@@ -116,6 +118,7 @@ describe('<LeaderboardDetails />', () => {
     expect(screen.getByLabelText('Internal name')).toHaveValue('score')
     expect(screen.getByLabelText('Display name')).toHaveValue('Score')
     expect(screen.getByText('Ascending')).toBeInTheDocument()
+    expect(screen.getByText('Weekly')).toBeInTheDocument()
     expect(screen.getByLabelText('Yes')).toBeChecked()
 
     expect(screen.getByText('Update')).toBeInTheDocument()
@@ -262,5 +265,35 @@ describe('<LeaderboardDetails />', () => {
     await waitFor(() => {
       expect(screen.getByText('Network Error')).toBeInTheDocument()
     })
+  })
+
+  it('should create a leaderboard with daily refresh', async () => {
+    axiosMock.onPost('http://talo.api/games/1/leaderboards').replyOnce(200, { leaderboard: { id: 4 } })
+
+    const closeMock = vi.fn()
+    const mutateMock = vi.fn()
+
+    render(
+      <KitchenSink states={[
+        { node: userState, initialValue: { type: UserType.ADMIN } },
+        { node: activeGameState, initialValue: activeGameValue }
+      ]}>
+        <LeaderboardDetails modalState={[true, closeMock]} mutate={mutateMock} editingLeaderboard={null} />
+      </KitchenSink>
+    )
+
+    await userEvent.type(screen.getByLabelText('Internal name'), 'score')
+    await userEvent.type(screen.getByLabelText('Display name'), 'Score')
+
+    await userEvent.click(screen.getByLabelText('Refresh entries'))
+    await userEvent.click(screen.getByText('Daily'))
+
+    await userEvent.click(screen.getByText('Create'))
+
+    await waitFor(() => {
+      expect(closeMock).toHaveBeenCalled()
+    })
+
+    expect(mutateMock).toHaveBeenCalled()
   })
 })

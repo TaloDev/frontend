@@ -13,7 +13,7 @@ import { useRecoilValue } from 'recoil'
 import updateLeaderboard from '../api/updateLeaderboard'
 import deleteLeaderboard from '../api/deleteLeaderboard'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
-import { Leaderboard, LeaderboardSortMode } from '../entities/leaderboard'
+import { Leaderboard, LeaderboardSortMode, LeaderboardRefreshInterval } from '../entities/leaderboard'
 import { KeyedMutator } from 'swr'
 
 type LeaderboardDetailsProps = {
@@ -38,6 +38,8 @@ const LeaderboardDetails = ({
   const [internalName, setInternalName] = useState(editingLeaderboard?.internalName ?? '')
   const [displayName, setDisplayName] = useState(editingLeaderboard?.name ?? '')
   const [sortMode, setSortMode] = useState(editingLeaderboard?.sortMode ?? LeaderboardSortMode.DESC)
+  const [refreshInterval, setRefreshInterval] = useState(editingLeaderboard?.refreshInterval ?? LeaderboardRefreshInterval.NEVER)
+
   const [unique, setUnique] = useState(editingLeaderboard?.unique ?? false)
 
   const onCreateClick = async (e: MouseEvent<HTMLElement>) => {
@@ -46,7 +48,7 @@ const LeaderboardDetails = ({
     setError(null)
 
     try {
-      const { leaderboard } = await createLeaderboard(activeGame.id, { internalName, name: displayName, sortMode, unique })
+      const { leaderboard } = await createLeaderboard(activeGame.id, { internalName, name: displayName, sortMode, unique, refreshInterval })
 
       mutate((data) => {
         return {
@@ -71,7 +73,7 @@ const LeaderboardDetails = ({
     setError(null)
 
     try {
-      const { leaderboard } = await updateLeaderboard(activeGame.id, editingLeaderboard!.id, { internalName, name: displayName, sortMode, unique })
+      const { leaderboard } = await updateLeaderboard(activeGame.id, editingLeaderboard!.id, { internalName, name: displayName, sortMode, unique, refreshInterval })
 
       mutate((data) => {
         return {
@@ -121,6 +123,14 @@ const LeaderboardDetails = ({
     { label: 'Ascending', value: LeaderboardSortMode.ASC }
   ]
 
+  const refreshIntervalOptions = [
+    { label: 'Never', value: LeaderboardRefreshInterval.NEVER },
+    { label: 'Daily', value: LeaderboardRefreshInterval.DAILY },
+    { label: 'Weekly', value: LeaderboardRefreshInterval.WEEKLY },
+    { label: 'Monthly', value: LeaderboardRefreshInterval.MONTHLY },
+    { label: 'Yearly', value: LeaderboardRefreshInterval.YEARLY }
+  ]
+
   return (
     <Modal
       id='leaderboard-details'
@@ -156,6 +166,17 @@ const LeaderboardDetails = ({
               defaultValue={sortModeOptions.find((option) => option.value === sortMode)}
               onChange={(option) => setSortMode(option!.value)}
               options={sortModeOptions}
+            />
+          </div>
+
+          <div className='w-full'>
+            <label htmlFor='refresh-interval' className='block font-semibold mb-1'>Refresh entries</label>
+            <p className='text-sm text-gray-500 mb-2'>Hide leaderboard entries older than the selected interval</p>
+            <Select
+              inputId='refresh-interval'
+              defaultValue={refreshIntervalOptions.find((option) => option.value === refreshInterval)}
+              onChange={(option) => setRefreshInterval(option!.value)}
+              options={refreshIntervalOptions}
             />
           </div>
 

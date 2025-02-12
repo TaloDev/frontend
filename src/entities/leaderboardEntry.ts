@@ -12,7 +12,8 @@ export const leaderboardEntrySchema = z.object({
   hidden: z.boolean(),
   props: z.array(propSchema),
   createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime()
+  updatedAt: z.string().datetime(),
+  deletedAt: z.string().datetime().nullable()
 })
 
 export type LeaderboardEntry = z.infer<typeof leaderboardEntrySchema>

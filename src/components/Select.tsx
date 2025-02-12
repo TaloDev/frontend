@@ -37,7 +37,8 @@ function Select<T>({ innerRef, onChange, ...props }: SelectProps<T>) {
       backgroundColor: state.isSelected ? '#6366F1' : provided.backgroundColor,
       color: state.isSelected ? '#FFF' : '#000',
       ':hover': {
-        backgroundColor: !state.isSelected ? '' : '#E0E7FF'
+        // backgroundColor: !state.isSelected ? '' : '#E0E7FF',
+        color: state.isSelected ? '#FFF' : '#000'
       }
     }),
     singleValue: (provided) => ({
