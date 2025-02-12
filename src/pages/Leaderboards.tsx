@@ -63,7 +63,7 @@ export default function Leaderboards() {
       }
 
       {!error && leaderboards.length > 0 &&
-        <Table columns={['Internal name', 'Display name', 'Sort mode', 'Unique entries', 'Created at', 'Updated at', '', '']}>
+        <Table columns={['Internal name', 'Display name', 'Sort mode', 'Unique entries', 'Refresh', 'Created at', 'Updated at', '', '']}>
           <TableBody iterator={sortedLeaderboards}>
             {(leaderboard) => (
               <>
@@ -76,6 +76,7 @@ export default function Leaderboards() {
                   }
                 </TableCell>
                 <TableCell>{leaderboard.unique ? 'Yes' : 'No'}</TableCell>
+                <TableCell className='capitalize'>{leaderboard.refreshInterval}</TableCell>
                 <DateCell>{format(new Date(leaderboard.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
                 <DateCell>{format(new Date(leaderboard.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
                 <TableCell className='w-40'>

@@ -5,9 +5,11 @@ import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
 import { leaderboardEntrySchema } from '../entities/leaderboardEntry'
 
-export default function useLeaderboardEntries(activeGame: Game, leaderboardId: number | undefined, page: number) {
+export default function useLeaderboardEntries(activeGame: Game, leaderboardId: number | undefined, page: number, withDeleted: boolean = false) {
   const fetcher = async ([url]: [string]) => {
-    const qs = new URLSearchParams({ page: String(page) }).toString()
+    const params: Record<string, string> = { page: String(page) }
+    if (withDeleted) params.withDeleted = '1'
+    const qs = new URLSearchParams(params).toString()
 
     const res = await makeValidatedGetRequest(`${url}?${qs}`, z.object({
       entries: z.array(leaderboardEntrySchema),
@@ -19,7 +21,7 @@ export default function useLeaderboardEntries(activeGame: Game, leaderboardId: n
   }
 
   const { data, error, mutate } = useSWR(
-    leaderboardId ? [`/games/${activeGame.id}/leaderboards/${leaderboardId}/entries`, page] : null,
+    leaderboardId ? [`/games/${activeGame.id}/leaderboards/${leaderboardId}/entries`, page, withDeleted] : null,
     fetcher
   )
 

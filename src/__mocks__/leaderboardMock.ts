@@ -1,4 +1,4 @@
-import { Leaderboard, LeaderboardSortMode } from '../entities/leaderboard'
+import { Leaderboard, LeaderboardSortMode, LeaderboardRefreshInterval } from '../entities/leaderboard'
 
 export default function leaderboardMock(extra: Partial<Leaderboard> = {}): Leaderboard {
   return {
@@ -9,6 +9,7 @@ export default function leaderboardMock(extra: Partial<Leaderboard> = {}): Leade
     unique: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    refreshInterval: LeaderboardRefreshInterval.NEVER,
     ...extra
   }
 }
