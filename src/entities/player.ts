@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { propSchema } from './prop'
 import { playerAliasSchema, PlayerAlias } from './playerAlias'
+import { playerPresenceSchema } from './playerPresence'
 
 export const basePlayerSchema = z.object({
   id: z.string().uuid(),
@@ -11,7 +12,8 @@ export const basePlayerSchema = z.object({
   groups: z.array(z.object({
     id: z.string(),
     name: z.string()
-  }))
+  })),
+  presence: playerPresenceSchema.nullable()
 })
 
 export type Player = z.infer<typeof basePlayerSchema> & {

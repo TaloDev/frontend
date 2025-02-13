@@ -21,6 +21,7 @@ import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import useDaySections from '../utils/useDaySections'
 import ActivityRenderer from '../components/ActivityRenderer'
 import userState, { AuthedUser } from '../state/userState'
+import clsx from 'clsx'
 
 const links = [
   {
@@ -87,6 +88,9 @@ export default function PlayerProfile() {
         <div className='flex mt-4 space-x-2'>
           <Identifier id={`Registered ${format(new Date(player.createdAt), 'do MMM Y')}`} />
           <Identifier id={`Last seen ${format(new Date(player.lastSeenAt), 'do MMM Y')}`} />
+          <span className={clsx(player.presence?.online && 'text-green-500')}>
+            <Identifier id={`${player.presence?.online ? 'Online' : 'Offline'}${player.presence?.customStatus ? ` (${player.presence.customStatus})` : ''}`} />
+          </span>
         </div>
       </div>
 

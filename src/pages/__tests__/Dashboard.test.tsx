@@ -25,6 +25,12 @@ describe('<Dashboard />', () => {
     axiosMock.onGet(/\/games\/\d\/headlines\/unique_event_submitters/).replyOnce(200, {
       count: 8
     })
+    axiosMock.onGet(/\/games\/\d\/headlines\/total_players/).replyOnce(200, {
+      count: 150030
+    })
+    axiosMock.onGet(/\/games\/\d\/headlines\/online_players/).replyOnce(200, {
+      count: 2094
+    })
 
     axiosMock.onGet(/\/games\/\d\/player-groups\/pinned/).replyOnce(200, {
       groups: [
@@ -79,12 +85,15 @@ describe('<Dashboard />', () => {
     expect(await screen.findByText('Swerve City dashboard')).toBeInTheDocument()
 
     expect(await screen.findByText('New players')).toBeInTheDocument()
-    expect(screen.getByText('Returning players')).toBeInTheDocument()
-    expect(screen.getByText('New events')).toBeInTheDocument()
-    expect(screen.getByText('Unique event submitters')).toBeInTheDocument()
+    expect(await screen.findByText('Returning players')).toBeInTheDocument()
+    expect(await screen.findByText('New events')).toBeInTheDocument()
+    expect(await screen.findByText('Unique event submitters')).toBeInTheDocument()
 
     expect(await screen.findByText('Stat A')).toBeInTheDocument()
-    expect(screen.getByText('Stat B')).toBeInTheDocument()
+    expect(await screen.findByText('Stat B')).toBeInTheDocument()
+
+    expect(await screen.findByText('150,030')).toBeInTheDocument()
+    expect(await screen.findByText('2,094')).toBeInTheDocument()
   })
 
   it('should be able to change the time period for headlines', async () => {
@@ -120,7 +129,7 @@ describe('<Dashboard />', () => {
 
     await userEvent.click(screen.getByText('This year'))
 
-    expect(await screen.findByText('2103')).toBeInTheDocument()
+    expect(await screen.findByText('2,103')).toBeInTheDocument()
   })
 
   it('should render headline, pinned group and stat errors', async () => {
