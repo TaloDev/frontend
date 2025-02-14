@@ -4,7 +4,7 @@ import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
 import { PricingPlanUsage, pricingPlanUsageSchema } from '../entities/pricingPlan'
 
-export default function usePricingPlanUsage() {
+export default function usePricingPlanUsage(run: boolean = true) {
   const fetcher = async ([url]: [string]) => {
     const res = await makeValidatedGetRequest(url, z.object({
       usage: pricingPlanUsageSchema
@@ -14,7 +14,7 @@ export default function usePricingPlanUsage() {
   }
 
   const { data, error } = useSWR(
-    ['/billing/usage'],
+    run ? ['/billing/usage'] : null,
     fetcher
   )
 

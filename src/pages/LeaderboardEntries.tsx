@@ -20,11 +20,13 @@ import { useRecoilValue } from 'recoil'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import findLeaderboard from '../api/findLeaderboard'
 import { LeaderboardEntry } from '../entities/leaderboardEntry'
-import { Leaderboard } from '../entities/leaderboard'
+import { Leaderboard, LeaderboardRefreshInterval } from '../entities/leaderboard'
 import { Prop } from '../entities/prop'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 import userState, { AuthedUser } from '../state/userState'
 import UpdateEntryScore from '../modals/UpdateEntryScore'
+import Toggle from '../components/toggles/Toggle'
+import Identifier from '../components/Identifier'
 
 function LeaderboardEntryProps({ props }: { props: Prop[] }) {
   return props.map(({ key, value }) => (
@@ -46,7 +48,8 @@ export default function LeaderboardEntries() {
   const [leaderboard, setLeaderboard] = useState<Leaderboard | undefined>(location.state?.leaderboard)
 
   const [page, setPage] = useState(0)
-  const { entries, count, itemsPerPage, loading, error: fetchError, mutate } = useLeaderboardEntries(activeGame, leaderboard?.id, page)
+  const [withDeleted, setWithDeleted] = useState(false)
+  const { entries, count, itemsPerPage, loading, error: fetchError, mutate } = useLeaderboardEntries(activeGame, leaderboard?.id, page, withDeleted)
 
   const [error, setError] = useState<TaloError | null>(null)
 
@@ -129,6 +132,16 @@ export default function LeaderboardEntries() {
       title={leaderboard ? `${leaderboard.name} entries` : ''}
       isLoading={loading}
     >
+      {leaderboard?.refreshInterval !== LeaderboardRefreshInterval.NEVER &&
+        <div className='flex items-center space-x-4 mt-0'>
+          <div><Toggle id='include-archived' enabled={withDeleted} onToggle={setWithDeleted} /></div>
+          <div>
+            <p className='font-medium'>Show history</p>
+            <p className='text-sm'>This will show entries not included in the {leaderboard?.refreshInterval} leaderboards</p>
+          </div>
+        </div>
+      }
+
       {error && <ErrorMessage error={error} />}
 
       {!fetchError && entries.length === 0 &&
@@ -137,7 +150,7 @@ export default function LeaderboardEntries() {
 
       {!fetchError && entries.length > 0 &&
         <>
-          <Table columns={['#', 'Player', 'Score', 'Props', 'Submitted at', ...(canUpdateEntry ? [''] : [])]}>
+          <Table columns={['#', 'Player', 'Score', 'Props', 'Submitted at', ...(withDeleted ? [''] : []), ...(canUpdateEntry ? [''] : [])]}>
             <TableBody
               iterator={entries}
               configureClassnames={(entry, idx) => ({
@@ -178,7 +191,14 @@ export default function LeaderboardEntries() {
                       <LeaderboardEntryProps props={entry.props} />
                     </div>
                   </TableCell>
-                  <DateCell>{format(new Date(entry.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
+                  <DateCell>
+                    {format(new Date(entry.createdAt), 'dd MMM Y, HH:mm')}
+                  </DateCell>
+                  {withDeleted &&
+                    <TableCell>
+                      {entry.deletedAt && <Identifier id='Archived' />}
+                    </TableCell>
+                  }
                   {canUpdateEntry &&
                     <TableCell className='w-40'>
                       <Button
