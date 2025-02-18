@@ -16,6 +16,7 @@ import DevDataStatus from '../components/DevDataStatus'
 import SecondaryTitle from '../components/SecondaryTitle'
 import useIntendedRoute from '../utils/useIntendedRoute'
 import usePinnedGroups from '../api/usePinnedGroups'
+import usePlayerHeadlines from '../api/usePlayerHeadlines'
 
 export const secondaryNavRoutes = [
   { title: 'Dashboard', to: routes.dashboard },
@@ -46,7 +47,7 @@ export default function Dashboard() {
   const { headlines, loading: headlinesLoading, error: headlinesError } = useHeadlines(activeGame, startDate, endDate, includeDevData)
   const { stats, loading: statsLoading, error: statsError } = useStats(activeGame, includeDevData)
   const { groups: pinnedGroups, loading: pinnedGroupsLoading, error: pinnedGroupsError } = usePinnedGroups(activeGame, includeDevData)
-
+  const { headlines: playerHeadlines, loading: playerHeadlinesLoading, error: playerHeadlinesError } = usePlayerHeadlines(activeGame, includeDevData)
   const intendedRouteChecked = useIntendedRoute()
 
   if (!intendedRouteChecked) return null
@@ -88,6 +89,19 @@ export default function Dashboard() {
           <HeadlineStat title='Returning players' stat={headlines.returning_players.count} />
           <HeadlineStat title='New events' stat={headlines.events.count} />
           <HeadlineStat title='Unique event submitters' stat={headlines.unique_event_submitters.count} />
+        </div>
+      }
+
+      <SecondaryTitle>Players</SecondaryTitle>
+
+      {playerHeadlinesError &&
+        <ErrorMessage error={{ message: 'Couldn\'t fetch player headlines' }} />
+      }
+
+      {!playerHeadlinesLoading && !playerHeadlinesError &&
+        <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-4'>
+          <HeadlineStat title='Total players' stat={playerHeadlines.total_players.count} />
+          <HeadlineStat title='Online players' stat={playerHeadlines.online_players.count} />
         </div>
       }
 

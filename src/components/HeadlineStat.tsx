@@ -12,7 +12,7 @@ const HeadlineStat = (props: HeadlineStatProps) => {
       </div>
 
       <div className='p-4'>
-        <p className='text-4xl md:text-6xl'>{props.stat}</p>
+        <p className='text-4xl md:text-6xl'>{props.stat.toLocaleString()}</p>
       </div>
     </div>
   )

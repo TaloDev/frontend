@@ -9,6 +9,7 @@ export default function playerMock(extra: Partial<Player> = {}): Player {
     lastSeenAt: new Date().toISOString(),
     aliases: [],
     groups: [],
+    presence: null,
     ...extra
   }
 }
