@@ -38,11 +38,17 @@ export default function PlayerAliases({
         <Tippy
           content={
             <p className={clsx({ 'capitalize': !alias.service.includes('_') && !alias.service.includes('-') })}>
-              {alias.service}
+              {alias.service}{alias.player.presence?.online && ' (Online)'}
             </p>
           }
         >
-          <span className='p-1 rounded-full bg-gray-900'>{getIcon(alias)}</span>
+          <span
+            className={clsx('p-1 rounded-full bg-gray-900', {
+              'text-green-500': alias.player.presence?.online
+            })}
+          >
+            {getIcon(alias)}
+          </span>
         </Tippy>
 
         <span className='ml-2 text-sm'>{alias.identifier}</span>
