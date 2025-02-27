@@ -1,7 +1,7 @@
 import ReactSelect, { components, Props as ReactSelectProps, OptionProps, GroupBase, StylesConfig, SingleValue, SelectInstance } from 'react-select'
 
 export type SelectOption<T> = {
-  label: string
+  label: string | React.ReactNode
   value: T
   desc?: string
 }

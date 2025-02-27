@@ -59,7 +59,7 @@ export default function Stats() {
               <>
                 <TableCell>{stat.internalName}</TableCell>
                 <TableCell>{stat.name}</TableCell>
-                <TableCell>{stat.global ? stat.globalValue : '—'}</TableCell>
+                <TableCell className='font-mono'>{stat.global ? stat.globalValue.toLocaleString() : '—'}</TableCell>
                 <DateCell>{format(new Date(stat.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
                 <DateCell>{format(new Date(stat.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
                 <TableCell className='w-40'>
