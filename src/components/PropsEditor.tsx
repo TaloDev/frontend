@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useRef, useEffect } from 'react'
 import { IconPlus, IconTrash } from '@tabler/icons-react'
 import Button from './Button'
 import TextInput from './TextInput'
@@ -11,6 +11,9 @@ import Table from './tables/Table'
 import SecondaryTitle from './SecondaryTitle'
 import { isMetaProp, metaPropKeyMap } from '../constants/metaProps'
 import type { Prop } from '../entities/prop'
+import FileInput from './FileInput'
+
+
 
 type PropsEditorProps = {
   startingProps: Prop[]
@@ -34,6 +37,13 @@ export default function PropsEditor({
   const [newProps, setNewProps] = useState<Prop[]>([])
   const [error, setError] = useState<TaloError | null>(null)
   const [isUpdating, setUpdating] = useState(false)
+
+  const [showBulkProps, setShowBulkProps] = useState(false)
+  const [bulkPropsList, setBulkPropsList] = useState<string>('')
+  const [bulkPropsFile, setBulkPropsFile] = useState<File | null>(null)
+  const [bulkPropsJson, setBulkPropsJson] = useState<object | null>(null)
+
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const editExistingProp = (key: string, value: string | null) => {
     setProps((curr) => {
@@ -65,7 +75,7 @@ export default function PropsEditor({
   }
 
   const enableResetButton = useMemo(() => {
-    if (newProps.length > 0) return true
+    if (newProps.length > 0 || bulkPropsList || fileInputRef.current) return true
 
     return originalProps.some((prop, idx) => {
       return prop.value !== props[idx].value
@@ -79,7 +89,62 @@ export default function PropsEditor({
   const reset = () => {
     setProps(originalProps)
     setNewProps([])
+    setBulkPropsFile(null)
+    setBulkPropsList('')
+    if (fileInputRef.current) {fileInputRef.current.value = ''}
   }
+
+  const handleFileChange = async (file: File) => {
+    const fileExtension = file.name.split('.').pop()
+    if (fileExtension !== 'json') {
+      setError(buildError(new Error('File must be a JSON file')))
+      setBulkPropsFile(null)
+      if (fileInputRef.current) {fileInputRef.current.value = ''}
+      return
+    }
+    setBulkPropsFile(file)
+  }
+
+  useEffect(() => {
+    setError(null)
+    const reader = new FileReader()
+    reader.onload = async (e) => {
+      const text = e.target?.result as string
+      try {
+        const parsed = JSON.parse(text)
+        setBulkPropsJson(parsed)
+      } catch (err) {
+        setError(buildError(err))
+      }
+    }
+    if (bulkPropsFile) {
+      reader.readAsText(bulkPropsFile)
+    }
+    
+  }, [bulkPropsFile])
+
+  const parseBulkPropsList = (list: string) => {
+    if (list) {setBulkPropsList(list)}
+
+      try {
+        const parsed = JSON.parse(list)
+        setBulkPropsJson(parsed)
+      } catch (err) {
+        setError(buildError(err))
+      }
+    }
+
+  const setNewPropsFromJson = () => {
+      if (bulkPropsJson) {
+        const bulkprops = Object.entries(bulkPropsJson).map(([key, value]) => ({ key, value: typeof value === 'string' ? value : JSON.stringify(value) }))
+        newProps.push(...bulkprops)
+        setNewProps(newProps)}
+        if (fileInputRef.current) {fileInputRef.current.value = ''}
+        setBulkPropsFile(null)
+        setBulkPropsList('')
+        setBulkPropsJson(null)
+      }
+  
 
   const save = async () => {
     setUpdating(true)
@@ -211,7 +276,49 @@ export default function PropsEditor({
       >
         <span>New property</span>
       </Button>
-
+      
+      <Button
+        className='mt-4'
+        onClick={() => setShowBulkProps(!showBulkProps)}
+        icon={<IconPlus size={16} />}
+      >
+        <span>Add properties from file or list</span>
+      </Button>
+      
+      {showBulkProps && <>
+        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="bulk-props">Upload JSON file</label>
+        <FileInput
+            inputRef={fileInputRef}
+            id='bulk-props'
+            type='file'
+            variant='light'
+            disabled={!!bulkPropsList}
+            onChange={(file: File) => handleFileChange(file)}
+          /> 
+      
+        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="bulk-props">Or paste properties</label>
+          <TextInput
+            id='bulk-props'
+            variant='light'
+            type='area'
+            disabled={!!bulkPropsFile}
+            placeholder='{"key1": "value1", "key2": "value2"}'
+            onChange={(value: string) =>  parseBulkPropsList(value)}
+            value={bulkPropsList ?? ''}
+          /> 
+      
+  
+      <div className="mt-4">
+        <Button
+          className='mt-4'
+          onClick={setNewPropsFromJson}
+          icon={<IconPlus size={16} />}
+        >
+          <span>Parse list</span>
+        </Button>
+        
+      </div>
+      </>}
       {error && <ErrorMessage error={error} />}
 
       <div className='flex space-x-4 mt-8'>
