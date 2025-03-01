@@ -174,7 +174,7 @@ export default function LeaderboardEntries() {
                   </TableCell>
                   <TableCell>
                     <div className='flex items-center space-x-2'>
-                      <span>{entry.score}</span>
+                      <span className='font-mono'>{entry.score.toLocaleString()}</span>
                       {canUpdateEntry &&
                         <Button
                           variant='icon'

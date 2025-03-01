@@ -15,6 +15,7 @@ import deleteLeaderboard from '../api/deleteLeaderboard'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 import { Leaderboard, LeaderboardSortMode, LeaderboardRefreshInterval } from '../entities/leaderboard'
 import { KeyedMutator } from 'swr'
+import clsx from 'clsx'
 
 type LeaderboardDetailsProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -41,6 +42,8 @@ const LeaderboardDetails = ({
   const [refreshInterval, setRefreshInterval] = useState(editingLeaderboard?.refreshInterval ?? LeaderboardRefreshInterval.NEVER)
 
   const [unique, setUnique] = useState(editingLeaderboard?.unique ?? false)
+
+  const [isMenuOpen, setMenuOpen] = useState(false)
 
   const onCreateClick = async (e: MouseEvent<HTMLElement>) => {
     e.preventDefault()
@@ -136,8 +139,11 @@ const LeaderboardDetails = ({
       id='leaderboard-details'
       title={editingLeaderboard ? 'Update leaderboard' : 'Create leaderboard'}
       modalState={modalState}
+      className={clsx('flex flex-col', {
+        'md:!h-[75vh]': isMenuOpen
+      })}
     >
-      <form>
+      <form className='flex flex-col grow'>
         <div className='p-4 space-y-4'>
           <TextInput
             startFocused
@@ -177,6 +183,8 @@ const LeaderboardDetails = ({
               defaultValue={refreshIntervalOptions.find((option) => option.value === refreshInterval)}
               onChange={(option) => setRefreshInterval(option!.value)}
               options={refreshIntervalOptions}
+              onMenuOpen={() => setMenuOpen(true)}
+              onMenuClose={() => setMenuOpen(false)}
             />
           </div>
 
@@ -194,7 +202,7 @@ const LeaderboardDetails = ({
           {error && <ErrorMessage error={error} />}
         </div>
 
-        <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>
+        <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200 mt-auto'>
           {!editingLeaderboard &&
             <div className='w-full md:w-32'>
               <Button

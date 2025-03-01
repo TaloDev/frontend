@@ -10,11 +10,7 @@ type PlayerAliasesProps = {
   aliases: PlayerAlias[]
 }
 
-export default function PlayerAliases({
-  aliases
-}: PlayerAliasesProps) {
-  const sortedAliases = useSortedItems(aliases, 'lastSeenAt')
-
+export function SingleAlias({ alias }: { alias: PlayerAlias }) {
   const getIcon = useCallback((alias: PlayerAlias) => {
     /* v8ignore next */
     switch (alias.service) {
@@ -26,6 +22,30 @@ export default function PlayerAliases({
     }
   }, [])
 
+  return (
+    <Tippy
+      content={
+        <p className={clsx({ 'capitalize': !alias.service.includes('_') && !alias.service.includes('-') })}>
+          {alias.service}{alias.player.presence?.online && ' (Online)'}
+        </p>
+      }
+    >
+      <span
+        className={clsx('p-1 rounded-full bg-gray-900 text-white', {
+          'text-green-500': alias.player.presence?.online
+        })}
+      >
+        {getIcon(alias)}
+      </span>
+    </Tippy>
+  )
+}
+
+export default function PlayerAliases({
+  aliases
+}: PlayerAliasesProps) {
+  const sortedAliases = useSortedItems(aliases, 'lastSeenAt')
+
   const alias = useMemo(() => {
     return sortedAliases.at(0)
   }, [sortedAliases])
@@ -34,24 +54,9 @@ export default function PlayerAliases({
 
   return (
     <div className='space-y-2'>
-      <div className='flex items-center'>
-        <Tippy
-          content={
-            <p className={clsx({ 'capitalize': !alias.service.includes('_') && !alias.service.includes('-') })}>
-              {alias.service}{alias.player.presence?.online && ' (Online)'}
-            </p>
-          }
-        >
-          <span
-            className={clsx('p-1 rounded-full bg-gray-900', {
-              'text-green-500': alias.player.presence?.online
-            })}
-          >
-            {getIcon(alias)}
-          </span>
-        </Tippy>
-
-        <span className='ml-2 text-sm'>{alias.identifier}</span>
+      <div className='flex items-center space-x-2'>
+        <SingleAlias alias={alias} />
+        <span className='text-sm'>{alias.identifier}</span>
       </div>
 
       {sortedAliases.length > 1 &&

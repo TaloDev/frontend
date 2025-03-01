@@ -144,7 +144,7 @@ function Organisation() {
                           </>
                         }
                       </TableCell>
-                      <TableCell>{game.playerCount}</TableCell>
+                      <TableCell className='font-mono'>{game.playerCount?.toLocaleString() ?? '-'}</TableCell>
                       <DateCell>{format(new Date(game.createdAt), 'do MMM Y')}</DateCell>
                     </>
                   )}
