@@ -7,17 +7,18 @@ export type TextInputVariant = 'light' | 'modal'
 
 type TextInputProps = {
   id: string
-  onChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void
+  onChange?: (value: string, event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
   value?: string
   label?: string
   placeholder?: string
   type?: string
+  inputType?: 'textarea' | 'input'
   variant?: TextInputVariant
   inputClassName?: string
   disabled?: boolean
   errors?: (string | undefined)[]
   containerClassName?: string
-  inputExtra?: InputHTMLAttributes<HTMLInputElement>
+  inputExtra?: InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>
   startFocused?: boolean
 }
 
@@ -28,6 +29,7 @@ export default function TextInput({
   label,
   placeholder = '',
   type,
+  inputType,
   variant,
   inputClassName,
   disabled,
@@ -66,24 +68,45 @@ export default function TextInput({
         }
 
         <div className='relative'>
-          <input
-            id={id}
-            className={finalClassName}
-            type={type ?? 'text'}
-            placeholder={placeholder}
-            onChange={(e) => onChange?.(e.target.value, e)}
-            value={value}
-            disabled={disabled}
-            {...inputExtra}
-            onFocus={(e) => {
-              inputExtra.onFocus?.(e)
-              setHasFocus(true)
-            }}
-            onBlur={(e) => {
-              inputExtra.onBlur?.(e)
-              setHasFocus(false)
-            }}
-          />
+          {inputType === 'textarea' ?
+            <textarea
+              id={id}
+              className={finalClassName}
+              placeholder={placeholder}
+              onChange={(e) => onChange?.(e.target.value, e)}
+              value={value}
+              disabled={disabled}
+              {...inputExtra}
+              onFocus={(e) => {
+                inputExtra.onFocus?.(e)
+                setHasFocus(true)
+              }}
+              onBlur={(e) => {
+                inputExtra.onBlur?.(e)
+                setHasFocus(false)
+              }}
+            />
+            :
+            <input
+              id={id}
+              className={finalClassName}
+              type={type ?? 'text'}
+              placeholder={placeholder}
+              onChange={(e) => onChange?.(e.target.value, e)}
+              value={value}
+              disabled={disabled}
+              {...inputExtra}
+              onFocus={(e) => {
+                inputExtra.onFocus?.(e)
+                setHasFocus(true)
+              }}
+              onBlur={(e) => {
+                inputExtra.onBlur?.(e)
+                setHasFocus(false)
+              }}
+            />
+          }
+         
 
           {showErrorHighlight && <div className='h-1 bg-red-500 absolute bottom-0 left-0 right-0 rounded-bl rounded-br' />}
         </div>
