@@ -12,6 +12,7 @@ export const gameChannelSchema = z.object({
   totalMessages: z.number(),
   props: z.array(propSchema),
   memberCount: z.number(),
+  autoCleanup: z.boolean(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime()
 })

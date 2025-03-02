@@ -13,6 +13,7 @@ type ModalProps = {
   children: ReactNode
   modalState: [boolean, (open: boolean) => void]
   scroll?: boolean
+  className?: string
 }
 
 export default function Modal({
@@ -21,7 +22,8 @@ export default function Modal({
   hideTitle,
   children,
   modalState,
-  scroll = true
+  scroll = true,
+  className
 }: ModalProps) {
   const [, setOpen] = modalState
 
@@ -43,7 +45,7 @@ export default function Modal({
     <FocusLock>
       <div className='fixed w-screen md:p-4 bg-gray-900 bg-opacity-60 flex items-start md:items-center justify-center inset-0 z-50 text-black transition-colors'>
         <dialog
-          className={clsx('block w-full h-full md:h-auto md:w-[640px] bg-white md:rounded p-0', {
+          className={clsx('block w-full h-full md:h-auto md:w-[640px] bg-white md:rounded p-0', className, {
             'overflow-y-scroll': scroll,
             'overflow-y-visible': !scroll
           })}
