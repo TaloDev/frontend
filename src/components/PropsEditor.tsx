@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState} from 'react'
 import { IconPlus, IconTrash } from '@tabler/icons-react'
 import Button from './Button'
 import TextInput from './TextInput'
@@ -30,10 +30,11 @@ export default function PropsEditor({
 }: PropsEditorProps) {
   const [originalProps, setOriginalProps] = useState<Prop[]>(startingProps)
   const [props, setProps] = useState<Prop[]>(originalProps)
-
+  const [bulkPropsList, setBulkPropsList] = useState<string>('')
   const [newProps, setNewProps] = useState<Prop[]>([])
   const [error, setError] = useState<TaloError | null>(null)
   const [isUpdating, setUpdating] = useState(false)
+  
 
   const editExistingProp = (key: string, value: string | null) => {
     setProps((curr) => {
@@ -65,7 +66,7 @@ export default function PropsEditor({
   }
 
   const enableResetButton = useMemo(() => {
-    if (newProps.length > 0) return true
+    if (newProps.length > 0 || bulkPropsList) return true
 
     return originalProps.some((prop, idx) => {
       return prop.value !== props[idx].value
@@ -79,7 +80,23 @@ export default function PropsEditor({
   const reset = () => {
     setProps(originalProps)
     setNewProps([])
+    setBulkPropsList('')
   }
+
+
+  const parseBulkPropsList = () => {
+    if (bulkPropsList){
+      try {
+        const parsed = JSON.parse(bulkPropsList)
+        const bulkprops = Object.entries(parsed).map(([key, value]) => ({ key, value: typeof value === 'string' ? value : JSON.stringify(value) }))
+        newProps.push(...bulkprops)
+        setNewProps(newProps)
+        setBulkPropsList('')
+        setError(null)
+      } catch (err) {
+        setError(buildError(err))
+      }
+    }}
 
   const save = async () => {
     setUpdating(true)
@@ -211,6 +228,28 @@ export default function PropsEditor({
       >
         <span>New property</span>
       </Button>
+     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="bulk-props">Or paste properties</label>
+        
+        <div className="mt-4">
+        <TextInput
+          id='bulk-props'
+          variant='light'
+          inputType='textarea'
+          placeholder='{"key1": "value1", "key2": "value2"}'
+          onChange={(value: string) =>  setBulkPropsList(value)}
+          value={bulkPropsList ?? ''}
+        /> 
+      
+  
+    
+        <Button
+          className='mt-4'
+          onClick={parseBulkPropsList}
+        >
+          <span>Parse JSON</span>
+        </Button>
+        
+      </div>
 
       {error && <ErrorMessage error={error} />}
 
