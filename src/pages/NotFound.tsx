@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import routes from '../constants/routes'
 import { useEffect, useState } from 'react'
 import Loading from '../components/Loading'
+import clsx from 'clsx'
 
 export default function NotFound() {
   const navigate = useNavigate()
@@ -25,7 +26,7 @@ export default function NotFound() {
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <div className={`text-white space-y-8 ${unauthedContainerStyle}`}>
+      <div className={clsx('text-white space-y-8', unauthedContainerStyle)}>
         <h1 className='text-4xl font-bold'>404 Not Found</h1>
         <p>
           Sorry, we couldn&apos;t find that page. If this is a mistake, please contact us.

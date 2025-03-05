@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom'
 import routes from '../constants/routes'
 import Link from '../components/Link'
 import { z } from 'zod'
+import clsx from 'clsx'
 
 const validationSchema = z.object({
   password: z.string().min(8, { message: 'Password is required' }),
@@ -67,7 +68,7 @@ export default function ResetPassword() {
   if (resetComplete) {
     return (
       <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-        <div className={`text-white space-y-8 ${unauthedContainerStyle}`}>
+        <div className={clsx('text-white space-y-8', unauthedContainerStyle)}>
           <Title>Reset password</Title>
 
           <AlertBanner
@@ -89,7 +90,7 @@ export default function ResetPassword() {
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={`text-white space-y-8 ${unauthedContainerStyle}`} onSubmit={handleSubmit(onConfirmClick)}>
+      <form className={clsx('text-white space-y-8', unauthedContainerStyle)} onSubmit={handleSubmit(onConfirmClick)}>
         <Title>Reset password</Title>
 
         <TextInput

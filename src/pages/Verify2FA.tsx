@@ -12,6 +12,7 @@ import Title from '../components/Title'
 import verify2FA from '../api/verify2FA'
 import Link from '../components/Link'
 import userState from '../state/userState'
+import clsx from 'clsx'
 
 export default function Verify2FA() {
   const navigate = useNavigate()
@@ -55,7 +56,7 @@ export default function Verify2FA() {
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={`text-white space-y-8 ${unauthedContainerStyle}`}>
+      <form className={clsx('text-white space-y-8', unauthedContainerStyle)}>
         <Title>Two factor authentication</Title>
 
         <TextInput

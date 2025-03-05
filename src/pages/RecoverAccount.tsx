@@ -13,6 +13,7 @@ import recoverAccount from '../api/recoverAccount'
 import RecoveryCodes from '../components/RecoveryCodes'
 import userState from '../state/userState'
 import { User } from '../entities/user'
+import clsx from 'clsx'
 
 export default function RecoverAccount() {
   const navigate = useNavigate()
@@ -72,7 +73,7 @@ export default function RecoverAccount() {
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={`text-white space-y-8 ${unauthedContainerStyle}`}>
+      <form className={clsx('text-white space-y-8', unauthedContainerStyle)}>
         {!recoveryCodes &&
           <>
             <Title>Recover account</Title>
