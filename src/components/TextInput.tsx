@@ -28,8 +28,8 @@ export default function TextInput({
   value,
   label,
   placeholder = '',
-  type,
-  inputType,
+  type = 'text',
+  inputType = 'input',
   variant,
   inputClassName,
   disabled,
@@ -39,7 +39,7 @@ export default function TextInput({
 }: TextInputProps) {
   const [hasFocus, setHasFocus] = useState(false)
 
-  const errorsToShow = errors?.filter((err) => err !== null && err !== undefined) ?? []
+  const errorsToShow = errors?.filter(Boolean) ?? []
   const showErrorHighlight = !hasFocus && errorsToShow.length > 0
 
   const finalClassName = clsx(`
@@ -57,65 +57,42 @@ export default function TextInput({
     'bg-white border border-black/30 focus:border-black/0': variant === 'modal'
   })
 
+  const Element = inputType === 'textarea' ? 'textarea' : 'input'
+
   return (
     <div>
       <div className={clsx('w-full inline-block', containerClassName)}>
-        {label &&
+        {label && (
           <label htmlFor={id} className='flex justify-between items-end font-semibold mb-2'>
             {label}
-            {errorsToShow.length > 0 && <span><IconAlertCircle className='inline -mt-0.5 text-red-500' size={20} /></span>}
+            {errorsToShow.length > 0 && <IconAlertCircle className='inline -mt-0.5 text-red-500' size={20} />}
           </label>
-        }
+        )}
 
         <div className='relative'>
-          {inputType === 'textarea' ?
-            <textarea
-              id={id}
-              className={finalClassName}
-              placeholder={placeholder}
-              onChange={(e) => onChange?.(e.target.value, e)}
-              value={value}
-              disabled={disabled}
-              {...inputExtra}
-              onFocus={(e) => {
-                inputExtra.onFocus?.(e)
-                setHasFocus(true)
-              }}
-              onBlur={(e) => {
-                inputExtra.onBlur?.(e)
-                setHasFocus(false)
-              }}
-            />
-            :
-            <input
-              id={id}
-              className={finalClassName}
-              type={type ?? 'text'}
-              placeholder={placeholder}
-              onChange={(e) => onChange?.(e.target.value, e)}
-              value={value}
-              disabled={disabled}
-              {...inputExtra}
-              onFocus={(e) => {
-                inputExtra.onFocus?.(e)
-                setHasFocus(true)
-              }}
-              onBlur={(e) => {
-                inputExtra.onBlur?.(e)
-                setHasFocus(false)
-              }}
-            />
-          }
-         
-
+          <Element
+            id={id}
+            className={finalClassName}
+            {...(inputType === 'input' ? { type } : {})}
+            placeholder={placeholder}
+            onChange={(e) => onChange?.(e.target.value, e)}
+            value={value}
+            disabled={disabled}
+            {...inputExtra}
+            onFocus={(e) => {
+              inputExtra.onFocus?.(e)
+              setHasFocus(true)
+            }}
+            onBlur={(e) => {
+              inputExtra.onBlur?.(e)
+              setHasFocus(false)
+            }}
+          />
           {showErrorHighlight && <div className='h-1 bg-red-500 absolute bottom-0 left-0 right-0 rounded-bl rounded-br' />}
         </div>
       </div>
 
-      {errorsToShow.filter((err) => {
-        // filter out empty string errors so they dont render and create dead space
-        return Boolean(err)
-      }).map((error, idx) => (
+      {errorsToShow.map((error, idx) => (
         <p role='alert' key={idx} className='text-red-500 font-medium mt-2'>{error}</p>
       ))}
     </div>
