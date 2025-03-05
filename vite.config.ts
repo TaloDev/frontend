@@ -20,7 +20,7 @@ export default defineConfig({
         'src/api',
         'src/entities',
         'src/constants',
-        'src/utils/canViewPage.js',
+        'src/utils/canViewPage.ts',
         '**/__tests__'
       ]
     }

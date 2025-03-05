@@ -1,7 +1,7 @@
 /// <reference types='cypress' />
 
 describe('Register', () => {
-  it('should let users register', () => {
+  it('should let users register and create a new game', () => {
     cy.intercept('POST', 'http://talo.api/public/users/register', {
       statusCode: 200,
       fixture: 'responses/auth/register'
@@ -22,5 +22,8 @@ describe('Register', () => {
     cy.findByText('Sign up').click()
 
     cy.findByText('New game').should('exist')
+    cy.findByText('New game').click()
+
+    cy.findByText('Create new game').should('exist')
   })
 })

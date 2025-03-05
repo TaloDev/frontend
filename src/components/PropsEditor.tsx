@@ -243,7 +243,7 @@ export default function PropsEditor({
           onClick={parseBulkPropsList}
           disabled={!bulkPropsList}
         >
-          <span>Parse JSON</span>
+          Parse JSON
         </Button>
       </div>
 
