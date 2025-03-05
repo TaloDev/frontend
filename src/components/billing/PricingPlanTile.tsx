@@ -11,6 +11,7 @@ import ConfirmPlanChange from '../../modals/ConfirmPlanChange'
 import Tile from '../Tile'
 import { Invoice } from '../../entities/invoice'
 import { PricingPlanProduct, PricingPlanProductPrice } from '../../entities/pricingPlan'
+import clsx from 'clsx'
 
 type PricingPlanTileProps = {
   plan?: PricingPlanProduct
@@ -91,7 +92,7 @@ export default function PricingPlanTile({
 
               {custom &&
                 <li>
-                  For higher limits or custom integrations, <a className={`${linkStyle} ${focusStyle}`} href='mailto:hello@trytalo.com?subject=Custom pricing plan'>contact us</a>
+                  For higher limits or custom integrations, <a className={clsx(linkStyle, focusStyle)} href='mailto:hello@trytalo.com?subject=Custom pricing plan'>contact us</a>
                 </li>
               }
             </ul>

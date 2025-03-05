@@ -7,17 +7,18 @@ export type TextInputVariant = 'light' | 'modal'
 
 type TextInputProps = {
   id: string
-  onChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void
+  onChange?: (value: string, event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
   value?: string
   label?: string
   placeholder?: string
   type?: string
+  inputType?: 'textarea' | 'input'
   variant?: TextInputVariant
   inputClassName?: string
   disabled?: boolean
   errors?: (string | undefined)[]
   containerClassName?: string
-  inputExtra?: InputHTMLAttributes<HTMLInputElement>
+  inputExtra?: InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>
   startFocused?: boolean
 }
 
@@ -27,7 +28,8 @@ export default function TextInput({
   value,
   label,
   placeholder = '',
-  type,
+  type = 'text',
+  inputType = 'input',
   variant,
   inputClassName,
   disabled,
@@ -37,7 +39,7 @@ export default function TextInput({
 }: TextInputProps) {
   const [hasFocus, setHasFocus] = useState(false)
 
-  const errorsToShow = errors?.filter((err) => err !== null && err !== undefined) ?? []
+  const errorsToShow = errors?.filter(Boolean) ?? []
   const showErrorHighlight = !hasFocus && errorsToShow.length > 0
 
   const finalClassName = clsx(`
@@ -55,21 +57,23 @@ export default function TextInput({
     'bg-white border border-black/30 focus:border-black/0': variant === 'modal'
   })
 
+  const Element = inputType === 'textarea' ? 'textarea' : 'input'
+
   return (
     <div>
       <div className={clsx('w-full inline-block', containerClassName)}>
-        {label &&
+        {label && (
           <label htmlFor={id} className='flex justify-between items-end font-semibold mb-2'>
             {label}
-            {errorsToShow.length > 0 && <span><IconAlertCircle className='inline -mt-0.5 text-red-500' size={20} /></span>}
+            {errorsToShow.length > 0 && <IconAlertCircle className='inline -mt-0.5 text-red-500' size={20} />}
           </label>
-        }
+        )}
 
         <div className='relative'>
-          <input
+          <Element
             id={id}
             className={finalClassName}
-            type={type ?? 'text'}
+            {...(inputType === 'input' ? { type } : {})}
             placeholder={placeholder}
             onChange={(e) => onChange?.(e.target.value, e)}
             value={value}
@@ -84,15 +88,11 @@ export default function TextInput({
               setHasFocus(false)
             }}
           />
-
           {showErrorHighlight && <div className='h-1 bg-red-500 absolute bottom-0 left-0 right-0 rounded-bl rounded-br' />}
         </div>
       </div>
 
-      {errorsToShow.filter((err) => {
-        // filter out empty string errors so they dont render and create dead space
-        return Boolean(err)
-      }).map((error, idx) => (
+      {errorsToShow.map((error, idx) => (
         <p role='alert' key={idx} className='text-red-500 font-medium mt-2'>{error}</p>
       ))}
     </div>

@@ -2,12 +2,15 @@ import useSWR from 'swr'
 import buildError from '../utils/buildError'
 import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
-import { PricingPlanUsage, pricingPlanUsageSchema } from '../entities/pricingPlan'
+import { PricingPlanUsage } from '../entities/pricingPlan'
 
 export default function usePricingPlanUsage(run: boolean = true) {
   const fetcher = async ([url]: [string]) => {
     const res = await makeValidatedGetRequest(url, z.object({
-      usage: pricingPlanUsageSchema
+      usage: z.object({
+        limit: z.number().nullable(),
+        used: z.number()
+      })
     }))
 
     return res

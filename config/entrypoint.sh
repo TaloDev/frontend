@@ -1,6 +1,6 @@
 #!/bin/sh
-for filename in /bin/www/assets/*.js; do
-  envsub $filename $filename
+for filename in /srv/assets/*.js; do
+  envsub --syntax handlebars $filename $filename
 done
 
-nginx -g 'daemon off;'
+caddy run --config /etc/caddy/Caddyfile

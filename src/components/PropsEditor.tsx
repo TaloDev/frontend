@@ -30,7 +30,7 @@ export default function PropsEditor({
 }: PropsEditorProps) {
   const [originalProps, setOriginalProps] = useState<Prop[]>(startingProps)
   const [props, setProps] = useState<Prop[]>(originalProps)
-
+  const [bulkPropsList, setBulkPropsList] = useState<string>('')
   const [newProps, setNewProps] = useState<Prop[]>([])
   const [error, setError] = useState<TaloError | null>(null)
   const [isUpdating, setUpdating] = useState(false)
@@ -65,12 +65,12 @@ export default function PropsEditor({
   }
 
   const enableResetButton = useMemo(() => {
-    if (newProps.length > 0) return true
+    if (newProps.length > 0 || bulkPropsList) return true
 
     return originalProps.some((prop, idx) => {
       return prop.value !== props[idx].value
     })
-  }, [newProps, originalProps, props])
+  }, [bulkPropsList, newProps.length, originalProps, props])
 
   const enableSaveButton = useMemo(() => {
     return newProps.every((prop) => prop.key && prop.value) && props.every((prop) => prop.value !== '')
@@ -79,6 +79,22 @@ export default function PropsEditor({
   const reset = () => {
     setProps(originalProps)
     setNewProps([])
+    setBulkPropsList('')
+  }
+
+  const parseBulkPropsList = () => {
+    if (bulkPropsList) {
+      try {
+        const parsed = JSON.parse(bulkPropsList)
+        const bulkprops = Object.entries(parsed).map(([key, value]) => ({ key, value: typeof value === 'string' ? value : JSON.stringify(value) }))
+        newProps.push(...bulkprops)
+        setNewProps(newProps)
+        setBulkPropsList('')
+        setError(null)
+      } catch (err) {
+        setError(buildError(err))
+      }
+    }
   }
 
   const save = async () => {
@@ -100,121 +116,140 @@ export default function PropsEditor({
   }
 
   const existingProps = props
-    // eslint-disable-next-line react/prop-types
     .filter((prop) => prop.value !== null && !isMetaProp(prop))
     .sort((a, b) => a.key.localeCompare(b.key))
 
   const metaProps = props
-    // eslint-disable-next-line react/prop-types
     .filter((prop) => isMetaProp(prop))
     .sort((a, b) => a.key.localeCompare(b.key))
 
   return (
     <>
-      {metaProps.length > 0 &&
-        <>
-          <SecondaryTitle>Talo props</SecondaryTitle>
-          <Table columns={['Property', 'Value', '']}>
-            <TableBody
-              iterator={metaProps}
-              configureClassnames={(prop, idx) => ({
-                'bg-orange-600': prop.key === 'META_DEV_BUILD' && idx % 2 !== 0,
-                'bg-orange-500': prop.key === 'META_DEV_BUILD' && idx % 2 === 0
-              })}
-            >
-              {(prop) => (
-                <>
-                  <TableCell className='min-w-80'>{metaPropKeyMap[(prop as MetaProp).key]}</TableCell>
-                  <TableCell className='min-w-80'>{prop.value}</TableCell>
-                  <TableCell />
-                </>
-              )}
-            </TableBody>
-          </Table>
-        </>
-      }
+      <div className='space-y-4'>
+        {metaProps.length > 0 &&
+          <>
+            <SecondaryTitle>Talo props</SecondaryTitle>
+            <Table columns={['Property', 'Value', '']}>
+              <TableBody
+                iterator={metaProps}
+                configureClassnames={(prop, idx) => ({
+                  'bg-orange-600': prop.key === 'META_DEV_BUILD' && idx % 2 !== 0,
+                  'bg-orange-500': prop.key === 'META_DEV_BUILD' && idx % 2 === 0
+                })}
+              >
+                {(prop) => (
+                  <>
+                    <TableCell className='min-w-80'>{metaPropKeyMap[(prop as MetaProp).key]}</TableCell>
+                    <TableCell className='min-w-80'>{prop.value}</TableCell>
+                    <TableCell />
+                  </>
+                )}
+              </TableBody>
+            </Table>
+          </>
+        }
 
-      {existingProps.length + newProps.length === 0 &&
-        <p>{noPropsMessage}. Click the button below to add one.</p>
-      }
+        {existingProps.length + newProps.length === 0 &&
+          <p>{noPropsMessage}. Click the button below to add one.</p>
+        }
 
-      {existingProps.length + newProps.length > 0 &&
-        <>
-          {metaProps.length > 0 && <SecondaryTitle>Your props</SecondaryTitle>}
-          <Table columns={['Property', 'Value', '']}>
-            <TableBody iterator={existingProps}>
-              {(prop) => (
-                <>
-                  <TableCell className={clsx('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}>{prop.key}</TableCell>
-                  <TableCell className='min-w-80'>
-                    <TextInput
-                      id={`edit-${prop.key}`}
-                      variant='light'
-                      placeholder='Value'
-                      onChange={(value: string) => editExistingProp(prop.key, value)}
-                      value={prop.value ?? ''}
-                    />
-                  </TableCell>
-                  <TableCell className={clsx({ '!rounded-br-none': newProps.length > 0 })}>
-                    <Button
-                      variant='icon'
-                      className='p-1 rounded-full bg-indigo-900 ml-auto'
-                      onClick={() => editExistingProp(prop.key, null)}
-                      icon={<IconTrash size={16} />}
-                      extra={{ 'aria-label': `Delete ${prop.key} prop` }}
-                    />
-                  </TableCell>
-                </>
-              )}
-            </TableBody>
-            <TableBody iterator={newProps} startIdx={existingProps.length}>
-              {(prop, idx) => (
-                <>
-                  <TableCell className='min-w-80'>
-                    <TextInput
-                      id={`edit-key-${idx}`}
-                      variant='light'
-                      placeholder='Property'
-                      onChange={(value: string) => editNewPropKey(idx, value)}
-                      value={prop.key}
-                    />
-                  </TableCell>
-                  <TableCell className='min-w-80'>
-                    <TextInput
-                      id={`edit-value-${idx}`}
-                      variant='light'
-                      placeholder='Value'
-                      onChange={(value: string) => editNewPropValue(idx, value)}
-                      value={prop.value ?? ''}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant='icon'
-                      className='p-1 rounded-full bg-indigo-900 ml-auto'
-                      onClick={() => deleteNewProp(idx)}
-                      icon={<IconTrash size={16} />}
-                      extra={{ 'aria-label': `Delete ${prop.key} prop` }}
-                    />
-                  </TableCell>
-                </>
-              )}
-            </TableBody>
-          </Table>
-        </>
-      }
+        {existingProps.length + newProps.length > 0 &&
+          <>
+            {metaProps.length > 0 && <SecondaryTitle>Your props</SecondaryTitle>}
+            <Table columns={['Property', 'Value', '']}>
+              <TableBody iterator={existingProps}>
+                {(prop) => (
+                  <>
+                    <TableCell className={clsx('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}>{prop.key}</TableCell>
+                    <TableCell className='min-w-80'>
+                      <TextInput
+                        id={`edit-${prop.key}`}
+                        variant='light'
+                        placeholder='Value'
+                        onChange={(value: string) => editExistingProp(prop.key, value)}
+                        value={prop.value ?? ''}
+                      />
+                    </TableCell>
+                    <TableCell className={clsx({ '!rounded-br-none': newProps.length > 0 })}>
+                      <Button
+                        variant='icon'
+                        className='p-1 rounded-full bg-indigo-900 ml-auto'
+                        onClick={() => editExistingProp(prop.key, null)}
+                        icon={<IconTrash size={16} />}
+                        extra={{ 'aria-label': `Delete ${prop.key} prop` }}
+                      />
+                    </TableCell>
+                  </>
+                )}
+              </TableBody>
+              <TableBody iterator={newProps} startIdx={existingProps.length}>
+                {(prop, idx) => (
+                  <>
+                    <TableCell className='min-w-80'>
+                      <TextInput
+                        id={`edit-key-${idx}`}
+                        variant='light'
+                        placeholder='Property'
+                        onChange={(value: string) => editNewPropKey(idx, value)}
+                        value={prop.key}
+                      />
+                    </TableCell>
+                    <TableCell className='min-w-80'>
+                      <TextInput
+                        id={`edit-value-${idx}`}
+                        variant='light'
+                        placeholder='Value'
+                        onChange={(value: string) => editNewPropValue(idx, value)}
+                        value={prop.value ?? ''}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant='icon'
+                        className='p-1 rounded-full bg-indigo-900 ml-auto'
+                        onClick={() => deleteNewProp(idx)}
+                        icon={<IconTrash size={16} />}
+                        extra={{ 'aria-label': `Delete ${prop.key} prop` }}
+                      />
+                    </TableCell>
+                  </>
+                )}
+              </TableBody>
+            </Table>
+          </>
+        }
 
-      <Button
-        className='mt-4'
-        onClick={addNewProp}
-        icon={<IconPlus size={16} />}
-      >
-        <span>New property</span>
-      </Button>
+        <Button
+          onClick={addNewProp}
+          icon={<IconPlus size={16} />}
+        >
+          <span>New property</span>
+        </Button>
+      </div>
+
+      <div className='space-y-4'>
+        <label className="block font-semibold" htmlFor="bulk-props">Import props</label>
+
+        <TextInput
+          id='bulk-props'
+          variant='light'
+          inputType='textarea'
+          placeholder='{"key1": "value1", "key2": "value2"}'
+          onChange={(value: string) =>  setBulkPropsList(value)}
+          value={bulkPropsList ?? ''}
+        />
+
+        <Button
+          onClick={parseBulkPropsList}
+          disabled={!bulkPropsList}
+        >
+          Parse JSON
+        </Button>
+      </div>
 
       {error && <ErrorMessage error={error} />}
 
-      <div className='flex space-x-4 mt-8'>
+      <div className='flex space-x-4'>
         <Button variant='grey' disabled={!enableResetButton} onClick={reset}>
           Reset
         </Button>

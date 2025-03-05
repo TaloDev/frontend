@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
 import { render, screen, waitFor } from '@testing-library/react'
@@ -132,7 +133,7 @@ describe('<PlayerProps />', () => {
     await userEvent.click(screen.getByText('New property'))
 
     await userEvent.type(screen.getByPlaceholderText('Property'), 'treasuresDiscovered')
-    await userEvent.type(screen.getByDisplayValue(''), '5')
+    await userEvent.type(screen.getAllByPlaceholderText('Value').at(-1)!, '5')
 
     expect(screen.getByDisplayValue('treasuresDiscovered')).toBeInTheDocument()
     expect(screen.getByDisplayValue('5')).toBeInTheDocument()
@@ -261,7 +262,7 @@ describe('<PlayerProps />', () => {
     await userEvent.click(screen.getByText('New property'))
 
     await userEvent.type(screen.getByPlaceholderText('Property'), 'treasuresDiscovered')
-    await userEvent.type(screen.getByDisplayValue(''), '5')
+    await userEvent.type(screen.getAllByPlaceholderText('Value').at(-1)!, '5')
 
     await userEvent.click(screen.getByText('Save changes'))
 
@@ -328,5 +329,32 @@ describe('<PlayerProps />', () => {
 
     expect(screen.getByText('SCREEN WIDTH')).toBeInTheDocument()
     expect(screen.getByText('1920')).toBeInTheDocument()
+  })
+
+  it('should add props from JSON input', async () => {
+    render(
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
+    )
+
+    await userEvent.click(screen.getByLabelText('Import props'))
+    await userEvent.paste(JSON.stringify({
+      speed: '100',
+      strength: '50'
+    }))
+    await userEvent.click(screen.getByText('Parse JSON'))
+
+    expect(screen.getByDisplayValue('speed')).toBeInTheDocument()
+    expect(screen.getByDisplayValue('100')).toBeInTheDocument()
+    expect(screen.getByDisplayValue('strength')).toBeInTheDocument()
+    expect(screen.getByDisplayValue('50')).toBeInTheDocument()
   })
 })

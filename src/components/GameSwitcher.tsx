@@ -68,7 +68,7 @@ export default function GameSwitcher() {
                 )
               })}
 
-              <li className={`rounded-b ${dropdownButtonStyle}`}>
+              <li className={clsx('rounded-b', dropdownButtonStyle)}>
                 <Button variant='bare' className='flex items-center rounded-b p-2 w-full' onClick={openModal}>
                   <div className='rounded-full p-1 bg-indigo-600'>
                     <IconPlus size={16} color='white' stroke={3} />

@@ -7,6 +7,7 @@ import buildError from '../utils/buildError'
 import getInvite from '../api/getInvite'
 import { useParams, useNavigate } from 'react-router-dom'
 import routes from '../constants/routes'
+import clsx from 'clsx'
 
 export default function AcceptInvite() {
   const { token } = useParams()
@@ -34,7 +35,7 @@ export default function AcceptInvite() {
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={`text-white space-y-8 ${unauthedContainerStyle}`}>
+      <form className={clsx('text-white space-y-8', unauthedContainerStyle)}>
         {!isLoading && <h1 className='text-4xl font-bold'>Accept invite</h1>}
 
         {isLoading &&

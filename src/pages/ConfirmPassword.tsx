@@ -13,6 +13,7 @@ import viewRecoveryCodes from '../api/viewRecoveryCodes'
 import createRecoveryCodes from '../api/createRecoveryCodes'
 import userState from '../state/userState'
 import disable2FA from '../api/disable2FA'
+import clsx from 'clsx'
 
 export const ConfirmPasswordAction = {
   DISABLE_2FA: 'disable2FA',
@@ -92,7 +93,7 @@ const ConfirmPassword = () => {
 
   return (
     <div className='md:translate-y-[80%]'>
-      <form className={`mx-auto text-white space-y-8 ${unauthedContainerStyle}`}>
+      <form className={clsx('mx-auto text-white space-y-8', unauthedContainerStyle)}>
         <Title>Confirm your password</Title>
 
         <TextInput

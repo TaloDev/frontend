@@ -9,6 +9,7 @@ import { unauthedContainerStyle } from '../styles/theme'
 import AuthService from '../services/AuthService'
 import createDemo from '../api/createDemo'
 import userState from '../state/userState'
+import clsx from 'clsx'
 
 export default function Demo() {
   const setUser = useSetRecoilState(userState)
@@ -32,7 +33,7 @@ export default function Demo() {
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={`text-white space-y-8 ${unauthedContainerStyle}`}>
+      <form className={clsx('text-white space-y-8', unauthedContainerStyle)}>
         <h1 className='text-4xl font-bold'>Browse the demo</h1>
         <p>
           You&apos;ll get to the read-only demo organisation for 1 hour. Some features are restricted in the demo environment but trust us, they work!

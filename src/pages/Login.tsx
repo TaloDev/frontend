@@ -16,6 +16,7 @@ import type { MouseEvent } from 'react'
 import userState from '../state/userState'
 import taloIcon from '../assets/talo-icon.svg'
 import TaloInfoCard from '../components/TaloInfoCard'
+import clsx from 'clsx'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -62,7 +63,7 @@ export default function Login() {
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={`text-white space-y-8 ${unauthedContainerStyle}`}>
+      <form className={clsx('text-white space-y-8', unauthedContainerStyle)}>
         <div className='space-y-4'>
           <h1 className='text-4xl font-mono font-bold flex items-center space-x-4'>
             <img src={taloIcon} alt='Talo' className='w-[32px] h-[32px]' />

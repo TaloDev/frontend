@@ -13,6 +13,7 @@ import requestNewPassword from '../api/requestNewPassword'
 import { IconCheck } from '@tabler/icons-react'
 import AlertBanner from '../components/AlertBanner'
 import { z } from 'zod'
+import clsx from 'clsx'
 
 const validationSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' })
@@ -47,7 +48,7 @@ export default function ForgotPassword() {
 
   return (
     <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={`text-white space-y-8 ${unauthedContainerStyle}`} onSubmit={handleSubmit(onConfirmClick)}>
+      <form className={clsx('text-white space-y-8', unauthedContainerStyle)} onSubmit={handleSubmit(onConfirmClick)}>
         <Title>Forgot password</Title>
 
         <TextInput
