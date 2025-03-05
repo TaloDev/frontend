@@ -1,0 +1,12 @@
+:80 {
+    root * /srv
+    encode gzip
+
+    try_files {path} /index.html
+    file_server
+
+    handle_errors {
+        rewrite * /index.html
+        file_server
+    }
+}
