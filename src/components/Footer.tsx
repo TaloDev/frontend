@@ -52,6 +52,7 @@ export default function Footer() {
             <li><Link to='https://github.com/TaloDev'>GitHub</Link></li>
             <li><Link to='https://docs.trytalo.com?utm_source=dashboard&utm_medium=footer'>Docs</Link></li>
             <li><Link to='https://trytalo.com/blog?utm_source=dashboard&utm_medium=footer'>Blog</Link></li>
+            <li><Link to='https://trytalo.com/showcase?utm_source=dashboard&utm_medium=footer'>Showcase</Link></li>
             <li><Link to='https://trytalo.com/pricing?utm_source=dashboard&utm_medium=footer'>Pricing</Link></li>
             <li><Link to='https://trytalo.com/privacy?utm_source=dashboard&utm_medium=footer'>Privacy</Link></li>
             <li><Link to='https://trytalo.com/terms?utm_source=dashboard&utm_medium=footer'>Terms</Link></li>
