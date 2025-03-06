@@ -10,10 +10,12 @@ import { BrowserRouter } from 'react-router-dom'
 import * as Sentry from '@sentry/react'
 import ToastProvider from './components/toast/ToastProvider'
 
-Sentry.init({
-  dsn: import.meta.env.VITE_SENTRY_DSN,
-  environment: import.meta.env.VITE_SENTRY_ENV
-})
+if (import.meta.env.VITE_SENTRY_DSN?.startsWith('http')) {
+  Sentry.init({
+    dsn: import.meta.env.VITE_SENTRY_DSN,
+    environment: import.meta.env.VITE_SENTRY_ENV
+  })
+}
 
 const root = createRoot(document.getElementById('root')!)
 root.render(
