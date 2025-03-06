@@ -1,5 +1,4 @@
-import { User } from '@sentry/react'
-import { UserType } from '../entities/user'
+import { User, UserType } from '../entities/user'
 
 export enum PermissionBasedAction {
   DELETE_LEADERBOARD,

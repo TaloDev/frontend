@@ -1,6 +1,5 @@
-import { User } from '@sentry/react'
 import routes from '../constants/routes'
-import { UserType } from '../entities/user'
+import { User, UserType } from '../entities/user'
 
 export default function canViewPage(user: User | null, route: string) {
   if (!user) return false
