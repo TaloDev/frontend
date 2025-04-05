@@ -12,7 +12,7 @@ import Footer from './components/Footer'
 
 const Login = lazy(() => import(/* webpackChunkName: 'login' */ './pages/Login'))
 const Dashboard = lazy(() => import(/* webpackChunkName: 'dashboard' */ './pages/Dashboard'))
-const Events = lazy(() => import(/* webpackChunkName: 'events' */ './pages/Events'))
+const EventsOverview = lazy(() => import(/* webpackChunkName: 'events-overview' */ './pages/EventsOverview'))
 const Players = lazy(() => import(/* webpackChunkName: 'players' */ './pages/Players'))
 const Register = lazy(() => import(/* webpackChunkName: 'register' */ './pages/Register'))
 const PlayerProps = lazy(() => import(/* webpackChunkName: 'player-props' */ './pages/PlayerProps'))
@@ -45,6 +45,7 @@ const NotFound = lazy(() => import(/* webpackChunkName: 'not-found' */ './pages/
 const Feedback = lazy(() => import(/* webpackChunkName: 'feedback' */ './pages/Feedback'))
 const FeedbackCategories = lazy(() => import(/* webpackChunkName: 'feedback-categories' */ './pages/FeedbackCategories'))
 const Channels = lazy(() => import(/* webpackChunkName: 'channels' */ './pages/Channels'))
+const EventBreakdown = lazy(() => import(/* webpackChunkName: 'event-breakdown' */ './pages/EventBreakdown'))
 
 type RouterProps = {
   intendedRoute: string | null
@@ -92,7 +93,7 @@ function Router({
               {activeGame &&
                 <>
                   <Route path={routes.players} element={<Players />} />
-                  <Route path={routes.events} element={<Events />} />
+                  <Route path={routes.eventsOverview} element={<EventsOverview />} />
                   {canViewPage(user, routes.apiKeys) && <Route path={routes.apiKeys} element={<APIKeys />} />}
                   <Route path={routes.playerProps} element={<PlayerProps />} />
                   <Route path={routes.playerEvents} element={<PlayerEvents />} />
@@ -112,6 +113,7 @@ function Router({
                   <Route path={routes.feedback} element={<Feedback />} />
                   {canViewPage(user, routes.feedbackCategories) && <Route path={routes.feedbackCategories} element={<FeedbackCategories />} />}
                   <Route path={routes.channels} element={<Channels />} />
+                  <Route path={routes.eventBreakdown} element={<EventBreakdown />} />
                 </>
               }
 

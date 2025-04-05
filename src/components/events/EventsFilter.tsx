@@ -5,16 +5,17 @@ import LinkButton from '../LinkButton'
 import TextInput from '../TextInput'
 import Tippy from '@tippyjs/react'
 import { useCallback, useMemo, useState } from 'react'
-import { SetLocalStorageValue } from '../../utils/useLocalStorage'
+import { useEventsContext } from './EventsContext'
 
 type EventsFilterProps = {
+  initialShow?: boolean
   eventNames: string[]
-  selectedEventNames: string[]
-  setSelectedEventNames: SetLocalStorageValue<string[]>
 }
 
-export default function EventsFilter({ eventNames, selectedEventNames, setSelectedEventNames }: EventsFilterProps) {
-  const [show, setShow] = useState(false)
+export default function EventsFilter({ eventNames, initialShow = false }: EventsFilterProps) {
+  const { selectedEventNames, setSelectedEventNames } = useEventsContext()
+
+  const [show, setShow] = useState(initialShow)
   const [eventNamefilter, setEventNameFilter] = useState('')
 
   const onCheckEventName = useCallback((checked: boolean, name: string) => {
