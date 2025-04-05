@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import ChartTooltip from '../ChartTooltip'
 
+const listItemsPerEvent = 3
+
 describe('<ChartTooltip />', () => {
   it('should only show events where the count is greater than 0', () => {
     render(
@@ -28,7 +30,7 @@ describe('<ChartTooltip />', () => {
       />
     )
 
-    expect(screen.getAllByRole('listitem')).toHaveLength(1)
+    expect(screen.getAllByRole('listitem')).toHaveLength(1 * listItemsPerEvent)
   })
 
   it('should only render unique event names', () => {
@@ -65,7 +67,7 @@ describe('<ChartTooltip />', () => {
       />
     )
 
-    expect(screen.getAllByRole('listitem')).toHaveLength(2)
+    expect(screen.getAllByRole('listitem')).toHaveLength(2 * listItemsPerEvent)
   })
 
   it('should not render if there are no items with a count greater than 0', () => {
