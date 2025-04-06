@@ -66,10 +66,11 @@ export default function PlayerLeaderboardEntries() {
       }
 
       {!error && entries.length > 0 &&
-        <Table columns={['Leaderboard', 'Alias', 'Score', 'Submitted at']}>
+        <Table columns={['#', 'Leaderboard', 'Alias', 'Score', 'Submitted at']}>
           <TableBody iterator={entries}>
             {(entry) => (
               <>
+                <TableCell><span className='font-semibold'>{entry.position! + 1}</span></TableCell>
                 <TableCell>
                   <div className='flex items-center'>
                     <span>{entry.leaderboardName}</span>
