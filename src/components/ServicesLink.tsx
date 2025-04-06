@@ -50,7 +50,7 @@ function ServicesLink() {
       name: 'Events',
       desc: 'Track and filter events',
       icon: IconBolt,
-      route: routes.events
+      route: routes.eventsOverview
     },
     {
       name: 'Export',
