@@ -7,7 +7,7 @@ import clsx from 'clsx'
 
 type SaveDataNodeProps = {
   id: string
-  data: { rows: NodeDataRow[], search: string }
+  data: { rows: NodeDataRow[], search: string, formatVersion: string }
 }
 
 function SaveDataNode({ id, data }: SaveDataNodeProps ) {
@@ -51,10 +51,13 @@ function SaveDataNode({ id, data }: SaveDataNodeProps ) {
 
   const renderItem = useCallback((item: string) => {
     if (valueIsString(item)) {
+      if (data.formatVersion === 'godot.v2' && item.includes('"')) {
+        return item
+      }
       return `"${item}"`
     }
     return item
-  }, [valueIsString])
+  }, [data.formatVersion, valueIsString])
 
   const searchMatches = useMemo(() => {
     return data.rows.some((row) => {
@@ -84,7 +87,7 @@ function SaveDataNode({ id, data }: SaveDataNodeProps ) {
               <>
                 <span className='font-medium'>{row.item.split(' ')[0]} </span>
                 <span className={composeClassNames(row.item.split(' ')[1])}>
-                  {renderItem(row.item.split(' ')[1])}
+                  {renderItem(row.item.split(': ')[1])}
                 </span>
               </>
             }
