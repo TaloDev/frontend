@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Edge, Node } from '@xyflow/react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import dagre from 'dagre'
 import { useRecoilValue } from 'recoil'
 import saveDataNodeSizesState, { SaveDataNodeSize } from '../state/saveDataNodeSizesState'
+import { GameSave } from '../entities/gameSave'
 
 export type NodeDataRow = {
   item: string
@@ -61,11 +62,20 @@ function getLayoutedElements(nodes: Set<Node>, edges: Set<Edge>, nodeSizes: Save
   return newNodes
 }
 
-export default function useNodeGraph(content: { [key: string]: any }, search: string = '') {
+export default function useNodeGraph(save: GameSave | undefined, search: string = '') {
+  const content = save?.content
+
   const [nodes, setNodes] = useState<Node[]>([])
   const [edges, setEdges] = useState<Edge[]>([])
 
   const nodeSizes = useRecoilValue(saveDataNodeSizesState)
+
+  const getFormatVersion = useCallback(() => {
+    if (!content) {
+      return ''
+    }
+    return (content.version as string) ?? ''
+  }, [content])
 
   useEffect(() => {
     if (!content) return
@@ -74,7 +84,8 @@ export default function useNodeGraph(content: { [key: string]: any }, search: st
     const edgeSet = new Set<Edge>()
 
     const addNode = (id: string, rows: NodeDataRow[]) => {
-      nodeSet.add({ id, position: { x: 0, y: 0 }, data: { rows, search } })
+      const data = { rows, search, formatVersion: getFormatVersion() }
+      nodeSet.add({ id, position: { x: 0, y: 0 }, data })
     }
 
     const processContent = (key: string, value: any, parentKey: string | null = null) => {
@@ -128,7 +139,7 @@ export default function useNodeGraph(content: { [key: string]: any }, search: st
 
     setNodes(getLayoutedElements(nodeSet, edgeSet, nodeSizes))
     setEdges(Array.from(edgeSet))
-  }, [content, nodeSizes, search])
+  }, [content, getFormatVersion, nodeSizes, search])
 
   return { nodes, edges }
 }

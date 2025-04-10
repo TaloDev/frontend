@@ -7,12 +7,13 @@ import TextInput from '../components/TextInput'
 import { Background, BackgroundVariant, Controls, ReactFlow } from '@xyflow/react'
 import SaveDataNode from '../components/saves/SaveDataNode'
 import SaveContentFitManager from '../components/saves/SaveContentFitManager'
+import { GameSave } from '../entities/gameSave'
 
 export default function PlayerSaveContent() {
   const { id: playerId } = useParams()
 
   const location = useLocation()
-  const save = location.state?.save
+  const save: GameSave | undefined = location.state?.save
 
   const [isLoading, setLoading] = useState(true)
 
@@ -27,7 +28,7 @@ export default function PlayerSaveContent() {
   }, [navigate, playerId, save])
 
   const [search, setSearch] = useState('')
-  const { nodes, edges } = useNodeGraph(save?.content, search)
+  const { nodes, edges } = useNodeGraph(save, search)
 
   return (
     <Page
