@@ -3,7 +3,7 @@ import api from './api'
 import { GameChannel, gameChannelSchema } from '../entities/gameChannels'
 import makeValidatedRequest from './makeValidatedRequest'
 
-type Data = Pick<GameChannel, 'name' | 'autoCleanup'> & { ownerAliasId: number | null }
+type Data = Pick<GameChannel, 'name' | 'autoCleanup' | 'private'> & { ownerAliasId: number | null }
 
 const updateChannel = makeValidatedRequest(
   (gameId: number, channelId: number, data: Data) => api.put(`/games/${gameId}/game-channels/${channelId}`, data),
