@@ -28,6 +28,7 @@ import userState, { AuthedUser } from '../state/userState'
 const validationSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),
   autoCleanup: z.boolean(),
+  private: z.boolean(),
   ownerAliasId: z.number().nullable()
 })
 
@@ -65,6 +66,7 @@ export default function ChannelDetails({
     defaultValues: {
       name: editingChannel?.name || '',
       autoCleanup: editingChannel?.autoCleanup ?? false,
+      private: editingChannel?.private ?? false,
       ownerAliasId: editingChannel?.owner?.id || null
     },
     mode: 'onChange'
@@ -210,7 +212,7 @@ export default function ChannelDetails({
 
           <hr />
 
-          <div className='flex justify-between items-start'>
+          <div className='flex justify-between items-center'>
             <div>
               <label htmlFor='auto-cleanup' className='font-semibold'>Auto cleanup</label>
               <p className='text-sm text-gray-500'>Delete this channel when the owner or the last subscribed member leaves</p>
@@ -223,6 +225,27 @@ export default function ChannelDetails({
               }) => (
                 <Toggle
                   id='auto-cleanup'
+                  inputRef={ref}
+                  enabled={value}
+                  onToggle={onChange}
+                />
+              )}
+            />
+          </div>
+
+          <div className='flex justify-between items-center'>
+            <div>
+              <label htmlFor='private' className='font-semibold'>Private</label>
+              <p className='text-sm text-gray-500'>Only the channel owner can invite players to this channel</p>
+            </div>
+            <Controller
+              control={control}
+              name='private'
+              render={({
+                field: { onChange, value, ref }
+              }) => (
+                <Toggle
+                  id='private'
                   inputRef={ref}
                   enabled={value}
                   onToggle={onChange}
