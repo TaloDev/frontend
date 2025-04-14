@@ -13,6 +13,7 @@ export const gameChannelSchema = z.object({
   props: z.array(propSchema),
   memberCount: z.number(),
   autoCleanup: z.boolean(),
+  private: z.boolean(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime()
 })
