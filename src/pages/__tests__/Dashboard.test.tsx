@@ -25,6 +25,14 @@ describe('<Dashboard />', () => {
     axiosMock.onGet(/\/games\/\d\/headlines\/unique_event_submitters/).replyOnce(200, {
       count: 8
     })
+    axiosMock.onGet(/\/games\/\d\/headlines\/total_sessions/).replyOnce(200, {
+      count: 122
+    })
+    axiosMock.onGet(/\/games\/\d\/headlines\/average_session_duration/).replyOnce(200, {
+      hours: 2,
+      minutes: 30,
+      seconds: 45
+    })
     axiosMock.onGet(/\/games\/\d\/headlines\/total_players/).replyOnce(200, {
       count: 150030
     })
@@ -86,6 +94,8 @@ describe('<Dashboard />', () => {
 
     expect(await screen.findByText('New players')).toBeInTheDocument()
     expect(await screen.findByText('Returning players')).toBeInTheDocument()
+    expect(await screen.findByText('Total sessions')).toBeInTheDocument()
+    expect(await screen.findByText('Average session duration')).toBeInTheDocument()
     expect(await screen.findByText('New events')).toBeInTheDocument()
     expect(await screen.findByText('Unique event submitters')).toBeInTheDocument()
 
@@ -126,6 +136,14 @@ describe('<Dashboard />', () => {
     axiosMock.onGet(/\/games\/\d\/headlines\/unique_event_submitters/).replyOnce(200, {
       count: 8
     })
+    axiosMock.onGet(/\/games\/\d\/headlines\/total_sessions/).replyOnce(200, {
+      count: 122
+    })
+    axiosMock.onGet(/\/games\/\d\/headlines\/average_session_duration/).replyOnce(200, {
+      hours: 2,
+      minutes: 30,
+      seconds: 45
+    })
 
     await userEvent.click(screen.getByText('This year'))
 
@@ -138,6 +156,8 @@ describe('<Dashboard />', () => {
     axiosMock.onGet(/\/games\/\d\/headlines\/returning_players/).networkErrorOnce()
     axiosMock.onGet(/\/games\/\d\/headlines\/events/).networkErrorOnce()
     axiosMock.onGet(/\/games\/\d\/headlines\/unique_event_submitters/).networkErrorOnce()
+    axiosMock.onGet(/\/games\/\d\/headlines\/total_sessions/).networkErrorOnce()
+    axiosMock.onGet(/\/games\/\d\/headlines\/average_session_duration/).networkErrorOnce()
     axiosMock.onGet(/\/games\/\d\/player-groups\/pinned/).networkErrorOnce()
     axiosMock.onGet(/\/games\/\d\/game-stats/).networkErrorOnce()
 
