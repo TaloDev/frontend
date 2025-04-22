@@ -5,7 +5,7 @@ import ErrorMessage from '../components/ErrorMessage'
 import HeadlineStat from '../components/HeadlineStat'
 import TimePeriodPicker from '../components/TimePeriodPicker'
 import Page from '../components/Page'
-import routes from '../constants/routes'
+import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
 import activeGameState from '../state/activeGameState'
 import useLocalStorage from '../utils/useLocalStorage'
 import useTimePeriod, { TimePeriod } from '../utils/useTimePeriod'
@@ -17,13 +17,6 @@ import SecondaryTitle from '../components/SecondaryTitle'
 import useIntendedRoute from '../utils/useIntendedRoute'
 import usePinnedGroups from '../api/usePinnedGroups'
 import usePlayerHeadlines from '../api/usePlayerHeadlines'
-
-export const secondaryNavRoutes = [
-  { title: 'Dashboard', to: routes.dashboard },
-  { title: 'Activity log', to: routes.activity },
-  { title: 'Organisation', to: routes.organisation },
-  { title: 'Billing', to: routes.billing }
-]
 
 export default function Dashboard() {
   const includeDevData = useRecoilValue(devDataState)
@@ -87,6 +80,11 @@ export default function Dashboard() {
         <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-4'>
           <HeadlineStat title='New players' stat={headlines.new_players.count} />
           <HeadlineStat title='Returning players' stat={headlines.returning_players.count} />
+          <HeadlineStat title='Total sessions' stat={headlines.total_sessions.count} />
+          <HeadlineStat
+            title='Average session duration'
+            stat={`${headlines.average_session_duration.hours}h ${headlines.average_session_duration.minutes}m ${headlines.average_session_duration.seconds}s`}
+          />
           <HeadlineStat title='New events' stat={headlines.events.count} />
           <HeadlineStat title='Unique event submitters' stat={headlines.unique_event_submitters.count} />
         </div>

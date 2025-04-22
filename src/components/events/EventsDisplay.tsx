@@ -90,20 +90,18 @@ export default function EventsDisplay({
 
                 {selectedEventNames.length > 0 && <Tooltip content={<ChartTooltip />} />}
 
-                {Object.keys(events!)
-                  .filter((eventName) => selectedEventNames.includes(eventName))
-                  .map((eventName) => (
-                    <Line
-                      dataKey='count'
-                      data={events![eventName]}
-                      key={eventName}
-                      stroke={getEventColour(eventName)}
-                      activeDot={{ r: 6 }}
-                      type='linear'
-                      strokeWidth={3}
-                      dot={false}
-                    />
-                  ))}
+                {selectedEventNames.map((eventName) => (
+                  <Line
+                    dataKey='count'
+                    data={events![eventName]}
+                    key={eventName}
+                    stroke={getEventColour(eventName)}
+                    activeDot={{ r: 6 }}
+                    type='linear'
+                    strokeWidth={3}
+                    dot={false}
+                  />
+                ))}
               </LineChart>
             </ResponsiveContainer>
           </div>

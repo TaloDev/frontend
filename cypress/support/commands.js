@@ -1,6 +1,15 @@
 import '@testing-library/cypress/add-commands'
 
 Cypress.Commands.add('stubDashboardCalls', () => {
+  cy.intercept('GET', /http:\/\/talo\.api\/games\/1\/headlines\/average_session_duration/, {
+    statusCode: 200,
+    body: {
+      hours: Cypress._.random(0, 2),
+      minutes: Cypress._.random(0, 59),
+      seconds: Cypress._.random(0, 59)
+    }
+  })
+
   cy.intercept('GET', /http:\/\/talo\.api\/games\/1\/headlines\/(.*)/, {
     statusCode: 200,
     body: {
