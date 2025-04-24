@@ -83,7 +83,7 @@ export default function Dashboard() {
           <HeadlineStat title='Total sessions' stat={headlines.total_sessions.count} />
           <HeadlineStat
             title='Average session duration'
-            stat={`${headlines.average_session_duration.hours}h ${headlines.average_session_duration.minutes}m ${headlines.average_session_duration.seconds}s`}
+            stat={`${Math.round(headlines.average_session_duration.hours)}h ${Math.round(headlines.average_session_duration.minutes)}m ${Math.round(headlines.average_session_duration.seconds)}s`}
           />
           <HeadlineStat title='New events' stat={headlines.events.count} />
           <HeadlineStat title='Unique event submitters' stat={headlines.unique_event_submitters.count} />
