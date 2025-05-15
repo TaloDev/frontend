@@ -4,8 +4,16 @@ import api from './api'
 import makeValidatedRequest from './makeValidatedRequest'
 import { Prop } from '../entities/prop'
 
+type Data = {
+  name?: string
+  props?: Prop[]
+  purgeDevPlayers?: boolean
+  purgeLivePlayers?: boolean
+  website?: string | null
+}
+
 const updateGame = makeValidatedRequest(
-  (gameId: number, data: { name?: string, props?: Prop[] }) => api.patch(`/games/${gameId}`, data),
+  (gameId: number, data: Data) => api.patch(`/games/${gameId}`, data),
   z.object({
     game: gameSchema
   })
