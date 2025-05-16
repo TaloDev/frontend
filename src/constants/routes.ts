@@ -15,6 +15,7 @@ export default {
   feedbackCategories: '/feedback-categories',
   forgotPassword: '/forgot-password',
   gameProps: '/game-config',
+  gameSettings: '/game-settings',
   groups: '/groups',
   integrations: '/integrations',
   leaderboards: '/leaderboards',

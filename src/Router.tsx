@@ -46,6 +46,7 @@ const Feedback = lazy(() => import(/* webpackChunkName: 'feedback' */ './pages/F
 const FeedbackCategories = lazy(() => import(/* webpackChunkName: 'feedback-categories' */ './pages/FeedbackCategories'))
 const Channels = lazy(() => import(/* webpackChunkName: 'channels' */ './pages/Channels'))
 const EventBreakdown = lazy(() => import(/* webpackChunkName: 'event-breakdown' */ './pages/EventBreakdown'))
+const GameSettings = lazy(() => import(/* webpackChunkName: 'game-settings */ './pages/GameSettings'))
 
 type RouterProps = {
   intendedRoute: string | null
@@ -114,6 +115,7 @@ function Router({
                   {canViewPage(user, routes.feedbackCategories) && <Route path={routes.feedbackCategories} element={<FeedbackCategories />} />}
                   <Route path={routes.channels} element={<Channels />} />
                   <Route path={routes.eventBreakdown} element={<EventBreakdown />} />
+                  {canViewPage(user, routes.gameSettings) && <Route path={routes.gameSettings} element={<GameSettings />} />}
                 </>
               }
 
