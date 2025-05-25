@@ -14,6 +14,7 @@ export const gameChannelSchema = z.object({
   memberCount: z.number(),
   autoCleanup: z.boolean(),
   private: z.boolean(),
+  temporaryMembership: z.boolean(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime()
 })

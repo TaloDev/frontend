@@ -29,6 +29,7 @@ const validationSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),
   autoCleanup: z.boolean(),
   private: z.boolean(),
+  temporaryMembership: z.boolean(),
   ownerAliasId: z.number().nullable()
 })
 
@@ -67,6 +68,7 @@ export default function ChannelDetails({
       name: editingChannel?.name || '',
       autoCleanup: editingChannel?.autoCleanup ?? false,
       private: editingChannel?.private ?? false,
+      temporaryMembership: editingChannel?.temporaryMembership ?? false,
       ownerAliasId: editingChannel?.owner?.id || null
     },
     mode: 'onChange'
@@ -246,6 +248,27 @@ export default function ChannelDetails({
               }) => (
                 <Toggle
                   id='private'
+                  inputRef={ref}
+                  enabled={value}
+                  onToggle={onChange}
+                />
+              )}
+            />
+          </div>
+
+          <div className='flex justify-between items-center'>
+            <div>
+              <label htmlFor='temporary-membership' className='font-semibold'>Temporary membership</label>
+              <p className='text-sm text-gray-500'>Players will be removed from this channel when they close the game</p>
+            </div>
+            <Controller
+              control={control}
+              name='temporaryMembership'
+              render={({
+                field: { onChange, value, ref }
+              }) => (
+                <Toggle
+                  id='temporary-membership'
                   inputRef={ref}
                   enabled={value}
                   onToggle={onChange}
