@@ -118,7 +118,7 @@ export default function Feedback() {
                 <>
                   <DateCell>{format(new Date(feedback.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
                   <TableCell>{feedback.category.name}</TableCell>
-                  <TableCell className='min-w-[320px] max-w-[320px]'>{feedback.comment}</TableCell>
+                  <TableCell className='min-w-[320px] max-w-[320px] whitespace-pre-wrap'>{feedback.comment}</TableCell>
                   <TableCell>
                     {feedback.playerAlias &&
                       <div className='flex items-center'>
