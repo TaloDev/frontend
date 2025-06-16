@@ -6,6 +6,22 @@ export const gameStatSchema = z.object({
   name: z.string(),
   global: z.boolean(),
   globalValue: z.number(),
+  metrics: z.object({
+    globalCount: z.number(),
+    globalValue: z.object({
+      minValue: z.number(),
+      maxValue: z.number(),
+      medianValue: z.number(),
+      averageValue: z.number(),
+      averageChange: z.number()
+    }),
+    playerValue: z.object({
+      minValue: z.number(),
+      maxValue: z.number(),
+      medianValue: z.number(),
+      averageValue: z.number()
+    })
+  }).optional(),
   defaultValue: z.number(),
   maxChange: z.number().nullable(),
   minValue: z.number().nullable(),

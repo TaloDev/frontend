@@ -1,6 +1,6 @@
-import { IconPlus } from '@tabler/icons-react'
+import { IconPlus, IconZoom } from '@tabler/icons-react'
 import { format } from 'date-fns'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import useStats from '../api/useStats'
 import Button from '../components/Button'
@@ -14,6 +14,8 @@ import StatDetails from '../modals/StatDetails'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import useSortedItems from '../utils/useSortedItems'
 import { GameStat } from '../entities/gameStat'
+import { useNavigate } from 'react-router-dom'
+import routes from '../constants/routes'
 
 export default function Stats() {
   const [showModal, setShowModal] = useState(false)
@@ -24,14 +26,20 @@ export default function Stats() {
 
   const sortedStats = useSortedItems(stats, 'internalName', 'asc')
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     if (!showModal) setEditingStat(null)
   }, [showModal, setEditingStat])
 
-  const onEditStatClick = (stat: GameStat) => {
+  const onEditStatClick = useCallback((stat: GameStat) => {
     setEditingStat(stat)
     setShowModal(true)
-  }
+  }, [])
+
+  const onViewMetricsClick = useCallback((stat: GameStat) => {
+    navigate(routes.statMetrics.replace(':internalName', stat.internalName))
+  }, [navigate])
 
   return (
     <Page
@@ -53,7 +61,7 @@ export default function Stats() {
       }
 
       {!error && sortedStats.length > 0 &&
-        <Table columns={['Internal name', 'Display name', 'Global value', 'Created at', 'Updated at', '']}>
+        <Table columns={['Internal name', 'Display name', 'Global value', 'Created at', 'Updated at', '', '']}>
           <TableBody iterator={sortedStats}>
             {(stat) => (
               <>
@@ -62,6 +70,13 @@ export default function Stats() {
                 <TableCell className='font-mono'>{stat.global ? stat.globalValue.toLocaleString() : '—'}</TableCell>
                 <DateCell>{format(new Date(stat.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
                 <DateCell>{format(new Date(stat.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
+                <TableCell className='w-40'>
+                  {stat.global &&
+                    <Button variant='grey' icon={<IconZoom size={16} />} onClick={() => onViewMetricsClick(stat)}>
+                      <span>Metrics</span>
+                    </Button>
+                  }
+                </TableCell>
                 <TableCell className='w-40'>
                   <Button variant='grey' onClick={() => onEditStatClick(stat)}>Edit</Button>
                 </TableCell>

@@ -5,9 +5,19 @@ import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
 import { gameStatSchema } from '../entities/gameStat'
 
-export default function useStats(activeGame: Game | null, includeDevData?: boolean) {
+export default function useStats(
+  activeGame: Game | null,
+  includeDevData?: boolean,
+  metricsStartDate: string = '',
+  metricsEndDate: string = ''
+) {
   const fetcher = async ([url]: [string]) => {
-    const res = await makeValidatedGetRequest(url, z.object({
+    const qs = new URLSearchParams({
+      metricsStartDate,
+      metricsEndDate
+    }).toString()
+
+    const res = await makeValidatedGetRequest(`${url}?${qs}`, z.object({
       stats: z.array(gameStatSchema)
     }))
 
@@ -15,7 +25,7 @@ export default function useStats(activeGame: Game | null, includeDevData?: boole
   }
 
   const { data, error, mutate } = useSWR(
-    activeGame ? [`/games/${activeGame.id}/game-stats`, includeDevData] : null,
+    activeGame ? [`/games/${activeGame.id}/game-stats`, includeDevData, metricsStartDate, metricsEndDate] : null,
     fetcher
   )
 
