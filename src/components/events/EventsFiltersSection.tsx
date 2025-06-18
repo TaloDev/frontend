@@ -1,10 +1,10 @@
 import { useEffect, useMemo } from 'react'
-import { useEventsContext } from './EventsContext' // Adjust the path if needed
+import { useEventsContext } from './EventsContext'
 import TimePeriodPicker from '../TimePeriodPicker'
 import DateInput from '../DateInput'
 import EventsFilter from './EventsFilter'
-import { timePeriods } from './useEventsTimePeriod'
 import useEvents from '../../api/useEvents'
+import { timePeriods } from '../../utils/useTimePeriodAndDates'
 
 type Props = Pick<ReturnType<typeof useEvents>, 'eventNames' | 'error'>
 

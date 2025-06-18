@@ -34,5 +34,6 @@ export default {
   register: '/register',
   resetPassword: '/reset-password',
   stats: '/stats',
+  statMetrics: '/stats/:internalName/metrics',
   verify2FA: '/verify'
 }
