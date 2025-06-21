@@ -13,6 +13,7 @@ export default function useStats(
 ) {
   const fetcher = async ([url]: [string]) => {
     const qs = new URLSearchParams({
+      withMetrics: (metricsStartDate || metricsEndDate) ? '1' : '0',
       metricsStartDate,
       metricsEndDate
     }).toString()
