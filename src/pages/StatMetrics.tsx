@@ -6,7 +6,7 @@ import Table from '../components/tables/Table'
 import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { GameStat } from '../entities/gameStat'
 import routes from '../constants/routes'
@@ -39,6 +39,10 @@ export default function StatMetrics() {
   }, [internalName, stats])
 
   const [stat, setStat] = useState<GameStatWithMetrics | undefined>(getStat() as GameStatWithMetrics)
+
+  const metrics = useMemo(() => {
+    return stat?.metrics
+  }, [stat])
 
   useEffect(() => {
     const matchingStat = getStat()
@@ -99,10 +103,10 @@ export default function StatMetrics() {
       {!error &&
         <>
           <SecondaryTitle>Global metrics</SecondaryTitle>
-          {stat &&
+          {metrics &&
             <Table columns={['Min value', 'Max value', 'Median value', 'Average value', 'Total updates', 'Average change']}>
-              <TableBody iterator={[stat]}>
-                {({ metrics }) => (
+              <TableBody iterator={[metrics]}>
+                {(metrics) => (
                   <>
                     <TableCell className='font-mono'>{metrics.globalValue.minValue}</TableCell>
                     <TableCell className='font-mono'>{metrics.globalValue.maxValue}</TableCell>
@@ -115,13 +119,13 @@ export default function StatMetrics() {
               </TableBody>
             </Table>
           }
-          {!stat && <div><Loading size={32} thickness={180} /></div>}
+          {!metrics && <div><Loading size={32} thickness={180} /></div>}
 
           <SecondaryTitle>Player metrics</SecondaryTitle>
-          {stat &&
+          {metrics &&
             <Table columns={['Min value', 'Max value', 'Median value', 'Average value']}>
-              <TableBody iterator={[stat]}>
-                {({ metrics }) => (
+              <TableBody iterator={[metrics]}>
+                {(metrics) => (
                   <>
                     <TableCell className='font-mono'>{metrics.playerValue.minValue}</TableCell>
                     <TableCell className='font-mono'>{metrics.playerValue.maxValue}</TableCell>
@@ -132,7 +136,7 @@ export default function StatMetrics() {
               </TableBody>
             </Table>
           }
-          {!stat && <div><Loading size={32} thickness={180} /></div>}
+          {!metrics && <div><Loading size={32} thickness={180} /></div>}
         </>
       }
 
