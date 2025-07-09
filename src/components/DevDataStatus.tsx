@@ -15,7 +15,7 @@ function DevDataStatus() {
         </span>
       </SecondaryTitle>
 
-      <p>When enabled, you&apos;ll see data submitted by players from dev builds of your game</p>
+      <p>When enabled, the dashboard will display data submitted by players from dev builds. This has no effect on your game.</p>
 
       <DevDataToggle />
     </div>
