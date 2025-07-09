@@ -17,6 +17,7 @@ import SecondaryTitle from '../components/SecondaryTitle'
 import useIntendedRoute from '../utils/useIntendedRoute'
 import usePinnedGroups from '../api/usePinnedGroups'
 import usePlayerHeadlines from '../api/usePlayerHeadlines'
+import { useMemo } from 'react'
 
 export default function Dashboard() {
   const includeDevData = useRecoilValue(devDataState)
@@ -42,6 +43,10 @@ export default function Dashboard() {
   const { groups: pinnedGroups, loading: pinnedGroupsLoading, error: pinnedGroupsError } = usePinnedGroups(activeGame, includeDevData)
   const { headlines: playerHeadlines, loading: playerHeadlinesLoading, error: playerHeadlinesError } = usePlayerHeadlines(activeGame, includeDevData)
   const intendedRouteChecked = useIntendedRoute()
+
+  const globalStats = useMemo(() => {
+    return stats.filter((stat) => stat.global)
+  }, [stats])
 
   if (!intendedRouteChecked) return null
 
@@ -117,7 +122,7 @@ export default function Dashboard() {
         </div>
       }
 
-      {stats.length > 0 && <SecondaryTitle>Global stats</SecondaryTitle>}
+      {globalStats.length > 0 && <SecondaryTitle>Global stats</SecondaryTitle>}
 
       {statsError &&
         <ErrorMessage error={{ message: 'Couldn\'t fetch stats' }} />
@@ -125,7 +130,7 @@ export default function Dashboard() {
 
       {!statsLoading &&
         <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-4'>
-          {stats.filter((stat) => stat.global).map((stat) => (
+          {globalStats.map((stat) => (
             <HeadlineStat key={stat.id} title={stat.name} stat={stat.globalValue} />
           ))}
         </div>
