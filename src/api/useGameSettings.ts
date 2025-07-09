@@ -10,6 +10,8 @@ export default function useGameSettings(activeGame: Game) {
       settings: z.object({
         purgeDevPlayers: z.boolean(),
         purgeLivePlayers: z.boolean(),
+        purgeDevPlayersRetention: z.number(),
+        purgeLivePlayersRetention: z.number(),
         website: z.string().nullable()
       })
     }))

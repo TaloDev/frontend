@@ -99,7 +99,7 @@ export default function NewInvite({
           />
 
           <div className='w-full'>
-            <label htmlFor='sort-mode' className='block font-semibold mb-1'>User type</label>
+            <label htmlFor='user-type' className='block font-semibold mb-1'>User type</label>
 
             <Controller
               name='userType'
@@ -108,7 +108,7 @@ export default function NewInvite({
                 <Select
                   {...field}
                   innerRef={ref}
-                  inputId='sort-mode'
+                  inputId='user-type'
                   options={userTypeOptions}
                 />
               )}

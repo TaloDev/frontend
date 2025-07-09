@@ -14,13 +14,30 @@ import buildError from '../utils/buildError'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import Loading from '../components/Loading'
 import { z, ZodError } from 'zod'
+import Select from '../components/Select'
 
 type Settings = NonNullable<ReturnType<typeof useGameSettings>['settings']>
 const defaultSettings: Settings = {
   purgeDevPlayers: false,
   purgeLivePlayers: false,
+  purgeDevPlayersRetention: 60,
+  purgeLivePlayersRetention: 90,
   website: null
 }
+
+const purgeDevPlayersRetentionOptions = [
+  { label: '30 days', value: 30 },
+  { label: '60 days', value: 60 },
+  { label: '90 days', value: 90 }
+]
+
+const purgeLivePlayersRetentionOptions = [
+  { label: '60 days', value: 60 },
+  { label: '90 days', value: 90 },
+  { label: '3 months', value: 120 },
+  { label: '6 months', value: 180 },
+  { label: '1 year', value: 365 }
+]
 
 export default function GameSettings() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
@@ -39,7 +56,7 @@ export default function GameSettings() {
     }
   }, [fetchError, fetchedSettings, loading])
 
-  const updateSetting = useCallback((key: keyof Settings, value: boolean | string) => {
+  const updateSetting = useCallback((key: keyof Settings, value: boolean | string | number) => {
     setSettings((curr) => {
       return {
         ...curr,
@@ -92,9 +109,25 @@ export default function GameSettings() {
         </div>
         <div>
           <p className='font-medium'>Purge dev players</p>
-          <p className='text-sm'>Automatically delete players created in dev builds with no activity in the last 60 days</p>
+          <p className='text-sm'>Automatically delete players created in dev builds with no activity in the last {settings.purgeDevPlayersRetention} days</p>
         </div>
       </div>
+
+      {settings.purgeDevPlayers && (
+        <div>
+          <label htmlFor='dev-players-retention' className='block font-medium mb-1'>Purge dev players after...</label>
+          <Select
+            inputId='dev-players-retention'
+            options={purgeDevPlayersRetentionOptions}
+            onChange={(opt) => {
+              if (opt) {
+                updateSetting('purgeDevPlayersRetention', opt.value)
+              }
+            }}
+            defaultValue={purgeDevPlayersRetentionOptions.find((opt) => opt.value === settings.purgeDevPlayersRetention)}
+          />
+        </div>
+      )}
 
       <div className='flex items-center space-x-4'>
         <div>
@@ -111,9 +144,25 @@ export default function GameSettings() {
         </div>
         <div>
           <p className='font-medium'>Purge live players</p>
-          <p className='text-sm'>Automatically delete players with no activity in the last 90 days</p>
+          <p className='text-sm'>Automatically delete players with no activity in the last {settings.purgeLivePlayersRetention} days</p>
         </div>
       </div>
+
+      {settings.purgeLivePlayers && (
+        <div>
+          <label htmlFor='live-players-retention' className='block font-medium mb-1'>Purge live players after...</label>
+          <Select
+            inputId='live-players-retention'
+            options={purgeLivePlayersRetentionOptions}
+            onChange={(opt) => {
+              if (opt) {
+                updateSetting('purgeLivePlayersRetention', opt.value)
+              }
+            }}
+            defaultValue={purgeLivePlayersRetentionOptions.find((opt) => opt.value === settings.purgeLivePlayersRetention)}
+          />
+        </div>
+      )}
 
       <div>
         <TextInput
