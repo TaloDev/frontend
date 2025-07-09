@@ -129,6 +129,8 @@ export default function GameSettings() {
         </div>
       )}
 
+      <hr className='border-gray-700' />
+
       <div className='flex items-center space-x-4'>
         <div>
           {!settingsLoaded &&
@@ -163,6 +165,8 @@ export default function GameSettings() {
           />
         </div>
       )}
+
+      <hr className='border-gray-700' />
 
       <div>
         <TextInput
