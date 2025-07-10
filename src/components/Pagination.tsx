@@ -60,7 +60,7 @@ export default function Pagination({
           <li>
             <Button
               variant='bare'
-              className='px-3 py-2 text-sm font-medium text-black bg-white rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed'
+              className='px-3 py-2 text-sm font-medium text-black bg-white rounded-md hover:enabled:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed'
               onClick={() => goToPage(page - 1)}
               disabled={page === 0}
             >
@@ -98,7 +98,7 @@ export default function Pagination({
           <li>
             <Button
               variant='bare'
-              className='px-3 py-2 text-sm font-medium text-black bg-white rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed'
+              className='px-3 py-2 text-sm font-medium text-black bg-white rounded-md hover:enabled:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed'
               onClick={() => goToPage(page + 1)}
               disabled={page === totalPages - 1}
             >
