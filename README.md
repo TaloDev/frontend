@@ -1,8 +1,8 @@
 # Talo frontend: self-hostable game dev dashboard
 
-Talo is a collection of tools and APIs designed to make game development easier and to help you make better data-driven decisions.
+Talo is the easiest way to add leaderboards, player authentication, socket-based multiplayer and more to your game.
 
-The Talo dashboard gives you a visual overview of your game including players, leaderboards, game save data and various analytics.
+Using the Talo Dashboard, you can visualise and analyse your game data to help make better data-driven decisions.
 
 Talo is available to use via our [Godot plugin](https://github.com/TaloDev/godot), [Unity package](https://github.com/TaloDev/unity) or [REST API](https://docs.trytalo.com/docs/http/authentication).
 
@@ -22,22 +22,16 @@ Talo is available to use via our [Godot plugin](https://github.com/TaloDev/godot
 - 🗣️ [Game feedback](https://trytalo.com/feedback): Collect and manage feedback from your players.
 - 🔔 [Player presence](https://trytalo.com/players#presence): See if players are online and set custom statuses.
 
-## Documentation
+## Links
 
-Check out the [full Talo docs](https://docs.trytalo.com) for setup instructions, detailed API docs/examples and configuration options.
-
-## Self-hosting your own Talo instance
-
-Talo is designed to be easily self-hosted. Take a look at our [self-hosting guide](https://docs.trytalo.com/docs/selfhosting/overview) and the [GitHub repo](https://github.com/TaloDev/hosting) for examples on how to get started.
+- [Website](https://trytalo.com)
+- [Documentation](https://docs.trytalo.com)
+- [Self-hosting examples](https://github.com/talodev/hosting)
 
 ## Contributing to Talo
 
 Thinking about contributing to Talo? We’d love the help! Head over to our [contribution guide](CONTRIBUTING.md) to learn how to set up the project, run tests, and start adding new features.
 
-## Join our community
+## Join the community
 
 Have questions, want to share feedback or show off your game? [Join us on Discord](https://trytalo.com/discord) to connect with other developers and get help from the Talo team.
-
----
-
-Find all the details about Talo on our [website](https://trytalo.com)!
