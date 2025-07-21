@@ -167,7 +167,7 @@ export default function LeaderboardEntries() {
                       {canUpdateEntry &&
                         <Button
                           variant='icon'
-                          className='p-1 rounded-full bg-indigo-900'
+                          className={clsx('p-1 rounded-full bg-indigo-900', { 'bg-orange-900': entry.playerAlias.player.devBuild })}
                           onClick={() => setEditingEntry(entry)}
                           icon={<IconPencil size={16} />}
                           extra={{ 'aria-label': 'Edit leaderboard entry' }}
@@ -175,10 +175,8 @@ export default function LeaderboardEntries() {
                       }
                     </div>
                   </TableCell>
-                  <TableCell className='min-w-80'>
-                    <div className='-mb-2'>
-                      <PropBadges props={entry.props} />
-                    </div>
+                  <TableCell className='w-[400px]'>
+                    <PropBadges props={entry.props} className='flex flex-wrap space-y-0 gap-2' />
                   </TableCell>
                   <DateCell>
                     {format(new Date(entry.createdAt), 'dd MMM Y, HH:mm')}

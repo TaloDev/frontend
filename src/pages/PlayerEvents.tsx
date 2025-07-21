@@ -73,10 +73,8 @@ export default function PlayerEvents() {
               {(event) => (
                 <>
                   <TableCell className='min-w-60'>{event.name}</TableCell>
-                  <TableCell className='min-w-80'>
-                    <div className='-mb-2'>
-                      <PropBadges props={event.props} />
-                    </div>
+                  <TableCell className='w-[400px]'>
+                    <PropBadges props={event.props} className='flex flex-wrap space-y-0 gap-2' />
                   </TableCell>
                   <DateCell>{format(new Date(event.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
                 </>

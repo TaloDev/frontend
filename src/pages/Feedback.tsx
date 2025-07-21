@@ -50,6 +50,7 @@ export default function Feedback() {
   }, [navigate])
 
   const setPropSearch = useCallback((prop: Prop) => {
+    window.scrollTo(0, 0)
     setSearch(`prop:${prop.key}=${prop.value}`)
   }, [setSearch])
 
@@ -124,17 +125,15 @@ export default function Feedback() {
                 <>
                   <DateCell>{format(new Date(feedback.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
                   <TableCell>{feedback.category.name}</TableCell>
-                  <TableCell className='min-w-[320px] max-w-[320px] whitespace-pre-wrap'>{feedback.comment}</TableCell>
-                  <TableCell className='min-w-80'>
-                    <div className='-mb-2'>
-                      <PropBadges
-                        props={feedback.props}
-                        devBuild={feedback.devBuild}
-                        icon={<IconCrosshair size={20} />}
-                        onClick={setPropSearch}
-                        buttonTitle='Filter by this prop'
-                      />
-                    </div>
+                  <TableCell className='w-[400px] whitespace-pre-wrap'>{feedback.comment}</TableCell>
+                  <TableCell className='w-[400px]'>
+                    <PropBadges
+                      props={feedback.props}
+                      devBuild={feedback.devBuild}
+                      icon={<IconCrosshair size={20} />}
+                      onClick={setPropSearch}
+                      buttonTitle='Filter by this prop'
+                    />
                   </TableCell>
                   <TableCell>
                     {feedback.playerAlias &&
