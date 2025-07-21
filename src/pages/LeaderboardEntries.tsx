@@ -21,23 +21,12 @@ import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import findLeaderboard from '../api/findLeaderboard'
 import { LeaderboardEntry } from '../entities/leaderboardEntry'
 import { Leaderboard, LeaderboardRefreshInterval } from '../entities/leaderboard'
-import { Prop } from '../entities/prop'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 import userState, { AuthedUser } from '../state/userState'
 import UpdateEntryScore from '../modals/UpdateEntryScore'
 import Toggle from '../components/toggles/Toggle'
 import Identifier from '../components/Identifier'
-
-function LeaderboardEntryProps({ props }: { props: Prop[] }) {
-  return props.map(({ key, value }) => (
-    <code
-      key={`${key}-${value}`}
-      className='bg-gray-900 rounded p-2 mr-2 mb-2 text-xs inline-block'
-    >
-      {key} = {value}
-    </code>
-  ))
-}
+import { PropBadges } from '../components/PropBadges'
 
 export default function LeaderboardEntries() {
   const location = useLocation()
@@ -188,7 +177,7 @@ export default function LeaderboardEntries() {
                   </TableCell>
                   <TableCell className='min-w-80'>
                     <div className='-mb-2'>
-                      <LeaderboardEntryProps props={entry.props} />
+                      <PropBadges props={entry.props} />
                     </div>
                   </TableCell>
                   <DateCell>
