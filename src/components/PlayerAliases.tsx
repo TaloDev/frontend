@@ -32,7 +32,7 @@ export function SingleAlias({ alias }: { alias: PlayerAlias }) {
     >
       <span
         className={clsx('p-1 rounded-full bg-gray-900 text-white', {
-          'text-green-500': alias.player.presence?.online
+          '!text-green-400': alias.player.presence?.online
         })}
       >
         {getIcon(alias)}

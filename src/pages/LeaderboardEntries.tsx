@@ -21,23 +21,12 @@ import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import findLeaderboard from '../api/findLeaderboard'
 import { LeaderboardEntry } from '../entities/leaderboardEntry'
 import { Leaderboard, LeaderboardRefreshInterval } from '../entities/leaderboard'
-import { Prop } from '../entities/prop'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 import userState, { AuthedUser } from '../state/userState'
 import UpdateEntryScore from '../modals/UpdateEntryScore'
 import Toggle from '../components/toggles/Toggle'
 import Identifier from '../components/Identifier'
-
-function LeaderboardEntryProps({ props }: { props: Prop[] }) {
-  return props.map(({ key, value }) => (
-    <code
-      key={`${key}-${value}`}
-      className='bg-gray-900 rounded p-2 mr-2 mb-2 text-xs inline-block'
-    >
-      {key} = {value}
-    </code>
-  ))
-}
+import { PropBadges } from '../components/PropBadges'
 
 export default function LeaderboardEntries() {
   const location = useLocation()
@@ -178,7 +167,7 @@ export default function LeaderboardEntries() {
                       {canUpdateEntry &&
                         <Button
                           variant='icon'
-                          className='p-1 rounded-full bg-indigo-900'
+                          className={clsx('p-1 rounded-full bg-indigo-900', { 'bg-orange-900': entry.playerAlias.player.devBuild })}
                           onClick={() => setEditingEntry(entry)}
                           icon={<IconPencil size={16} />}
                           extra={{ 'aria-label': 'Edit leaderboard entry' }}
@@ -186,10 +175,8 @@ export default function LeaderboardEntries() {
                       }
                     </div>
                   </TableCell>
-                  <TableCell className='min-w-80'>
-                    <div className='-mb-2'>
-                      <LeaderboardEntryProps props={entry.props} />
-                    </div>
+                  <TableCell className='w-[400px]'>
+                    <PropBadges props={entry.props} className='flex flex-wrap space-y-0 gap-2' />
                   </TableCell>
                   <DateCell>
                     {format(new Date(entry.createdAt), 'dd MMM Y, HH:mm')}
