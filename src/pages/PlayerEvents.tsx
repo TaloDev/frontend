@@ -14,22 +14,10 @@ import PlayerIdentifier from '../components/PlayerIdentifier'
 import Page from '../components/Page'
 import usePlayer from '../utils/usePlayer'
 import Table from '../components/tables/Table'
-import { isMetaProp } from '../constants/metaProps'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import { useRecoilValue } from 'recoil'
-import { Prop } from '../entities/prop'
 import useSearch from '../utils/useSearch'
-
-function EventProps({ props }: { props: Prop[] }) {
-  return props.filter((prop) => !isMetaProp(prop)).map(({ key, value }) => (
-    <code
-      key={`${key}-${value}`}
-      className='bg-gray-900 rounded p-2 mr-2 mb-2 text-xs inline-block'
-    >
-      {key} = {value}
-    </code>
-  ))
-}
+import { PropBadges } from '../components/PropBadges'
 
 export default function PlayerEvents() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
@@ -85,10 +73,8 @@ export default function PlayerEvents() {
               {(event) => (
                 <>
                   <TableCell className='min-w-60'>{event.name}</TableCell>
-                  <TableCell className='min-w-80'>
-                    <div className='-mb-2'>
-                      <EventProps props={event.props} />
-                    </div>
+                  <TableCell className='w-[400px]'>
+                    <PropBadges props={event.props} className='flex flex-wrap space-y-0 gap-2' />
                   </TableCell>
                   <DateCell>{format(new Date(event.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
                 </>

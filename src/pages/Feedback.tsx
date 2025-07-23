@@ -14,14 +14,16 @@ import { useNavigate } from 'react-router-dom'
 import routes from '../constants/routes'
 import useFeedback from '../api/useFeedback'
 import useFeedbackCategories from '../api/useFeedbackCategories'
-import { IconArrowRight } from '@tabler/icons-react'
+import { IconArrowRight, IconCrosshair } from '@tabler/icons-react'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import canViewPage from '../utils/canViewPage'
 import userState from '../state/userState'
 import Pagination from '../components/Pagination'
 import TextInput from '../components/TextInput'
 import useSearch from '../utils/useSearch'
+import { PropBadges } from '../components/PropBadges'
+import { Prop } from '../entities/prop'
 
 export default function Feedback() {
   const user = useRecoilValue(userState)
@@ -43,9 +45,14 @@ export default function Feedback() {
 
   const navigate = useNavigate()
 
-  const goToPlayer = (identifier: string) => {
+  const goToPlayer = useCallback((identifier: string) => {
     navigate(`${routes.players}?search=${identifier}`)
-  }
+  }, [navigate])
+
+  const setPropSearch = useCallback((prop: Prop) => {
+    window.scrollTo(0, 0)
+    setSearch(`prop:${prop.key}=${prop.value}`)
+  }, [setSearch])
 
   return (
     <Page
@@ -82,7 +89,7 @@ export default function Feedback() {
               <TextInput
                 id='feedback-search'
                 type='search'
-                placeholder='Search...'
+                placeholder='Search by comment, player or props...'
                 onChange={setSearch}
                 value={search}
               />
@@ -106,7 +113,7 @@ export default function Feedback() {
 
       {!feedbackError && sortedFeedback.length > 0 &&
         <>
-          <Table columns={['Submitted at', 'Category', 'Comment', 'Player']}>
+          <Table columns={['Submitted at', 'Category', 'Comment', 'Props', 'Player']}>
             <TableBody
               iterator={sortedFeedback}
               configureClassnames={(feedback, idx) => ({
@@ -118,7 +125,16 @@ export default function Feedback() {
                 <>
                   <DateCell>{format(new Date(feedback.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
                   <TableCell>{feedback.category.name}</TableCell>
-                  <TableCell className='min-w-[320px] max-w-[320px] whitespace-pre-wrap'>{feedback.comment}</TableCell>
+                  <TableCell className='w-[400px] whitespace-pre-wrap'>{feedback.comment}</TableCell>
+                  <TableCell className='w-[400px]'>
+                    <PropBadges
+                      props={feedback.props}
+                      devBuild={feedback.devBuild}
+                      icon={<IconCrosshair size={20} />}
+                      onClick={setPropSearch}
+                      buttonTitle='Filter by this prop'
+                    />
+                  </TableCell>
                   <TableCell>
                     {feedback.playerAlias &&
                       <div className='flex items-center'>

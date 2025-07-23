@@ -77,6 +77,14 @@ table {
   @apply sm:w-auto
 }
 
+.tippy-box:not([data-theme]) {
+  @apply bg-gray-900;
+
+  & > .tippy-arrow {
+    @apply text-gray-900;
+  }
+}
+
 .rdp {
   @apply bg-white;
   @apply text-black;
