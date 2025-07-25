@@ -14,6 +14,10 @@ export default function PlayerProps() {
   const [player] = usePlayer()
 
   const onSave = async (props: Prop[]): Promise<Prop[]> => {
+    if (!player) {
+      throw new Error('Player not found')
+    }
+
     const { player: updatedPlayer } = await updatePlayer(activeGame.id, player.id, { props })
     return updatedPlayer.props
   }
