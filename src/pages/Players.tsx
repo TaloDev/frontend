@@ -27,9 +27,7 @@ export default function Players() {
   const navigate = useNavigate()
 
   const goToPlayerProfile = (player: Player) => {
-    navigate(routes.playerProfile.replace(':id', player.id), {
-      state: { player }
-    })
+    navigate(routes.playerProfile.replace(':id', player.id))
   }
 
   return (

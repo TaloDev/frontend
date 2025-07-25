@@ -59,14 +59,16 @@ export default function PlayerProfile() {
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
   const user = useRecoilValue(userState) as AuthedUser
-  const { activities } = usePlayerAuthActivities(activeGame, player?.id, user)
+  const { activities } = usePlayerAuthActivities(activeGame, user, player?.id)
 
   const sections = useDaySections(activities)
 
   const goToPlayerRoute = (route: string) => {
-    navigate(route.replace(':id', player?.id), {
-      state: { player }
-    })
+    if (!player) {
+      throw new Error('Player not found')
+    }
+
+    navigate(route.replace(':id', player.id))
   }
 
   if (!player) {

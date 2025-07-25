@@ -8,7 +8,7 @@ import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
 import { leaderboardEntrySchema } from '../entities/leaderboardEntry'
 
-export default function usePlayerLeaderboardEntries(activeGame: Game, leaderboards: Leaderboard[], player: Player | null) {
+export default function usePlayerLeaderboardEntries(activeGame: Game, leaderboards: Leaderboard[], player?: Player) {
   const fetcher = async ([activeGame, leaderboards, aliases]: [Game, Leaderboard[], PlayerAlias[]]) => {
     const urls = aliases.flatMap((alias) => {
       return leaderboards.map((leaderboard) => `/games/${activeGame.id}/leaderboards/${leaderboard.id}/entries?aliasId=${alias.id}&page=0`)
