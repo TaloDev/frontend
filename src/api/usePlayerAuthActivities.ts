@@ -7,7 +7,7 @@ import { playerAuthActivitySchema } from '../entities/playerAuthActivity'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 import { AuthedUser } from '../state/userState'
 
-export default function usePlayerAuthActivities(activeGame: Game, playerId: string, user: AuthedUser) {
+export default function usePlayerAuthActivities(activeGame: Game, user: AuthedUser, playerId?: string) {
   const fetcher = async ([url]: [string]) => {
     const res = await makeValidatedGetRequest(url, z.object({
       activities: z.array(playerAuthActivitySchema)

@@ -28,141 +28,11 @@ describe('<PlayerProps />', () => {
 
   const axiosMock = new MockAdapter(api)
 
-  it('should render current props', () => {
-    render(
-      <KitchenSink
-        states={[
-          { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
-        ]}
-        routePath='/:id'
-        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
-      >
-        <PlayerProps />
-      </KitchenSink>
-    )
-
-    expect(screen.getByText(`Player = ${basePlayer.id}`)).toBeInTheDocument()
-
-    for (const prop of basePlayer.props) {
-      expect(screen.getByText(prop.key)).toBeInTheDocument()
-      expect(screen.getByDisplayValue(prop.value)).toBeInTheDocument()
-    }
+  beforeEach(() => {
+    axiosMock.reset()
   })
 
-  it('should only enable the reset button after a change', async () => {
-    render(
-      <KitchenSink
-        states={[
-          { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
-        ]}
-        routePath='/:id'
-        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
-      >
-        <PlayerProps />
-      </KitchenSink>
-    )
-
-    expect(screen.getByText('Reset')).toBeDisabled()
-
-    await userEvent.type(screen.getByDisplayValue('80'), '{backspace}4')
-
-    expect(screen.getByDisplayValue('84')).toBeInTheDocument()
-
-    expect(screen.getByText('Reset')).toBeEnabled()
-  })
-
-  it('should only enable the reset a change', async () => {
-    render(
-      <KitchenSink
-        states={[
-          { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
-        ]}
-        routePath='/:id'
-        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
-      >
-        <PlayerProps />
-      </KitchenSink>
-    )
-
-    expect(screen.getByDisplayValue('80')).toBeInTheDocument()
-    await userEvent.type(screen.getByDisplayValue('80'), '{backspace}4')
-    expect(screen.getByDisplayValue('84')).toBeInTheDocument()
-
-    await userEvent.click(screen.getByText('Reset'))
-    expect(screen.queryByDisplayValue('84')).not.toBeInTheDocument()
-    expect(screen.getByDisplayValue('80')).toBeInTheDocument()
-  })
-
-  it('should delete existing props', async () => {
-    render(
-      <KitchenSink
-        states={[
-          { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
-        ]}
-        routePath='/:id'
-        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
-      >
-        <PlayerProps />
-      </KitchenSink>
-    )
-
-    expect(screen.getByText('health')).toBeInTheDocument()
-
-    await userEvent.click(screen.getByLabelText('Delete health prop'))
-    expect(screen.queryByText('health')).not.toBeInTheDocument()
-  })
-
-  it('should add new props', async () => {
-    render(
-      <KitchenSink
-        states={[
-          { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
-        ]}
-        routePath='/:id'
-        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
-      >
-        <PlayerProps />
-      </KitchenSink>
-    )
-
-    await userEvent.click(screen.getByText('New property'))
-
-    await userEvent.type(screen.getByPlaceholderText('Property'), 'treasuresDiscovered')
-    await userEvent.type(screen.getAllByPlaceholderText('Value').at(-1)!, '5')
-
-    expect(screen.getByDisplayValue('treasuresDiscovered')).toBeInTheDocument()
-    expect(screen.getByDisplayValue('5')).toBeInTheDocument()
-  })
-
-  it('should delete new props', async () => {
-    render(
-      <KitchenSink
-        states={[
-          { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
-        ]}
-        routePath='/:id'
-        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
-      >
-        <PlayerProps />
-      </KitchenSink>
-    )
-
-    await userEvent.click(screen.getByText('New property'))
-
-    await userEvent.type(screen.getByPlaceholderText('Property'), 'treasuresDiscovered')
-
-    await userEvent.click(screen.getByLabelText('Delete treasuresDiscovered prop'))
-
-    expect(screen.queryByDisplayValue('treasuresDiscovered')).not.toBeInTheDocument()
-  })
-
-  it('should load in players that are not in the location state', async () => {
+  it('should render current props', async () => {
     axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
       players: [basePlayer]
     })
@@ -174,7 +44,7 @@ describe('<PlayerProps />', () => {
           { node: userState, initialValue: userValue }
         ]}
         routePath='/:id'
-        initialEntries={[{ pathname: `/${basePlayer.id}` }]}
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
       >
         <PlayerProps />
       </KitchenSink>
@@ -186,6 +56,138 @@ describe('<PlayerProps />', () => {
       expect(screen.getByText(prop.key)).toBeInTheDocument()
       expect(screen.getByDisplayValue(prop.value)).toBeInTheDocument()
     }
+  })
+
+  it('should only enable the reset button after a change', async () => {
+    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
+      players: [basePlayer]
+    })
+
+    render(
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
+    )
+
+    expect(await screen.findByText('Reset')).toBeDisabled()
+
+    await userEvent.type(screen.getByDisplayValue('80'), '{backspace}4')
+
+    expect(screen.getByDisplayValue('84')).toBeInTheDocument()
+
+    expect(screen.getByText('Reset')).toBeEnabled()
+  })
+
+  it('should only enable the reset a change', async () => {
+    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
+      players: [basePlayer]
+    })
+
+    render(
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
+    )
+
+    expect(await screen.findByDisplayValue('80')).toBeInTheDocument()
+    await userEvent.type(screen.getByDisplayValue('80'), '{backspace}4')
+    expect(screen.getByDisplayValue('84')).toBeInTheDocument()
+
+    await userEvent.click(screen.getByText('Reset'))
+    expect(screen.queryByDisplayValue('84')).not.toBeInTheDocument()
+    expect(screen.getByDisplayValue('80')).toBeInTheDocument()
+  })
+
+  it('should delete existing props', async () => {
+    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
+      players: [basePlayer]
+    })
+
+    render(
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
+    )
+
+    expect(await screen.findByText('health')).toBeInTheDocument()
+
+    await userEvent.click(screen.getByLabelText('Delete health prop'))
+    expect(screen.queryByText('health')).not.toBeInTheDocument()
+  })
+
+  it('should add new props', async () => {
+    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
+      players: [basePlayer]
+    })
+
+    render(
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
+    )
+
+    await userEvent.click(await screen.findByText('New property'))
+
+    await userEvent.type(screen.getByPlaceholderText('Property'), 'treasuresDiscovered')
+    await userEvent.type(screen.getAllByPlaceholderText('Value').at(-1)!, '5')
+
+    expect(screen.getByDisplayValue('treasuresDiscovered')).toBeInTheDocument()
+    expect(screen.getByDisplayValue('5')).toBeInTheDocument()
+  })
+
+  it('should delete new props', async () => {
+    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
+      players: [basePlayer]
+    })
+
+    render(
+      <KitchenSink
+        states={[
+          { node: activeGameState, initialValue: { id: 1 } },
+          { node: userState, initialValue: userValue }
+        ]}
+        routePath='/:id'
+        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
+      >
+        <PlayerProps />
+      </KitchenSink>
+    )
+
+    await userEvent.click(await screen.findByText('New property'))
+
+    await userEvent.type(screen.getByPlaceholderText('Property'), 'treasuresDiscovered')
+
+    await userEvent.click(screen.getByLabelText('Delete treasuresDiscovered prop'))
+
+    expect(screen.queryByDisplayValue('treasuresDiscovered')).not.toBeInTheDocument()
   })
 
   it('should show a message for players with no props', async () => {
@@ -236,6 +238,10 @@ describe('<PlayerProps />', () => {
   })
 
   it('should save props', async () => {
+    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
+      players: [basePlayer]
+    })
+
     axiosMock.onPatch(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
       player: {
         ...basePlayer,
@@ -259,7 +265,7 @@ describe('<PlayerProps />', () => {
       </KitchenSink>
     )
 
-    await userEvent.click(screen.getByText('New property'))
+    await userEvent.click(await screen.findByText('New property'))
 
     await userEvent.type(screen.getByPlaceholderText('Property'), 'treasuresDiscovered')
     await userEvent.type(screen.getAllByPlaceholderText('Value').at(-1)!, '5')
@@ -274,6 +280,10 @@ describe('<PlayerProps />', () => {
   })
 
   it('should render saving errors', async () => {
+    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
+      players: [basePlayer]
+    })
+
     axiosMock.onPatch(`http://talo.api/games/1/players/${basePlayer.id}`).networkErrorOnce()
 
     render(
@@ -289,7 +299,7 @@ describe('<PlayerProps />', () => {
       </KitchenSink>
     )
 
-    await userEvent.type(screen.getByDisplayValue('42'), '6')
+    await userEvent.type(await screen.findByDisplayValue('42'), '6')
     await userEvent.click(screen.getByText('Save changes'))
 
     await waitFor(() => {
@@ -297,7 +307,7 @@ describe('<PlayerProps />', () => {
     })
   })
 
-  it('should render meta props', () => {
+  it('should render meta props', async () => {
     const player = {
       ...basePlayer,
       props: [
@@ -308,6 +318,10 @@ describe('<PlayerProps />', () => {
       ]
     }
 
+    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
+      players: [player]
+    })
+
     render(
       <KitchenSink
         states={[
@@ -315,13 +329,13 @@ describe('<PlayerProps />', () => {
           { node: userState, initialValue: userValue }
         ]}
         routePath='/:id'
-        initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player } }]}
+        initialEntries={[{ pathname: `/${basePlayer.id}` }]}
       >
         <PlayerProps />
       </KitchenSink>
     )
 
-    expect(screen.getByText('DEV BUILD')).toBeInTheDocument()
+    expect(await screen.findByText('DEV BUILD')).toBeInTheDocument()
     expect(screen.getByText('1')).toBeInTheDocument()
 
     expect(screen.getByText('WINDOW MODE')).toBeInTheDocument()
@@ -332,6 +346,10 @@ describe('<PlayerProps />', () => {
   })
 
   it('should add props from JSON input', async () => {
+    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
+      players: [basePlayer]
+    })
+
     render(
       <KitchenSink
         states={[
@@ -345,7 +363,7 @@ describe('<PlayerProps />', () => {
       </KitchenSink>
     )
 
-    await userEvent.click(screen.getByLabelText('Import props'))
+    await userEvent.click(await screen.findByLabelText('Import props'))
     await userEvent.paste(JSON.stringify({
       speed: '100',
       strength: '50'

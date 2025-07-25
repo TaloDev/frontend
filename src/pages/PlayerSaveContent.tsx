@@ -8,12 +8,27 @@ import { Background, BackgroundVariant, Controls, ReactFlow } from '@xyflow/reac
 import SaveDataNode from '../components/saves/SaveDataNode'
 import SaveContentFitManager from '../components/saves/SaveContentFitManager'
 import { GameSave } from '../entities/gameSave'
+import usePlayerSaves from '../api/usePlayerSaves'
+import { useRecoilValue } from 'recoil'
+import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 
 export default function PlayerSaveContent() {
-  const { id: playerId } = useParams()
+  const { id: playerId, saveId } = useParams()
 
   const location = useLocation()
-  const save: GameSave | undefined = location.state?.save
+  const [save, setSave] = useState<GameSave | undefined>(location.state?.save)
+
+  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const { saves } = usePlayerSaves(activeGame, playerId!)
+
+  useEffect(() => {
+    if (saves.length > 0) {
+      const matchingSave = saves.find((s) => s.id === Number(saveId))
+      if (matchingSave) {
+        setSave(matchingSave)
+      }
+    }
+  }, [saves, saveId])
 
   const [isLoading, setLoading] = useState(true)
 

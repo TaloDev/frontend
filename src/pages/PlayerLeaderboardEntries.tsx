@@ -39,9 +39,7 @@ export default function PlayerLeaderboardEntries() {
   const loading = !player || leaderboardsLoading || entriesLoading
 
   const goToLeaderboard = (internalName: string) => {
-    navigate(routes.leaderboardEntries.replace(':internalName', internalName), {
-      state: { player }
-    })
+    navigate(routes.leaderboardEntries.replace(':internalName', internalName))
   }
 
   const onEntryUpdated = useCallback((entry: LeaderboardEntry) => {
