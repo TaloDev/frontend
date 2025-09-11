@@ -16,17 +16,20 @@ import canPerformAction, { PermissionBasedAction } from '../utils/canPerformActi
 import { Leaderboard, LeaderboardSortMode, LeaderboardRefreshInterval } from '../entities/leaderboard'
 import { KeyedMutator } from 'swr'
 import clsx from 'clsx'
+import { IconRefresh, IconTrash } from '@tabler/icons-react'
 
 type LeaderboardDetailsProps = {
   modalState: [boolean, (open: boolean) => void]
   mutate: KeyedMutator<{ leaderboards: Leaderboard[] }>
   editingLeaderboard: Leaderboard | null
+  onResetClick: () => void
 }
 
 const LeaderboardDetails = ({
   modalState,
   mutate,
-  editingLeaderboard
+  editingLeaderboard,
+  onResetClick
 }: LeaderboardDetailsProps) => {
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)
@@ -199,6 +202,43 @@ const LeaderboardDetails = ({
             value={unique}
           />
 
+          {editingLeaderboard && canPerformAction(user, PermissionBasedAction.DELETE_LEADERBOARD) &&
+            <div className='p-4 space-y-2 bg-red-100 border border-red-400 rounded'>
+              <p className='font-semibold'>Danger zone</p>
+
+              <p className='space-y-2'>
+                <p>Once taken, these actions are irreversible.</p>
+                <div className='flex space-x-2'>
+                  <Button
+                    type='button'
+                    isLoading={isDeleting}
+                    onClick={onResetClick}
+                    variant='red'
+                    className='!w-auto'
+                    icon={<IconRefresh />}
+                  >
+                    <span>
+                      Reset
+                    </span>
+                  </Button>
+
+                  <Button
+                    type='button'
+                    isLoading={isDeleting}
+                    onClick={onDeleteClick}
+                    variant='red'
+                    className='!w-auto'
+                    icon={<IconTrash />}
+                  >
+                    <span>
+                      Delete
+                    </span>
+                  </Button>
+                </div>
+              </p>
+            </div>
+          }
+
           {error && <ErrorMessage error={error} />}
         </div>
 
@@ -215,29 +255,14 @@ const LeaderboardDetails = ({
             </div>
           }
           {editingLeaderboard &&
-            <div className='flex space-x-2'>
-              {canPerformAction(user, PermissionBasedAction.DELETE_LEADERBOARD) &&
-                <div className='w-full md:w-32'>
-                  <Button
-                    type='button'
-                    isLoading={isDeleting}
-                    onClick={onDeleteClick}
-                    variant='red'
-                  >
-                    Delete
-                  </Button>
-                </div>
-              }
-
-              <div className='w-full md:w-32'>
-                <Button
-                  disabled={!internalName || !displayName || !sortMode || isDeleting}
-                  isLoading={isLoading}
-                  onClick={onUpdateClick}
-                >
-                  Update
-                </Button>
-              </div>
+            <div className='w-full md:w-32'>
+              <Button
+                disabled={!internalName || !displayName || !sortMode || isDeleting}
+                isLoading={isLoading}
+                onClick={onUpdateClick}
+              >
+                Update
+              </Button>
             </div>
           }
           <div className='w-full md:w-32'>
