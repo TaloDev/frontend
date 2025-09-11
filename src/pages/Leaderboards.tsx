@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import ErrorMessage from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
@@ -16,12 +16,14 @@ import useSortedItems from '../utils/useSortedItems'
 import Page from '../components/Page'
 import Table from '../components/tables/Table'
 import { Leaderboard } from '../entities/leaderboard'
+import { ResetLeaderboardEntries } from '../modals/ResetLeaderboardEntries'
 
 export default function Leaderboards() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
   const navigate = useNavigate()
 
   const [showModal, setShowModal] = useState(false)
+  const [showResetModal, setShowResetModal] = useState(false)
   const [editingLeaderboard, setEditingLeaderboard] = useState<Leaderboard | null>(null)
 
   const { leaderboards, loading, error, mutate } = useLeaderboards(activeGame)
@@ -29,19 +31,31 @@ export default function Leaderboards() {
   const sortedLeaderboards = useSortedItems(leaderboards, 'createdAt')
 
   useEffect(() => {
-    if (!showModal) setEditingLeaderboard(null)
-  }, [showModal, editingLeaderboard])
+    if (!showModal && !showResetModal) setEditingLeaderboard(null)
+  }, [showModal, showResetModal])
 
-  const goToEntries = (leaderboard: Leaderboard) => {
+  const goToEntries = useCallback((leaderboard: Leaderboard) => {
     navigate(routes.leaderboardEntries.replace(':internalName', leaderboard.internalName), {
       state: { leaderboard }
     })
-  }
+  }, [navigate])
 
-  const onEditLeaderboardClick = (leaderboard: Leaderboard) => {
+  const onEditLeaderboardClick = useCallback((leaderboard: Leaderboard) => {
     setEditingLeaderboard(leaderboard)
     setShowModal(true)
-  }
+  }, [])
+
+  const onResetLeaderboardClick = useCallback(() => {
+    setShowModal(false)
+    setShowResetModal(true)
+  }, [])
+
+  const onResetLeaderboardCloseClick = useCallback((close: boolean) => {
+    setShowResetModal(false)
+    if (!close) {
+      setShowModal(true)
+    }
+  }, [])
 
   return (
     <Page
@@ -97,6 +111,13 @@ export default function Leaderboards() {
         <LeaderboardDetails
           modalState={[showModal, setShowModal]}
           mutate={mutate}
+          editingLeaderboard={editingLeaderboard}
+          onResetClick={onResetLeaderboardClick}
+        />
+      }
+      {showResetModal &&
+        <ResetLeaderboardEntries
+          modalState={[showResetModal, onResetLeaderboardCloseClick]}
           editingLeaderboard={editingLeaderboard}
         />
       }

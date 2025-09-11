@@ -25,7 +25,12 @@ describe('<LeaderboardDetails />', () => {
         { node: userState, initialValue: { type: UserType.ADMIN } },
         { node: activeGameState, initialValue: activeGameValue }
       ]}>
-        <LeaderboardDetails modalState={[true, closeMock]} mutate={mutateMock} editingLeaderboard={null} />
+        <LeaderboardDetails
+          modalState={[true, closeMock]}
+          mutate={mutateMock}
+          editingLeaderboard={null}
+          onResetClick={vi.fn()}
+        />
       </KitchenSink>
     )
 
@@ -66,7 +71,12 @@ describe('<LeaderboardDetails />', () => {
         { node: userState, initialValue: { type: UserType.ADMIN } },
         { node: activeGameState, initialValue: activeGameValue }
       ]}>
-        <LeaderboardDetails modalState={[true, closeMock]} mutate={vi.fn()} editingLeaderboard={null} />
+        <LeaderboardDetails
+          modalState={[true, closeMock]}
+          mutate={vi.fn()}
+          editingLeaderboard={null}
+          onResetClick={vi.fn()}
+        />
       </KitchenSink>
     )
 
@@ -88,7 +98,12 @@ describe('<LeaderboardDetails />', () => {
         { node: userState, initialValue: { type: UserType.ADMIN } },
         { node: activeGameState, initialValue: activeGameValue }
       ]}>
-        <LeaderboardDetails modalState={[true, closeMock]} mutate={vi.fn()} editingLeaderboard={null} />
+        <LeaderboardDetails
+          modalState={[true, closeMock]}
+          mutate={vi.fn()}
+          editingLeaderboard={null}
+          onResetClick={vi.fn()}
+        />
       </KitchenSink>
     )
 
@@ -111,6 +126,7 @@ describe('<LeaderboardDetails />', () => {
             unique: true,
             refreshInterval: LeaderboardRefreshInterval.WEEKLY
           })}
+          onResetClick={vi.fn()}
         />
       </KitchenSink>
     )
@@ -145,6 +161,7 @@ describe('<LeaderboardDetails />', () => {
           modalState={[true, closeMock]}
           mutate={mutateMock}
           editingLeaderboard={initialLeaderboard}
+          onResetClick={vi.fn()}
         />
       </KitchenSink>
     )
@@ -176,6 +193,7 @@ describe('<LeaderboardDetails />', () => {
           modalState={[true, vi.fn()]}
           mutate={vi.fn()}
           editingLeaderboard={leaderboardMock()}
+          onResetClick={vi.fn()}
         />
       </KitchenSink>
     )
@@ -205,6 +223,7 @@ describe('<LeaderboardDetails />', () => {
           modalState={[true, closeMock]}
           mutate={mutateMock}
           editingLeaderboard={initialLeaderboard}
+          onResetClick={vi.fn()}
         />
       </KitchenSink>
     )
@@ -235,6 +254,7 @@ describe('<LeaderboardDetails />', () => {
           modalState={[true, vi.fn()]}
           mutate={vi.fn()}
           editingLeaderboard={initialLeaderboard}
+          onResetClick={vi.fn()}
         />
       </KitchenSink>
     )
@@ -256,6 +276,7 @@ describe('<LeaderboardDetails />', () => {
           modalState={[true, closeMock]}
           mutate={vi.fn()}
           editingLeaderboard={leaderboardMock()}
+          onResetClick={vi.fn()}
         />
       </KitchenSink>
     )
@@ -278,7 +299,12 @@ describe('<LeaderboardDetails />', () => {
         { node: userState, initialValue: { type: UserType.ADMIN } },
         { node: activeGameState, initialValue: activeGameValue }
       ]}>
-        <LeaderboardDetails modalState={[true, closeMock]} mutate={mutateMock} editingLeaderboard={null} />
+        <LeaderboardDetails
+          modalState={[true, closeMock]}
+          mutate={mutateMock}
+          editingLeaderboard={null}
+          onResetClick={vi.fn()}
+        />
       </KitchenSink>
     )
 
