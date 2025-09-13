@@ -53,7 +53,7 @@ export function ResetLeaderboardEntries({
     <Modal
       id='reset-leaderboard-entries'
       title='Reset leaderboard entries'
-      modalState={modalState}
+      modalState={[true, () => goBack(true)]}
       className={clsx('flex flex-col', {
         'md:!h-[55vh]': isMenuOpen
       })}
@@ -63,6 +63,9 @@ export function ResetLeaderboardEntries({
           <p>
             After clicking <b>Reset</b>, all leaderboard entries from players matching the selected reset mode will be permanently deleted. This action cannot be undone.
           </p>
+          <div className='p-4 text-sm bg-yellow-50 border border-yellow-300 rounded'>
+            <p>If Steamworks syncing is enabled, your Talo leaderboard entries are deleted instantly, but the Steamworks leaderboard may take up to an hour to update.</p>
+          </div>
 
           <div className='w-full'>
             <label htmlFor='refresh-interval' className='block font-semibold mb-1'>Reset mode</label>
