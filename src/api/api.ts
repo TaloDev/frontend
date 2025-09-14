@@ -8,6 +8,7 @@ export const apiConfig = {
 }
 
 const instance = axios.create(apiConfig)
+let refreshPromise: ReturnType<typeof refreshAccess> | null = null
 
 instance.interceptors.request.use((config) => {
   if (AuthService.getToken()) {
@@ -32,13 +33,24 @@ instance.interceptors.response.use((response) => {
     if (error.response?.status === 401 && !request._retry) {
       request._retry = true
 
-      const { accessToken } = await refreshAccess()
-      const newToken = accessToken
+      if (!refreshPromise) {
+        refreshPromise = refreshAccess().finally(() => {
+          refreshPromise = null
+        })
+      }
 
-      AuthService.setToken(newToken)
-      axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
+      try {
+        const { accessToken } = await refreshPromise
+        const newToken = accessToken
 
-      return instance(request)
+        AuthService.setToken(newToken)
+        axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`
+
+        return instance(request)
+      } catch (refreshError) {
+        AuthService.reload()
+        return Promise.reject(refreshError)
+      }
     } else if (error.response?.status === 401 && request._retry) {
       AuthService.reload()
     }
