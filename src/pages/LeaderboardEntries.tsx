@@ -27,6 +27,9 @@ import UpdateEntryScore from '../modals/UpdateEntryScore'
 import Toggle from '../components/toggles/Toggle'
 import Identifier from '../components/Identifier'
 import { PropBadges } from '../components/PropBadges'
+import useTimePeriodAndDates, { timePeriods } from '../utils/useTimePeriodAndDates'
+import DateInput from '../components/DateInput'
+import TimePeriodPicker from '../components/TimePeriodPicker'
 
 export default function LeaderboardEntries() {
   const location = useLocation()
@@ -36,9 +39,25 @@ export default function LeaderboardEntries() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
   const [leaderboard, setLeaderboard] = useState<Leaderboard | undefined>(location.state?.leaderboard)
 
+  const {
+    timePeriod,
+    setTimePeriod,
+    selectedStartDate,
+    selectedEndDate,
+    onStartDateChange,
+    onEndDateChange
+  } = useTimePeriodAndDates(`${internalName}-entries`)
+
   const [page, setPage] = useState(0)
   const [withDeleted, setWithDeleted] = useState(false)
-  const { entries, count, itemsPerPage, loading, error: fetchError, mutate } = useLeaderboardEntries(activeGame, leaderboard?.id, page, withDeleted)
+  const { entries, count, itemsPerPage, loading, error: fetchError, mutate } = useLeaderboardEntries({
+    activeGame,
+    leaderboardId: leaderboard?.id,
+    page,
+    withDeleted,
+    startDate: selectedStartDate,
+    endDate: selectedEndDate
+  })
 
   const [error, setError] = useState<TaloError | null>(null)
 
@@ -130,6 +149,46 @@ export default function LeaderboardEntries() {
           </div>
         </div>
       }
+
+      <div className='justify-between items-start'>
+        <div className='mb-4 md:mb-8'>
+          <TimePeriodPicker
+            periods={timePeriods}
+            onPick={(period) => setTimePeriod(period.id)}
+            selectedPeriod={timePeriod}
+          />
+        </div>
+
+        <div className='flex items-end w-full md:w-1/2 space-x-4'>
+          <div className='w-1/3'>
+            <DateInput
+              id='start-date'
+              onDateTimeStringChange={onStartDateChange}
+              value={selectedStartDate}
+              textInputProps={{
+                label: 'Start date',
+                placeholder: 'Start date',
+                errors: fetchError?.keys.startDate,
+                variant: undefined
+              }}
+            />
+          </div>
+
+          <div className='w-1/3'>
+            <DateInput
+              id='end-date'
+              onDateTimeStringChange={onEndDateChange}
+              value={selectedEndDate}
+              textInputProps={{
+                label: 'End date',
+                placeholder: 'End date',
+                errors: fetchError?.keys.endDate,
+                variant: undefined
+              }}
+            />
+          </div>
+        </div>
+      </div>
 
       {error && <ErrorMessage error={error} />}
 
