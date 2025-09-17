@@ -16,9 +16,11 @@ import useSortedItems from '../utils/useSortedItems'
 import { GameStat } from '../entities/gameStat'
 import { useNavigate } from 'react-router-dom'
 import routes from '../constants/routes'
+import { ResetStat } from '../modals/ResetStat'
 
 export default function Stats() {
   const [showModal, setShowModal] = useState(false)
+  const [showResetModal, setShowResetModal] = useState(false)
   const [editingStat, setEditingStat] = useState<GameStat | null>(null)
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
@@ -29,12 +31,24 @@ export default function Stats() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!showModal) setEditingStat(null)
-  }, [showModal, setEditingStat])
+    if (!showModal && !showResetModal) setEditingStat(null)
+  }, [showModal, showResetModal])
 
   const onEditStatClick = useCallback((stat: GameStat) => {
     setEditingStat(stat)
     setShowModal(true)
+  }, [])
+
+  const onResetStatClick = useCallback(() => {
+    setShowModal(false)
+    setShowResetModal(true)
+  }, [])
+
+  const onResetStatCloseClick = useCallback((close: boolean) => {
+    setShowResetModal(false)
+    if (!close) {
+      setShowModal(true)
+    }
   }, [])
 
   const onViewMetricsClick = useCallback((stat: GameStat) => {
@@ -92,6 +106,13 @@ export default function Stats() {
         <StatDetails
           modalState={[showModal, setShowModal]}
           mutate={mutate}
+          editingStat={editingStat}
+          onResetClick={onResetStatClick}
+        />
+      }
+      {showResetModal &&
+        <ResetStat
+          modalState={[showResetModal, onResetStatCloseClick]}
           editingStat={editingStat}
         />
       }
