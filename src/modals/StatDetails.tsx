@@ -18,11 +18,13 @@ import canPerformAction, { PermissionBasedAction } from '../utils/canPerformActi
 import { GameStat } from '../entities/gameStat'
 import { KeyedMutator } from 'swr'
 import { z } from 'zod'
+import { IconRefresh, IconTrash } from '@tabler/icons-react'
 
 type StatDetailsProps = {
   modalState: [boolean, (open: boolean) => void]
   mutate: KeyedMutator<{ stats: GameStat[] }>
   editingStat: GameStat | null
+  onResetClick?: () => void
 }
 
 const validationSchema = z.object({
@@ -92,7 +94,8 @@ type FormValues = z.infer<typeof validationSchema>
 const StatDetails = ({
   modalState,
   mutate,
-  editingStat
+  editingStat,
+  onResetClick
 }: StatDetailsProps) => {
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)
@@ -324,6 +327,44 @@ const StatDetails = ({
             errors={[errors.maxChange?.message]}
           />
 
+          {editingStat && canPerformAction(user, PermissionBasedAction.DELETE_STAT) &&
+            <div className='p-4 space-y-2 bg-red-100 border border-red-400 rounded'>
+              <p className='font-semibold'>Danger zone</p>
+
+              <div className='space-y-2'>
+                <p>Once taken, these actions are irreversible.</p>
+                <div className='flex space-x-2'>
+                  {onResetClick &&
+                    <Button
+                      type='button'
+                      onClick={onResetClick}
+                      variant='red'
+                      className='!w-auto'
+                      icon={<IconRefresh />}
+                    >
+                      <span>
+                        Reset
+                      </span>
+                    </Button>
+                  }
+
+                  <Button
+                    type='button'
+                    isLoading={isDeleting}
+                    onClick={onDeleteClick}
+                    variant='red'
+                    className='!w-auto'
+                    icon={<IconTrash />}
+                  >
+                    <span>
+                      Delete
+                    </span>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          }
+
           {apiError && <ErrorMessage error={apiError} />}
         </div>
 
@@ -339,28 +380,13 @@ const StatDetails = ({
             </div>
           }
           {editingStat &&
-            <div className='flex space-x-2'>
-              {canPerformAction(user, PermissionBasedAction.DELETE_STAT) &&
-                <div className='w-full md:w-32'>
-                  <Button
-                    type='button'
-                    isLoading={isDeleting}
-                    onClick={onDeleteClick}
-                    variant='red'
-                  >
-                    Delete
-                  </Button>
-                </div>
-              }
-
-              <div className='w-full md:w-32'>
-                <Button
-                  disabled={!isValid || isDeleting}
-                  isLoading={isLoading}
-                >
-                  Update
-                </Button>
-              </div>
+            <div className='w-full md:w-32'>
+              <Button
+                disabled={!isValid || isDeleting}
+                isLoading={isLoading}
+              >
+                Update
+              </Button>
             </div>
           }
           <div className='w-full md:w-32'>

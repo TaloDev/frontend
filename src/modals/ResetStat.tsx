@@ -7,21 +7,21 @@ import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Select from '../components/Select'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import { useRecoilValue } from 'recoil'
-import { Leaderboard } from '../entities/leaderboard'
+import { GameStat } from '../entities/gameStat'
 import clsx from 'clsx'
-import { resetLeaderboard } from '../api/resetLeaderboard'
+import { resetStat } from '../api/resetStat'
 import ToastContext from '../components/toast/ToastContext'
 import { ResetMode, resetModeOptions } from '../constants/resetMode'
 
-type ResetLeaderboardEntriesProps = {
+type ResetStatProps = {
   modalState: [boolean, (goBack: boolean) => void]
-  editingLeaderboard: Leaderboard | null
+  editingStat: GameStat | null
 }
 
-export function ResetLeaderboardEntries({
+export function ResetStat({
   modalState,
-  editingLeaderboard
-}: ResetLeaderboardEntriesProps) {
+  editingStat
+}: ResetStatProps) {
   const [, goBack] = modalState
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState<TaloError | null>(null)
@@ -40,7 +40,7 @@ export function ResetLeaderboardEntries({
     setError(null)
 
     try {
-      const res = await resetLeaderboard(activeGame.id, editingLeaderboard!.id, resetMode)
+      const res = await resetStat(activeGame.id, editingStat!.id, resetMode)
       toast.trigger(`${res.deletedCount} ${res.deletedCount === 1 ? 'entry was' : 'entries were'} deleted`)
       goBack(true)
     } catch (err) {
@@ -51,8 +51,8 @@ export function ResetLeaderboardEntries({
 
   return (
     <Modal
-      id='reset-leaderboard-entries'
-      title='Reset leaderboard entries'
+      id='reset-stat'
+      title={`Reset ${editingStat?.name}`}
       modalState={[true, () => goBack(true)]}
       className={clsx('flex flex-col', {
         'md:!h-[55vh]': isMenuOpen
@@ -61,10 +61,10 @@ export function ResetLeaderboardEntries({
       <form className='flex flex-col grow'>
         <div className='p-4 space-y-4'>
           <p>
-            After clicking <b>Reset</b>, all leaderboard entries from players matching the selected reset mode will be permanently deleted. This action cannot be undone.
+            After clicking <b>Reset</b>, all player stat data matching the selected reset mode will be permanently deleted. This action cannot be undone.
           </p>
           <div className='p-4 text-sm bg-yellow-50 border border-yellow-300 rounded'>
-            <p>If Steamworks syncing is enabled, your Talo leaderboard entries are deleted instantly, but the Steamworks leaderboard may take up to an hour to update.</p>
+            <p>If Steamworks syncing is enabled, your Talo stat data is deleted instantly, but the Steamworks stats may take up to an hour to update.</p>
           </div>
 
           <div className='w-full'>
