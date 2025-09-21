@@ -52,7 +52,7 @@ export function ResetLeaderboardEntries({
   return (
     <Modal
       id='reset-leaderboard-entries'
-      title='Reset leaderboard entries'
+      title={`Reset ${editingLeaderboard?.name}`}
       modalState={[true, () => goBack(true)]}
       className={clsx('flex flex-col', {
         'md:!h-[55vh]': isMenuOpen
