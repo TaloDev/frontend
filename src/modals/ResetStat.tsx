@@ -64,7 +64,7 @@ export function ResetStat({
             After clicking <b>Reset</b>, all player stat data matching the selected reset mode will be permanently deleted. This action cannot be undone.
           </p>
           <div className='p-4 text-sm bg-yellow-50 border border-yellow-300 rounded'>
-            <p>If Steamworks syncing is enabled, your Talo stat data is deleted instantly, but the Steamworks stats may take up to an hour to update.</p>
+            <p>If Steamworks syncing is enabled, your Talo stat data is deleted instantly, but the associated Steamworks player stats may take up to an hour to update.</p>
           </div>
 
           <div className='w-full'>
