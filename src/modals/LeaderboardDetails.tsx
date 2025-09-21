@@ -206,7 +206,7 @@ const LeaderboardDetails = ({
             <div className='p-4 space-y-2 bg-red-100 border border-red-400 rounded'>
               <p className='font-semibold'>Danger zone</p>
 
-              <p className='space-y-2'>
+              <div className='space-y-2'>
                 <p>Once taken, these actions are irreversible.</p>
                 <div className='flex space-x-2'>
                   <Button
@@ -235,7 +235,7 @@ const LeaderboardDetails = ({
                     </span>
                   </Button>
                 </div>
-              </p>
+              </div>
             </div>
           }
 
