@@ -33,8 +33,8 @@ describe('<PlayerProps />', () => {
   })
 
   it('should render current props', async () => {
-    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
-      players: [basePlayer]
+    axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
+      player: basePlayer
     })
 
     render(
@@ -59,8 +59,8 @@ describe('<PlayerProps />', () => {
   })
 
   it('should only enable the reset button after a change', async () => {
-    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
-      players: [basePlayer]
+    axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
+      player: basePlayer
     })
 
     render(
@@ -86,8 +86,8 @@ describe('<PlayerProps />', () => {
   })
 
   it('should only enable the reset a change', async () => {
-    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
-      players: [basePlayer]
+    axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
+      player: basePlayer
     })
 
     render(
@@ -113,8 +113,8 @@ describe('<PlayerProps />', () => {
   })
 
   it('should delete existing props', async () => {
-    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
-      players: [basePlayer]
+    axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
+      player: basePlayer
     })
 
     render(
@@ -137,8 +137,8 @@ describe('<PlayerProps />', () => {
   })
 
   it('should add new props', async () => {
-    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
-      players: [basePlayer]
+    axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
+      player: basePlayer
     })
 
     render(
@@ -164,8 +164,8 @@ describe('<PlayerProps />', () => {
   })
 
   it('should delete new props', async () => {
-    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
-      players: [basePlayer]
+    axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
+      player: basePlayer
     })
 
     render(
@@ -191,8 +191,8 @@ describe('<PlayerProps />', () => {
   })
 
   it('should show a message for players with no props', async () => {
-    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
-      players: [{ ...basePlayer, props: [] }]
+    axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
+      player: { ...basePlayer, props: [] }
     })
 
     render(
@@ -214,7 +214,7 @@ describe('<PlayerProps />', () => {
   })
 
   it('should return to the players page if the find request fails', async () => {
-    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).networkErrorOnce()
+    axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).networkErrorOnce()
 
     const setLocationMock = vi.fn()
 
@@ -238,8 +238,8 @@ describe('<PlayerProps />', () => {
   })
 
   it('should save props', async () => {
-    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
-      players: [basePlayer]
+    axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
+      player: basePlayer
     })
 
     axiosMock.onPatch(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
@@ -280,8 +280,8 @@ describe('<PlayerProps />', () => {
   })
 
   it('should render saving errors', async () => {
-    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
-      players: [basePlayer]
+    axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
+      player: basePlayer
     })
 
     axiosMock.onPatch(`http://talo.api/games/1/players/${basePlayer.id}`).networkErrorOnce()
@@ -318,8 +318,8 @@ describe('<PlayerProps />', () => {
       ]
     }
 
-    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
-      players: [player]
+    axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
+      player
     })
 
     render(
@@ -346,8 +346,8 @@ describe('<PlayerProps />', () => {
   })
 
   it('should add props from JSON input', async () => {
-    axiosMock.onGet(`http://talo.api/games/1/players?search=${basePlayer.id}`).replyOnce(200, {
-      players: [basePlayer]
+    axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
+      player: basePlayer
     })
 
     render(
