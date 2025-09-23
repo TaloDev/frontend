@@ -8,7 +8,8 @@ export enum PermissionBasedAction {
   VIEW_PLAYER_AUTH_ACTIVITIES,
   UPDATE_PLAYER_STAT,
   UPDATE_LEADERBOARD_ENTRY,
-  DELETE_CHANNEL
+  DELETE_CHANNEL,
+  DELETE_PLAYER
 }
 
 export default function canPerformAction(user: User, action: PermissionBasedAction) {
@@ -22,6 +23,7 @@ export default function canPerformAction(user: User, action: PermissionBasedActi
     case PermissionBasedAction.UPDATE_PLAYER_STAT:
     case PermissionBasedAction.UPDATE_LEADERBOARD_ENTRY:
     case PermissionBasedAction.DELETE_CHANNEL:
+    case PermissionBasedAction.DELETE_PLAYER:
       return user.type === UserType.ADMIN
     case PermissionBasedAction.DELETE_GROUP:
       return [UserType.DEV, UserType.ADMIN].includes(user.type)
