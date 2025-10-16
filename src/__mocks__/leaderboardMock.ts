@@ -7,6 +7,7 @@ export default function leaderboardMock(extra: Partial<Leaderboard> = {}): Leade
     name: 'Score',
     sortMode: LeaderboardSortMode.ASC,
     unique: true,
+    uniqueByProps: false,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     refreshInterval: LeaderboardRefreshInterval.NEVER,

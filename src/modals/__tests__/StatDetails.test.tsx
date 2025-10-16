@@ -178,8 +178,8 @@ describe('<StatDetails />', () => {
       </KitchenSink>
     )
 
-    await userEvent.clear(screen.getByLabelText('Min time between updates'))
-    await userEvent.type(screen.getByLabelText('Min time between updates'), '-1')
+    await userEvent.clear(screen.getByLabelText('Min seconds between updates'))
+    await userEvent.type(screen.getByLabelText('Min seconds between updates'), '-1')
 
     expect(await screen.findByText('Time between updates must be greater than or equal to 0')).toBeInTheDocument()
   })
