@@ -45,6 +45,7 @@ const LeaderboardDetails = ({
   const [refreshInterval, setRefreshInterval] = useState(editingLeaderboard?.refreshInterval ?? LeaderboardRefreshInterval.NEVER)
 
   const [unique, setUnique] = useState(editingLeaderboard?.unique ?? false)
+  const [uniqueByProps, setUniqueByProps] = useState(editingLeaderboard?.uniqueByProps ?? false)
 
   const [isMenuOpen, setMenuOpen] = useState(false)
 
@@ -54,7 +55,7 @@ const LeaderboardDetails = ({
     setError(null)
 
     try {
-      const { leaderboard } = await createLeaderboard(activeGame.id, { internalName, name: displayName, sortMode, unique, refreshInterval })
+      const { leaderboard } = await createLeaderboard(activeGame.id, { internalName, name: displayName, sortMode, unique, uniqueByProps, refreshInterval })
 
       mutate((data) => {
         return {
@@ -79,7 +80,7 @@ const LeaderboardDetails = ({
     setError(null)
 
     try {
-      const { leaderboard } = await updateLeaderboard(activeGame.id, editingLeaderboard!.id, { internalName, name: displayName, sortMode, unique, refreshInterval })
+      const { leaderboard } = await updateLeaderboard(activeGame.id, editingLeaderboard!.id, { internalName, name: displayName, sortMode, unique, uniqueByProps, refreshInterval })
 
       mutate((data) => {
         return {
@@ -201,6 +202,20 @@ const LeaderboardDetails = ({
             onChange={(value) => setUnique(value)}
             value={unique}
           />
+
+          {unique &&
+            <RadioGroup
+              label='Unique by props?'
+              name='uniqueByProps'
+              options={[
+                { label: 'Yes', value: true },
+                { label: 'No', value: false }
+              ]}
+              onChange={(value) => setUniqueByProps(value)}
+              value={uniqueByProps}
+              info='Each unique combination of props creates a separate entry for the player'
+            />
+          }
 
           {editingLeaderboard && canPerformAction(user, PermissionBasedAction.DELETE_LEADERBOARD) &&
             <div className='p-4 space-y-2 bg-red-100 border border-red-400 rounded'>

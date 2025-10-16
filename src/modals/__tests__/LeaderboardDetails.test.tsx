@@ -15,7 +15,7 @@ describe('<LeaderboardDetails />', () => {
   const activeGameValue = { id: 1, name: 'Shattered' }
 
   it('should create a leaderboard', async () => {
-    axiosMock.onPost('http://talo.api/games/1/leaderboards').replyOnce(200, { leaderboard: { id: 4 } })
+    axiosMock.onPost('http://talo.api/games/1/leaderboards').replyOnce(200, { leaderboard: leaderboardMock({ id: 4 }) })
 
     const closeMock = vi.fn()
     const mutateMock = vi.fn()
@@ -56,9 +56,9 @@ describe('<LeaderboardDetails />', () => {
     ]
 
     const mutator = mutateMock.mock.calls[0][0]
-    expect(mutator({ leaderboards })).toStrictEqual({
-      leaderboards: [...leaderboards, { id: 4 }]
-    })
+    const result = mutator({ leaderboards })
+    expect(result.leaderboards).toHaveLength(4)
+    expect(result.leaderboards[3].id).toBe(4)
   })
 
   it('should handle creation errors', async () => {
@@ -124,6 +124,7 @@ describe('<LeaderboardDetails />', () => {
           editingLeaderboard={leaderboardMock({
             sortMode: LeaderboardSortMode.ASC,
             unique: true,
+            uniqueByProps: true,
             refreshInterval: LeaderboardRefreshInterval.WEEKLY
           })}
           onResetClick={vi.fn()}
@@ -135,7 +136,10 @@ describe('<LeaderboardDetails />', () => {
     expect(screen.getByLabelText('Display name')).toHaveValue('Score')
     expect(screen.getByText('Ascending')).toBeInTheDocument()
     expect(screen.getByText('Weekly')).toBeInTheDocument()
-    expect(screen.getByLabelText('Yes')).toBeChecked()
+
+    const yesOptions = screen.getAllByLabelText('Yes')
+    expect(yesOptions[0]).toBeChecked() // unique
+    expect(yesOptions[1]).toBeChecked() // uniqueByProps
 
     expect(screen.getByText('Update')).toBeInTheDocument()
   })
@@ -289,7 +293,7 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should create a leaderboard with daily refresh', async () => {
-    axiosMock.onPost('http://talo.api/games/1/leaderboards').replyOnce(200, { leaderboard: { id: 4 } })
+    axiosMock.onPost('http://talo.api/games/1/leaderboards').replyOnce(200, { leaderboard: leaderboardMock({ id: 4 }) })
 
     const closeMock = vi.fn()
     const mutateMock = vi.fn()
@@ -313,6 +317,83 @@ describe('<LeaderboardDetails />', () => {
 
     await userEvent.click(screen.getByLabelText('Refresh entries'))
     await userEvent.click(screen.getByText('Daily'))
+
+    await userEvent.click(screen.getByText('Create'))
+
+    await waitFor(() => {
+      expect(closeMock).toHaveBeenCalled()
+    })
+
+    expect(mutateMock).toHaveBeenCalled()
+  })
+
+  it('should show uniqueByProps option when unique is true', () => {
+    render(
+      <KitchenSink states={[
+        { node: userState, initialValue: { type: UserType.ADMIN } },
+        { node: activeGameState, initialValue: activeGameValue }
+      ]}>
+        <LeaderboardDetails
+          modalState={[true, vi.fn()]}
+          mutate={vi.fn()}
+          editingLeaderboard={leaderboardMock({ unique: true })}
+          onResetClick={vi.fn()}
+        />
+      </KitchenSink>
+    )
+
+    expect(screen.getByText('Unique by props?')).toBeInTheDocument()
+    expect(screen.getByText('Each unique combination of props creates a separate entry for the player')).toBeInTheDocument()
+  })
+
+  it('should not show uniqueByProps option when unique is false', () => {
+    render(
+      <KitchenSink states={[
+        { node: userState, initialValue: { type: UserType.ADMIN } },
+        { node: activeGameState, initialValue: activeGameValue }
+      ]}>
+        <LeaderboardDetails
+          modalState={[true, vi.fn()]}
+          mutate={vi.fn()}
+          editingLeaderboard={leaderboardMock({ unique: false })}
+          onResetClick={vi.fn()}
+        />
+      </KitchenSink>
+    )
+
+    expect(screen.queryByText('Unique by props?')).not.toBeInTheDocument()
+  })
+
+  it('should create a leaderboard with uniqueByProps', async () => {
+    axiosMock.onPost('http://talo.api/games/1/leaderboards').replyOnce(200, { leaderboard: leaderboardMock({ id: 4 }) })
+
+    const closeMock = vi.fn()
+    const mutateMock = vi.fn()
+
+    render(
+      <KitchenSink states={[
+        { node: userState, initialValue: { type: UserType.ADMIN } },
+        { node: activeGameState, initialValue: activeGameValue }
+      ]}>
+        <LeaderboardDetails
+          modalState={[true, closeMock]}
+          mutate={mutateMock}
+          editingLeaderboard={null}
+          onResetClick={vi.fn()}
+        />
+      </KitchenSink>
+    )
+
+    await userEvent.type(screen.getByLabelText('Internal name'), 'score')
+    await userEvent.type(screen.getByLabelText('Display name'), 'Score')
+
+    const uniqueYesOptions = screen.getAllByLabelText('Yes')
+    await userEvent.click(uniqueYesOptions[0])
+
+    expect(screen.getByText('Unique by props?')).toBeInTheDocument()
+
+    const uniqueByPropsYesOptions = screen.getAllByLabelText('Yes')
+    await userEvent.click(uniqueByPropsYesOptions[1])
 
     await userEvent.click(screen.getByText('Create'))
 
