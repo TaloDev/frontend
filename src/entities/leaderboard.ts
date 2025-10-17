@@ -19,6 +19,7 @@ export const leaderboardSchema = z.object({
   name: z.string(),
   sortMode: z.nativeEnum(LeaderboardSortMode),
   unique: z.boolean(),
+  uniqueByProps: z.boolean(),
   refreshInterval: z.nativeEnum(LeaderboardRefreshInterval),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime()

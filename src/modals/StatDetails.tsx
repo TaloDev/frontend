@@ -236,23 +236,19 @@ const StatDetails = ({
             info='Global stats display an aggregated value from all players'
           />
 
-          <div>
-            <TextInput
-              id='min-time-between-updates'
-              type='number'
-              variant='modal'
-              label='Min time between updates'
-              placeholder='Seconds'
-              inputExtra={{
-                ...register('minTimeBetweenUpdates', { valueAsNumber: true }),
-                step: 'any'
-              }}
-              containerClassName='max-w-xs'
-              errors={[errors.minTimeBetweenUpdates?.message]}
-            />
-            <p className='mt-2 text-sm text-gray-500'>Seconds required to have elapsed between stat updates for a player</p>
-
-          </div>
+          <TextInput
+            id='min-time-between-updates'
+            type='number'
+            variant='modal'
+            label='Min seconds between updates'
+            placeholder='Seconds'
+            inputExtra={{
+              ...register('minTimeBetweenUpdates', { valueAsNumber: true }),
+              step: 'any'
+            }}
+            containerClassName='max-w-xs'
+            errors={[errors.minTimeBetweenUpdates?.message]}
+          />
 
           <div className='border-t border-b py-4 md:py-0 border-gray-200 md:border-none'>
             <div className='space-y-4 md:space-y-0 md:flex md:space-x-4'>

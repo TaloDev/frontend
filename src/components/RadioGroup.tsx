@@ -27,6 +27,7 @@ function RadioGroup<T>({
   return (
     <fieldset className='w-full'>
       {label && <legend className='font-semibold mb-1'>{label}</legend>}
+      {info && <p className='mb-2 text-sm text-gray-500'>{info}</p>}
 
       <div className='flex space-x-2'>
         {options.map((option, idx) => {
@@ -66,8 +67,6 @@ function RadioGroup<T>({
           )
         })}
       </div>
-
-      {info && <p className='mt-2 text-sm text-gray-500'>{info}</p>}
     </fieldset>
   )
 }

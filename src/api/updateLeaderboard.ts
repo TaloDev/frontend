@@ -3,7 +3,7 @@ import api from './api'
 import { Leaderboard, leaderboardSchema } from '../entities/leaderboard'
 import makeValidatedRequest from './makeValidatedRequest'
 
-type Data = Pick<Leaderboard, 'internalName' | 'name' | 'sortMode' | 'unique' | 'refreshInterval'>
+type Data = Pick<Leaderboard, 'internalName' | 'name' | 'sortMode' | 'unique' | 'uniqueByProps' | 'refreshInterval'>
 
 const updateLeaderboard = makeValidatedRequest(
   (gameId: number, leaderboardId: number, data: Data) => api.put(`/games/${gameId}/leaderboards/${leaderboardId}`, data),
