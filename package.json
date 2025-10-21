@@ -71,7 +71,7 @@
     "start-server-and-test": "^2.0.0",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5",
-    "vite": "^6.2.0",
+    "vite": "^6.4.1",
     "vitest": "^3.0.7"
   },
   "license": "MIT",
