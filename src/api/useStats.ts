@@ -4,6 +4,7 @@ import { Game } from '../entities/game'
 import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
 import { gameStatSchema } from '../entities/gameStat'
+import { convertDateToUTC } from '../utils/convertDateToUTC'
 
 export default function useStats(
   activeGame: Game | null,
@@ -14,8 +15,8 @@ export default function useStats(
   const fetcher = async ([url]: [string]) => {
     const qs = new URLSearchParams({
       withMetrics: (metricsStartDate || metricsEndDate) ? '1' : '0',
-      metricsStartDate,
-      metricsEndDate
+      metricsStartDate: convertDateToUTC(metricsStartDate),
+      metricsEndDate: convertDateToUTC(metricsEndDate)
     }).toString()
 
     const res = await makeValidatedGetRequest(`${url}?${qs}`, z.object({

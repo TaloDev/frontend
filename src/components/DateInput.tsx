@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import TextInput from './TextInput'
 import Tippy from '@tippyjs/react'
 import { DayPicker } from 'react-day-picker'
-import { addHours, format, isValid } from 'date-fns'
+import { format, isValid } from 'date-fns'
 
 type DateInputProps = {
   id: string
@@ -25,8 +25,12 @@ export default function DateInput({
     return isValid(new Date(value)) ? new Date(value) : new Date()
   }, [value])
 
-  const getDateTimeStringForValue = useCallback((value: Date): string => {
-    return addHours(value, (value.getTimezoneOffset() / 60) * -1).toISOString()
+  const getDateStringForValue = useCallback((value: Date): string => {
+    // return YYYY-MM-DD format in local time
+    const year = value.getFullYear()
+    const month = String(value.getMonth() + 1).padStart(2, '0')
+    const day = String(value.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
   }, [])
 
   return (
@@ -44,7 +48,7 @@ export default function DateInput({
             onSelect={(selectedDate) => {
               const newDate = selectedDate ?? new Date()
               onDateChange?.(newDate)
-              onDateTimeStringChange?.(getDateTimeStringForValue(newDate))
+              onDateTimeStringChange?.(getDateStringForValue(newDate))
 
               setOpen(false)
             }}
