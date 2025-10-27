@@ -4,13 +4,14 @@ import { Game } from '../entities/game'
 import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
 import { eventsVisualisationPayloadSchema } from './useEvents'
+import { convertDateToUTC } from '../utils/convertDateToUTC'
 
 export default function useEventBreakdown(activeGame: Game, eventName: string, startDate: string, endDate: string) {
   const fetcher = async ([url]: [string]) => {
     const qs = new URLSearchParams({
       eventName,
-      startDate,
-      endDate
+      startDate: convertDateToUTC(startDate),
+      endDate: convertDateToUTC(endDate)
     }).toString()
 
     const res = await makeValidatedGetRequest(`${url}?${qs}`, z.object({

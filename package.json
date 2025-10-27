@@ -3,7 +3,7 @@
     "dev": "vite",
     "dev:e2e": "vite --mode e2e",
     "build": "tsc -p tsconfig.build.json && vite build",
-    "test": "vitest",
+    "test": "TZ=UTC vitest",
     "test:e2e": "start-server-and-test dev:e2e http://localhost:8080 cypress:open",
     "cypress:open": "cypress open",
     "prepare": "husky || true",

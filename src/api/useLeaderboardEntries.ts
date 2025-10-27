@@ -4,6 +4,7 @@ import { Game } from '../entities/game'
 import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
 import { leaderboardEntrySchema } from '../entities/leaderboardEntry'
+import { convertDateToUTC } from '../utils/convertDateToUTC'
 
 export default function useLeaderboardEntries({
   activeGame,
@@ -23,8 +24,8 @@ export default function useLeaderboardEntries({
   const fetcher = async ([url]: [string]) => {
     const params: Record<string, string> = { page: String(page) }
     if (withDeleted) params.withDeleted = '1'
-    params.startDate = startDate
-    params.endDate = endDate
+    params.startDate = convertDateToUTC(startDate)
+    params.endDate = convertDateToUTC(endDate)
     const qs = new URLSearchParams(params).toString()
 
     const res = await makeValidatedGetRequest(`${url}?${qs}`, z.object({
