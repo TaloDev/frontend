@@ -7,7 +7,7 @@ describe('<DateInput />', () => {
     vi.setSystemTime(new Date(2022, 0, 1))
   })
 
-  it('should the date as dd MMM yyyy', () => {
+  it('should render the date as dd MMM yyyy', () => {
     render(
       <DateInput
         id='test'
@@ -43,6 +43,6 @@ describe('<DateInput />', () => {
     await userEvent.click(screen.getByDisplayValue('01 Jan 2022'))
     expect(await screen.findByText('January 2022')).toBeInTheDocument()
     await userEvent.click(screen.getByText('15'), { pointerEventsCheck: PointerEventsCheckLevel.Never })
-    expect(changeMock).toHaveBeenCalledWith('2022-01-15T00:00:00.000Z')
+    expect(changeMock).toHaveBeenCalledWith('2022-01-15')
   })
 })

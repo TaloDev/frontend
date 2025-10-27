@@ -3,6 +3,7 @@ import buildError from '../utils/buildError'
 import { Game } from '../entities/game'
 import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
+import { convertDateToUTC } from '../utils/convertDateToUTC'
 
 export const eventsVisualisationPayloadSchema = z.object({
   name: z.string(),
@@ -14,8 +15,8 @@ export const eventsVisualisationPayloadSchema = z.object({
 export default function useEvents(activeGame: Game, startDate: string, endDate: string) {
   const fetcher = async ([url]: [string]) => {
     const qs = new URLSearchParams({
-      startDate,
-      endDate
+      startDate: convertDateToUTC(startDate),
+      endDate: convertDateToUTC(endDate)
     }).toString()
 
     const res = await makeValidatedGetRequest(`${url}?${qs}`, z.object({

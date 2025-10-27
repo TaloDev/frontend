@@ -3,6 +3,7 @@ import buildError from '../utils/buildError'
 import { Game } from '../entities/game'
 import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { averageSessionDurationSchema, countSchema, Headlines } from '../entities/headline'
+import { convertDateToUTC } from '../utils/convertDateToUTC'
 
 const defaultHeadlines: Headlines = {
   new_players: { count: 0 },
@@ -25,8 +26,8 @@ function getSchema(headline: keyof Headlines) {
 export default function useHeadlines(activeGame: Game | null, startDate: string, endDate: string, includeDevData: boolean) {
   const fetcher = async ([url]: [string]) => {
     const qs = new URLSearchParams({
-      startDate,
-      endDate
+      startDate: convertDateToUTC(startDate),
+      endDate: convertDateToUTC(endDate)
     }).toString()
 
     const headlines: (keyof Headlines)[] = [

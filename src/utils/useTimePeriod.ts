@@ -9,31 +9,32 @@ export default (timePeriod: TimePeriod | null) => {
 
   useEffect(() => {
     if (timePeriod) {
-      const isStartOfWeekToday = isToday(startOfWeek(new Date()))
+      const now = new Date()
+      const isStartOfWeekToday = isToday(startOfWeek(now))
 
       switch (timePeriod) {
         case '7d':
-          setStartDate(format(sub(new Date(), { days: 7 }), 'yyyy-MM-dd'))
+          setStartDate(format(sub(now, { days: 7 }), 'yyyy-MM-dd'))
           break
         case '30d':
-          setStartDate(format(sub(new Date(), { days: 30 }), 'yyyy-MM-dd'))
+          setStartDate(format(sub(now, { days: 30 }), 'yyyy-MM-dd'))
           break
         case 'w':
           if (isStartOfWeekToday) {
-            setStartDate(format(sub(new Date(), { days: 7 }), 'yyyy-MM-dd'))
+            setStartDate(format(sub(now, { days: 7 }), 'yyyy-MM-dd'))
           } else {
-            setStartDate(format(startOfWeek(new Date()), 'yyyy-MM-dd'))
+            setStartDate(format(startOfWeek(now), 'yyyy-MM-dd'))
           }
           break
         case 'm':
-          setStartDate(format(startOfMonth(new Date()), 'yyyy-MM-dd'))
+          setStartDate(format(startOfMonth(now), 'yyyy-MM-dd'))
           break
         case 'y':
-          setStartDate(format(startOfYear(new Date()), 'yyyy-MM-dd'))
+          setStartDate(format(startOfYear(now), 'yyyy-MM-dd'))
           break
       }
 
-      setEndDate(format(new Date(), 'yyyy-MM-dd'))
+      setEndDate(format(now, 'yyyy-MM-dd'))
     } else {
       setStartDate('')
       setEndDate('')
