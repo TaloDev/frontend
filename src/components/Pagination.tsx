@@ -83,7 +83,7 @@ export default function Pagination({
                 <Button
                   variant='bare'
                   className={clsx(
-                    'min-w-10 px-3 py-2 text-black text-center text-sm font-medium rounded-md',
+                    'min-w-10 px-3 py-2 text-black text-center! text-sm font-medium rounded-md',
                     { 'bg-white hover:bg-gray-200': page !== pageNumber },
                     { 'bg-indigo-500 text-white': page === pageNumber }
                   )}
