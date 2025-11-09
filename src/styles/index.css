@@ -1,11 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --min-width-10: 2.5rem;
+  --min-width-20: 5rem;
+  --min-width-40: 10rem;
+  --min-width-60: 15rem;
+  --min-width-80: 20rem;
+}
 
 :root {
   --xy-node-border: none;
   --xy-attribution-background-color: none;
-  --xy-edge-stroke: theme('colors.gray.500');
+  --xy-edge-stroke: theme(--color-gray-500);
   --xy-edge-stroke-width: 2;
 }
 
@@ -89,7 +95,7 @@ table {
   @apply bg-white;
   @apply text-black;
   @apply p-2;
-  @apply !m-0;
+  @apply m-0!;
   @apply rounded;
   @apply border;
   @apply border-gray-300;
@@ -101,20 +107,20 @@ table {
 }
 
 .rdp-day:hover, .rdp-button:hover {
-  @apply bg-indigo-100 !important;
+  @apply bg-indigo-100!;
 }
 
 .rdp-day_selected {
-  @apply bg-indigo-500 !important;
+  @apply bg-indigo-500!;
 }
 
 .rdp-day_selected:hover {
-  @apply bg-indigo-600 !important;
+  @apply bg-indigo-600!;
 }
 
 .rdp-caption_label {
-  @apply !text-lg;
-  @apply !font-semibold;
+  @apply text-lg!;
+  @apply font-semibold!;
 }
 
 @keyframes spinners-react-circular-fixed {
