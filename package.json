@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@dinero.js/currencies": "^2.0.0-alpha.11",
-    "@hookform/resolvers": "^3.3.4",
+    "@hookform/resolvers": "^5.2.2",
     "@sentry/react": "^7.112.2",
     "@tabler/icons-react": "^3.2.0",
     "@tippyjs/react": "^4.2.5",
@@ -29,7 +29,7 @@
     "react-day-picker": "^8.3.5",
     "react-dom": "^18.3.1",
     "react-focus-lock": "^2.13.6",
-    "react-hook-form": "^7.43.8",
+    "react-hook-form": "^7.66.0",
     "react-router-dom": "^6.23.1",
     "react-select": "^5.8.0",
     "react-useportal": "^1.0.19",
@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^2.2.2",
+    "@tailwindcss/vite": "^4.1.17",
     "@testing-library/cypress": "^10.0.3",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^15.0.4",
@@ -54,7 +55,6 @@
     "@typescript-eslint/parser": "^7.13.1",
     "@vitejs/plugin-react-swc": "^3.8.0",
     "@vitest/coverage-v8": "^3.0.7",
-    "autoprefixer": "^10.4.19",
     "axios-mock-adapter": "^1.20.0",
     "cypress": "^14.0.0",
     "eslint": "^8.57.0",
@@ -67,9 +67,8 @@
     "husky": "^9.0.11",
     "jsdom": "^24.0.0",
     "lint-staged": ">=10",
-    "postcss": "^8.4.38",
     "start-server-and-test": "^2.0.0",
-    "tailwindcss": "^3.4.3",
+    "tailwindcss": "^4.1.17",
     "typescript": "^5.4.5",
     "vite": "^6.2.0",
     "vitest": "^3.0.7"
@@ -79,9 +78,9 @@
   "lint-staged": {
     "*.{ts,js,tsx,jsx}": "eslint --fix"
   },
-  "version": "0.62.0",
+  "version": "0.63.0",
   "engines": {
-    "node": "20.x"
+    "node": "22.x"
   },
   "type": "module"
 }

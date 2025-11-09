@@ -54,7 +54,7 @@ export default function Register() {
       termsAccepted: false,
       hasInvite: Boolean(location.state?.invite)
     },
-    mode: 'onBlur'
+    mode: 'onTouched'
   })
 
   const onRegisterClick = async ({ email, password, organisationName, username }: FormValues) => {
