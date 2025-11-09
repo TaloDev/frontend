@@ -22,7 +22,7 @@ export function PropBadges({ props, icon: Icon, devBuild, onClick, buttonTitle, 
   }, [props])
 
   return (
-    <div className={clsx('space-y-2', className)}>
+    <div className={clsx('gap-2', className)}>
       {sortedProps.map(({ key, value }) => (
         <span
           key={`${key}-${value}`}

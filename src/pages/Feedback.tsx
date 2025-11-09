@@ -63,7 +63,7 @@ export default function Feedback() {
         <div className='space-y-4'>
           <div>
             <div className='flex items-center'>
-              <div className='w-1/2 flex-grow md:flex-grow-0 md:w-[400px]'>
+              <div className='w-1/2 grow md:grow-0 md:w-[400px]'>
                 <Select
                   inputId='sort-mode'
                   options={feedbackCategories.map((category) => ({ label: category.name, value: category.internalName, desc: category.description }))}
@@ -77,7 +77,7 @@ export default function Feedback() {
               {canViewPage(user, routes.feedbackCategories) &&
                 <Button
                   onClick={() => navigate(routes.feedbackCategories)}
-                  className='ml-4 !w-auto'
+                  className='ml-4 w-auto!'
                 >
                   Edit categories
                 </Button>
@@ -85,7 +85,7 @@ export default function Feedback() {
             </div>
           </div>
           <div className='flex items-center'>
-            <div className='w-1/2 flex-grow md:flex-grow-0 md:w-[400px]'>
+            <div className='w-1/2 grow md:grow-0 md:w-[400px]'>
               <TextInput
                 id='feedback-search'
                 type='search'
@@ -129,6 +129,7 @@ export default function Feedback() {
                   <TableCell className='w-[400px]'>
                     <PropBadges
                       props={feedback.props}
+                      className='flex flex-col'
                       devBuild={feedback.devBuild}
                       icon={<IconCrosshair size={20} />}
                       onClick={setPropSearch}
