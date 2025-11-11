@@ -177,9 +177,7 @@ export default function IntegrationDetails({
     >
       <form onSubmit={handleSubmit(onEnableClick)}>
         <div className='p-4 space-y-4'>
-          <span>To learn more about how the integration works, <Link to='https://docs.trytalo.com/docs/integrations/steamworks?utm_source=dashboard&utm_medium=integration-modal'>visit the docs</Link></span>
-
-          <hr />
+          <div>To learn more about how the integration works, <Link to='https://docs.trytalo.com/docs/integrations/steamworks?utm_source=dashboard&utm_medium=integration-modal'>visit the docs</Link></div>
 
           <div className='space-y-4'>
             <TextInput
@@ -229,7 +227,7 @@ export default function IntegrationDetails({
             }
           </div>
 
-          <hr />
+          <hr className='border-gray-200' />
 
           <div className='flex justify-between items-start'>
             <div>

@@ -55,7 +55,7 @@ export default function GameSwitcher() {
                 const disabled = activeGame.id === game.id
 
                 return (
-                  <li key={game.name} className={clsx(dropdownButtonStyle, { ['!bg-transparent']: disabled })}>
+                  <li key={game.name} className={clsx(dropdownButtonStyle, { ['bg-transparent!']: disabled })}>
                     <Button
                       variant='bare'
                       disabled={disabled}
@@ -83,7 +83,7 @@ export default function GameSwitcher() {
             <div className='flex items-center'>
               <span
                 style={{ backgroundColor: randomColor({ seed: activeGame.name, luminosity: 'dark' }) }}
-                className='bg-indigo-100 rounded w-8 h-8 leading-7 text-center font-semibold text-white border-2 border-gray-900 border-opacity-30'
+                className='bg-indigo-100 rounded w-8 h-8 leading-7 text-center font-semibold text-white border-2 border-gray-900/30'
               >
                 {activeGame.name.substring(0, 1).toUpperCase()}
               </span>

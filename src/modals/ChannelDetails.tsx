@@ -170,7 +170,7 @@ export default function ChannelDetails({
       title={isEditing ? 'Edit channel' : 'Create channel'}
       modalState={modalState}
       className={clsx('flex flex-col', {
-        'md:!h-[50vh]': isMenuOpen
+        'md:h-[50vh]!': isMenuOpen
       })}
     >
       <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col grow'>
@@ -212,7 +212,7 @@ export default function ChannelDetails({
             />
           </div>
 
-          <hr />
+          <hr className='border-gray-200' />
 
           <div className='flex justify-between items-center'>
             <div>
