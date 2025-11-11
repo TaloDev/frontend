@@ -15,7 +15,6 @@ import deleteLeaderboard from '../api/deleteLeaderboard'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 import { Leaderboard, LeaderboardSortMode, LeaderboardRefreshInterval } from '../entities/leaderboard'
 import { KeyedMutator } from 'swr'
-import clsx from 'clsx'
 import { IconRefresh, IconTrash } from '@tabler/icons-react'
 
 type LeaderboardDetailsProps = {
@@ -46,8 +45,6 @@ const LeaderboardDetails = ({
 
   const [unique, setUnique] = useState(editingLeaderboard?.unique ?? false)
   const [uniqueByProps, setUniqueByProps] = useState(editingLeaderboard?.uniqueByProps ?? false)
-
-  const [isMenuOpen, setMenuOpen] = useState(false)
 
   const onCreateClick = async (e: MouseEvent<HTMLElement>) => {
     e.preventDefault()
@@ -143,9 +140,7 @@ const LeaderboardDetails = ({
       id='leaderboard-details'
       title={editingLeaderboard ? 'Update leaderboard' : 'Create leaderboard'}
       modalState={modalState}
-      className={clsx('flex flex-col', {
-        'md:!h-[75vh]': isMenuOpen
-      })}
+      className='flex flex-col'
     >
       <form className='flex flex-col grow'>
         <div className='p-4 space-y-4'>
@@ -187,8 +182,6 @@ const LeaderboardDetails = ({
               defaultValue={refreshIntervalOptions.find((option) => option.value === refreshInterval)}
               onChange={(option) => setRefreshInterval(option!.value)}
               options={refreshIntervalOptions}
-              onMenuOpen={() => setMenuOpen(true)}
-              onMenuClose={() => setMenuOpen(false)}
             />
           </div>
 
@@ -229,7 +222,7 @@ const LeaderboardDetails = ({
                     isLoading={isDeleting}
                     onClick={onResetClick}
                     variant='red'
-                    className='!w-auto'
+                    className='w-auto!'
                     icon={<IconRefresh />}
                   >
                     <span>
@@ -242,7 +235,7 @@ const LeaderboardDetails = ({
                     isLoading={isDeleting}
                     onClick={onDeleteClick}
                     variant='red'
-                    className='!w-auto'
+                    className='w-auto!'
                     icon={<IconTrash />}
                   >
                     <span>

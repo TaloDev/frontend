@@ -42,7 +42,7 @@ export default function EventsFilter({ eventNames, initialShow = false }: Events
         arrow={false}
         theme='bare'
         content={(
-          <div className='rdp !p-0 min-w-[400px] space-y-2'>
+          <div className='rdp p-0! min-w-[400px] space-y-2'>
             <div className='p-2 space-y-2'>
               <h2 className='font-semibold text-lg'>{filteredEventNames.length} events</h2>
               <TextInput
@@ -55,9 +55,9 @@ export default function EventsFilter({ eventNames, initialShow = false }: Events
               />
             </div>
 
-            <hr />
+            <hr className='border-gray-200' />
 
-            <ul className='p-2 h-[200px] overflow-y-scroll !mt-0'>
+            <ul className='p-2 h-[200px] overflow-y-scroll mt-0!'>
               {filteredEventNames.sort((a, b) => a.localeCompare(b)).map((name) => (
                 <li key={name}>
                   <CheckboxButton
@@ -71,7 +71,7 @@ export default function EventsFilter({ eventNames, initialShow = false }: Events
               {filteredEventNames.length === 0 && <li>No events found</li>}
             </ul>
 
-            <hr className='!mt-0' />
+            <hr className='mt-0! border-gray-200' />
 
             <div className='px-2 pb-2 flex items-center justify-between'>
               <LinkButton onClick={() => setSelectedEventNames((curr) => [...new Set([...curr, ...filteredEventNames])])}>
