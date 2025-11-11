@@ -43,9 +43,9 @@ export default function Modal({
   return (
     <Portal>
       <FocusLock>
-        <div className='fixed w-screen md:p-4 bg-gray-900 bg-opacity-60 flex items-start md:items-center justify-center inset-0 z-50 text-black transition-colors'>
+        <div className='fixed w-screen md:p-4 bg-gray-900/60 flex items-start md:items-center inset-0 z-50 text-black transition-colors'>
           <dialog
-            className={clsx('block w-full h-full md:h-auto md:w-[640px] bg-white md:rounded p-0', className, {
+            className={clsx('block w-full h-full md:h-auto md:w-[640px] md:mx-auto bg-white md:rounded p-0', className, {
               'overflow-y-scroll': scroll,
               'overflow-y-visible': !scroll
             })}

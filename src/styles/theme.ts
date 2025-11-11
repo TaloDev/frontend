@@ -1,6 +1,6 @@
-export const focusStyle = 'focus:outline-none focus:ring focus:ring-pink-500 focus:z-[999]'
+export const focusStyle = 'focus:outline-none focus:ring-2 focus:ring-pink-500 focus:z-[999]'
 
-export const labelFocusStyle = 'ring ring-pink-500'
+export const labelFocusStyle = 'ring-2 ring-pink-500'
 
 export const linkStyle = 'text-indigo-400 hover:underline font-semibold transition-colors rounded-none'
 
