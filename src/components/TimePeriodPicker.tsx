@@ -22,7 +22,7 @@ export default function TimePeriodPicker({ periods, onPick, selectedPeriod }: Ti
         <Button
           key={period.id}
           variant='bare'
-          className={clsx(buttonClassName, { 'bg-indigo-500 hover:!bg-indigo-500': period.id === selectedPeriod })}
+          className={clsx(buttonClassName, { 'bg-indigo-500 hover:bg-indigo-500': period.id === selectedPeriod })}
           onClick={() => onPick(period)}
         >
           {period.label}
