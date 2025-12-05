@@ -29,6 +29,7 @@ export default function Dashboard() {
     label: string
     titlePrefix: string
   }[] = [
+    { id: '1d', label: 'Today', titlePrefix: 'Today' },
     { id: '7d', label: '7 days', titlePrefix: 'Last 7 days' },
     { id: '30d', label: '30 days', titlePrefix: 'Last 30 days' },
     { id: 'w', label: 'This week', titlePrefix: 'This week' },

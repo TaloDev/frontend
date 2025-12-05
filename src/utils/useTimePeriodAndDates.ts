@@ -7,6 +7,7 @@ export const timePeriods: {
   id: TimePeriod
   label: string
 }[] = [
+  { id: '1d', label: 'Today' },
   { id: '7d', label: '7 days' },
   { id: '30d', label: '30 days' },
   { id: 'w', label: 'This week' },

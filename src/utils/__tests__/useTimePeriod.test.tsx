@@ -12,6 +12,12 @@ describe('useTimePeriod', () => {
     expect(result.current.endDate).toBe('')
   })
 
+  it('should return the correct dates for today', () => {
+    const { result } = renderHook(() => useTimePeriod('1d'))
+    expect(result.current.startDate).toBe('2021-06-12')
+    expect(result.current.endDate).toBe('2021-06-12')
+  })
+
   it('should return the correct dates for the last 7 days', () => {
     const { result } = renderHook(() => useTimePeriod('7d'))
     expect(result.current.startDate).toBe('2021-06-05')
