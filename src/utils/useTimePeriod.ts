@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { format, sub, startOfWeek, startOfMonth, startOfYear, isToday } from 'date-fns'
+import { format, sub, startOfWeek, startOfMonth, startOfYear, isToday, startOfDay } from 'date-fns'
 
-export type TimePeriod = '7d' | '30d' | 'w' | 'm' | 'y'
+export type TimePeriod = '1d' | '7d' | '30d' | 'w' | 'm' | 'y'
 
 export default (timePeriod: TimePeriod | null) => {
   const [startDate, setStartDate] = useState('')
@@ -13,6 +13,9 @@ export default (timePeriod: TimePeriod | null) => {
       const isStartOfWeekToday = isToday(startOfWeek(now))
 
       switch (timePeriod) {
+        case '1d':
+          setStartDate(format(startOfDay(now), 'yyyy-MM-dd'))
+          break
         case '7d':
           setStartDate(format(sub(now, { days: 7 }), 'yyyy-MM-dd'))
           break
