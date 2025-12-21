@@ -87,9 +87,9 @@ export default function Pagination({
                     { 'bg-white hover:bg-gray-200': page !== pageNumber },
                     { 'bg-indigo-500 text-white': page === pageNumber }
                   )}
-                  onClick={() => goToPage(pageNumber as number)}
+                  onClick={() => goToPage(pageNumber)}
                 >
-                  {String((pageNumber as number) + 1)}
+                  {pageNumber + 1}
                 </Button>
               )}
             </li>
