@@ -15,8 +15,10 @@ export default function useStats(
   const fetcher = async ([url]: [string]) => {
     const qs = new URLSearchParams({
       withMetrics: (metricsStartDate || metricsEndDate) ? '1' : '0',
-      metricsStartDate: convertDateToUTC(metricsStartDate),
-      metricsEndDate: convertDateToUTC(metricsEndDate)
+      // the backend prefers the dashboard to send yyyy-mm-dd dates for metrics
+      // so that the start date and end date can be set consistently
+      metricsStartDate: convertDateToUTC(metricsStartDate).split('T')[0],
+      metricsEndDate: convertDateToUTC(metricsEndDate).split('T')[0]
     }).toString()
 
     const res = await makeValidatedGetRequest(`${url}?${qs}`, z.object({
