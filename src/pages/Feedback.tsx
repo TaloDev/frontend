@@ -123,7 +123,7 @@ export default function Feedback() {
             >
               {(feedback) => (
                 <>
-                  <DateCell>{format(new Date(feedback.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
+                  <DateCell>{format(new Date(feedback.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
                   <TableCell>{feedback.category.name}</TableCell>
                   <TableCell className='w-[400px] whitespace-pre-wrap'>{feedback.comment}</TableCell>
                   <TableCell className='w-[400px]'>

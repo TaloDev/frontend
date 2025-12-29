@@ -58,8 +58,8 @@ export default function ConfirmPlanChange({
   }
 
   const groupedLines = groupBy(lines, (line) => {
-    const startDate = format(new Date(Number(line.period.start) * 1000), 'dd MMM Y')
-    const endDate = format(new Date(Number(line.period.end) * 1000), 'dd MMM Y')
+    const startDate = format(new Date(Number(line.period.start) * 1000), 'dd MMM yyyy')
+    const endDate = format(new Date(Number(line.period.end) * 1000), 'dd MMM yyyy')
     return [startDate, endDate]
   })
 
@@ -73,7 +73,7 @@ export default function ConfirmPlanChange({
         <div className='p-4 space-y-4'>
           <div>
             <h3 className='font-semibold'>Upcoming invoice</h3>
-            <p className='mt-1'>This is a preview of the invoice that will be billed on {format(new Date(collectionDate * 1000), 'dd MMM Y')}:</p>
+            <p className='mt-1'>This is a preview of the invoice that will be billed on {format(new Date(collectionDate * 1000), 'dd MMM yyyy')}:</p>
           </div>
 
           <table className='w-full'>

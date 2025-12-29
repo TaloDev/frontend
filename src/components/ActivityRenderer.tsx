@@ -15,7 +15,7 @@ type ActivityRendererProps = {
 export default function ActivityRenderer({ section }: ActivityRendererProps) {
   return (
     <div className='space-y-4'>
-      <SecondaryTitle className='text-lg'>{format(section.date, 'dd MMM Y')}</SecondaryTitle>
+      <SecondaryTitle className='text-lg'>{format(section.date, 'dd MMM yyyy')}</SecondaryTitle>
 
       {section.items.map((item, itemIdx) => (
         <div key={itemIdx} className='border-t-2 border-gray-700 pt-4'>

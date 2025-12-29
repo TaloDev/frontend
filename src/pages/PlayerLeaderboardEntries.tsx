@@ -93,7 +93,7 @@ export default function PlayerLeaderboardEntries() {
                     />
                   }
                 </TableCell>
-                <DateCell>{format(new Date(entry.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(entry.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
               </>
             )}
           </TableBody>

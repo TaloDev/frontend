@@ -77,8 +77,8 @@ export default function PlayerStats() {
                     }
                   </>
                 </TableCell>
-                <DateCell>{format(new Date(playerStat.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                <DateCell>{format(new Date(playerStat.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(playerStat.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(playerStat.updatedAt), 'dd MMM yyyy, HH:mm')}</DateCell>
               </>
             )}
           </TableBody>

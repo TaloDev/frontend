@@ -149,8 +149,8 @@ export default function PlayerProfile() {
           {(alias) => (
             <>
               <TableCell className='min-w-60'><PlayerAliases aliases={[alias]} /></TableCell>
-              <DateCell>{format(new Date(alias.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-              <DateCell>{format(new Date(alias.lastSeenAt), 'dd MMM Y, HH:mm')}</DateCell>
+              <DateCell>{format(new Date(alias.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+              <DateCell>{format(new Date(alias.lastSeenAt), 'dd MMM yyyy, HH:mm')}</DateCell>
             </>
           )}
         </TableBody>
