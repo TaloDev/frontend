@@ -130,7 +130,7 @@ export default function Groups() {
                     </div>
                   </TableCell>
                   <TableCell className='font-mono'>{group.count.toLocaleString()}</TableCell>
-                  <DateCell>{format(new Date(group.updatedAt), 'do MMM Y')}</DateCell>
+                  <DateCell>{format(new Date(group.updatedAt), 'dd MMM yyyy')}</DateCell>
                   <TableCell className='w-40'>
                     <Button
                       variant='grey'
