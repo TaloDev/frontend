@@ -170,7 +170,7 @@ describe('<Billing />', () => {
       </KitchenSink>
     )
 
-    expect(await screen.findByText('Your plan expires on 2nd Mar 2022')).toBeInTheDocument()
+    expect(await screen.findByText('Your plan expires on 02 Mar 2022')).toBeInTheDocument()
   })
 
   it('should not render the billing portal tile if they cannot view it', async () => {

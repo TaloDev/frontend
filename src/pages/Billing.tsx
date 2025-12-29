@@ -65,7 +65,7 @@ export default function Billing() {
                   header={(
                     <h2 className='text-xl font-semibold'>
                       <IconAlertCircle className='inline -mt-0.5 text-red-500 mr-2' size={24} />
-                      Your plan expires on {format(new Date(orgPlan.endDate), 'do MMM yyyy')}
+                      Your plan expires on {format(new Date(orgPlan.endDate), 'dd MMM yyyy')}
                     </h2>
                   )}
                   content={(

@@ -71,8 +71,8 @@ export default function FeedbackCategories() {
                   </div>
                 </TableCell>
                 <TableCell>{feedbackCategory.anonymised ? 'Yes' : 'No'}</TableCell>
-                <DateCell>{format(new Date(feedbackCategory.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                <DateCell>{format(new Date(feedbackCategory.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(feedbackCategory.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(feedbackCategory.updatedAt), 'dd MMM yyyy, HH:mm')}</DateCell>
                 <TableCell className='w-40'>
                   <Button variant='grey' onClick={() => onEditCategoryClick(feedbackCategory)}>Edit</Button>
                 </TableCell>

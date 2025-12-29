@@ -115,8 +115,8 @@ export default function PlayerProfile() {
       <div>
         <PlayerIdentifier player={player} />
         <div className='flex mt-4 space-x-2'>
-          <Identifier id={`Registered ${format(new Date(player.createdAt), 'do MMM Y')}`} />
-          <Identifier id={`Last seen ${format(new Date(player.lastSeenAt), 'do MMM Y')}`} />
+          <Identifier id={`Registered ${format(new Date(player.createdAt), 'dd MMM yyyy')}`} />
+          <Identifier id={`Last seen ${format(new Date(player.lastSeenAt), 'dd MMM yyyy')}`} />
           <span className={clsx(player.presence?.online && 'text-green-400')}>
             <Identifier id={`${player.presence?.online ? 'Online' : 'Offline'}${player.presence?.customStatus ? ` (${player.presence.customStatus})` : ''}`} />
           </span>
@@ -149,8 +149,8 @@ export default function PlayerProfile() {
           {(alias) => (
             <>
               <TableCell className='min-w-60'><PlayerAliases aliases={[alias]} /></TableCell>
-              <DateCell>{format(new Date(alias.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-              <DateCell>{format(new Date(alias.lastSeenAt), 'dd MMM Y, HH:mm')}</DateCell>
+              <DateCell>{format(new Date(alias.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+              <DateCell>{format(new Date(alias.lastSeenAt), 'dd MMM yyyy, HH:mm')}</DateCell>
             </>
           )}
         </TableBody>
@@ -182,7 +182,7 @@ export default function PlayerProfile() {
                     isLoading={isDeleting}
                     onClick={onDeleteClick}
                     variant='red'
-                    className='!w-auto'
+                    className='w-auto!'
                     icon={<IconTrash />}
                   >
                     <span>

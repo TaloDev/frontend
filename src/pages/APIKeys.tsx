@@ -122,8 +122,8 @@ export default function APIKeys() {
               {(key) => (
                 <>
                   <TableCell>{key.createdBy === user.username ? 'You' : key.createdBy}</TableCell>
-                  <DateCell>{format(new Date(key.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                  <DateCell>{key.lastUsedAt ? format(new Date(key.lastUsedAt), 'dd MMM Y, HH:mm') : 'Never used'}</DateCell>
+                  <DateCell>{format(new Date(key.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+                  <DateCell>{key.lastUsedAt ? format(new Date(key.lastUsedAt), 'dd MMM yyyy, HH:mm') : 'Never used'}</DateCell>
                   <TableCell className='flex'>
                     <div>
                       <Button variant='grey' onClick={() => setSelectedKey(key)}>Modify scopes</Button>

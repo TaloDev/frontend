@@ -123,8 +123,8 @@ export default function Channels() {
                   </TableCell>
                   <TableCell className='font-mono'>{channel.memberCount.toLocaleString()}</TableCell>
                   <TableCell className='font-mono'>{channel.totalMessages.toLocaleString()}</TableCell>
-                  <DateCell>{format(new Date(channel.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                  <DateCell>{format(new Date(channel.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
+                  <DateCell>{format(new Date(channel.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+                  <DateCell>{format(new Date(channel.updatedAt), 'dd MMM yyyy, HH:mm')}</DateCell>
                   <TableCell className='w-40'>
                     <Button
                       variant='grey'

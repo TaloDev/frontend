@@ -34,7 +34,7 @@ export default function Players() {
     <Page title='Players' isLoading={loading} showBackButton={Boolean(initialSearch)}>
       {(players.length > 0 || debouncedSearch.length > 0) &&
         <div className='flex items-center'>
-          <div className='w-1/2 flex-grow md:flex-grow-0 lg:w-1/4'>
+          <div className='w-1/2 grow md:grow-0 lg:w-1/4'>
             <TextInput
               id='players-search'
               type='search'
@@ -43,7 +43,11 @@ export default function Players() {
               value={search}
             />
           </div>
-          {Boolean(count) && <span className='ml-4'>{count} {count === 1 ? 'player' : 'players'}</span>}
+          {!!count &&
+            <span className='ml-4'>
+              {new Intl.NumberFormat('en-US').format(count)} {count === 1 ? 'player' : 'players'}
+            </span>
+          }
         </div>
       }
 
@@ -71,8 +75,8 @@ export default function Players() {
               {(player) => (
                 <>
                   <TableCell className='min-w-80 md:min-w-0'><PlayerAliases aliases={player.aliases} /></TableCell>
-                  <DateCell>{format(new Date(player.createdAt), 'do MMM Y')}</DateCell>
-                  <DateCell>{format(new Date(player.lastSeenAt), 'do MMM Y')}</DateCell>
+                  <DateCell>{format(new Date(player.createdAt), 'dd MMM yyyy')}</DateCell>
+                  <DateCell>{format(new Date(player.lastSeenAt), 'dd MMM yyyy')}</DateCell>
                   <TableCell className='w-48'>
                     <Button
                       variant='grey'
@@ -86,7 +90,7 @@ export default function Players() {
             </TableBody>
           </Table>
 
-          {Boolean(count) && <Pagination count={count!} pageState={[page, setPage]} itemsPerPage={itemsPerPage!} />}
+          {!!count && <Pagination count={count!} pageState={[page, setPage]} itemsPerPage={itemsPerPage!} />}
         </>
       }
     </Page>

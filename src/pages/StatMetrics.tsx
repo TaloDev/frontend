@@ -54,6 +54,11 @@ export default function StatMetrics() {
     setStat(matchingStat as GameStatWithMetrics)
   }, [getStat, internalName, loading, navigate, stat, stats])
 
+  const formatValue = useCallback((val: number) => {
+    const opts = Number.isInteger(val) ? {} : { maximumFractionDigits: 2 }
+    return new Intl.NumberFormat('en-US', opts).format(val)
+  }, [])
+
   return (
     <Page
       title={`${stat?.name ?? 'Stat'} metrics`}
@@ -108,12 +113,12 @@ export default function StatMetrics() {
               <TableBody iterator={[metrics]}>
                 {(metrics) => (
                   <>
-                    <TableCell className='font-mono'>{metrics.globalValue.minValue}</TableCell>
-                    <TableCell className='font-mono'>{metrics.globalValue.maxValue}</TableCell>
-                    <TableCell className='font-mono'>{metrics.globalValue.medianValue}</TableCell>
-                    <TableCell className='font-mono'>{metrics.globalValue.averageValue}</TableCell>
-                    <TableCell className='font-mono'>{metrics.globalCount}</TableCell>
-                    <TableCell className='font-mono'>{metrics.globalValue.averageChange}</TableCell>
+                    <TableCell className='font-mono'>{formatValue(metrics.globalValue.minValue)}</TableCell>
+                    <TableCell className='font-mono'>{formatValue(metrics.globalValue.maxValue)}</TableCell>
+                    <TableCell className='font-mono'>{formatValue(metrics.globalValue.medianValue)}</TableCell>
+                    <TableCell className='font-mono'>{formatValue(metrics.globalValue.averageValue)}</TableCell>
+                    <TableCell className='font-mono'>{formatValue(metrics.globalCount)}</TableCell>
+                    <TableCell className='font-mono'>{formatValue(metrics.globalValue.averageChange)}</TableCell>
                   </>
                 )}
               </TableBody>
@@ -127,10 +132,10 @@ export default function StatMetrics() {
               <TableBody iterator={[metrics]}>
                 {(metrics) => (
                   <>
-                    <TableCell className='font-mono'>{metrics.playerValue.minValue}</TableCell>
-                    <TableCell className='font-mono'>{metrics.playerValue.maxValue}</TableCell>
-                    <TableCell className='font-mono'>{metrics.playerValue.medianValue}</TableCell>
-                    <TableCell className='font-mono'>{metrics.playerValue.averageValue}</TableCell>
+                    <TableCell className='font-mono'>{formatValue(metrics.playerValue.minValue)}</TableCell>
+                    <TableCell className='font-mono'>{formatValue(metrics.playerValue.maxValue)}</TableCell>
+                    <TableCell className='font-mono'>{formatValue(metrics.playerValue.medianValue)}</TableCell>
+                    <TableCell className='font-mono'>{formatValue(metrics.playerValue.averageValue)}</TableCell>
                   </>
                 )}
               </TableBody>

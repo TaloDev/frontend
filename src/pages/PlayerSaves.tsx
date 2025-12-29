@@ -66,8 +66,8 @@ export default function PlayerSaves() {
             {(save) => (
               <>
                 <TableCell className='min-w-60'>{save.name}</TableCell>
-                <DateCell>{format(new Date(save.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                <DateCell>{format(new Date(save.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(save.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(save.updatedAt), 'dd MMM yyyy, HH:mm')}</DateCell>
                 <TableCell className='w-60'>
                   <Button variant='grey' onClick={() => viewSaveContent(save)}>View content</Button>
                 </TableCell>

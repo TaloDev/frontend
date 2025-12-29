@@ -42,7 +42,7 @@ export default function EventsDisplay({
       return acc
     }, 0)
 
-    return new Intl.NumberFormat('en-GB').format(count)
+    return new Intl.NumberFormat('en-US').format(count)
   }, [events])
 
   return (

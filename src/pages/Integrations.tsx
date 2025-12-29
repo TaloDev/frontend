@@ -61,7 +61,7 @@ function ManualSyncSection({
 
           <Button
             type='button'
-            className='!w-auto'
+            className='w-auto!'
             variant='grey'
             onClick={onClick}
             isLoading={loading === syncingState.ACTIVE}
@@ -142,7 +142,7 @@ export default function Integrations() {
               {!loading &&
                 <Button
                   variant='grey'
-                  className='!w-auto'
+                  className='w-auto!'
                   onClick={onSteamIntegrationClick}
                 >
                   {!steamIntegration && <span>Enable integration</span>}
@@ -156,8 +156,8 @@ export default function Integrations() {
             <div className='leading-relaxed'>
               {!steamIntegration && <p>Authenticate Steam players and sync your leaderboards and stats from Steamworks</p>}
               {!steamIntegration && <p>Requires a <Link to='https://partner.steamgames.com/doc/webapi_overview/auth'>Web API Publisher key</Link></p>}
-              {steamIntegration && <p className='font-bold'>Enabled {format(new Date(steamIntegration.createdAt), 'do MMM yyyy')}</p>}
-              {steamIntegration && <p>Last updated {format(new Date(steamIntegration.updatedAt), 'do MMM yyyy HH:mm')}</p>}
+              {steamIntegration && <p className='font-bold'>Enabled {format(new Date(steamIntegration.createdAt), 'dd MMM yyyy')}</p>}
+              {steamIntegration && <p>Last updated {format(new Date(steamIntegration.updatedAt), 'dd MMM yyyy HH:mm')}</p>}
             </div>
           )}
           footer={steamIntegration ? (
