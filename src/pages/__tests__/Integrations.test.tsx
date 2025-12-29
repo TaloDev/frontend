@@ -59,8 +59,8 @@ describe('<Integrations />', () => {
     expect(screen.getByText('Steamworks integration')).toBeInTheDocument()
     await userEvent.click(screen.getByText('Done'))
 
-    expect(screen.getByText('Enabled 1st Aug 2022'))
-    expect(screen.getByText('Last updated 1st Aug 2022 20:32'))
+    expect(screen.getByText('Enabled 01 Aug 2022'))
+    expect(screen.getByText('Last updated 01 Aug 2022 20:32'))
   })
 
   it('should render the error state', async () => {
