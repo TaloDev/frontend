@@ -82,8 +82,8 @@ export default function Stats() {
                 <TableCell>{stat.internalName}</TableCell>
                 <TableCell>{stat.name}</TableCell>
                 <TableCell className='font-mono'>{stat.global ? stat.globalValue.toLocaleString() : '—'}</TableCell>
-                <DateCell>{format(new Date(stat.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                <DateCell>{format(new Date(stat.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(stat.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(stat.updatedAt), 'dd MMM yyyy, HH:mm')}</DateCell>
                 <TableCell className='w-40'>
                   {stat.global &&
                     <Button variant='grey' icon={<IconZoom size={16} />} onClick={() => onViewMetricsClick(stat)}>

@@ -91,8 +91,8 @@ export default function Leaderboards() {
                 </TableCell>
                 <TableCell>{leaderboard.unique ? 'Yes' : 'No'}</TableCell>
                 <TableCell className='capitalize'>{leaderboard.refreshInterval}</TableCell>
-                <DateCell>{format(new Date(leaderboard.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
-                <DateCell>{format(new Date(leaderboard.updatedAt), 'dd MMM Y, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(leaderboard.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(leaderboard.updatedAt), 'dd MMM yyyy, HH:mm')}</DateCell>
                 <TableCell className='w-40'>
                   <Button variant='grey' onClick={() => goToEntries(leaderboard)}>View entries</Button>
                 </TableCell>

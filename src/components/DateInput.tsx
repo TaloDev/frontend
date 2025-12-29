@@ -62,7 +62,7 @@ export default function DateInput({
           <TextInput
             id={id}
             variant='modal'
-            value={format(date, 'dd MMM Y')}
+            value={format(date, 'dd MMM yyyy')}
             inputExtra={{
               onFocus: () => setOpen(true),
               name: id

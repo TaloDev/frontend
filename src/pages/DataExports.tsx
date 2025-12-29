@@ -88,7 +88,7 @@ export default function DataExports() {
                   </span>
                 </TableCell>
                 <TableCell className='capitalize'>{dataExport.entities.join(', ')}</TableCell>
-                <DateCell>{format(new Date(dataExport.createdAt), 'dd MMM Y, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(dataExport.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
                 <TableCell>{dataExport.createdBy === user.email ? 'You' : dataExport.createdBy}</TableCell>
               </>
             )}

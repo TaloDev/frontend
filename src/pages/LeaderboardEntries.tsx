@@ -238,7 +238,7 @@ export default function LeaderboardEntries() {
                     <PropBadges props={entry.props} className='flex flex-wrap space-y-0 gap-2' />
                   </TableCell>
                   <DateCell>
-                    {format(new Date(entry.createdAt), 'dd MMM Y, HH:mm')}
+                    {format(new Date(entry.createdAt), 'dd MMM yyyy, HH:mm')}
                   </DateCell>
                   {withDeleted &&
                     <TableCell>
