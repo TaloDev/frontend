@@ -25,7 +25,7 @@ export default function ChartTooltip({ active, payload, label }: ChartTooltipPro
 
   return (
     <div className='bg-white p-4 rounded'>
-      <p className='text-black font-medium text-sm'>{format(new Date(label!), 'EEEE do MMM yyyy')}</p>
+      <p className='text-black font-medium text-sm'>{format(new Date(label!), 'EEEE dd MMM yyyy')}</p>
       <ul className='text-black grid grid-cols-[2fr_1fr_0.5fr] gap-y-2 mt-4'>
         {uniqBy(filteredItems, 'payload.name')
           .sort((a, b) => b.payload.count - a.payload.count)

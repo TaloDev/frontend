@@ -168,7 +168,7 @@ function Organisation() {
                       <TableCell>{invite.email}</TableCell>
                       <TableCell>{invite.type === UserType.ADMIN ? 'Admin' : 'Dev'}</TableCell>
                       <TableCell>{invite.invitedBy}</TableCell>
-                      <DateCell>{format(new Date(invite.createdAt), 'do MMM yyyy')}</DateCell>
+                      <DateCell>{format(new Date(invite.createdAt), 'dd MMM yyyy')}</DateCell>
                     </>
                   )}
                 </TableBody>
@@ -197,8 +197,8 @@ function Organisation() {
                 <>
                   <TableCell>{member.username}</TableCell>
                   <TableCell>{userTypeMap[member.type]}</TableCell>
-                  <DateCell>{format(new Date(member.createdAt), 'do MMM yyyy')}</DateCell>
-                  <DateCell>{format(new Date(member.lastSeenAt), 'do MMM yyyy')}</DateCell>
+                  <DateCell>{format(new Date(member.createdAt), 'dd MMM yyyy')}</DateCell>
+                  <DateCell>{format(new Date(member.lastSeenAt), 'dd MMM yyyy')}</DateCell>
                 </>
               )}
             </TableBody>
