@@ -90,7 +90,7 @@ export default function Players() {
             </TableBody>
           </Table>
 
-          {Boolean(count) && <Pagination count={count!} pageState={[page, setPage]} itemsPerPage={itemsPerPage!} />}
+          {!!count && <Pagination count={count!} pageState={[page, setPage]} itemsPerPage={itemsPerPage!} />}
         </>
       }
     </Page>

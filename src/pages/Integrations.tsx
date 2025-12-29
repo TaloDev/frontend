@@ -61,7 +61,7 @@ function ManualSyncSection({
 
           <Button
             type='button'
-            className='!w-auto'
+            className='w-auto!'
             variant='grey'
             onClick={onClick}
             isLoading={loading === syncingState.ACTIVE}
@@ -142,7 +142,7 @@ export default function Integrations() {
               {!loading &&
                 <Button
                   variant='grey'
-                  className='!w-auto'
+                  className='w-auto!'
                   onClick={onSteamIntegrationClick}
                 >
                   {!steamIntegration && <span>Enable integration</span>}

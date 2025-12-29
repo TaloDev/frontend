@@ -182,7 +182,7 @@ export default function PlayerProfile() {
                     isLoading={isDeleting}
                     onClick={onDeleteClick}
                     variant='red'
-                    className='!w-auto'
+                    className='w-auto!'
                     icon={<IconTrash />}
                   >
                     <span>
