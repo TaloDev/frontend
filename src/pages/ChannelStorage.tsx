@@ -94,7 +94,11 @@ export default function ChannelStorage() {
               {(storageProp) => (
                 <>
                   <TableCell>{storageProp.key}</TableCell>
-                  <TableCell>{storageProp.value}</TableCell>
+                  <TableCell className='min-w-[400px] max-w-[400px]'>
+                    <span className='bg-gray-900 rounded text-xs flex'>
+                      <code className='align-middle inline-block p-2 break-all'>{storageProp.value}</code>
+                    </span>
+                  </TableCell>
                   <TableCell>
                     <div className='flex items-center'>
                       <span>{storageProp.createdBy.identifier}</span>
