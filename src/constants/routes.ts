@@ -5,6 +5,7 @@ export default {
   apiKeys: '/api-keys',
   billing: '/billing',
   channels: '/channels',
+  channelStorage: '/channels/:channelId/storage',
   confirmPassword: '/confirm-password',
   dashboard: '/',
   dataExports: '/exports',
