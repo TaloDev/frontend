@@ -90,7 +90,7 @@ function ServicesLink() {
     },
     {
       name: 'Channels',
-      desc: 'Manage player chat channels',
+      desc: 'Manage player communication channels',
       icon: IconMessages,
       route: routes.channels
     }

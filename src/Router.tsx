@@ -48,6 +48,7 @@ const Channels = lazy(() => import(/* webpackChunkName: 'channels' */ './pages/C
 const EventBreakdown = lazy(() => import(/* webpackChunkName: 'event-breakdown' */ './pages/EventBreakdown'))
 const GameSettings = lazy(() => import(/* webpackChunkName: 'game-settings */ './pages/GameSettings'))
 const StatMetrics = lazy(() => import(/* webpackChunkName: 'stat-metrics */ './pages/StatMetrics'))
+const ChannelStorage = lazy(() => import(/* webpackChunkName: 'channel-storage */ './pages/ChannelStorage'))
 
 type RouterProps = {
   intendedRoute: string | null
@@ -118,6 +119,7 @@ function Router({
                   <Route path={routes.eventBreakdown} element={<EventBreakdown />} />
                   {canViewPage(user, routes.gameSettings) && <Route path={routes.gameSettings} element={<GameSettings />} />}
                   <Route path={routes.statMetrics} element={<StatMetrics />} />
+                  <Route path={routes.channelStorage} element={<ChannelStorage />} />
                 </>
               }
 
