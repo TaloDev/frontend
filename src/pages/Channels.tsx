@@ -35,7 +35,7 @@ export default function Channels() {
     mutate
   } = useChannels(activeGame, debouncedSearch, page)
 
-  const sortedChannels = useSortedItems(channels, 'memberCount')
+  const sortedChannels = useSortedItems(channels, 'name')
 
   const [showModal, setShowModal] = useState(false)
   const [editingChannel, setEditingChannel] = useState<GameChannel | null>(null)
@@ -59,6 +59,10 @@ export default function Channels() {
     setShowModal(true)
   }
 
+  const goToChannelStorage = (channel: GameChannel) => {
+    navigate(routes.channelStorage.replace(':channelId', String(channel.id)))
+  }
+
   return (
     <Page
       title='Channels'
@@ -74,9 +78,9 @@ export default function Channels() {
         </div>
       }
     >
-      {channels.length > 0 &&
+      {(channels.length > 0 || debouncedSearch.length > 0) &&
         <div className='flex items-center'>
-          <div className='w-1/2 flex-grow md:flex-grow-0 md:w-[400px]'>
+          <div className='w-1/2 grow md:grow-0 md:w-[400px]'>
             <TextInput
               id='channel-search'
               type='search'
@@ -121,7 +125,17 @@ export default function Channels() {
                     }
                     {!channel.owner && 'Game-owned'}
                   </TableCell>
-                  <TableCell className='font-mono'>{channel.memberCount.toLocaleString()}</TableCell>
+                  <TableCell className='font-mono'>
+                    <div className='flex items-center'>
+                      <span>{channel.memberCount.toLocaleString()}</span>
+                      <Button
+                        variant='icon'
+                        className={clsx('ml-2 p-1 rounded-full bg-indigo-900')}
+                        onClick={() => goToPlayersForChannel(channel)}
+                        icon={<IconArrowRight size={16} />}
+                      />
+                    </div>
+                  </TableCell>
                   <TableCell className='font-mono'>{channel.totalMessages.toLocaleString()}</TableCell>
                   <DateCell>{format(new Date(channel.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
                   <DateCell>{format(new Date(channel.updatedAt), 'dd MMM yyyy, HH:mm')}</DateCell>
@@ -136,9 +150,9 @@ export default function Channels() {
                   <TableCell className='w-48'>
                     <Button
                       variant='grey'
-                      onClick={() => goToPlayersForChannel(channel)}
+                      onClick={() => goToChannelStorage(channel)}
                     >
-                      View players
+                      View storage
                     </Button>
                   </TableCell>
                 </>
