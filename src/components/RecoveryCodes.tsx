@@ -84,6 +84,7 @@ function RecoveryCodes({
 
         {showCreateButton &&
           <Button
+            type='button'
             className='justify-center md:w-auto'
             onClick={onCreateRecoveryCodesClick}
           >
