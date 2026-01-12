@@ -5,7 +5,7 @@ import saveDataNodeSizesState from '../state/saveDataNodeSizesState'
 import { GameSave } from '../entities/gameSave'
 import { NodeDataRow, objectToRows, getLayoutedElements } from './nodeGraphHelpers'
 
-export default function useNodeGraph(save: GameSave | undefined, search: string = '') {
+export default function useNodeGraph(save: GameSave | undefined, search: string = '', enabled: boolean) {
   const content = save?.content
 
   const [nodes, setNodes] = useState<Node[]>([])
@@ -21,7 +21,7 @@ export default function useNodeGraph(save: GameSave | undefined, search: string 
   }, [content])
 
   useEffect(() => {
-    if (!content) return
+    if (!content || !enabled) return
 
     const nodeSet = new Set<Node>()
     const edgeSet = new Set<Edge>()
@@ -84,7 +84,7 @@ export default function useNodeGraph(save: GameSave | undefined, search: string 
 
     setNodes(getLayoutedElements(nodeSet, edgeSet, nodeSizes))
     setEdges(Array.from(edgeSet))
-  }, [content, getFormatVersion, nodeSizes, search])
+  }, [content, getFormatVersion, nodeSizes, search, enabled])
 
   return { nodes, edges }
 }

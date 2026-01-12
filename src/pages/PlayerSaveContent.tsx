@@ -48,8 +48,8 @@ export default function PlayerSaveContent() {
 
   const [search, setSearch] = useState('')
   const [mode, setMode] = useState<SaveMode>('linear')
-  const treeGraph = useNodeGraph(save, search)
-  const linearGraph = useLinearNodeGraph(save, search)
+  const treeGraph = useNodeGraph(save, search, mode === 'tree')
+  const linearGraph = useLinearNodeGraph(save, search, mode === 'linear')
   const { nodes, edges } = mode === 'tree' ? treeGraph : linearGraph
 
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null)
