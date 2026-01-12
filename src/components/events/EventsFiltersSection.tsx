@@ -31,7 +31,7 @@ export default function EventsFiltersSection({ eventNames, error }: Props) {
   }, [eventNames, filteredSelectedEvents, selectedEventNames, setSelectedEventNames])
 
   return (
-    <div className='justify-between items-start'>
+    <div>
       <div className='mb-4 md:mb-8'>
         <TimePeriodPicker
           periods={timePeriods}
