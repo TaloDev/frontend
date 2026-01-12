@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import routes from '../constants/routes'
 import Page from '../components/Page'
@@ -62,13 +62,15 @@ export default function PlayerSaveContent() {
     setHoveredNodeId(null)
   }, [])
 
-  const nodesWithHoverState = nodes.map((node) => ({
-    ...node,
-    data: {
-      ...node.data,
-      isHovered: node.id === hoveredNodeId
-    }
-  }))
+  const nodesWithHoverState = useMemo(() => {
+    return nodes.map((node) => ({
+      ...node,
+      data: {
+        ...node.data,
+        isHovered: node.id === hoveredNodeId
+      }
+    }))
+  }, [hoveredNodeId, nodes])
 
   return (
     <Page
