@@ -1,5 +1,4 @@
 import { memo, useCallback, useContext, useEffect, useMemo, useRef } from 'react'
-import { NodeDataRow } from '../../utils/useNodeGraph'
 import { Handle, Position } from '@xyflow/react'
 import { useSetRecoilState } from 'recoil'
 import saveDataNodeSizesState from '../../state/saveDataNodeSizesState'
@@ -7,6 +6,7 @@ import clsx from 'clsx'
 import Button from '../Button'
 import { IconCopy } from '@tabler/icons-react'
 import ToastContext from '../toast/ToastContext'
+import { NodeDataRow } from '../../utils/nodeGraphHelpers'
 
 const MIN_NODE_WIDTH = 'min-w-[200px]'
 const MAX_NODE_WIDTH = 'max-w-[600px]'
