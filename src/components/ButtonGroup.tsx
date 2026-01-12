@@ -23,6 +23,7 @@ export default function ButtonGroup<T extends string>({
     <div>
       {options.map((option) => (
         <Button
+          type='button'
           key={option.id}
           variant='bare'
           className={clsx(buttonClassName, { 'bg-indigo-500 hover:bg-indigo-500': option.id === selected })}
