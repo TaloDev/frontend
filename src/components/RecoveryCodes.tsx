@@ -54,7 +54,7 @@ function RecoveryCodes({
   return (
     <Container>
       <AlertBanner
-        className='!items-start'
+        className='items-start!'
         text={'Keep these codes safe. If you lose access to your authenticator and don\'t have any recovery codes, you will lose access to your account.'}
       />
 
@@ -64,6 +64,7 @@ function RecoveryCodes({
 
       <div className='md:flex space-y-4 md:space-y-0 md:space-x-4'>
         <Button
+          type='button'
           className='justify-center md:w-auto'
           variant={codesCopied ? 'green' : undefined}
           onClick={onCopyCodesClick}
@@ -73,6 +74,7 @@ function RecoveryCodes({
         </Button>
 
         <Button
+          type='button'
           className='justify-center md:w-auto'
           onClick={onDownloadCodesClick}
           icon={<IconDownload />}
@@ -82,6 +84,7 @@ function RecoveryCodes({
 
         {showCreateButton &&
           <Button
+            type='button'
             className='justify-center md:w-auto'
             onClick={onCreateRecoveryCodesClick}
           >

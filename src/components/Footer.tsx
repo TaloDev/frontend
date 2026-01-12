@@ -32,6 +32,7 @@ export default function Footer() {
           <li><Link to='https://trytalo.com/stats?utm_source=dashboard&utm_medium=footer'>Game stats</Link></li>
           <li><Link to='https://trytalo.com/feedback?utm_source=dashboard&utm_medium=footer'>Game feedback</Link></li>
           <li><Link to='https://trytalo.com/live-config?utm_source=dashboard&utm_medium=footer'>Live config</Link></li>
+          <li><Link to='https://trytalo.com/player-relationships?utm_source=dashboard&utm_medium=footer'>Player relationships</Link></li>
           <li><Link to='https://trytalo.com/open-source?utm_source=dashboard&utm_medium=footer'>Open source</Link></li>
         </ul>
       </div>

@@ -65,7 +65,7 @@ export default function StatMetrics() {
       isLoading={loading}
       showBackButton
     >
-      <div className='justify-between items-start'>
+      <div>
         <div className='mb-4 md:mb-8'>
           <TimePeriodPicker
             periods={timePeriods}

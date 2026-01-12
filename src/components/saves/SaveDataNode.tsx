@@ -1,13 +1,24 @@
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
-import { NodeDataRow } from '../../utils/useNodeGraph'
+import { memo, useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import { Handle, Position } from '@xyflow/react'
 import { useSetRecoilState } from 'recoil'
 import saveDataNodeSizesState from '../../state/saveDataNodeSizesState'
 import clsx from 'clsx'
+import Button from '../Button'
+import { IconCopy } from '@tabler/icons-react'
+import ToastContext from '../toast/ToastContext'
+import { NodeDataRow } from '../../utils/nodeGraphHelpers'
+
+const MIN_NODE_WIDTH = 'min-w-[200px]'
+const MAX_NODE_WIDTH = 'max-w-[600px]'
 
 type SaveDataNodeProps = {
   id: string
-  data: { rows: NodeDataRow[], search: string, formatVersion: string }
+  data: {
+    rows: NodeDataRow[]
+    search: string
+    formatVersion: string
+    isHovered: boolean
+  }
 }
 
 function SaveDataNode({ id, data }: SaveDataNodeProps ) {
@@ -30,7 +41,8 @@ function SaveDataNode({ id, data }: SaveDataNodeProps ) {
   }, [id, setNodeSizes])
 
   const valueIsNumber = useCallback((value: unknown) => {
-    return !isNaN(Number(value))
+    const str = String(value)
+    return str !== '' && !isNaN(Number(value))
   }, [])
 
   const valueIsBoolean = useCallback((value: unknown) => {
@@ -51,6 +63,9 @@ function SaveDataNode({ id, data }: SaveDataNodeProps ) {
 
   const renderItem = useCallback((item: string) => {
     if (valueIsString(item)) {
+      if (item === '') {
+        return '""'
+      }
       if (data.formatVersion === 'godot.v2' && item.includes('"')) {
         return item
       }
@@ -65,15 +80,39 @@ function SaveDataNode({ id, data }: SaveDataNodeProps ) {
     })
   }, [data.search, data.rows])
 
+  const valueRow = useMemo(() => {
+    return data.rows.find((row) => row.item.startsWith('value'))
+  }, [data.rows])
+
+  const canShowCopyButton = data.isHovered && valueRow
+
+  const toast = useContext(ToastContext)
+
+  const copyValue = useCallback(() => {
+    if (valueRow) {
+      const value = valueRow.item.split(': ')[1] || ''
+      navigator.clipboard.writeText(value)
+      toast.trigger('Value copied to clipboard')
+    }
+  }, [valueRow, toast])
+
   return (
-    <div ref={ref} className={clsx('py-4 px-8 rounded bg-gray-900 border-2 border-gray-500 transition-all', {
-      'bg-opacity-30': data.search !== '' && !searchMatches
-    })}>
-      <div className={clsx('transition-opacity -mx-4', { 'opacity-30': data.search !== '' && !searchMatches })}>
+    <div
+      ref={ref}
+      className={clsx(
+        'py-4 px-8 rounded bg-gray-900 border-2 border-gray-500 transition-all',
+        MIN_NODE_WIDTH,
+        MAX_NODE_WIDTH,
+        {
+          'bg-opacity-30': data.search !== '' && !searchMatches
+        }
+      )}
+    >
+      <div className={clsx('relative transition-opacity -mx-4', { 'opacity-30': data.search !== '' && !searchMatches })}>
         {data.rows.map((row, idx) => (
           <div
             key={idx}
-            className={clsx('text-sm text-white font-mono text-nowrap', {
+            className={clsx('text-sm text-white font-mono wrap-break-word', {
               'text-center': data.rows.length === 1
             })}
           >
@@ -83,15 +122,15 @@ function SaveDataNode({ id, data }: SaveDataNodeProps ) {
                 <span className='text-indigo-300'>{row.item.split(' ')[1]}</span>
               </>
             }
-            {row.type !== 'array' && /(.*: .*)\w+/.test(row.item) &&
+            {row.type !== 'array' && row.item.includes(': ') &&
               <>
-                <span className='font-medium'>{row.item.split(' ')[0]} </span>
-                <span className={composeClassNames(row.item.split(' ')[1])}>
-                  {renderItem(row.item.split(': ')[1])}
+                <span className='font-medium'>{row.item.split(': ')[0]}: </span>
+                <span className={composeClassNames(row.item.split(': ')[1] || '')}>
+                  {renderItem(row.item.split(': ')[1] || '')}
                 </span>
               </>
             }
-            {row.type !== 'array' && !/(.*: .*)\w+/.test(row.item) &&
+            {row.type !== 'array' && !row.item.includes(': ') &&
               <span
                 className={composeClassNames(row.item)}>
                 {renderItem(row.item)}
@@ -99,6 +138,15 @@ function SaveDataNode({ id, data }: SaveDataNodeProps ) {
             }
           </div>
         ))}
+
+        {canShowCopyButton &&
+          <Button
+            type='button'
+            className='absolute right-0 top-0 w-auto!'
+            icon={<IconCopy size={20} />}
+            onClick={copyValue}
+          />
+        }
 
         <Handle type='target' position={Position.Top} className='invisible mt-1' />
         <Handle type='source' position={Position.Bottom} className='invisible' />
