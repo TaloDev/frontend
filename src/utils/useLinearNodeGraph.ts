@@ -1,66 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Edge, Node } from '@xyflow/react'
 import { useCallback, useEffect, useState } from 'react'
-import dagre from 'dagre'
 import { useRecoilValue } from 'recoil'
-import saveDataNodeSizesState, { SaveDataNodeSize } from '../state/saveDataNodeSizesState'
+import saveDataNodeSizesState from '../state/saveDataNodeSizesState'
 import { GameSave } from '../entities/gameSave'
-
-export type NodeDataRow = {
-  item: string
-  type: string
-}
-
-function objectToRows(obj: { [key: string]: any }): NodeDataRow[] {
-  const filtered = Object.fromEntries(
-    Object.entries(obj).filter(([, v]) => !Array.isArray(v) && typeof v !== 'object')
-  )
-
-  return Object.entries(filtered).map(([key, value]) => ({
-    item: `${key}: ${value}`,
-    type: typeof value
-  }))
-}
-
-function getNodeSize(id: string, nodeSizes: SaveDataNodeSize[]) {
-  const nodeSize = nodeSizes.find((size) => size.id === id)
-  if (nodeSize) {
-    return { width: nodeSize.width, height: nodeSize.height }
-  }
-
-  return { width: 0, height: 0 }
-}
-
-function getLayoutedElements(nodes: Set<Node>, edges: Set<Edge>, nodeSizes: SaveDataNodeSize[]): Node[] {
-  const dagreGraph = new dagre.graphlib.Graph()
-  dagreGraph.setDefaultEdgeLabel(() => ({}))
-
-  dagreGraph.setGraph({ rankdir: 'TB' })
-  nodes.forEach((node) => {
-    const { width, height } = getNodeSize(node.id, nodeSizes)
-    dagreGraph.setNode(node.id, { width, height })
-  })
-  edges.forEach((edge) => {
-    dagreGraph.setEdge(edge.source, edge.target)
-  })
-  dagre.layout(dagreGraph)
-
-  const newNodes = Array.from(nodes).map((node: Node) => {
-    const dagreNode = dagreGraph.node(node.id)
-    return {
-      ...node,
-      position: {
-        x: dagreNode.x - dagreNode.width / 2,
-        y: dagreNode.y - dagreNode.height / 2
-      },
-      draggable: false,
-      width: dagreNode.width > 0 ? dagreNode.width : undefined,
-      height: dagreNode.height > 0 ? dagreNode.height : undefined
-    } as Node
-  })
-
-  return newNodes
-}
+import { NodeDataRow, objectToRows, getLayoutedElements } from './nodeGraphHelpers'
 
 export default function useLinearNodeGraph(save: GameSave | undefined, search: string = '') {
   const content = save?.content
@@ -88,6 +31,7 @@ export default function useLinearNodeGraph(save: GameSave | undefined, search: s
       nodeSet.add({ id, position: { x: 0, y: 0 }, data })
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const processContent = (key: string, value: any, parentKey: string | null = null, shouldChain: boolean = false, arrayIndex: number = 0) => {
       const nodeId = parentKey ? `${parentKey}-${key}` : key
 
@@ -108,6 +52,7 @@ export default function useLinearNodeGraph(save: GameSave | undefined, search: s
           const isDataArray = key === 'data'
           let previousItemId: string | null = null
 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           value.forEach((item: any, index: number) => {
             const itemId = `${nodeId}-${index}`
 
