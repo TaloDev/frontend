@@ -1,16 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import routes from '../constants/routes'
 import Page from '../components/Page'
 import useNodeGraph from '../utils/useNodeGraph'
+import useLinearNodeGraph from '../utils/useLinearNodeGraph'
 import TextInput from '../components/TextInput'
-import { Background, BackgroundVariant, Controls, ReactFlow } from '@xyflow/react'
+import { Background, BackgroundVariant, Controls, Node, ReactFlow } from '@xyflow/react'
 import SaveDataNode from '../components/saves/SaveDataNode'
 import SaveContentFitManager from '../components/saves/SaveContentFitManager'
 import { GameSave } from '../entities/gameSave'
 import usePlayerSaves from '../api/usePlayerSaves'
 import { useRecoilValue } from 'recoil'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import SaveModePicker, { SaveMode } from '../components/saves/SaveModePicker'
+
+const nodeTypes = { default: SaveDataNode }
 
 export default function PlayerSaveContent() {
   const { id: playerId, saveId } = useParams()
@@ -43,7 +47,28 @@ export default function PlayerSaveContent() {
   }, [navigate, playerId, save])
 
   const [search, setSearch] = useState('')
-  const { nodes, edges } = useNodeGraph(save, search)
+  const [mode, setMode] = useState<SaveMode>('linear')
+  const treeGraph = useNodeGraph(save, search)
+  const linearGraph = useLinearNodeGraph(save, search)
+  const { nodes, edges } = mode === 'tree' ? treeGraph : linearGraph
+
+  const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null)
+
+  const onNodeMouseEnter = useCallback((_: React.MouseEvent, node: Node) => {
+    setHoveredNodeId(node.id)
+  }, [])
+
+  const onNodeMouseLeave = useCallback(() => {
+    setHoveredNodeId(null)
+  }, [])
+
+  const nodesWithHoverState = nodes.map((node) => ({
+    ...node,
+    data: {
+      ...node.data,
+      isHovered: node.id === hoveredNodeId
+    }
+  }))
 
   return (
     <Page
@@ -51,24 +76,36 @@ export default function PlayerSaveContent() {
       title={save?.name ?? 'Save content'}
       isLoading={isLoading}
     >
-      <div className='w-full md:w-[400px]'>
-        <TextInput
-          id='node-search'
-          type='search'
-          placeholder='Search...'
-          onChange={setSearch}
-          value={search}
-        />
+      <div className='md:flex justify-between items-start'>
+        <div className='w-full md:w-[400px]'>
+          <TextInput
+            id='node-search'
+            type='search'
+            placeholder='Search...'
+            onChange={setSearch}
+            value={search}
+          />
+        </div>
+
+        <div className='mt-4 md:mt-0'>
+          <SaveModePicker
+            selectedMode={mode}
+            onModeChange={setMode}
+          />
+        </div>
       </div>
 
       <div className='w-full h-[68vh] rounded overflow-hidden'>
         <ReactFlow
+          key={mode}
           fitView
-          className='!bg-gray-700'
-          nodes={nodes}
+          className='bg-gray-700!'
+          nodes={nodesWithHoverState}
           edges={edges}
-          nodeTypes={{ default: SaveDataNode }}
+          nodeTypes={nodeTypes}
           elementsSelectable={false}
+          onNodeMouseEnter={onNodeMouseEnter}
+          onNodeMouseLeave={onNodeMouseLeave}
         >
           <SaveContentFitManager />
           <Controls showInteractive={false} />
