@@ -39,6 +39,7 @@ export default function NewGame({ modalState }: NewGameProps) {
       })
       setActiveGame(game)
       setOpen(false)
+      window.location.href = '/'
     } catch (err) {
       setError(buildError(err))
       setLoading(false)
