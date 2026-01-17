@@ -173,7 +173,7 @@ Required environment variables (set via `.env` files):
 
 ## Node Version
 
-This project requires Node.js 22.x (see package.json engines).
+This project requires Node.js 24.x (see package.json engines).
 
 ## Git Workflow
 

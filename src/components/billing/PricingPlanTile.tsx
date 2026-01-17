@@ -101,7 +101,7 @@ export default function PricingPlanTile({
               <Button
                 variant={isUpgrade() ? undefined : 'grey'}
                 onClick={onChangePlanClick}
-                className='!w-40'
+                className='w-40!'
                 icon={isUpgrade() && <IconArrowUp />}
                 isLoading={planLoading === plan?.id}
                 disabled={Boolean(planLoading)}

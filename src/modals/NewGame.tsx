@@ -30,15 +30,21 @@ export default function NewGame({ modalState }: NewGameProps) {
 
     try {
       const { game } = await createGame(name)
+      const allGames = [...user.organisation.games, game]
+
       setUser({
         ...user,
         organisation: {
           ...user.organisation,
-          games: [...user.organisation.games, game]
+          games: allGames
         }
       })
       setActiveGame(game)
       setOpen(false)
+
+      if (allGames.length > 1) {
+        window.location.href = '/'
+      }
     } catch (err) {
       setError(buildError(err))
       setLoading(false)

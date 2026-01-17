@@ -4,6 +4,8 @@ import { useRecoilValue } from 'recoil'
 import saveDataNodeSizesState from '../../state/saveDataNodeSizesState'
 import { useDebounce } from 'use-debounce'
 
+export const minZoom = 0.1
+
 export default function SaveContentFitManager() {
   const reactFlow = useReactFlow()
   const nodeSizes = useRecoilValue(saveDataNodeSizesState)
@@ -12,7 +14,9 @@ export default function SaveContentFitManager() {
 
   useEffect(() => {
     if (debouncedLength > 0) {
-      reactFlow.fitView()
+      reactFlow.fitView({
+        minZoom
+      })
     }
   }, [debouncedLength, reactFlow])
 

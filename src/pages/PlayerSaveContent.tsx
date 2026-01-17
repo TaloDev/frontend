@@ -7,12 +7,13 @@ import useLinearNodeGraph from '../utils/useLinearNodeGraph'
 import TextInput from '../components/TextInput'
 import { Background, BackgroundVariant, Controls, Node, ReactFlow } from '@xyflow/react'
 import SaveDataNode from '../components/saves/SaveDataNode'
-import SaveContentFitManager from '../components/saves/SaveContentFitManager'
+import SaveContentFitManager, { minZoom } from '../components/saves/SaveContentFitManager'
 import { GameSave } from '../entities/gameSave'
 import usePlayerSaves from '../api/usePlayerSaves'
 import { useRecoilValue } from 'recoil'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import SaveModePicker, { SaveMode } from '../components/saves/SaveModePicker'
+import useLocalStorage from '../utils/useLocalStorage'
 
 const nodeTypes = { default: SaveDataNode }
 
@@ -47,7 +48,7 @@ export default function PlayerSaveContent() {
   }, [navigate, playerId, save])
 
   const [search, setSearch] = useState('')
-  const [mode, setMode] = useState<SaveMode>('linear')
+  const [mode, setMode] = useLocalStorage<SaveMode>('saveContentViewMode', 'linear')
   const treeGraph = useNodeGraph(save, search, mode === 'tree')
   const linearGraph = useLinearNodeGraph(save, search, mode === 'linear')
   const { nodes, edges } = mode === 'tree' ? treeGraph : linearGraph
@@ -108,6 +109,7 @@ export default function PlayerSaveContent() {
           elementsSelectable={false}
           onNodeMouseEnter={onNodeMouseEnter}
           onNodeMouseLeave={onNodeMouseLeave}
+          minZoom={minZoom}
         >
           <SaveContentFitManager />
           <Controls showInteractive={false} />
