@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
+import { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
@@ -17,6 +17,7 @@ import Page from '../components/Page'
 import Table from '../components/tables/Table'
 import useAPIKeys from '../api/useAPIKeys'
 import { APIKey } from '../entities/apiKey'
+import ToastContext from '../components/toast/ToastContext'
 
 export default function APIKeys() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
@@ -31,6 +32,8 @@ export default function APIKeys() {
   const user = useRecoilValue(userState) as AuthedUser
   const [selectedKey, setSelectedKey] = useState<APIKey | null>(null)
   const [showScopesModal, setShowScopesModal] = useState(false)
+
+  const toast = useContext(ToastContext)
 
   useEffect(() => {
     setShowScopesModal(Boolean(selectedKey))
@@ -60,6 +63,7 @@ export default function APIKeys() {
 
         setError(null)
         setCreatedKey(null)
+        toast.trigger('Access key revoked')
       } catch (err) {
         setError(buildError(err))
       } finally {
@@ -191,7 +195,7 @@ export default function APIKeys() {
             <h2 className='text-xl lg:text-2xl font-bold'>Your new key</h2>
             <p>Save this key somewhere because we won&apos;t show it again</p>
 
-            <div className='mt-4 rounded border-2 border-gray-700 bg-gray-700 p-4 break-words'>
+            <div className='mt-4 rounded border-2 border-gray-700 bg-gray-700 p-4 wrap-break-word'>
               <code>{createdKey}</code>
             </div>
 
