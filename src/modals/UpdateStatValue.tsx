@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react'
+import { MouseEvent, useContext, useState } from 'react'
 import Modal from '../components/Modal'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
@@ -11,6 +11,7 @@ import activeGameState from '../state/activeGameState'
 import { useRecoilValue } from 'recoil'
 import { SelectedActiveGame } from '../state/activeGameState'
 import { upperFirst } from 'lodash-es'
+import ToastContext, { ToastType } from '../components/toast/ToastContext'
 
 type UpdateStatValueProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -26,7 +27,9 @@ export default function UpdateStatValue({ modalState, mutate, editingStat }: Upd
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
 
-  const onCreateClick = async (e: MouseEvent<HTMLElement>) => {
+  const toast = useContext(ToastContext)
+
+  const onUpdateClick = async (e: MouseEvent<HTMLElement>) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
@@ -39,6 +42,9 @@ export default function UpdateStatValue({ modalState, mutate, editingStat }: Upd
           stats: [...data!.stats.filter((stat) => stat.id !== editingStat!.id), playerStat]
         }
       }, true)
+
+      toast.trigger(`${editingStat.stat.name} value updated`, ToastType.SUCCESS)
+
       setOpen(false)
     } catch (err) {
       setError(buildError(err))
@@ -78,7 +84,7 @@ export default function UpdateStatValue({ modalState, mutate, editingStat }: Upd
             <Button
               disabled={!value}
               isLoading={isLoading}
-              onClick={onCreateClick}
+              onClick={onUpdateClick}
             >
               Update
             </Button>
