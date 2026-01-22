@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react'
+import { MouseEvent, useContext, useState } from 'react'
 import Modal from '../components/Modal'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
@@ -14,6 +14,7 @@ import updateFeedbackCategory from '../api/updateFeedbackCategory'
 import createFeedbackCategory from '../api/createFeedbackCategory'
 import { GameFeedbackCategory } from '../entities/gameFeedbackCategory'
 import { KeyedMutator } from 'swr'
+import ToastContext, { ToastType } from '../components/toast/ToastContext'
 
 type FeedbackCategoryDetailsProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -39,6 +40,8 @@ export default function FeedbackCategoryDetails({
   const [description, setDescription] = useState(editingCategory?.description ?? '')
   const [anonymised, setAnonymised] = useState(editingCategory?.anonymised ?? false)
 
+  const toast = useContext(ToastContext)
+
   const onCreateClick = async (e: MouseEvent<HTMLElement>) => {
     e.preventDefault()
     setLoading(true)
@@ -56,6 +59,8 @@ export default function FeedbackCategoryDetails({
           ]
         }
       }, false)
+
+      toast.trigger(`${displayName} created`, ToastType.SUCCESS)
 
       setOpen(false)
     } catch (err) {
@@ -82,6 +87,8 @@ export default function FeedbackCategoryDetails({
         }
       }, false)
 
+      toast.trigger(`${displayName} updated`, ToastType.SUCCESS)
+
       setOpen(false)
     } catch (err) {
       setError(buildError(err, 'internalName'))
@@ -107,6 +114,8 @@ export default function FeedbackCategoryDetails({
           })
         }
       }, false)
+
+      toast.trigger(`${editingCategory!.name} deleted`)
 
       setOpen(false)
     } catch (err) {
