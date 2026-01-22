@@ -169,7 +169,7 @@ const StatDetails = ({
         }
       }, false)
 
-      toast.trigger(`${editingStat!.name} updated`, ToastType.SUCCESS)
+      toast.trigger(`${stat.name} updated`, ToastType.SUCCESS)
 
       setOpen(false)
     } catch (err) {
