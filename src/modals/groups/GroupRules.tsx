@@ -142,7 +142,11 @@ export default function GroupRules({
   }, [availableFields, findRuleByName, setRules])
 
   const getFieldDisplayNameForRule = useCallback((rule: UnpackedGroupRule) => {
-    return availableFields.find((f) => f.mapsTo === rule.mapsTo)!.fieldDisplayName
+    const isMetaRule = metaGroupFields.some((f) => f.metaProp === rule.namespacedValue)
+    return availableFields.find((f) =>
+      f.mapsTo === rule.mapsTo &&
+      (isMetaRule ? f.metaProp === rule.namespacedValue : !f.metaProp)
+    )!.fieldDisplayName
   }, [availableFields])
 
   const updateOperands = (ruleIdx: number, operandIdx: number, value: string) => {
@@ -179,93 +183,21 @@ export default function GroupRules({
     <div className='border rounded border-gray-200 p-4 space-y-4 md:max-h-80 md:overflow-y-scroll'>
       <p className='text-sm'>All players</p>
 
-      {rules.length > 0 &&
-        <div className='divide-y space-y-4'>
-          {rules.map((rule, idx) => (
-            <div key={idx} className='text-sm space-y-2 pt-4 first:pt-0'>
-              <div className='flex items-center space-x-2'>
-                <div className='-translate-y-0.5 w-[12px] h-[8px] border-l border-b border-gray-300' />
+      <div className='divide-y divide-gray-200 space-y-4'>
+        {rules.map((rule, idx) => (
+          <div key={idx} className='text-sm space-y-2 pb-4'>
+            <div className='flex items-center space-x-2'>
+              <div className='-translate-y-0.5 w-3 h-2 border-l border-b border-gray-300' />
 
-                <div>
-                  {idx === 0 && <span className='text-gray-500'>where</span>}
+              <div>
+                {idx === 0 && <span className='text-gray-500'>where</span>}
 
-                  {idx > 0 &&
-                    <DropdownMenu
-                      options={[
-                        { label: 'and', onClick: () => setRuleMode(PlayerGroupRuleMode.AND) },
-                        { label: 'or', onClick: () => setRuleMode(PlayerGroupRuleMode.OR) }
-                      ]}
-                    >
-                      {(setOpen) => (
-                        <Button
-                          type='button'
-                          onClick={() => setOpen(true)}
-                          variant='small'
-                        >
-                          {ruleMode.substring(1, ruleMode.length)}
-                        </Button>
-                      )}
-                    </DropdownMenu>
-                  }
-                </div>
-
-                <DropdownMenu
-                  options={availableFields.map(({ fieldDisplayName }) => ({
-                    label: fieldDisplayName,
-                    onClick: () => {
-                      updateRuleName(idx, fieldDisplayName)
-                    }
-                  }))}
-                >
-                  {(setOpen) => (
-                    <Button
-                      type='button'
-                      onClick={() => setOpen(true)}
-                      variant='small'
-                    >
-                      {getFieldDisplayNameForRule(rule)}
-                    </Button>
-                  )}
-                </DropdownMenu>
-
-                {rule.namespaced && !metaGroupFields.some((f) => f.metaProp === rule.namespacedValue) &&
-                  <TextInput
-                    id='namespaced-value'
-                    variant='modal'
-                    containerClassName='w-24 md:w-32'
-                    onChange={(namespacedValue) => updateRule(idx, { namespacedValue })}
-                    value={rule.namespacedValue ?? ''}
-                    placeholder={getNamespacedRulePlaceholder(getFieldDisplayNameForRule(rule))}
-                    data-testid='namespaced-value'
-                  />
-                }
-
-                <div className='!ml-auto'>
-                  <Button
-                    type='button'
-                    onClick={() => onDeleteClick(idx)}
-                    variant='small'
-                    icon={<IconTrash size={16} />}
-                    extra={{ 'aria-label': `Delete rule ${idx + 1}` }}
-                  />
-                </div>
-              </div>
-
-              {getFieldDisplayNameForRule(rule) === groupPropKeyField &&
-                <div className='flex items-center space-x-2 ml-5'>
-                  <span>value as</span>
-
+                {idx > 0 &&
                   <DropdownMenu
                     options={[
-                      PlayerGroupRuleCastType.CHAR,
-                      PlayerGroupRuleCastType.DOUBLE,
-                      PlayerGroupRuleCastType.DATETIME
-                    ].map((castType) => ({
-                      label: getCastTypeDescription(castType),
-                      onClick: () => {
-                        updateRule(idx, { castType })
-                      }
-                    }))}
+                      { label: 'and', onClick: () => setRuleMode(PlayerGroupRuleMode.AND) },
+                      { label: 'or', onClick: () => setRuleMode(PlayerGroupRuleMode.OR) }
+                    ]}
                   >
                     {(setOpen) => (
                       <Button
@@ -273,19 +205,68 @@ export default function GroupRules({
                         onClick={() => setOpen(true)}
                         variant='small'
                       >
-                        <span>{getCastTypeDescription(rule.castType)}</span>
+                        {ruleMode.substring(1, ruleMode.length)}
                       </Button>
                     )}
                   </DropdownMenu>
-                </div>
+                }
+              </div>
+
+              <DropdownMenu
+                options={availableFields.map(({ fieldDisplayName }) => ({
+                  label: fieldDisplayName,
+                  onClick: () => {
+                    updateRuleName(idx, fieldDisplayName)
+                  }
+                }))}
+              >
+                {(setOpen) => (
+                  <Button
+                    type='button'
+                    onClick={() => setOpen(true)}
+                    variant='small'
+                  >
+                    {getFieldDisplayNameForRule(rule)}
+                  </Button>
+                )}
+              </DropdownMenu>
+
+              {rule.namespaced && !metaGroupFields.some((f) => f.metaProp === rule.namespacedValue) &&
+                <TextInput
+                  id='namespaced-value'
+                  variant='modal'
+                  containerClassName='w-24 md:w-32'
+                  onChange={(namespacedValue) => updateRule(idx, { namespacedValue })}
+                  value={rule.namespacedValue ?? ''}
+                  placeholder={getNamespacedRulePlaceholder(getFieldDisplayNameForRule(rule))}
+                  data-testid='namespaced-value'
+                />
               }
 
+              <div className='ml-auto!'>
+                <Button
+                  type='button'
+                  onClick={() => onDeleteClick(idx)}
+                  variant='small'
+                  icon={<IconTrash size={16} />}
+                  extra={{ 'aria-label': `Delete rule ${idx + 1}` }}
+                />
+              </div>
+            </div>
+
+            {getFieldDisplayNameForRule(rule) === groupPropKeyField &&
               <div className='flex items-center space-x-2 ml-5'>
+                <span>value as</span>
+
                 <DropdownMenu
-                  options={availableRules.filter((availableRule) => availableRule.castTypes.includes(rule.castType)).map(({ name, negate }) => ({
-                    label: getRuleDescription(name, negate),
+                  options={[
+                    PlayerGroupRuleCastType.CHAR,
+                    PlayerGroupRuleCastType.DOUBLE,
+                    PlayerGroupRuleCastType.DATETIME
+                  ].map((castType) => ({
+                    label: getCastTypeDescription(castType),
                     onClick: () => {
-                      updateRule(idx, { name, negate })
+                      updateRule(idx, { castType })
                     }
                   }))}
                 >
@@ -295,52 +276,72 @@ export default function GroupRules({
                       onClick={() => setOpen(true)}
                       variant='small'
                     >
-                      {getRuleDescription(rule.name, rule.negate)}
+                      <span>{getCastTypeDescription(rule.castType)}</span>
                     </Button>
                   )}
                 </DropdownMenu>
-
-                {[...new Array(findRuleByName(rule.name).operandCount)].map((_, operandIdx) => {
-                  if (rule.castType === 'DATETIME') {
-                    return (
-                      <DateInput
-                        key={operandIdx}
-                        id={`operand-${operandIdx}`}
-                        onDateTimeStringChange={(value) => updateOperands(idx, operandIdx, value)}
-                        value={rule.operands[operandIdx]}
-                        textInputProps={{
-                          containerClassName: '!w-28'
-                        }}
-                      />
-                    )
-                  } else {
-                    return (
-                      <TextInput
-                        key={operandIdx}
-                        id={`operand-${operandIdx}`}
-                        variant='modal'
-                        containerClassName='w-14 md:w-20'
-                        onChange={(value) => updateOperands(idx, operandIdx, value)}
-                        value={rule.operands[operandIdx] ?? ''}
-                      />
-                    )
-                  }
-                })}
               </div>
-            </div>
-          ))}
-        </div>
-      }
+            }
 
-      <div className='w-32'>
-        <Button
-          type='button'
-          onClick={onAddFilterClick}
-          icon={<IconPlus size={16} />}
-          variant='small'
-        >
-          <span>Add filter</span>
-        </Button>
+            <div className='flex items-center space-x-2 ml-5'>
+              <DropdownMenu
+                options={availableRules.filter((availableRule) => availableRule.castTypes.includes(rule.castType)).map(({ name, negate }) => ({
+                  label: getRuleDescription(name, negate),
+                  onClick: () => {
+                    updateRule(idx, { name, negate })
+                  }
+                }))}
+              >
+                {(setOpen) => (
+                  <Button
+                    type='button'
+                    onClick={() => setOpen(true)}
+                    variant='small'
+                  >
+                    {getRuleDescription(rule.name, rule.negate)}
+                  </Button>
+                )}
+              </DropdownMenu>
+
+              {[...new Array(findRuleByName(rule.name).operandCount)].map((_, operandIdx) => {
+                if (rule.castType === 'DATETIME') {
+                  return (
+                    <DateInput
+                      key={operandIdx}
+                      id={`operand-${operandIdx}`}
+                      onDateTimeStringChange={(value) => updateOperands(idx, operandIdx, value)}
+                      value={rule.operands[operandIdx]}
+                      textInputProps={{
+                        containerClassName: '!w-28'
+                      }}
+                    />
+                  )
+                } else {
+                  return (
+                    <TextInput
+                      key={operandIdx}
+                      id={`operand-${operandIdx}`}
+                      variant='modal'
+                      containerClassName='w-14 md:w-20'
+                      onChange={(value) => updateOperands(idx, operandIdx, value)}
+                      value={rule.operands[operandIdx] ?? ''}
+                    />
+                  )
+                }
+              })}
+            </div>
+          </div>
+        ))}
+        <div className='w-32'>
+          <Button
+            type='button'
+            onClick={onAddFilterClick}
+            icon={<IconPlus size={16} />}
+            variant='small'
+          >
+            <span>Add filter</span>
+          </Button>
+        </div>
       </div>
     </div>
   )

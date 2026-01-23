@@ -63,9 +63,11 @@ export default function Groups() {
           ? data!.groups.filter((pg) => pg.id !== group.id)
           : [...data!.groups, group]
       }), false)
-      toast.trigger(isPinned(group) ? 'Group unpinned' : 'Group pinned to your dashboard', ToastType.SUCCESS)
+
+      const toastMessage = isPinned(group) ? `${group.name} unpinned` : `${group.name} pinned to your dashboard`
+      toast.trigger(toastMessage, ToastType.SUCCESS)
     } catch (err) {
-      toast.trigger('Failed to pin group', ToastType.ERROR)
+      toast.trigger(`Failed to pin ${group.name}`, ToastType.ERROR)
     }
   }, [activeGame.id, isPinned, mutatePinnedGroups, toast])
 
