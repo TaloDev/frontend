@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 import Modal from '../../components/Modal'
 import TextInput from '../../components/TextInput'
 import Button from '../../components/Button'
@@ -26,9 +26,10 @@ import { z } from 'zod'
 import Toggle from '../../components/toggles/Toggle'
 import Link from '../../components/Link'
 import { unpackRules } from '../../utils/group-rules/unpackRules'
+import ToastContext, { ToastType } from '../../components/toast/ToastContext'
 
 const validationSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1, { message: 'Name is required' }),
   description: z.string(),
   membersVisible: z.boolean()
 })
@@ -72,6 +73,8 @@ export default function GroupDetails({
   const { count, loading: countLoading } = useGroupPreviewCount(activeGame, ruleMode, debouncedRules)
   const [displayableCount, setDisplayableCount] = useState(count)
 
+  const toast = useContext(ToastContext)
+
   useEffect(() => {
     if (count !== undefined) {
       setDisplayableCount(count)
@@ -110,6 +113,8 @@ export default function GroupDetails({
         }
       }, true)
 
+      toast.trigger(`${group.name} created`, ToastType.SUCCESS)
+
       setOpen(false)
     } catch (err) {
       setAPIError(buildError(err))
@@ -134,6 +139,8 @@ export default function GroupDetails({
           })
         }
       }, true)
+
+      toast.trigger(`${group.name} updated`, ToastType.SUCCESS)
 
       setOpen(false)
     } catch (err) {
@@ -160,6 +167,8 @@ export default function GroupDetails({
           })
         }
       }, false)
+
+      toast.trigger(`${editingGroup!.name} deleted`)
 
       setOpen(false)
     } catch (err) {
