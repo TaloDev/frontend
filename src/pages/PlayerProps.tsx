@@ -7,11 +7,15 @@ import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import { useRecoilValue } from 'recoil'
 import PropsEditor from '../components/PropsEditor'
 import { Prop } from '../entities/prop'
+import { useContext } from 'react'
+import ToastContext, { ToastType } from '../components/toast/ToastContext'
 
 export default function PlayerProps() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
 
   const [player] = usePlayer()
+
+  const toast = useContext(ToastContext)
 
   const onSave = async (props: Prop[]): Promise<Prop[]> => {
     if (!player) {
@@ -19,6 +23,9 @@ export default function PlayerProps() {
     }
 
     const { player: updatedPlayer } = await updatePlayer(activeGame.id, player.id, { props })
+
+    toast.trigger('Props updated', ToastType.SUCCESS)
+
     return updatedPlayer.props
   }
 
