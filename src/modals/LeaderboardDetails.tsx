@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react'
+import { MouseEvent, useContext, useState } from 'react'
 import Modal from '../components/Modal'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
@@ -16,6 +16,7 @@ import canPerformAction, { PermissionBasedAction } from '../utils/canPerformActi
 import { Leaderboard, LeaderboardSortMode, LeaderboardRefreshInterval } from '../entities/leaderboard'
 import { KeyedMutator } from 'swr'
 import { IconRefresh, IconTrash } from '@tabler/icons-react'
+import ToastContext, { ToastType } from '../components/toast/ToastContext'
 
 type LeaderboardDetailsProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -46,6 +47,8 @@ const LeaderboardDetails = ({
   const [unique, setUnique] = useState(editingLeaderboard?.unique ?? false)
   const [uniqueByProps, setUniqueByProps] = useState(editingLeaderboard?.uniqueByProps ?? false)
 
+  const toast = useContext(ToastContext)
+
   const onCreateClick = async (e: MouseEvent<HTMLElement>) => {
     e.preventDefault()
     setLoading(true)
@@ -63,6 +66,8 @@ const LeaderboardDetails = ({
           ]
         }
       }, false)
+
+      toast.trigger(`${leaderboard.name} created`, ToastType.SUCCESS)
 
       setOpen(false)
     } catch (err) {
@@ -89,6 +94,8 @@ const LeaderboardDetails = ({
         }
       }, false)
 
+      toast.trigger(`${leaderboard.name} updated`, ToastType.SUCCESS)
+
       setOpen(false)
     } catch (err) {
       setError(buildError(err, 'internalName'))
@@ -114,6 +121,8 @@ const LeaderboardDetails = ({
           })
         }
       }, false)
+
+      toast.trigger(`${editingLeaderboard!.name} deleted`)
 
       setOpen(false)
     } catch (err) {

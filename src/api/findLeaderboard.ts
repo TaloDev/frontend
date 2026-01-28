@@ -4,9 +4,9 @@ import api from './api'
 import makeValidatedRequest from './makeValidatedRequest'
 
 const findLeaderboard = makeValidatedRequest(
-  (gameId: number, internalName: string) => api.get(`/games/${gameId}/leaderboards/search?internalName=${internalName}`),
+  (gameId: number, internalName: string) => api.get(`/games/${gameId}/leaderboards?internalName=${internalName}`),
   z.object({
-    leaderboard: leaderboardSchema
+    leaderboards: z.array(leaderboardSchema)
   })
 )
 

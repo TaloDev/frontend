@@ -99,7 +99,7 @@ export default function ChannelDetails({
           }
         }, false)
 
-        toast.trigger('Channel successfully updated', ToastType.SUCCESS)
+        toast.trigger(`${channel.name} updated`, ToastType.SUCCESS)
         setOpen(false)
       } else {
         const { channel } = await createChannel(activeGame.id, formData)
@@ -118,7 +118,7 @@ export default function ChannelDetails({
           }
         }, false)
 
-        toast.trigger('Channel successfully created', ToastType.SUCCESS)
+        toast.trigger(`${channel.name} created`, ToastType.SUCCESS)
         setOpen(false)
       }
     } catch (err) {
@@ -147,7 +147,7 @@ export default function ChannelDetails({
       }, false)
 
       setOpen(false)
-      toast.trigger('Channel successfully deleted', ToastType.SUCCESS)
+      toast.trigger(`${editingChannel!.name} deleted`)
     } catch (err) {
       setAPIError(buildError(err))
       setDeleting(false)

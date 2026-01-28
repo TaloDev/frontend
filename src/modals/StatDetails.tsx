@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import Modal from '../components/Modal'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
@@ -19,6 +19,7 @@ import { GameStat } from '../entities/gameStat'
 import { KeyedMutator } from 'swr'
 import { z } from 'zod'
 import { IconRefresh, IconTrash } from '@tabler/icons-react'
+import ToastContext, { ToastType } from '../components/toast/ToastContext'
 
 type StatDetailsProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -121,6 +122,8 @@ const StatDetails = ({
     mode: 'onChange'
   })
 
+  const toast = useContext(ToastContext)
+
   const onCreateClick: SubmitHandler<FormValues> = async (FormValues, e) => {
     e?.preventDefault()
     setLoading(true)
@@ -138,6 +141,8 @@ const StatDetails = ({
           ]
         }
       }, false)
+
+      toast.trigger(`${stat.name} created`, ToastType.SUCCESS)
 
       setOpen(false)
     } catch (err) {
@@ -164,6 +169,8 @@ const StatDetails = ({
         }
       }, false)
 
+      toast.trigger(`${stat.name} updated`, ToastType.SUCCESS)
+
       setOpen(false)
     } catch (err) {
       setAPIError(buildError(err))
@@ -189,6 +196,8 @@ const StatDetails = ({
           })
         }
       }, false)
+
+      toast.trigger(`${editingStat!.name} deleted`)
 
       setOpen(false)
     } catch (err) {
@@ -335,7 +344,7 @@ const StatDetails = ({
                       type='button'
                       onClick={onResetClick}
                       variant='red'
-                      className='!w-auto'
+                      className='w-auto!'
                       icon={<IconRefresh />}
                     >
                       <span>
@@ -349,7 +358,7 @@ const StatDetails = ({
                     isLoading={isDeleting}
                     onClick={onDeleteClick}
                     variant='red'
-                    className='!w-auto'
+                    className='w-auto!'
                     icon={<IconTrash />}
                   >
                     <span>
