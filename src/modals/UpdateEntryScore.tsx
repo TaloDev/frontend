@@ -1,4 +1,4 @@
-import { MouseEvent, useState } from 'react'
+import { MouseEvent, useContext, useState } from 'react'
 import Modal from '../components/Modal'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
@@ -10,6 +10,7 @@ import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import updateLeaderboardEntry from '../api/updateLeaderboardEntry'
 import { Leaderboard } from '../entities/leaderboard'
 import { upperFirst } from 'lodash-es'
+import ToastContext from '../components/toast/ToastContext'
 
 type UpdateEntryScoreProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -26,6 +27,8 @@ export default function UpdateEntryScore({ modalState, onEntryUpdated, editingEn
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
 
+  const toast = useContext(ToastContext)
+
   const onUpdateClick = async (e: MouseEvent<HTMLElement>) => {
     e.preventDefault()
     setLoading(true)
@@ -34,6 +37,9 @@ export default function UpdateEntryScore({ modalState, onEntryUpdated, editingEn
     try {
       const { entry } = await updateLeaderboardEntry(activeGame.id, leaderboard.id, editingEntry.id, { newScore: Number(score) })
       onEntryUpdated(entry)
+
+      toast.trigger('Score updated')
+
       setOpen(false)
     } catch (err) {
       setError(buildError(err))

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import TableCell from '../components/tables/TableCell'
@@ -30,6 +30,7 @@ import { PropBadges } from '../components/PropBadges'
 import useTimePeriodAndDates, { timePeriods } from '../utils/useTimePeriodAndDates'
 import DateInput from '../components/DateInput'
 import TimePeriodPicker from '../components/TimePeriodPicker'
+import ToastContext, { ToastType } from '../components/toast/ToastContext'
 
 export default function LeaderboardEntries() {
   const location = useLocation()
@@ -67,12 +68,17 @@ export default function LeaderboardEntries() {
 
   const [editingEntry, setEditingEntry] = useState<LeaderboardEntry | null>(null)
 
+  const toast = useContext(ToastContext)
+
   useEffect(() => {
     (async () => {
       if (isLoading) {
         try {
-          const { leaderboard } = await findLeaderboard(activeGame.id, internalName!)
-          setLeaderboard(leaderboard)
+          const { leaderboards } = await findLeaderboard(activeGame.id, internalName!)
+          if (!leaderboards[0]) {
+            throw new Error('Leaderboard not found')
+          }
+          setLeaderboard(leaderboards[0])
           setLoading(false)
         } catch (err) {
           navigate(routes.leaderboards, { replace: true })
@@ -110,10 +116,15 @@ export default function LeaderboardEntries() {
           })
         }
       }, false)
+
+      toast.trigger(
+        `Leaderboard entry ${updatedEntry.hidden ? 'hidden' : 'unhidden'}`,
+        updatedEntry.hidden ? ToastType.NONE : ToastType.SUCCESS
+      )
     } catch (err) {
       setError(buildError(err))
     }
-  }, [activeGame.id, leaderboard, mutate])
+  }, [activeGame.id, leaderboard, mutate, toast])
 
   const onEntryUpdated = useCallback((entry: LeaderboardEntry) => {
     mutate((data) => {
