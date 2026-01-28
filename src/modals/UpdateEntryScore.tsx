@@ -10,7 +10,7 @@ import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import updateLeaderboardEntry from '../api/updateLeaderboardEntry'
 import { Leaderboard } from '../entities/leaderboard'
 import { upperFirst } from 'lodash-es'
-import ToastContext from '../components/toast/ToastContext'
+import ToastContext, { ToastType } from '../components/toast/ToastContext'
 
 type UpdateEntryScoreProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -38,7 +38,7 @@ export default function UpdateEntryScore({ modalState, onEntryUpdated, editingEn
       const { entry } = await updateLeaderboardEntry(activeGame.id, leaderboard.id, editingEntry.id, { newScore: Number(score) })
       onEntryUpdated(entry)
 
-      toast.trigger('Score updated')
+      toast.trigger(`${leaderboard.name} score updated`, ToastType.SUCCESS)
 
       setOpen(false)
     } catch (err) {
