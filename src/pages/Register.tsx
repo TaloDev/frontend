@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import TextInput from '../components/TextInput'
 import Button from '../components/Button'
 import Link from '../components/Link'
@@ -18,6 +18,9 @@ import clsx from 'clsx'
 import routes from '../constants/routes'
 import userState from '../state/userState'
 import { z } from 'zod'
+import HCaptcha from '@hcaptcha/react-hcaptcha'
+
+const captchaKey = import.meta.env.VITE_HCAPTCHA_SITE_KEY
 
 const validationSchema = z.object({
   organisationName: z.string().optional(),
@@ -25,7 +28,10 @@ const validationSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
   password: z.string().min(1, { message: 'Password is required' }),
   termsAccepted: z.boolean().refine((val) => val === true, { message: 'Terms must be accepted' }),
-  hasInvite: z.boolean()
+  hasInvite: z.boolean(),
+  captchaToken: captchaKey
+    ? z.string().min(1, { message: 'Please complete the captcha' })
+    : z.string().optional()
 }).superRefine(({ hasInvite, organisationName }, ctx) => {
   if (!hasInvite && !organisationName?.trim()) {
     ctx.addIssue({
@@ -52,17 +58,28 @@ export default function Register() {
     defaultValues: {
       email: location.state?.invite.email ?? '',
       termsAccepted: false,
-      hasInvite: Boolean(location.state?.invite)
+      hasInvite: Boolean(location.state?.invite),
+      captchaToken: ''
     },
     mode: 'onTouched'
   })
 
-  const onRegisterClick = async ({ email, password, organisationName, username }: FormValues) => {
+  const captchaRef = useRef<HCaptcha | null>(null)
+
+  const onRegisterClick = async ({ email, password, organisationName, username, captchaToken }: FormValues) => {
     setAPIError(null)
     setLoading(true)
 
     try {
-      const { accessToken, user } = await registerUser({ email, password, organisationName, username, inviteToken: location.state?.invite.token })
+      const { accessToken, user } = await registerUser({
+        email,
+        password,
+        organisationName,
+        username,
+        inviteToken: location.state?.invite.token,
+        captchaToken
+      })
+
       AuthService.setToken(accessToken)
       setUser(user)
 
@@ -70,6 +87,7 @@ export default function Register() {
     } catch (err) {
       setAPIError(buildError(err))
       setLoading(false)
+      captchaRef.current?.resetCaptcha()
     }
   }
 
@@ -140,6 +158,28 @@ export default function Register() {
             />
           )}
         />
+
+        {!!captchaKey &&
+          <Controller
+            control={control}
+            name="captchaToken"
+            render={({ field }) => (
+              <div className="flex flex-col gap-2">
+                <HCaptcha
+                  ref={captchaRef}
+                  sitekey={captchaKey}
+                  onVerify={field.onChange}
+                  onExpire={() => field.onChange('')}
+                  onError={() => field.onChange('')}
+                  size='normal'
+                />
+                {errors.captchaToken && (
+                  <p role='alert' className='text-red-500 font-medium'>{errors.captchaToken.message}</p>
+                )}
+              </div>
+            )}
+          />
+        }
 
         {apiError && <ErrorMessage error={apiError} />}
 

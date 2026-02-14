@@ -9,6 +9,7 @@ export type Data = {
   organisationName?: string
   username: string
   inviteToken?: string
+  captchaToken?: string
 }
 
 const register = makeValidatedRequest(
