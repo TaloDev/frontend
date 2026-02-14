@@ -57,7 +57,8 @@ describe('<Register />', () => {
         organisationName: 'Sleepy Studios',
         username: 'Talo',
         email: 'hello@trytalo.com',
-        password: 'p@ssw0rd'
+        password: 'p@ssw0rd',
+        captchaToken: ''
       })
     })
 
@@ -147,7 +148,8 @@ describe('<Register />', () => {
         username: 'Talo',
         email: 'dev@trytalo.com',
         password: 'p@ssw0rd',
-        inviteToken: invite.token
+        inviteToken: invite.token,
+        captchaToken: ''
       })
     })
 

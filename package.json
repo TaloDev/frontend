@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@dinero.js/currencies": "^2.0.0-alpha.11",
+    "@hcaptcha/react-hcaptcha": "^2.0.2",
     "@hookform/resolvers": "^5.2.2",
     "@sentry/react": "^7.112.2",
     "@tabler/icons-react": "^3.2.0",
