@@ -1,10 +1,11 @@
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import ErrorMessage from '../components/ErrorMessage'
 import { format } from 'date-fns'
 import { IconPinned, IconPinnedFilled, IconPlus } from '@tabler/icons-react'
 import Button from '../components/Button'
+import TextInput from '../components/TextInput'
 import TableCell from '../components/tables/TableCell'
 import TableBody from '../components/tables/TableBody'
 import DateCell from '../components/tables/cells/DateCell'
@@ -23,13 +24,29 @@ import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import togglePinnedGroup from '../api/toggledPinnedGroup'
 
 export default function Groups() {
+  const initialSearch = new URLSearchParams(window.location.search).get('search')
+  const [search, setSearch] = useState(initialSearch ?? '')
+
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
 
   const [showModal, setShowModal] = useState(false)
   const [editingGroup, setEditingGroup] = useState<PlayerGroup | null>(null)
 
   const { groups, loading, error, mutate } = useGroups(activeGame)
-  const sortedGroups = useSortedItems(groups, 'name', 'asc')
+
+  const filteredGroups = useMemo(() => {
+    if (!search) {
+      return groups
+    }
+
+    const lower = search.toLowerCase()
+    return groups.filter((group) => {
+      const groupName = group.name.toLowerCase()
+      return groupName.includes(lower) || group.id.includes(lower)
+    })
+  }, [groups, search])
+
+  const sortedGroups = useSortedItems(filteredGroups, 'name', 'asc')
 
   const { groups: pinnedGroups, mutate: mutatePinnedGroups } = usePinnedGroups(activeGame)
 
@@ -75,6 +92,7 @@ export default function Groups() {
     <Page
       title='Groups'
       isLoading={loading}
+      showBackButton={Boolean(initialSearch)}
       extraTitleComponent={
         <div className='mt-1 ml-4 p-1 rounded-full bg-indigo-600'>
           <Button
@@ -86,13 +104,32 @@ export default function Groups() {
         </div>
       }
     >
-      {groups.length === 0 && !loading &&
-        <p>{activeGame.name} doesn&apos;t have any groups yet</p>
+      {(sortedGroups.length > 0 || search.length > 0) &&
+        <div className='flex items-center'>
+          <div className='w-1/2 grow md:grow-0 lg:w-1/4'>
+            <TextInput
+              id='groups-search'
+              type='search'
+              placeholder='Search...'
+              onChange={setSearch}
+              value={search}
+            />
+          </div>
+        </div>
+      }
+
+      {sortedGroups.length === 0 && !loading &&
+        <>
+          {search.length > 0
+            ? <p>No groups match your query</p>
+            : <p>{activeGame.name} doesn&apos;t have any groups yet</p>
+          }
+        </>
       }
 
       {error && <ErrorMessage error={error} />}
 
-      {groups.length > 0 &&
+      {sortedGroups.length > 0 &&
         <>
           <Table columns={['ID', 'Name', 'Players', 'Last updated', '', '']}>
             <TableBody iterator={sortedGroups}>

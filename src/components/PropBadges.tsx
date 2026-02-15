@@ -1,4 +1,4 @@
-import { ReactElement, useMemo } from 'react'
+import { ReactElement, ReactNode, useMemo } from 'react'
 import { isMetaProp } from '../constants/metaProps'
 import { Prop } from '../entities/prop'
 import clsx from 'clsx'
@@ -12,9 +12,21 @@ type Props = {
   devBuild?: boolean
   buttonTitle?: string
   className?: string
+  contentRenderer?: (prop: Prop) => ReactNode
 }
 
-export function PropBadges({ props, icon: Icon, devBuild, onClick, buttonTitle, className }: Props) {
+function defaultContentRenderer({ key, value }: Prop) {
+  return `${key} = ${value}`
+}
+
+export function PropBadges({
+  props,
+  icon: Icon,
+  devBuild, onClick,
+  buttonTitle,
+  className,
+  contentRenderer = defaultContentRenderer
+}: Props) {
   const sortedProps = useMemo(() => {
     return props
       .filter((prop) => !isMetaProp(prop))
@@ -28,7 +40,7 @@ export function PropBadges({ props, icon: Icon, devBuild, onClick, buttonTitle, 
           key={`${key}-${value}`}
           className='bg-gray-900 rounded text-xs flex w-fit'
         >
-          <code className='align-middle inline-block p-2 break-all'>{key} = {value}</code>
+          <code className='align-middle inline-block p-2 break-all'>{contentRenderer({ key, value })}</code>
           {onClick && (
             <Tippy content={<p>{buttonTitle}</p>}>
               <button
