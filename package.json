@@ -11,12 +11,13 @@
   },
   "dependencies": {
     "@dinero.js/currencies": "^2.0.0-alpha.11",
+    "@hcaptcha/react-hcaptcha": "^2.0.2",
     "@hookform/resolvers": "^5.2.2",
     "@sentry/react": "^7.112.2",
     "@tabler/icons-react": "^3.2.0",
     "@tippyjs/react": "^4.2.5",
     "@xyflow/react": "^12.2.1",
-    "axios": "^1.12.1",
+    "axios": "^1.13.5",
     "clsx": "^2.0.0",
     "dagre": "^0.8.5",
     "date-fns": "^2.29.3",
@@ -78,7 +79,7 @@
   "lint-staged": {
     "*.{ts,js,tsx,jsx}": "eslint --fix"
   },
-  "version": "0.67.0",
+  "version": "0.68.0",
   "engines": {
     "node": "24.x"
   },
