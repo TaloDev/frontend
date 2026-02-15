@@ -12,7 +12,7 @@ import Table from '../components/tables/Table'
 import SecondaryTitle from '../components/SecondaryTitle'
 import PlayerAliases from '../components/PlayerAliases'
 import Identifier from '../components/Identifier'
-import { IconBolt, IconChartBar, IconDeviceFloppy, IconSettings, IconTrash, IconTrophy } from '@tabler/icons-react'
+import { IconArrowRight, IconBolt, IconChartBar, IconDeviceFloppy, IconSettings, IconTrash, IconTrophy } from '@tabler/icons-react'
 import Button from '../components/Button'
 import Loading from '../components/Loading'
 import usePlayerAuthActivities from '../api/usePlayerAuthActivities'
@@ -27,6 +27,7 @@ import { useCallback, useContext, useState } from 'react'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import deletePlayer from '../api/deletePlayer'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
+import { PropBadges } from '../components/PropBadges'
 
 const links = [
   {
@@ -78,6 +79,10 @@ export default function PlayerProfile() {
 
     navigate(route.replace(':id', player.id))
   }, [navigate, player])
+
+  const goToGroup = useCallback((groupId: string) => {
+    navigate(`${routes.groups}?search=${groupId}`)
+  }, [navigate])
 
   const onDeleteClick = useCallback(async () => {
     if (window.confirm('Are you sure you want to delete this player? This action cannot be undone.')) {
@@ -155,6 +160,21 @@ export default function PlayerProfile() {
           )}
         </TableBody>
       </Table>
+
+      {player.groups.length > 0 &&
+        <>
+          <SecondaryTitle>Groups</SecondaryTitle>
+
+          <PropBadges
+            props={player.groups.map(({ id, name }) => ({ key: id, value: name }))}
+            className='flex flex-wrap gap-4 w-full lg:w-3/4 xl:w-1/2'
+            contentRenderer={({ value: name }) => <span className='text-sm'>{name}</span>}
+            icon={<IconArrowRight size={20} />}
+            onClick={(p) => goToGroup(p.key)}
+            buttonTitle='Go to group'
+          />
+        </>
+      }
 
       {activities.length > 0 &&
         <>
