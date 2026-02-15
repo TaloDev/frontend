@@ -22,7 +22,7 @@ function SecondaryNav({
   if (availableRoutes.length < 2) return null
 
   return (
-    <nav className='bg-gray-700 w-screen px-4 md:px-8 -mx-4 md:-mx-8 -mt-4 md:-mt-8 mb-8 py-4 border-b-2 border-b-gray-600 flex justify-between items-center overflow-x-scroll'>
+    <nav className='bg-gray-700 pl-4 pr-12 md:px-8 py-4 -mx-4 md:-mx-8 -mt-4 md:-mt-8 mb-8 border-b-2 border-b-gray-600 overflow-x-scroll no-scrollbar'>
       <ul className='flex space-x-6 md:space-x-8'>
         {availableRoutes.map(({ title, to }) => {
           const active = location.pathname === to
@@ -36,7 +36,7 @@ function SecondaryNav({
           >
             <Link
               to={to}
-              className={clsx('!no-underline', { '!text-white': active, '!text-indigo-300': !active })}
+              className={clsx('no-underline!', { 'text-white!': active, 'text-indigo-300!': !active })}
             >
               {title}
             </Link>
