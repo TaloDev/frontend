@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react'
-import ChartTooltip from '../ChartTooltip'
+import { EventChartTooltip } from '../EventChartTooltip'
 
 const listItemsPerEvent = 3
 
-describe('<ChartTooltip />', () => {
+describe('<EventChartTooltip />', () => {
   it('should only show events where the count is greater than 0', () => {
     render(
-      <ChartTooltip
+      <EventChartTooltip
         active
         payload={[
           {
@@ -35,7 +35,7 @@ describe('<ChartTooltip />', () => {
 
   it('should only render unique event names', () => {
     render(
-      <ChartTooltip
+      <EventChartTooltip
         active
         payload={[
           {
@@ -72,7 +72,7 @@ describe('<ChartTooltip />', () => {
 
   it('should not render if there are no items with a count greater than 0', () => {
     render(
-      <ChartTooltip
+      <EventChartTooltip
         active
         payload={[
           {
