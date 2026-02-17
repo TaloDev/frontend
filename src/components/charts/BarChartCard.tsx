@@ -7,17 +7,18 @@ import TimePeriodPicker from '../TimePeriodPicker'
 import { timePeriods } from '../../utils/useTimePeriodAndDates'
 import { TimePeriod } from '../../utils/useTimePeriod'
 import { LabelledTimePeriod } from '../TimePeriodPicker'
+import { DataKey } from 'recharts/types/util/types'
 
-export type BarChartCardBar = {
-  dataKey: string
+export type BarChartCardBar<T> = {
+  dataKey: DataKey<T>
   fill: string
   stackId?: string
 }
 
-type BarChartCardProps = {
+type BarChartCardProps<T> = {
   title: string
-  data: { date: number, [key: string]: number }[]
-  bars: BarChartCardBar[]
+  data: T[]
+  bars: BarChartCardBar<T>[]
   loading: boolean
   error: TaloError | null
   emptyMessage: string
@@ -27,7 +28,7 @@ type BarChartCardProps = {
   tooltip: ReactElement
 }
 
-export function BarChartCard({
+export function BarChartCard<T>({
   title,
   data,
   bars,
@@ -38,7 +39,7 @@ export function BarChartCard({
   onTimePeriodChange,
   height = 300,
   tooltip
-}: BarChartCardProps) {
+}: BarChartCardProps<T>) {
   return (
     <div className='hidden md:block border-2 border-gray-700 rounded bg-black space-y-8 p-4'>
       <div className='flex items-start justify-between'>
@@ -87,9 +88,9 @@ export function BarChartCard({
               cursor={{ fill: '#444', opacity: 0.4 }}
             />
 
-            {bars.map((bar) => (
+            {bars.map((bar, idx) => (
               <Bar
-                key={bar.dataKey}
+                key={idx}
                 dataKey={bar.dataKey}
                 fill={bar.fill}
                 stackId={bar.stackId}

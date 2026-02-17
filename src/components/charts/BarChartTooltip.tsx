@@ -1,14 +1,14 @@
 import { format } from 'date-fns'
 import { ReactNode } from 'react'
 
-type BarChartTooltipProps = {
+type BarChartTooltipProps<T> = {
   active?: boolean
-  payload?: { payload: Record<string, number> }[]
+  payload?: { payload: T }[]
   label?: number
-  formatter: (payload: Record<string, number>) => ReactNode
+  formatter: (payload: T) => ReactNode
 }
 
-export function BarChartTooltip({ active, payload, label, formatter }: BarChartTooltipProps) {
+export function BarChartTooltip<T>({ active, payload, label, formatter }: BarChartTooltipProps<T>) {
   if (!active || !payload?.length || label === undefined) return null
 
   return (

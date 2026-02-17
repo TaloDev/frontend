@@ -31,10 +31,10 @@ export function NewPlayersChart() {
       timePeriod={timePeriod}
       onTimePeriodChange={(period) => setTimePeriod(period.id)}
       tooltip={(
-        <BarChartTooltip
-          formatter={(p) => {
-            const count = p.count
-            const change = p.change
+        <BarChartTooltip<typeof chartData[number]>
+          formatter={(payload) => {
+            const count = payload.count
+            const change = payload.change
 
             return (
               <ul className='text-black grid grid-cols-[1fr_0.5fr] mt-4'>
@@ -46,8 +46,8 @@ export function NewPlayersChart() {
                   className={clsx(
                     'ml-2 text-xs text-center p-1 rounded',
                     {
-                      'bg-red-100 text-red-600': change < 0,
-                      'bg-green-100 text-green-600': change > 0,
+                      'bg-red-100/50 text-red-600': change < 0,
+                      'bg-green-100/50 text-green-600': change > 0,
                       'bg-gray-100 text-gray-600': change === 0
                     }
                   )}
