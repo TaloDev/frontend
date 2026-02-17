@@ -17,6 +17,7 @@ import { GameStat } from '../entities/gameStat'
 import { useNavigate } from 'react-router-dom'
 import routes from '../constants/routes'
 import { ResetStat } from '../modals/ResetStat'
+import { StatsActivityChart } from '../components/charts/StatsActivityChart'
 
 export default function Stats() {
   const [showModal, setShowModal] = useState(false)
@@ -70,6 +71,8 @@ export default function Stats() {
       }
       isLoading={loading}
     >
+      <StatsActivityChart />
+
       {!error && !loading && sortedStats.length === 0 &&
         <p>{activeGame.name} doesn&apos;t have any stats yet</p>
       }

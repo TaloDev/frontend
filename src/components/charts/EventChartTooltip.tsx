@@ -3,7 +3,7 @@ import { uniqBy } from 'lodash-es'
 import clsx from 'clsx'
 import { z } from 'zod'
 import { eventsVisualisationPayloadSchema } from '../../api/useEvents'
-import { Fragment } from 'react/jsx-runtime'
+import { Fragment } from 'react'
 import { getPersistentColor } from '../../utils/getPersistentColour'
 
 type Payload = z.infer<typeof eventsVisualisationPayloadSchema>
