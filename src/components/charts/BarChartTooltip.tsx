@@ -14,9 +14,7 @@ export function BarChartTooltip<T>({ active, payload, label, formatter }: BarCha
   return (
     <div className='bg-white p-4 rounded'>
       <p className='text-black font-medium text-sm'>{format(new Date(label), 'dd MMM yyyy')}</p>
-      <p className='text-black font-mono text-sm font-medium mt-2'>
-        {formatter(payload[0].payload)}
-      </p>
+      {formatter(payload[0].payload)}
     </div>
   )
 }
