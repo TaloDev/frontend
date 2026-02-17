@@ -16,7 +16,7 @@ export function StatsActivityChart() {
     setTimePeriod,
     debouncedStartDate,
     debouncedEndDate
-  } = useTimePeriodAndDates('statUpdatesChart')
+  } = useTimePeriodAndDates('statsActivityChart')
 
   const { stats, statNames, loading, error } = useStatsActivityChart(activeGame, debouncedStartDate, debouncedEndDate)
   const bars = statNames.map((name) => ({
