@@ -16,6 +16,7 @@ import Page from '../components/Page'
 import Table from '../components/tables/Table'
 import { Player } from '../entities/player'
 import useSearch from '../utils/useSearch'
+import { NewPlayersChart } from '../components/charts/NewPlayersChart'
 
 export default function Players() {
   const initialSearch = new URLSearchParams(window.location.search).get('search')
@@ -32,6 +33,8 @@ export default function Players() {
 
   return (
     <Page title='Players' isLoading={loading} showBackButton={Boolean(initialSearch)}>
+      <NewPlayersChart />
+
       {(players.length > 0 || debouncedSearch.length > 0) &&
         <div className='flex items-center'>
           <div className='w-1/2 grow md:grow-0 lg:w-1/4'>

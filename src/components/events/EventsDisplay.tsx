@@ -1,6 +1,6 @@
 import ErrorMessage from '../../components/ErrorMessage'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import ChartTooltip from '../../components/charts/ChartTooltip'
+import { EventChartTooltip } from '../charts/EventChartTooltip'
 import ChartTick from '../../components/charts/ChartTick'
 import { format } from 'date-fns'
 import getEventColour from '../../utils/getEventColour'
@@ -58,7 +58,7 @@ export default function EventsDisplay({
           <div className='pt-4 pl-4 pb-4 w-full'>
             <ResponsiveContainer height={600}>
               <LineChart margin={{ top: 20, bottom: 20, right: 10 }}>
-                <CartesianGrid strokeDasharray='4' stroke='#555' vertical={false} />
+                <CartesianGrid strokeDasharray='4' stroke='#444' vertical={false} />
 
                 <XAxis
                   dataKey='date'
@@ -88,7 +88,7 @@ export default function EventsDisplay({
                   )}
                 />
 
-                {selectedEventNames.length > 0 && <Tooltip content={<ChartTooltip />} />}
+                {selectedEventNames.length > 0 && <Tooltip content={<EventChartTooltip />} />}
 
                 {selectedEventNames.map((eventName) => (
                   <Line

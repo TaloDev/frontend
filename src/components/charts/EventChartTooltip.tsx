@@ -18,7 +18,7 @@ type Item = {
   payload: Payload
 }
 
-export default function ChartTooltip({ active, payload, label }: ChartTooltipProps) {
+export function EventChartTooltip({ active, payload, label }: ChartTooltipProps) {
   const filteredItems = payload?.filter((item: Item) => item.payload.count > 0)
 
   if (!active || filteredItems?.length === 0) return null
