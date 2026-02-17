@@ -1,10 +1,10 @@
 import { format } from 'date-fns'
 import { uniqBy } from 'lodash-es'
 import clsx from 'clsx'
-import getEventColour from '../../utils/getEventColour'
 import { z } from 'zod'
 import { eventsVisualisationPayloadSchema } from '../../api/useEvents'
 import { Fragment } from 'react/jsx-runtime'
+import { getPersistentColor } from '../../utils/getPersistentColour'
 
 type Payload = z.infer<typeof eventsVisualisationPayloadSchema>
 
@@ -34,7 +34,7 @@ export function EventChartTooltip({ active, payload, label }: ChartTooltipProps)
               <li className='flex items-center text-sm'>
                 <span
                   className='w-4 h-4 rounded inline-block mr-2'
-                  style={{ backgroundColor: getEventColour(item.payload.name) }}
+                  style={{ backgroundColor: getPersistentColor(item.payload.name) }}
                 />
                 {item.payload.name}
               </li>
@@ -47,8 +47,8 @@ export function EventChartTooltip({ active, payload, label }: ChartTooltipProps)
                 className={clsx(
                   'ml-2 text-xs text-center p-1 rounded',
                   {
-                    'bg-red-100 text-red-600': item.payload.change < 0,
-                    'bg-green-100 text-green-600': item.payload.change > 0,
+                    'bg-red-100/50 text-red-600': item.payload.change < 0,
+                    'bg-green-100/50 text-green-600': item.payload.change > 0,
                     'bg-gray-100 text-gray-600': item.payload.change === 0
                   }
                 )}

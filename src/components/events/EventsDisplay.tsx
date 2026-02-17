@@ -3,13 +3,13 @@ import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YA
 import { EventChartTooltip } from '../charts/EventChartTooltip'
 import ChartTick from '../../components/charts/ChartTick'
 import { format } from 'date-fns'
-import getEventColour from '../../utils/getEventColour'
 import { IconAlertCircle } from '@tabler/icons-react'
 import useEvents from '../../api/useEvents'
 import { useCallback } from 'react'
 import { useEventsContext } from './EventsContext'
 import routes from '../../constants/routes'
 import Link from '../Link'
+import { getPersistentColor } from '../../utils/getPersistentColour'
 
 type Props = ReturnType<typeof useEvents> & {
   showBreakdown?: boolean
@@ -95,7 +95,7 @@ export default function EventsDisplay({
                     dataKey='count'
                     data={events![eventName]}
                     key={eventName}
-                    stroke={getEventColour(eventName)}
+                    stroke={getPersistentColor(eventName)}
                     activeDot={{ r: 6 }}
                     type='linear'
                     strokeWidth={3}
@@ -115,7 +115,7 @@ export default function EventsDisplay({
                 <li key={name}>
                   <p className='text-sm flex justify-between items-center'>
                     <span className='px-2 py-1 rounded bg-gray-900 border border-gray-800'>
-                      <span className='w-4 h-4 rounded inline-block align-text-bottom' style={{ backgroundColor: getEventColour(name) }} />
+                      <span className='w-4 h-4 rounded inline-block align-text-bottom' style={{ backgroundColor: getPersistentColor(name) }} />
                       <span className='ml-2'>
                         <EventName name={name} showBreakdown={showBreakdown} />
                       </span>

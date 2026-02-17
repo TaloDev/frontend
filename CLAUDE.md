@@ -131,7 +131,6 @@ Located in [src/utils/](src/utils/):
 - `useNodeGraph` - Graph visualization for save data (using @xyflow/react)
 - `buildError` - Normalize error objects
 - `canPerformAction` / `canViewPage` - Permission checking
-- `getEventColour` - Consistent color assignment for events
 
 ## Important Patterns
 
