@@ -17,6 +17,7 @@ import Page from '../components/Page'
 import Table from '../components/tables/Table'
 import { Leaderboard } from '../entities/leaderboard'
 import { ResetLeaderboardEntries } from '../modals/ResetLeaderboardEntries'
+import { NewLeaderboardEntriesChart } from '../components/charts/NewLeaderboardEntriesChart'
 
 export default function Leaderboards() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
@@ -72,6 +73,8 @@ export default function Leaderboards() {
         </div>
       }
     >
+      <NewLeaderboardEntriesChart />
+
       {!error && !loading && leaderboards.length === 0 &&
         <p>{activeGame.name} doesn&apos;t have any leaderboards yet</p>
       }
