@@ -12,7 +12,7 @@ describe('<Activity />', () => {
   const axiosMock = new MockAdapter(api)
 
   it('should handle having no activities', async () => {
-    axiosMock.onGet('http://talo.api/games/1/game-activities').replyOnce(200, { activities: [] })
+    axiosMock.onGet(/games\/1\/game-activities/).replyOnce(200, { activities: [], count: 0, itemsPerPage: 25, isLastPage: true })
 
     render(
       <KitchenSink
@@ -49,7 +49,7 @@ describe('<Activity />', () => {
       }
     ]
 
-    axiosMock.onGet('http://talo.api/games/2/game-activities').replyOnce(200, { activities })
+    axiosMock.onGet(/games\/2\/game-activities/).replyOnce(200, { activities, count: 3, itemsPerPage: 25, isLastPage: true })
 
     render(
       <KitchenSink
@@ -89,7 +89,7 @@ describe('<Activity />', () => {
       }
     ]
 
-    axiosMock.onGet('http://talo.api/games/3/game-activities').replyOnce(200, { activities })
+    axiosMock.onGet(/games\/3\/game-activities/).replyOnce(200, { activities, count: 3, itemsPerPage: 25, isLastPage: true })
 
     render(
       <KitchenSink
@@ -127,7 +127,7 @@ describe('<Activity />', () => {
       }
     ]
 
-    axiosMock.onGet('http://talo.api/games/4/game-activities').replyOnce(200, { activities })
+    axiosMock.onGet(/games\/4\/game-activities/).replyOnce(200, { activities, count: 3, itemsPerPage: 25, isLastPage: true })
 
     render(
       <KitchenSink
@@ -155,7 +155,7 @@ describe('<Activity />', () => {
   })
 
   it('should render an error', async () => {
-    axiosMock.onGet('http://talo.api/games/5/game-activities').networkErrorOnce()
+    axiosMock.onGet(/games\/5\/game-activities/).networkErrorOnce()
 
     render(
       <KitchenSink
