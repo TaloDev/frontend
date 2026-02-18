@@ -2,7 +2,7 @@ import { useRecoilValue } from 'recoil'
 import activeGameState, { SelectedActiveGame } from '../../state/activeGameState'
 import useTimePeriodAndDates from '../../utils/useTimePeriodAndDates'
 import { BarChartCard } from './BarChartCard'
-import { BarChartTooltip } from './BarChartTooltip'
+import { ChartCardTooltip } from './ChartCardTooltip'
 import { useStatsActivityChart } from '../../api/useStatsActivityChart'
 import { Fragment } from 'react'
 import clsx from 'clsx'
@@ -36,7 +36,7 @@ export function StatsActivityChart() {
       timePeriod={timePeriod}
       onTimePeriodChange={(period) => setTimePeriod(period.id)}
       tooltip={(
-        <BarChartTooltip<typeof stats[number]>
+        <ChartCardTooltip<typeof stats[number]>
           formatter={(payload) => {
             return (
               <span className='text-black grid grid-cols-[2fr_1fr_0.5fr] gap-y-2 mt-4'>
