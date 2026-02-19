@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import useGameActivities from '../api/useGameActivities'
 import ErrorMessage from '../components/ErrorMessage'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
@@ -7,10 +8,13 @@ import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
 import Page from '../components/Page'
 import useDaySections from '../utils/useDaySections'
 import ActivityRenderer from '../components/ActivityRenderer'
+import Pagination from '../components/Pagination'
 
 export default function Activity() {
+  const [page, setPage] = useState(0)
+
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
-  const { activities, loading, error } = useGameActivities(activeGame)
+  const { activities, count, itemsPerPage, loading, error } = useGameActivities(activeGame, page)
   const sections = useDaySections(activities)
 
   return (
@@ -28,6 +32,8 @@ export default function Activity() {
       ))}
 
       {error && <ErrorMessage error={error} />}
+
+      {!!count && <Pagination count={count} pageState={[page, setPage]} itemsPerPage={itemsPerPage!} />}
     </Page>
   )
 }

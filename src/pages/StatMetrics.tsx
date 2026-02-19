@@ -15,6 +15,7 @@ import DateInput from '../components/DateInput'
 import useTimePeriodAndDates, { timePeriods } from '../utils/useTimePeriodAndDates'
 import TimePeriodPicker from '../components/TimePeriodPicker'
 import Loading from '../components/Loading'
+import { StatGlobalValueChart } from '../components/charts/StatGlobalValueChart'
 
 type GameStatWithMetrics = Omit<GameStat, 'metrics'> & { metrics: NonNullable<GameStat['metrics']> }
 
@@ -27,6 +28,8 @@ export default function StatMetrics() {
     setTimePeriod,
     selectedStartDate,
     selectedEndDate,
+    debouncedStartDate,
+    debouncedEndDate,
     onStartDateChange,
     onEndDateChange
   } = useTimePeriodAndDates(`${internalName}-metrics`)
@@ -108,6 +111,15 @@ export default function StatMetrics() {
       {!error &&
         <>
           <SecondaryTitle>Global metrics</SecondaryTitle>
+
+          {internalName &&
+            <StatGlobalValueChart
+              internalName={internalName}
+              startDate={debouncedStartDate}
+              endDate={debouncedEndDate}
+            />
+          }
+
           {metrics &&
             <Table columns={['Min value', 'Max value', 'Median value', 'Average value', 'Total updates', 'Average change']}>
               <TableBody iterator={[metrics]}>

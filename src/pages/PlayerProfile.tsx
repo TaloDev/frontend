@@ -12,27 +12,31 @@ import Table from '../components/tables/Table'
 import SecondaryTitle from '../components/SecondaryTitle'
 import PlayerAliases from '../components/PlayerAliases'
 import Identifier from '../components/Identifier'
-import { IconBolt, IconChartBar, IconDeviceFloppy, IconSettings, IconTrash, IconTrophy } from '@tabler/icons-react'
+import { IconArrowRight, IconBolt, IconChartBar, IconDeviceFloppy, IconLock, IconSettings, IconTrash, IconTrophy } from '@tabler/icons-react'
 import Button from '../components/Button'
 import Loading from '../components/Loading'
-import usePlayerAuthActivities from '../api/usePlayerAuthActivities'
 import { useRecoilValue } from 'recoil'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import useDaySections from '../utils/useDaySections'
-import ActivityRenderer from '../components/ActivityRenderer'
 import userState, { AuthedUser } from '../state/userState'
 import clsx from 'clsx'
 import Tile from '../components/Tile'
-import { useCallback, useContext, useState } from 'react'
+import { useCallback, useContext, useMemo, useState } from 'react'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import deletePlayer from '../api/deletePlayer'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
+import { PropBadges } from '../components/PropBadges'
+import { PlayerAliasService } from '../entities/playerAlias'
 
 const links = [
   {
     name: 'Properties',
     icon: IconSettings,
     route: routes.playerProps
+  },
+  {
+    name: 'Auth logs',
+    icon: IconLock,
+    route: routes.playerAuthActivities
   },
   {
     name: 'Events',
@@ -64,10 +68,6 @@ export default function PlayerProfile() {
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
   const user = useRecoilValue(userState) as AuthedUser
-  const { activities } = usePlayerAuthActivities(activeGame, user, player?.id)
-
-  const sections = useDaySections(activities)
-
   const [isDeleting, setIsDeleting] = useState(false)
   const toast = useContext(ToastContext)
 
@@ -78,6 +78,10 @@ export default function PlayerProfile() {
 
     navigate(route.replace(':id', player.id))
   }, [navigate, player])
+
+  const goToGroup = useCallback((groupId: string) => {
+    navigate(`${routes.groups}?search=${groupId}`)
+  }, [navigate])
 
   const onDeleteClick = useCallback(async () => {
     if (window.confirm('Are you sure you want to delete this player? This action cannot be undone.')) {
@@ -97,6 +101,20 @@ export default function PlayerProfile() {
       }, 2000)
     }
   }, [activeGame.id, navigate, player, toast])
+
+  const filteredLinks = useMemo(() => {
+    if (!player) {
+      return []
+    }
+
+    return links.filter(({ route }) => {
+      const taloAlias = player.aliases.find((alias) => alias.service === PlayerAliasService.TALO)
+      if (route === routes.playerAuthActivities && !taloAlias) {
+        return false
+      }
+      return true
+    })
+  }, [player])
 
   if (!player) {
     return (
@@ -124,7 +142,7 @@ export default function PlayerProfile() {
       </div>
 
       <div className='inline-grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4'>
-        {links.map((link) => (
+        {filteredLinks.map((link) => (
           <Button
             key={link.name}
             variant='grey'
@@ -156,13 +174,18 @@ export default function PlayerProfile() {
         </TableBody>
       </Table>
 
-      {activities.length > 0 &&
+      {player.groups.length > 0 &&
         <>
-          <SecondaryTitle>Authentication activities</SecondaryTitle>
+          <SecondaryTitle>Groups</SecondaryTitle>
 
-          {sections.map((section, sectionIdx) => (
-            <ActivityRenderer key={sectionIdx} section={section} />
-          ))}
+          <PropBadges
+            props={player.groups.map(({ id, name }) => ({ key: id, value: name }))}
+            className='flex flex-wrap gap-4 w-full lg:w-3/4 xl:w-1/2'
+            contentRenderer={({ value: name }) => <span className='text-sm'>{name}</span>}
+            icon={<IconArrowRight size={20} />}
+            onClick={(p) => goToGroup(p.key)}
+            buttonTitle='Go to group'
+          />
         </>
       }
 

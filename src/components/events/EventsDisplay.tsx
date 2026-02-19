@@ -1,15 +1,15 @@
 import ErrorMessage from '../../components/ErrorMessage'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import ChartTooltip from '../../components/charts/ChartTooltip'
+import { EventChartTooltip } from '../charts/EventChartTooltip'
 import ChartTick from '../../components/charts/ChartTick'
 import { format } from 'date-fns'
-import getEventColour from '../../utils/getEventColour'
 import { IconAlertCircle } from '@tabler/icons-react'
 import useEvents from '../../api/useEvents'
 import { useCallback } from 'react'
 import { useEventsContext } from './EventsContext'
 import routes from '../../constants/routes'
 import Link from '../Link'
+import { getPersistentColor } from '../../utils/getPersistentColour'
 
 type Props = ReturnType<typeof useEvents> & {
   showBreakdown?: boolean
@@ -58,7 +58,7 @@ export default function EventsDisplay({
           <div className='pt-4 pl-4 pb-4 w-full'>
             <ResponsiveContainer height={600}>
               <LineChart margin={{ top: 20, bottom: 20, right: 10 }}>
-                <CartesianGrid strokeDasharray='4' stroke='#555' vertical={false} />
+                <CartesianGrid strokeDasharray='4' stroke='#444' vertical={false} />
 
                 <XAxis
                   dataKey='date'
@@ -88,14 +88,14 @@ export default function EventsDisplay({
                   )}
                 />
 
-                {selectedEventNames.length > 0 && <Tooltip content={<ChartTooltip />} />}
+                {selectedEventNames.length > 0 && <Tooltip content={<EventChartTooltip />} />}
 
                 {selectedEventNames.map((eventName) => (
                   <Line
                     dataKey='count'
                     data={events![eventName]}
                     key={eventName}
-                    stroke={getEventColour(eventName)}
+                    stroke={getPersistentColor(eventName)}
                     activeDot={{ r: 6 }}
                     type='linear'
                     strokeWidth={3}
@@ -115,7 +115,7 @@ export default function EventsDisplay({
                 <li key={name}>
                   <p className='text-sm flex justify-between items-center'>
                     <span className='px-2 py-1 rounded bg-gray-900 border border-gray-800'>
-                      <span className='w-4 h-4 rounded inline-block align-text-bottom' style={{ backgroundColor: getEventColour(name) }} />
+                      <span className='w-4 h-4 rounded inline-block align-text-bottom' style={{ backgroundColor: getPersistentColor(name) }} />
                       <span className='ml-2'>
                         <EventName name={name} showBreakdown={showBreakdown} />
                       </span>

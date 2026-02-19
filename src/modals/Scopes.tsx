@@ -10,6 +10,7 @@ import buildError from '../utils/buildError'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import { APIKey } from '../entities/apiKey'
 import { KeyedMutator } from 'swr'
+import { formatAPIKeyScopeGroup } from '../utils/formatAPIKeyScopeGroup'
 
 type ScopesProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -88,7 +89,7 @@ export default function Scopes({
           <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4'>
             {availableScopes && Object.keys(availableScopes).map((group) => (
               <div key={group} className='p-4 bg-gray-100 rounded'>
-                <h4 className='font-semibold capitalize'>{group}</h4>
+                <h4 className='font-semibold'>{formatAPIKeyScopeGroup(group)}</h4>
                 {availableScopes[group].map((scope: string) => (
                   <div key={scope}>
                     <input
@@ -104,7 +105,7 @@ export default function Scopes({
               </div>
             ))}
           </div>
-          <Button className='!w-auto' variant='black' onClick={onAllScopesSelected}>
+          <Button className='w-auto!' variant='black' onClick={onAllScopesSelected}>
             Select all scopes
           </Button>
           {error && <ErrorMessage error={error} />}
