@@ -12,14 +12,11 @@ import Table from '../components/tables/Table'
 import SecondaryTitle from '../components/SecondaryTitle'
 import PlayerAliases from '../components/PlayerAliases'
 import Identifier from '../components/Identifier'
-import { IconArrowRight, IconBolt, IconChartBar, IconDeviceFloppy, IconSettings, IconTrash, IconTrophy } from '@tabler/icons-react'
+import { IconArrowRight, IconBolt, IconChartBar, IconDeviceFloppy, IconLock, IconSettings, IconTrash, IconTrophy } from '@tabler/icons-react'
 import Button from '../components/Button'
 import Loading from '../components/Loading'
-import usePlayerAuthActivities from '../api/usePlayerAuthActivities'
 import { useRecoilValue } from 'recoil'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import useDaySections from '../utils/useDaySections'
-import ActivityRenderer from '../components/ActivityRenderer'
 import userState, { AuthedUser } from '../state/userState'
 import clsx from 'clsx'
 import Tile from '../components/Tile'
@@ -34,6 +31,11 @@ const links = [
     name: 'Properties',
     icon: IconSettings,
     route: routes.playerProps
+  },
+  {
+    name: 'Auth logs',
+    icon: IconLock,
+    route: routes.playerAuthActivities
   },
   {
     name: 'Events',
@@ -65,10 +67,6 @@ export default function PlayerProfile() {
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
   const user = useRecoilValue(userState) as AuthedUser
-  const { activities } = usePlayerAuthActivities(activeGame, user, player?.id)
-
-  const sections = useDaySections(activities)
-
   const [isDeleting, setIsDeleting] = useState(false)
   const toast = useContext(ToastContext)
 
@@ -173,16 +171,6 @@ export default function PlayerProfile() {
             onClick={(p) => goToGroup(p.key)}
             buttonTitle='Go to group'
           />
-        </>
-      }
-
-      {activities.length > 0 &&
-        <>
-          <SecondaryTitle>Authentication activities</SecondaryTitle>
-
-          {sections.map((section, sectionIdx) => (
-            <ActivityRenderer key={sectionIdx} section={section} />
-          ))}
         </>
       }
 
