@@ -9,10 +9,8 @@ import Loading from '../Loading'
 
 type ChartCardProps = {
   title: string
-  hasData: boolean
   loading: boolean
   error: TaloError | null
-  emptyMessage: string
   timePeriod?: TimePeriod | null
   onTimePeriodChange?: (period: LabelledTimePeriod) => void
   height?: number
@@ -21,10 +19,8 @@ type ChartCardProps = {
 
 export function ChartCard({
   title,
-  hasData,
   loading,
   error,
-  emptyMessage,
   timePeriod,
   onTimePeriodChange,
   height = 300,
@@ -52,11 +48,7 @@ export function ChartCard({
 
       {error?.hasKeys === false && <ErrorMessage error={error} />}
 
-      {!loading && !hasData &&
-        <p>{emptyMessage}</p>
-      }
-
-      {hasData &&
+      {!loading &&
         <ResponsiveContainer height={height}>
           {children}
         </ResponsiveContainer>

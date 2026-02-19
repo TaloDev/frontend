@@ -110,8 +110,6 @@ export default function StatMetrics() {
 
       {!error &&
         <>
-          <SecondaryTitle>Global metrics</SecondaryTitle>
-
           {internalName &&
             <StatGlobalValueChart
               internalName={internalName}
@@ -119,6 +117,8 @@ export default function StatMetrics() {
               endDate={debouncedEndDate}
             />
           }
+
+          <SecondaryTitle>Global metrics</SecondaryTitle>
 
           {metrics &&
             <Table columns={['Min value', 'Max value', 'Median value', 'Average value', 'Total updates', 'Average change']}>

@@ -33,7 +33,9 @@ export default function Players() {
 
   return (
     <Page title='Players' isLoading={loading} showBackButton={Boolean(initialSearch)}>
-      <NewPlayersChart />
+      {players.length > 0 &&
+        <NewPlayersChart />
+      }
 
       {(players.length > 0 || debouncedSearch.length > 0) &&
         <div className='flex items-center'>
