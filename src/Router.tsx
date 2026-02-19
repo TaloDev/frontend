@@ -39,6 +39,7 @@ const PlayerProfile = lazy(() => import(/* webpackChunkName: 'player-profile' */
 const PlayerLeaderboardEntries = lazy(() => import(/* webpackChunkName: 'player-leaderboard-entries' */ './pages/PlayerLeaderboardEntries'))
 const ForgotPassword = lazy(() => import(/* webpackChunkName: 'forgot-password' */ './pages/ForgotPassword'))
 const ResetPassword = lazy(() => import(/* webpackChunkName: 'reset-password' */ './pages/ResetPassword'))
+const PlayerAuthActivities = lazy(() => import(/* webpackChunkName: 'player-auth-activities' */ './pages/PlayerAuthActivities'))
 const PlayerSaves = lazy(() => import(/* webpackChunkName: 'player-saves' */ './pages/PlayerSaves'))
 const PlayerSaveContent = lazy(() => import(/* webpackChunkName: 'player-save-content' */ './pages/PlayerSaveContent'))
 const NotFound = lazy(() => import(/* webpackChunkName: 'not-found' */ './pages/NotFound'))
@@ -112,6 +113,7 @@ function Router({
                   <Route path={routes.playerProfile} element={<PlayerProfile />} />
                   <Route path={routes.playerLeaderboardEntries} element={<PlayerLeaderboardEntries />} />
                   <Route path={routes.playerSaveContent} element={<PlayerSaveContent />} />
+                  <Route path={routes.playerAuthActivities} element={<PlayerAuthActivities />} />
                   <Route path={routes.playerSaves} element={<PlayerSaves />} />
                   <Route path={routes.feedback} element={<Feedback />} />
                   {canViewPage(user, routes.feedbackCategories) && <Route path={routes.feedbackCategories} element={<FeedbackCategories />} />}
