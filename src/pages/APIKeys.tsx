@@ -18,6 +18,7 @@ import Table from '../components/tables/Table'
 import useAPIKeys from '../api/useAPIKeys'
 import { APIKey } from '../entities/apiKey'
 import ToastContext from '../components/toast/ToastContext'
+import { formatAPIKeyScopeGroup } from '../utils/formatAPIKeyScopeGroup'
 
 export default function APIKeys() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
@@ -157,7 +158,7 @@ export default function APIKeys() {
               <div className='grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 md:gap-y-8 p-4'>
                 {availableScopes && Object.keys(availableScopes).map((group) => (
                   <div key={group}>
-                    <h4 className='font-semibold capitalize'>{group}</h4>
+                    <h4 className='font-semibold'>{formatAPIKeyScopeGroup(group)}</h4>
                     {availableScopes[group].map((scope: string) => (
                       <div key={scope}>
                         <input
