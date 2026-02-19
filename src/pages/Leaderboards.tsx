@@ -73,7 +73,9 @@ export default function Leaderboards() {
         </div>
       }
     >
-      <NewLeaderboardEntriesChart />
+      {leaderboards.length > 0 &&
+        <NewLeaderboardEntriesChart />
+      }
 
       {!error && !loading && leaderboards.length === 0 &&
         <p>{activeGame.name} doesn&apos;t have any leaderboards yet</p>

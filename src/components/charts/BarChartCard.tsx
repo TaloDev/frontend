@@ -20,7 +20,6 @@ type BarChartCardProps<T> = {
   bars: BarChartCardBar<T>[]
   loading: boolean
   error: TaloError | null
-  emptyMessage: string
   timePeriod: TimePeriod | null
   onTimePeriodChange: (period: LabelledTimePeriod) => void
   height?: number
@@ -33,7 +32,6 @@ export function BarChartCard<T>({
   bars,
   loading,
   error,
-  emptyMessage,
   timePeriod,
   onTimePeriodChange,
   height = 300,
@@ -42,10 +40,8 @@ export function BarChartCard<T>({
   return (
     <ChartCard
       title={title}
-      hasData={data.length > 0}
       loading={loading}
       error={error}
-      emptyMessage={emptyMessage}
       timePeriod={timePeriod}
       onTimePeriodChange={onTimePeriodChange}
       height={height}
@@ -69,7 +65,7 @@ export function BarChartCard<T>({
           tick={(
             <ChartTick
               transform={(x, y) => `translate(${x! - 4},${y! - 12})`}
-              formatter={(tick) => tick}
+              formatter={(tick) => tick.toLocaleString()}
             />
           )}
         />

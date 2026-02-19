@@ -5,13 +5,12 @@ import TimePeriodPicker from '../TimePeriodPicker'
 import { timePeriods } from '../../utils/useTimePeriodAndDates'
 import { TimePeriod } from '../../utils/useTimePeriod'
 import { LabelledTimePeriod } from '../TimePeriodPicker'
+import Loading from '../Loading'
 
 type ChartCardProps = {
   title: string
-  hasData: boolean
   loading: boolean
   error: TaloError | null
-  emptyMessage: string
   timePeriod?: TimePeriod | null
   onTimePeriodChange?: (period: LabelledTimePeriod) => void
   height?: number
@@ -20,10 +19,8 @@ type ChartCardProps = {
 
 export function ChartCard({
   title,
-  hasData,
   loading,
   error,
-  emptyMessage,
   timePeriod,
   onTimePeriodChange,
   height = 300,
@@ -32,7 +29,14 @@ export function ChartCard({
   return (
     <div className='hidden md:block border-2 border-gray-700 rounded bg-black space-y-8 p-4'>
       <div className='flex items-start justify-between'>
-        <h2 className='text-xl'>{title}</h2>
+        <div className='flex gap-4'>
+          <h2 className='text-xl'>{title}</h2>
+          {loading &&
+            <div className='mt-1'>
+              <Loading size={24} thickness={180} />
+            </div>
+          }
+        </div>
         {onTimePeriodChange &&
           <TimePeriodPicker
             periods={timePeriods}
@@ -44,11 +48,7 @@ export function ChartCard({
 
       {error?.hasKeys === false && <ErrorMessage error={error} />}
 
-      {!loading && !hasData &&
-        <p>{emptyMessage}</p>
-      }
-
-      {hasData &&
+      {!loading &&
         <ResponsiveContainer height={height}>
           {children}
         </ResponsiveContainer>

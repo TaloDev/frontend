@@ -71,7 +71,9 @@ export default function Stats() {
       }
       isLoading={loading}
     >
-      <StatsActivityChart />
+      {sortedStats.length > 0 &&
+        <StatsActivityChart />
+      }
 
       {!error && !loading && sortedStats.length === 0 &&
         <p>{activeGame.name} doesn&apos;t have any stats yet</p>

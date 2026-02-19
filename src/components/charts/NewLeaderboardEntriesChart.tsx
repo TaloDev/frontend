@@ -32,7 +32,6 @@ export function NewLeaderboardEntriesChart() {
       bars={bars}
       loading={loading}
       error={error}
-      emptyMessage='There are no leaderboard entries for this date range'
       timePeriod={timePeriod}
       onTimePeriodChange={(period) => setTimePeriod(period.id)}
       tooltip={(

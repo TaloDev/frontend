@@ -83,7 +83,7 @@ export default function EventsDisplay({
                   tick={(
                     <ChartTick
                       transform={(x, y) => `translate(${x! - 4},${y! - 12})`}
-                      formatter={(tick) => tick}
+                      formatter={(tick) => tick.toLocaleString()}
                     />
                   )}
                 />
