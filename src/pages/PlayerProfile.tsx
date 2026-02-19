@@ -20,11 +20,12 @@ import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import userState, { AuthedUser } from '../state/userState'
 import clsx from 'clsx'
 import Tile from '../components/Tile'
-import { useCallback, useContext, useState } from 'react'
+import { useCallback, useContext, useMemo, useState } from 'react'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import deletePlayer from '../api/deletePlayer'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 import { PropBadges } from '../components/PropBadges'
+import { PlayerAliasService } from '../entities/playerAlias'
 
 const links = [
   {
@@ -101,6 +102,20 @@ export default function PlayerProfile() {
     }
   }, [activeGame.id, navigate, player, toast])
 
+  const filteredLinks = useMemo(() => {
+    if (!player) {
+      return []
+    }
+
+    return links.filter(({ route }) => {
+      const taloAlias = player.aliases.find((alias) => alias.service === PlayerAliasService.TALO)
+      if (route === routes.playerAuthActivities && !taloAlias) {
+        return false
+      }
+      return true
+    })
+  }, [player])
+
   if (!player) {
     return (
       <div className='flex items-center justify-center'>
@@ -127,7 +142,7 @@ export default function PlayerProfile() {
       </div>
 
       <div className='inline-grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4'>
-        {links.map((link) => (
+        {filteredLinks.map((link) => (
           <Button
             key={link.name}
             variant='grey'
