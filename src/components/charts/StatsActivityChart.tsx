@@ -32,7 +32,6 @@ export function StatsActivityChart() {
       bars={bars}
       loading={loading}
       error={error}
-      emptyMessage='There are no stat updates for this date range'
       timePeriod={timePeriod}
       onTimePeriodChange={(period) => setTimePeriod(period.id)}
       tooltip={(

@@ -27,10 +27,8 @@ export function StatGlobalValueChart({ internalName, startDate, endDate }: StatG
   return (
     <ChartCard
       title='Global value'
-      hasData={dataPoints.length > 0}
       loading={loading}
       error={error}
-      emptyMessage='There is no global value data for this date range'
     >
       <LineChart data={dataPoints} margin={{ bottom: 20, left: 10, top: 10 }}>
         <CartesianGrid strokeDasharray='4' stroke='#444' vertical={false} />
