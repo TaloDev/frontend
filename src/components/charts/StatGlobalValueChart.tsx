@@ -7,6 +7,7 @@ import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts'
 import ChartTick from './ChartTick'
 import { format } from 'date-fns'
 import clsx from 'clsx'
+import { useYAxis } from './useYAxis'
 
 type StatGlobalValueChartProps = {
   internalName: string
@@ -24,13 +25,18 @@ export function StatGlobalValueChart({ internalName, startDate, endDate }: StatG
     endDate
   )
 
+  const { yAxisProps } = useYAxis({
+    data: dataPoints,
+    transformer: (d) => d.map((point) => point.value)
+  })
+
   return (
     <ChartCard
       title='Global value'
       loading={loading}
       error={error}
     >
-      <LineChart data={dataPoints} margin={{ bottom: 20, left: 10, top: 10 }}>
+      <LineChart data={dataPoints} margin={{ top: 8, left: 16, bottom: 20, right: 8 }}>
         <CartesianGrid strokeDasharray='4' stroke='#444' vertical={false} />
 
         <XAxis
@@ -38,21 +44,13 @@ export function StatGlobalValueChart({ internalName, startDate, endDate }: StatG
           type='category'
           tick={(
             <ChartTick
-              transform={(x, y) => `translate(${x},${y}) rotate(-30)`}
+              transform={(x, y) => `translate(${x},${y}) rotate(-15)`}
               formatter={(tick) => format(new Date(tick), 'd MMM')}
             />
           )}
         />
 
-        <YAxis
-          allowDecimals={false}
-          tick={(
-            <ChartTick
-              transform={(x, y) => `translate(${x! - 4},${y! - 12})`}
-              formatter={(tick) => tick.toLocaleString()}
-            />
-          )}
-        />
+        <YAxis {...yAxisProps} />
 
         <Tooltip
           content={(
