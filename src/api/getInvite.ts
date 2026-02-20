@@ -6,8 +6,8 @@ import makeValidatedRequest from './makeValidatedRequest'
 const getInvite = makeValidatedRequest(
   (token: string) => api.get(`/public/invites/${token}`),
   z.object({
-    invite: inviteSchema
-  })
+    invite: inviteSchema,
+  }),
 )
 
 export default getInvite

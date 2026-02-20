@@ -1,13 +1,13 @@
 import { MouseEvent, useState } from 'react'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import createGame from '../api/createGame'
+import Button from '../components/Button'
+import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Modal from '../components/Modal'
 import TextInput from '../components/TextInput'
-import Button from '../components/Button'
-import createGame from '../api/createGame'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import activeGameState from '../state/activeGameState'
 import userState, { AuthedUserState } from '../state/userState'
 import buildError from '../utils/buildError'
-import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import activeGameState from '../state/activeGameState'
 
 type NewGameProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -36,8 +36,8 @@ export default function NewGame({ modalState }: NewGameProps) {
         ...user,
         organisation: {
           ...user.organisation,
-          games: allGames
-        }
+          games: allGames,
+        },
       })
       setActiveGame(game)
       setOpen(false)
@@ -52,13 +52,9 @@ export default function NewGame({ modalState }: NewGameProps) {
   }
 
   return (
-    <Modal
-      id='new-game'
-      title='Create new game'
-      modalState={modalState}
-    >
+    <Modal id='new-game' title='Create new game' modalState={modalState}>
       <form>
-        <div className='p-4 space-y-4'>
+        <div className='space-y-4 p-4'>
           <TextInput
             id='name'
             variant='light'
@@ -72,18 +68,16 @@ export default function NewGame({ modalState }: NewGameProps) {
           {error && <ErrorMessage error={error} />}
         </div>
 
-        <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
           <div className='w-full md:w-32'>
-            <Button
-              disabled={!name}
-              isLoading={isLoading}
-              onClick={onCreateClick}
-            >
+            <Button disabled={!name} isLoading={isLoading} onClick={onCreateClick}>
               Create
             </Button>
           </div>
           <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>Cancel</Button>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
           </div>
         </div>
       </form>

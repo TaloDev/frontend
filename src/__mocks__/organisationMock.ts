@@ -6,8 +6,8 @@ export default function organisationMock(extra: Partial<Organisation> = {}): Org
     name: 'Sleepy Studios',
     games: [],
     pricingPlan: {
-      status: statusSchema.enum.active
+      status: statusSchema.enum.active,
     },
-    ...extra
+    ...extra,
   }
 }

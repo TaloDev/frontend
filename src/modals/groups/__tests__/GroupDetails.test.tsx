@@ -1,13 +1,18 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import GroupDetails from '../GroupDetails'
-import api from '../../../api/api'
 import MockAdapter from 'axios-mock-adapter'
+import api from '../../../api/api'
+import {
+  PlayerGroup,
+  PlayerGroupRuleCastType,
+  PlayerGroupRuleMode,
+  PlayerGroupRuleName,
+} from '../../../entities/playerGroup'
+import { UserType } from '../../../entities/user'
 import activeGameState from '../../../state/activeGameState'
 import userState from '../../../state/userState'
 import KitchenSink from '../../../utils/KitchenSink'
-import { UserType } from '../../../entities/user'
-import { PlayerGroup, PlayerGroupRuleCastType, PlayerGroupRuleMode, PlayerGroupRuleName } from '../../../entities/playerGroup'
+import GroupDetails from '../GroupDetails'
 
 describe('<GroupDetails />', () => {
   const axiosMock = new MockAdapter(api)
@@ -22,7 +27,7 @@ describe('<GroupDetails />', () => {
       rules: [],
       ruleMode: PlayerGroupRuleMode.AND,
       count: 0,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     }
 
     axiosMock.onPost('http://talo.api/games/1/player-groups').replyOnce(200, { group: secondGroup })
@@ -31,12 +36,14 @@ describe('<GroupDetails />', () => {
     const mutateMock = vi.fn()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <GroupDetails modalState={[true, closeMock]} mutate={mutateMock} editingGroup={null} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Name'), 'Winners')
@@ -62,13 +69,13 @@ describe('<GroupDetails />', () => {
         ruleMode: PlayerGroupRuleMode.AND,
         count: 0,
         membersVisible: false,
-        updatedAt: new Date().toISOString()
-      }
+        updatedAt: new Date().toISOString(),
+      },
     ]
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ groups })).toStrictEqual({
-      groups: [...groups, secondGroup]
+      groups: [...groups, secondGroup],
     })
   })
 
@@ -78,12 +85,14 @@ describe('<GroupDetails />', () => {
     const closeMock = vi.fn()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <GroupDetails modalState={[true, closeMock]} mutate={vi.fn()} editingGroup={null} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Name'), 'Winners')
@@ -101,12 +110,14 @@ describe('<GroupDetails />', () => {
     const closeMock = vi.fn()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <GroupDetails modalState={[true, closeMock]} mutate={vi.fn()} editingGroup={null} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Close'))
@@ -116,10 +127,12 @@ describe('<GroupDetails />', () => {
 
   it('should prefill details if a group is being edited', () => {
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <GroupDetails
           modalState={[true, vi.fn()]}
           mutate={vi.fn()}
@@ -130,10 +143,11 @@ describe('<GroupDetails />', () => {
             rules: [
               {
                 name: PlayerGroupRuleName.SET,
-                negate: false, operands: [],
+                negate: false,
+                operands: [],
                 field: 'props.hasWonGame',
                 castType: PlayerGroupRuleCastType.CHAR,
-                namespaced: true
+                namespaced: true,
               },
               {
                 name: PlayerGroupRuleName.GTE,
@@ -141,16 +155,16 @@ describe('<GroupDetails />', () => {
                 operands: ['70'],
                 field: 'props.currentLevel',
                 castType: PlayerGroupRuleCastType.DOUBLE,
-                namespaced: true
-              }
+                namespaced: true,
+              },
             ],
             ruleMode: PlayerGroupRuleMode.AND,
             count: 0,
             membersVisible: true,
-            updatedAt: new Date().toISOString()
+            updatedAt: new Date().toISOString(),
           }}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByLabelText('Name')).toHaveValue('Winners')
@@ -171,10 +185,11 @@ describe('<GroupDetails />', () => {
       rules: [
         {
           name: PlayerGroupRuleName.SET,
-          negate: false, operands: [],
+          negate: false,
+          operands: [],
           field: 'props.hasWonGame',
           castType: PlayerGroupRuleCastType.CHAR,
-          namespaced: true
+          namespaced: true,
         },
         {
           name: PlayerGroupRuleName.GTE,
@@ -182,32 +197,35 @@ describe('<GroupDetails />', () => {
           operands: ['70'],
           field: 'props.currentLevel',
           castType: PlayerGroupRuleCastType.DOUBLE,
-          namespaced: true
-        }
+          namespaced: true,
+        },
       ],
       ruleMode: PlayerGroupRuleMode.AND,
       count: 0,
       membersVisible: false,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     }
 
     axiosMock.onPut('http://talo.api/games/1/player-groups/1').replyOnce(200, {
       group: {
-        ...initialGroup, name: 'High level winners'
-      }
+        ...initialGroup,
+        name: 'High level winners',
+      },
     })
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <GroupDetails
           modalState={[true, closeMock]}
           mutate={mutateMock}
           editingGroup={initialGroup}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByText('Name'), 'High level winners')
@@ -223,7 +241,7 @@ describe('<GroupDetails />', () => {
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ groups: [initialGroup, { id: 2 }] })).toStrictEqual({
-      groups: [{ ...initialGroup, name: 'High level winners' }, { id: 2 }]
+      groups: [{ ...initialGroup, name: 'High level winners' }, { id: 2 }],
     })
   })
 
@@ -231,10 +249,12 @@ describe('<GroupDetails />', () => {
     axiosMock.onPut('http://talo.api/games/1/player-groups/1').networkErrorOnce()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <GroupDetails
           modalState={[true, vi.fn()]}
           mutate={vi.fn()}
@@ -246,10 +266,10 @@ describe('<GroupDetails />', () => {
             ruleMode: PlayerGroupRuleMode.AND,
             count: 0,
             membersVisible: false,
-            updatedAt: new Date().toISOString()
+            updatedAt: new Date().toISOString(),
           }}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await waitFor(() => expect(screen.getByText('Update')).toBeEnabled())
@@ -272,23 +292,25 @@ describe('<GroupDetails />', () => {
       ruleMode: PlayerGroupRuleMode.AND,
       count: 0,
       membersVisible: false,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     }
 
     axiosMock.onDelete('http://talo.api/games/1/player-groups/1').replyOnce(200)
     window.confirm = vi.fn(() => true)
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <GroupDetails
           modalState={[true, closeMock]}
           mutate={mutateMock}
           editingGroup={initialGroup}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Delete'))
@@ -301,7 +323,7 @@ describe('<GroupDetails />', () => {
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ groups: [initialGroup, { id: 2 }] })).toStrictEqual({
-      groups: [{ id: 2 }]
+      groups: [{ id: 2 }],
     })
   })
 
@@ -314,20 +336,18 @@ describe('<GroupDetails />', () => {
       ruleMode: PlayerGroupRuleMode.AND,
       count: 0,
       membersVisible: false,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     }
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.DEMO } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
-        <GroupDetails
-          modalState={[true, vi.fn()]}
-          mutate={vi.fn()}
-          editingGroup={initialGroup}
-        />
-      </KitchenSink>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.DEMO } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
+        <GroupDetails modalState={[true, vi.fn()]} mutate={vi.fn()} editingGroup={initialGroup} />
+      </KitchenSink>,
     )
 
     expect(screen.queryByText('Delete')).not.toBeInTheDocument()
@@ -339,10 +359,12 @@ describe('<GroupDetails />', () => {
     const closeMock = vi.fn()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <GroupDetails
           modalState={[true, closeMock]}
           mutate={vi.fn()}
@@ -354,10 +376,10 @@ describe('<GroupDetails />', () => {
             ruleMode: PlayerGroupRuleMode.AND,
             count: 0,
             membersVisible: false,
-            updatedAt: new Date().toISOString()
+            updatedAt: new Date().toISOString(),
           }}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Delete'))

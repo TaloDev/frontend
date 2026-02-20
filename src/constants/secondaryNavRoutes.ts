@@ -5,5 +5,5 @@ export const secondaryNavRoutes = [
   { title: 'Activity log', to: routes.activity },
   { title: 'Game settings', to: routes.gameSettings },
   { title: 'Organisation', to: routes.organisation },
-  { title: 'Billing', to: routes.billing }
+  { title: 'Billing', to: routes.billing },
 ]

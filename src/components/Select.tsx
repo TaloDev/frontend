@@ -1,4 +1,12 @@
-import ReactSelect, { components, Props as ReactSelectProps, OptionProps, GroupBase, StylesConfig, SingleValue, SelectInstance } from 'react-select'
+import ReactSelect, {
+  components,
+  Props as ReactSelectProps,
+  OptionProps,
+  GroupBase,
+  StylesConfig,
+  SingleValue,
+  SelectInstance,
+} from 'react-select'
 
 export type SelectOption<T> = {
   label: string | React.ReactNode
@@ -12,7 +20,7 @@ function Option<T>(props: OptionProps<T, boolean, GroupBase<T>>) {
   return (
     <components.Option {...props}>
       <p className='font-medium'>{label}</p>
-      {desc && <p className='text-sm mt-2'>{desc}</p>}
+      {desc && <p className='mt-2 text-sm'>{desc}</p>}
     </components.Option>
   )
 }
@@ -27,10 +35,12 @@ function Select<T>({ innerRef, onChange, ...props }: SelectProps<T>) {
     control: (provided, state) => ({
       ...provided,
       border: `1px solid ${state.isFocused ? 'transparent' : 'rgba(0, 0, 0, 0.3)'} !important`,
-      boxShadow: state.isFocused ? 'rgb(255, 255, 255) 0px 0px 0px 0px, rgb(236, 72, 153) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px' : 'none',
+      boxShadow: state.isFocused
+        ? 'rgb(255, 255, 255) 0px 0px 0px 0px, rgb(236, 72, 153) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px'
+        : 'none',
       paddingTop: '2px',
       paddingBottom: '2px',
-      transition: 'none'
+      transition: 'none',
     }),
     option: (provided, state) => ({
       ...provided,
@@ -38,14 +48,14 @@ function Select<T>({ innerRef, onChange, ...props }: SelectProps<T>) {
       color: state.isSelected ? '#FFF' : '#000',
       ':hover': {
         // backgroundColor: !state.isSelected ? '' : '#E0E7FF',
-        color: state.isSelected ? '#FFF' : '#000'
-      }
+        color: state.isSelected ? '#FFF' : '#000',
+      },
     }),
     singleValue: (provided) => ({
       ...provided,
       color: '#000',
-      padding: '0px'
-    })
+      padding: '0px',
+    }),
   }
 
   return (
@@ -53,7 +63,7 @@ function Select<T>({ innerRef, onChange, ...props }: SelectProps<T>) {
       {...props}
       ref={innerRef}
       components={{ Option }}
-      onChange={(option) => onChange((option as SingleValue<SelectOption<T>>))}
+      onChange={(option) => onChange(option as SingleValue<SelectOption<T>>)}
       styles={styles}
     />
   )

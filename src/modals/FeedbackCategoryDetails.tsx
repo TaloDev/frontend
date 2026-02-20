@@ -1,20 +1,20 @@
 import { MouseEvent, useContext, useState } from 'react'
-import Modal from '../components/Modal'
-import TextInput from '../components/TextInput'
-import Button from '../components/Button'
-import buildError from '../utils/buildError'
-import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import RadioGroup from '../components/RadioGroup'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import userState, { AuthedUser } from '../state/userState'
 import { useRecoilValue } from 'recoil'
-import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
+import { KeyedMutator } from 'swr'
+import createFeedbackCategory from '../api/createFeedbackCategory'
 import deleteFeedbackCategory from '../api/deleteFeedbackCategory'
 import updateFeedbackCategory from '../api/updateFeedbackCategory'
-import createFeedbackCategory from '../api/createFeedbackCategory'
-import { GameFeedbackCategory } from '../entities/gameFeedbackCategory'
-import { KeyedMutator } from 'swr'
+import Button from '../components/Button'
+import ErrorMessage, { TaloError } from '../components/ErrorMessage'
+import Modal from '../components/Modal'
+import RadioGroup from '../components/RadioGroup'
+import TextInput from '../components/TextInput'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
+import { GameFeedbackCategory } from '../entities/gameFeedbackCategory'
+import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import userState, { AuthedUser } from '../state/userState'
+import buildError from '../utils/buildError'
+import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 
 type FeedbackCategoryDetailsProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -25,7 +25,7 @@ type FeedbackCategoryDetailsProps = {
 export default function FeedbackCategoryDetails({
   modalState,
   mutate,
-  editingCategory
+  editingCategory,
 }: FeedbackCategoryDetailsProps) {
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)
@@ -48,15 +48,17 @@ export default function FeedbackCategoryDetails({
     setError(null)
 
     try {
-      const { feedbackCategory } = await createFeedbackCategory(activeGame.id, { internalName, name: displayName, description, anonymised })
+      const { feedbackCategory } = await createFeedbackCategory(activeGame.id, {
+        internalName,
+        name: displayName,
+        description,
+        anonymised,
+      })
 
-      mutate((data) => {
+      await mutate((data) => {
         return {
           ...data,
-          feedbackCategories: [
-            ...data!.feedbackCategories,
-            feedbackCategory
-          ]
+          feedbackCategories: [...data!.feedbackCategories, feedbackCategory],
         }
       }, false)
 
@@ -75,15 +77,19 @@ export default function FeedbackCategoryDetails({
     setError(null)
 
     try {
-      const { feedbackCategory } = await updateFeedbackCategory(activeGame.id, editingCategory!.id, { internalName, name: displayName, description, anonymised })
+      const { feedbackCategory } = await updateFeedbackCategory(
+        activeGame.id,
+        editingCategory!.id,
+        { internalName, name: displayName, description, anonymised },
+      )
 
-      mutate((data) => {
+      await mutate((data) => {
         return {
           ...data,
           feedbackCategories: data!.feedbackCategories.map((existingCategory) => {
             if (existingCategory.id === feedbackCategory.id) return feedbackCategory
             return existingCategory
-          })
+          }),
         }
       }, false)
 
@@ -98,7 +104,12 @@ export default function FeedbackCategoryDetails({
 
   const onDeleteClick = async () => {
     /* v8ignore next */
-    if (!window.confirm('Are you sure you want to delete this feedback category? This will permanently delete all feedback in this category.')) return
+    if (
+      !window.confirm(
+        'Are you sure you want to delete this feedback category? This will permanently delete all feedback in this category.',
+      )
+    )
+      return
 
     setDeleting(true)
     setError(null)
@@ -106,12 +117,12 @@ export default function FeedbackCategoryDetails({
     try {
       await deleteFeedbackCategory(activeGame.id, editingCategory!.id)
 
-      mutate((data) => {
+      await mutate((data) => {
         return {
           ...data,
           feedbackCategories: data!.feedbackCategories.filter((existingCategory) => {
             return existingCategory.id !== editingCategory!.id
-          })
+          }),
         }
       }, false)
 
@@ -131,7 +142,7 @@ export default function FeedbackCategoryDetails({
       modalState={modalState}
     >
       <form>
-        <div className='p-4 space-y-4'>
+        <div className='space-y-4 p-4'>
           <TextInput
             startFocused
             id='internal-name'
@@ -166,7 +177,7 @@ export default function FeedbackCategoryDetails({
             name='anonymised'
             options={[
               { label: 'Yes', value: true },
-              { label: 'No', value: false }
+              { label: 'No', value: false },
             ]}
             onChange={(value) => setAnonymised(value)}
             value={anonymised}
@@ -175,8 +186,8 @@ export default function FeedbackCategoryDetails({
           {error && <ErrorMessage error={error} />}
         </div>
 
-        <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>
-          {!editingCategory &&
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          {!editingCategory && (
             <div className='w-full md:w-32'>
               <Button
                 disabled={!internalName || !displayName || !description}
@@ -186,10 +197,10 @@ export default function FeedbackCategoryDetails({
                 Create
               </Button>
             </div>
-          }
-          {editingCategory &&
+          )}
+          {editingCategory && (
             <div className='flex space-x-2'>
-              {canPerformAction(user, PermissionBasedAction.DELETE_FEEDBACK_CATEGORY) &&
+              {canPerformAction(user, PermissionBasedAction.DELETE_FEEDBACK_CATEGORY) && (
                 <div className='w-full md:w-32'>
                   <Button
                     type='button'
@@ -200,7 +211,7 @@ export default function FeedbackCategoryDetails({
                     Delete
                   </Button>
                 </div>
-              }
+              )}
 
               <div className='w-full md:w-32'>
                 <Button
@@ -212,9 +223,11 @@ export default function FeedbackCategoryDetails({
                 </Button>
               </div>
             </div>
-          }
+          )}
           <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>Close</Button>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Close
+            </Button>
           </div>
         </div>
       </form>

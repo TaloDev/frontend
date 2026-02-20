@@ -1,6 +1,6 @@
 import clsx from 'clsx'
-import Button from './Button'
 import { Dispatch, SetStateAction } from 'react'
+import Button from './Button'
 
 type PaginationProps = {
   count: number
@@ -13,7 +13,7 @@ export default function Pagination({
   count,
   pageState,
   itemsPerPage,
-  maxPageButtons = 10
+  maxPageButtons = 10,
 }: PaginationProps) {
   const [page, setPage] = pageState
   const totalPages = Math.ceil(count / itemsPerPage)
@@ -54,13 +54,13 @@ export default function Pagination({
   }
 
   return (
-    <div className='w-full flex justify-center py-4'>
+    <div className='flex w-full justify-center py-4'>
       <nav aria-label='Pagination'>
         <ul className='flex items-center space-x-2'>
           <li>
             <Button
               variant='bare'
-              className='px-3 py-2 text-sm font-medium text-black bg-white rounded-md hover:enabled:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed'
+              className='rounded-md bg-white px-3 py-2 text-sm font-medium text-black hover:enabled:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50'
               onClick={() => goToPage(page - 1)}
               disabled={page === 0}
             >
@@ -73,8 +73,8 @@ export default function Pagination({
               key={idx}
               className={clsx(
                 'lg:inline',
-                { 'hidden': typeof pageNumber !== 'number' || Math.abs(pageNumber - page) > 2 },
-                { 'md:inline': typeof pageNumber === 'number' && Math.abs(pageNumber - page) <= 4 }
+                { hidden: typeof pageNumber !== 'number' || Math.abs(pageNumber - page) > 2 },
+                { 'md:inline': typeof pageNumber === 'number' && Math.abs(pageNumber - page) <= 4 },
               )}
             >
               {pageNumber === 'ellipsis' ? (
@@ -83,9 +83,9 @@ export default function Pagination({
                 <Button
                   variant='bare'
                   className={clsx(
-                    'min-w-10 px-3 py-2 text-black text-center! text-sm font-medium rounded-md',
+                    'min-w-10 rounded-md px-3 py-2 text-center! text-sm font-medium text-black',
                     { 'bg-white hover:bg-gray-200': page !== pageNumber },
-                    { 'bg-indigo-500 text-white': page === pageNumber }
+                    { 'bg-indigo-500 text-white': page === pageNumber },
                   )}
                   onClick={() => goToPage(pageNumber)}
                 >
@@ -98,7 +98,7 @@ export default function Pagination({
           <li>
             <Button
               variant='bare'
-              className='px-3 py-2 text-sm font-medium text-black bg-white rounded-md hover:enabled:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed'
+              className='rounded-md bg-white px-3 py-2 text-sm font-medium text-black hover:enabled:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50'
               onClick={() => goToPage(page + 1)}
               disabled={page === totalPages - 1}
             >

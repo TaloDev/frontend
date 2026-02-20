@@ -1,12 +1,16 @@
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { useContext, useRef } from 'react'
 import ToastContext from './ToastContext'
 import ToastProvider from './ToastProvider'
-import userEvent from '@testing-library/user-event'
 
 function ToastDummy() {
   const { trigger } = useContext(ToastContext)
-  return <button type='button' onClick={() => trigger('Hello!')}>Trigger</button>
+  return (
+    <button type='button' onClick={() => trigger('Hello!')}>
+      Trigger
+    </button>
+  )
 }
 
 function MultiToastDummy() {
@@ -31,7 +35,7 @@ describe('<ToastProvider />', () => {
     render(
       <ToastProvider lifetime={300}>
         <ToastDummy />
-      </ToastProvider>
+      </ToastProvider>,
     )
 
     await userEvent.click(screen.getByText('Trigger'))
@@ -42,7 +46,7 @@ describe('<ToastProvider />', () => {
     render(
       <ToastProvider lifetime={300}>
         <MultiToastDummy />
-      </ToastProvider>
+      </ToastProvider>,
     )
 
     await userEvent.click(screen.getByText('Trigger'))

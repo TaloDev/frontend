@@ -1,13 +1,13 @@
 import { z } from 'zod'
 
 export const countSchema = z.object({
-  count: z.number()
+  count: z.number(),
 })
 
 export const averageSessionDurationSchema = z.object({
   hours: z.number(),
   minutes: z.number(),
-  seconds: z.number()
+  seconds: z.number(),
 })
 
 export const headlinesSchema = z.object({
@@ -16,7 +16,7 @@ export const headlinesSchema = z.object({
   events: countSchema,
   unique_event_submitters: countSchema,
   total_sessions: countSchema,
-  average_session_duration: averageSessionDurationSchema
+  average_session_duration: averageSessionDurationSchema,
 })
 
 export type Headlines = z.infer<typeof headlinesSchema>

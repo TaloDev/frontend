@@ -9,6 +9,7 @@ Talo is a self-hostable game dev dashboard. This is the frontend React applicati
 ## Development Commands
 
 ### Running the application
+
 ```bash
 npm run dev              # Start dev server on http://localhost:8080
 npm run dev:e2e          # Start dev server in e2e mode for Cypress tests
@@ -16,6 +17,7 @@ npm run build            # Build for production (runs tsc + vite build)
 ```
 
 ### Testing
+
 ```bash
 npm test                 # Run all Vitest unit tests (runs with TZ=UTC)
 npm test -- <pattern>    # Run specific test file(s) matching pattern
@@ -24,11 +26,13 @@ npm run cypress:open     # Open Cypress (dev server must be running)
 ```
 
 ### Code Quality
+
 ```bash
-npm run lint             # Run ESLint on src/**/*.{js,jsx,ts,tsx}
+npm run lint             # Run Oxlint on src/**/*.{js,jsx,ts,tsx}
 ```
 
 ### Testing Notes
+
 - Unit tests use Vitest with jsdom environment
 - Test files are co-located with source in `__tests__/` directories
 - E2E tests are in `cypress/e2e/pages/` and use Cypress
@@ -38,6 +42,7 @@ npm run lint             # Run ESLint on src/**/*.{js,jsx,ts,tsx}
 ## Architecture Overview
 
 ### Tech Stack
+
 - React 18 with TypeScript
 - Vite for build tooling
 - React Router v6 for routing
@@ -78,6 +83,7 @@ src/
 ```
 
 ### Routing
+
 - Routes are defined in [Router.tsx](src/Router.tsx) using React Router v6
 - Route paths are constants in [src/constants/routes.ts](src/constants/routes.ts)
 - All pages use lazy loading via `React.lazy()` for code splitting
@@ -86,6 +92,7 @@ src/
 - Many routes only render when an `activeGame` is selected
 
 ### State Management
+
 - Global state uses Recoil with atoms in [src/state/](src/state/)
 - Key atoms:
   - `userState` - Current authenticated user
@@ -96,6 +103,7 @@ src/
 - State consumed via `useRecoilValue()`, `useRecoilState()`, `useSetRecoilState()`
 
 ### API Layer
+
 - Base Axios instance configured in [src/api/api.ts](src/api/api.ts)
 - Request interceptor adds Bearer token and dev data header
 - Response interceptor handles 401s with automatic token refresh
@@ -113,6 +121,7 @@ src/
    - Returns validated, typed responses
 
 ### Component Patterns
+
 - Functional components with TypeScript
 - Composition over inheritance
 - Context for cross-cutting concerns (EventsContext, ToastProvider)
@@ -120,6 +129,7 @@ src/
 - Tables use composable system: `Table` > `TableHeader`/`TableBody` > `TableCell`
 
 ### Key Utilities and Hooks
+
 Located in [src/utils/](src/utils/):
 
 - `useTimePeriod` - Date range calculation from period strings ('1d', '7d', '30d', 'w', 'm', 'y')
@@ -135,32 +145,38 @@ Located in [src/utils/](src/utils/):
 ## Important Patterns
 
 ### Authentication
+
 - Managed by [AuthService](src/services/AuthService.ts) singleton
 - Token-based with automatic refresh on 401 responses
 - Token stored in memory (not localStorage for security)
 - Login redirects handled via `useIntendedRoute` hook
 
 ### Authorization
+
 - Route-level checks with `canViewPage()` in Router
 - Action-level checks with `canPerformAction()` throughout components
 - Based on user type (ADMIN, OWNER, DEV, DEMO)
 
 ### Validation
+
 - Zod schemas defined alongside entities in [src/entities/](src/entities/)
 - `makeValidatedRequest()` and `makeValidatedGetRequest()` wrappers ensure type safety
 - Validation errors logged and sent to Sentry
 
 ### Error Handling
+
 - Centralized error normalization via `buildError()`
 - API errors show user-friendly messages via toast notifications
 - Sentry integration for error tracking
 
 ### Date Handling
+
 - All API dates must be UTC
 - Use `convertDateToUTC()` when sending dates to API
 - Tests run with `TZ=UTC` to ensure consistency
 
 ### Active Game Context
+
 - Most features require an active game to be selected
 - Active game stored in Recoil state and persisted to localStorage
 - Routes conditionally render based on `activeGame` availability
@@ -168,6 +184,7 @@ Located in [src/utils/](src/utils/):
 ## Environment Variables
 
 Required environment variables (set via `.env` files):
+
 - `VITE_API_URL` - Backend API base URL (e.g., `http://localhost:3000`)
 
 ## Node Version

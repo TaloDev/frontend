@@ -1,17 +1,17 @@
+import { upperFirst } from 'lodash-es'
 import { MouseEvent, useContext, useState } from 'react'
-import Modal from '../components/Modal'
-import TextInput from '../components/TextInput'
-import Button from '../components/Button'
-import buildError from '../utils/buildError'
-import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import { PlayerGameStat } from '../entities/playerGameStat'
+import { useRecoilValue } from 'recoil'
 import { KeyedMutator } from 'swr'
 import updateStatValue from '../api/updateStatValue'
-import activeGameState from '../state/activeGameState'
-import { useRecoilValue } from 'recoil'
-import { SelectedActiveGame } from '../state/activeGameState'
-import { upperFirst } from 'lodash-es'
+import Button from '../components/Button'
+import ErrorMessage, { TaloError } from '../components/ErrorMessage'
+import Modal from '../components/Modal'
+import TextInput from '../components/TextInput'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
+import { PlayerGameStat } from '../entities/playerGameStat'
+import activeGameState from '../state/activeGameState'
+import { SelectedActiveGame } from '../state/activeGameState'
+import buildError from '../utils/buildError'
 
 type UpdateStatValueProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -35,11 +35,16 @@ export default function UpdateStatValue({ modalState, mutate, editingStat }: Upd
     setError(null)
 
     try {
-      const { playerStat } = await updateStatValue(activeGame.id, editingStat.stat.id, editingStat.id, Number(value))
-      mutate((data) => {
+      const { playerStat } = await updateStatValue(
+        activeGame.id,
+        editingStat.stat.id,
+        editingStat.id,
+        Number(value),
+      )
+      await mutate((data) => {
         return {
           ...data,
-          stats: [...data!.stats.filter((stat) => stat.id !== editingStat!.id), playerStat]
+          stats: [...data!.stats.filter((stat) => stat.id !== editingStat!.id), playerStat],
         }
       }, true)
 
@@ -59,7 +64,7 @@ export default function UpdateStatValue({ modalState, mutate, editingStat }: Upd
       modalState={modalState}
     >
       <form>
-        <div className='p-4 space-y-4'>
+        <div className='space-y-4 p-4'>
           <div>
             <p className='font-semibold'>Current value</p>
             <p>{editingStat.value}</p>
@@ -79,18 +84,16 @@ export default function UpdateStatValue({ modalState, mutate, editingStat }: Upd
           {error && <ErrorMessage error={error} />}
         </div>
 
-        <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
           <div className='w-full md:w-32'>
-            <Button
-              disabled={!value}
-              isLoading={isLoading}
-              onClick={onUpdateClick}
-            >
+            <Button disabled={!value} isLoading={isLoading} onClick={onUpdateClick}>
               Update
             </Button>
           </div>
           <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>Cancel</Button>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
           </div>
         </div>
       </form>

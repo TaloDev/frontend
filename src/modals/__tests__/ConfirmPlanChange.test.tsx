@@ -1,9 +1,9 @@
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import ConfirmPlanChange from '../ConfirmPlanChange'
-import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
 import pricingPlanMock from '../../__mocks__/pricingPlanMock'
+import api from '../../api/api'
+import ConfirmPlanChange from '../ConfirmPlanChange'
 
 describe('<ConfirmPlanChange />', () => {
   const axiosMock = new MockAdapter(api)
@@ -13,29 +13,29 @@ describe('<ConfirmPlanChange />', () => {
       id: '1',
       period: {
         start: 1655024400,
-        end: 1657616400
+        end: 1657616400,
       },
       description: 'Team plan usage',
-      amount: 5000
+      amount: 5000,
     },
     {
       id: '2',
       period: {
         start: 1655024400,
-        end: 1657666799
+        end: 1657666799,
       },
       description: 'Team plan proration',
-      amount: -300
+      amount: -300,
     },
     {
       id: '3',
       period: {
         start: 1657670400,
-        end: 1660345199
+        end: 1660345199,
       },
       description: 'Studio plan usage',
-      amount: 8000
-    }
+      amount: 8000,
+    },
   ]
 
   it('should group invoice lines by the formatted dates', () => {
@@ -48,12 +48,14 @@ describe('<ConfirmPlanChange />', () => {
           lines,
           total: 13300,
           prorationDate: Math.floor(new Date().getTime() / 1000),
-          collectionDate: Math.floor(new Date(2022, 10, 12).getTime() / 1000)
+          collectionDate: Math.floor(new Date(2022, 10, 12).getTime() / 1000),
         }}
-      />
+      />,
     )
 
-    expect(screen.getByText('This is a preview of the invoice that will be billed on 12 Nov 2022:')).toBeInTheDocument()
+    expect(
+      screen.getByText('This is a preview of the invoice that will be billed on 12 Nov 2022:'),
+    ).toBeInTheDocument()
 
     expect(screen.getByText('12 Jun 2022 - 12 Jul 2022')).toBeInTheDocument()
 
@@ -89,9 +91,9 @@ describe('<ConfirmPlanChange />', () => {
           lines,
           total: 13300,
           prorationDate: Math.floor(new Date().getTime() / 1000),
-          collectionDate: Math.floor(new Date(2022, 10, 12).getTime() / 1000)
+          collectionDate: Math.floor(new Date(2022, 10, 12).getTime() / 1000),
         }}
-      />
+      />,
     )
 
     await userEvent.click(screen.getByText('Confirm'))
@@ -120,9 +122,9 @@ describe('<ConfirmPlanChange />', () => {
           lines,
           total: 13300,
           prorationDate: Math.floor(new Date().getTime() / 1000),
-          collectionDate: Math.floor(new Date(2022, 10, 12).getTime() / 1000)
+          collectionDate: Math.floor(new Date(2022, 10, 12).getTime() / 1000),
         }}
-      />
+      />,
     )
 
     await userEvent.click(screen.getByText('Confirm'))
@@ -144,14 +146,17 @@ describe('<ConfirmPlanChange />', () => {
           lines,
           total: 13300,
           prorationDate: Math.floor(new Date().getTime() / 1000),
-          collectionDate: Math.floor(new Date(2022, 10, 12).getTime() / 1000)
+          collectionDate: Math.floor(new Date(2022, 10, 12).getTime() / 1000),
         }}
-      />
+      />,
     )
 
     await userEvent.click(screen.getByText('Confirm'))
 
-    expect(await screen.findByText('Request failed with status code 403')).toHaveAttribute('role', 'alert')
+    expect(await screen.findByText('Request failed with status code 403')).toHaveAttribute(
+      'role',
+      'alert',
+    )
   })
 
   it('should close the modal', async () => {
@@ -166,9 +171,9 @@ describe('<ConfirmPlanChange />', () => {
           lines,
           total: 13300,
           prorationDate: Math.floor(new Date().getTime() / 1000),
-          collectionDate: Math.floor(new Date(2022, 10, 12).getTime() / 1000)
+          collectionDate: Math.floor(new Date(2022, 10, 12).getTime() / 1000),
         }}
-      />
+      />,
     )
 
     await userEvent.click(screen.getByText('Cancel'))

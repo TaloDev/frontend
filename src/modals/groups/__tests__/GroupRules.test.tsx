@@ -1,13 +1,17 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import api from '../../../api/api'
 import MockAdapter from 'axios-mock-adapter'
+import { Mock } from 'vitest'
+import api from '../../../api/api'
+import {
+  PlayerGroupRuleCastType,
+  PlayerGroupRuleMode,
+  PlayerGroupRuleName,
+} from '../../../entities/playerGroup'
 import activeGameState from '../../../state/activeGameState'
 import KitchenSink from '../../../utils/KitchenSink'
-import GroupRules from '../GroupRules'
-import { PlayerGroupRuleCastType, PlayerGroupRuleMode, PlayerGroupRuleName } from '../../../entities/playerGroup'
-import { Mock } from 'vitest'
 import { UnpackedGroupRule } from '../GroupDetails'
+import GroupRules from '../GroupRules'
 
 function getLatestChange(changeMock: Mock) {
   return changeMock.mock.calls[changeMock.mock.calls.length - 1][0]
@@ -17,120 +21,92 @@ describe('<GroupRules />', () => {
   const axiosMock = new MockAdapter(api)
   const activeGameValue = { id: 1, name: 'Shattered' }
   axiosMock.onGet('http://talo.api/games/1/player-groups/rules').reply(200, {
-    'availableRules': [
+    availableRules: [
       {
         name: 'EQUALS',
-        castTypes: [
-          'CHAR',
-          'DOUBLE',
-          'DATETIME'
-        ],
+        castTypes: ['CHAR', 'DOUBLE', 'DATETIME'],
         operandCount: 1,
-        negate: false
+        negate: false,
       },
       {
         name: 'EQUALS',
-        castTypes: [
-          'CHAR',
-          'DOUBLE',
-          'DATETIME'
-        ],
+        castTypes: ['CHAR', 'DOUBLE', 'DATETIME'],
         operandCount: 1,
-        negate: true
+        negate: true,
       },
       {
         name: 'GT',
         negatable: false,
-        castTypes: [
-          'DOUBLE',
-          'DATETIME'
-        ],
+        castTypes: ['DOUBLE', 'DATETIME'],
         operandCount: 1,
-        negate: false
+        negate: false,
       },
       {
         name: 'GTE',
         negatable: false,
-        castTypes: [
-          'DOUBLE',
-          'DATETIME'
-        ],
+        castTypes: ['DOUBLE', 'DATETIME'],
         operandCount: 1,
-        negate: false
+        negate: false,
       },
       {
         name: 'LT',
         negatable: false,
-        castTypes: [
-          'DOUBLE',
-          'DATETIME'
-        ],
+        castTypes: ['DOUBLE', 'DATETIME'],
         operandCount: 1,
-        negate: false
+        negate: false,
       },
       {
         name: 'LTE',
         negatable: false,
-        castTypes: [
-          'DOUBLE',
-          'DATETIME'
-        ],
+        castTypes: ['DOUBLE', 'DATETIME'],
         operandCount: 1,
-        negate: false
+        negate: false,
       },
       {
         name: 'SET',
-        castTypes: [
-          'CHAR',
-          'DOUBLE',
-          'DATETIME'
-        ],
+        castTypes: ['CHAR', 'DOUBLE', 'DATETIME'],
         operandCount: 0,
-        negate: false
+        negate: false,
       },
       {
         name: 'SET',
-        castTypes: [
-          'CHAR',
-          'DOUBLE',
-          'DATETIME'
-        ],
+        castTypes: ['CHAR', 'DOUBLE', 'DATETIME'],
         operandCount: 0,
-        negate: true
-      }
+        negate: true,
+      },
     ],
     availableFields: [
       {
         fieldDisplayName: 'prop with key',
         defaultCastType: 'CHAR',
         mapsTo: 'props',
-        namespaced: true
+        namespaced: true,
       },
       {
         fieldDisplayName: 'latest login',
         defaultCastType: 'DATETIME',
         mapsTo: 'lastSeenAt',
-        namespaced: false
+        namespaced: false,
       },
       {
         fieldDisplayName: 'first login',
         defaultCastType: 'DATETIME',
         mapsTo: 'createdAt',
-        namespaced: false
+        namespaced: false,
       },
       {
         fieldDisplayName: 'value for stat',
         defaultCastType: 'DOUBLE',
         mapsTo: 'statValue',
-        namespaced: true
+        namespaced: true,
       },
       {
         fieldDisplayName: 'score in leaderboard',
         defaultCastType: 'DOUBLE',
         mapsTo: 'leaderboardEntryScore',
-        namespaced: true
-      }
-    ]
+        namespaced: true,
+      },
+    ],
   })
 
   it('should render non-prop rules', async () => {
@@ -139,22 +115,24 @@ describe('<GroupRules />', () => {
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
           rulesState={[
-            [{
-              name: PlayerGroupRuleName.GT,
-              negate: false,
-              castType: PlayerGroupRuleCastType.DATETIME,
-              namespaced: false,
-              namespacedValue: '',
-              operands: {
-                0: '2022-03-03'
+            [
+              {
+                name: PlayerGroupRuleName.GT,
+                negate: false,
+                castType: PlayerGroupRuleCastType.DATETIME,
+                namespaced: false,
+                namespacedValue: '',
+                operands: {
+                  0: '2022-03-03',
+                },
+                operandCount: 1,
+                mapsTo: 'createdAt',
               },
-              operandCount: 1,
-              mapsTo: 'createdAt'
-            }],
-            vi.fn()
+            ],
+            vi.fn(),
           ]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText('first login')).toBeInTheDocument()
@@ -168,22 +146,24 @@ describe('<GroupRules />', () => {
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
           rulesState={[
-            [{
-              name: PlayerGroupRuleName.LTE,
-              negate: true,
-              castType: PlayerGroupRuleCastType.DOUBLE,
-              namespaced: true,
-              namespacedValue: 'currentLevel',
-              operands: {
-                0: '55'
+            [
+              {
+                name: PlayerGroupRuleName.LTE,
+                negate: true,
+                castType: PlayerGroupRuleCastType.DOUBLE,
+                namespaced: true,
+                namespacedValue: 'currentLevel',
+                operands: {
+                  0: '55',
+                },
+                operandCount: 1,
+                mapsTo: 'props',
               },
-              operandCount: 1,
-              mapsTo: 'props'
-            }],
-            vi.fn()
+            ],
+            vi.fn(),
           ]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByDisplayValue('currentLevel')).toBeInTheDocument()
@@ -199,26 +179,25 @@ describe('<GroupRules />', () => {
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[
-            [],
-            changeMock
-          ]}
+          rulesState={[[], changeMock]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(await screen.findByText('Add filter'))
 
-    expect(getLatestChange(changeMock)([])).toStrictEqual([{
-      name: 'EQUALS',
-      negate: false,
-      castType: 'CHAR',
-      operands: {},
-      operandCount: 1,
-      mapsTo: 'props',
-      namespaced: true,
-      namespacedValue: ''
-    }])
+    expect(getLatestChange(changeMock)([])).toStrictEqual([
+      {
+        name: 'EQUALS',
+        negate: false,
+        castType: 'CHAR',
+        operands: {},
+        operandCount: 1,
+        mapsTo: 'props',
+        namespaced: true,
+        namespacedValue: '',
+      },
+    ])
   })
 
   it('should delete rules', async () => {
@@ -232,10 +211,10 @@ describe('<GroupRules />', () => {
         namespaced: true,
         namespacedValue: '',
         operands: {
-          0: '2022-03-03'
+          0: '2022-03-03',
         },
         operandCount: 1,
-        mapsTo: 'createdAt'
+        mapsTo: 'createdAt',
       },
       {
         name: PlayerGroupRuleName.GT,
@@ -244,23 +223,20 @@ describe('<GroupRules />', () => {
         namespaced: true,
         namespacedValue: '',
         operands: {
-          0: '2022-01-01'
+          0: '2022-01-01',
         },
         operandCount: 1,
-        mapsTo: 'createdAt'
-      }
+        mapsTo: 'createdAt',
+      },
     ]
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[
-            rules,
-            changeMock
-          ]}
+          rulesState={[rules, changeMock]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(await screen.findByLabelText('Delete rule 1'))
@@ -278,10 +254,10 @@ describe('<GroupRules />', () => {
       namespaced: true,
       namespacedValue: 'pos.x',
       operands: {
-        0: '5'
+        0: '5',
       },
       operandCount: 1,
-      mapsTo: 'props'
+      mapsTo: 'props',
     }
 
     const irrelevantRule: UnpackedGroupRule = {
@@ -292,35 +268,35 @@ describe('<GroupRules />', () => {
       namespacedValue: 'hasWonGame',
       operands: {},
       operandCount: 0,
-      mapsTo: 'props'
+      mapsTo: 'props',
     }
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[
-            [initialRule, irrelevantRule],
-            changeMock
-          ]}
+          rulesState={[[initialRule, irrelevantRule], changeMock]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(await screen.findByDisplayValue('5'), '6')
 
-    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
-      name: 'GT',
-      negate: false,
-      castType: PlayerGroupRuleCastType.DOUBLE,
-      operands: {
-        0: '56'
+    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([
+      {
+        name: 'GT',
+        negate: false,
+        castType: PlayerGroupRuleCastType.DOUBLE,
+        operands: {
+          0: '56',
+        },
+        operandCount: 1,
+        mapsTo: 'props',
+        namespaced: true,
+        namespacedValue: 'pos.x',
       },
-      operandCount: 1,
-      mapsTo: 'props',
-      namespaced: true,
-      namespacedValue: 'pos.x'
-    }, irrelevantRule])
+      irrelevantRule,
+    ])
   })
 
   it('should update rule names', async () => {
@@ -333,10 +309,10 @@ describe('<GroupRules />', () => {
       namespaced: true,
       namespacedValue: 'pos.x',
       operands: {
-        0: '5'
+        0: '5',
       },
       operandCount: 1,
-      mapsTo: 'props'
+      mapsTo: 'props',
     }
 
     const irrelevantRule: UnpackedGroupRule = {
@@ -347,36 +323,36 @@ describe('<GroupRules />', () => {
       namespacedValue: 'hasWonGame',
       operands: {},
       operandCount: 0,
-      mapsTo: 'props'
+      mapsTo: 'props',
     }
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[
-            [initialRule, irrelevantRule],
-            changeMock
-          ]}
+          rulesState={[[initialRule, irrelevantRule], changeMock]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(await screen.findByText('is less than'))
     await userEvent.click(await screen.findByText('is greater than'))
 
-    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
-      name: 'GT',
-      negate: false,
-      castType: 'DOUBLE',
-      namespaced: true,
-      namespacedValue: 'pos.x',
-      operands: {
-        0: '5'
+    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([
+      {
+        name: 'GT',
+        negate: false,
+        castType: 'DOUBLE',
+        namespaced: true,
+        namespacedValue: 'pos.x',
+        operands: {
+          0: '5',
+        },
+        operandCount: 1,
+        mapsTo: 'props',
       },
-      operandCount: 1,
-      mapsTo: 'props'
-    }, irrelevantRule])
+      irrelevantRule,
+    ])
   })
 
   it('should update rule mode to $or', async () => {
@@ -390,10 +366,10 @@ describe('<GroupRules />', () => {
         namespaced: false,
         namespacedValue: '',
         operands: {
-          0: '2022-03-03'
+          0: '2022-03-03',
         },
         operandCount: 1,
-        mapsTo: 'createdAt'
+        mapsTo: 'createdAt',
       },
       {
         name: PlayerGroupRuleName.GT,
@@ -402,23 +378,20 @@ describe('<GroupRules />', () => {
         namespaced: false,
         namespacedValue: '',
         operands: {
-          0: '2022-01-01'
+          0: '2022-01-01',
         },
         operandCount: 1,
-        mapsTo: 'createdAt'
-      }
+        mapsTo: 'createdAt',
+      },
     ]
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, changeMock]}
-          rulesState={[
-            rules,
-            vi.fn()
-          ]}
+          rulesState={[rules, vi.fn()]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(await screen.findByText('and'))
@@ -438,10 +411,10 @@ describe('<GroupRules />', () => {
         namespaced: false,
         namespacedValue: '',
         operands: {
-          0: '2022-03-03'
+          0: '2022-03-03',
         },
         operandCount: 1,
-        mapsTo: 'createdAt'
+        mapsTo: 'createdAt',
       },
       {
         name: PlayerGroupRuleName.GT,
@@ -450,23 +423,20 @@ describe('<GroupRules />', () => {
         namespaced: false,
         namespacedValue: '',
         operands: {
-          0: '2022-01-01'
+          0: '2022-01-01',
         },
         operandCount: 1,
-        mapsTo: 'createdAt'
-      }
+        mapsTo: 'createdAt',
+      },
     ]
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.OR, changeMock]}
-          rulesState={[
-            rules,
-            vi.fn()
-          ]}
+          rulesState={[rules, vi.fn()]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(await screen.findByText('or'))
@@ -485,10 +455,10 @@ describe('<GroupRules />', () => {
       namespaced: false,
       namespacedValue: '',
       operands: {
-        0: '5'
+        0: '5',
       },
       operandCount: 1,
-      mapsTo: 'createdAt'
+      mapsTo: 'createdAt',
     }
 
     const irrelevantRule: UnpackedGroupRule = {
@@ -499,36 +469,36 @@ describe('<GroupRules />', () => {
       namespacedValue: 'hasWonGame',
       operands: {},
       operandCount: 0,
-      mapsTo: 'props'
+      mapsTo: 'props',
     }
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[
-            [initialRule, irrelevantRule],
-            changeMock
-          ]}
+          rulesState={[[initialRule, irrelevantRule], changeMock]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(await screen.findByText('first login'))
     await userEvent.click(await screen.findByText('latest login'))
 
-    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
-      name: 'EQUALS',
-      negate: false,
-      castType: 'DATETIME',
-      namespaced: false,
-      namespacedValue: '',
-      operands: {
-        0: ''
+    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([
+      {
+        name: 'EQUALS',
+        negate: false,
+        castType: 'DATETIME',
+        namespaced: false,
+        namespacedValue: '',
+        operands: {
+          0: '',
+        },
+        operandCount: 1,
+        mapsTo: 'lastSeenAt',
       },
-      operandCount: 1,
-      mapsTo: 'lastSeenAt'
-    }, irrelevantRule])
+      irrelevantRule,
+    ])
   })
 
   it('should update prop key names', async () => {
@@ -542,7 +512,7 @@ describe('<GroupRules />', () => {
       namespacedValue: 'hasLoggedIn',
       operands: {},
       operandCount: 0,
-      mapsTo: 'props'
+      mapsTo: 'props',
     }
 
     const irrelevantRule: UnpackedGroupRule = {
@@ -552,36 +522,36 @@ describe('<GroupRules />', () => {
       namespaced: false,
       namespacedValue: '',
       operands: {
-        0: '5'
+        0: '5',
       },
       operandCount: 1,
-      mapsTo: 'createdAt'
+      mapsTo: 'createdAt',
     }
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[
-            [initialRule, irrelevantRule],
-            changeMock
-          ]}
+          rulesState={[[initialRule, irrelevantRule], changeMock]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(await screen.findByDisplayValue('hasLoggedIn'), '1')
 
-    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
-      name: 'SET',
-      negate: false,
-      castType: 'CHAR',
-      namespaced: true,
-      namespacedValue: 'hasLoggedIn1',
-      operands: {},
-      operandCount: 0,
-      mapsTo: 'props'
-    }, irrelevantRule])
+    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([
+      {
+        name: 'SET',
+        negate: false,
+        castType: 'CHAR',
+        namespaced: true,
+        namespacedValue: 'hasLoggedIn1',
+        operands: {},
+        operandCount: 0,
+        mapsTo: 'props',
+      },
+      irrelevantRule,
+    ])
   })
 
   it('should update the cast type', async () => {
@@ -595,7 +565,7 @@ describe('<GroupRules />', () => {
       namespacedValue: 'hasLoggedIn',
       operands: {},
       operandCount: 0,
-      mapsTo: 'props'
+      mapsTo: 'props',
     }
 
     const irrelevantRule: UnpackedGroupRule = {
@@ -605,37 +575,37 @@ describe('<GroupRules />', () => {
       namespaced: false,
       namespacedValue: '',
       operands: {
-        0: '5'
+        0: '5',
       },
       operandCount: 1,
-      mapsTo: 'createdAt'
+      mapsTo: 'createdAt',
     }
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[
-            [initialRule, irrelevantRule],
-            changeMock
-          ]}
+          rulesState={[[initialRule, irrelevantRule], changeMock]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(await screen.findByText('text'))
     await userEvent.click(await screen.findByText('number'))
 
-    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
-      name: 'SET',
-      negate: false,
-      castType: 'DOUBLE',
-      namespaced: true,
-      namespacedValue: 'hasLoggedIn',
-      operands: {},
-      operandCount: 0,
-      mapsTo: 'props'
-    }, irrelevantRule])
+    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([
+      {
+        name: 'SET',
+        negate: false,
+        castType: 'DOUBLE',
+        namespaced: true,
+        namespacedValue: 'hasLoggedIn',
+        operands: {},
+        operandCount: 0,
+        mapsTo: 'props',
+      },
+      irrelevantRule,
+    ])
   })
 
   it('should select meta props', async () => {
@@ -648,10 +618,10 @@ describe('<GroupRules />', () => {
       namespaced: false,
       namespacedValue: '',
       operands: {
-        0: '5'
+        0: '5',
       },
       operandCount: 1,
-      mapsTo: 'createdAt'
+      mapsTo: 'createdAt',
     }
 
     const irrelevantRule: UnpackedGroupRule = {
@@ -662,36 +632,36 @@ describe('<GroupRules />', () => {
       namespacedValue: 'hasWonGame',
       operands: {},
       operandCount: 0,
-      mapsTo: 'props'
+      mapsTo: 'props',
     }
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[
-            [initialRule, irrelevantRule],
-            changeMock
-          ]}
+          rulesState={[[initialRule, irrelevantRule], changeMock]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(await screen.findByText('first login'))
     await userEvent.click(await screen.findByText('window mode'))
 
-    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([{
-      name: 'EQUALS',
-      negate: false,
-      castType: 'DOUBLE',
-      namespaced: true,
-      namespacedValue: 'META_WINDOW_MODE',
-      operands: {
-        0: ''
+    expect(getLatestChange(changeMock)([initialRule, irrelevantRule])).toStrictEqual([
+      {
+        name: 'EQUALS',
+        negate: false,
+        castType: 'DOUBLE',
+        namespaced: true,
+        namespacedValue: 'META_WINDOW_MODE',
+        operands: {
+          0: '',
+        },
+        operandCount: 1,
+        mapsTo: 'props',
       },
-      operandCount: 1,
-      mapsTo: 'props'
-    }, irrelevantRule])
+      irrelevantRule,
+    ])
   })
 
   it('should remove operands for a rule with no operands', async () => {
@@ -704,37 +674,36 @@ describe('<GroupRules />', () => {
       namespaced: true,
       namespacedValue: 'pos.x',
       operands: {
-        0: '5'
+        0: '5',
       },
       operandCount: 1,
-      mapsTo: 'props'
+      mapsTo: 'props',
     }
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[
-            [initialRule],
-            changeMock
-          ]}
+          rulesState={[[initialRule], changeMock]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(await screen.findByText('is less than'))
     await userEvent.click(await screen.findByText('is set'))
 
-    expect(getLatestChange(changeMock)([initialRule])).toStrictEqual([{
-      name: 'SET',
-      negate: false,
-      castType: 'DOUBLE',
-      namespaced: true,
-      namespacedValue: 'pos.x',
-      operands: {},
-      operandCount: 0,
-      mapsTo: 'props'
-    }])
+    expect(getLatestChange(changeMock)([initialRule])).toStrictEqual([
+      {
+        name: 'SET',
+        negate: false,
+        castType: 'DOUBLE',
+        namespaced: true,
+        namespacedValue: 'pos.x',
+        operands: {},
+        operandCount: 0,
+        mapsTo: 'props',
+      },
+    ])
   })
 
   it('should select the stat value rule', async () => {
@@ -747,39 +716,38 @@ describe('<GroupRules />', () => {
       namespaced: true,
       namespacedValue: 'pos.x',
       operands: {
-        0: '5'
+        0: '5',
       },
       operandCount: 1,
-      mapsTo: 'props'
+      mapsTo: 'props',
     }
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[
-            [initialRule],
-            changeMock
-          ]}
+          rulesState={[[initialRule], changeMock]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(await screen.findByText('prop with key'))
     await userEvent.click(await screen.findByText('value for stat'))
 
-    expect(getLatestChange(changeMock)([initialRule])).toStrictEqual([{
-      name: 'EQUALS',
-      negate: false,
-      castType: 'DOUBLE',
-      namespaced: true,
-      namespacedValue: '',
-      operands: {
-        0: ''
+    expect(getLatestChange(changeMock)([initialRule])).toStrictEqual([
+      {
+        name: 'EQUALS',
+        negate: false,
+        castType: 'DOUBLE',
+        namespaced: true,
+        namespacedValue: '',
+        operands: {
+          0: '',
+        },
+        operandCount: 1,
+        mapsTo: 'statValue',
       },
-      operandCount: 1,
-      mapsTo: 'statValue'
-    }])
+    ])
   })
 
   it('should select the leaderboard entry score rule', async () => {
@@ -792,39 +760,38 @@ describe('<GroupRules />', () => {
       namespaced: true,
       namespacedValue: 'pos.x',
       operands: {
-        0: '5'
+        0: '5',
       },
       operandCount: 1,
-      mapsTo: 'props'
+      mapsTo: 'props',
     }
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[
-            [initialRule],
-            changeMock
-          ]}
+          rulesState={[[initialRule], changeMock]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(await screen.findByText('prop with key'))
     await userEvent.click(await screen.findByText('score in leaderboard'))
 
-    expect(getLatestChange(changeMock)([initialRule])).toStrictEqual([{
-      name: 'EQUALS',
-      negate: false,
-      castType: 'DOUBLE',
-      namespaced: true,
-      namespacedValue: '',
-      operands: {
-        0: ''
+    expect(getLatestChange(changeMock)([initialRule])).toStrictEqual([
+      {
+        name: 'EQUALS',
+        negate: false,
+        castType: 'DOUBLE',
+        namespaced: true,
+        namespacedValue: '',
+        operands: {
+          0: '',
+        },
+        operandCount: 1,
+        mapsTo: 'leaderboardEntryScore',
       },
-      operandCount: 1,
-      mapsTo: 'leaderboardEntryScore'
-    }])
+    ])
   })
 
   it('should render the correct placeholder for the namespacedValue of the stat value rule', async () => {
@@ -835,22 +802,19 @@ describe('<GroupRules />', () => {
       namespaced: true,
       namespacedValue: '',
       operands: {
-        0: '5'
+        0: '5',
       },
       operandCount: 1,
-      mapsTo: 'statValue'
+      mapsTo: 'statValue',
     }
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[
-            [initialRule],
-            vi.fn()
-          ]}
+          rulesState={[[initialRule], vi.fn()]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByPlaceholderText('Internal name')).toBeInTheDocument()
@@ -864,22 +828,19 @@ describe('<GroupRules />', () => {
       namespaced: true,
       namespacedValue: '',
       operands: {
-        0: '5'
+        0: '5',
       },
       operandCount: 1,
-      mapsTo: 'leaderboardEntryScore'
+      mapsTo: 'leaderboardEntryScore',
     }
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[
-            [initialRule],
-            vi.fn()
-          ]}
+          rulesState={[[initialRule], vi.fn()]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByPlaceholderText('Internal name')).toBeInTheDocument()
@@ -893,22 +854,19 @@ describe('<GroupRules />', () => {
       namespaced: true,
       namespacedValue: '',
       operands: {
-        0: '5'
+        0: '5',
       },
       operandCount: 1,
-      mapsTo: 'props'
+      mapsTo: 'props',
     }
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[
-            [initialRule],
-            vi.fn()
-          ]}
+          rulesState={[[initialRule], vi.fn()]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByPlaceholderText('Key')).toBeInTheDocument()
@@ -922,22 +880,19 @@ describe('<GroupRules />', () => {
       namespaced: true,
       namespacedValue: 'META_DEV_BUILD',
       operands: {
-        0: '1'
+        0: '1',
       },
       operandCount: 1,
-      mapsTo: 'props'
+      mapsTo: 'props',
     }
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
         <GroupRules
           ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[
-            [initialRule],
-            vi.fn()
-          ]}
+          rulesState={[[initialRule], vi.fn()]}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.queryByTestId('namespaced-value')).not.toBeInTheDocument()
@@ -949,11 +904,8 @@ describe('<GroupRules />', () => {
 
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: activeGameValue }]}>
-        <GroupRules
-          ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]}
-          rulesState={[[], vi.fn()]}
-        />
-      </KitchenSink>
+        <GroupRules ruleModeState={[PlayerGroupRuleMode.AND, vi.fn()]} rulesState={[[], vi.fn()]} />
+      </KitchenSink>,
     )
 
     expect(await screen.findByText('Network Error')).toBeInTheDocument()

@@ -7,13 +7,9 @@ describe('<Modal />', () => {
     const closeMock = vi.fn()
 
     render(
-      <Modal
-        id='dummy'
-        title='Dummy'
-        modalState={[true, closeMock]}
-      >
+      <Modal id='dummy' title='Dummy' modalState={[true, closeMock]}>
         <span>Content</span>
-      </Modal>
+      </Modal>,
     )
 
     await userEvent.keyboard('{Escape}')
@@ -25,13 +21,9 @@ describe('<Modal />', () => {
     const closeMock = vi.fn()
 
     render(
-      <Modal
-        id='dummy'
-        title='Dummy'
-        modalState={[true, closeMock]}
-      >
+      <Modal id='dummy' title='Dummy' modalState={[true, closeMock]}>
         <span>Content</span>
-      </Modal>
+      </Modal>,
     )
 
     await userEvent.click(screen.getByLabelText('Close modal'))

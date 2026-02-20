@@ -81,5 +81,8 @@ jobs:
       - name: Install deps
         run: npm ci --prefer-offline
 
+      - name: Format
+        run: npm run fmt
+
       - name: Lint
-        run: npx eslint
+        run: npm run lint

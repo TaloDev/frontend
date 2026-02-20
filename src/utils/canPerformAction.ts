@@ -9,7 +9,7 @@ export enum PermissionBasedAction {
   UPDATE_PLAYER_STAT,
   UPDATE_LEADERBOARD_ENTRY,
   DELETE_CHANNEL,
-  DELETE_PLAYER
+  DELETE_PLAYER,
 }
 
 export default function canPerformAction(user: User, action: PermissionBasedAction) {

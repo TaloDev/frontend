@@ -1,14 +1,11 @@
 import { z } from 'zod'
-import { propSchema } from './prop'
 import { playerAliasSchema } from './playerAlias'
+import { propSchema } from './prop'
 
 export const gameChannelSchema = z.object({
   id: z.number(),
   name: z.string(),
-  owner: z.union([
-    playerAliasSchema,
-    z.null()
-  ]),
+  owner: z.union([playerAliasSchema, z.null()]),
   totalMessages: z.number(),
   props: z.array(propSchema),
   memberCount: z.number(),
@@ -16,7 +13,7 @@ export const gameChannelSchema = z.object({
   private: z.boolean(),
   temporaryMembership: z.boolean(),
   createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime()
+  updatedAt: z.string().datetime(),
 })
 
 export type GameChannel = z.infer<typeof gameChannelSchema>

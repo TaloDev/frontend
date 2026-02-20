@@ -1,21 +1,21 @@
+import { IconPlus } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
+import useFeedbackCategories from '../api/useFeedbackCategories'
 import Button from '../components/Button'
 import ErrorMessage from '../components/ErrorMessage'
+import Link from '../components/Link'
 import Page from '../components/Page'
 import DateCell from '../components/tables/cells/DateCell'
 import Table from '../components/tables/Table'
 import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
+import routes from '../constants/routes'
+import { GameFeedbackCategory } from '../entities/gameFeedbackCategory'
+import FeedbackCategoryDetails from '../modals/FeedbackCategoryDetails'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import useSortedItems from '../utils/useSortedItems'
-import { IconPlus } from '@tabler/icons-react'
-import routes from '../constants/routes'
-import Link from '../components/Link'
-import useFeedbackCategories from '../api/useFeedbackCategories'
-import FeedbackCategoryDetails from '../modals/FeedbackCategoryDetails'
-import { GameFeedbackCategory } from '../entities/gameFeedbackCategory'
 
 export default function FeedbackCategories() {
   const [showModal, setShowModal] = useState(false)
@@ -39,7 +39,7 @@ export default function FeedbackCategories() {
     <Page
       title='Feedback categories'
       extraTitleComponent={
-        <div className='mt-1 ml-4 p-1 rounded-full bg-indigo-600'>
+        <div className='mt-1 ml-4 rounded-full bg-indigo-600 p-1'>
           <Button
             variant='icon'
             onClick={() => setShowModal(true)}
@@ -54,43 +54,49 @@ export default function FeedbackCategories() {
         <Link to={routes.feedback}>Back to feedback</Link>
       </div>
 
-      {!error && !loading && feedbackCategories.length === 0 &&
+      {!error && !loading && feedbackCategories.length === 0 && (
         <p>{activeGame.name} doesn&apos;t have any feedback categories yet</p>
-      }
+      )}
 
-      {!error && feedbackCategories.length > 0 &&
-        <Table columns={['Internal name', 'Display name', 'Anonymised', 'Created at', 'Updated at', '']}>
+      {!error && feedbackCategories.length > 0 && (
+        <Table
+          columns={['Internal name', 'Display name', 'Anonymised', 'Created at', 'Updated at', '']}
+        >
           <TableBody iterator={sortedFeedbackCategories}>
             {(feedbackCategory) => (
               <>
                 <TableCell>{feedbackCategory.internalName}</TableCell>
-                <TableCell className='min-w-[320px] max-w-[320px] lg:min-w-0'>
+                <TableCell className='max-w-[320px] min-w-[320px] lg:min-w-0'>
                   {feedbackCategory.name}
-                  <div className='mt-2 text-sm'>
-                    {feedbackCategory.description}
-                  </div>
+                  <div className='mt-2 text-sm'>{feedbackCategory.description}</div>
                 </TableCell>
                 <TableCell>{feedbackCategory.anonymised ? 'Yes' : 'No'}</TableCell>
-                <DateCell>{format(new Date(feedbackCategory.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
-                <DateCell>{format(new Date(feedbackCategory.updatedAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+                <DateCell>
+                  {format(new Date(feedbackCategory.createdAt), 'dd MMM yyyy, HH:mm')}
+                </DateCell>
+                <DateCell>
+                  {format(new Date(feedbackCategory.updatedAt), 'dd MMM yyyy, HH:mm')}
+                </DateCell>
                 <TableCell className='w-40'>
-                  <Button variant='grey' onClick={() => onEditCategoryClick(feedbackCategory)}>Edit</Button>
+                  <Button variant='grey' onClick={() => onEditCategoryClick(feedbackCategory)}>
+                    Edit
+                  </Button>
                 </TableCell>
               </>
             )}
           </TableBody>
         </Table>
-      }
+      )}
 
       {error && <ErrorMessage error={error} />}
 
-      {showModal &&
+      {showModal && (
         <FeedbackCategoryDetails
           modalState={[showModal, setShowModal]}
           mutate={mutate}
           editingCategory={editingCategory}
         />
-      }
+      )}
     </Page>
   )
 }

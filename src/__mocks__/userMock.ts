@@ -12,6 +12,6 @@ export default function userMock(extra: Partial<User> = {}): User {
     type: UserType.DEV,
     has2fa: false,
     createdAt: new Date().toISOString(),
-    ...extra
+    ...extra,
   }
 }

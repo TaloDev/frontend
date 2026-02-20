@@ -1,6 +1,8 @@
 import { GameFeedbackCategory } from '../entities/gameFeedbackCategory'
 
-export default function gameFeedbackCategoryMock(extra: Partial<GameFeedbackCategory> = {}): GameFeedbackCategory {
+export default function gameFeedbackCategoryMock(
+  extra: Partial<GameFeedbackCategory> = {},
+): GameFeedbackCategory {
   return {
     id: 1,
     internalName: 'bugs',
@@ -9,6 +11,6 @@ export default function gameFeedbackCategoryMock(extra: Partial<GameFeedbackCate
     anonymised: false,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    ...extra
+    ...extra,
   }
 }

@@ -8,6 +8,6 @@ export default function prepareRule(rule: UnpackedGroupRule): PlayerGroupRule {
     castType: rule.castType,
     field: rule.namespaced ? `${rule.mapsTo}.${rule.namespacedValue}` : rule.mapsTo,
     operands: Object.values(rule.operands).filter((_, idx) => idx < rule.operandCount),
-    namespaced: rule.namespaced
+    namespaced: rule.namespaced,
   }
 }

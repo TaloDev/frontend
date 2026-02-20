@@ -1,17 +1,17 @@
-import { useCallback, useState } from 'react'
-import { IconArrowUp } from '@tabler/icons-react'
-import { dinero, toDecimal } from 'dinero.js'
 import { USD } from '@dinero.js/currencies'
-import Button from '../Button'
-import { focusStyle, linkStyle } from '../../styles/theme'
+import { IconArrowUp } from '@tabler/icons-react'
+import clsx from 'clsx'
+import { dinero, toDecimal } from 'dinero.js'
+import { useCallback, useState } from 'react'
 import createCheckoutSession from '../../api/createCheckoutSession'
-import ErrorMessage, { TaloError } from '../ErrorMessage'
-import buildError from '../../utils/buildError'
-import ConfirmPlanChange from '../../modals/ConfirmPlanChange'
-import Tile from '../Tile'
 import { Invoice } from '../../entities/invoice'
 import { PricingPlanProduct, PricingPlanProductPrice } from '../../entities/pricingPlan'
-import clsx from 'clsx'
+import ConfirmPlanChange from '../../modals/ConfirmPlanChange'
+import { focusStyle, linkStyle } from '../../styles/theme'
+import buildError from '../../utils/buildError'
+import Button from '../Button'
+import ErrorMessage, { TaloError } from '../ErrorMessage'
+import Tile from '../Tile'
 
 type PricingPlanTileProps = {
   plan?: PricingPlanProduct
@@ -28,7 +28,7 @@ export default function PricingPlanTile({
   custom,
   currentPlanPrice,
   planLoadingState,
-  current
+  current,
 }: PricingPlanTileProps) {
   const [error, setError] = useState<TaloError | null>(null)
   const [planLoading, setPlanLoading] = planLoadingState
@@ -38,21 +38,27 @@ export default function PricingPlanTile({
   const isUpgrade = useCallback(() => {
     if (!currentPlanPrice || !plan) return true
 
-    return plan.prices.find((price) => price.interval === currentPlanPrice.interval)!.amount > currentPlanPrice.amount
+    return (
+      plan.prices.find((price) => price.interval === currentPlanPrice.interval)!.amount >
+      currentPlanPrice.amount
+    )
   }, [plan, currentPlanPrice])
 
-  const getPrice = useCallback((plan?: PricingPlanProduct) => {
-    if (!plan) return ''
+  const getPrice = useCallback(
+    (plan?: PricingPlanProduct) => {
+      if (!plan) return ''
 
-    const price = plan.prices.find((p) => p.interval === displayInterval)
+      const price = plan.prices.find((p) => p.interval === displayInterval)
 
-    const amount = price?.amount
-    if (!amount) return 'Free forever'
+      const amount = price?.amount
+      if (!amount) return 'Free forever'
 
-    const d = dinero({ amount, currency: USD })
-    const transformer = ({ value }: { value: string }) => `$${value} / ${price.interval}`
-    return toDecimal(d, transformer)
-  }, [displayInterval])
+      const d = dinero({ amount, currency: USD })
+      const transformer = ({ value }: { value: string }) => `$${value} / ${price.interval}`
+      return toDecimal(d, transformer)
+    },
+    [displayInterval],
+  )
 
   const onChangePlanClick = async () => {
     setError(null)
@@ -75,29 +81,39 @@ export default function PricingPlanTile({
     <li>
       <Tile
         selected={current}
-        header={(
+        header={
           <>
             <h2 className='text-xl font-semibold'>{custom ? 'Custom Plan' : plan!.name}</h2>
-            <h2 className='text-xl font-semibold font-mono'>{getPrice(plan)}</h2>
+            <h2 className='font-mono text-xl font-semibold'>{getPrice(plan)}</h2>
           </>
-        )}
-        content={(
+        }
+        content={
           <>
             <ul>
-              {!custom &&
+              {!custom && (
                 <li>
-                  Up to <span className='font-semibold'>{(plan?.playerLimit ?? Infinity).toLocaleString()}</span> players
+                  Up to{' '}
+                  <span className='font-semibold'>
+                    {(plan?.playerLimit ?? Infinity).toLocaleString()}
+                  </span>{' '}
+                  players
                 </li>
-              }
+              )}
 
-              {custom &&
+              {custom && (
                 <li>
-                  For higher limits or custom integrations, <a className={clsx(linkStyle, focusStyle)} href='mailto:hello@trytalo.com?subject=Custom pricing plan'>contact us</a>
+                  For higher limits or custom integrations,{' '}
+                  <a
+                    className={clsx(linkStyle, focusStyle)}
+                    href='mailto:hello@trytalo.com?subject=Custom pricing plan'
+                  >
+                    contact us
+                  </a>
                 </li>
-              }
+              )}
             </ul>
 
-            {!custom && !current &&
+            {!custom && !current && (
               <Button
                 variant={isUpgrade() ? undefined : 'grey'}
                 onClick={onChangePlanClick}
@@ -108,16 +124,18 @@ export default function PricingPlanTile({
               >
                 <span>{isUpgrade() ? 'Upgrade' : 'Change plan'}</span>
               </Button>
-            }
+            )}
           </>
-        )}
-        footer={(
+        }
+        footer={
           <>
-            {error &&
-              <div className='px-4'><ErrorMessage error={error} /></div>
-            }
+            {error && (
+              <div className='px-4'>
+                <ErrorMessage error={error} />
+              </div>
+            )}
 
-            {invoice &&
+            {invoice && (
               <ConfirmPlanChange
                 modalState={[
                   Boolean(invoice),
@@ -125,15 +143,15 @@ export default function PricingPlanTile({
                   () => {
                     setInvoice(null)
                     setPlanLoading(null)
-                  }
+                  },
                 ]}
                 plan={plan!}
                 invoice={invoice}
                 pricingInterval={displayInterval}
               />
-            }
+            )}
           </>
-        )}
+        }
       />
     </li>
   )

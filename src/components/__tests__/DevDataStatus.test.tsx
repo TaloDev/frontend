@@ -1,14 +1,14 @@
 import { render, screen } from '@testing-library/react'
 import devDataState from '../../state/devDataState'
-import DevDataStatus from '../DevDataStatus'
 import KitchenSink from '../../utils/KitchenSink'
+import DevDataStatus from '../DevDataStatus'
 
 describe('<DevDataStatus />', () => {
   it('should render the not enabled state', () => {
     render(
       <KitchenSink states={[{ node: devDataState, initialValue: false }]}>
         <DevDataStatus />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('not enabled')).toBeInTheDocument()
@@ -18,7 +18,7 @@ describe('<DevDataStatus />', () => {
     render(
       <KitchenSink states={[{ node: devDataState, initialValue: true }]}>
         <DevDataStatus />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.queryByText('not enabled')).not.toBeInTheDocument()

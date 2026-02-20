@@ -5,7 +5,7 @@ export enum UserType {
   OWNER,
   ADMIN,
   DEV,
-  DEMO
+  DEMO,
 }
 
 export const userSchema = z.object({
@@ -17,7 +17,7 @@ export const userSchema = z.object({
   organisation: organisationSchema,
   type: z.nativeEnum(UserType),
   has2fa: z.boolean(),
-  createdAt: z.string().datetime()
+  createdAt: z.string().datetime(),
 })
 
 export type User = z.infer<typeof userSchema>

@@ -1,32 +1,40 @@
-import { Dispatch, useState } from 'react'
-import Modal from '../components/Modal'
-import TextInput from '../components/TextInput'
-import Button from '../components/Button'
-import buildError from '../utils/buildError'
-import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import createInvite from '../api/createInvite'
-import Select from '../components/Select'
-import { UserType } from '../entities/user'
+import { Dispatch, useState } from 'react'
+import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import { KeyedMutator } from 'swr'
 import { z } from 'zod'
+import createInvite from '../api/createInvite'
 import { currentOrganisationSchema } from '../api/useOrganisation'
+import Button from '../components/Button'
+import ErrorMessage, { TaloError } from '../components/ErrorMessage'
+import Modal from '../components/Modal'
+import Select from '../components/Select'
+import TextInput from '../components/TextInput'
+import { UserType } from '../entities/user'
+import buildError from '../utils/buildError'
 
 const validationSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
   userType: z.object({
     label: z.string(),
     value: z.nativeEnum(UserType),
-    desc: z.string()
-  })
+    desc: z.string(),
+  }),
 })
 
 type FormValues = z.infer<typeof validationSchema>
 
 const userTypeOptions = [
-  { label: 'Developer', value: UserType.DEV, desc: 'Developers can create entities such as trackable stats and also update entities like players and leaderboard entries' },
-  { label: 'Admin', value: UserType.ADMIN, desc: 'Admins can perform destructive actions such as deleting leaderboards but can also create access keys and export data' }
+  {
+    label: 'Developer',
+    value: UserType.DEV,
+    desc: 'Developers can create entities such as trackable stats and also update entities like players and leaderboard entries',
+  },
+  {
+    label: 'Admin',
+    value: UserType.ADMIN,
+    desc: 'Admins can perform destructive actions such as deleting leaderboards but can also create access keys and export data',
+  },
 ]
 
 type NewInviteProps = {
@@ -34,21 +42,23 @@ type NewInviteProps = {
   mutate: KeyedMutator<z.infer<typeof currentOrganisationSchema>>
 }
 
-export default function NewInvite({
-  modalState,
-  mutate
-}: NewInviteProps) {
+export default function NewInvite({ modalState, mutate }: NewInviteProps) {
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)
   const [apiError, setAPIError] = useState<TaloError | null>(null)
 
-  const { register, handleSubmit, formState: { isValid, errors }, control } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid, errors },
+    control,
+  } = useForm<FormValues>({
     resolver: zodResolver(validationSchema),
     defaultValues: {
       email: '',
-      userType: userTypeOptions[0]
+      userType: userTypeOptions[0],
     },
-    mode: 'onChange'
+    mode: 'onChange',
   })
 
   const onCreateClick: SubmitHandler<FormValues> = async (formData, e) => {
@@ -59,17 +69,14 @@ export default function NewInvite({
     try {
       const { invite } = await createInvite(formData.email, formData.userType.value)
 
-      mutate((data) => {
+      await mutate((data) => {
         if (!data) {
           throw new Error('Current organisation data not set')
         }
 
         return {
           ...data,
-          pendingInvites: [
-            ...data.pendingInvites,
-            invite
-          ]
+          pendingInvites: [...data.pendingInvites, invite],
         }
       }, false)
 
@@ -81,14 +88,9 @@ export default function NewInvite({
   }
 
   return (
-    <Modal
-      id='new-invite'
-      title='New invite'
-      modalState={modalState}
-      scroll={false}
-    >
+    <Modal id='new-invite' title='New invite' modalState={modalState} scroll={false}>
       <form onSubmit={handleSubmit(onCreateClick)}>
-        <div className='p-4 space-y-4'>
+        <div className='space-y-4 p-4'>
           <TextInput
             id='email'
             variant='modal'
@@ -99,18 +101,15 @@ export default function NewInvite({
           />
 
           <div className='w-full'>
-            <label htmlFor='user-type' className='block font-semibold mb-1'>User type</label>
+            <label htmlFor='user-type' className='mb-1 block font-semibold'>
+              User type
+            </label>
 
             <Controller
               name='userType'
               control={control}
               render={({ field: { ref, ...field } }) => (
-                <Select
-                  {...field}
-                  innerRef={ref}
-                  inputId='user-type'
-                  options={userTypeOptions}
-                />
+                <Select {...field} innerRef={ref} inputId='user-type' options={userTypeOptions} />
               )}
             />
           </div>
@@ -118,18 +117,17 @@ export default function NewInvite({
           {apiError && <ErrorMessage error={apiError} />}
         </div>
 
-        <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
           <div className='w-full md:w-32'>
-            <Button
-              disabled={!isValid}
-              isLoading={isLoading}
-            >
+            <Button disabled={!isValid} isLoading={isLoading}>
               Create
             </Button>
           </div>
 
           <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>Close</Button>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Close
+            </Button>
           </div>
         </div>
       </form>

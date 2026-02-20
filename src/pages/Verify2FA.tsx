@@ -1,18 +1,18 @@
-import { MouseEvent, useEffect, useState } from 'react'
-import TextInput from '../components/TextInput'
-import Button from '../components/Button'
-import { useSetRecoilState } from 'recoil'
-import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import buildError from '../utils/buildError'
-import routes from '../constants/routes'
-import { unauthedContainerStyle } from '../styles/theme'
-import AuthService from '../services/AuthService'
-import { useNavigate, useLocation } from 'react-router-dom'
-import Title from '../components/Title'
-import verify2FA from '../api/verify2FA'
-import Link from '../components/Link'
-import userState from '../state/userState'
 import clsx from 'clsx'
+import { MouseEvent, useEffect, useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useSetRecoilState } from 'recoil'
+import verify2FA from '../api/verify2FA'
+import Button from '../components/Button'
+import ErrorMessage, { TaloError } from '../components/ErrorMessage'
+import Link from '../components/Link'
+import TextInput from '../components/TextInput'
+import Title from '../components/Title'
+import routes from '../constants/routes'
+import AuthService from '../services/AuthService'
+import userState from '../state/userState'
+import { unauthedContainerStyle } from '../styles/theme'
+import buildError from '../utils/buildError'
 
 export default function Verify2FA() {
   const navigate = useNavigate()
@@ -33,8 +33,8 @@ export default function Verify2FA() {
       navigate(routes.login, {
         replace: true,
         state: {
-          new2FASessionRequired: true
-        }
+          new2FASessionRequired: true,
+        },
       })
     }
   }, [error, navigate])
@@ -55,8 +55,8 @@ export default function Verify2FA() {
   }
 
   return (
-    <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={clsx('text-white space-y-8', unauthedContainerStyle)}>
+    <div className='flex h-full flex-col p-8 md:items-center md:justify-center'>
+      <form className={clsx('space-y-8 text-white', unauthedContainerStyle)}>
         <Title>Two factor authentication</Title>
 
         <TextInput
@@ -70,17 +70,13 @@ export default function Verify2FA() {
             name: 'token',
             inputMode: 'numeric',
             pattern: '[0-9]*',
-            autoComplete: 'one-time-code'
+            autoComplete: 'one-time-code',
           }}
         />
 
         {error && <ErrorMessage error={error} />}
 
-        <Button
-          disabled={code.length < 6}
-          onClick={onConfirmClick}
-          isLoading={isLoading}
-        >
+        <Button disabled={code.length < 6} onClick={onConfirmClick} isLoading={isLoading}>
           Confirm
         </Button>
       </form>
@@ -88,10 +84,7 @@ export default function Verify2FA() {
       <div className={unauthedContainerStyle}>
         <p className='mt-4 text-white'>
           <span>Or, </span>
-          <Link
-            to={routes.recover}
-            state={{ userId }}
-          >
+          <Link to={routes.recover} state={{ userId }}>
             use a recovery code
           </Link>
         </p>

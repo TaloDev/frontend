@@ -6,26 +6,26 @@ Cypress.Commands.add('stubDashboardCalls', () => {
     body: {
       hours: Cypress._.random(0, 2),
       minutes: Cypress._.random(0, 59),
-      seconds: Cypress._.random(0, 59)
-    }
+      seconds: Cypress._.random(0, 59),
+    },
   })
 
   cy.intercept('GET', /http:\/\/talo\.api\/games\/1\/headlines\/(.*)/, {
     statusCode: 200,
     body: {
-      count: Cypress._.random(0, 100)
-    }
+      count: Cypress._.random(0, 100),
+    },
   })
 
   cy.intercept('GET', 'http://talo.api/games/1/game-stats', {
     statusCode: 200,
-    fixture: 'responses/game-stats/global'
+    fixture: 'responses/game-stats/global',
   })
 })
 
 Cypress.Commands.add('visitAsGuest', (url = '/') => {
   cy.intercept('GET', 'http://talo.api/public/users/refresh', {
-    statusCode: 401
+    statusCode: 401,
   })
 
   cy.stubDashboardCalls()
@@ -36,7 +36,7 @@ Cypress.Commands.add('visitAsGuest', (url = '/') => {
 Cypress.Commands.add('login', (userType = 'dev', url = '/') => {
   cy.intercept('GET', 'http://talo.api/public/users/refresh', {
     statusCode: 200,
-    fixture: `responses/auth/${userType}`
+    fixture: `responses/auth/${userType}`,
   })
 
   cy.stubDashboardCalls()

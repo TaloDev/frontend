@@ -9,15 +9,9 @@ type SaveModePickerProps = {
 
 const modes: ButtonGroupOption<SaveMode>[] = [
   { id: 'linear', label: 'Linear mode' },
-  { id: 'tree', label: 'Tree mode' }
+  { id: 'tree', label: 'Tree mode' },
 ]
 
 export default function SaveModePicker({ selectedMode, onModeChange }: SaveModePickerProps) {
-  return (
-    <ButtonGroup
-      options={modes}
-      selected={selectedMode}
-      onChange={onModeChange}
-    />
-  )
+  return <ButtonGroup options={modes} selected={selectedMode} onChange={onModeChange} />
 }

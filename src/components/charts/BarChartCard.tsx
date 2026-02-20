@@ -1,13 +1,13 @@
+import { format } from 'date-fns'
 import { get } from 'lodash-es'
 import { ReactElement } from 'react'
 import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from 'recharts'
-import ChartTick from './ChartTick'
-import { format } from 'date-fns'
-import { TaloError } from '../ErrorMessage'
-import { TimePeriod } from '../../utils/useTimePeriod'
-import { LabelledTimePeriod } from '../TimePeriodPicker'
 import { DataKey } from 'recharts/types/util/types'
+import { TimePeriod } from '../../utils/useTimePeriod'
+import { TaloError } from '../ErrorMessage'
+import { LabelledTimePeriod } from '../TimePeriodPicker'
 import { ChartCard } from './ChartCard'
+import ChartTick from './ChartTick'
 import { useYAxis } from './useYAxis'
 
 export type BarChartCardBar<T> = {
@@ -37,7 +37,7 @@ export function BarChartCard<T>({
   timePeriod,
   onTimePeriodChange,
   height = 300,
-  tooltip
+  tooltip,
 }: BarChartCardProps<T>) {
   const { yAxisProps } = useYAxis({
     data,
@@ -49,9 +49,9 @@ export function BarChartCard<T>({
           }
           const value = get(item, String(bar.dataKey))
           return typeof value === 'number' ? value : 0
-        })
+        }),
       )
-    }
+    },
   })
 
   return (
@@ -70,28 +70,20 @@ export function BarChartCard<T>({
         <XAxis
           dataKey='date'
           type='category'
-          tick={(
+          tick={
             <ChartTick
               transform={(x, y) => `translate(${x},${y}) rotate(-30)`}
               formatter={(tick) => format(new Date(tick), 'd MMM')}
             />
-          )}
+          }
         />
 
         <YAxis {...yAxisProps} />
 
-        <Tooltip
-          content={tooltip}
-          cursor={{ fill: '#444', opacity: 0.4 }}
-        />
+        <Tooltip content={tooltip} cursor={{ fill: '#444', opacity: 0.4 }} />
 
         {bars.map((bar, idx) => (
-          <Bar
-            key={idx}
-            dataKey={bar.dataKey}
-            fill={bar.fill}
-            stackId={bar.stackId}
-          />
+          <Bar key={idx} dataKey={bar.dataKey} fill={bar.fill} stackId={bar.stackId} />
         ))}
       </BarChart>
     </ChartCard>

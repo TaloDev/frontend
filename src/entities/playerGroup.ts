@@ -6,18 +6,18 @@ export enum PlayerGroupRuleName {
   GT = 'GT',
   GTE = 'GTE',
   LT = 'LT',
-  LTE = 'LTE'
+  LTE = 'LTE',
 }
 
 export enum PlayerGroupRuleCastType {
   CHAR = 'CHAR',
   DOUBLE = 'DOUBLE',
-  DATETIME = 'DATETIME'
+  DATETIME = 'DATETIME',
 }
 
 export enum PlayerGroupRuleMode {
   AND = '$and',
-  OR = '$or'
+  OR = '$or',
 }
 
 export enum PlayerField {
@@ -25,7 +25,7 @@ export enum PlayerField {
   LAST_SEEN_AT = 'lastSeenAt',
   CREATED_AT = 'createdAt',
   STAT_VALUE = 'statValue',
-  LEADERBOARD_ENTRY_SCORE = 'leaderboardEntryScore'
+  LEADERBOARD_ENTRY_SCORE = 'leaderboardEntryScore',
 }
 
 export const availablePlayerGroupFieldSchema = z.object({
@@ -33,7 +33,7 @@ export const availablePlayerGroupFieldSchema = z.object({
   defaultCastType: z.nativeEnum(PlayerGroupRuleCastType),
   mapsTo: z.union([z.nativeEnum(PlayerField), z.string().startsWith('META_')]),
   namespaced: z.boolean(),
-  metaProp: z.string().optional() // client-side only
+  metaProp: z.string().optional(), // client-side only
 })
 
 export type AvailablePlayerGroupField = z.infer<typeof availablePlayerGroupFieldSchema>
@@ -44,7 +44,7 @@ export const playerGroupRuleSchema = z.object({
   field: z.string(),
   castType: z.nativeEnum(PlayerGroupRuleCastType),
   operands: z.array(z.string()),
-  namespaced: z.boolean()
+  namespaced: z.boolean(),
 })
 
 export type PlayerGroupRule = z.infer<typeof playerGroupRuleSchema>
@@ -57,7 +57,7 @@ export const playerGroupSchema = z.object({
   ruleMode: z.nativeEnum(PlayerGroupRuleMode),
   count: z.number(),
   membersVisible: z.boolean(),
-  updatedAt: z.string().datetime()
+  updatedAt: z.string().datetime(),
 })
 
 export type PlayerGroup = z.infer<typeof playerGroupSchema>
@@ -67,7 +67,7 @@ export const playerGroupRuleOptionSchema = z.object({
   castTypes: z.array(z.nativeEnum(PlayerGroupRuleCastType)),
   operandCount: z.number(),
   negate: z.boolean(),
-  negatable: z.boolean().optional()
+  negatable: z.boolean().optional(),
 })
 
 export type PlayerGroupRuleOption = z.infer<typeof playerGroupRuleOptionSchema>

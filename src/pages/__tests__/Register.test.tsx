@@ -1,9 +1,9 @@
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import MockAdapter from 'axios-mock-adapter'
 import api from '../../api/api'
-import { render, screen, waitFor } from '@testing-library/react'
-import KitchenSink from '../../utils/KitchenSink'
 import userState from '../../state/userState'
-import userEvent from '@testing-library/user-event'
+import KitchenSink from '../../utils/KitchenSink'
 import Register from '../Register'
 
 describe('<Register />', () => {
@@ -12,16 +12,15 @@ describe('<Register />', () => {
   it('should let users register', async () => {
     const user = {
       id: 1,
-      username: 'Talo'
+      username: 'Talo',
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const postMock = vi.fn((_) => [
       200,
       {
         accessToken: 'ey...',
-        user
-      }
+        user,
+      },
     ])
 
     const changeMock = vi.fn()
@@ -31,7 +30,7 @@ describe('<Register />', () => {
     render(
       <KitchenSink states={[{ node: userState, onChange: changeMock }]}>
         <Register />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Sign up')).toBeDisabled()
@@ -58,7 +57,7 @@ describe('<Register />', () => {
         username: 'Talo',
         email: 'hello@trytalo.com',
         password: 'p@ssw0rd',
-        captchaToken: ''
+        captchaToken: '',
       })
     })
 
@@ -71,7 +70,7 @@ describe('<Register />', () => {
     render(
       <KitchenSink>
         <Register />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Sign up')).toBeDisabled()
@@ -90,24 +89,23 @@ describe('<Register />', () => {
   it('should let users register with an invite code', async () => {
     const user = {
       id: 1,
-      username: 'Talo'
+      username: 'Talo',
     }
 
     const invite = {
       organisation: {
-        name: 'Sleepy Studios'
+        name: 'Sleepy Studios',
       },
       token: 'abc123',
-      email: 'dev@trytalo.com'
+      email: 'dev@trytalo.com',
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const postMock = vi.fn((_) => [
       200,
       {
         accessToken: 'ey...',
-        user
-      }
+        user,
+      },
     ])
 
     const changeMock = vi.fn()
@@ -120,7 +118,7 @@ describe('<Register />', () => {
         initialEntries={[{ pathname: '/', state: { invite } }]}
       >
         <Register />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Sign up')).toBeDisabled()
@@ -149,7 +147,7 @@ describe('<Register />', () => {
         email: 'dev@trytalo.com',
         password: 'p@ssw0rd',
         inviteToken: invite.token,
-        captchaToken: ''
+        captchaToken: '',
       })
     })
 
@@ -158,14 +156,13 @@ describe('<Register />', () => {
     })
   })
 
-
   it('should render registration errors', async () => {
     axiosMock.onPost('http://talo.api/public/users/register').networkErrorOnce()
 
     render(
       <KitchenSink>
         <Register />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Sign up')).toBeDisabled()
@@ -184,7 +181,7 @@ describe('<Register />', () => {
       expect(screen.getByText('Sign up')).toBeEnabled()
     })
 
-    click(screen.getByText('Sign up'))
+    await click(screen.getByText('Sign up'))
 
     expect(await screen.findByText('Network Error')).toBeInTheDocument()
   })
@@ -198,7 +195,7 @@ describe('<Register />', () => {
     render(
       <KitchenSink>
         <Register />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.queryByText('Indie Plan')).not.toBeInTheDocument()
@@ -213,7 +210,7 @@ describe('<Register />', () => {
     render(
       <KitchenSink>
         <Register />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Team Plan')).toBeInTheDocument()
@@ -229,7 +226,7 @@ describe('<Register />', () => {
     render(
       <KitchenSink>
         <Register />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Enterprise Plans')).toBeInTheDocument()

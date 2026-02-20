@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { playerAliasSchema } from './playerAlias'
 import { gameFeedbackCategorySchema } from './gameFeedbackCategory'
+import { playerAliasSchema } from './playerAlias'
 import { propSchema } from './prop'
 
 export const gameFeedbackSchema = z.object({
@@ -11,7 +11,7 @@ export const gameFeedbackSchema = z.object({
   playerAlias: playerAliasSchema.nullable(),
   devBuild: z.boolean(),
   props: z.array(propSchema),
-  createdAt: z.string().datetime()
+  createdAt: z.string().datetime(),
 })
 
 export type GameFeedback = z.infer<typeof gameFeedbackSchema>

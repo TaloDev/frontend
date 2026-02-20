@@ -3,7 +3,8 @@ import { GameStat, gameStatSchema } from '../entities/gameStat'
 import api from './api'
 import makeValidatedRequest from './makeValidatedRequest'
 
-type Data = Pick<GameStat,
+type Data = Pick<
+  GameStat,
   | 'internalName'
   | 'name'
   | 'global'
@@ -11,13 +12,15 @@ type Data = Pick<GameStat,
   | 'maxChange'
   | 'minValue'
   | 'maxValue'
-  | 'minTimeBetweenUpdates'>
+  | 'minTimeBetweenUpdates'
+>
 
 const updateStat = makeValidatedRequest(
-  (gameId: number, statId: number, data: Data) => api.put(`/games/${gameId}/game-stats/${statId}`, data),
+  (gameId: number, statId: number, data: Data) =>
+    api.put(`/games/${gameId}/game-stats/${statId}`, data),
   z.object({
-    stat: gameStatSchema
-  })
+    stat: gameStatSchema,
+  }),
 )
 
 export default updateStat

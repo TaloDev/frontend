@@ -1,31 +1,33 @@
-import api from '../../api/api'
-import MockAdapter from 'axios-mock-adapter'
 import { render, screen } from '@testing-library/react'
-import Activity from '../Activity'
-import activeGameState from '../../state/activeGameState'
+import MockAdapter from 'axios-mock-adapter'
 import { format } from 'date-fns'
+import api from '../../api/api'
+import { UserType } from '../../entities/user'
+import activeGameState from '../../state/activeGameState'
 import userState from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
-import { UserType } from '../../entities/user'
+import Activity from '../Activity'
 
 describe('<Activity />', () => {
   const axiosMock = new MockAdapter(api)
 
   it('should handle having no activities', async () => {
-    axiosMock.onGet(/games\/1\/game-activities/).replyOnce(200, { activities: [], count: 0, itemsPerPage: 25, isLastPage: true })
+    axiosMock
+      .onGet(/games\/1\/game-activities/)
+      .replyOnce(200, { activities: [], count: 0, itemsPerPage: 25, isLastPage: true })
 
     render(
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: { id: 1, name: 'Superstatic' } }
+          { node: activeGameState, initialValue: { id: 1, name: 'Superstatic' } },
         ]}
       >
         <Activity />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
-    expect(await screen.findByText('Superstatic doesn\'t have any activity yet')).toBeInTheDocument()
+    expect(await screen.findByText("Superstatic doesn't have any activity yet")).toBeInTheDocument()
   })
 
   it('should render activities for a single day', async () => {
@@ -34,32 +36,34 @@ describe('<Activity />', () => {
         description: 'Jeff did something',
         createdAt: '2022-01-01 19:53:00',
         extra: {
-          'Player': '1234-567-89',
+          Player: '1234-567-89',
           'Other prop': 'another prop',
-          'And another prop': 'something'
-        }
+          'And another prop': 'something',
+        },
       },
       {
         description: 'Jeff did something else',
-        createdAt: '2022-01-01 19:58:00'
+        createdAt: '2022-01-01 19:58:00',
       },
       {
         description: 'Jeff did a final thing',
-        createdAt: '2022-01-01 19:59:36'
-      }
+        createdAt: '2022-01-01 19:59:36',
+      },
     ]
 
-    axiosMock.onGet(/games\/2\/game-activities/).replyOnce(200, { activities, count: 3, itemsPerPage: 25, isLastPage: true })
+    axiosMock
+      .onGet(/games\/2\/game-activities/)
+      .replyOnce(200, { activities, count: 3, itemsPerPage: 25, isLastPage: true })
 
     render(
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: { id: 2, name: 'Superstatic' } }
+          { node: activeGameState, initialValue: { id: 2, name: 'Superstatic' } },
         ]}
       >
         <Activity />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText('01 Jan 2022')).toBeInTheDocument()
@@ -77,29 +81,31 @@ describe('<Activity />', () => {
     const activities = [
       {
         description: 'Jeff did something',
-        createdAt: '2022-01-01 19:53:00'
+        createdAt: '2022-01-01 19:53:00',
       },
       {
         description: 'Jeff did something else',
-        createdAt: '2022-01-02 19:58:00'
+        createdAt: '2022-01-02 19:58:00',
       },
       {
         description: 'Jeff did a final thing',
-        createdAt: '2022-01-03 19:59:36'
-      }
+        createdAt: '2022-01-03 19:59:36',
+      },
     ]
 
-    axiosMock.onGet(/games\/3\/game-activities/).replyOnce(200, { activities, count: 3, itemsPerPage: 25, isLastPage: true })
+    axiosMock
+      .onGet(/games\/3\/game-activities/)
+      .replyOnce(200, { activities, count: 3, itemsPerPage: 25, isLastPage: true })
 
     render(
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: { id: 3, name: 'Superstatic' } }
+          { node: activeGameState, initialValue: { id: 3, name: 'Superstatic' } },
         ]}
       >
         <Activity />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText('01 Jan 2022')).toBeInTheDocument()
@@ -115,29 +121,31 @@ describe('<Activity />', () => {
     const activities = [
       {
         description: 'Jeff did something',
-        createdAt: '2022-01-01 19:53:00'
+        createdAt: '2022-01-01 19:53:00',
       },
       {
         description: 'Jeff did something else',
-        createdAt: '2022-01-04 19:58:00'
+        createdAt: '2022-01-04 19:58:00',
       },
       {
         description: 'Jeff did a final thing',
-        createdAt: '2022-01-06 19:59:36'
-      }
+        createdAt: '2022-01-06 19:59:36',
+      },
     ]
 
-    axiosMock.onGet(/games\/4\/game-activities/).replyOnce(200, { activities, count: 3, itemsPerPage: 25, isLastPage: true })
+    axiosMock
+      .onGet(/games\/4\/game-activities/)
+      .replyOnce(200, { activities, count: 3, itemsPerPage: 25, isLastPage: true })
 
     render(
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: { id: 4, name: 'Superstatic' } }
+          { node: activeGameState, initialValue: { id: 4, name: 'Superstatic' } },
         ]}
       >
         <Activity />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText('01 Jan 2022')).toBeInTheDocument()
@@ -161,11 +169,11 @@ describe('<Activity />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: { id: 5, name: 'Superstatic' } }
+          { node: activeGameState, initialValue: { id: 5, name: 'Superstatic' } },
         ]}
       >
         <Activity />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByRole('alert')).toBeInTheDocument()

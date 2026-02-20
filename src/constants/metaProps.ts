@@ -29,7 +29,7 @@ export const metaPropKeyMap = {
   [META_STEAMWORKS_OWNS_APP_PERMANENTLY]: 'STEAMWORKS OWNS APP PERMANENTLY',
   [META_STEAMWORKS_OWNS_APP_FROM_DATE]: 'STEAMWORKS OWNS APP FROM DATE',
   [META_STEAMWORKS_AVATAR_HASH]: 'STEAMWORKS AVATAR HASH',
-  [META_STEAMWORKS_PERSONA_NAME]: 'STEAM USERNAME'
+  [META_STEAMWORKS_PERSONA_NAME]: 'STEAM USERNAME',
 }
 
 export function isMetaProp(prop: Prop) {
@@ -42,41 +42,41 @@ export const metaGroupFields: AvailablePlayerGroupField[] = [
     defaultCastType: PlayerGroupRuleCastType.CHAR,
     mapsTo: 'props',
     namespaced: true,
-    metaProp: META_DEV_BUILD
+    metaProp: META_DEV_BUILD,
   },
   {
     fieldDisplayName: 'operating system',
     defaultCastType: PlayerGroupRuleCastType.CHAR,
     mapsTo: 'props',
     namespaced: true,
-    metaProp: META_OS
+    metaProp: META_OS,
   },
   {
     fieldDisplayName: 'game version',
     defaultCastType: PlayerGroupRuleCastType.DOUBLE,
     mapsTo: 'props',
     namespaced: true,
-    metaProp: META_GAME_VERSION
+    metaProp: META_GAME_VERSION,
   },
   {
     fieldDisplayName: 'window mode',
     defaultCastType: PlayerGroupRuleCastType.DOUBLE,
     mapsTo: 'props',
     namespaced: true,
-    metaProp: META_WINDOW_MODE
+    metaProp: META_WINDOW_MODE,
   },
   {
     fieldDisplayName: 'screen width',
     defaultCastType: PlayerGroupRuleCastType.DOUBLE,
     mapsTo: 'props',
     namespaced: true,
-    metaProp: META_SCREEN_WIDTH
+    metaProp: META_SCREEN_WIDTH,
   },
   {
     fieldDisplayName: 'screen height',
     defaultCastType: PlayerGroupRuleCastType.DOUBLE,
     mapsTo: 'props',
     namespaced: true,
-    metaProp: META_SCREEN_HEIGHT
-  }
+    metaProp: META_SCREEN_HEIGHT,
+  },
 ]

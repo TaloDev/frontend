@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react'
-import TextInput from '../components/TextInput'
-import Button from '../components/Button'
-import Link from '../components/Link'
-import { useSetRecoilState } from 'recoil'
-import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import login from '../api/login'
-import buildError from '../utils/buildError'
-import routes from '../constants/routes'
-import { unauthedContainerStyle } from '../styles/theme'
-import AuthService from '../services/AuthService'
-import AlertBanner from '../components/AlertBanner'
-import { useNavigate, useLocation } from 'react-router-dom'
-import * as Sentry from '@sentry/react'
 import type { MouseEvent } from 'react'
-import userState from '../state/userState'
-import taloIcon from '../assets/talo-icon.svg'
-import TaloInfoCard from '../components/TaloInfoCard'
+import * as Sentry from '@sentry/react'
 import clsx from 'clsx'
+import { useEffect, useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useSetRecoilState } from 'recoil'
+import login from '../api/login'
+import taloIcon from '../assets/talo-icon.svg'
+import AlertBanner from '../components/AlertBanner'
+import Button from '../components/Button'
+import ErrorMessage, { TaloError } from '../components/ErrorMessage'
+import Link from '../components/Link'
+import TaloInfoCard from '../components/TaloInfoCard'
+import TextInput from '../components/TextInput'
+import routes from '../constants/routes'
+import AuthService from '../services/AuthService'
+import userState from '../state/userState'
+import { unauthedContainerStyle } from '../styles/theme'
+import buildError from '../utils/buildError'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -47,7 +47,7 @@ export default function Login() {
 
       if ('twoFactorAuthRequired' in res) {
         navigate(routes.verify2FA, {
-          state: { userId: res.userId }
+          state: { userId: res.userId },
         })
       } else {
         AuthService.setToken(res.accessToken)
@@ -62,23 +62,21 @@ export default function Login() {
   }
 
   return (
-    <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={clsx('text-white space-y-8', unauthedContainerStyle)}>
+    <div className='flex h-full flex-col p-8 md:items-center md:justify-center'>
+      <form className={clsx('space-y-8 text-white', unauthedContainerStyle)}>
         <div className='space-y-4'>
-          <h1 className='text-4xl font-mono font-bold flex items-center space-x-4'>
-            <img src={taloIcon} alt='Talo' className='w-[32px] h-[32px]' />
+          <h1 className='flex items-center space-x-4 font-mono text-4xl font-bold'>
+            <img src={taloIcon} alt='Talo' className='h-[32px] w-[32px]' />
             <span>Talo Game Services</span>
           </h1>
 
           <TaloInfoCard />
 
-          {wasLoggedOut &&
-            <AlertBanner text='You were logged out' />
-          }
+          {wasLoggedOut && <AlertBanner text='You were logged out' />}
 
-          {location.state?.new2FASessionRequired &&
+          {location.state?.new2FASessionRequired && (
             <AlertBanner text='Your 2FA session has expired, please log in again' />
-          }
+          )}
         </div>
 
         <TextInput
@@ -100,22 +98,22 @@ export default function Login() {
             value={password}
           />
 
-          <Link to={routes.forgotPassword} className='inline-block mt-4'>Forgot your password?</Link>
+          <Link to={routes.forgotPassword} className='mt-4 inline-block'>
+            Forgot your password?
+          </Link>
         </div>
 
         {error && <ErrorMessage error={error} />}
 
-        <Button
-          disabled={!email || !password}
-          onClick={onLoginClick}
-          isLoading={isLoading}
-        >
+        <Button disabled={!email || !password} onClick={onLoginClick} isLoading={isLoading}>
           Login
         </Button>
       </form>
 
       <div className={unauthedContainerStyle}>
-        <p className='mt-4 text-white'>Need an account? <Link to={routes.register}>Register here</Link></p>
+        <p className='mt-4 text-white'>
+          Need an account? <Link to={routes.register}>Register here</Link>
+        </p>
       </div>
     </div>
   )

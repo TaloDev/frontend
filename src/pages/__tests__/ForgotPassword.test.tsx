@@ -1,9 +1,9 @@
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import MockAdapter from 'axios-mock-adapter'
 import api from '../../api/api'
-import { render, screen, waitFor } from '@testing-library/react'
 import KitchenSink from '../../utils/KitchenSink'
 import ForgotPassword from '../ForgotPassword'
-import userEvent from '@testing-library/user-event'
 
 describe('<ForgotPassword />', () => {
   const axiosMock = new MockAdapter(api)
@@ -14,19 +14,23 @@ describe('<ForgotPassword />', () => {
     render(
       <KitchenSink>
         <ForgotPassword />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Confirm')).toBeDisabled()
 
-    userEvent.type(screen.getByLabelText('Email'), 'dev@trytalo.com')
+    await userEvent.type(screen.getByLabelText('Email'), 'dev@trytalo.com')
 
     await waitFor(() => {
       expect(screen.getByText('Confirm')).toBeEnabled()
     })
-    userEvent.click(screen.getByText('Confirm'))
+    await userEvent.click(screen.getByText('Confirm'))
 
-    expect(await screen.findByText('If an account exists for this email, you\'ll receive an email with instructions on how to reset your password')).toBeInTheDocument()
+    expect(
+      await screen.findByText(
+        "If an account exists for this email, you'll receive an email with instructions on how to reset your password",
+      ),
+    ).toBeInTheDocument()
 
     expect(screen.getByText('Confirm')).toBeDisabled()
     expect(screen.getByDisplayValue('dev@trytalo.com')).toBeDisabled()
@@ -38,17 +42,17 @@ describe('<ForgotPassword />', () => {
     render(
       <KitchenSink>
         <ForgotPassword />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Confirm')).toBeDisabled()
 
-    userEvent.type(screen.getByLabelText('Email'), 'dev@trytalo.com')
+    await userEvent.type(screen.getByLabelText('Email'), 'dev@trytalo.com')
 
     await waitFor(() => {
       expect(screen.getByText('Confirm')).toBeEnabled()
     })
-    userEvent.click(screen.getByText('Confirm'))
+    await userEvent.click(screen.getByText('Confirm'))
 
     expect(await screen.findByText('Network Error')).toBeInTheDocument()
 

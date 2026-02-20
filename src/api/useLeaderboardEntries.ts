@@ -1,10 +1,10 @@
 import useSWR from 'swr'
-import buildError from '../utils/buildError'
-import { Game } from '../entities/game'
-import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
+import { Game } from '../entities/game'
 import { leaderboardEntrySchema } from '../entities/leaderboardEntry'
+import buildError from '../utils/buildError'
 import { convertDateToUTC } from '../utils/convertDateToUTC'
+import makeValidatedGetRequest from './makeValidatedGetRequest'
 
 export default function useLeaderboardEntries({
   activeGame,
@@ -12,7 +12,7 @@ export default function useLeaderboardEntries({
   page,
   withDeleted = false,
   startDate,
-  endDate
+  endDate,
 }: {
   activeGame: Game
   leaderboardId: number | undefined
@@ -28,20 +28,29 @@ export default function useLeaderboardEntries({
     params.endDate = convertDateToUTC(endDate)
     const qs = new URLSearchParams(params).toString()
 
-    const res = await makeValidatedGetRequest(`${url}?${qs}`, z.object({
-      entries: z.array(leaderboardEntrySchema),
-      count: z.number(),
-      itemsPerPage: z.number()
-    }))
+    const res = await makeValidatedGetRequest(
+      `${url}?${qs}`,
+      z.object({
+        entries: z.array(leaderboardEntrySchema),
+        count: z.number(),
+        itemsPerPage: z.number(),
+      }),
+    )
 
     return res
   }
 
   const { data, error, mutate } = useSWR(
     leaderboardId
-      ? [`/games/${activeGame.id}/leaderboards/${leaderboardId}/entries`, page, withDeleted, startDate, endDate]
+      ? [
+          `/games/${activeGame.id}/leaderboards/${leaderboardId}/entries`,
+          page,
+          withDeleted,
+          startDate,
+          endDate,
+        ]
       : null,
-    fetcher
+    fetcher,
   )
 
   return {
@@ -50,6 +59,6 @@ export default function useLeaderboardEntries({
     itemsPerPage: data?.itemsPerPage,
     loading: !data && !error,
     error: error && buildError(error),
-    mutate
+    mutate,
   }
 }

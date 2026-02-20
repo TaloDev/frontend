@@ -6,8 +6,8 @@ describe('Verify2FA', () => {
       statusCode: 200,
       body: {
         twoFactorAuthRequired: true,
-        userId: 1
-      }
+        userId: 1,
+      },
     })
 
     cy.intercept('POST', 'http://talo.api/public/users/2fa', { fixture: 'responses/auth/dev' })
@@ -29,15 +29,15 @@ describe('Verify2FA', () => {
       statusCode: 200,
       body: {
         twoFactorAuthRequired: true,
-        userId: 1
-      }
+        userId: 1,
+      },
     })
 
     cy.intercept('POST', 'http://talo.api/public/users/2fa', {
       statusCode: 403,
       body: {
-        message: 'Invalid code'
-      }
+        message: 'Invalid code',
+      },
     })
 
     cy.visitAsGuest()

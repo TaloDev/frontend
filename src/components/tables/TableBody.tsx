@@ -1,5 +1,5 @@
-import clsx from 'clsx'
 import type { ReactNode } from 'react'
+import clsx from 'clsx'
 
 type TableBodyProps<T> = {
   iterator: T[]
@@ -12,7 +12,7 @@ export default function TableBody<T>({
   iterator,
   children,
   startIdx = 0,
-  configureClassnames
+  configureClassnames,
 }: TableBodyProps<T>) {
   return (
     <tbody>
@@ -22,7 +22,7 @@ export default function TableBody<T>({
           className={clsx({
             'bg-indigo-600': (startIdx + idx) % 2 !== 0,
             'bg-indigo-500': (startIdx + idx) % 2 === 0,
-            ...configureClassnames?.(iteraee, startIdx + idx)
+            ...configureClassnames?.(iteraee, startIdx + idx),
           })}
         >
           {children(iteraee, idx)}

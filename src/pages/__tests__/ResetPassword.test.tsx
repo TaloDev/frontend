@@ -1,10 +1,10 @@
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import MockAdapter from 'axios-mock-adapter'
 import api from '../../api/api'
-import { render, screen, waitFor } from '@testing-library/react'
+import routes from '../../constants/routes'
 import KitchenSink from '../../utils/KitchenSink'
 import ResetPassword from '../ResetPassword'
-import userEvent from '@testing-library/user-event'
-import routes from '../../constants/routes'
 
 describe('<ResetPassword />', () => {
   const axiosMock = new MockAdapter(api)
@@ -26,7 +26,7 @@ describe('<ResetPassword />', () => {
         initialEntries={[routes.forgotPassword]}
       >
         <ResetPassword />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Confirm')).toBeDisabled()
@@ -65,7 +65,7 @@ describe('<ResetPassword />', () => {
     render(
       <KitchenSink>
         <ResetPassword />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Confirm')).toBeDisabled()
@@ -88,12 +88,14 @@ describe('<ResetPassword />', () => {
       return null
     })
 
-    axiosMock.onPost('/public/users/reset_password').replyOnce(400, { message: 'Expired', expired: true })
+    axiosMock
+      .onPost('/public/users/reset_password')
+      .replyOnce(400, { message: 'Expired', expired: true })
 
     render(
       <KitchenSink>
         <ResetPassword />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Confirm')).toBeDisabled()
@@ -122,7 +124,7 @@ describe('<ResetPassword />', () => {
         initialEntries={[routes.forgotPassword]}
       >
         <ResetPassword />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await waitFor(() => {

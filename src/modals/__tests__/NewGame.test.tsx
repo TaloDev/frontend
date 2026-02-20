@@ -1,10 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import NewGame from '../NewGame'
-import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
+import api from '../../api/api'
 import userState from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
+import NewGame from '../NewGame'
 
 describe('<NewGame />', () => {
   const axiosMock = new MockAdapter(api)
@@ -16,9 +16,17 @@ describe('<NewGame />', () => {
     const userChangeMock = vi.fn()
 
     render(
-      <KitchenSink states={[{ node: userState, onChange: userChangeMock, initialValue: { organisation: { games: [] } } }]}>
+      <KitchenSink
+        states={[
+          {
+            node: userState,
+            onChange: userChangeMock,
+            initialValue: { organisation: { games: [] } },
+          },
+        ]}
+      >
         <NewGame modalState={[true, closeMock]} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Name'), 'Shattered')
@@ -31,8 +39,8 @@ describe('<NewGame />', () => {
 
     expect(userChangeMock).toHaveBeenCalledWith({
       organisation: {
-        games: [{ id: 1, name: 'Shattered' }]
-      }
+        games: [{ id: 1, name: 'Shattered' }],
+      },
     })
   })
 
@@ -43,9 +51,17 @@ describe('<NewGame />', () => {
     const userChangeMock = vi.fn()
 
     render(
-      <KitchenSink states={[{ node: userState, onChange: userChangeMock, initialValue: { organisation: { games: [] } } }]}>
+      <KitchenSink
+        states={[
+          {
+            node: userState,
+            onChange: userChangeMock,
+            initialValue: { organisation: { games: [] } },
+          },
+        ]}
+      >
         <NewGame modalState={[true, closeMock]} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Name'), 'Shattered')
@@ -62,9 +78,17 @@ describe('<NewGame />', () => {
     const userChangeMock = vi.fn()
 
     render(
-      <KitchenSink states={[{ node: userState, onChange: userChangeMock, initialValue: { organisation: { games: [] } } }]}>
+      <KitchenSink
+        states={[
+          {
+            node: userState,
+            onChange: userChangeMock,
+            initialValue: { organisation: { games: [] } },
+          },
+        ]}
+      >
         <NewGame modalState={[true, closeMock]} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Cancel'))

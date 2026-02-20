@@ -17,7 +17,7 @@ const AuthService = (() => {
   return {
     getToken,
     setToken,
-    reload
+    reload,
   }
 })()
 

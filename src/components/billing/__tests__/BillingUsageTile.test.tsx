@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
-import BillingUsageTile from '../BillingUsageTile'
-import KitchenSink from '../../../utils/KitchenSink'
 import buildError from '../../../utils/buildError'
+import KitchenSink from '../../../utils/KitchenSink'
+import BillingUsageTile from '../BillingUsageTile'
 
 describe('<BillingUsageTile />', () => {
   it('should render player usages', () => {
@@ -10,11 +10,11 @@ describe('<BillingUsageTile />', () => {
         <BillingUsageTile
           usage={{
             limit: 5,
-            used: 3
+            used: 3,
           }}
           usageError={null}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Players')).toBeInTheDocument()
@@ -24,8 +24,11 @@ describe('<BillingUsageTile />', () => {
   it('should handle usage errors', async () => {
     render(
       <KitchenSink>
-        <BillingUsageTile usage={{ limit: 0, used: 0 }} usageError={buildError(new Error('Network Error'))} />
-      </KitchenSink>
+        <BillingUsageTile
+          usage={{ limit: 0, used: 0 }}
+          usageError={buildError(new Error('Network Error'))}
+        />
+      </KitchenSink>,
     )
 
     expect(await screen.findByText('Network Error')).toHaveAttribute('role', 'alert')

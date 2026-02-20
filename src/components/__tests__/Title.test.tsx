@@ -4,13 +4,13 @@ import KitchenSink from '../../utils/KitchenSink'
 import Title from '../Title'
 
 describe('<Title />', () => {
-  it('should go back', async  () => {
+  it('should go back', async () => {
     const setLocationMock = vi.fn()
 
     render(
       <KitchenSink initialEntries={['/players', '/']} setLocation={setLocationMock}>
         <Title showBackButton>Player Props</Title>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Player Props')).toBeInTheDocument()
@@ -20,7 +20,7 @@ describe('<Title />', () => {
     await waitFor(() => {
       expect(setLocationMock).toHaveBeenCalledWith({
         pathname: '/players',
-        state: null
+        state: null,
       })
     })
   })

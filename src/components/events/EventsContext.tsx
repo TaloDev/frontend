@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext } from 'react'
 import useLocalStorage, { SetLocalStorageValue } from '../../utils/useLocalStorage'
-import useEventsTimePeriod from './useEventsTimePeriod'
 import { TimePeriod } from '../../utils/useTimePeriod'
+import useEventsTimePeriod from './useEventsTimePeriod'
 
 type EventsContextType = {
   localStorageKey: string
@@ -19,7 +19,13 @@ type EventsContextType = {
 
 const EventsContext = createContext<EventsContextType | undefined>(undefined)
 
-export function EventsProvider({ children, localStorageKey }: { children: ReactNode, localStorageKey: string }) {
+export function EventsProvider({
+  children,
+  localStorageKey,
+}: {
+  children: ReactNode
+  localStorageKey: string
+}) {
   const {
     timePeriod,
     setTimePeriod,
@@ -28,25 +34,30 @@ export function EventsProvider({ children, localStorageKey }: { children: ReactN
     selectedStartDate,
     selectedEndDate,
     onStartDateChange,
-    onEndDateChange
+    onEndDateChange,
   } = useEventsTimePeriod()
 
-  const [selectedEventNames, setSelectedEventNames] = useLocalStorage<string[]>(`${localStorageKey}SelectedEvents`, [])
+  const [selectedEventNames, setSelectedEventNames] = useLocalStorage<string[]>(
+    `${localStorageKey}SelectedEvents`,
+    [],
+  )
 
   return (
-    <EventsContext.Provider value={{
-      localStorageKey,
-      selectedEventNames,
-      setSelectedEventNames,
-      timePeriod,
-      setTimePeriod,
-      selectedStartDate,
-      selectedEndDate,
-      debouncedStartDate,
-      debouncedEndDate,
-      onStartDateChange,
-      onEndDateChange
-    }}>
+    <EventsContext.Provider
+      value={{
+        localStorageKey,
+        selectedEventNames,
+        setSelectedEventNames,
+        timePeriod,
+        setTimePeriod,
+        selectedStartDate,
+        selectedEndDate,
+        debouncedStartDate,
+        debouncedEndDate,
+        onStartDateChange,
+        onEndDateChange,
+      }}
+    >
       {children}
     </EventsContext.Provider>
   )

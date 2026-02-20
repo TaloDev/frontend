@@ -11,7 +11,7 @@ describe('AuthService', () => {
 
     const { reload } = window.location
     Object.defineProperty(window, 'location', {
-      value: { reload: reloadMock }
+      value: { reload: reloadMock },
     })
 
     AuthService.reload()

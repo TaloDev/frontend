@@ -1,22 +1,22 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { IconCheck } from '@tabler/icons-react'
+import clsx from 'clsx'
 import { useState } from 'react'
-import TextInput from '../components/TextInput'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { z } from 'zod'
+import requestNewPassword from '../api/requestNewPassword'
+import AlertBanner from '../components/AlertBanner'
 import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import buildError from '../utils/buildError'
+import Link from '../components/Link'
+import TextInput from '../components/TextInput'
+import Title from '../components/Title'
 import routes from '../constants/routes'
 import { unauthedContainerStyle } from '../styles/theme'
-import Title from '../components/Title'
-import Link from '../components/Link'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import requestNewPassword from '../api/requestNewPassword'
-import { IconCheck } from '@tabler/icons-react'
-import AlertBanner from '../components/AlertBanner'
-import { z } from 'zod'
-import clsx from 'clsx'
+import buildError from '../utils/buildError'
 
 const validationSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email address' })
+  email: z.string().email({ message: 'Please enter a valid email address' }),
 })
 
 type FormValues = z.infer<typeof validationSchema>
@@ -26,10 +26,14 @@ export default function ForgotPassword() {
   const [isLoading, setLoading] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
 
-  const { register, handleSubmit, formState: { isValid, errors } } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid, errors },
+  } = useForm<FormValues>({
     resolver: zodResolver(validationSchema),
     mode: 'onTouched',
-    defaultValues: { email: '' }
+    defaultValues: { email: '' },
   })
 
   const onConfirmClick: SubmitHandler<FormValues> = async ({ email }) => {
@@ -47,8 +51,11 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={clsx('text-white space-y-8', unauthedContainerStyle)} onSubmit={handleSubmit(onConfirmClick)}>
+    <div className='flex h-full flex-col p-8 md:items-center md:justify-center'>
+      <form
+        className={clsx('space-y-8 text-white', unauthedContainerStyle)}
+        onSubmit={handleSubmit(onConfirmClick)}
+      >
         <Title>Forgot password</Title>
 
         <TextInput
@@ -63,20 +70,25 @@ export default function ForgotPassword() {
 
         {apiError && <ErrorMessage error={apiError} />}
 
-        <Button
-          disabled={!isValid || emailSent}
-          isLoading={isLoading}
-        >
+        <Button disabled={!isValid || emailSent} isLoading={isLoading}>
           Confirm
         </Button>
 
-        {emailSent &&
-          <AlertBanner className='bg-green-600' icon={IconCheck} text={'If an account exists for this email, you\'ll receive an email with instructions on how to reset your password'} />
-        }
+        {emailSent && (
+          <AlertBanner
+            className='bg-green-600'
+            icon={IconCheck}
+            text={
+              "If an account exists for this email, you'll receive an email with instructions on how to reset your password"
+            }
+          />
+        )}
       </form>
 
       <div className={unauthedContainerStyle}>
-        <p className='mt-4 text-white'><Link to={routes.login}>Back to Login</Link></p>
+        <p className='mt-4 text-white'>
+          <Link to={routes.login}>Back to Login</Link>
+        </p>
       </div>
     </div>
   )

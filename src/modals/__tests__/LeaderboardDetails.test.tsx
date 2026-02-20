@@ -1,37 +1,41 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import LeaderboardDetails from '../LeaderboardDetails'
-import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
+import leaderboardMock from '../../__mocks__/leaderboardMock'
+import api from '../../api/api'
+import { LeaderboardSortMode, LeaderboardRefreshInterval } from '../../entities/leaderboard'
+import { UserType } from '../../entities/user'
 import activeGameState from '../../state/activeGameState'
 import userState from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
-import { UserType } from '../../entities/user'
-import { LeaderboardSortMode, LeaderboardRefreshInterval } from '../../entities/leaderboard'
-import leaderboardMock from '../../__mocks__/leaderboardMock'
+import LeaderboardDetails from '../LeaderboardDetails'
 
 describe('<LeaderboardDetails />', () => {
   const axiosMock = new MockAdapter(api)
   const activeGameValue = { id: 1, name: 'Shattered' }
 
   it('should create a leaderboard', async () => {
-    axiosMock.onPost('http://talo.api/games/1/leaderboards').replyOnce(200, { leaderboard: leaderboardMock({ id: 4 }) })
+    axiosMock
+      .onPost('http://talo.api/games/1/leaderboards')
+      .replyOnce(200, { leaderboard: leaderboardMock({ id: 4 }) })
 
     const closeMock = vi.fn()
     const mutateMock = vi.fn()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <LeaderboardDetails
           modalState={[true, closeMock]}
           mutate={mutateMock}
           editingLeaderboard={null}
           onResetClick={vi.fn()}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Internal name'), 'score')
@@ -49,11 +53,7 @@ describe('<LeaderboardDetails />', () => {
 
     expect(mutateMock).toHaveBeenCalled()
 
-    const leaderboards = [
-      { id: 1 },
-      { id: 2 },
-      { id: 3 }
-    ]
+    const leaderboards = [{ id: 1 }, { id: 2 }, { id: 3 }]
 
     const mutator = mutateMock.mock.calls[0][0]
     const result = mutator({ leaderboards })
@@ -67,17 +67,19 @@ describe('<LeaderboardDetails />', () => {
     const closeMock = vi.fn()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <LeaderboardDetails
           modalState={[true, closeMock]}
           mutate={vi.fn()}
           editingLeaderboard={null}
           onResetClick={vi.fn()}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Internal name'), 'score')
@@ -94,17 +96,19 @@ describe('<LeaderboardDetails />', () => {
     const closeMock = vi.fn()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <LeaderboardDetails
           modalState={[true, closeMock]}
           mutate={vi.fn()}
           editingLeaderboard={null}
           onResetClick={vi.fn()}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Close'))
@@ -114,10 +118,12 @@ describe('<LeaderboardDetails />', () => {
 
   it('should prefill details if a leaderboard is being edited', () => {
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <LeaderboardDetails
           modalState={[true, vi.fn()]}
           mutate={vi.fn()}
@@ -125,11 +131,11 @@ describe('<LeaderboardDetails />', () => {
             sortMode: LeaderboardSortMode.ASC,
             unique: true,
             uniqueByProps: true,
-            refreshInterval: LeaderboardRefreshInterval.WEEKLY
+            refreshInterval: LeaderboardRefreshInterval.WEEKLY,
           })}
           onResetClick={vi.fn()}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByLabelText('Internal name')).toHaveValue('score')
@@ -152,22 +158,25 @@ describe('<LeaderboardDetails />', () => {
 
     axiosMock.onPut('http://talo.api/games/1/leaderboards/1').replyOnce(200, {
       leaderboard: {
-        ...initialLeaderboard, unique: true
-      }
+        ...initialLeaderboard,
+        unique: true,
+      },
     })
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <LeaderboardDetails
           modalState={[true, closeMock]}
           mutate={mutateMock}
           editingLeaderboard={initialLeaderboard}
           onResetClick={vi.fn()}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Yes'))
@@ -181,7 +190,7 @@ describe('<LeaderboardDetails />', () => {
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ leaderboards: [initialLeaderboard, { id: 2 }] })).toStrictEqual({
-      leaderboards: [{ ...initialLeaderboard, unique: true }, { id: 2 }]
+      leaderboards: [{ ...initialLeaderboard, unique: true }, { id: 2 }],
     })
   })
 
@@ -189,17 +198,19 @@ describe('<LeaderboardDetails />', () => {
     axiosMock.onPut('http://talo.api/games/1/leaderboards/1').networkErrorOnce()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <LeaderboardDetails
           modalState={[true, vi.fn()]}
           mutate={vi.fn()}
           editingLeaderboard={leaderboardMock()}
           onResetClick={vi.fn()}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Update'))
@@ -219,17 +230,19 @@ describe('<LeaderboardDetails />', () => {
     window.confirm = vi.fn(() => true)
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <LeaderboardDetails
           modalState={[true, closeMock]}
           mutate={mutateMock}
           editingLeaderboard={initialLeaderboard}
           onResetClick={vi.fn()}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Delete'))
@@ -242,7 +255,7 @@ describe('<LeaderboardDetails />', () => {
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ leaderboards: [initialLeaderboard, { id: 2 }] })).toStrictEqual({
-      leaderboards: [{ id: 2 }]
+      leaderboards: [{ id: 2 }],
     })
   })
 
@@ -250,17 +263,19 @@ describe('<LeaderboardDetails />', () => {
     const initialLeaderboard = leaderboardMock()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.DEV } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.DEV } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <LeaderboardDetails
           modalState={[true, vi.fn()]}
           mutate={vi.fn()}
           editingLeaderboard={initialLeaderboard}
           onResetClick={vi.fn()}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.queryByText('Delete')).not.toBeInTheDocument()
@@ -272,17 +287,19 @@ describe('<LeaderboardDetails />', () => {
     const closeMock = vi.fn()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <LeaderboardDetails
           modalState={[true, closeMock]}
           mutate={vi.fn()}
           editingLeaderboard={leaderboardMock()}
           onResetClick={vi.fn()}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Delete'))
@@ -293,23 +310,27 @@ describe('<LeaderboardDetails />', () => {
   })
 
   it('should create a leaderboard with daily refresh', async () => {
-    axiosMock.onPost('http://talo.api/games/1/leaderboards').replyOnce(200, { leaderboard: leaderboardMock({ id: 4 }) })
+    axiosMock
+      .onPost('http://talo.api/games/1/leaderboards')
+      .replyOnce(200, { leaderboard: leaderboardMock({ id: 4 }) })
 
     const closeMock = vi.fn()
     const mutateMock = vi.fn()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <LeaderboardDetails
           modalState={[true, closeMock]}
           mutate={mutateMock}
           editingLeaderboard={null}
           onResetClick={vi.fn()}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Internal name'), 'score')
@@ -329,59 +350,69 @@ describe('<LeaderboardDetails />', () => {
 
   it('should show uniqueByProps option when unique is true', () => {
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <LeaderboardDetails
           modalState={[true, vi.fn()]}
           mutate={vi.fn()}
           editingLeaderboard={leaderboardMock({ unique: true })}
           onResetClick={vi.fn()}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Unique by props?')).toBeInTheDocument()
-    expect(screen.getByText('Each unique combination of props creates a separate entry for the player')).toBeInTheDocument()
+    expect(
+      screen.getByText('Each unique combination of props creates a separate entry for the player'),
+    ).toBeInTheDocument()
   })
 
   it('should not show uniqueByProps option when unique is false', () => {
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <LeaderboardDetails
           modalState={[true, vi.fn()]}
           mutate={vi.fn()}
           editingLeaderboard={leaderboardMock({ unique: false })}
           onResetClick={vi.fn()}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.queryByText('Unique by props?')).not.toBeInTheDocument()
   })
 
   it('should create a leaderboard with uniqueByProps', async () => {
-    axiosMock.onPost('http://talo.api/games/1/leaderboards').replyOnce(200, { leaderboard: leaderboardMock({ id: 4 }) })
+    axiosMock
+      .onPost('http://talo.api/games/1/leaderboards')
+      .replyOnce(200, { leaderboard: leaderboardMock({ id: 4 }) })
 
     const closeMock = vi.fn()
     const mutateMock = vi.fn()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <LeaderboardDetails
           modalState={[true, closeMock]}
           mutate={mutateMock}
           editingLeaderboard={null}
           onResetClick={vi.fn()}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Internal name'), 'score')

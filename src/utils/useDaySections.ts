@@ -1,6 +1,6 @@
+import { differenceInDays, isSameDay, startOfDay, subDays } from 'date-fns'
 import { useMemo } from 'react'
 import useSortedItems from './useSortedItems'
-import { differenceInDays, isSameDay, startOfDay, subDays } from 'date-fns'
 
 export default function useDaySections<T extends { createdAt: string }>(items: T[]) {
   const sortedItems = useSortedItems(items, 'createdAt')
@@ -17,7 +17,7 @@ export default function useDaySections<T extends { createdAt: string }>(items: T
       const date = startOfDay(subDays(new Date(latestDate), i))
       sections.push({
         date,
-        items: sortedItems.filter((item) => isSameDay(date, new Date(item.createdAt)))
+        items: sortedItems.filter((item) => isSameDay(date, new Date(item.createdAt))),
       })
     }
 

@@ -1,13 +1,13 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import StatDetails from '../StatDetails'
-import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
+import gameStatMock from '../../__mocks__/gameStatMock'
+import api from '../../api/api'
+import { UserType } from '../../entities/user'
 import activeGameState from '../../state/activeGameState'
 import userState from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
-import { UserType } from '../../entities/user'
-import gameStatMock from '../../__mocks__/gameStatMock'
+import StatDetails from '../StatDetails'
 
 describe('<StatDetails />', () => {
   const axiosMock = new MockAdapter(api)
@@ -23,11 +23,11 @@ describe('<StatDetails />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: activeGameValue }
+          { node: activeGameState, initialValue: activeGameValue },
         ]}
       >
         <StatDetails modalState={[true, closeMock]} mutate={mutateMock} editingStat={null} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Internal name'), 'hearts-collected')
@@ -45,13 +45,11 @@ describe('<StatDetails />', () => {
 
     expect(mutateMock).toHaveBeenCalled()
 
-    const stats = [
-      { id: 1 }
-    ]
+    const stats = [{ id: 1 }]
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ stats })).toStrictEqual({
-      stats: [...stats, { id: 2 }]
+      stats: [...stats, { id: 2 }],
     })
   })
 
@@ -62,11 +60,11 @@ describe('<StatDetails />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: activeGameValue }
+          { node: activeGameState, initialValue: activeGameValue },
         ]}
       >
         <StatDetails modalState={[true, vi.fn()]} mutate={vi.fn()} editingStat={null} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Internal name'), 'hearts-collected')
@@ -87,17 +85,19 @@ describe('<StatDetails />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: activeGameValue }
+          { node: activeGameState, initialValue: activeGameValue },
         ]}
       >
         <StatDetails modalState={[true, vi.fn()]} mutate={vi.fn()} editingStat={null} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Min value'), '60')
     await userEvent.type(screen.getByLabelText('Default value'), '52')
 
-    expect(await screen.findByText('Default value must be more than the min value')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Default value must be more than the min value'),
+    ).toBeInTheDocument()
   })
 
   it('should display an error if the default value is more than the max value', async () => {
@@ -107,17 +107,19 @@ describe('<StatDetails />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: activeGameValue }
+          { node: activeGameState, initialValue: activeGameValue },
         ]}
       >
         <StatDetails modalState={[true, vi.fn()]} mutate={vi.fn()} editingStat={null} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Max value'), '52')
     await userEvent.type(screen.getByLabelText('Default value'), '60')
 
-    expect(await screen.findByText('Default value must be less than the max value')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Default value must be less than the max value'),
+    ).toBeInTheDocument()
   })
 
   it('should display an error if the min value is more than the max value', async () => {
@@ -127,11 +129,11 @@ describe('<StatDetails />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: activeGameValue }
+          { node: activeGameState, initialValue: activeGameValue },
         ]}
       >
         <StatDetails modalState={[true, vi.fn()]} mutate={vi.fn()} editingStat={null} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Min value'), '60')
@@ -148,20 +150,24 @@ describe('<StatDetails />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: activeGameValue }
+          { node: activeGameState, initialValue: activeGameValue },
         ]}
       >
         <StatDetails modalState={[true, vi.fn()]} mutate={vi.fn()} editingStat={null} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Max change'), '-8')
 
-    expect(await screen.findByText('Max change must be greater than or equal to 1')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Max change must be greater than or equal to 1'),
+    ).toBeInTheDocument()
 
     await userEvent.type(screen.getByLabelText('Max change'), '0')
 
-    expect(await screen.findByText('Max change must be greater than or equal to 1')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Max change must be greater than or equal to 1'),
+    ).toBeInTheDocument()
   })
 
   it('should display an error if the time between updates is negative', async () => {
@@ -171,17 +177,19 @@ describe('<StatDetails />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: activeGameValue }
+          { node: activeGameState, initialValue: activeGameValue },
         ]}
       >
         <StatDetails modalState={[true, vi.fn()]} mutate={vi.fn()} editingStat={null} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.clear(screen.getByLabelText('Min seconds between updates'))
     await userEvent.type(screen.getByLabelText('Min seconds between updates'), '-1')
 
-    expect(await screen.findByText('Time between updates must be greater than or equal to 0')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Time between updates must be greater than or equal to 0'),
+    ).toBeInTheDocument()
   })
 
   it('should close when clicking close', async () => {
@@ -191,11 +199,11 @@ describe('<StatDetails />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: activeGameValue }
+          { node: activeGameState, initialValue: activeGameValue },
         ]}
       >
         <StatDetails modalState={[true, closeMock]} mutate={vi.fn()} editingStat={null} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Close'))
@@ -213,19 +221,19 @@ describe('<StatDetails />', () => {
       stat: {
         ...initialStat,
         minValue: -10,
-        maxValue: 30
-      }
+        maxValue: 30,
+      },
     })
 
     render(
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: activeGameValue }
+          { node: activeGameState, initialValue: activeGameValue },
         ]}
       >
         <StatDetails modalState={[true, closeMock]} mutate={mutateMock} editingStat={initialStat} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByDisplayValue('hearts-collected')).toBeDisabled()
@@ -249,10 +257,10 @@ describe('<StatDetails />', () => {
         {
           ...initialStat,
           minValue: -10,
-          maxValue: 30
+          maxValue: 30,
         },
-        { id: 2 }
-      ]
+        { id: 2 },
+      ],
     })
   })
 
@@ -265,11 +273,11 @@ describe('<StatDetails />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: activeGameValue }
+          { node: activeGameState, initialValue: activeGameValue },
         ]}
       >
         <StatDetails modalState={[true, vi.fn()]} mutate={vi.fn()} editingStat={initialStat} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await waitFor(() => expect(screen.getByText('Update')).toBeEnabled())
@@ -291,11 +299,11 @@ describe('<StatDetails />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: activeGameValue }
+          { node: activeGameState, initialValue: activeGameValue },
         ]}
       >
         <StatDetails modalState={[true, closeMock]} mutate={mutateMock} editingStat={initialStat} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Delete'))
@@ -308,7 +316,7 @@ describe('<StatDetails />', () => {
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ stats: [initialStat, { id: 2 }] })).toStrictEqual({
-      stats: [{ id: 2 }]
+      stats: [{ id: 2 }],
     })
   })
 
@@ -322,11 +330,11 @@ describe('<StatDetails />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.ADMIN } },
-          { node: activeGameState, initialValue: activeGameValue }
+          { node: activeGameState, initialValue: activeGameValue },
         ]}
       >
         <StatDetails modalState={[true, vi.fn()]} mutate={vi.fn()} editingStat={initialStat} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Delete'))
@@ -341,11 +349,11 @@ describe('<StatDetails />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: { type: UserType.DEV } },
-          { node: activeGameState, initialValue: activeGameValue }
+          { node: activeGameState, initialValue: activeGameValue },
         ]}
       >
         <StatDetails modalState={[true, vi.fn()]} mutate={vi.fn()} editingStat={initialStat} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.queryByText('Delete')).not.toBeInTheDocument()

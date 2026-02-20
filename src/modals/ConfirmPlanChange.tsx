@@ -1,16 +1,16 @@
-import { MouseEvent, useState } from 'react'
-import Modal from '../components/Modal'
-import Button from '../components/Button'
-import buildError from '../utils/buildError'
-import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import confirmPlan from '../api/confirmPlan'
-import { dinero, toDecimal } from 'dinero.js'
 import { USD } from '@dinero.js/currencies'
-import { groupBy } from 'lodash-es'
-import { format } from 'date-fns'
 import { AxiosError } from 'axios'
+import { format } from 'date-fns'
+import { dinero, toDecimal } from 'dinero.js'
+import { groupBy } from 'lodash-es'
+import { MouseEvent, useState } from 'react'
+import confirmPlan from '../api/confirmPlan'
+import Button from '../components/Button'
+import ErrorMessage, { TaloError } from '../components/ErrorMessage'
+import Modal from '../components/Modal'
 import { Invoice } from '../entities/invoice'
 import { PricingPlanProduct } from '../entities/pricingPlan'
+import buildError from '../utils/buildError'
 
 type ConfirmPlanChangeProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -23,7 +23,7 @@ export default function ConfirmPlanChange({
   modalState,
   plan,
   pricingInterval,
-  invoice
+  invoice,
 }: ConfirmPlanChangeProps) {
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)
@@ -53,7 +53,8 @@ export default function ConfirmPlanChange({
 
   const formatPrice = (amount: number) => {
     const d = dinero({ amount, currency: USD })
-    const transformer = ({ value }: { value: string }) => `${Number(value) < 0 ? '-' : ''}$${Math.abs(Number(value)).toFixed(2)}`
+    const transformer = ({ value }: { value: string }) =>
+      `${Number(value) < 0 ? '-' : ''}$${Math.abs(Number(value)).toFixed(2)}`
     return toDecimal(d, transformer)
   }
 
@@ -64,16 +65,15 @@ export default function ConfirmPlanChange({
   })
 
   return (
-    <Modal
-      id='confirm-plan-change'
-      title='Confirm plan change'
-      modalState={modalState}
-    >
+    <Modal id='confirm-plan-change' title='Confirm plan change' modalState={modalState}>
       <form>
-        <div className='p-4 space-y-4'>
+        <div className='space-y-4 p-4'>
           <div>
             <h3 className='font-semibold'>Upcoming invoice</h3>
-            <p className='mt-1'>This is a preview of the invoice that will be billed on {format(new Date(collectionDate * 1000), 'dd MMM yyyy')}:</p>
+            <p className='mt-1'>
+              This is a preview of the invoice that will be billed on{' '}
+              {format(new Date(collectionDate * 1000), 'dd MMM yyyy')}:
+            </p>
           </div>
 
           <table className='w-full'>
@@ -90,24 +90,30 @@ export default function ConfirmPlanChange({
 
               return (
                 <tbody key={dates} data-testid={`${startDate} - ${endDate}`}>
-                  <tr className='border-y border-y-gray-200 text-xs uppercase text-gray-600'>
-                    <td className='py-2'>{startDate} - {endDate}</td>
+                  <tr className='border-y border-y-gray-200 text-xs text-gray-600 uppercase'>
+                    <td className='py-2'>
+                      {startDate} - {endDate}
+                    </td>
                     <td />
                   </tr>
 
-                  {lines.sort((a, b) => b.amount - a.amount).map((line) => (
-                    <tr key={line.id} className='border-y border-y-gray-200 text-sm font-medium'>
-                      <td className='py-2'>{line.description}</td>
-                      <td className='py-2 text-right font-mono'>{formatPrice(line.amount)}</td>
-                    </tr>
-                  ))}
+                  {lines
+                    .sort((a, b) => b.amount - a.amount)
+                    .map((line) => (
+                      <tr key={line.id} className='border-y border-y-gray-200 text-sm font-medium'>
+                        <td className='py-2'>{line.description}</td>
+                        <td className='py-2 text-right font-mono'>{formatPrice(line.amount)}</td>
+                      </tr>
+                    ))}
                 </tbody>
               )
             })}
             <tbody>
               <tr>
-                <td className='pb-2 pt-4 font-semibold'>Total</td>
-                <td className='pb-2 pt-4 font-semibold text-right font-mono'>{formatPrice(total)}</td>
+                <td className='pt-4 pb-2 font-semibold'>Total</td>
+                <td className='pt-4 pb-2 text-right font-mono font-semibold'>
+                  {formatPrice(total)}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -115,21 +121,23 @@ export default function ConfirmPlanChange({
           {error && <ErrorMessage error={error} />}
         </div>
 
-        <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
           <div className='w-full md:w-32'>
             <Button
               variant='green'
               isLoading={isLoading}
               onClick={onConfirmClick}
               extra={{
-                'data-testid': 'confirm-plan-change'
+                'data-testid': 'confirm-plan-change',
               }}
             >
               Confirm
             </Button>
           </div>
           <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>Cancel</Button>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
           </div>
         </div>
       </form>

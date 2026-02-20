@@ -4,7 +4,7 @@ describe('Demo', () => {
   it('should let users enter the demo dashboard', () => {
     cy.intercept('POST', 'http://talo.api/public/demo', {
       statusCode: 200,
-      fixture: 'responses/auth/dev'
+      fixture: 'responses/auth/dev',
     })
 
     cy.visitAsGuest('/demo')
@@ -17,8 +17,8 @@ describe('Demo', () => {
     cy.intercept('POST', 'http://talo.api/public/demo', {
       statusCode: 500,
       body: {
-        message: 'Something went wrong'
-      }
+        message: 'Something went wrong',
+      },
     })
 
     cy.visitAsGuest('/demo')

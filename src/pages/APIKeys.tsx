@@ -1,28 +1,34 @@
+import { format } from 'date-fns'
 import { ChangeEvent, MouseEvent, useContext, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import buildError from '../utils/buildError'
-import { format } from 'date-fns'
-import Button from '../components/Button'
-import deleteAPIKey from '../api/deleteAPIKey'
 import createAPIKey from '../api/createAPIKey'
-import userState, { AuthedUser } from '../state/userState'
-import TableCell from '../components/tables/TableCell'
-import TableBody from '../components/tables/TableBody'
-import AlertBanner from '../components/AlertBanner'
-import DateCell from '../components/tables/cells/DateCell'
-import Scopes from '../modals/Scopes'
-import Page from '../components/Page'
-import Table from '../components/tables/Table'
+import deleteAPIKey from '../api/deleteAPIKey'
 import useAPIKeys from '../api/useAPIKeys'
-import { APIKey } from '../entities/apiKey'
+import AlertBanner from '../components/AlertBanner'
+import Button from '../components/Button'
+import ErrorMessage, { TaloError } from '../components/ErrorMessage'
+import Page from '../components/Page'
+import DateCell from '../components/tables/cells/DateCell'
+import Table from '../components/tables/Table'
+import TableBody from '../components/tables/TableBody'
+import TableCell from '../components/tables/TableCell'
 import ToastContext from '../components/toast/ToastContext'
+import { APIKey } from '../entities/apiKey'
+import Scopes from '../modals/Scopes'
+import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import userState, { AuthedUser } from '../state/userState'
+import buildError from '../utils/buildError'
 import { formatAPIKeyScopeGroup } from '../utils/formatAPIKeyScopeGroup'
 
 export default function APIKeys() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
-  const { apiKeys, scopes: availableScopes, loading, error: fetchError, mutate } = useAPIKeys(activeGame)
+  const {
+    apiKeys,
+    scopes: availableScopes,
+    loading,
+    error: fetchError,
+    mutate,
+  } = useAPIKeys(activeGame)
 
   const [deletingKeys, setDeletingKeys] = useState<number[]>([])
   const [error, setError] = useState<TaloError | null>(null)
@@ -45,20 +51,24 @@ export default function APIKeys() {
   }, [showScopesModal])
 
   const onDeleteClick = async (apiKey: APIKey) => {
-    if (window.confirm('Are you sure you want to permanently delete this access key? This action is irreversible.')) {
+    if (
+      window.confirm(
+        'Are you sure you want to permanently delete this access key? This action is irreversible.',
+      )
+    ) {
       setError(null)
       setDeletingKeys([...deletingKeys, apiKey.id])
 
       try {
         await deleteAPIKey(activeGame.id, apiKey.id)
-        mutate((data) => {
+        await mutate((data) => {
           if (!data) {
             throw new Error('API key data not set')
           }
 
           return {
             ...data,
-            apiKeys: data.apiKeys.filter((k) => k.id !== apiKey.id)
+            apiKeys: data.apiKeys.filter((k) => k.id !== apiKey.id),
           }
         })
 
@@ -80,17 +90,14 @@ export default function APIKeys() {
 
     try {
       const { apiKey, token } = await createAPIKey(activeGame.id, selectedScopes)
-      mutate((data) => {
+      await mutate((data) => {
         if (!data) {
           throw new Error('API key data not set')
         }
 
         return {
           ...data,
-          apiKeys: [
-            ...data.apiKeys,
-            apiKey
-          ]
+          apiKeys: [...data.apiKeys, apiKey],
         }
       })
 
@@ -117,66 +124,82 @@ export default function APIKeys() {
       <Page title='Access keys' isLoading={loading}>
         {Boolean(error ?? fetchError) && <ErrorMessage error={error ?? fetchError} />}
 
-        {!user.emailConfirmed &&
-          <AlertBanner className='lg:w-max' text='You need to confirm your email address to manage access keys' />
-        }
+        {!user.emailConfirmed && (
+          <AlertBanner
+            className='lg:w-max'
+            text='You need to confirm your email address to manage access keys'
+          />
+        )}
 
-        {user.emailConfirmed && apiKeys.length > 0 &&
+        {user.emailConfirmed && apiKeys.length > 0 && (
           <Table columns={['Created by', 'Created at', 'Last used', 'Scopes', '']}>
             <TableBody iterator={apiKeys}>
               {(key) => (
                 <>
                   <TableCell>{key.createdBy === user.username ? 'You' : key.createdBy}</TableCell>
                   <DateCell>{format(new Date(key.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
-                  <DateCell>{key.lastUsedAt ? format(new Date(key.lastUsedAt), 'dd MMM yyyy, HH:mm') : 'Never used'}</DateCell>
+                  <DateCell>
+                    {key.lastUsedAt
+                      ? format(new Date(key.lastUsedAt), 'dd MMM yyyy, HH:mm')
+                      : 'Never used'}
+                  </DateCell>
                   <TableCell className='flex'>
                     <div>
-                      <Button variant='grey' onClick={() => setSelectedKey(key)}>Modify scopes</Button>
+                      <Button variant='grey' onClick={() => setSelectedKey(key)}>
+                        Modify scopes
+                      </Button>
                     </div>
                   </TableCell>
                   <TableCell className='w-40'>
-                    <Button variant='black' onClick={() => onDeleteClick(key)}>Revoke</Button>
+                    <Button variant='black' onClick={() => onDeleteClick(key)}>
+                      Revoke
+                    </Button>
                   </TableCell>
                 </>
               )}
             </TableBody>
           </Table>
-        }
+        )}
 
         {apiKeys.length > 0 && <div className='h-1 rounded bg-gray-700' />}
 
-        {!createdKey &&
-          <form className='w-full lg:2/3 xl:w-1/2'>
-            <h2 className='text-xl lg:text-2xl font-bold'>Create key</h2>
+        {!createdKey && (
+          <form className='lg:2/3 w-full xl:w-1/2'>
+            <h2 className='text-xl font-bold lg:text-2xl'>Create key</h2>
 
             <div className='mt-4 rounded border-2 border-gray-700'>
-              <div className='p-4 bg-gray-700'>
+              <div className='bg-gray-700 p-4'>
                 <h3 className='text-lg font-bold'>Scopes</h3>
                 <p>Scopes control what your access key can and can&apos;t do</p>
               </div>
 
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 md:gap-y-8 p-4'>
-                {availableScopes && Object.keys(availableScopes).map((group) => (
-                  <div key={group}>
-                    <h4 className='font-semibold'>{formatAPIKeyScopeGroup(group)}</h4>
-                    {availableScopes[group].map((scope: string) => (
-                      <div key={scope}>
-                        <input
-                          id={scope}
-                          type='checkbox'
-                          disabled={!user.emailConfirmed}
-                          onChange={onScopeChecked}
-                          checked={Boolean(selectedScopes.find((s) => s === scope))}
-                          value={scope}
-                        />
-                        <label htmlFor={scope} className='ml-2'>{scope}</label>
-                      </div>
-                    ))}
-                  </div>
-                ))}
+              <div className='grid grid-cols-1 gap-x-8 gap-y-4 p-4 md:grid-cols-2 md:gap-y-8'>
+                {availableScopes &&
+                  Object.keys(availableScopes).map((group) => (
+                    <div key={group}>
+                      <h4 className='font-semibold'>{formatAPIKeyScopeGroup(group)}</h4>
+                      {availableScopes[group].map((scope: string) => (
+                        <div key={scope}>
+                          <input
+                            id={scope}
+                            type='checkbox'
+                            disabled={!user.emailConfirmed}
+                            onChange={onScopeChecked}
+                            checked={Boolean(selectedScopes.find((s) => s === scope))}
+                            value={scope}
+                          />
+                          <label htmlFor={scope} className='ml-2'>
+                            {scope}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
               </div>
 
-              {!loading && !availableScopes && <ErrorMessage className='mt-4' error={{ message: 'Couldn\'t fetch scopes' }} />}
+              {!loading && !availableScopes && (
+                <ErrorMessage className='mt-4' error={{ message: "Couldn't fetch scopes" }} />
+              )}
             </div>
 
             <Button
@@ -189,35 +212,32 @@ export default function APIKeys() {
               Create
             </Button>
           </form>
-        }
+        )}
 
-        {createdKey &&
-          <div className='w-full lg:2/3 xl:w-1/2'>
-            <h2 className='text-xl lg:text-2xl font-bold'>Your new key</h2>
+        {createdKey && (
+          <div className='lg:2/3 w-full xl:w-1/2'>
+            <h2 className='text-xl font-bold lg:text-2xl'>Your new key</h2>
             <p>Save this key somewhere because we won&apos;t show it again</p>
 
             <div className='mt-4 rounded border-2 border-gray-700 bg-gray-700 p-4 wrap-break-word'>
               <code>{createdKey}</code>
             </div>
 
-            <Button
-              className='mt-4'
-              onClick={() => setCreatedKey(null)}
-            >
+            <Button className='mt-4' onClick={() => setCreatedKey(null)}>
               Create another
             </Button>
           </div>
-        }
+        )}
       </Page>
 
-      {showScopesModal &&
+      {showScopesModal && (
         <Scopes
           modalState={[showScopesModal, setShowScopesModal]}
           selectedKey={selectedKey}
           availableScopes={availableScopes}
           mutate={mutate}
         />
-      }
+      )}
     </>
   )
 }

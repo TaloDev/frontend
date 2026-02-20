@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import Button from '../Button'
-import buildError from '../../utils/buildError'
-import createPortalSession from '../../api/createPortalSession'
 import { IconExternalLink } from '@tabler/icons-react'
+import { useState } from 'react'
+import createPortalSession from '../../api/createPortalSession'
+import buildError from '../../utils/buildError'
+import Button from '../Button'
 import ErrorMessage, { TaloError } from '../ErrorMessage'
 import Tile from '../Tile'
 
@@ -26,7 +26,7 @@ export default function BillingPortalTile() {
   return (
     <li>
       <Tile
-        header={(
+        header={
           <>
             <h2 className='text-xl font-semibold'>Billing details</h2>
             <Button
@@ -39,19 +39,23 @@ export default function BillingPortalTile() {
               <span>Billing Portal</span>
             </Button>
           </>
-        )}
-        content={(
+        }
+        content={
           <div>
-            <p>You can update your billing information and view invoices inside the billing portal</p>
+            <p>
+              You can update your billing information and view invoices inside the billing portal
+            </p>
           </div>
-        )}
-        footer={(
+        }
+        footer={
           <>
-            {portalError &&
-              <div className='px-4'><ErrorMessage error={portalError} /></div>
-            }
+            {portalError && (
+              <div className='px-4'>
+                <ErrorMessage error={portalError} />
+              </div>
+            )}
           </>
-        )}
+        }
       />
     </li>
   )

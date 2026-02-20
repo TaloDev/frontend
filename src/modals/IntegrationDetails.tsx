@@ -1,37 +1,44 @@
-import { useState, useContext, MouseEvent } from 'react'
-import Modal from '../components/Modal'
-import Button from '../components/Button'
-import buildError from '../utils/buildError'
-import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import Toggle from '../components/toggles/Toggle'
-import TextInput from '../components/TextInput'
-import { upperFirst } from 'lodash-es'
-import enableIntegration from '../api/enableIntegration'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import { useRecoilValue } from 'recoil'
-import disableIntegration from '../api/disableIntegration'
-import updateIntegration from '../api/updateIntegration'
-import Loading from '../components/Loading'
-import ToastContext, { ToastType } from '../components/toast/ToastContext'
-import Link from '../components/Link'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Integration, SteamIntegrationConfig } from '../entities/integration'
+import { upperFirst } from 'lodash-es'
+import { useState, useContext, MouseEvent } from 'react'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { useRecoilValue } from 'recoil'
 import { KeyedMutator } from 'swr'
 import { z } from 'zod'
+import disableIntegration from '../api/disableIntegration'
+import enableIntegration from '../api/enableIntegration'
+import updateIntegration from '../api/updateIntegration'
+import Button from '../components/Button'
+import ErrorMessage, { TaloError } from '../components/ErrorMessage'
+import Link from '../components/Link'
+import Loading from '../components/Loading'
+import Modal from '../components/Modal'
+import TextInput from '../components/TextInput'
+import ToastContext, { ToastType } from '../components/toast/ToastContext'
+import Toggle from '../components/toggles/Toggle'
+import { Integration, SteamIntegrationConfig } from '../entities/integration'
+import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import buildError from '../utils/buildError'
 
-const toastMessageConfigKeyMap = (newValue: boolean) => ({
-  apiKey: 'Key successfully updated',
-  appId: 'App ID successfully updated',
-  syncLeaderboards: 'Leaderboard syncing successfully turned ' + (newValue ? 'on' : 'off'),
-  syncStats: 'Stat syncing successfully turned ' + (newValue ? 'on' : 'off')
-} as { [key: string]: string })
+const toastMessageConfigKeyMap = (newValue: boolean) =>
+  ({
+    apiKey: 'Key successfully updated',
+    appId: 'App ID successfully updated',
+    syncLeaderboards: 'Leaderboard syncing successfully turned ' + (newValue ? 'on' : 'off'),
+    syncStats: 'Stat syncing successfully turned ' + (newValue ? 'on' : 'off'),
+  }) as { [key: string]: string }
 
 const validationSchema = z.object({
-  apiKey: z.string().length(32, { message: 'Key must be 32 characters long' }).min(1, { message: 'Key is required' }),
-  appId: z.number({ invalid_type_error: 'App ID must be a number', required_error: 'App ID is required' }),
+  apiKey: z
+    .string()
+    .length(32, { message: 'Key must be 32 characters long' })
+    .min(1, { message: 'Key is required' }),
+  appId: z.number({
+    invalid_type_error: 'App ID must be a number',
+    required_error: 'App ID is required',
+  }),
   syncLeaderboards: z.boolean({ required_error: 'Sync leaderboards is required' }),
-  syncStats: z.boolean({ required_error: 'Sync stats is required' })
+  syncStats: z.boolean({ required_error: 'Sync stats is required' }),
 })
 
 type FormValues = z.infer<typeof validationSchema>
@@ -45,7 +52,7 @@ type IntegrationDetailsProps = {
 export default function IntegrationDetails({
   modalState,
   mutate,
-  editingIntegration
+  editingIntegration,
 }: IntegrationDetailsProps) {
   const toast = useContext(ToastContext)
 
@@ -56,15 +63,21 @@ export default function IntegrationDetails({
   const [apiError, setAPIError] = useState<TaloError | null>(null)
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
 
-  const { register, handleSubmit, formState: { isValid, errors }, watch, control } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid, errors },
+    watch,
+    control,
+  } = useForm<FormValues>({
     resolver: zodResolver(validationSchema),
     defaultValues: {
       apiKey: '',
       appId: editingIntegration?.config?.appId,
       syncLeaderboards: editingIntegration?.config?.syncLeaderboards ?? true,
-      syncStats: editingIntegration?.config?.syncStats ?? true
+      syncStats: editingIntegration?.config?.syncStats ?? true,
     },
-    mode: 'onChange'
+    mode: 'onChange',
   })
 
   const [apiKey, appId] = watch(['apiKey', 'appId'])
@@ -77,15 +90,17 @@ export default function IntegrationDetails({
     setAPIError(null)
 
     try {
-      const { integration } = await updateIntegration(activeGame.id, editingIntegration!.id!, { config: partial })
+      const { integration } = await updateIntegration(activeGame.id, editingIntegration!.id!, {
+        config: partial,
+      })
 
-      mutate((data) => {
+      await mutate((data) => {
         return {
           ...data,
           integrations: data!.integrations.map((existingIntegration) => {
             if (existingIntegration.id === integration.id) return integration
             return existingIntegration
-          })
+          }),
         }
       }, false)
 
@@ -99,7 +114,10 @@ export default function IntegrationDetails({
     }
   }
 
-  const onSyncLeaderboardsToggle = async (sync: boolean, formCallback: (...event: unknown[]) => void) => {
+  const onSyncLeaderboardsToggle = async (
+    sync: boolean,
+    formCallback: (...event: unknown[]) => void,
+  ) => {
     formCallback(sync)
 
     if (enabled) {
@@ -123,22 +141,22 @@ export default function IntegrationDetails({
     try {
       const { integration } = await enableIntegration(activeGame.id, {
         type: editingIntegration!.type!,
-        config: formData
+        config: formData,
       })
 
-      mutate((data) => {
+      await mutate((data) => {
         return {
           ...data,
-          integrations: [
-            ...data!.integrations,
-            integration
-          ]
+          integrations: [...data!.integrations, integration],
         }
       }, false)
 
       setOpen(false)
 
-      toast.trigger(`${upperFirst(editingIntegration!.type)} integration successfully enabled`, ToastType.SUCCESS)
+      toast.trigger(
+        `${upperFirst(editingIntegration!.type)} integration successfully enabled`,
+        ToastType.SUCCESS,
+      )
     } catch (err) {
       setAPIError(buildError(err))
       setLoading(false)
@@ -153,16 +171,21 @@ export default function IntegrationDetails({
     try {
       await disableIntegration(activeGame.id, editingIntegration!.id!)
 
-      mutate((data) => {
+      await mutate((data) => {
         return {
           ...data,
-          integrations: data!.integrations.filter((integration) => integration.id !== editingIntegration!.id)
+          integrations: data!.integrations.filter(
+            (integration) => integration.id !== editingIntegration!.id,
+          ),
         }
       }, false)
 
       setOpen(false)
 
-      toast.trigger(`${upperFirst(editingIntegration!.type)} integration successfully disabled`, ToastType.SUCCESS)
+      toast.trigger(
+        `${upperFirst(editingIntegration!.type)} integration successfully disabled`,
+        ToastType.SUCCESS,
+      )
     } catch (err) {
       setAPIError(buildError(err))
       setDeleting(false)
@@ -176,21 +199,30 @@ export default function IntegrationDetails({
       modalState={modalState}
     >
       <form onSubmit={handleSubmit(onEnableClick)}>
-        <div className='p-4 space-y-4'>
-          <div>To learn more about how the integration works, <Link to='https://docs.trytalo.com/docs/integrations/steamworks?utm_source=dashboard&utm_medium=integration-modal'>visit the docs</Link></div>
+        <div className='space-y-4 p-4'>
+          <div>
+            To learn more about how the integration works,{' '}
+            <Link to='https://docs.trytalo.com/docs/integrations/steamworks?utm_source=dashboard&utm_medium=integration-modal'>
+              visit the docs
+            </Link>
+          </div>
 
           <div className='space-y-4'>
             <TextInput
               id='api-key'
               variant='modal'
               label='Publisher API key'
-              placeholder={enabled ? 'Enter a new key to override the existing one' : 'e.g. 8C9906B42D144BA9B785DC8E2F7DADEF'}
+              placeholder={
+                enabled
+                  ? 'Enter a new key to override the existing one'
+                  : 'e.g. 8C9906B42D144BA9B785DC8E2F7DADEF'
+              }
               inputExtra={{ ...register('apiKey') }}
               errors={[errors.apiKey?.message]}
             />
 
-            {enabled &&
-              <div className='w-full md:w-36 ml-auto'>
+            {enabled && (
+              <div className='ml-auto w-full md:w-36'>
                 <Button
                   type='button'
                   disabled={Boolean(errors.apiKey) || Boolean(isUpdating)}
@@ -200,7 +232,7 @@ export default function IntegrationDetails({
                   Update key
                 </Button>
               </div>
-            }
+            )}
           </div>
 
           <div className='space-y-4'>
@@ -213,8 +245,8 @@ export default function IntegrationDetails({
               errors={[errors.appId?.message]}
             />
 
-            {enabled &&
-              <div className='w-full md:w-36 ml-auto'>
+            {enabled && (
+              <div className='ml-auto w-full md:w-36'>
                 <Button
                   type='button'
                   disabled={Boolean(errors.appId || isUpdating)}
@@ -224,14 +256,16 @@ export default function IntegrationDetails({
                   Update app ID
                 </Button>
               </div>
-            }
+            )}
           </div>
 
           <hr className='border-gray-200' />
 
-          <div className='flex justify-between items-start'>
+          <div className='flex items-start justify-between'>
             <div>
-              <label htmlFor='sync-leaderboards' className='font-semibold'>Sync leaderboards</label>
+              <label htmlFor='sync-leaderboards' className='font-semibold'>
+                Sync leaderboards
+              </label>
               <p className='text-sm text-gray-500'>Push leaderboard entries to Steam</p>
             </div>
             <div className='flex items-center space-x-4'>
@@ -239,9 +273,7 @@ export default function IntegrationDetails({
               <Controller
                 control={control}
                 name='syncLeaderboards'
-                render={({
-                  field: { onChange, value, ref }
-                }) => (
+                render={({ field: { onChange, value, ref } }) => (
                   <Toggle
                     id='sync-leaderboards'
                     inputRef={ref}
@@ -254,9 +286,11 @@ export default function IntegrationDetails({
             </div>
           </div>
 
-          <div className='flex justify-between items-start'>
+          <div className='flex items-start justify-between'>
             <div>
-              <label htmlFor='sync-stats' className='font-semibold'>Sync stats</label>
+              <label htmlFor='sync-stats' className='font-semibold'>
+                Sync stats
+              </label>
               <p className='text-sm text-gray-500'>Push individual and global values to Steam</p>
             </div>
             <div className='flex items-center space-x-4'>
@@ -264,9 +298,7 @@ export default function IntegrationDetails({
               <Controller
                 control={control}
                 name='syncStats'
-                render={({
-                  field: { onChange, value, ref }
-                }) => (
+                render={({ field: { onChange, value, ref } }) => (
                   <Toggle
                     id='sync-stats'
                     inputRef={ref}
@@ -282,19 +314,16 @@ export default function IntegrationDetails({
           {apiError && <ErrorMessage error={apiError} />}
         </div>
 
-        <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>
-          {!enabled &&
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          {!enabled && (
             <div className='w-full md:w-32'>
-              <Button
-                disabled={!isValid}
-                isLoading={isLoading}
-              >
+              <Button disabled={!isValid} isLoading={isLoading}>
                 Enable
               </Button>
             </div>
-          }
+          )}
 
-          {enabled &&
+          {enabled && (
             <div className='w-full md:w-32'>
               <Button
                 type='button'
@@ -306,7 +335,7 @@ export default function IntegrationDetails({
                 Disable
               </Button>
             </div>
-          }
+          )}
 
           <div className='w-full md:w-32'>
             <Button type='button' variant='grey' onClick={() => setOpen(false)}>

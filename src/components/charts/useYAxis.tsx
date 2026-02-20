@@ -15,7 +15,7 @@ function getNiceMax(maxValue: number) {
 
 export function useYAxisWidth<T>({
   data,
-  transformer
+  transformer,
 }: {
   data: T[]
   transformer: (d: T[]) => number[]
@@ -27,20 +27,20 @@ export function useYAxisWidth<T>({
   }, [data, transformer])
 
   return {
-    yAxisWidth
+    yAxisWidth,
   }
 }
 
 export function useYAxis<T>({
   data,
-  transformer
+  transformer,
 }: {
   data: T[]
   transformer: (d: T[]) => number[]
 }) {
   const { yAxisWidth } = useYAxisWidth({
     data,
-    transformer
+    transformer,
   })
 
   const tickComponent = useMemo(() => {
@@ -59,7 +59,7 @@ export function useYAxis<T>({
     yAxisProps: {
       allowDecimals: false,
       width: yAxisWidth,
-      tick: tickComponent
-    } as React.ComponentProps<typeof YAxis>
+      tick: tickComponent,
+    } as React.ComponentProps<typeof YAxis>,
   }
 }

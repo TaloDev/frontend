@@ -1,23 +1,23 @@
 import { IconPlus, IconZoom } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { useCallback, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import useStats from '../api/useStats'
 import Button from '../components/Button'
+import { StatsActivityChart } from '../components/charts/StatsActivityChart'
 import ErrorMessage from '../components/ErrorMessage'
 import Page from '../components/Page'
 import DateCell from '../components/tables/cells/DateCell'
 import Table from '../components/tables/Table'
 import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
+import routes from '../constants/routes'
+import { GameStat } from '../entities/gameStat'
+import { ResetStat } from '../modals/ResetStat'
 import StatDetails from '../modals/StatDetails'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import useSortedItems from '../utils/useSortedItems'
-import { GameStat } from '../entities/gameStat'
-import { useNavigate } from 'react-router-dom'
-import routes from '../constants/routes'
-import { ResetStat } from '../modals/ResetStat'
-import { StatsActivityChart } from '../components/charts/StatsActivityChart'
 
 export default function Stats() {
   const [showModal, setShowModal] = useState(false)
@@ -52,15 +52,18 @@ export default function Stats() {
     }
   }, [])
 
-  const onViewMetricsClick = useCallback((stat: GameStat) => {
-    navigate(routes.statMetrics.replace(':internalName', stat.internalName))
-  }, [navigate])
+  const onViewMetricsClick = useCallback(
+    (stat: GameStat) => {
+      navigate(routes.statMetrics.replace(':internalName', stat.internalName))
+    },
+    [navigate],
+  )
 
   return (
     <Page
       title='Stats'
       extraTitleComponent={
-        <div className='mt-1 ml-4 p-1 rounded-full bg-indigo-600'>
+        <div className='mt-1 ml-4 rounded-full bg-indigo-600 p-1'>
           <Button
             variant='icon'
             onClick={() => setShowModal(true)}
@@ -71,56 +74,69 @@ export default function Stats() {
       }
       isLoading={loading}
     >
-      {sortedStats.length > 0 &&
-        <StatsActivityChart />
-      }
+      {sortedStats.length > 0 && <StatsActivityChart />}
 
-      {!error && !loading && sortedStats.length === 0 &&
+      {!error && !loading && sortedStats.length === 0 && (
         <p>{activeGame.name} doesn&apos;t have any stats yet</p>
-      }
+      )}
 
-      {!error && sortedStats.length > 0 &&
-        <Table columns={['Internal name', 'Display name', 'Global value', 'Created at', 'Updated at', '', '']}>
+      {!error && sortedStats.length > 0 && (
+        <Table
+          columns={[
+            'Internal name',
+            'Display name',
+            'Global value',
+            'Created at',
+            'Updated at',
+            '',
+            '',
+          ]}
+        >
           <TableBody iterator={sortedStats}>
             {(stat) => (
               <>
                 <TableCell>{stat.internalName}</TableCell>
                 <TableCell>{stat.name}</TableCell>
-                <TableCell className='font-mono'>{stat.global ? stat.globalValue.toLocaleString() : '—'}</TableCell>
+                <TableCell className='font-mono'>
+                  {stat.global ? stat.globalValue.toLocaleString() : '—'}
+                </TableCell>
                 <DateCell>{format(new Date(stat.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
                 <DateCell>{format(new Date(stat.updatedAt), 'dd MMM yyyy, HH:mm')}</DateCell>
                 <TableCell className='w-40'>
-                  {stat.global &&
-                    <Button variant='grey' icon={<IconZoom size={16} />} onClick={() => onViewMetricsClick(stat)}>
+                  {stat.global && (
+                    <Button
+                      variant='grey'
+                      icon={<IconZoom size={16} />}
+                      onClick={() => onViewMetricsClick(stat)}
+                    >
                       <span>Metrics</span>
                     </Button>
-                  }
+                  )}
                 </TableCell>
                 <TableCell className='w-40'>
-                  <Button variant='grey' onClick={() => onEditStatClick(stat)}>Edit</Button>
+                  <Button variant='grey' onClick={() => onEditStatClick(stat)}>
+                    Edit
+                  </Button>
                 </TableCell>
               </>
             )}
           </TableBody>
         </Table>
-      }
+      )}
 
       {error && <ErrorMessage error={error} />}
 
-      {showModal &&
+      {showModal && (
         <StatDetails
           modalState={[showModal, setShowModal]}
           mutate={mutate}
           editingStat={editingStat}
           onResetClick={onResetStatClick}
         />
-      }
-      {showResetModal &&
-        <ResetStat
-          modalState={[showResetModal, onResetStatCloseClick]}
-          editingStat={editingStat}
-        />
-      }
+      )}
+      {showResetModal && (
+        <ResetStat modalState={[showResetModal, onResetStatCloseClick]} editingStat={editingStat} />
+      )}
     </Page>
   )
 }

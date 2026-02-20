@@ -8,8 +8,13 @@ type HeadlineStatProps = {
 
 export default function HeadlineStat({ className, title, stat }: HeadlineStatProps) {
   return (
-    <div className={clsx('rounded border-2 border-gray-700 w-full text-center md:text-left', className)}>
-      <div className='p-4 bg-gray-700'>
+    <div
+      className={clsx(
+        'w-full rounded border-2 border-gray-700 text-center md:text-left',
+        className,
+      )}
+    >
+      <div className='bg-gray-700 p-4'>
         <h3 className='text-lg font-bold'>{title}</h3>
       </div>
 

@@ -1,14 +1,27 @@
-import { useState, useEffect } from 'react'
+import {
+  IconCaretDown,
+  IconBolt,
+  IconUser,
+  IconFileExport,
+  IconTrophy,
+  IconKey,
+  IconChartBar,
+  IconExchange,
+  IconSocial,
+  IconSettings,
+  IconMessages,
+  IconBubbleText,
+} from '@tabler/icons-react'
+import Tippy from '@tippyjs/react'
 import clsx from 'clsx'
+import { useState, useEffect } from 'react'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
-import { focusStyle } from '../styles/theme'
-import canViewPage from '../utils/canViewPage'
-import { IconCaretDown, IconBolt, IconUser, IconFileExport, IconTrophy, IconKey, IconChartBar, IconExchange, IconSocial, IconSettings, IconMessages, IconBubbleText } from '@tabler/icons-react'
-import LinkButton from './LinkButton'
+import { useRecoilValue } from 'recoil'
 import routes from '../constants/routes'
 import userState from '../state/userState'
-import { useRecoilValue } from 'recoil'
-import Tippy from '@tippyjs/react'
+import { focusStyle } from '../styles/theme'
+import canViewPage from '../utils/canViewPage'
+import LinkButton from './LinkButton'
 
 function ServicesLink() {
   const user = useRecoilValue(userState)
@@ -32,68 +45,68 @@ function ServicesLink() {
       name: 'Access keys',
       desc: 'Manage and create keys',
       icon: IconKey,
-      route: routes.apiKeys
+      route: routes.apiKeys,
     },
     {
       name: 'Players',
       desc: 'See props, aliases and events',
       icon: IconUser,
-      route: routes.players
+      route: routes.players,
     },
     {
       name: 'Groups',
       desc: 'Define rules for grouping players',
       icon: IconSocial,
-      route: routes.groups
+      route: routes.groups,
     },
     {
       name: 'Events',
       desc: 'Track and filter events',
       icon: IconBolt,
-      route: routes.eventsOverview
+      route: routes.eventsOverview,
     },
     {
       name: 'Export',
       desc: 'Export your data',
       icon: IconFileExport,
-      route: routes.dataExports
+      route: routes.dataExports,
     },
     {
       name: 'Leaderboards',
       desc: 'Flexible highscore tracking',
       icon: IconTrophy,
-      route: routes.leaderboards
+      route: routes.leaderboards,
     },
     {
       name: 'Stats',
       desc: 'Global and individual data',
       icon: IconChartBar,
-      route: routes.stats
+      route: routes.stats,
     },
     {
       name: 'Integrations',
       desc: 'Sync data with external services',
       icon: IconExchange,
-      route: routes.integrations
+      route: routes.integrations,
     },
     {
       name: 'Live config',
       desc: 'Push state directly to your game',
       icon: IconSettings,
-      route: routes.gameProps
+      route: routes.gameProps,
     },
     {
       name: 'Feedback',
       desc: 'Receive feedback from your players',
       icon: IconBubbleText,
-      route: routes.feedback
+      route: routes.feedback,
     },
     {
       name: 'Channels',
       desc: 'Manage player communication channels',
       icon: IconMessages,
-      route: routes.channels
-    }
+      route: routes.channels,
+    },
   ]
 
   return (
@@ -107,29 +120,45 @@ function ServicesLink() {
         arrow={false}
         theme='services'
         maxWidth=''
-        content={(
-          <ul className='mb-4 sm:min-w-[480px] grid sm:grid-cols-2 gap-2 bg-gray-800 border border-gray-700 p-2 rounded text-white transition-all'>
-            {services.filter(({ route }) => canViewPage(user, route)).map(({ name, desc, icon: Icon, route }) => (
-              <li key={name}>
-                {showServicesMenu &&
-                  <RouterLink to={route} className={clsx('group block p-4 rounded transition-colors hover:bg-gray-700 focus:bg-gray-700 space-y-2', focusStyle)}>
-                    <p className='font-bold text-white group-hover:text-indigo-300 group-focus:text-indigo-300 text-sm md:text-base'>
-                      <Icon size={16} className='inline-block mb-1 mr-1' />
-                      {name}
-                    </p>
-                    <p className='text-gray-300 text-sm group-hover:text-white group-focus:text-white'>{desc}</p>
-                  </RouterLink>
-                }
-              </li>
-            ))}
+        content={
+          <ul className='mb-4 grid gap-2 rounded border border-gray-700 bg-gray-800 p-2 text-white transition-all sm:min-w-[480px] sm:grid-cols-2'>
+            {services
+              .filter(({ route }) => canViewPage(user, route))
+              .map(({ name, desc, icon: Icon, route }) => (
+                <li key={name}>
+                  {showServicesMenu && (
+                    <RouterLink
+                      to={route}
+                      className={clsx(
+                        'group block space-y-2 rounded p-4 transition-colors hover:bg-gray-700 focus:bg-gray-700',
+                        focusStyle,
+                      )}
+                    >
+                      <p className='text-sm font-bold text-white group-hover:text-indigo-300 group-focus:text-indigo-300 md:text-base'>
+                        <Icon size={16} className='mr-1 mb-1 inline-block' />
+                        {name}
+                      </p>
+                      <p className='text-sm text-gray-300 group-hover:text-white group-focus:text-white'>
+                        {desc}
+                      </p>
+                    </RouterLink>
+                  )}
+                </li>
+              ))}
           </ul>
-        )}
+        }
       >
         <div>
           <LinkButton onClick={() => setShowServicesMenu(!showServicesMenu)}>
-            <div className='flex sm:flex-row-reverse items-center'>
+            <div className='flex items-center sm:flex-row-reverse'>
               Services
-              <IconCaretDown size={20} className={clsx('ml-1 sm:ml-0 sm:mr-1 fill-current transform transition-transform', { 'rotate-180': showServicesMenu })} />
+              <IconCaretDown
+                size={20}
+                className={clsx(
+                  'ml-1 transform fill-current transition-transform sm:mr-1 sm:ml-0',
+                  { 'rotate-180': showServicesMenu },
+                )}
+              />
             </div>
           </LinkButton>
         </div>

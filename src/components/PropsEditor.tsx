@@ -1,16 +1,16 @@
-import { useMemo, useState } from 'react'
 import { IconPlus, IconTrash } from '@tabler/icons-react'
-import Button from './Button'
-import TextInput from './TextInput'
-import ErrorMessage, { TaloError } from './ErrorMessage'
-import buildError from '../utils/buildError'
-import TableCell from './tables/TableCell'
-import TableBody from './tables/TableBody'
 import clsx from 'clsx'
-import Table from './tables/Table'
-import SecondaryTitle from './SecondaryTitle'
-import { isMetaProp, metaPropKeyMap } from '../constants/metaProps'
+import { useMemo, useState } from 'react'
 import type { Prop } from '../entities/prop'
+import { isMetaProp, metaPropKeyMap } from '../constants/metaProps'
+import buildError from '../utils/buildError'
+import Button from './Button'
+import ErrorMessage, { TaloError } from './ErrorMessage'
+import SecondaryTitle from './SecondaryTitle'
+import Table from './tables/Table'
+import TableBody from './tables/TableBody'
+import TableCell from './tables/TableCell'
+import TextInput from './TextInput'
 
 type PropsEditorProps = {
   startingProps: Prop[]
@@ -23,11 +23,7 @@ type MetaProp = {
   value: string
 }
 
-export default function PropsEditor({
-  startingProps,
-  onSave,
-  noPropsMessage
-}: PropsEditorProps) {
+export default function PropsEditor({ startingProps, onSave, noPropsMessage }: PropsEditorProps) {
   const [originalProps, setOriginalProps] = useState<Prop[]>(startingProps)
   const [props, setProps] = useState<Prop[]>(originalProps)
   const [bulkPropsList, setBulkPropsList] = useState<string>('')
@@ -73,7 +69,9 @@ export default function PropsEditor({
   }, [bulkPropsList, newProps.length, originalProps, props])
 
   const enableSaveButton = useMemo(() => {
-    return newProps.every((prop) => prop.key && prop.value) && props.every((prop) => prop.value !== '')
+    return (
+      newProps.every((prop) => prop.key && prop.value) && props.every((prop) => prop.value !== '')
+    )
   }, [newProps, props])
 
   const reset = () => {
@@ -86,7 +84,10 @@ export default function PropsEditor({
     if (bulkPropsList) {
       try {
         const parsed = JSON.parse(bulkPropsList)
-        const bulkprops = Object.entries(parsed).map(([key, value]) => ({ key, value: typeof value === 'string' ? value : JSON.stringify(value) }))
+        const bulkprops = Object.entries(parsed).map(([key, value]) => ({
+          key,
+          value: typeof value === 'string' ? value : JSON.stringify(value),
+        }))
         newProps.push(...bulkprops)
         setNewProps(newProps)
         setBulkPropsList('')
@@ -126,7 +127,7 @@ export default function PropsEditor({
   return (
     <>
       <div className='space-y-4'>
-        {metaProps.length > 0 &&
+        {metaProps.length > 0 && (
           <>
             <SecondaryTitle>Talo props</SecondaryTitle>
             <Table columns={['Property', 'Value', '']}>
@@ -134,12 +135,14 @@ export default function PropsEditor({
                 iterator={metaProps}
                 configureClassnames={(prop, idx) => ({
                   'bg-orange-600': prop.key === 'META_DEV_BUILD' && idx % 2 !== 0,
-                  'bg-orange-500': prop.key === 'META_DEV_BUILD' && idx % 2 === 0
+                  'bg-orange-500': prop.key === 'META_DEV_BUILD' && idx % 2 === 0,
                 })}
               >
                 {(prop) => (
                   <>
-                    <TableCell className='min-w-80'>{metaPropKeyMap[(prop as MetaProp).key]}</TableCell>
+                    <TableCell className='min-w-80'>
+                      {metaPropKeyMap[(prop as MetaProp).key]}
+                    </TableCell>
                     <TableCell className='min-w-80'>{prop.value}</TableCell>
                     <TableCell />
                   </>
@@ -147,20 +150,24 @@ export default function PropsEditor({
               </TableBody>
             </Table>
           </>
-        }
+        )}
 
-        {existingProps.length + newProps.length === 0 &&
+        {existingProps.length + newProps.length === 0 && (
           <p>{noPropsMessage}. Click the button below to add one.</p>
-        }
+        )}
 
-        {existingProps.length + newProps.length > 0 &&
+        {existingProps.length + newProps.length > 0 && (
           <>
             {metaProps.length > 0 && <SecondaryTitle>Your props</SecondaryTitle>}
             <Table columns={['Property', 'Value', '']}>
               <TableBody iterator={existingProps}>
                 {(prop) => (
                   <>
-                    <TableCell className={clsx('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}>{prop.key}</TableCell>
+                    <TableCell
+                      className={clsx('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}
+                    >
+                      {prop.key}
+                    </TableCell>
                     <TableCell className='min-w-80'>
                       <TextInput
                         id={`edit-${prop.key}`}
@@ -173,7 +180,7 @@ export default function PropsEditor({
                     <TableCell className={clsx({ '!rounded-br-none': newProps.length > 0 })}>
                       <Button
                         variant='icon'
-                        className='p-1 rounded-full bg-indigo-900 ml-auto'
+                        className='ml-auto rounded-full bg-indigo-900 p-1'
                         onClick={() => editExistingProp(prop.key, null)}
                         icon={<IconTrash size={16} />}
                         extra={{ 'aria-label': `Delete ${prop.key} prop` }}
@@ -206,7 +213,7 @@ export default function PropsEditor({
                     <TableCell>
                       <Button
                         variant='icon'
-                        className='p-1 rounded-full bg-indigo-900 ml-auto'
+                        className='ml-auto rounded-full bg-indigo-900 p-1'
                         onClick={() => deleteNewProp(idx)}
                         icon={<IconTrash size={16} />}
                         extra={{ 'aria-label': `Delete ${prop.key} prop` }}
@@ -217,32 +224,28 @@ export default function PropsEditor({
               </TableBody>
             </Table>
           </>
-        }
+        )}
 
-        <Button
-          onClick={addNewProp}
-          icon={<IconPlus size={16} />}
-        >
+        <Button onClick={addNewProp} icon={<IconPlus size={16} />}>
           <span>New property</span>
         </Button>
       </div>
 
       <div className='space-y-4'>
-        <label className="block font-semibold" htmlFor="bulk-props">Import props</label>
+        <label className='block font-semibold' htmlFor='bulk-props'>
+          Import props
+        </label>
 
         <TextInput
           id='bulk-props'
           variant='light'
           inputType='textarea'
           placeholder='{"key1": "value1", "key2": "value2"}'
-          onChange={(value: string) =>  setBulkPropsList(value)}
+          onChange={(value: string) => setBulkPropsList(value)}
           value={bulkPropsList ?? ''}
         />
 
-        <Button
-          onClick={parseBulkPropsList}
-          disabled={!bulkPropsList}
-        >
+        <Button onClick={parseBulkPropsList} disabled={!bulkPropsList}>
           Parse JSON
         </Button>
       </div>

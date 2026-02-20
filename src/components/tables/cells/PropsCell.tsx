@@ -10,7 +10,7 @@ type PropsCellProps = {
 
 export default function PropsCell({ props, children }: PropsCellProps) {
   return (
-    <TableCell className='w-[400px]'>
+    <TableCell className='w-100'>
       {children ?? (props ? <PropBadgesGrid props={props} /> : null)}
     </TableCell>
   )

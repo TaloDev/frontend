@@ -1,18 +1,20 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
-import KitchenSink from '../../utils/KitchenSink'
-import activeGameState from '../../state/activeGameState'
-import IntegrationDetails from '../IntegrationDetails'
+import api from '../../api/api'
 import ToastProvider from '../../components/toast/ToastProvider'
 import { IntegrationType } from '../../entities/integration'
+import activeGameState from '../../state/activeGameState'
+import KitchenSink from '../../utils/KitchenSink'
+import IntegrationDetails from '../IntegrationDetails'
 
 describe('<IntegrationDetails />', () => {
   const axiosMock = new MockAdapter(api)
 
   it('should enable a steamworks integration', async () => {
-    axiosMock.onPost('http://talo.api/games/1/integrations').replyOnce(200, { integration: { id: 1 } })
+    axiosMock
+      .onPost('http://talo.api/games/1/integrations')
+      .replyOnce(200, { integration: { id: 1 } })
 
     const closeMock = vi.fn()
     const mutateMock = vi.fn()
@@ -26,12 +28,15 @@ describe('<IntegrationDetails />', () => {
             editingIntegration={{ type: IntegrationType.STEAMWORKS }}
           />
         </ToastProvider>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Enable')).toBeDisabled()
 
-    await userEvent.type(screen.getByLabelText('Publisher API key'), '337e67be02be453695f8a5b8038496c2')
+    await userEvent.type(
+      screen.getByLabelText('Publisher API key'),
+      '337e67be02be453695f8a5b8038496c2',
+    )
     expect(screen.getByText('Enable')).toBeDisabled()
 
     await userEvent.type(screen.getByLabelText('Game app ID'), '375290')
@@ -39,7 +44,9 @@ describe('<IntegrationDetails />', () => {
 
     await userEvent.click(screen.getByText('Enable'))
 
-    expect(await screen.findByText('Steamworks integration successfully enabled')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Steamworks integration successfully enabled'),
+    ).toBeInTheDocument()
 
     await waitFor(() => {
       expect(closeMock).toHaveBeenCalled()
@@ -49,7 +56,7 @@ describe('<IntegrationDetails />', () => {
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ integrations: [] })).toStrictEqual({
-      integrations: [{ id: 1 }]
+      integrations: [{ id: 1 }],
     })
   })
 
@@ -65,10 +72,13 @@ describe('<IntegrationDetails />', () => {
             editingIntegration={{ type: IntegrationType.STEAMWORKS }}
           />
         </ToastProvider>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
-    await userEvent.type(screen.getByLabelText('Publisher API key'), '337e67be02be453695f8a5b8038496c2')
+    await userEvent.type(
+      screen.getByLabelText('Publisher API key'),
+      '337e67be02be453695f8a5b8038496c2',
+    )
     await userEvent.type(screen.getByLabelText('Game app ID'), '375290')
 
     expect(await screen.findByText('Enable')).toBeEnabled()
@@ -90,7 +100,7 @@ describe('<IntegrationDetails />', () => {
             editingIntegration={{ type: IntegrationType.STEAMWORKS }}
           />
         </ToastProvider>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Cancel'))
@@ -110,10 +120,13 @@ describe('<IntegrationDetails />', () => {
             editingIntegration={{ type: IntegrationType.STEAMWORKS }}
           />
         </ToastProvider>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
-    await userEvent.type(screen.getByLabelText('Publisher API key'), '337e67be02be453695f8a5b8038496c')
+    await userEvent.type(
+      screen.getByLabelText('Publisher API key'),
+      '337e67be02be453695f8a5b8038496c',
+    )
     expect(await screen.findByText('Key must be 32 characters long')).toBeInTheDocument()
 
     await userEvent.type(screen.getByLabelText('Publisher API key'), '2')
@@ -138,12 +151,12 @@ describe('<IntegrationDetails />', () => {
               config: {
                 appId: 375290,
                 syncLeaderboards: true,
-                syncStats: false
-              }
+                syncStats: false,
+              },
             }}
           />
         </ToastProvider>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByDisplayValue('375290')).toBeInTheDocument()
@@ -169,12 +182,12 @@ describe('<IntegrationDetails />', () => {
               config: {
                 appId: 375290,
                 syncLeaderboards: true,
-                syncStats: false
-              }
+                syncStats: false,
+              },
             }}
           />
         </ToastProvider>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Disable'))
@@ -185,11 +198,13 @@ describe('<IntegrationDetails />', () => {
 
     expect(mutateMock).toHaveBeenCalled()
 
-    expect(await screen.findByText('Steamworks integration successfully disabled')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Steamworks integration successfully disabled'),
+    ).toBeInTheDocument()
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ integrations: [{ id: 1 }, { id: 2 }] })).toStrictEqual({
-      integrations: [{ id: 2 }]
+      integrations: [{ id: 2 }],
     })
   })
 
@@ -211,12 +226,12 @@ describe('<IntegrationDetails />', () => {
               config: {
                 appId: 375290,
                 syncLeaderboards: true,
-                syncStats: false
-              }
+                syncStats: false,
+              },
             }}
           />
         </ToastProvider>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Disable'))
@@ -224,7 +239,9 @@ describe('<IntegrationDetails />', () => {
   })
 
   it('should update the steamworks integration api key', async () => {
-    axiosMock.onPatch('http://talo.api/games/1/integrations/1').replyOnce(200, { integration: { id: 1 } })
+    axiosMock
+      .onPatch('http://talo.api/games/1/integrations/1')
+      .replyOnce(200, { integration: { id: 1 } })
 
     const mutateMock = vi.fn()
 
@@ -240,12 +257,12 @@ describe('<IntegrationDetails />', () => {
               config: {
                 appId: 375290,
                 syncLeaderboards: true,
-                syncStats: false
-              }
+                syncStats: false,
+              },
             }}
           />
         </ToastProvider>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Update key'))
@@ -258,12 +275,14 @@ describe('<IntegrationDetails />', () => {
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ integrations: [{ id: 1 }, { id: 2 }] })).toStrictEqual({
-      integrations: [{ id: 1 }, { id: 2 }]
+      integrations: [{ id: 1 }, { id: 2 }],
     })
   })
 
   it('should update the steamworks integration app id', async () => {
-    axiosMock.onPatch('http://talo.api/games/1/integrations/1').replyOnce(200, { integration: { id: 1, config: { appId: '375299' } } })
+    axiosMock
+      .onPatch('http://talo.api/games/1/integrations/1')
+      .replyOnce(200, { integration: { id: 1, config: { appId: '375299' } } })
 
     const mutateMock = vi.fn()
 
@@ -279,12 +298,12 @@ describe('<IntegrationDetails />', () => {
               config: {
                 appId: 375290,
                 syncLeaderboards: true,
-                syncStats: false
-              }
+                syncStats: false,
+              },
             }}
           />
         </ToastProvider>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Game app ID'), '375299')
@@ -298,12 +317,14 @@ describe('<IntegrationDetails />', () => {
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ integrations: [{ id: 1, config: { appId: '325290' } }] })).toStrictEqual({
-      integrations: [{ id: 1, config: { appId: '375299' } }]
+      integrations: [{ id: 1, config: { appId: '375299' } }],
     })
   })
 
   it('should update the steamworks integration leaderboard syncing', async () => {
-    axiosMock.onPatch('http://talo.api/games/1/integrations/1').replyOnce(200, { integration: { id: 1, config: { syncLeaderboards: false } } })
+    axiosMock
+      .onPatch('http://talo.api/games/1/integrations/1')
+      .replyOnce(200, { integration: { id: 1, config: { syncLeaderboards: false } } })
 
     const mutateMock = vi.fn()
 
@@ -319,12 +340,12 @@ describe('<IntegrationDetails />', () => {
               config: {
                 appId: 375290,
                 syncLeaderboards: true,
-                syncStats: false
-              }
+                syncStats: false,
+              },
             }}
           />
         </ToastProvider>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByTestId('sync-leaderboards'))
@@ -333,16 +354,22 @@ describe('<IntegrationDetails />', () => {
       expect(mutateMock).toHaveBeenCalled()
     })
 
-    expect(await screen.findByText('Leaderboard syncing successfully turned off')).toBeInTheDocument()
+    expect(
+      await screen.findByText('Leaderboard syncing successfully turned off'),
+    ).toBeInTheDocument()
 
     const mutator = mutateMock.mock.calls[0][0]
-    expect(mutator({ integrations: [{ id: 1, config: { syncLeaderboards: true } }] })).toStrictEqual({
-      integrations: [{ id: 1, config: { syncLeaderboards: false } }]
+    expect(
+      mutator({ integrations: [{ id: 1, config: { syncLeaderboards: true } }] }),
+    ).toStrictEqual({
+      integrations: [{ id: 1, config: { syncLeaderboards: false } }],
     })
   })
 
   it('should update the steamworks integration stat syncing', async () => {
-    axiosMock.onPatch('http://talo.api/games/1/integrations/1').replyOnce(200, { integration: { id: 1, config: { syncStats: true } } })
+    axiosMock
+      .onPatch('http://talo.api/games/1/integrations/1')
+      .replyOnce(200, { integration: { id: 1, config: { syncStats: true } } })
 
     const mutateMock = vi.fn()
 
@@ -358,12 +385,12 @@ describe('<IntegrationDetails />', () => {
               config: {
                 appId: 375290,
                 syncLeaderboards: true,
-                syncStats: false
-              }
+                syncStats: false,
+              },
             }}
           />
         </ToastProvider>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByTestId('sync-stats'))
@@ -376,7 +403,7 @@ describe('<IntegrationDetails />', () => {
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ integrations: [{ id: 1, config: { syncStats: false } }] })).toStrictEqual({
-      integrations: [{ id: 1, config: { syncStats: true } }]
+      integrations: [{ id: 1, config: { syncStats: true } }],
     })
   })
 
@@ -397,12 +424,12 @@ describe('<IntegrationDetails />', () => {
               config: {
                 appId: 375290,
                 syncLeaderboards: true,
-                syncStats: false
-              }
+                syncStats: false,
+              },
             }}
           />
         </ToastProvider>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Update key'))

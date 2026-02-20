@@ -10,7 +10,9 @@ describe('<Pagination />', () => {
   })
 
   it('should render the correct amount of pages and ellipsis', () => {
-    render(<Pagination count={350} pageState={[7, vi.fn()]} itemsPerPage={25} maxPageButtons={10} />)
+    render(
+      <Pagination count={350} pageState={[7, vi.fn()]} itemsPerPage={25} maxPageButtons={10} />,
+    )
     // previous, 1, ..., 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, ..., 14, next
     expect(screen.getAllByRole('listitem')).toHaveLength(16)
   })

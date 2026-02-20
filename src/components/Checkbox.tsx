@@ -1,7 +1,7 @@
-import clsx from 'clsx'
-import { IconCheck } from '@tabler/icons-react'
-import { focusStyle } from '../styles/theme'
 import type { ReactNode, Ref } from 'react'
+import { IconCheck } from '@tabler/icons-react'
+import clsx from 'clsx'
+import { focusStyle } from '../styles/theme'
 
 type CheckboxProps = {
   id: string
@@ -11,29 +11,31 @@ type CheckboxProps = {
   inputRef?: Ref<HTMLInputElement>
 }
 
-export default function Checkbox({
-  id,
-  checked,
-  onChange,
-  labelContent,
-  inputRef
-}: CheckboxProps) {
+export default function Checkbox({ id, checked, onChange, labelContent, inputRef }: CheckboxProps) {
   return (
     <div>
       <span className='relative'>
         <input
           id={id}
           ref={inputRef}
-          className={clsx(focusStyle, 'peer appearance-none align-text-top h-[20px] w-[20px] rounded-sm border border-gray-500 checked:border-indigo-400 bg-gray-600 checked:bg-indigo-500')}
+          className={clsx(
+            focusStyle,
+            'peer h-[20px] w-[20px] appearance-none rounded-sm border border-gray-500 bg-gray-600 align-text-top checked:border-indigo-400 checked:bg-indigo-500',
+          )}
           type='checkbox'
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}
         />
-        <IconCheck size={16} stroke={3} className='hidden peer-checked:inline absolute left-[1.5px] top-[2px] pointer-events-none' />
+        <IconCheck
+          size={16}
+          stroke={3}
+          className='pointer-events-none absolute top-[2px] left-[1.5px] hidden peer-checked:inline'
+        />
       </span>
 
-
-      <label htmlFor={id} className='ml-2'>{labelContent}</label>
+      <label htmlFor={id} className='ml-2'>
+        {labelContent}
+      </label>
     </div>
   )
 }

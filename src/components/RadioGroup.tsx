@@ -1,5 +1,5 @@
-import { useState } from 'react'
 import clsx from 'clsx'
+import { useState } from 'react'
 import { hiddenInputStyle, labelFocusStyle } from '../styles/theme'
 
 type RadioGroupProps<T> = {
@@ -14,19 +14,12 @@ type RadioGroupProps<T> = {
   info?: string
 }
 
-function RadioGroup<T>({
-  label,
-  name,
-  options,
-  onChange,
-  value,
-  info
-}: RadioGroupProps<T>) {
+function RadioGroup<T>({ label, name, options, onChange, value, info }: RadioGroupProps<T>) {
   const [focusedValue, setFocusedValue] = useState<T | null>(null)
 
   return (
     <fieldset className='w-full'>
-      {label && <legend className='font-semibold mb-1'>{label}</legend>}
+      {label && <legend className='mb-1 font-semibold'>{label}</legend>}
       {info && <p className='mb-2 text-sm text-gray-500'>{info}</p>}
 
       <div className='flex space-x-2'>
@@ -50,15 +43,20 @@ function RadioGroup<T>({
               <label
                 htmlFor={`${name}${idx}`}
                 className={clsx(
-                  'block font-semibold border border-black/30 p-2 rounded cursor-pointer transition-colors hover:bg-gray-100',
-                  { 'bg-indigo-500 hover:!bg-indigo-500 border-indigo-500': selected },
-                  { [labelFocusStyle]: option.value === focusedValue }
+                  'block cursor-pointer rounded border border-black/30 p-2 font-semibold transition-colors hover:bg-gray-100',
+                  { 'border-indigo-500 bg-indigo-500 hover:!bg-indigo-500': selected },
+                  { [labelFocusStyle]: option.value === focusedValue },
                 )}
               >
-                <span className={clsx('inline-block relative rounded-full w-4 h-4 bg-white align-text-bottom border border-black/30', { 'border-indigo-500': selected })}>
-                  {selected &&
-                    <span className='absolute inset-0 rounded-full bg-indigo-300 m-0.5' />
-                  }
+                <span
+                  className={clsx(
+                    'relative inline-block h-4 w-4 rounded-full border border-black/30 bg-white align-text-bottom',
+                    { 'border-indigo-500': selected },
+                  )}
+                >
+                  {selected && (
+                    <span className='absolute inset-0 m-0.5 rounded-full bg-indigo-300' />
+                  )}
                 </span>
 
                 <span className={clsx('ml-1', { 'text-white': selected })}>{option.label}</span>

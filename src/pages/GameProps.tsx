@@ -1,11 +1,11 @@
-import Page from '../components/Page'
-import activeGameState, { SelectedActiveGameState } from '../state/activeGameState'
-import { useRecoilState } from 'recoil'
-import PropsEditor from '../components/PropsEditor'
-import updateGame from '../api/updateGame'
-import { Prop } from '../entities/prop'
 import { useContext } from 'react'
+import { useRecoilState } from 'recoil'
+import updateGame from '../api/updateGame'
+import Page from '../components/Page'
+import PropsEditor from '../components/PropsEditor'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
+import { Prop } from '../entities/prop'
+import activeGameState, { SelectedActiveGameState } from '../state/activeGameState'
 
 export default function GameProps() {
   const [activeGame, setActiveGame] = useRecoilState(activeGameState) as SelectedActiveGameState
@@ -22,10 +22,7 @@ export default function GameProps() {
   }
 
   return (
-    <Page
-      containerClassName='w-full lg:w-2/3'
-      title={`${activeGame.name} config`}
-    >
+    <Page containerClassName='w-full lg:w-2/3' title={`${activeGame.name} config`}>
       <PropsEditor
         startingProps={activeGame.props}
         onSave={onSave}

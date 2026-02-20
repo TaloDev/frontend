@@ -1,43 +1,43 @@
 import { render, screen } from '@testing-library/react'
-import api from '../../api/api'
+import userEvent from '@testing-library/user-event'
 import MockAdapter from 'axios-mock-adapter'
-import KitchenSink from '../../utils/KitchenSink'
-import userState from '../../state/userState'
+import api from '../../api/api'
+import { PlayerGroupRuleMode } from '../../entities/playerGroup'
 import activeGameState from '../../state/activeGameState'
 import devDataState from '../../state/devDataState'
+import userState from '../../state/userState'
+import KitchenSink from '../../utils/KitchenSink'
 import Dashboard from '../Dashboard'
-import userEvent from '@testing-library/user-event'
-import { PlayerGroupRuleMode } from '../../entities/playerGroup'
 
 describe('<Dashboard />', () => {
   const axiosMock = new MockAdapter(api)
 
   beforeEach(() => {
     axiosMock.onGet(/\/games\/\d\/headlines\/new_players/).replyOnce(200, {
-      count: 3
+      count: 3,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/returning_players/).replyOnce(200, {
-      count: 1
+      count: 1,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/events/).replyOnce(200, {
-      count: 104
+      count: 104,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/unique_event_submitters/).replyOnce(200, {
-      count: 8
+      count: 8,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/total_sessions/).replyOnce(200, {
-      count: 122
+      count: 122,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/average_session_duration/).replyOnce(200, {
       hours: 2,
       minutes: 30,
-      seconds: 45
+      seconds: 45,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/total_players/).replyOnce(200, {
-      count: 150030
+      count: 150030,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/online_players/).replyOnce(200, {
-      count: 2094
+      count: 2094,
     })
 
     axiosMock.onGet(/\/games\/\d\/player-groups\/pinned/).replyOnce(200, {
@@ -49,17 +49,17 @@ describe('<Dashboard />', () => {
           rules: [],
           ruleMode: PlayerGroupRuleMode.AND,
           count: 0,
-          updatedAt: new Date().toISOString()
-        }
-      ]
+          updatedAt: new Date().toISOString(),
+        },
+      ],
     })
   })
 
   axiosMock.onGet(/\/game-stats/).reply(200, {
     stats: [
       { id: 1, global: true, name: 'Stat A', globalValue: 10 },
-      { id: 2, global: true, name: 'Stat B', globalValue: 30 }
-    ]
+      { id: 2, global: true, name: 'Stat B', globalValue: 30 },
+    ],
   })
 
   it('should render an empty state if there is no active game', async () => {
@@ -67,14 +67,18 @@ describe('<Dashboard />', () => {
       <KitchenSink
         states={[
           { node: userState, initialValue: {} },
-          { node: devDataState, initialValue: false }
+          { node: devDataState, initialValue: false },
         ]}
       >
         <Dashboard />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
-    expect(await screen.findByText('Welcome to Talo! To get started, create a new game using the button in the top right')).toBeInTheDocument()
+    expect(
+      await screen.findByText(
+        'Welcome to Talo! To get started, create a new game using the button in the top right',
+      ),
+    ).toBeInTheDocument()
   })
 
   it('should render the dashboard for an existing game', async () => {
@@ -83,11 +87,11 @@ describe('<Dashboard />', () => {
         states={[
           { node: userState, initialValue: {} },
           { node: activeGameState, initialValue: { id: 1, name: 'Swerve City' } },
-          { node: devDataState, initialValue: false }
+          { node: devDataState, initialValue: false },
         ]}
       >
         <Dashboard />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText('Swerve City dashboard')).toBeInTheDocument()
@@ -112,11 +116,11 @@ describe('<Dashboard />', () => {
         states={[
           { node: userState, initialValue: {} },
           { node: activeGameState, initialValue: { id: 2, name: 'Swerve City' } },
-          { node: devDataState, initialValue: false }
+          { node: devDataState, initialValue: false },
         ]}
       >
         <Dashboard />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText('Swerve City dashboard')).toBeInTheDocument()
@@ -125,24 +129,24 @@ describe('<Dashboard />', () => {
 
     axiosMock.reset()
     axiosMock.onGet(/\/games\/\d\/headlines\/new_players/).replyOnce(200, {
-      count: 3
+      count: 3,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/returning_players/).replyOnce(200, {
-      count: 1
+      count: 1,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/events/).replyOnce(200, {
-      count: 2103
+      count: 2103,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/unique_event_submitters/).replyOnce(200, {
-      count: 8
+      count: 8,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/total_sessions/).replyOnce(200, {
-      count: 122
+      count: 122,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/average_session_duration/).replyOnce(200, {
       hours: 2,
       minutes: 30,
-      seconds: 45
+      seconds: 45,
     })
 
     await userEvent.click(screen.getByText('This year'))
@@ -166,17 +170,17 @@ describe('<Dashboard />', () => {
         states={[
           { node: userState, initialValue: {} },
           { node: activeGameState, initialValue: { id: 3, name: 'Swerve City' } },
-          { node: devDataState, initialValue: false }
+          { node: devDataState, initialValue: false },
         ]}
       >
         <Dashboard />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText('Swerve City dashboard')).toBeInTheDocument()
 
-    expect(await screen.findByText('Couldn\'t fetch headlines')).toBeInTheDocument()
-    expect(await screen.findByText('Couldn\'t fetch stats')).toBeInTheDocument()
+    expect(await screen.findByText("Couldn't fetch headlines")).toBeInTheDocument()
+    expect(await screen.findByText("Couldn't fetch stats")).toBeInTheDocument()
   })
 
   it('should go to the intended route', () => {
@@ -191,12 +195,12 @@ describe('<Dashboard />', () => {
         states={[
           { node: userState, initialValue: {} },
           { node: activeGameState, initialValue: { id: 4, name: 'Swerve City' } },
-          { node: devDataState, initialValue: false }
+          { node: devDataState, initialValue: false },
         ]}
         setLocation={locationMock}
       >
         <Dashboard />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(locationMock).toHaveBeenCalledWith({ pathname: '/players', state: null })

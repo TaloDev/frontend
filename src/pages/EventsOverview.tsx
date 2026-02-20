@@ -1,10 +1,10 @@
 import { useRecoilValue } from 'recoil'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import Page from '../components/Page'
+import useEvents from '../api/useEvents'
+import { EventsProvider, useEventsContext } from '../components/events/EventsContext'
 import EventsDisplay from '../components/events/EventsDisplay'
 import EventsFiltersSection from '../components/events/EventsFiltersSection'
-import { EventsProvider, useEventsContext } from '../components/events/EventsContext'
-import useEvents from '../api/useEvents'
+import Page from '../components/Page'
+import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 
 const localStorageKey = 'eventsOverview'
 
@@ -20,7 +20,11 @@ export default function EventsOverview() {
 
 function EventsOverviewDisplay({ activeGame }: { activeGame: SelectedActiveGame }) {
   const { debouncedStartDate, debouncedEndDate } = useEventsContext()
-  const { events, eventNames, loading, error } = useEvents(activeGame, debouncedStartDate, debouncedEndDate)
+  const { events, eventNames, loading, error } = useEvents(
+    activeGame,
+    debouncedStartDate,
+    debouncedEndDate,
+  )
 
   return (
     <Page title='Events overview' isLoading={loading}>

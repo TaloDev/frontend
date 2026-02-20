@@ -3,7 +3,7 @@ import { User } from '../entities/user'
 
 const userState = atom<User | null>({
   key: 'user',
-  default: null
+  default: null,
 })
 
 export type AuthedUser = NonNullable<User>

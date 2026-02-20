@@ -5,7 +5,7 @@ export const playerAuthActivitySchema = z.object({
   type: z.number(),
   description: z.string(),
   extra: z.record(z.unknown()),
-  createdAt: z.string().datetime()
+  createdAt: z.string().datetime(),
 })
 
 export type PlayerAuthActivity = z.infer<typeof playerAuthActivitySchema>

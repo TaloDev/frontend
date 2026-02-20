@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react'
-import api from '../../api/api'
-import MockAdapter from 'axios-mock-adapter'
-import KitchenSink from '../../utils/KitchenSink'
-import activeGameState from '../../state/activeGameState'
 import userEvent from '@testing-library/user-event'
-import Integrations from '../Integrations'
+import MockAdapter from 'axios-mock-adapter'
+import api from '../../api/api'
+import activeGameState from '../../state/activeGameState'
 import userState from '../../state/userState'
+import KitchenSink from '../../utils/KitchenSink'
+import Integrations from '../Integrations'
 
 describe('<Integrations />', () => {
   const axiosMock = new MockAdapter(api)
@@ -14,12 +14,14 @@ describe('<Integrations />', () => {
     axiosMock.onGet('http://talo.api/games/1/integrations').replyOnce(200, { integrations: [] })
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: {} },
-        { node: activeGameState, initialValue: { id: 1 } }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: {} },
+          { node: activeGameState, initialValue: { id: 1 } },
+        ]}
+      >
         <Integrations />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText('Enable integration')).toBeInTheDocument()
@@ -31,26 +33,30 @@ describe('<Integrations />', () => {
 
   it('should render the enabled state for the steamworks integration', async () => {
     axiosMock.onGet('http://talo.api/games/1/integrations').replyOnce(200, {
-      integrations: [{
-        id: 1,
-        type: 'steamworks',
-        createdAt: '2022-08-01 20:08:13',
-        updatedAt: '2022-08-01 20:32:43',
-        config: {
-          appId: '375290',
-          syncLeaderboards: true,
-          syncStats: true
-        }
-      }]
+      integrations: [
+        {
+          id: 1,
+          type: 'steamworks',
+          createdAt: '2022-08-01 20:08:13',
+          updatedAt: '2022-08-01 20:32:43',
+          config: {
+            appId: '375290',
+            syncLeaderboards: true,
+            syncStats: true,
+          },
+        },
+      ],
     })
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: {} },
-        { node: activeGameState, initialValue: { id: 1 } }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: {} },
+          { node: activeGameState, initialValue: { id: 1 } },
+        ]}
+      >
         <Integrations />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText('Update integration')).toBeInTheDocument()
@@ -67,12 +73,14 @@ describe('<Integrations />', () => {
     axiosMock.onGet('http://talo.api/games/1/integrations').networkErrorOnce()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: {} },
-        { node: activeGameState, initialValue: { id: 1 } }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: {} },
+          { node: activeGameState, initialValue: { id: 1 } },
+        ]}
+      >
         <Integrations />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText('Network Error')).toBeInTheDocument()
@@ -82,71 +90,90 @@ describe('<Integrations />', () => {
     [false, false],
     [false, true],
     [true, false],
-    [true, true]
-  ])('should handle steamworks syncing when leaderboard syncing is %p and stat syncing is %p', async (syncLeaderboards, syncStats) => {
-    axiosMock.onGet('http://talo.api/games/1/integrations').replyOnce(200, {
-      integrations: [{
-        id: 1,
-        type: 'steamworks',
-        createdAt: '2022-08-01 20:08:13',
-        updatedAt: '2022-08-01 20:32:43',
-        config: {
-          appId: '375290',
-          syncLeaderboards,
-          syncStats
-        }
-      }]
-    })
+    [true, true],
+  ])(
+    'should handle steamworks syncing when leaderboard syncing is %p and stat syncing is %p',
+    async (syncLeaderboards, syncStats) => {
+      axiosMock.onGet('http://talo.api/games/1/integrations').replyOnce(200, {
+        integrations: [
+          {
+            id: 1,
+            type: 'steamworks',
+            createdAt: '2022-08-01 20:08:13',
+            updatedAt: '2022-08-01 20:32:43',
+            config: {
+              appId: '375290',
+              syncLeaderboards,
+              syncStats,
+            },
+          },
+        ],
+      })
 
-    if (syncLeaderboards) axiosMock.onPost('http://talo.api/games/1/integrations/1/sync-leaderboards').replyOnce(204)
-    if (syncStats) axiosMock.onPost('http://talo.api/games/1/integrations/1/sync-stats').replyOnce(204)
+      if (syncLeaderboards)
+        axiosMock.onPost('http://talo.api/games/1/integrations/1/sync-leaderboards').replyOnce(204)
+      if (syncStats)
+        axiosMock.onPost('http://talo.api/games/1/integrations/1/sync-stats').replyOnce(204)
 
-    render(
-      <KitchenSink states={[
-        { node: userState, initialValue: {} },
-        { node: activeGameState, initialValue: { id: 1 } }
-      ]}>
-        <Integrations />
-      </KitchenSink>
-    )
+      render(
+        <KitchenSink
+          states={[
+            { node: userState, initialValue: {} },
+            { node: activeGameState, initialValue: { id: 1 } },
+          ]}
+        >
+          <Integrations />
+        </KitchenSink>,
+      )
 
-    if (syncLeaderboards) {
-      expect(await screen.findByText('Sync leaderboards')).toBeInTheDocument()
-      await userEvent.click(screen.getByText('Sync leaderboards'))
-      expect(await screen.findByText('This will usually only take a few minutes. Leaderboards will be updated in the background.')).toBeInTheDocument()
-    }
+      if (syncLeaderboards) {
+        expect(await screen.findByText('Sync leaderboards')).toBeInTheDocument()
+        await userEvent.click(screen.getByText('Sync leaderboards'))
+        expect(
+          await screen.findByText(
+            'This will usually only take a few minutes. Leaderboards will be updated in the background.',
+          ),
+        ).toBeInTheDocument()
+      }
 
-    if (syncStats) {
-      expect(await screen.findByText('Sync stats')).toBeInTheDocument()
-      await userEvent.click(screen.getByText('Sync stats'))
-      expect(await screen.findByText('This will usually only take a few minutes.')).toBeInTheDocument()
-    }
-  })
+      if (syncStats) {
+        expect(await screen.findByText('Sync stats')).toBeInTheDocument()
+        await userEvent.click(screen.getByText('Sync stats'))
+        expect(
+          await screen.findByText('This will usually only take a few minutes.'),
+        ).toBeInTheDocument()
+      }
+    },
+  )
 
   it('should handle steamworks leaderboards syncing errors', async () => {
     axiosMock.onGet('http://talo.api/games/1/integrations').replyOnce(200, {
-      integrations: [{
-        id: 1,
-        type: 'steamworks',
-        createdAt: '2022-08-01 20:08:13',
-        updatedAt: '2022-08-01 20:32:43',
-        config: {
-          appId: '375290',
-          syncLeaderboards: true,
-          syncStats: true
-        }
-      }]
+      integrations: [
+        {
+          id: 1,
+          type: 'steamworks',
+          createdAt: '2022-08-01 20:08:13',
+          updatedAt: '2022-08-01 20:32:43',
+          config: {
+            appId: '375290',
+            syncLeaderboards: true,
+            syncStats: true,
+          },
+        },
+      ],
     })
 
     axiosMock.onPost('http://talo.api/games/1/integrations/1/sync-leaderboards').networkErrorOnce()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: {} },
-        { node: activeGameState, initialValue: { id: 1 } }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: {} },
+          { node: activeGameState, initialValue: { id: 1 } },
+        ]}
+      >
         <Integrations />
-      </KitchenSink>
+      </KitchenSink>,
     )
     expect(await screen.findByText('Sync leaderboards')).toBeInTheDocument()
     await userEvent.click(screen.getByText('Sync leaderboards'))
@@ -155,28 +182,32 @@ describe('<Integrations />', () => {
 
   it('should handle steamworks stats syncing errors', async () => {
     axiosMock.onGet('http://talo.api/games/1/integrations').replyOnce(200, {
-      integrations: [{
-        id: 1,
-        type: 'steamworks',
-        createdAt: '2022-08-01 20:08:13',
-        updatedAt: '2022-08-01 20:32:43',
-        config: {
-          appId: '375290',
-          syncLeaderboards: true,
-          syncStats: true
-        }
-      }]
+      integrations: [
+        {
+          id: 1,
+          type: 'steamworks',
+          createdAt: '2022-08-01 20:08:13',
+          updatedAt: '2022-08-01 20:32:43',
+          config: {
+            appId: '375290',
+            syncLeaderboards: true,
+            syncStats: true,
+          },
+        },
+      ],
     })
 
     axiosMock.onPost('http://talo.api/games/1/integrations/1/sync-stats').networkErrorOnce()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: {} },
-        { node: activeGameState, initialValue: { id: 1 } }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: {} },
+          { node: activeGameState, initialValue: { id: 1 } },
+        ]}
+      >
         <Integrations />
-      </KitchenSink>
+      </KitchenSink>,
     )
     expect(await screen.findByText('Sync stats')).toBeInTheDocument()
     await userEvent.click(screen.getByText('Sync stats'))

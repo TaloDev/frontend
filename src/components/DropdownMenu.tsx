@@ -1,7 +1,7 @@
-import { ReactNode, useState } from 'react'
-import { motion } from 'framer-motion'
-import Button from './Button'
 import Tippy from '@tippyjs/react'
+import { motion } from 'framer-motion'
+import { ReactNode, useState } from 'react'
+import Button from './Button'
 
 type DropdownMenuProps = {
   options: {
@@ -11,10 +11,7 @@ type DropdownMenuProps = {
   children: (setOpen: (val: boolean) => void) => ReactNode
 }
 
-export default function DropdownMenu({
-  options,
-  children
-}: DropdownMenuProps) {
+export default function DropdownMenu({ options, children }: DropdownMenuProps) {
   const [isOpen, setOpen] = useState(false)
 
   return (
@@ -27,19 +24,19 @@ export default function DropdownMenu({
         interactive={true}
         arrow={false}
         theme='bare'
-        content={(
+        content={
           <motion.ul
             animate={{ opacity: isOpen ? 1 : 0 }}
             transition={{ duration: 0.2 }}
-            className='bg-white text-black rounded overflow-hidden min-w-20 divide-y divide-gray-300 border border-gray-300 shadow'
+            className='min-w-20 divide-y divide-gray-300 overflow-hidden rounded border border-gray-300 bg-white text-black shadow'
           >
             {options.map(({ label, onClick }) => {
               return (
-                <li key={label} className='hover:bg-gray-100 active:bg-gray-200 focus:z-10'>
+                <li key={label} className='hover:bg-gray-100 focus:z-10 active:bg-gray-200'>
                   <Button
                     type='button'
                     variant='bare'
-                    className='truncate p-2 w-full'
+                    className='w-full truncate p-2'
                     onClick={() => {
                       onClick()
                       setOpen(false)
@@ -51,11 +48,9 @@ export default function DropdownMenu({
               )
             })}
           </motion.ul>
-        )}
+        }
       >
-        <div>
-          {children(setOpen)}
-        </div>
+        <div>{children(setOpen)}</div>
       </Tippy>
     </span>
   )

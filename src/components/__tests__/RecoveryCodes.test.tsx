@@ -1,16 +1,16 @@
 import { render, screen, waitFor } from '@testing-library/react'
-import RecoveryCodes from '../RecoveryCodes'
 import userEvent from '@testing-library/user-event'
 import routes from '../../constants/routes'
 import { ConfirmPasswordAction } from '../../pages/ConfirmPassword'
 import KitchenSink from '../../utils/KitchenSink'
+import RecoveryCodes from '../RecoveryCodes'
 
 describe('<RecoveryCodes />', () => {
   it('should render recovery codes', () => {
     render(
       <KitchenSink>
         <RecoveryCodes codes={['abc123', 'efg456', 'hij789']} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getAllByRole('listitem')).toHaveLength(3)
@@ -26,7 +26,7 @@ describe('<RecoveryCodes />', () => {
     render(
       <KitchenSink>
         <RecoveryCodes codes={['abc123', 'efg456', 'hij789']} withBackground />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getAllByRole('listitem')).toHaveLength(3)
@@ -44,7 +44,7 @@ describe('<RecoveryCodes />', () => {
     render(
       <KitchenSink setLocation={setLocationMock}>
         <RecoveryCodes codes={['abc123', 'efg456', 'hij789']} showCreateButton />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Create new codes')).toBeInTheDocument()
@@ -55,8 +55,8 @@ describe('<RecoveryCodes />', () => {
       expect(setLocationMock).toHaveBeenCalledWith({
         pathname: routes.confirmPassword,
         state: {
-          onConfirmAction: ConfirmPasswordAction.CREATE_RECOVERY_CODES
-        }
+          onConfirmAction: ConfirmPasswordAction.CREATE_RECOVERY_CODES,
+        },
       })
     })
   })
@@ -64,27 +64,29 @@ describe('<RecoveryCodes />', () => {
   it('should let the user copy codes', async () => {
     Object.defineProperty(navigator, 'clipboard', {
       writable: true,
-      value: { writeText: vi.fn() }
+      value: { writeText: vi.fn() },
     })
 
     const codes = ['abc123', 'efg456', 'hij789']
     render(
       <KitchenSink>
         <RecoveryCodes codes={codes} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Copy codes'))
     expect(await screen.findByText('Copied')).toBeInTheDocument()
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1)
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(['abc123', 'efg456', 'hij789'].join('\n\n'))
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+      ['abc123', 'efg456', 'hij789'].join('\n\n'),
+    )
   })
 
   it('should let the user download codes', async () => {
     const link: Partial<HTMLAnchorElement> = {
       click: vi.fn(),
-      remove: vi.fn()
+      remove: vi.fn(),
     }
 
     URL.createObjectURL = vi.fn(() => 'data')
@@ -93,7 +95,7 @@ describe('<RecoveryCodes />', () => {
     render(
       <KitchenSink>
         <RecoveryCodes codes={['abc123', 'efg456', 'hij789']} />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     vi.spyOn(document, 'createElement').mockImplementation(() => link as HTMLAnchorElement)

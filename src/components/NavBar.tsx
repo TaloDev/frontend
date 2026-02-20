@@ -1,16 +1,16 @@
+import * as Sentry from '@sentry/react'
+import { IconMenu2 } from '@tabler/icons-react'
 import { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import logout from '../api/logout'
-import LinkButton from './LinkButton'
-import Link from './Link'
 import routes from '../constants/routes'
-import GameSwitcher from './GameSwitcher'
-import { IconMenu2 } from '@tabler/icons-react'
-import MobileMenu from './MobileMenu'
-import Button from './Button'
-import ServicesLink from './ServicesLink'
-import * as Sentry from '@sentry/react'
 import activeGameState from '../state/activeGameState'
+import Button from './Button'
+import GameSwitcher from './GameSwitcher'
+import Link from './Link'
+import LinkButton from './LinkButton'
+import MobileMenu from './MobileMenu'
+import ServicesLink from './ServicesLink'
 
 export default function NavBar() {
   const [activeGame, setActiveGame] = useRecoilState(activeGameState)
@@ -38,9 +38,7 @@ export default function NavBar() {
       <li>
         <Link to='/'>Home</Link>
       </li>
-      {activeGame &&
-        <ServicesLink />
-      }
+      {activeGame && <ServicesLink />}
       <li>
         <Link to={routes.account}>Account</Link>
       </li>
@@ -51,12 +49,10 @@ export default function NavBar() {
   )
 
   return (
-    <nav className='bg-gray-900 w-full p-4 md:p-8 flex justify-between items-center'>
-      <ul className='hidden md:flex space-x-4 md:space-x-8'>
-        {links}
-      </ul>
+    <nav className='flex w-full items-center justify-between bg-gray-900 p-4 md:p-8'>
+      <ul className='hidden space-x-4 md:flex md:space-x-8'>{links}</ul>
 
-      <div className='flex mr-4 md:hidden text-white'>
+      <div className='mr-4 flex text-white md:hidden'>
         <Button
           variant='icon'
           onClick={() => setShowMobileMenu(true)}

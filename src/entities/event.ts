@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { propSchema } from './prop'
 import { playerAliasSchema } from './playerAlias'
+import { propSchema } from './prop'
 
 export const eventSchema = z.object({
   id: z.string().uuid(),
@@ -8,7 +8,7 @@ export const eventSchema = z.object({
   props: z.array(propSchema),
   playerAlias: playerAliasSchema,
   gameId: z.number(),
-  createdAt: z.string().datetime()
+  createdAt: z.string().datetime(),
 })
 
 export type Event = z.infer<typeof eventSchema>

@@ -1,21 +1,23 @@
-import api from '../../api/api'
-import MockAdapter from 'axios-mock-adapter'
 import { render, screen } from '@testing-library/react'
-import ConfirmEmailBanner from '../ConfirmEmailBanner'
-import userState from '../../state/userState'
 import userEvent from '@testing-library/user-event'
+import MockAdapter from 'axios-mock-adapter'
+import api from '../../api/api'
+import userState from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
+import ConfirmEmailBanner from '../ConfirmEmailBanner'
 import Link from '../Link'
 
 describe('<ConfirmEmailBanner />', () => {
   const axiosMock = new MockAdapter(api)
-  axiosMock.onPost('http://talo.api/users/confirm_email').reply(200, { user: { emailConfirmed: true } })
+  axiosMock
+    .onPost('http://talo.api/users/confirm_email')
+    .reply(200, { user: { emailConfirmed: true } })
 
-  it('should render if the user hasn\'t confirmed their email', () => {
+  it("should render if the user hasn't confirmed their email", () => {
     render(
       <KitchenSink states={[{ node: userState, initialValue: {} }]}>
         <ConfirmEmailBanner />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Please confirm your email address')).toBeInTheDocument()
@@ -26,7 +28,7 @@ describe('<ConfirmEmailBanner />', () => {
       <KitchenSink states={[{ node: userState, initialValue: {}, onChange: vi.fn() }]}>
         <Link to='/'>Navigate away</Link>
         <ConfirmEmailBanner />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     const { type, click } = userEvent.setup()
@@ -46,7 +48,7 @@ describe('<ConfirmEmailBanner />', () => {
     render(
       <KitchenSink states={[{ node: userState, initialValue: {} }]}>
         <ConfirmEmailBanner />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     const { type, click } = userEvent.setup()

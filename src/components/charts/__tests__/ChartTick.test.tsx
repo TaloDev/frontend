@@ -10,7 +10,7 @@ describe('<ChartTick />', () => {
           formatter={(tick) => (tick as string).split(' ')[0]}
           transform={vi.fn()}
         />
-      </svg>
+      </svg>,
     )
 
     expect(screen.getByText('1995-11-12')).toBeInTheDocument()
