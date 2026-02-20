@@ -1,3 +1,4 @@
+import { get } from 'lodash-es'
 import { ReactElement } from 'react'
 import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from 'recharts'
 import ChartTick from './ChartTick'
@@ -7,6 +8,7 @@ import { TimePeriod } from '../../utils/useTimePeriod'
 import { LabelledTimePeriod } from '../TimePeriodPicker'
 import { DataKey } from 'recharts/types/util/types'
 import { ChartCard } from './ChartCard'
+import { useYAxis } from './useYAxis'
 
 export type BarChartCardBar<T> = {
   dataKey: DataKey<T>
@@ -37,6 +39,21 @@ export function BarChartCard<T>({
   height = 300,
   tooltip
 }: BarChartCardProps<T>) {
+  const { yAxisProps } = useYAxis({
+    data,
+    transformer: (d) => {
+      return d.flatMap((item) =>
+        bars.map((bar) => {
+          if (typeof bar.dataKey === 'function') {
+            return bar.dataKey(item)
+          }
+          const value = get(item, String(bar.dataKey))
+          return typeof value === 'number' ? value : 0
+        })
+      )
+    }
+  })
+
   return (
     <ChartCard
       title={title}
@@ -45,8 +62,9 @@ export function BarChartCard<T>({
       timePeriod={timePeriod}
       onTimePeriodChange={onTimePeriodChange}
       height={height}
+      hasData={data.length > 0}
     >
-      <BarChart data={data} margin={{ bottom: 20, left: 10, top: 10 }}>
+      <BarChart data={data} margin={{ top: 8, left: 16, bottom: 20, right: 8 }}>
         <CartesianGrid strokeDasharray='4' stroke='#444' vertical={false} />
 
         <XAxis
@@ -60,15 +78,7 @@ export function BarChartCard<T>({
           )}
         />
 
-        <YAxis
-          allowDecimals={false}
-          tick={(
-            <ChartTick
-              transform={(x, y) => `translate(${x! - 4},${y! - 12})`}
-              formatter={(tick) => tick.toLocaleString()}
-            />
-          )}
-        />
+        <YAxis {...yAxisProps} />
 
         <Tooltip
           content={tooltip}
