@@ -1,5 +1,6 @@
 import ErrorMessage from '../../components/ErrorMessage'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { useYAxis } from '../charts/useYAxis'
 import { EventChartTooltip } from '../charts/EventChartTooltip'
 import ChartTick from '../../components/charts/ChartTick'
 import { format } from 'date-fns'
@@ -32,6 +33,11 @@ export default function EventsDisplay({
 }: Props) {
   const { selectedEventNames } = useEventsContext()
 
+  const { yAxisProps } = useYAxis({
+    data: Object.values(events ?? {}),
+    transformer: (d) => d.flat().map((item) => item.count)
+  })
+
   const getEventCount = useCallback((eventNames: string[]): string => {
     if (!events) return '0'
 
@@ -57,7 +63,7 @@ export default function EventsDisplay({
         <div className='flex border-2 border-gray-700 rounded bg-black overflow-x-scroll'>
           <div className='pt-4 pl-4 pb-4 w-full'>
             <ResponsiveContainer height={600}>
-              <LineChart margin={{ top: 20, bottom: 20, right: 10 }}>
+              <LineChart margin={{ top: 8, left: 16, bottom: 20, right: 8 }}>
                 <CartesianGrid strokeDasharray='4' stroke='#444' vertical={false} />
 
                 <XAxis
@@ -78,14 +84,7 @@ export default function EventsDisplay({
 
                 <YAxis
                   dataKey='count'
-                  width={30}
-                  allowDecimals={false}
-                  tick={(
-                    <ChartTick
-                      transform={(x, y) => `translate(${x! - 4},${y! - 12})`}
-                      formatter={(tick) => tick.toLocaleString()}
-                    />
-                  )}
+                  {...yAxisProps}
                 />
 
                 {selectedEventNames.length > 0 && <Tooltip content={<EventChartTooltip />} />}

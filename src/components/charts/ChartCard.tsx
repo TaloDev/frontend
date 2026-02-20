@@ -14,6 +14,7 @@ type ChartCardProps = {
   timePeriod?: TimePeriod | null
   onTimePeriodChange?: (period: LabelledTimePeriod) => void
   height?: number
+  hasData?: boolean
   children: ReactElement
 }
 
@@ -24,10 +25,11 @@ export function ChartCard({
   timePeriod,
   onTimePeriodChange,
   height = 300,
+  hasData = true,
   children
 }: ChartCardProps) {
   return (
-    <div className='hidden md:block border-2 border-gray-700 rounded bg-black space-y-8 p-4'>
+    <div className='hidden md:block border-2 border-gray-700 rounded bg-black space-y-4 p-4'>
       <div className='flex items-start justify-between'>
         <div className='flex gap-4'>
           <h2 className='text-xl'>{title}</h2>
@@ -48,7 +50,11 @@ export function ChartCard({
 
       {error?.hasKeys === false && <ErrorMessage error={error} />}
 
-      {!loading &&
+      {!hasData && !loading &&
+        <p className='-mt-4'>No data for this date range</p>
+      }
+
+      {hasData && !loading &&
         <ResponsiveContainer height={height}>
           {children}
         </ResponsiveContainer>
