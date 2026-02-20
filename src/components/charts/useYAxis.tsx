@@ -4,6 +4,15 @@ import ChartTick from './ChartTick'
 
 const pxPerChar = 8
 
+function getNiceMax(maxValue: number) {
+  if (maxValue === 0) {
+    return 0
+  }
+
+  const magnitude = Math.pow(10, Math.floor(Math.log10(maxValue)))
+  return Math.ceil(maxValue / magnitude) * magnitude
+}
+
 export function useYAxisWidth<T>({
   data,
   transformer
@@ -13,7 +22,8 @@ export function useYAxisWidth<T>({
 }) {
   const yAxisWidth = useMemo(() => {
     const maxValue = Math.max(...transformer(data), 0)
-    return maxValue.toLocaleString().length * pxPerChar
+    const niceMax = getNiceMax(maxValue)
+    return niceMax.toLocaleString().length * pxPerChar
   }, [data, transformer])
 
   return {
