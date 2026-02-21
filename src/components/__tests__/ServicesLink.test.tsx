@@ -1,10 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import ServicesLink from '../ServicesLink'
-import userState from '../../state/userState'
-import KitchenSink from '../../utils/KitchenSink'
 import routes from '../../constants/routes'
 import { UserType } from '../../entities/user'
+import userState from '../../state/userState'
+import KitchenSink from '../../utils/KitchenSink'
+import ServicesLink from '../ServicesLink'
 
 describe('<ServicesLink />', () => {
   it('should close when going to a different page', async () => {
@@ -16,7 +16,7 @@ describe('<ServicesLink />', () => {
         setLocation={setLocationMock}
       >
         <ServicesLink />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Services'))
@@ -25,7 +25,7 @@ describe('<ServicesLink />', () => {
     await waitFor(() => {
       expect(setLocationMock).toHaveBeenLastCalledWith({
         pathname: routes.players,
-        state: null
+        state: null,
       })
     })
 

@@ -1,8 +1,8 @@
-import { useCallback, useMemo, useState } from 'react'
-import TextInput from './TextInput'
 import Tippy from '@tippyjs/react'
-import { DayPicker } from 'react-day-picker'
 import { format, isValid } from 'date-fns'
+import { useCallback, useMemo, useState } from 'react'
+import { DayPicker } from 'react-day-picker'
+import TextInput from './TextInput'
 
 type DateInputProps = {
   id: string
@@ -17,7 +17,7 @@ export default function DateInput({
   value,
   onDateChange,
   onDateTimeStringChange,
-  textInputProps
+  textInputProps,
 }: DateInputProps) {
   const [isOpen, setOpen] = useState(false)
 
@@ -41,7 +41,7 @@ export default function DateInput({
         interactive={true}
         arrow={false}
         theme='bare'
-        content={(
+        content={
           <DayPicker
             mode='single'
             selected={date}
@@ -54,7 +54,7 @@ export default function DateInput({
             }}
             defaultMonth={date}
           />
-        )}
+        }
         visible={isOpen}
         onClickOutside={/* v8ignore next */ () => setOpen(false)}
       >
@@ -65,7 +65,7 @@ export default function DateInput({
             value={format(date, 'dd MMM yyyy')}
             inputExtra={{
               onFocus: () => setOpen(true),
-              name: id
+              name: id,
             }}
             inputClassName='caret-transparent cursor-pointer'
             {...textInputProps}

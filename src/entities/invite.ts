@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { UserType } from './user'
 import { organisationSchema } from './organisation'
+import { UserType } from './user'
 
 export const inviteSchema = z.object({
   id: z.number(),
@@ -8,7 +8,7 @@ export const inviteSchema = z.object({
   organisation: organisationSchema,
   type: z.nativeEnum(UserType),
   invitedBy: z.string(),
-  createdAt: z.string().datetime()
+  createdAt: z.string().datetime(),
 })
 
 export type Invite = z.infer<typeof inviteSchema>

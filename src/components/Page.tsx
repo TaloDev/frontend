@@ -1,8 +1,8 @@
-import clsx from 'clsx'
-import Title from './Title'
-import Loading from './Loading'
-import GlobalBanners from './GlobalBanners'
 import type { ReactNode } from 'react'
+import clsx from 'clsx'
+import GlobalBanners from './GlobalBanners'
+import Loading from './Loading'
+import Title from './Title'
 
 type PageProps = {
   title: string
@@ -23,7 +23,7 @@ export default function Page({
   extraTitleComponent,
   children,
   secondaryNav,
-  disableBanners
+  disableBanners,
 }: PageProps) {
   return (
     <div className='space-y-8'>
@@ -35,11 +35,11 @@ export default function Page({
         <div className='flex items-center'>
           <Title showBackButton={showBackButton}>{title}</Title>
 
-          {isLoading &&
+          {isLoading && (
             <div className='mt-1 ml-4'>
               <Loading size={24} thickness={180} />
             </div>
-          }
+          )}
 
           {!isLoading && extraTitleComponent}
         </div>

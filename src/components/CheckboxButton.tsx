@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import clsx from 'clsx'
 import { IconCheck } from '@tabler/icons-react'
+import clsx from 'clsx'
+import { useState } from 'react'
 import { hiddenInputStyle, labelFocusStyle } from '../styles/theme'
 
 type CheckboxButtonProps = {
@@ -26,14 +26,17 @@ export default function CheckboxButton({ id, checked, label, onChange }: Checkbo
 
       <label
         htmlFor={id}
-        className={clsx('p-1 rounded hover:bg-gray-200 flex items-center space-x-2 cursor-pointer transition-all', { [labelFocusStyle]: focus })}
+        className={clsx(
+          'flex cursor-pointer items-center space-x-2 rounded p-1 transition-all hover:bg-gray-200',
+          { [labelFocusStyle]: focus },
+        )}
       >
-        <span className='inline-block rounded w-6 h-6 bg-white border border-black/30 align-text-bottom text-black active:bg-gray-200 transition-colors'>
-          {checked &&
-            <span className='flex items-center justify-center h-full'>
+        <span className='inline-block h-6 w-6 rounded border border-black/30 bg-white align-text-bottom text-black transition-colors active:bg-gray-200'>
+          {checked && (
+            <span className='flex h-full items-center justify-center'>
               <IconCheck size={16} stroke={3} />
             </span>
-          }
+          )}
         </span>
         <span>{label}</span>
       </label>

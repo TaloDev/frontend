@@ -4,7 +4,7 @@ const userTypeMap = {
   [UserType.OWNER]: 'Owner',
   [UserType.ADMIN]: 'Admin',
   [UserType.DEV]: 'Dev',
-  [UserType.DEMO]: 'Demo'
+  [UserType.DEMO]: 'Demo',
 }
 
 export default userTypeMap

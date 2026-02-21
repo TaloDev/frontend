@@ -1,11 +1,15 @@
 import { Edge, Node } from '@xyflow/react'
 import { useCallback, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import saveDataNodeSizesState from '../state/saveDataNodeSizesState'
 import { GameSave } from '../entities/gameSave'
+import saveDataNodeSizesState from '../state/saveDataNodeSizesState'
 import { NodeDataRow, objectToRows, getLayoutedElements } from './nodeGraphHelpers'
 
-export default function useLinearNodeGraph(save: GameSave | undefined, search: string = '', enabled: boolean) {
+export default function useLinearNodeGraph(
+  save: GameSave | undefined,
+  search: string = '',
+  enabled: boolean,
+) {
   const content = save?.content
 
   const [nodes, setNodes] = useState<Node[]>([])
@@ -31,28 +35,36 @@ export default function useLinearNodeGraph(save: GameSave | undefined, search: s
       nodeSet.add({ id, position: { x: 0, y: 0 }, data })
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const processContent = (key: string, value: any, parentKey: string | null = null, shouldChain: boolean = false, arrayIndex: number = 0) => {
+    const processContent = (
+      key: string,
+      // oxlint-disable-next-line typescript/no-explicit-any
+      value: any,
+      parentKey: string | null = null,
+      shouldChain: boolean = false,
+      arrayIndex: number = 0,
+    ) => {
       const nodeId = parentKey ? `${parentKey}-${key}` : key
 
       if (typeof value === 'object' && value !== null) {
         if (Array.isArray(value)) {
           // arrays get their own nodes
-          addNode(nodeId, [{
-            item: `${key} [${value.length}]`,
-            type: 'array'
-          }])
+          addNode(nodeId, [
+            {
+              item: `${key} [${value.length}]`,
+              type: 'array',
+            },
+          ])
 
           // edge connecting the array node to its parent
           if (parentKey) {
             edgeSet.add({ id: `${parentKey}-${nodeId}`, source: parentKey, target: nodeId })
           }
 
-          // Check if this is a "data" array - only chain those
+          // check if this is a "data" array - only chain those
           const isDataArray = key === 'data'
           let previousItemId: string | null = null
 
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // oxlint-disable-next-line typescript/no-explicit-any
           value.forEach((item: any, index: number) => {
             const itemId = `${nodeId}-${index}`
 
@@ -66,7 +78,11 @@ export default function useLinearNodeGraph(save: GameSave | undefined, search: s
 
               // chain only if this is a data array
               if (isDataArray && previousItemId) {
-                edgeSet.add({ id: `${previousItemId}-${itemId}`, source: previousItemId, target: itemId })
+                edgeSet.add({
+                  id: `${previousItemId}-${itemId}`,
+                  source: previousItemId,
+                  target: itemId,
+                })
               } else {
                 edgeSet.add({ id: `${nodeId}-${itemId}`, source: nodeId, target: itemId })
               }

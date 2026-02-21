@@ -4,7 +4,7 @@ import makeValidatedRequest from './makeValidatedRequest'
 
 const deletePlayer = makeValidatedRequest(
   (gameId: number, playerId: string) => api.delete(`/games/${gameId}/players/${playerId}`),
-  z.literal('')
+  z.literal(''),
 )
 
 export default deletePlayer

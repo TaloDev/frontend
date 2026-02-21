@@ -7,7 +7,7 @@ export const channelStoragePropSchema = z.object({
   createdBy: playerAliasSchema,
   lastUpdatedBy: playerAliasSchema,
   createdAt: z.string(),
-  updatedAt: z.string()
+  updatedAt: z.string(),
 })
 
 export type ChannelStorageProp = z.infer<typeof channelStoragePropSchema>

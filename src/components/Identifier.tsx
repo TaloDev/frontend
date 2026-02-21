@@ -5,13 +5,10 @@ type IdentifierProps = {
   children?: ReactNode
 }
 
-export default function Identifier({
-  id,
-  children
-}: IdentifierProps) {
+export default function Identifier({ id, children }: IdentifierProps) {
   return (
     <div>
-      <code className='bg-gray-900 rounded p-2 text-xs md:text-sm'>
+      <code className='rounded bg-gray-900 p-2 text-xs md:text-sm'>
         {children}
         {id}
       </code>

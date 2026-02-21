@@ -1,12 +1,12 @@
+import clsx from 'clsx'
+import { format } from 'date-fns'
+import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts'
 import { useRecoilValue } from 'recoil'
+import { useStatGlobalValueChart } from '../../api/useStatGlobalValueChart'
 import activeGameState, { SelectedActiveGame } from '../../state/activeGameState'
 import { ChartCard } from './ChartCard'
 import { ChartCardTooltip } from './ChartCardTooltip'
-import { useStatGlobalValueChart } from '../../api/useStatGlobalValueChart'
-import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts'
 import ChartTick from './ChartTick'
-import { format } from 'date-fns'
-import clsx from 'clsx'
 import { useYAxis } from './useYAxis'
 
 type StatGlobalValueChartProps = {
@@ -15,62 +15,59 @@ type StatGlobalValueChartProps = {
   endDate: string
 }
 
-export function StatGlobalValueChart({ internalName, startDate, endDate }: StatGlobalValueChartProps) {
+export function StatGlobalValueChart({
+  internalName,
+  startDate,
+  endDate,
+}: StatGlobalValueChartProps) {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
 
   const { dataPoints, loading, error } = useStatGlobalValueChart(
     activeGame,
     internalName,
     startDate,
-    endDate
+    endDate,
   )
 
   const { yAxisProps } = useYAxis({
     data: dataPoints,
-    transformer: (d) => d.map((point) => point.value)
+    transformer: (d) => d.map((point) => point.value),
   })
 
   return (
-    <ChartCard
-      title='Global value'
-      loading={loading}
-      error={error}
-    >
+    <ChartCard title='Global value' loading={loading} error={error}>
       <LineChart data={dataPoints} margin={{ top: 8, left: 16, bottom: 20, right: 8 }}>
         <CartesianGrid strokeDasharray='4' stroke='#444' vertical={false} />
 
         <XAxis
           dataKey='date'
           type='category'
-          tick={(
+          tick={
             <ChartTick
               transform={(x, y) => `translate(${x},${y}) rotate(-15)`}
               formatter={(tick) => format(new Date(tick), 'd MMM')}
             />
-          )}
+          }
         />
 
         <YAxis {...yAxisProps} />
 
         <Tooltip
-          content={(
-            <ChartCardTooltip<typeof dataPoints[number]>
+          content={
+            <ChartCardTooltip<(typeof dataPoints)[number]>
               formatter={(payload) => {
                 return (
-                  <div className='text-black grid grid-cols-[1fr_0.5fr] items-center mt-4'>
+                  <div className='mt-4 grid grid-cols-[1fr_0.5fr] items-center text-black'>
                     <div className='font-mono text-sm font-medium'>
                       {payload.value.toLocaleString()}
                     </div>
 
                     <div
-                      className={clsx(
-                        'ml-2 text-xs text-center p-1 rounded',
-                        {
-                          'bg-red-100/50 text-red-600': payload.change < 0,
-                          'bg-green-100/50 text-green-600': payload.change > 0,
-                          'bg-gray-100 text-gray-600': payload.change === 0
-                        }
-                      )}
+                      className={clsx('ml-2 rounded p-1 text-center text-xs', {
+                        'bg-red-100/50 text-red-600': payload.change < 0,
+                        'bg-green-100/50 text-green-600': payload.change > 0,
+                        'bg-gray-100 text-gray-600': payload.change === 0,
+                      })}
                     >
                       {(payload.change * 100).toFixed(1)}%
                     </div>
@@ -78,7 +75,7 @@ export function StatGlobalValueChart({ internalName, startDate, endDate }: StatG
                 )
               }}
             />
-          )}
+          }
         />
 
         <Line

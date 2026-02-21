@@ -6,11 +6,13 @@ describe('RecoverAccount', () => {
       statusCode: 200,
       body: {
         twoFactorAuthRequired: true,
-        userId: 1
-      }
+        userId: 1,
+      },
     })
 
-    cy.intercept('POST', 'http://talo.api/public/users/2fa/recover', { fixture: 'responses/auth/dev' })
+    cy.intercept('POST', 'http://talo.api/public/users/2fa/recover', {
+      fixture: 'responses/auth/dev',
+    })
 
     cy.visitAsGuest()
     cy.findByLabelText('Email').type('admin@trytalo.com')
@@ -32,8 +34,8 @@ describe('RecoverAccount', () => {
       statusCode: 200,
       body: {
         twoFactorAuthRequired: true,
-        userId: 1
-      }
+        userId: 1,
+      },
     })
 
     cy.fixture('responses/auth/dev').then((res) => {
@@ -41,8 +43,8 @@ describe('RecoverAccount', () => {
         statusCode: 200,
         body: {
           ...res,
-          newRecoveryCodes: ['1', '2', '3', '4']
-        }
+          newRecoveryCodes: ['1', '2', '3', '4'],
+        },
       })
     })
 
@@ -68,15 +70,15 @@ describe('RecoverAccount', () => {
       statusCode: 200,
       body: {
         twoFactorAuthRequired: true,
-        userId: 1
-      }
+        userId: 1,
+      },
     })
 
     cy.intercept('POST', 'http://talo.api/public/users/2fa/recover', {
       statusCode: 403,
       body: {
-        message: 'Invalid code'
-      }
+        message: 'Invalid code',
+      },
     })
 
     cy.visitAsGuest()

@@ -2,12 +2,12 @@ import { MouseEvent, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import confirmEmail from '../api/confirmEmail'
+import justConfirmedEmailState from '../state/justConfirmedEmailState'
 import userState, { AuthedUserState } from '../state/userState'
 import buildError from '../utils/buildError'
 import Button from './Button'
 import ErrorMessage, { TaloError } from './ErrorMessage'
 import TextInput from './TextInput'
-import justConfirmedEmailState from '../state/justConfirmedEmailState'
 
 export default function ConfirmEmailBanner() {
   const [code, setCode] = useState('')
@@ -39,8 +39,11 @@ export default function ConfirmEmailBanner() {
   }
 
   return (
-    <div className='bg-gray-900 p-4 md:p-8 rounded-md w-full lg:2/3 xl:w-1/2 space-y-4' role='alert'>
-      {!user.emailConfirmed &&
+    <div
+      className='lg:2/3 w-full space-y-4 rounded-md bg-gray-900 p-4 md:p-8 xl:w-1/2'
+      role='alert'
+    >
+      {!user.emailConfirmed && (
         <>
           <div>
             <p className='text-xl font-bold'>Please confirm your email address</p>
@@ -57,12 +60,8 @@ export default function ConfirmEmailBanner() {
                 variant='light'
               />
             </div>
-            <div className='w-full mt-4 lg:mt-0 lg:w-24 lg:ml-4'>
-              <Button
-                disabled={code.length < 6}
-                onClick={onConfirmClick}
-                isLoading={isLoading}
-              >
+            <div className='mt-4 w-full lg:mt-0 lg:ml-4 lg:w-24'>
+              <Button disabled={code.length < 6} onClick={onConfirmClick} isLoading={isLoading}>
                 Confirm
               </Button>
             </div>
@@ -70,14 +69,14 @@ export default function ConfirmEmailBanner() {
 
           {error && <ErrorMessage error={error} />}
         </>
-      }
+      )}
 
-      {justConfirmedEmail &&
+      {justConfirmedEmail && (
         <div>
           <p className='text-xl font-bold'>Success!</p>
           <p>We&apos;ve confirmed your email and unlocked the rest of the dashboard for you</p>
         </div>
-      }
+      )}
     </div>
   )
 }

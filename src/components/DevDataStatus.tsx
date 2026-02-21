@@ -9,13 +9,18 @@ function DevDataStatus() {
 
   return (
     <div className='space-y-4'>
-      <SecondaryTitle className='mt-4 md:mt-0'>Dev data is currently
+      <SecondaryTitle className='mt-4 md:mt-0'>
+        Dev data is currently
         <span className={clsx('font-semibold', { 'text-orange-500': includeDevData })}>
-          {' '}{includeDevData ? 'enabled' : 'not enabled'}
+          {' '}
+          {includeDevData ? 'enabled' : 'not enabled'}
         </span>
       </SecondaryTitle>
 
-      <p>When enabled, the dashboard will display data submitted by players from dev builds. This has no effect on your game.</p>
+      <p>
+        When enabled, the dashboard will display data submitted by players from dev builds. This has
+        no effect on your game.
+      </p>
 
       <DevDataToggle />
     </div>

@@ -3,7 +3,7 @@
 describe('ForgotPassword', () => {
   it('should let users request a reset link', () => {
     cy.intercept('POST', 'http://talo.api/public/users/forgot_password', {
-      statusCode: 204
+      statusCode: 204,
     })
 
     cy.visitAsGuest()
@@ -11,6 +11,8 @@ describe('ForgotPassword', () => {
     cy.findByLabelText('Email').type('admin@trytalo.com')
     cy.findByText('Confirm').click()
 
-    cy.findByText('If an account exists for this email, you\'ll receive an email with instructions on how to reset your password').should('exist')
+    cy.findByText(
+      "If an account exists for this email, you'll receive an email with instructions on how to reset your password",
+    ).should('exist')
   })
 })

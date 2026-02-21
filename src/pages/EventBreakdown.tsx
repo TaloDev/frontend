@@ -1,13 +1,13 @@
+import { useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import Page from '../components/Page'
+import useEventBreakdown from '../api/useEventBreakdown'
+import { EventsProvider, useEventsContext } from '../components/events/EventsContext'
 import EventsDisplay from '../components/events/EventsDisplay'
 import EventsFiltersSection from '../components/events/EventsFiltersSection'
-import { EventsProvider, useEventsContext } from '../components/events/EventsContext'
-import useEventBreakdown from '../api/useEventBreakdown'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
+import Page from '../components/Page'
 import routes from '../constants/routes'
+import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 
 export default function EventBreakdown() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
@@ -38,17 +38,17 @@ function EventBreakdownDisplay({ activeGame }: { activeGame: SelectedActiveGame 
   const location = useLocation()
 
   const { debouncedStartDate, debouncedEndDate } = useEventsContext()
-  const { events, eventNames, loading, error } = useEventBreakdown(activeGame, location.state.eventName, debouncedStartDate, debouncedEndDate)
+  const { events, eventNames, loading, error } = useEventBreakdown(
+    activeGame,
+    location.state.eventName,
+    debouncedStartDate,
+    debouncedEndDate,
+  )
 
   return (
     <Page showBackButton title={`${location.state.eventName} breakdown`} isLoading={loading}>
       <EventsFiltersSection eventNames={eventNames} error={error} />
-      <EventsDisplay
-        events={events}
-        eventNames={eventNames}
-        loading={loading}
-        error={error}
-      />
+      <EventsDisplay events={events} eventNames={eventNames} loading={loading} error={error} />
     </Page>
   )
 }

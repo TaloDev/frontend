@@ -1,9 +1,9 @@
-import { ReactNode, useCallback, useEffect } from 'react'
 import { IconX } from '@tabler/icons-react'
-import Button from './Button'
 import clsx from 'clsx'
+import { ReactNode, useCallback, useEffect } from 'react'
 import FocusLock from 'react-focus-lock'
 import usePortal from 'react-useportal'
+import Button from './Button'
 
 type ModalProps = {
   id: string
@@ -22,13 +22,16 @@ export default function Modal({
   children,
   modalState,
   scroll = true,
-  className
+  className,
 }: ModalProps) {
   const [, setOpen] = modalState
 
-  const handleEscapePressed = useCallback((event: KeyboardEvent) => {
-    if (event.key === 'Escape') setOpen(false)
-  }, [setOpen])
+  const handleEscapePressed = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false)
+    },
+    [setOpen],
+  )
 
   useEffect(() => {
     document.addEventListener('keydown', handleEscapePressed)
@@ -43,19 +46,23 @@ export default function Modal({
   return (
     <Portal>
       <FocusLock>
-        <div className='fixed w-screen md:p-4 bg-gray-900/60 flex items-start md:items-center inset-0 z-50 text-black transition-colors'>
+        <div className='fixed inset-0 z-50 flex w-screen items-start bg-gray-900/60 text-black transition-colors md:items-center md:p-4'>
           <dialog
-            className={clsx('block w-full h-full md:h-auto md:w-[640px] md:mx-auto bg-white md:rounded p-0', className, {
-              'overflow-y-scroll': scroll,
-              'overflow-y-visible': !scroll
-            })}
+            className={clsx(
+              'block h-full w-full bg-white p-0 md:mx-auto md:h-auto md:w-[640px] md:rounded',
+              className,
+              {
+                'overflow-y-scroll': scroll,
+                'overflow-y-visible': !scroll,
+              },
+            )}
             aria-modal='true'
             aria-labelledby={`modal-${id}-label`}
           >
-            <div className='p-4 border-b border-gray-200 flex items-center justify-between'>
+            <div className='flex items-center justify-between border-b border-gray-200 p-4'>
               <h2
                 id={`modal-${id}-label`}
-                className={clsx('text-xl font-semibold', { 'hidden': hideTitle })}
+                className={clsx('text-xl font-semibold', { hidden: hideTitle })}
               >
                 {title}
               </h2>

@@ -15,7 +15,7 @@ const key = 'includeDevData'
 const devDataState = atom<boolean>({
   key,
   default: window.localStorage.getItem(key) === 'true',
-  effects: [localStorageEffect]
+  effects: [localStorageEffect],
 })
 
 export default devDataState

@@ -1,10 +1,10 @@
-import { ReactNode, useState } from 'react'
 import { IconCheck, IconCopy, IconDownload } from '@tabler/icons-react'
-import Button from './Button'
-import AlertBanner from './AlertBanner'
+import { ReactNode, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import routes from '../constants/routes'
 import { ConfirmPasswordAction } from '../pages/ConfirmPassword'
-import { useNavigate } from 'react-router-dom'
+import AlertBanner from './AlertBanner'
+import Button from './Button'
 
 type RecoveryCodesProps = {
   codes: string[]
@@ -12,11 +12,7 @@ type RecoveryCodesProps = {
   withBackground?: boolean
 }
 
-function RecoveryCodes({
-  codes,
-  showCreateButton,
-  withBackground
-}: RecoveryCodesProps) {
+function RecoveryCodes({ codes, showCreateButton, withBackground }: RecoveryCodesProps) {
   const navigate = useNavigate()
 
   const [codesCopied, setCodesCopied] = useState(false)
@@ -30,7 +26,7 @@ function RecoveryCodes({
     const anchor = document.createElement('a')
     const file = new Blob([codes.join('\n\n')], { type: 'text/plain' })
 
-    anchor.href= URL.createObjectURL(file)
+    anchor.href = URL.createObjectURL(file)
     anchor.download = 'talo-recovery-codes.txt'
     anchor.click()
 
@@ -42,27 +38,35 @@ function RecoveryCodes({
   const onCreateRecoveryCodesClick = () => {
     navigate(routes.confirmPassword, {
       state: {
-        onConfirmAction: ConfirmPasswordAction.CREATE_RECOVERY_CODES
-      }
+        onConfirmAction: ConfirmPasswordAction.CREATE_RECOVERY_CODES,
+      },
     })
   }
 
   const Container = withBackground
-    ? ({ children }: { children: ReactNode }) => <div className='bg-gray-900 p-4 rounded space-y-4'>{children}</div>
+    ? ({ children }: { children: ReactNode }) => (
+        <div className='space-y-4 rounded bg-gray-900 p-4'>{children}</div>
+      )
     : ({ children }: { children: ReactNode }) => <>{children}</>
 
   return (
     <Container>
       <AlertBanner
         className='items-start!'
-        text={'Keep these codes safe. If you lose access to your authenticator and don\'t have any recovery codes, you will lose access to your account.'}
+        text={
+          "Keep these codes safe. If you lose access to your authenticator and don't have any recovery codes, you will lose access to your account."
+        }
       />
 
-      <ul className='grid grid-cols-2 md:grid-cols-4 gap-y-4 bg-gray-800 py-4 rounded'>
-        {codes.map((recoveryCode) => <li key={recoveryCode} className='text-center tracking-wider'><code>{recoveryCode}</code></li>)}
+      <ul className='grid grid-cols-2 gap-y-4 rounded bg-gray-800 py-4 md:grid-cols-4'>
+        {codes.map((recoveryCode) => (
+          <li key={recoveryCode} className='text-center tracking-wider'>
+            <code>{recoveryCode}</code>
+          </li>
+        ))}
       </ul>
 
-      <div className='md:flex space-y-4 md:space-y-0 md:space-x-4'>
+      <div className='space-y-4 md:flex md:space-y-0 md:space-x-4'>
         <Button
           type='button'
           className='justify-center md:w-auto'
@@ -82,7 +86,7 @@ function RecoveryCodes({
           <span>Download codes</span>
         </Button>
 
-        {showCreateButton &&
+        {showCreateButton && (
           <Button
             type='button'
             className='justify-center md:w-auto'
@@ -90,7 +94,7 @@ function RecoveryCodes({
           >
             Create new codes
           </Button>
-        }
+        )}
       </div>
     </Container>
   )

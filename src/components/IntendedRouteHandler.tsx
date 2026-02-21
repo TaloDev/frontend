@@ -10,9 +10,7 @@ type IntendedRouteHandlerProps = {
 // 2. user is redirected to dashboard.trytalo.com/?next=%2Fleaderboards
 // 3. "next" search param is put into sessionStorage
 // 4. useIntendedRoute hook picks up logic to redirect based on the sessionStorage
-export default function IntendedRouteHandler({
-  intendedRoute
-}: IntendedRouteHandlerProps) {
+export default function IntendedRouteHandler({ intendedRoute }: IntendedRouteHandlerProps) {
   useEffect(() => {
     const next = new URLSearchParams(window.location.search).get('next')
     if (next) {
@@ -21,10 +19,8 @@ export default function IntendedRouteHandler({
   }, [])
 
   if (!intendedRoute) {
-    <Navigate to={routes.login} replace />
+    ;<Navigate to={routes.login} replace />
   }
 
-  return (
-    <Navigate to={`${routes.login}?next=${encodeURIComponent(intendedRoute!)}`} replace />
-  )
+  return <Navigate to={`${routes.login}?next=${encodeURIComponent(intendedRoute!)}`} replace />
 }

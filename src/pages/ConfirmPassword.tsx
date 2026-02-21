@@ -1,25 +1,25 @@
+import clsx from 'clsx'
 import { useEffect, useState } from 'react'
-import TextInput from '../components/TextInput'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useSetRecoilState } from 'recoil'
+import changePassword from '../api/changePassword'
+import createRecoveryCodes from '../api/createRecoveryCodes'
+import disable2FA from '../api/disable2FA'
+import viewRecoveryCodes from '../api/viewRecoveryCodes'
 import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import { unauthedContainerStyle } from '../styles/theme'
-import { useNavigate, useLocation } from 'react-router-dom'
+import TextInput from '../components/TextInput'
 import Title from '../components/Title'
-import buildError from '../utils/buildError'
-import { useSetRecoilState } from 'recoil'
 import routes from '../constants/routes'
-import changePassword from '../api/changePassword'
-import viewRecoveryCodes from '../api/viewRecoveryCodes'
-import createRecoveryCodes from '../api/createRecoveryCodes'
 import userState from '../state/userState'
-import disable2FA from '../api/disable2FA'
-import clsx from 'clsx'
+import { unauthedContainerStyle } from '../styles/theme'
+import buildError from '../utils/buildError'
 
 export const ConfirmPasswordAction = {
   DISABLE_2FA: 'disable2FA',
   CHANGE_PASSWORD: 'changePassword',
   VIEW_RECOVERY_CODES: 'viewRecoveryCodes',
-  CREATE_RECOVERY_CODES: 'createRecoveryCodes'
+  CREATE_RECOVERY_CODES: 'createRecoveryCodes',
 }
 
 const ConfirmPassword = () => {
@@ -45,8 +45,8 @@ const ConfirmPassword = () => {
       navigate(routes.account, {
         replace: true,
         state: {
-          successMessage: 'Two factor authentication has been disabled'
-        }
+          successMessage: 'Two factor authentication has been disabled',
+        },
       })
     },
     [ConfirmPasswordAction.CHANGE_PASSWORD]: async () => {
@@ -54,8 +54,8 @@ const ConfirmPassword = () => {
       navigate(routes.account, {
         replace: true,
         state: {
-          successMessage: 'Your password has been updated'
-        }
+          successMessage: 'Your password has been updated',
+        },
       })
     },
     [ConfirmPasswordAction.VIEW_RECOVERY_CODES]: async () => {
@@ -63,8 +63,8 @@ const ConfirmPassword = () => {
       navigate(routes.account, {
         replace: true,
         state: {
-          recoveryCodes
-        }
+          recoveryCodes,
+        },
       })
     },
     [ConfirmPasswordAction.CREATE_RECOVERY_CODES]: async () => {
@@ -73,10 +73,10 @@ const ConfirmPassword = () => {
         replace: true,
         state: {
           successMessage: 'Your new recovery codes have been generated',
-          recoveryCodes: recoveryCodes
-        }
+          recoveryCodes: recoveryCodes,
+        },
       })
-    }
+    },
   }
 
   const onConfirmClick = async () => {
@@ -93,7 +93,7 @@ const ConfirmPassword = () => {
 
   return (
     <div className='md:translate-y-[80%]'>
-      <form className={clsx('mx-auto text-white space-y-8', unauthedContainerStyle)}>
+      <form className={clsx('mx-auto space-y-8 text-white', unauthedContainerStyle)}>
         <Title>Confirm your password</Title>
 
         <TextInput
@@ -107,11 +107,7 @@ const ConfirmPassword = () => {
 
         {error && <ErrorMessage error={error} />}
 
-        <Button
-          disabled={!password}
-          onClick={onConfirmClick}
-          isLoading={isLoading}
-        >
+        <Button disabled={!password} onClick={onConfirmClick} isLoading={isLoading}>
           Confirm
         </Button>
       </form>

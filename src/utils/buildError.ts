@@ -18,22 +18,26 @@ export default function buildError(error: unknown, preferredKey: string = ''): T
 
     if (axiosError.response?.data?.message) {
       message = axiosError.response.data.message
-      extra = (Object.keys(axiosError.response.data) as (keyof APIError)[])
-        .reduce((acc, key) => {
+      extra = (Object.keys(axiosError.response.data) as (keyof APIError)[]).reduce(
+        (acc, key) => {
           if (key !== 'message') {
             return { ...acc, [key]: axiosError.response!.data[key] }
           }
           return acc
-        }, {} as Partial<Omit<APIError, 'message'>>)
+        },
+        {} as Partial<Omit<APIError, 'message'>>,
+      )
     } else if (axiosError.response?.data?.errors) {
       keys = axiosError.response.data.errors
-      extra = (Object.keys(axiosError.response.data) as (keyof APIError)[])
-        .reduce((acc, key) => {
+      extra = (Object.keys(axiosError.response.data) as (keyof APIError)[]).reduce(
+        (acc, key) => {
           if (key !== 'errors') {
             return { ...acc, [key]: axiosError.response!.data[key] }
           }
           return acc
-        }, {} as Partial<Omit<APIError, 'errors'>>)
+        },
+        {} as Partial<Omit<APIError, 'errors'>>,
+      )
 
       message = Object.keys(keys).includes(preferredKey)
         ? keys[preferredKey][0]
@@ -47,6 +51,6 @@ export default function buildError(error: unknown, preferredKey: string = ''): T
     message,
     keys,
     hasKeys: Object.keys(keys).length > 0,
-    extra
+    extra,
   }
 }

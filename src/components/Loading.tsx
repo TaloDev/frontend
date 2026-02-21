@@ -8,10 +8,7 @@ type LoadingProps = {
   thickness?: number
 }
 
-export default function Loading({
-  size = 80,
-  thickness = 160
-}: LoadingProps) {
+export default function Loading({ size = 80, thickness = 160 }: LoadingProps) {
   const speed = 100
   const strokeWidth = 4 * (thickness / 100)
 

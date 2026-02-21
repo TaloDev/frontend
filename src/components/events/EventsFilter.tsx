@@ -1,10 +1,10 @@
 import { IconAdjustmentsHorizontal } from '@tabler/icons-react'
+import Tippy from '@tippyjs/react'
+import { useCallback, useMemo, useState } from 'react'
 import Button from '../Button'
 import CheckboxButton from '../CheckboxButton'
 import LinkButton from '../LinkButton'
 import TextInput from '../TextInput'
-import Tippy from '@tippyjs/react'
-import { useCallback, useMemo, useState } from 'react'
 import { useEventsContext } from './EventsContext'
 
 type EventsFilterProps = {
@@ -18,13 +18,16 @@ export default function EventsFilter({ eventNames, initialShow = false }: Events
   const [show, setShow] = useState(initialShow)
   const [eventNamefilter, setEventNameFilter] = useState('')
 
-  const onCheckEventName = useCallback((checked: boolean, name: string) => {
-    if (checked) {
-      setSelectedEventNames([...selectedEventNames, name])
-    } else {
-      setSelectedEventNames(selectedEventNames.filter((selected) => selected !== name))
-    }
-  }, [selectedEventNames, setSelectedEventNames])
+  const onCheckEventName = useCallback(
+    (checked: boolean, name: string) => {
+      if (checked) {
+        setSelectedEventNames([...selectedEventNames, name])
+      } else {
+        setSelectedEventNames(selectedEventNames.filter((selected) => selected !== name))
+      }
+    },
+    [selectedEventNames, setSelectedEventNames],
+  )
 
   const filteredEventNames = useMemo(() => {
     return eventNames.filter((name) => {
@@ -41,10 +44,10 @@ export default function EventsFilter({ eventNames, initialShow = false }: Events
         interactive={true}
         arrow={false}
         theme='bare'
-        content={(
-          <div className='rdp p-0! min-w-[400px] space-y-2'>
-            <div className='p-2 space-y-2'>
-              <h2 className='font-semibold text-lg'>{filteredEventNames.length} events</h2>
+        content={
+          <div className='rdp min-w-100 space-y-2 p-0!'>
+            <div className='space-y-2 p-2'>
+              <h2 className='text-lg font-semibold'>{filteredEventNames.length} events</h2>
               <TextInput
                 id='event-name-filter'
                 variant='modal'
@@ -57,32 +60,36 @@ export default function EventsFilter({ eventNames, initialShow = false }: Events
 
             <hr className='border-gray-200' />
 
-            <ul className='p-2 h-[200px] overflow-y-scroll mt-0!'>
-              {filteredEventNames.sort((a, b) => a.localeCompare(b)).map((name) => (
-                <li key={name}>
-                  <CheckboxButton
-                    id={`${name}-checkbox`}
-                    checked={Boolean(selectedEventNames.find((selected) => selected === name))}
-                    onChange={(checked) => onCheckEventName(checked, name)}
-                    label={name}
-                  />
-                </li>
-              ))}
+            <ul className='mt-0! h-[200px] overflow-y-scroll p-2'>
+              {filteredEventNames
+                .sort((a, b) => a.localeCompare(b))
+                .map((name) => (
+                  <li key={name}>
+                    <CheckboxButton
+                      id={`${name}-checkbox`}
+                      checked={Boolean(selectedEventNames.find((selected) => selected === name))}
+                      onChange={(checked) => onCheckEventName(checked, name)}
+                      label={name}
+                    />
+                  </li>
+                ))}
               {filteredEventNames.length === 0 && <li>No events found</li>}
             </ul>
 
             <hr className='mt-0! border-gray-200' />
 
-            <div className='px-2 pb-2 flex items-center justify-between'>
-              <LinkButton onClick={() => setSelectedEventNames((curr) => [...new Set([...curr, ...filteredEventNames])])}>
+            <div className='flex items-center justify-between px-2 pb-2'>
+              <LinkButton
+                onClick={() =>
+                  setSelectedEventNames((curr) => [...new Set([...curr, ...filteredEventNames])])
+                }
+              >
                 Select all
               </LinkButton>
-              <LinkButton onClick={() => setSelectedEventNames([])}>
-                Clear
-              </LinkButton>
+              <LinkButton onClick={() => setSelectedEventNames([])}>Clear</LinkButton>
             </div>
           </div>
-        )}
+        }
         visible={show}
         onClickOutside={() => setShow(false)}
       >

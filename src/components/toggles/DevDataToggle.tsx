@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { IconCheck, IconX } from '@tabler/icons-react'
 import clsx from 'clsx'
 import { motion } from 'framer-motion'
-import { hiddenInputStyle, labelFocusStyle } from '../../styles/theme'
-import { IconCheck, IconX } from '@tabler/icons-react'
+import { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import devDataState from '../../state/devDataState'
+import { hiddenInputStyle, labelFocusStyle } from '../../styles/theme'
 
 function DevDataToggle() {
   const [includeDevData, setIncludeDevData] = useRecoilState(devDataState)
@@ -15,7 +15,7 @@ function DevDataToggle() {
   const sharedIconProps = {
     className: 'flex items-center justify-center h-full absolute left-0 right-0',
     initial: false,
-    transition: { duration: 0.3 }
+    transition: { duration: 0.3 },
   }
 
   return (
@@ -32,16 +32,19 @@ function DevDataToggle() {
 
       <label
         htmlFor='dev-data'
-        className={clsx('block h-12 w-24 p-2 bg-gray-900 border-2 border-gray-700 rounded-lg cursor-pointer', { [labelFocusStyle]: focus })}
+        className={clsx(
+          'block h-12 w-24 cursor-pointer rounded-lg border-2 border-gray-700 bg-gray-900 p-2',
+          { [labelFocusStyle]: focus },
+        )}
       >
         <motion.div
           animate={{
             x: innerEnabled ? 44 : 0,
-            backgroundColor: innerEnabled ? 'rgb(249,115,22)' : 'rgb(99,102,241)'
+            backgroundColor: innerEnabled ? 'rgb(249,115,22)' : 'rgb(99,102,241)',
           }}
           initial={false}
           transition={{ duration: 0.2 }}
-          className='h-full w-8 rounded-md relative'
+          className='relative h-full w-8 rounded-md'
           onAnimationStart={() => {
             window.localStorage.setItem('includeDevDataOptimistic', String(innerEnabled))
           }}

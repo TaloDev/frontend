@@ -4,7 +4,7 @@ describe('Login', () => {
   it('should let users login with valid credentials', () => {
     cy.intercept('POST', 'http://talo.api/public/users/login', {
       statusCode: 200,
-      fixture: 'responses/auth/dev'
+      fixture: 'responses/auth/dev',
     })
 
     cy.visitAsGuest()
@@ -19,8 +19,8 @@ describe('Login', () => {
     cy.intercept('POST', 'http://talo.api/public/users/login', {
       statusCode: 401,
       body: {
-        message: 'Incorrect email address or password'
-      }
+        message: 'Incorrect email address or password',
+      },
     })
 
     cy.visitAsGuest()
@@ -34,7 +34,7 @@ describe('Login', () => {
   it('should redirect to the intended route after logging in', () => {
     cy.intercept('POST', 'http://talo.api/public/users/login', {
       statusCode: 200,
-      fixture: 'responses/auth/dev'
+      fixture: 'responses/auth/dev',
     })
 
     cy.visitAsGuest('/account')
@@ -50,7 +50,7 @@ describe('Login', () => {
   it('should redirect to the 404 page after logging in if the intended route does not exist', () => {
     cy.intercept('POST', 'http://talo.api/public/users/login', {
       statusCode: 200,
-      fixture: 'responses/auth/dev'
+      fixture: 'responses/auth/dev',
     })
 
     cy.visitAsGuest('/does-not-exist')

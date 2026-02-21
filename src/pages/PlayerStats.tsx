@@ -1,27 +1,27 @@
+import { IconPencil } from '@tabler/icons-react'
+import { format } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import ErrorMessage from '../components/ErrorMessage'
-import TableCell from '../components/tables/TableCell'
-import TableBody from '../components/tables/TableBody'
-import routes from '../constants/routes'
-import { format } from 'date-fns'
-import DateCell from '../components/tables/cells/DateCell'
-import useSortedItems from '../utils/useSortedItems'
-import Page from '../components/Page'
-import usePlayerStats from '../api/usePlayerStats'
-import PlayerIdentifier from '../components/PlayerIdentifier'
-import usePlayer from '../utils/usePlayer'
-import Table from '../components/tables/Table'
 import { useRecoilValue } from 'recoil'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import usePlayerStats from '../api/usePlayerStats'
 import Button from '../components/Button'
-import { IconPencil } from '@tabler/icons-react'
+import ErrorMessage from '../components/ErrorMessage'
+import Page from '../components/Page'
+import PlayerIdentifier from '../components/PlayerIdentifier'
+import DateCell from '../components/tables/cells/DateCell'
+import Table from '../components/tables/Table'
+import TableBody from '../components/tables/TableBody'
+import TableCell from '../components/tables/TableCell'
+import routes from '../constants/routes'
 import { PlayerGameStat } from '../entities/playerGameStat'
 import UpdateStatValue from '../modals/UpdateStatValue'
-import { PermissionBasedAction } from '../utils/canPerformAction'
-import canPerformAction from '../utils/canPerformAction'
+import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import userState from '../state/userState'
 import { AuthedUser } from '../state/userState'
+import { PermissionBasedAction } from '../utils/canPerformAction'
+import canPerformAction from '../utils/canPerformAction'
+import usePlayer from '../utils/usePlayer'
+import useSortedItems from '../utils/useSortedItems'
 
 export default function PlayerStats() {
   const user = useRecoilValue(userState) as AuthedUser
@@ -30,7 +30,13 @@ export default function PlayerStats() {
   const { id: playerId } = useParams()
   const [player] = usePlayer()
 
-  const { stats, loading: statsLoading, error, errorStatusCode, mutate } = usePlayerStats(activeGame, playerId!)
+  const {
+    stats,
+    loading: statsLoading,
+    error,
+    errorStatusCode,
+    mutate,
+  } = usePlayerStats(activeGame, playerId!)
   const sortedStats = useSortedItems(stats, 'updatedAt')
 
   const navigate = useNavigate()
@@ -46,35 +52,29 @@ export default function PlayerStats() {
   }, [errorStatusCode, navigate])
 
   return (
-    <Page
-      showBackButton
-      title='Player stats'
-      isLoading={loading}
-    >
+    <Page showBackButton title='Player stats' isLoading={loading}>
       <PlayerIdentifier player={player} />
 
-      {!error && !loading && sortedStats.length === 0 &&
-        <p>This player has no stat entries yet</p>
-      }
+      {!error && !loading && sortedStats.length === 0 && <p>This player has no stat entries yet</p>}
 
-      {!error && sortedStats.length > 0 &&
+      {!error && sortedStats.length > 0 && (
         <Table columns={['Stat', 'Value', 'Created at', 'Updated at']}>
           <TableBody iterator={sortedStats}>
             {(playerStat) => (
               <>
                 <TableCell className='min-w-60'>{playerStat.stat.name}</TableCell>
-                <TableCell className='min-w-40 flex items-center space-x-2'>
+                <TableCell className='flex min-w-40 items-center space-x-2'>
                   <>
                     <span>{playerStat.value}</span>
-                    {canPerformAction(user, PermissionBasedAction.UPDATE_PLAYER_STAT) &&
+                    {canPerformAction(user, PermissionBasedAction.UPDATE_PLAYER_STAT) && (
                       <Button
                         variant='icon'
-                        className='p-1 rounded-full bg-indigo-900'
+                        className='rounded-full bg-indigo-900 p-1'
                         onClick={() => setEditingStat(playerStat)}
                         icon={<IconPencil size={16} />}
                         extra={{ 'aria-label': 'Edit game name' }}
                       />
-                    }
+                    )}
                   </>
                 </TableCell>
                 <DateCell>{format(new Date(playerStat.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
@@ -83,15 +83,15 @@ export default function PlayerStats() {
             )}
           </TableBody>
         </Table>
-      }
+      )}
 
-      {editingStat &&
+      {editingStat && (
         <UpdateStatValue
           modalState={[true, () => setEditingStat(null)]}
           mutate={mutate}
           editingStat={editingStat}
         />
-      }
+      )}
 
       {error && <ErrorMessage error={error} />}
     </Page>

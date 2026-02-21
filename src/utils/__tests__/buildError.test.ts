@@ -21,9 +21,9 @@ describe('buildError', () => {
     const error = buildError({
       response: {
         data: {
-          message: 'Something went wrong'
-        }
-      }
+          message: 'Something went wrong',
+        },
+      },
     })
     expect(error.message).toBe('Something went wrong')
     expect(error.keys).toStrictEqual({})
@@ -36,9 +36,9 @@ describe('buildError', () => {
       response: {
         data: {
           message: 'Something went wrong',
-          showHint: true
-        }
-      }
+          showHint: true,
+        },
+      },
     })
     expect(error.message).toBe('Something went wrong')
     expect(error.keys).toStrictEqual({})
@@ -52,15 +52,15 @@ describe('buildError', () => {
         data: {
           errors: {
             startDate: ['The startDate is invalid'],
-            endDate: ['The endDate is invalid']
-          }
-        }
-      }
+            endDate: ['The endDate is invalid'],
+          },
+        },
+      },
     })
     expect(error.message).toBe('Something went wrong, please try again later')
     expect(error.keys).toStrictEqual({
       startDate: ['The startDate is invalid'],
-      endDate: ['The endDate is invalid']
+      endDate: ['The endDate is invalid'],
     })
     expect(error.hasKeys).toBe(true)
     expect(error.extra).toStrictEqual({})
@@ -72,32 +72,35 @@ describe('buildError', () => {
         data: {
           errors: {
             startDate: ['The startDate is invalid'],
-            endDate: ['The endDate is invalid']
+            endDate: ['The endDate is invalid'],
           },
-          showHint: true
-        }
-      }
+          showHint: true,
+        },
+      },
     })
     expect(error.message).toBe('Something went wrong, please try again later')
     expect(error.keys).toStrictEqual({
       startDate: ['The startDate is invalid'],
-      endDate: ['The endDate is invalid']
+      endDate: ['The endDate is invalid'],
     })
     expect(error.hasKeys).toBe(true)
     expect(error.extra).toStrictEqual({ showHint: true })
   })
 
   it('should use the message from a preferredKey if it is set', () => {
-    const error = buildError({
-      response: {
-        data: {
-          errors: {
-            startDate: ['The startDate is invalid'],
-            endDate: ['The endDate is invalid']
-          }
-        }
-      }
-    }, 'startDate')
+    const error = buildError(
+      {
+        response: {
+          data: {
+            errors: {
+              startDate: ['The startDate is invalid'],
+              endDate: ['The endDate is invalid'],
+            },
+          },
+        },
+      },
+      'startDate',
+    )
     expect(error.message).toBe('The startDate is invalid')
   })
 })

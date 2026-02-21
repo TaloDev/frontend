@@ -10,6 +10,6 @@ export default function playerMock(extra: Partial<Player> = {}): Player {
     aliases: [],
     groups: [],
     presence: null,
-    ...extra
+    ...extra,
   }
 }

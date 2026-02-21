@@ -1,15 +1,15 @@
 import useSWR from 'swr'
-import buildError from '../utils/buildError'
-import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
 import { gameSchema } from '../entities/game'
-import { userSchema } from '../entities/user'
 import { inviteSchema } from '../entities/invite'
+import { userSchema } from '../entities/user'
+import buildError from '../utils/buildError'
+import makeValidatedGetRequest from './makeValidatedGetRequest'
 
 export const currentOrganisationSchema = z.object({
   games: z.array(gameSchema),
   members: z.array(userSchema),
-  pendingInvites: z.array(inviteSchema)
+  pendingInvites: z.array(inviteSchema),
 })
 
 export default function useOrganisation() {
@@ -19,10 +19,7 @@ export default function useOrganisation() {
     return res
   }
 
-  const { data, error, mutate } = useSWR(
-    ['/organisations/current'],
-    fetcher
-  )
+  const { data, error, mutate } = useSWR(['/organisations/current'], fetcher)
 
   return {
     games: data?.games ?? [],
@@ -30,6 +27,6 @@ export default function useOrganisation() {
     pendingInvites: data?.pendingInvites ?? [],
     loading: !data && !error,
     error: error && buildError(error),
-    mutate
+    mutate,
   }
 }

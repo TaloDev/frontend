@@ -1,4 +1,7 @@
 {
+  "version": "0.69.3",
+  "license": "MIT",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "dev:e2e": "vite --mode e2e",
@@ -7,7 +10,10 @@
     "test:e2e": "start-server-and-test dev:e2e http://localhost:8080 cypress:open",
     "cypress:open": "cypress open",
     "prepare": "husky || true",
-    "lint": "eslint src/**/*.{js,jsx,ts,tsx}"
+    "lint": "oxlint --type-aware",
+    "lint:fix": "oxlint --type-aware --fix",
+    "fmt": "oxfmt --check",
+    "fmt:fix": "oxfmt"
   },
   "dependencies": {
     "@dinero.js/currencies": "^2.0.0-alpha.11",
@@ -42,7 +48,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@stylistic/eslint-plugin": "^2.2.2",
     "@tailwindcss/vite": "^4.1.17",
     "@testing-library/cypress": "^10.0.3",
     "@testing-library/jest-dom": "^6.4.2",
@@ -54,36 +59,30 @@
     "@types/randomcolor": "^0.5.9",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/eslint-plugin": "^7.13.1",
-    "@typescript-eslint/parser": "^7.13.1",
     "@vitejs/plugin-react-swc": "^3.8.0",
     "@vitest/coverage-v8": "^3.0.7",
     "axios-mock-adapter": "^1.20.0",
     "cypress": "^14.0.0",
-    "eslint": "^8.57.0",
     "eslint-plugin-cypress": "^3.3.0",
     "eslint-plugin-jest-dom": "^5.4.0",
-    "eslint-plugin-jsx-a11y": "^6.9.0",
-    "eslint-plugin-react": "^7.34.3",
-    "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-testing-library": "^6.2.2",
     "husky": "^9.0.11",
     "jsdom": "^24.0.0",
     "lint-staged": ">=10",
+    "oxfmt": "^0.34.0",
+    "oxlint": "^1.49.0",
+    "oxlint-tsgolint": "^0.14.2",
     "start-server-and-test": "^2.0.0",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.4.5",
     "vite": "^6.2.0",
     "vitest": "^3.0.7"
   },
-  "license": "MIT",
-  "browserslist": ">0.75%",
   "lint-staged": {
-    "*.{ts,js,tsx,jsx}": "eslint --fix"
+    "*.{ts,js,tsx,jsx}": "npm run lint"
   },
-  "version": "0.69.2",
+  "browserslist": ">0.75%",
   "engines": {
     "node": "24.x"
-  },
-  "type": "module"
+  }
 }

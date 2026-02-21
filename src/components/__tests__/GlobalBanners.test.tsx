@@ -1,17 +1,17 @@
 import { render, screen } from '@testing-library/react'
-import KitchenSink from '../../utils/KitchenSink'
-import userState from '../../state/userState'
-import GlobalBanners from '../GlobalBanners'
 import routes from '../../constants/routes'
-import { ConfirmPasswordAction } from '../../pages/ConfirmPassword'
 import { UserType } from '../../entities/user'
+import { ConfirmPasswordAction } from '../../pages/ConfirmPassword'
+import userState from '../../state/userState'
+import KitchenSink from '../../utils/KitchenSink'
+import GlobalBanners from '../GlobalBanners'
 
 describe('<GlobalBanners />', () => {
   it('should render on allowed pages', () => {
     render(
       <KitchenSink states={[{ node: userState, initialValue: { emailConfirmed: false } }]}>
         <GlobalBanners />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Please confirm your email address')).toBeInTheDocument()
@@ -21,10 +21,15 @@ describe('<GlobalBanners />', () => {
     render(
       <KitchenSink
         states={[{ node: userState, initialValue: { emailConfirmed: false } }]}
-        initialEntries={[{ pathname: routes.confirmPassword, state: { onConfirmAction: ConfirmPasswordAction.CHANGE_PASSWORD } }]}
+        initialEntries={[
+          {
+            pathname: routes.confirmPassword,
+            state: { onConfirmAction: ConfirmPasswordAction.CHANGE_PASSWORD },
+          },
+        ]}
       >
         <GlobalBanners />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.queryByText('Please confirm your email address')).not.toBeInTheDocument()
@@ -35,18 +40,20 @@ describe('<GlobalBanners />', () => {
       type: UserType.OWNER,
       organisation: {
         pricingPlan: {
-          status: 'incomplete'
-        }
-      }
+          status: 'incomplete',
+        },
+      },
     }
 
     render(
-      <KitchenSink states={[ { node: userState, initialValue: userValue }]}>
+      <KitchenSink states={[{ node: userState, initialValue: userValue }]}>
         <GlobalBanners />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
-    expect(screen.getByText('Please update your payment details to continue your current price plan')).toBeInTheDocument()
+    expect(
+      screen.getByText('Please update your payment details to continue your current price plan'),
+    ).toBeInTheDocument()
   })
 
   it('should not render the payment required banner when the plan status is active', () => {
@@ -54,17 +61,19 @@ describe('<GlobalBanners />', () => {
       type: UserType.OWNER,
       organisation: {
         pricingPlan: {
-          status: 'active'
-        }
-      }
+          status: 'active',
+        },
+      },
     }
 
     render(
-      <KitchenSink states={[ { node: userState, initialValue: userValue }]}>
+      <KitchenSink states={[{ node: userState, initialValue: userValue }]}>
         <GlobalBanners />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
-    expect(screen.queryByText('Please update your payment details to continue your current price plan')).not.toBeInTheDocument()
+    expect(
+      screen.queryByText('Please update your payment details to continue your current price plan'),
+    ).not.toBeInTheDocument()
   })
 })

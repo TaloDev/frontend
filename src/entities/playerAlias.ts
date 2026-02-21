@@ -7,7 +7,7 @@ export enum PlayerAliasService {
   USERNAME = 'username',
   EMAIL = 'email',
   CUSTOM = 'custom',
-  TALO = 'talo'
+  TALO = 'talo',
 }
 
 export const playerAliasSchema = z.object({
@@ -17,7 +17,7 @@ export const playerAliasSchema = z.object({
   player: z.lazy(() => basePlayerSchema),
   lastSeenAt: z.string().datetime(),
   createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime()
+  updatedAt: z.string().datetime(),
 })
 
 export type PlayerAlias = z.infer<typeof playerAliasSchema>

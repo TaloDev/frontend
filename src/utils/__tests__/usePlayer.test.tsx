@@ -1,9 +1,9 @@
-import api from '../../api/api'
-import MockAdapter from 'axios-mock-adapter'
-import usePlayer from '../usePlayer'
 import { render, screen, waitFor } from '@testing-library/react'
+import MockAdapter from 'axios-mock-adapter'
+import api from '../../api/api'
 import activeGameState from '../../state/activeGameState'
 import KitchenSink from '../KitchenSink'
+import usePlayer from '../usePlayer'
 
 describe('usePlayer', () => {
   const axiosMock = new MockAdapter(api)
@@ -19,7 +19,7 @@ describe('usePlayer', () => {
     const id = '82141b6e-e662-4ff2-bc77-5dc46236f339'
 
     axiosMock.onGet(`http://talo.api/games/1/players/${id}`).replyOnce(200, {
-      player: { id }
+      player: { id },
     })
 
     render(
@@ -29,7 +29,7 @@ describe('usePlayer', () => {
         initialEntries={[{ pathname: `/${id}` }]}
       >
         <DummyHookRenderer />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText(id)).toBeInTheDocument()
@@ -48,7 +48,7 @@ describe('usePlayer', () => {
         setLocation={setLocationMock}
       >
         <DummyHookRenderer />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await waitFor(() => {
@@ -69,7 +69,7 @@ describe('usePlayer', () => {
         setLocation={setLocationMock}
       >
         <DummyHookRenderer />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await waitFor(() => {

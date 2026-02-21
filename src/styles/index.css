@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
   --min-width-10: 2.5rem;
@@ -9,7 +9,8 @@
 }
 
 @layer base {
-  button:not(:disabled), [role="button"]:not(:disabled) {
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
     cursor: pointer;
   }
 }
@@ -84,7 +85,8 @@ table {
   @apply outline-none;
 }
 
-.tippy-box[data-theme~='bare'], .tippy-box[data-theme~='services'] {
+.tippy-box[data-theme~='bare'],
+.tippy-box[data-theme~='services'] {
   background-color: unset;
   font-size: unset;
 
@@ -96,7 +98,7 @@ table {
 .tippy-box[data-theme~='services'] {
   width: calc(100vw - 32px);
 
-  @apply sm:w-auto
+  @apply sm:w-auto;
 }
 
 .tippy-box:not([data-theme]) {
@@ -118,11 +120,13 @@ table {
   @apply shadow-lg;
 }
 
-.rdp-day, .rdp-button {
+.rdp-day,
+.rdp-button {
   @apply transition-colors;
 }
 
-.rdp-day:hover, .rdp-button:hover {
+.rdp-day:hover,
+.rdp-button:hover {
   @apply bg-indigo-100!;
 }
 
@@ -140,6 +144,10 @@ table {
 }
 
 @keyframes spinners-react-circular-fixed {
-  0% { stroke-dashoffset: 325; }
-  100% { stroke-dashoffset: 151; }
+  0% {
+    stroke-dashoffset: 325;
+  }
+  100% {
+    stroke-dashoffset: 151;
+  }
 }

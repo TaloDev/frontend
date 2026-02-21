@@ -14,20 +14,20 @@ describe('<EventChartTooltip />', () => {
               count: 0,
               name: 'Treasure discovered',
               change: 0,
-              date: 1612147200000
-            }
+              date: 1612147200000,
+            },
           },
           {
             payload: {
               count: 3,
               name: 'Item looted',
               change: 1,
-              date: 1612147200000
-            }
-          }
+              date: 1612147200000,
+            },
+          },
         ]}
         label='2021-01-01 19:00:00'
-      />
+      />,
     )
 
     expect(screen.getAllByRole('listitem')).toHaveLength(1 * listItemsPerEvent)
@@ -43,28 +43,28 @@ describe('<EventChartTooltip />', () => {
               count: 0,
               name: 'Treasure discovered',
               change: 0,
-              date: 1612147200000
-            }
+              date: 1612147200000,
+            },
           },
           {
             payload: {
               count: 2,
               name: 'Treasure discovered',
               change: 0,
-              date: 1612147200000
-            }
+              date: 1612147200000,
+            },
           },
           {
             payload: {
               count: 3,
               name: 'Item looted',
               change: 0,
-              date: 1612147200000
-            }
-          }
+              date: 1612147200000,
+            },
+          },
         ]}
         label='2021-01-01 19:00:00'
-      />
+      />,
     )
 
     expect(screen.getAllByRole('listitem')).toHaveLength(2 * listItemsPerEvent)
@@ -80,20 +80,20 @@ describe('<EventChartTooltip />', () => {
               count: 0,
               name: 'Treasure discovered',
               change: 0,
-              date: 1612147200000
-            }
+              date: 1612147200000,
+            },
           },
           {
             payload: {
               count: 0,
               name: 'Item looted',
               change: 0,
-              date: 1612147200000
-            }
-          }
+              date: 1612147200000,
+            },
+          },
         ]}
         label='2021-01-01 19:00:00'
-      />
+      />,
     )
 
     expect(screen.queryAllByRole('listitem')).toHaveLength(0)

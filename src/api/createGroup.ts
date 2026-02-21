@@ -8,8 +8,8 @@ type Data = Pick<PlayerGroup, 'name' | 'description' | 'rules' | 'ruleMode'>
 const createGroup = makeValidatedRequest(
   (gameId: number, data: Data) => api.post(`/games/${gameId}/player-groups`, data),
   z.object({
-    group: playerGroupSchema
-  })
+    group: playerGroupSchema,
+  }),
 )
 
 export default createGroup

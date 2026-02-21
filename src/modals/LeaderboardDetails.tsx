@@ -1,22 +1,26 @@
+import { IconRefresh, IconTrash } from '@tabler/icons-react'
 import { MouseEvent, useContext, useState } from 'react'
-import Modal from '../components/Modal'
-import TextInput from '../components/TextInput'
-import Button from '../components/Button'
+import { useRecoilValue } from 'recoil'
+import { KeyedMutator } from 'swr'
 import createLeaderboard from '../api/createLeaderboard'
-import buildError from '../utils/buildError'
+import deleteLeaderboard from '../api/deleteLeaderboard'
+import updateLeaderboard from '../api/updateLeaderboard'
+import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import Select from '../components/Select'
+import Modal from '../components/Modal'
 import RadioGroup from '../components/RadioGroup'
+import Select from '../components/Select'
+import TextInput from '../components/TextInput'
+import ToastContext, { ToastType } from '../components/toast/ToastContext'
+import {
+  Leaderboard,
+  LeaderboardSortMode,
+  LeaderboardRefreshInterval,
+} from '../entities/leaderboard'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import userState, { AuthedUser } from '../state/userState'
-import { useRecoilValue } from 'recoil'
-import updateLeaderboard from '../api/updateLeaderboard'
-import deleteLeaderboard from '../api/deleteLeaderboard'
+import buildError from '../utils/buildError'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
-import { Leaderboard, LeaderboardSortMode, LeaderboardRefreshInterval } from '../entities/leaderboard'
-import { KeyedMutator } from 'swr'
-import { IconRefresh, IconTrash } from '@tabler/icons-react'
-import ToastContext, { ToastType } from '../components/toast/ToastContext'
 
 type LeaderboardDetailsProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -29,7 +33,7 @@ const LeaderboardDetails = ({
   modalState,
   mutate,
   editingLeaderboard,
-  onResetClick
+  onResetClick,
 }: LeaderboardDetailsProps) => {
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)
@@ -42,7 +46,9 @@ const LeaderboardDetails = ({
   const [internalName, setInternalName] = useState(editingLeaderboard?.internalName ?? '')
   const [displayName, setDisplayName] = useState(editingLeaderboard?.name ?? '')
   const [sortMode, setSortMode] = useState(editingLeaderboard?.sortMode ?? LeaderboardSortMode.DESC)
-  const [refreshInterval, setRefreshInterval] = useState(editingLeaderboard?.refreshInterval ?? LeaderboardRefreshInterval.NEVER)
+  const [refreshInterval, setRefreshInterval] = useState(
+    editingLeaderboard?.refreshInterval ?? LeaderboardRefreshInterval.NEVER,
+  )
 
   const [unique, setUnique] = useState(editingLeaderboard?.unique ?? false)
   const [uniqueByProps, setUniqueByProps] = useState(editingLeaderboard?.uniqueByProps ?? false)
@@ -55,15 +61,19 @@ const LeaderboardDetails = ({
     setError(null)
 
     try {
-      const { leaderboard } = await createLeaderboard(activeGame.id, { internalName, name: displayName, sortMode, unique, uniqueByProps, refreshInterval })
+      const { leaderboard } = await createLeaderboard(activeGame.id, {
+        internalName,
+        name: displayName,
+        sortMode,
+        unique,
+        uniqueByProps,
+        refreshInterval,
+      })
 
-      mutate((data) => {
+      await mutate((data) => {
         return {
           ...data,
-          leaderboards: [
-            ...data!.leaderboards,
-            leaderboard
-          ]
+          leaderboards: [...data!.leaderboards, leaderboard],
         }
       }, false)
 
@@ -82,15 +92,22 @@ const LeaderboardDetails = ({
     setError(null)
 
     try {
-      const { leaderboard } = await updateLeaderboard(activeGame.id, editingLeaderboard!.id, { internalName, name: displayName, sortMode, unique, uniqueByProps, refreshInterval })
+      const { leaderboard } = await updateLeaderboard(activeGame.id, editingLeaderboard!.id, {
+        internalName,
+        name: displayName,
+        sortMode,
+        unique,
+        uniqueByProps,
+        refreshInterval,
+      })
 
-      mutate((data) => {
+      await mutate((data) => {
         return {
           ...data,
           leaderboards: data!.leaderboards.map((existingLeaderboard) => {
             if (existingLeaderboard.id === leaderboard.id) return leaderboard
             return existingLeaderboard
-          })
+          }),
         }
       }, false)
 
@@ -113,12 +130,12 @@ const LeaderboardDetails = ({
     try {
       await deleteLeaderboard(activeGame.id, editingLeaderboard!.id)
 
-      mutate((data) => {
+      await mutate((data) => {
         return {
           ...data,
           leaderboards: data!.leaderboards.filter((existingLeaderboard) => {
             return existingLeaderboard.id !== editingLeaderboard!.id
-          })
+          }),
         }
       }, false)
 
@@ -133,7 +150,7 @@ const LeaderboardDetails = ({
 
   const sortModeOptions = [
     { label: 'Descending', value: LeaderboardSortMode.DESC },
-    { label: 'Ascending', value: LeaderboardSortMode.ASC }
+    { label: 'Ascending', value: LeaderboardSortMode.ASC },
   ]
 
   const refreshIntervalOptions = [
@@ -141,7 +158,7 @@ const LeaderboardDetails = ({
     { label: 'Daily', value: LeaderboardRefreshInterval.DAILY },
     { label: 'Weekly', value: LeaderboardRefreshInterval.WEEKLY },
     { label: 'Monthly', value: LeaderboardRefreshInterval.MONTHLY },
-    { label: 'Yearly', value: LeaderboardRefreshInterval.YEARLY }
+    { label: 'Yearly', value: LeaderboardRefreshInterval.YEARLY },
   ]
 
   return (
@@ -151,8 +168,8 @@ const LeaderboardDetails = ({
       modalState={modalState}
       className='flex flex-col'
     >
-      <form className='flex flex-col grow'>
-        <div className='p-4 space-y-4'>
+      <form className='flex grow flex-col'>
+        <div className='space-y-4 p-4'>
           <TextInput
             startFocused
             id='internal-name'
@@ -174,7 +191,9 @@ const LeaderboardDetails = ({
           />
 
           <div className='w-full'>
-            <label htmlFor='sort-mode' className='block font-semibold mb-1'>Sort mode</label>
+            <label htmlFor='sort-mode' className='mb-1 block font-semibold'>
+              Sort mode
+            </label>
             <Select
               inputId='sort-mode'
               defaultValue={sortModeOptions.find((option) => option.value === sortMode)}
@@ -184,11 +203,17 @@ const LeaderboardDetails = ({
           </div>
 
           <div className='w-full'>
-            <label htmlFor='refresh-interval' className='block font-semibold mb-1'>Refresh entries</label>
-            <p className='text-sm text-gray-500 mb-2'>Hide leaderboard entries older than the selected interval</p>
+            <label htmlFor='refresh-interval' className='mb-1 block font-semibold'>
+              Refresh entries
+            </label>
+            <p className='mb-2 text-sm text-gray-500'>
+              Hide leaderboard entries older than the selected interval
+            </p>
             <Select
               inputId='refresh-interval'
-              defaultValue={refreshIntervalOptions.find((option) => option.value === refreshInterval)}
+              defaultValue={refreshIntervalOptions.find(
+                (option) => option.value === refreshInterval,
+              )}
               onChange={(option) => setRefreshInterval(option!.value)}
               options={refreshIntervalOptions}
             />
@@ -199,68 +224,65 @@ const LeaderboardDetails = ({
             name='unique'
             options={[
               { label: 'Yes', value: true },
-              { label: 'No', value: false }
+              { label: 'No', value: false },
             ]}
             onChange={(value) => setUnique(value)}
             value={unique}
           />
 
-          {unique &&
+          {unique && (
             <RadioGroup
               label='Unique by props?'
               name='uniqueByProps'
               options={[
                 { label: 'Yes', value: true },
-                { label: 'No', value: false }
+                { label: 'No', value: false },
               ]}
               onChange={(value) => setUniqueByProps(value)}
               value={uniqueByProps}
               info='Each unique combination of props creates a separate entry for the player'
             />
-          }
+          )}
 
-          {editingLeaderboard && canPerformAction(user, PermissionBasedAction.DELETE_LEADERBOARD) &&
-            <div className='p-4 space-y-2 bg-red-100 border border-red-400 rounded'>
-              <p className='font-semibold'>Danger zone</p>
+          {editingLeaderboard &&
+            canPerformAction(user, PermissionBasedAction.DELETE_LEADERBOARD) && (
+              <div className='space-y-2 rounded border border-red-400 bg-red-100 p-4'>
+                <p className='font-semibold'>Danger zone</p>
 
-              <div className='space-y-2'>
-                <p>Once taken, these actions are irreversible.</p>
-                <div className='flex space-x-2'>
-                  <Button
-                    type='button'
-                    isLoading={isDeleting}
-                    onClick={onResetClick}
-                    variant='red'
-                    className='w-auto!'
-                    icon={<IconRefresh />}
-                  >
-                    <span>
-                      Reset
-                    </span>
-                  </Button>
+                <div className='space-y-2'>
+                  <p>Once taken, these actions are irreversible.</p>
+                  <div className='flex space-x-2'>
+                    <Button
+                      type='button'
+                      isLoading={isDeleting}
+                      onClick={onResetClick}
+                      variant='red'
+                      className='w-auto!'
+                      icon={<IconRefresh />}
+                    >
+                      <span>Reset</span>
+                    </Button>
 
-                  <Button
-                    type='button'
-                    isLoading={isDeleting}
-                    onClick={onDeleteClick}
-                    variant='red'
-                    className='w-auto!'
-                    icon={<IconTrash />}
-                  >
-                    <span>
-                      Delete
-                    </span>
-                  </Button>
+                    <Button
+                      type='button'
+                      isLoading={isDeleting}
+                      onClick={onDeleteClick}
+                      variant='red'
+                      className='w-auto!'
+                      icon={<IconTrash />}
+                    >
+                      <span>Delete</span>
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          }
+            )}
 
           {error && <ErrorMessage error={error} />}
         </div>
 
-        <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200 mt-auto'>
-          {!editingLeaderboard &&
+        <div className='mt-auto flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          {!editingLeaderboard && (
             <div className='w-full md:w-32'>
               <Button
                 disabled={!internalName || !displayName || !sortMode}
@@ -270,8 +292,8 @@ const LeaderboardDetails = ({
                 Create
               </Button>
             </div>
-          }
-          {editingLeaderboard &&
+          )}
+          {editingLeaderboard && (
             <div className='w-full md:w-32'>
               <Button
                 disabled={!internalName || !displayName || !sortMode || isDeleting}
@@ -281,9 +303,11 @@ const LeaderboardDetails = ({
                 Update
               </Button>
             </div>
-          }
+          )}
           <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>Close</Button>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Close
+            </Button>
           </div>
         </div>
       </form>

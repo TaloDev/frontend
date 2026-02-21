@@ -8,8 +8,8 @@ type Data = Pick<GameFeedbackCategory, 'internalName' | 'name' | 'description' |
 const createFeedbackCategory = makeValidatedRequest(
   (gameId: number, data: Data) => api.post(`/games/${gameId}/game-feedback/categories`, data),
   z.object({
-    feedbackCategory: gameFeedbackCategorySchema
-  })
+    feedbackCategory: gameFeedbackCategorySchema,
+  }),
 )
 
 export default createFeedbackCategory

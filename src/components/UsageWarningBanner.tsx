@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom'
-import AlertBanner from './AlertBanner'
 import { IconInfoCircle } from '@tabler/icons-react'
+import { Link } from 'react-router-dom'
 import { PricingPlanUsage } from '../entities/pricingPlan'
+import AlertBanner from './AlertBanner'
 
 type UsageWarningBannerProps = {
   usage: PricingPlanUsage
@@ -10,9 +10,18 @@ type UsageWarningBannerProps = {
 export default function UsageWarningBanner({ usage }: UsageWarningBannerProps) {
   return (
     <AlertBanner
-      className='w-full lg:2/3 xl:w-1/2'
+      className='lg:2/3 w-full xl:w-1/2'
       icon={IconInfoCircle}
-      text={<p>You&apos;ve used {Math.round((usage.used / usage.limit) * 100)}% of your current plan&apos;s limit. <Link to='/billing' className='font-bold underline'>Upgrade your plan</Link> to avoid any disruption to your game.</p>}
+      text={
+        <p>
+          You&apos;ve used {Math.round((usage.used / usage.limit) * 100)}% of your current
+          plan&apos;s limit.{' '}
+          <Link to='/billing' className='font-bold underline'>
+            Upgrade your plan
+          </Link>{' '}
+          to avoid any disruption to your game.
+        </p>
+      }
     />
   )
 }

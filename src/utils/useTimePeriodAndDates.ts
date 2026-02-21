@@ -12,14 +12,20 @@ export const timePeriods: {
   { id: '30d', label: '30 days' },
   { id: 'w', label: 'This week' },
   { id: 'm', label: 'This month' },
-  { id: 'y', label: 'This year' }
+  { id: 'y', label: 'This year' },
 ]
 
 export default function useTimePeriodAndDates(localStorageKey: string) {
-  const [timePeriod, setTimePeriod] = useLocalStorage<TimePeriod | null>(`${localStorageKey}TimePeriod`, timePeriods[1].id)
+  const [timePeriod, setTimePeriod] = useLocalStorage<TimePeriod | null>(
+    `${localStorageKey}TimePeriod`,
+    timePeriods[1].id,
+  )
   const { startDate, endDate } = useTimePeriod(timePeriod)
 
-  const [selectedStartDate, setSelectedStartDate] = useLocalStorage(`${localStorageKey}StartDate`, '')
+  const [selectedStartDate, setSelectedStartDate] = useLocalStorage(
+    `${localStorageKey}StartDate`,
+    '',
+  )
   const [selectedEndDate, setSelectedEndDate] = useLocalStorage(`${localStorageKey}EndDate`, '')
 
   const [debouncedStartDate] = useDebounce(selectedStartDate, 300)
@@ -32,15 +38,21 @@ export default function useTimePeriodAndDates(localStorageKey: string) {
     }
   }, [timePeriod, startDate, endDate, setSelectedStartDate, setSelectedEndDate])
 
-  const onStartDateChange = useCallback((date: string) => {
-    setTimePeriod(null)
-    setSelectedStartDate(date.split('T')[0])
-  }, [setSelectedStartDate, setTimePeriod])
+  const onStartDateChange = useCallback(
+    (date: string) => {
+      setTimePeriod(null)
+      setSelectedStartDate(date.split('T')[0])
+    },
+    [setSelectedStartDate, setTimePeriod],
+  )
 
-  const onEndDateChange = useCallback((date: string) => {
-    setTimePeriod(null)
-    setSelectedEndDate(date.split('T')[0])
-  }, [setSelectedEndDate, setTimePeriod])
+  const onEndDateChange = useCallback(
+    (date: string) => {
+      setTimePeriod(null)
+      setSelectedEndDate(date.split('T')[0])
+    },
+    [setSelectedEndDate, setTimePeriod],
+  )
 
   return {
     timePeriod,
@@ -50,6 +62,6 @@ export default function useTimePeriodAndDates(localStorageKey: string) {
     selectedStartDate,
     selectedEndDate,
     onStartDateChange,
-    onEndDateChange
+    onEndDateChange,
   }
 }

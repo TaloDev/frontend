@@ -1,21 +1,21 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import useStats from '../api/useStats'
+import { StatGlobalValueChart } from '../components/charts/StatGlobalValueChart'
+import DateInput from '../components/DateInput'
 import ErrorMessage from '../components/ErrorMessage'
+import Loading from '../components/Loading'
 import Page from '../components/Page'
+import SecondaryTitle from '../components/SecondaryTitle'
 import Table from '../components/tables/Table'
 import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { GameStat } from '../entities/gameStat'
-import routes from '../constants/routes'
-import SecondaryTitle from '../components/SecondaryTitle'
-import DateInput from '../components/DateInput'
-import useTimePeriodAndDates, { timePeriods } from '../utils/useTimePeriodAndDates'
 import TimePeriodPicker from '../components/TimePeriodPicker'
-import Loading from '../components/Loading'
-import { StatGlobalValueChart } from '../components/charts/StatGlobalValueChart'
+import routes from '../constants/routes'
+import { GameStat } from '../entities/gameStat'
+import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import useTimePeriodAndDates, { timePeriods } from '../utils/useTimePeriodAndDates'
 
 type GameStatWithMetrics = Omit<GameStat, 'metrics'> & { metrics: NonNullable<GameStat['metrics']> }
 
@@ -31,17 +31,24 @@ export default function StatMetrics() {
     debouncedStartDate,
     debouncedEndDate,
     onStartDateChange,
-    onEndDateChange
+    onEndDateChange,
   } = useTimePeriodAndDates(`${internalName}-metrics`)
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
-  const { stats, loading, error } = useStats(activeGame, undefined, selectedStartDate, selectedEndDate)
+  const { stats, loading, error } = useStats(
+    activeGame,
+    undefined,
+    selectedStartDate,
+    selectedEndDate,
+  )
 
   const getStat = useCallback(() => {
     return stats.find((stat) => stat.internalName === internalName)
   }, [internalName, stats])
 
-  const [stat, setStat] = useState<GameStatWithMetrics | undefined>(getStat() as GameStatWithMetrics)
+  const [stat, setStat] = useState<GameStatWithMetrics | undefined>(
+    getStat() as GameStatWithMetrics,
+  )
 
   const metrics = useMemo(() => {
     return stat?.metrics
@@ -63,11 +70,7 @@ export default function StatMetrics() {
   }, [])
 
   return (
-    <Page
-      title={`${stat?.name ?? 'Stat'} metrics`}
-      isLoading={loading}
-      showBackButton
-    >
+    <Page title={`${stat?.name ?? 'Stat'} metrics`} isLoading={loading} showBackButton>
       <div>
         <div className='mb-4 md:mb-8'>
           <TimePeriodPicker
@@ -77,7 +80,7 @@ export default function StatMetrics() {
           />
         </div>
 
-        <div className='flex items-end w-full md:w-1/2 space-x-4'>
+        <div className='flex w-full items-end space-x-4 md:w-1/2'>
           <div className='w-1/3'>
             <DateInput
               id='start-date'
@@ -87,7 +90,7 @@ export default function StatMetrics() {
                 label: 'Start date',
                 placeholder: 'Start date',
                 errors: error?.keys.startDate,
-                variant: undefined
+                variant: undefined,
               }}
             />
           </div>
@@ -101,61 +104,96 @@ export default function StatMetrics() {
                 label: 'End date',
                 placeholder: 'End date',
                 errors: error?.keys.endDate,
-                variant: undefined
+                variant: undefined,
               }}
             />
           </div>
         </div>
       </div>
 
-      {!error &&
+      {!error && (
         <>
-          {internalName &&
+          {internalName && (
             <StatGlobalValueChart
               internalName={internalName}
               startDate={debouncedStartDate}
               endDate={debouncedEndDate}
             />
-          }
+          )}
 
           <SecondaryTitle>Global metrics</SecondaryTitle>
 
-          {metrics &&
-            <Table columns={['Min value', 'Max value', 'Median value', 'Average value', 'Total updates', 'Average change']}>
+          {metrics && (
+            <Table
+              columns={[
+                'Min value',
+                'Max value',
+                'Median value',
+                'Average value',
+                'Total updates',
+                'Average change',
+              ]}
+            >
               <TableBody iterator={[metrics]}>
                 {(metrics) => (
                   <>
-                    <TableCell className='font-mono'>{formatValue(metrics.globalValue.minValue)}</TableCell>
-                    <TableCell className='font-mono'>{formatValue(metrics.globalValue.maxValue)}</TableCell>
-                    <TableCell className='font-mono'>{formatValue(metrics.globalValue.medianValue)}</TableCell>
-                    <TableCell className='font-mono'>{formatValue(metrics.globalValue.averageValue)}</TableCell>
+                    <TableCell className='font-mono'>
+                      {formatValue(metrics.globalValue.minValue)}
+                    </TableCell>
+                    <TableCell className='font-mono'>
+                      {formatValue(metrics.globalValue.maxValue)}
+                    </TableCell>
+                    <TableCell className='font-mono'>
+                      {formatValue(metrics.globalValue.medianValue)}
+                    </TableCell>
+                    <TableCell className='font-mono'>
+                      {formatValue(metrics.globalValue.averageValue)}
+                    </TableCell>
                     <TableCell className='font-mono'>{formatValue(metrics.globalCount)}</TableCell>
-                    <TableCell className='font-mono'>{formatValue(metrics.globalValue.averageChange)}</TableCell>
+                    <TableCell className='font-mono'>
+                      {formatValue(metrics.globalValue.averageChange)}
+                    </TableCell>
                   </>
                 )}
               </TableBody>
             </Table>
-          }
-          {!metrics && <div><Loading size={32} thickness={180} /></div>}
+          )}
+          {!metrics && (
+            <div>
+              <Loading size={32} thickness={180} />
+            </div>
+          )}
 
           <SecondaryTitle>Player metrics</SecondaryTitle>
-          {metrics &&
+          {metrics && (
             <Table columns={['Min value', 'Max value', 'Median value', 'Average value']}>
               <TableBody iterator={[metrics]}>
                 {(metrics) => (
                   <>
-                    <TableCell className='font-mono'>{formatValue(metrics.playerValue.minValue)}</TableCell>
-                    <TableCell className='font-mono'>{formatValue(metrics.playerValue.maxValue)}</TableCell>
-                    <TableCell className='font-mono'>{formatValue(metrics.playerValue.medianValue)}</TableCell>
-                    <TableCell className='font-mono'>{formatValue(metrics.playerValue.averageValue)}</TableCell>
+                    <TableCell className='font-mono'>
+                      {formatValue(metrics.playerValue.minValue)}
+                    </TableCell>
+                    <TableCell className='font-mono'>
+                      {formatValue(metrics.playerValue.maxValue)}
+                    </TableCell>
+                    <TableCell className='font-mono'>
+                      {formatValue(metrics.playerValue.medianValue)}
+                    </TableCell>
+                    <TableCell className='font-mono'>
+                      {formatValue(metrics.playerValue.averageValue)}
+                    </TableCell>
                   </>
                 )}
               </TableBody>
             </Table>
-          }
-          {!metrics && <div><Loading size={32} thickness={180} /></div>}
+          )}
+          {!metrics && (
+            <div>
+              <Loading size={32} thickness={180} />
+            </div>
+          )}
         </>
-      }
+      )}
 
       {error && <ErrorMessage error={error} />}
     </Page>

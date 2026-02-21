@@ -1,28 +1,28 @@
-import { useCallback, useEffect, useState } from 'react'
+import { IconCheck, IconPencil, IconPlus, IconX } from '@tabler/icons-react'
 import { format } from 'date-fns'
+import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import updateGame from '../api/updateGame'
+import useOrganisation from '../api/useOrganisation'
+import AlertBanner from '../components/AlertBanner'
+import Button from '../components/Button'
+import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Page from '../components/Page'
+import SecondaryNav from '../components/SecondaryNav'
+import SecondaryTitle from '../components/SecondaryTitle'
 import DateCell from '../components/tables/cells/DateCell'
+import Table from '../components/tables/Table'
 import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
-import organisationState from '../state/organisationState'
-import useOrganisation from '../api/useOrganisation'
-import Button from '../components/Button'
-import { IconCheck, IconPencil, IconPlus, IconX } from '@tabler/icons-react'
-import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import NewInvite from '../modals/NewInvite'
-import SecondaryNav from '../components/SecondaryNav'
-import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
-import Table from '../components/tables/Table'
-import AlertBanner from '../components/AlertBanner'
-import userState, { AuthedUser } from '../state/userState'
-import SecondaryTitle from '../components/SecondaryTitle'
-import { UserType } from '../entities/user'
-import userTypeMap from '../constants/userTypeMap'
 import TextInput from '../components/TextInput'
-import updateGame from '../api/updateGame'
-import buildError from '../utils/buildError'
+import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
+import userTypeMap from '../constants/userTypeMap'
+import { UserType } from '../entities/user'
+import NewInvite from '../modals/NewInvite'
 import activeGameState, { SelectedActiveGameState } from '../state/activeGameState'
+import organisationState from '../state/organisationState'
+import userState, { AuthedUser } from '../state/userState'
+import buildError from '../utils/buildError'
 
 function Organisation() {
   const organisation = useRecoilValue(organisationState)
@@ -55,7 +55,7 @@ function Organisation() {
           games: data!.games.map((existingGame) => {
             if (existingGame.id === editingGameId) return { ...existingGame, name: game.name }
             return existingGame
-          })
+          }),
         }
       }, false)
 
@@ -64,8 +64,8 @@ function Organisation() {
         ...user,
         organisation: {
           ...user.organisation,
-          games: updatedOrg!.games
-        }
+          games: updatedOrg!.games,
+        },
       })
       // game switcher active game
       if (activeGame.id === editingGameId) {
@@ -78,13 +78,16 @@ function Organisation() {
     }
   }, [activeGame, editingGameId, editingGameName, mutate, setActiveGame, setUser, user])
 
-  const onGameNameInputKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      onUpdateGameName()
-    } else if (e.key === 'Escape') {
-      setEditingGameId(null)
-    }
-  }, [onUpdateGameName])
+  const onGameNameInputKeyDown = useCallback(
+    async (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        await onUpdateGameName()
+      } else if (e.key === 'Escape') {
+        setEditingGameId(null)
+      }
+    },
+    [onUpdateGameName],
+  )
 
   return (
     <Page
@@ -92,9 +95,9 @@ function Organisation() {
       isLoading={loading}
       secondaryNav={<SecondaryNav routes={secondaryNavRoutes} />}
     >
-      {!loading && !error &&
+      {!loading && !error && (
         <>
-          {games.length > 0 &&
+          {games.length > 0 && (
             <>
               <SecondaryTitle>Games</SecondaryTitle>
 
@@ -105,7 +108,7 @@ function Organisation() {
                   {(game) => (
                     <>
                       <TableCell className='flex items-center space-x-2'>
-                        {editingGameId === game.id &&
+                        {editingGameId === game.id && (
                           <>
                             <TextInput
                               id={`edit-name-${game.id}`}
@@ -117,50 +120,55 @@ function Organisation() {
                             />
                             <Button
                               variant='icon'
-                              className='p-1 rounded-full bg-indigo-900'
+                              className='rounded-full bg-indigo-900 p-1'
                               onClick={onUpdateGameName}
                               icon={<IconCheck size={16} />}
                               extra={{ 'aria-label': 'Update game name' }}
                             />
                             <Button
                               variant='icon'
-                              className='p-1 rounded-full bg-indigo-900'
+                              className='rounded-full bg-indigo-900 p-1'
                               onClick={() => setEditingGameId(null)}
                               icon={<IconX size={16} />}
                               extra={{ 'aria-label': 'Cancel editing game name' }}
                             />
                           </>
-                        }
-                        {editingGameId !== game.id &&
+                        )}
+                        {editingGameId !== game.id && (
                           <>
                             <span>{game.name}</span>
                             <Button
                               variant='icon'
-                              className='p-1 rounded-full bg-indigo-900'
+                              className='rounded-full bg-indigo-900 p-1'
                               onClick={() => setEditingGameId(game.id)}
                               icon={<IconPencil size={16} />}
                               extra={{ 'aria-label': 'Edit game name' }}
                             />
                           </>
-                        }
+                        )}
                       </TableCell>
-                      <TableCell className='font-mono'>{game.playerCount?.toLocaleString() ?? '-'}</TableCell>
+                      <TableCell className='font-mono'>
+                        {game.playerCount?.toLocaleString() ?? '-'}
+                      </TableCell>
                       <DateCell>{format(new Date(game.createdAt), 'dd MMM yyyy')}</DateCell>
                     </>
                   )}
                 </TableBody>
               </Table>
             </>
-          }
+          )}
 
           <SecondaryTitle>Pending invites</SecondaryTitle>
 
-          {!user.emailConfirmed &&
-            <AlertBanner className='lg:w-max' text='You need to confirm your email address to invite users' />
-          }
+          {!user.emailConfirmed && (
+            <AlertBanner
+              className='lg:w-max'
+              text='You need to confirm your email address to invite users'
+            />
+          )}
 
           <div className='space-y-4'>
-            {pendingInvites.length > 0 &&
+            {pendingInvites.length > 0 && (
               <Table columns={['Email', 'Type', 'Invited by', 'Sent at']}>
                 <TableBody iterator={pendingInvites}>
                   {(invite) => (
@@ -173,11 +181,11 @@ function Organisation() {
                   )}
                 </TableBody>
               </Table>
-            }
+            )}
 
-            {pendingInvites.length === 0 && user.emailConfirmed &&
+            {pendingInvites.length === 0 && user.emailConfirmed && (
               <p>There are currently no pending invitations</p>
-            }
+            )}
 
             <Button
               className='w-full md:w-auto'
@@ -204,14 +212,9 @@ function Organisation() {
             </TableBody>
           </Table>
         </>
-      }
+      )}
 
-      {showModal &&
-        <NewInvite
-          modalState={[showModal, setShowModal]}
-          mutate={mutate}
-        />
-      }
+      {showModal && <NewInvite modalState={[showModal, setShowModal]} mutate={mutate} />}
 
       {error && <ErrorMessage error={error} />}
     </Page>

@@ -6,8 +6,8 @@ import makeValidatedRequest from './makeValidatedRequest'
 const createGame = makeValidatedRequest(
   (name: string) => api.post('/games', { name }),
   z.object({
-    game: gameSchema
-  })
+    game: gameSchema,
+  }),
 )
 
 export default createGame

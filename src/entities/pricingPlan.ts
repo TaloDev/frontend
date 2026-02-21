@@ -5,12 +5,12 @@ export const pricingPlanSchema = z.object({
   stripeId: z.string(),
   hidden: z.boolean(),
   default: z.boolean(),
-  playerLimit: z.number().nullable()
+  playerLimit: z.number().nullable(),
 })
 
 export const pricingPlanUsageSchema = z.object({
   limit: z.number(),
-  used: z.number()
+  used: z.number(),
 })
 
 export type PricingPlanUsage = z.infer<typeof pricingPlanUsageSchema>
@@ -19,7 +19,7 @@ const pricingPlanProductPriceSchema = z.object({
   currency: z.string(),
   amount: z.number(),
   interval: z.enum(['day', 'week', 'month', 'year']),
-  current: z.boolean()
+  current: z.boolean(),
 })
 
 export type PricingPlanProductPrice = z.infer<typeof pricingPlanProductPriceSchema>
@@ -32,10 +32,10 @@ export const pricingPlanProductSchema = pricingPlanSchema.merge(
         currency: z.string(),
         amount: z.number(),
         interval: z.enum(['day', 'week', 'month', 'year']),
-        current: z.boolean()
-      })
-    )
-  })
+        current: z.boolean(),
+      }),
+    ),
+  }),
 )
 
 export type PricingPlanProduct = z.infer<typeof pricingPlanProductSchema>

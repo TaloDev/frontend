@@ -1,13 +1,13 @@
+import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react-swc'
 /// <reference types="vitest" />
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
-import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     host: '0.0.0.0',
-    port: 8080
+    port: 8080,
   },
   test: {
     watch: false,
@@ -22,8 +22,8 @@ export default defineConfig({
         'src/entities',
         'src/constants',
         'src/utils/canViewPage.ts',
-        '**/__tests__'
-      ]
-    }
-  }
+        '**/__tests__',
+      ],
+    },
+  },
 })

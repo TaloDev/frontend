@@ -9,23 +9,23 @@ describe('AcceptInvite', () => {
           id: 1,
           email: 'dev@trytalo.com',
           organisation: {
-            name: 'Sleepy Studios'
+            name: 'Sleepy Studios',
           },
           invitedBy: 'Owner',
-          createdAt: '2023-01-01 00:00:00'
-        }
-      }
+          createdAt: '2023-01-01 00:00:00',
+        },
+      },
     })
 
     cy.intercept('POST', 'http://talo.api/public/users/register', {
       statusCode: 200,
-      fixture: 'responses/auth/dev'
+      fixture: 'responses/auth/dev',
     })
 
     cy.visitAsGuest('/accept/TRPEPI0BXC')
     cy.findByText('Sleepy Studios').should('exist')
 
-    cy.findByText('Let\'s get started').should('exist')
+    cy.findByText("Let's get started").should('exist')
     cy.findByLabelText('Username').type('sleepy')
     cy.findByLabelText('Password').type('password')
 
@@ -41,8 +41,8 @@ describe('AcceptInvite', () => {
     cy.intercept('GET', /http:\/\/talo\.api\/public\/invites\/(.*)/, {
       statusCode: 404,
       body: {
-        message: 'Invite not found'
-      }
+        message: 'Invite not found',
+      },
     })
 
     cy.visitAsGuest('/accept/TRPEPI0BXC')

@@ -1,12 +1,11 @@
-/* eslint-disable no-useless-escape */
-import api from '../../api/api'
-import MockAdapter from 'axios-mock-adapter'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import PlayerProps from '../PlayerProps'
+import MockAdapter from 'axios-mock-adapter'
+import api from '../../api/api'
 import activeGameState from '../../state/activeGameState'
-import KitchenSink from '../../utils/KitchenSink'
 import userState from '../../state/userState'
+import KitchenSink from '../../utils/KitchenSink'
+import PlayerProps from '../PlayerProps'
 
 describe('<PlayerProps />', () => {
   const basePlayer = {
@@ -14,14 +13,14 @@ describe('<PlayerProps />', () => {
     props: [
       {
         key: 'health',
-        value: '80'
+        value: '80',
       },
       {
         key: 'level',
-        value: '42'
-      }
+        value: '42',
+      },
     ],
-    devBuild: false
+    devBuild: false,
   }
 
   const userValue = { emailConfirmed: true }
@@ -34,20 +33,20 @@ describe('<PlayerProps />', () => {
 
   it('should render current props', async () => {
     axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
-      player: basePlayer
+      player: basePlayer,
     })
 
     render(
       <KitchenSink
         states={[
           { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
+          { node: userState, initialValue: userValue },
         ]}
         routePath='/:id'
         initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
       >
         <PlayerProps />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText(`Player = ${basePlayer.id}`)).toBeInTheDocument()
@@ -60,20 +59,20 @@ describe('<PlayerProps />', () => {
 
   it('should only enable the reset button after a change', async () => {
     axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
-      player: basePlayer
+      player: basePlayer,
     })
 
     render(
       <KitchenSink
         states={[
           { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
+          { node: userState, initialValue: userValue },
         ]}
         routePath='/:id'
         initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
       >
         <PlayerProps />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText('Reset')).toBeDisabled()
@@ -87,20 +86,20 @@ describe('<PlayerProps />', () => {
 
   it('should only enable the reset a change', async () => {
     axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
-      player: basePlayer
+      player: basePlayer,
     })
 
     render(
       <KitchenSink
         states={[
           { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
+          { node: userState, initialValue: userValue },
         ]}
         routePath='/:id'
         initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
       >
         <PlayerProps />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByDisplayValue('80')).toBeInTheDocument()
@@ -114,20 +113,20 @@ describe('<PlayerProps />', () => {
 
   it('should delete existing props', async () => {
     axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
-      player: basePlayer
+      player: basePlayer,
     })
 
     render(
       <KitchenSink
         states={[
           { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
+          { node: userState, initialValue: userValue },
         ]}
         routePath='/:id'
         initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
       >
         <PlayerProps />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText('health')).toBeInTheDocument()
@@ -138,20 +137,20 @@ describe('<PlayerProps />', () => {
 
   it('should add new props', async () => {
     axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
-      player: basePlayer
+      player: basePlayer,
     })
 
     render(
       <KitchenSink
         states={[
           { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
+          { node: userState, initialValue: userValue },
         ]}
         routePath='/:id'
         initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
       >
         <PlayerProps />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(await screen.findByText('New property'))
@@ -165,20 +164,20 @@ describe('<PlayerProps />', () => {
 
   it('should delete new props', async () => {
     axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
-      player: basePlayer
+      player: basePlayer,
     })
 
     render(
       <KitchenSink
         states={[
           { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
+          { node: userState, initialValue: userValue },
         ]}
         routePath='/:id'
         initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
       >
         <PlayerProps />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(await screen.findByText('New property'))
@@ -192,25 +191,27 @@ describe('<PlayerProps />', () => {
 
   it('should show a message for players with no props', async () => {
     axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
-      player: { ...basePlayer, props: [] }
+      player: { ...basePlayer, props: [] },
     })
 
     render(
       <KitchenSink
         states={[
           { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
+          { node: userState, initialValue: userValue },
         ]}
         routePath='/:id'
         initialEntries={[{ pathname: `/${basePlayer.id}` }]}
       >
         <PlayerProps />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText(`Player = ${basePlayer.id}`)).toBeInTheDocument()
 
-    expect(screen.getByText('This player has no custom properties. Click the button below to add one.')).toBeInTheDocument()
+    expect(
+      screen.getByText('This player has no custom properties. Click the button below to add one.'),
+    ).toBeInTheDocument()
   })
 
   it('should return to the players page if the find request fails', async () => {
@@ -222,14 +223,14 @@ describe('<PlayerProps />', () => {
       <KitchenSink
         states={[
           { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
+          { node: userState, initialValue: userValue },
         ]}
         routePath='/players/:id'
         initialEntries={[{ pathname: `/players/${basePlayer.id}` }]}
         setLocation={setLocationMock}
       >
         <PlayerProps />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await waitFor(() => {
@@ -239,30 +240,27 @@ describe('<PlayerProps />', () => {
 
   it('should save props', async () => {
     axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
-      player: basePlayer
+      player: basePlayer,
     })
 
     axiosMock.onPatch(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
       player: {
         ...basePlayer,
-        props: [
-          ...basePlayer.props,
-          { key: 'treasuresDiscovered', value: '5' }
-        ]
-      }
+        props: [...basePlayer.props, { key: 'treasuresDiscovered', value: '5' }],
+      },
     })
 
     render(
       <KitchenSink
         states={[
           { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
+          { node: userState, initialValue: userValue },
         ]}
         routePath='/:id'
         initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
       >
         <PlayerProps />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(await screen.findByText('New property'))
@@ -281,7 +279,7 @@ describe('<PlayerProps />', () => {
 
   it('should render saving errors', async () => {
     axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
-      player: basePlayer
+      player: basePlayer,
     })
 
     axiosMock.onPatch(`http://talo.api/games/1/players/${basePlayer.id}`).networkErrorOnce()
@@ -290,13 +288,13 @@ describe('<PlayerProps />', () => {
       <KitchenSink
         states={[
           { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
+          { node: userState, initialValue: userValue },
         ]}
         routePath='/:id'
         initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
       >
         <PlayerProps />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.type(await screen.findByDisplayValue('42'), '6')
@@ -314,25 +312,25 @@ describe('<PlayerProps />', () => {
         ...basePlayer.props,
         { key: 'META_DEV_BUILD', value: '1' },
         { key: 'META_WINDOW_MODE', value: 'Windowed' },
-        { key: 'META_SCREEN_WIDTH', value: '1920' }
-      ]
+        { key: 'META_SCREEN_WIDTH', value: '1920' },
+      ],
     }
 
     axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
-      player
+      player,
     })
 
     render(
       <KitchenSink
         states={[
           { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
+          { node: userState, initialValue: userValue },
         ]}
         routePath='/:id'
         initialEntries={[{ pathname: `/${basePlayer.id}` }]}
       >
         <PlayerProps />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(await screen.findByText('DEV BUILD')).toBeInTheDocument()
@@ -347,27 +345,29 @@ describe('<PlayerProps />', () => {
 
   it('should add props from JSON input', async () => {
     axiosMock.onGet(`http://talo.api/games/1/players/${basePlayer.id}`).replyOnce(200, {
-      player: basePlayer
+      player: basePlayer,
     })
 
     render(
       <KitchenSink
         states={[
           { node: activeGameState, initialValue: { id: 1 } },
-          { node: userState, initialValue: userValue }
+          { node: userState, initialValue: userValue },
         ]}
         routePath='/:id'
         initialEntries={[{ pathname: `/${basePlayer.id}`, state: { player: basePlayer } }]}
       >
         <PlayerProps />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(await screen.findByLabelText('Import props'))
-    await userEvent.paste(JSON.stringify({
-      speed: '100',
-      strength: '50'
-    }))
+    await userEvent.paste(
+      JSON.stringify({
+        speed: '100',
+        strength: '50',
+      }),
+    )
     await userEvent.click(screen.getByText('Parse JSON'))
 
     expect(screen.getByDisplayValue('speed')).toBeInTheDocument()

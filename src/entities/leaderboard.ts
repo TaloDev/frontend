@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export enum LeaderboardSortMode {
   DESC = 'desc',
-  ASC = 'asc'
+  ASC = 'asc',
 }
 
 export enum LeaderboardRefreshInterval {
@@ -10,7 +10,7 @@ export enum LeaderboardRefreshInterval {
   DAILY = 'daily',
   WEEKLY = 'weekly',
   MONTHLY = 'monthly',
-  YEARLY = 'yearly'
+  YEARLY = 'yearly',
 }
 
 export const leaderboardSchema = z.object({
@@ -22,7 +22,7 @@ export const leaderboardSchema = z.object({
   uniqueByProps: z.boolean(),
   refreshInterval: z.nativeEnum(LeaderboardRefreshInterval),
   createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime()
+  updatedAt: z.string().datetime(),
 })
 
 export type Leaderboard = z.infer<typeof leaderboardSchema>

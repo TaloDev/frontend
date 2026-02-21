@@ -8,8 +8,8 @@ type Data = Pick<GameChannel, 'name' | 'autoCleanup' | 'private'> & { ownerAlias
 const createChannel = makeValidatedRequest(
   (gameId: number, data: Data) => api.post(`/games/${gameId}/game-channels`, data),
   z.object({
-    channel: gameChannelSchema
-  })
+    channel: gameChannelSchema,
+  }),
 )
 
 export default createChannel

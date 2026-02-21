@@ -1,5 +1,5 @@
-import clsx from 'clsx'
 import type { ReactNode } from 'react'
+import clsx from 'clsx'
 
 type TableCellProps = {
   children?: ReactNode
@@ -9,13 +9,9 @@ type TableCellProps = {
 const TableCell = (props: TableCellProps) => {
   return (
     <td
-      className={clsx(
-        'p-4',
-        props.className,
-        {
-          'min-w-40': !props.className?.startsWith('min-w-')
-        }
-      )}
+      className={clsx('p-4', props.className, {
+        'min-w-40': !props.className?.startsWith('min-w-'),
+      })}
     >
       {props.children}
     </td>

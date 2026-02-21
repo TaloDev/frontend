@@ -8,7 +8,7 @@ export type SaveDataNodeSize = {
 
 const saveDataNodeSizesState = atom<SaveDataNodeSize[]>({
   key: 'saveDataNodeSizes',
-  default: []
+  default: [],
 })
 
 export default saveDataNodeSizesState

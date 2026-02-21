@@ -10,6 +10,6 @@ export default function playerAliasMock(extra: Partial<PlayerAlias> = {}): Playe
     lastSeenAt: new Date().toISOString(),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    ...extra
+    ...extra,
   }
 }

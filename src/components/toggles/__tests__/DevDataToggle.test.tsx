@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import KitchenSink from '../../../utils/KitchenSink'
 import devDataState from '../../../state/devDataState'
+import KitchenSink from '../../../utils/KitchenSink'
 import DevDataToggle from '../DevDataToggle'
 
 describe('<DevDataToggle />', () => {
@@ -11,7 +11,7 @@ describe('<DevDataToggle />', () => {
     render(
       <KitchenSink states={[{ node: devDataState, initialValue: false, onChange: toggleMock }]}>
         <DevDataToggle />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByRole('checkbox'))

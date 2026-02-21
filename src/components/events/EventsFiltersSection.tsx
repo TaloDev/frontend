@@ -1,10 +1,10 @@
 import { useEffect, useMemo } from 'react'
-import { useEventsContext } from './EventsContext'
-import TimePeriodPicker from '../TimePeriodPicker'
-import DateInput from '../DateInput'
-import EventsFilter from './EventsFilter'
 import useEvents from '../../api/useEvents'
 import { timePeriods } from '../../utils/useTimePeriodAndDates'
+import DateInput from '../DateInput'
+import TimePeriodPicker from '../TimePeriodPicker'
+import { useEventsContext } from './EventsContext'
+import EventsFilter from './EventsFilter'
 
 type Props = Pick<ReturnType<typeof useEvents>, 'eventNames' | 'error'>
 
@@ -17,7 +17,7 @@ export default function EventsFiltersSection({ eventNames, error }: Props) {
     onStartDateChange,
     onEndDateChange,
     selectedEventNames,
-    setSelectedEventNames
+    setSelectedEventNames,
   } = useEventsContext()
 
   const filteredSelectedEvents = useMemo(() => {
@@ -40,7 +40,7 @@ export default function EventsFiltersSection({ eventNames, error }: Props) {
         />
       </div>
 
-      <div className='flex items-end w-full md:w-1/2 space-x-4'>
+      <div className='flex w-full items-end space-x-4 md:w-1/2'>
         <div className='w-1/3'>
           <DateInput
             id='start-date'
@@ -50,7 +50,7 @@ export default function EventsFiltersSection({ eventNames, error }: Props) {
               label: 'Start date',
               placeholder: 'Start date',
               errors: error?.keys.startDate,
-              variant: undefined
+              variant: undefined,
             }}
           />
         </div>
@@ -64,17 +64,14 @@ export default function EventsFiltersSection({ eventNames, error }: Props) {
               label: 'End date',
               placeholder: 'End date',
               errors: error?.keys.endDate,
-              variant: undefined
+              variant: undefined,
             }}
           />
         </div>
 
-        {eventNames.length > 0 &&
-          <EventsFilter
-            initialShow={filteredSelectedEvents.length === 0}
-            eventNames={eventNames}
-          />
-        }
+        {eventNames.length > 0 && (
+          <EventsFilter initialShow={filteredSelectedEvents.length === 0} eventNames={eventNames} />
+        )}
       </div>
     </div>
   )

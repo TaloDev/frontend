@@ -4,17 +4,17 @@ describe('Billing', () => {
   function stubBillingCalls() {
     cy.intercept('GET', 'http://talo.api/billing/organisation-plan', {
       statusCode: 200,
-      fixture: 'responses/billing/free-plan'
+      fixture: 'responses/billing/free-plan',
     })
 
     cy.intercept('GET', 'http://talo.api/billing/plans', {
       statusCode: 200,
-      fixture: 'responses/billing/plans'
+      fixture: 'responses/billing/plans',
     })
 
     cy.intercept('GET', 'http://talo.api/billing/usage', {
       statusCode: 200,
-      fixture: 'responses/billing/usage'
+      fixture: 'responses/billing/usage',
     })
   }
 
@@ -31,8 +31,8 @@ describe('Billing', () => {
     cy.intercept('POST', 'http://talo.api/billing/portal-session', {
       statusCode: 200,
       body: {
-        redirect: '/portal-session-page'
-      }
+        redirect: '/portal-session-page',
+      },
     }).as('portalSession')
 
     cy.login('owner', '/billing')
@@ -49,8 +49,8 @@ describe('Billing', () => {
     cy.intercept('POST', 'http://talo.api/billing/checkout-session', {
       statusCode: 200,
       body: {
-        redirect: '/checkout-session-page'
-      }
+        redirect: '/checkout-session-page',
+      },
     }).as('checkoutSession')
 
     cy.login('owner', '/billing')
@@ -66,17 +66,19 @@ describe('Billing', () => {
 
     cy.intercept('POST', 'http://talo.api/billing/checkout-session', {
       statusCode: 200,
-      fixture: 'responses/billing/invoice'
+      fixture: 'responses/billing/invoice',
     })
 
     cy.intercept('POST', 'http://talo.api/billing/confirm-plan', {
-      statusCode: 204
+      statusCode: 204,
     })
 
     cy.login('owner', '/billing')
     cy.findAllByText('Upgrade').spread((button) => button.click())
 
-    cy.findByText('This is a preview of the invoice that will be billed on 12 Aug 2022:').should('exist')
+    cy.findByText('This is a preview of the invoice that will be billed on 12 Aug 2022:').should(
+      'exist',
+    )
     cy.findByText('12 Jun 2022 - 12 Jul 2022').should('exist')
     cy.findByText('Team plan usage').should('exist')
     cy.findByText('Team plan proration').should('exist')

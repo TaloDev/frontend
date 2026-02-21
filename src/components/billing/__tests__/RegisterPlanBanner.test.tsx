@@ -4,7 +4,7 @@ import RegisterPlanBanner from '../RegisterPlanBanner'
 describe('<RegisterPlanBanner />', () => {
   it('should not render anything if there is no plan query param', () => {
     Object.defineProperty(window, 'location', {
-      value:  { search: '' }
+      value: { search: '' },
     })
 
     render(<RegisterPlanBanner />)
@@ -14,7 +14,7 @@ describe('<RegisterPlanBanner />', () => {
 
   it('should not render anything if the plan is the free (indie) plan', () => {
     Object.defineProperty(window, 'location', {
-      value:  { search: '?plan=indie' }
+      value: { search: '?plan=indie' },
     })
 
     render(<RegisterPlanBanner />)
@@ -24,7 +24,7 @@ describe('<RegisterPlanBanner />', () => {
 
   it('should render enterprise plan copy if the plan is enterprise', () => {
     Object.defineProperty(window, 'location', {
-      value:  { search: '?plan=enterprise' }
+      value: { search: '?plan=enterprise' },
     })
 
     render(<RegisterPlanBanner />)
@@ -35,7 +35,7 @@ describe('<RegisterPlanBanner />', () => {
 
   it('should render enterprise any other plan copy if the plan is not enterprise', () => {
     Object.defineProperty(window, 'location', {
-      value:  { search: '?plan=team' }
+      value: { search: '?plan=team' },
     })
 
     render(<RegisterPlanBanner />)

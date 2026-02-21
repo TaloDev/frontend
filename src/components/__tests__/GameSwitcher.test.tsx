@@ -1,16 +1,16 @@
 import { render, screen, within, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import GameSwitcher from '../GameSwitcher'
-import KitchenSink from '../../utils/KitchenSink'
 import activeGameState from '../../state/activeGameState'
 import userState from '../../state/userState'
+import KitchenSink from '../../utils/KitchenSink'
+import GameSwitcher from '../GameSwitcher'
 
 describe('<GameSwitcher />', () => {
   it('should render a cta if there is no active game', () => {
     render(
       <KitchenSink>
         <GameSwitcher />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('New game')).toBeInTheDocument()
@@ -20,7 +20,7 @@ describe('<GameSwitcher />', () => {
     render(
       <KitchenSink>
         <GameSwitcher />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByRole('button'))
@@ -32,30 +32,32 @@ describe('<GameSwitcher />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { name: 'Crawle' } }]}>
         <GameSwitcher />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByText('Crawle')).toBeInTheDocument()
   })
 
-  it('should render all the organisation\'s games', async () => {
+  it("should render all the organisation's games", async () => {
     const user = {
       organisation: {
         games: [
           { id: 1, name: 'Crawle' },
           { id: 2, name: 'Superstatic' },
-          { id: 3, name: 'Scrunk' }
-        ]
-      }
+          { id: 3, name: 'Scrunk' },
+        ],
+      },
     }
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: user },
-        { node: activeGameState, initialValue: { name: 'Crawle' } }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: user },
+          { node: activeGameState, initialValue: { name: 'Crawle' } },
+        ]}
+      >
         <GameSwitcher />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByLabelText('Switch games or create a new one'))
@@ -72,20 +74,22 @@ describe('<GameSwitcher />', () => {
         games: [
           { id: 1, name: 'Crawle' },
           { id: 2, name: 'Superstatic' },
-          { id: 3, name: 'Scrunk' }
-        ]
-      }
+          { id: 3, name: 'Scrunk' },
+        ],
+      },
     }
 
     const switchMock = vi.fn()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: user },
-        { node: activeGameState, onChange: switchMock, initialValue: { name: 'Crawle' } }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: user },
+          { node: activeGameState, onChange: switchMock, initialValue: { name: 'Crawle' } },
+        ]}
+      >
         <GameSwitcher />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByLabelText('Switch games or create a new one'))
@@ -103,18 +107,20 @@ describe('<GameSwitcher />', () => {
         games: [
           { id: 1, name: 'Crawle' },
           { id: 2, name: 'Superstatic' },
-          { id: 3, name: 'Scrunk' }
-        ]
-      }
+          { id: 3, name: 'Scrunk' },
+        ],
+      },
     }
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: user },
-        { node: activeGameState, initialValue: { name: 'Crawle' } }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: user },
+          { node: activeGameState, initialValue: { name: 'Crawle' } },
+        ]}
+      >
         <GameSwitcher />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByLabelText('Switch games or create a new one'))
@@ -131,19 +137,21 @@ describe('<GameSwitcher />', () => {
         games: [
           { id: 1, name: 'Crawle' },
           { id: 2, name: 'Superstatic' },
-          { id: 3, name: 'Scrunk' }
-        ]
-      }
+          { id: 3, name: 'Scrunk' },
+        ],
+      },
     }
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: user },
-        { node: activeGameState, initialValue: { name: 'Crawle' } }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: user },
+          { node: activeGameState, initialValue: { name: 'Crawle' } },
+        ]}
+      >
         <GameSwitcher />
       </KitchenSink>,
-      { container: document.body.appendChild(main) }
+      { container: document.body.appendChild(main) },
     )
 
     await userEvent.click(screen.getByLabelText('Switch games or create a new one'))

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
 import { format, sub, startOfWeek, startOfMonth, startOfYear, isToday, startOfDay } from 'date-fns'
+import { useState, useEffect } from 'react'
 
 export type TimePeriod = '1d' | '7d' | '30d' | 'w' | 'm' | 'y'
 
@@ -46,6 +46,6 @@ export default (timePeriod: TimePeriod | null) => {
 
   return {
     startDate,
-    endDate
+    endDate,
   }
 }

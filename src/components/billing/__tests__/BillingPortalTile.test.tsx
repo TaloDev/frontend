@@ -1,20 +1,20 @@
 import { render, screen, waitFor } from '@testing-library/react'
-import api from '../../../api/api'
-import MockAdapter from 'axios-mock-adapter'
-import BillingPortalTile from '../BillingPortalTile'
 import userEvent from '@testing-library/user-event'
+import MockAdapter from 'axios-mock-adapter'
+import api from '../../../api/api'
+import BillingPortalTile from '../BillingPortalTile'
 
 describe('<BillingPortalTile />', () => {
   const axiosMock = new MockAdapter(api)
 
   it('should create a portal session and redirect', async () => {
     axiosMock.onPost('http://talo.api/billing/portal-session').replyOnce(200, {
-      redirect: 'http://stripe.com/portal'
+      redirect: 'http://stripe.com/portal',
     })
 
     const assignMock = vi.fn()
     Object.defineProperty(window, 'location', {
-      value: { assign: assignMock }
+      value: { assign: assignMock },
     })
 
     render(<BillingPortalTile />)

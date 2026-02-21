@@ -1,8 +1,8 @@
 import { useReactFlow } from '@xyflow/react'
 import { useEffect } from 'react'
 import { useRecoilValue } from 'recoil'
-import saveDataNodeSizesState from '../../state/saveDataNodeSizesState'
 import { useDebounce } from 'use-debounce'
+import saveDataNodeSizesState from '../../state/saveDataNodeSizesState'
 
 export const minZoom = 0.1
 
@@ -14,8 +14,8 @@ export default function SaveContentFitManager() {
 
   useEffect(() => {
     if (debouncedLength > 0) {
-      reactFlow.fitView({
-        minZoom
+      void reactFlow.fitView({
+        minZoom,
       })
     }
   }, [debouncedLength, reactFlow])

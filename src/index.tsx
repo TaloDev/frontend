@@ -1,19 +1,19 @@
+import * as Sentry from '@sentry/react'
 import React from 'react'
-import { createRoot } from 'react-dom/client'
 import './styles/index.css'
 import 'tippy.js/dist/tippy.css'
 import 'react-day-picker/dist/style.css'
 import '@xyflow/react/dist/base.css'
-import App from './App'
-import { RecoilRoot } from 'recoil'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import * as Sentry from '@sentry/react'
+import { RecoilRoot } from 'recoil'
+import App from './App'
 import ToastProvider from './components/toast/ToastProvider'
 
 if (import.meta.env.VITE_SENTRY_DSN?.startsWith('http')) {
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
-    environment: import.meta.env.VITE_SENTRY_ENV
+    environment: import.meta.env.VITE_SENTRY_ENV,
   })
 }
 
@@ -27,5 +27,5 @@ root.render(
         </BrowserRouter>
       </ToastProvider>
     </RecoilRoot>
-  </React.StrictMode>
+  </React.StrictMode>,
 )

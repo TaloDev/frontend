@@ -1,31 +1,39 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import api from '../../api/api'
 import MockAdapter from 'axios-mock-adapter'
+import gameFeedbackCategoryMock from '../../__mocks__/gameFeedbackCategoryMock'
+import api from '../../api/api'
+import { UserType } from '../../entities/user'
 import activeGameState from '../../state/activeGameState'
 import userState from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
 import FeedbackCategoryDetails from '../FeedbackCategoryDetails'
-import { UserType } from '../../entities/user'
-import gameFeedbackCategoryMock from '../../__mocks__/gameFeedbackCategoryMock'
 
 describe('<FeedbackCategoryDetails />', () => {
   const axiosMock = new MockAdapter(api)
   const activeGameValue = { id: 1, name: 'Shattered' }
 
   it('should create a feedback category', async () => {
-    axiosMock.onPost('http://talo.api/games/1/game-feedback/categories').replyOnce(200, { feedbackCategory: { id: 4 } })
+    axiosMock
+      .onPost('http://talo.api/games/1/game-feedback/categories')
+      .replyOnce(200, { feedbackCategory: { id: 4 } })
 
     const closeMock = vi.fn()
     const mutateMock = vi.fn()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
-        <FeedbackCategoryDetails modalState={[true, closeMock]} mutate={mutateMock} editingCategory={null} />
-      </KitchenSink>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
+        <FeedbackCategoryDetails
+          modalState={[true, closeMock]}
+          mutate={mutateMock}
+          editingCategory={null}
+        />
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Internal name'), 'bugs')
@@ -41,15 +49,11 @@ describe('<FeedbackCategoryDetails />', () => {
 
     expect(mutateMock).toHaveBeenCalled()
 
-    const feedbackCategories = [
-      { id: 1 },
-      { id: 2 },
-      { id: 3 }
-    ]
+    const feedbackCategories = [{ id: 1 }, { id: 2 }, { id: 3 }]
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ feedbackCategories })).toStrictEqual({
-      feedbackCategories: [...feedbackCategories, { id: 4 }]
+      feedbackCategories: [...feedbackCategories, { id: 4 }],
     })
   })
 
@@ -59,12 +63,18 @@ describe('<FeedbackCategoryDetails />', () => {
     const closeMock = vi.fn()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
-        <FeedbackCategoryDetails modalState={[true, closeMock]} mutate={vi.fn()} editingCategory={null} />
-      </KitchenSink>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
+        <FeedbackCategoryDetails
+          modalState={[true, closeMock]}
+          mutate={vi.fn()}
+          editingCategory={null}
+        />
+      </KitchenSink>,
     )
 
     await userEvent.type(screen.getByLabelText('Internal name'), 'bugs')
@@ -81,12 +91,18 @@ describe('<FeedbackCategoryDetails />', () => {
     const closeMock = vi.fn()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
-        <FeedbackCategoryDetails modalState={[true, closeMock]} mutate={vi.fn()} editingCategory={null} />
-      </KitchenSink>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
+        <FeedbackCategoryDetails
+          modalState={[true, closeMock]}
+          mutate={vi.fn()}
+          editingCategory={null}
+        />
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Close'))
@@ -96,16 +112,18 @@ describe('<FeedbackCategoryDetails />', () => {
 
   it('should prefill details if a category is being edited', () => {
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <FeedbackCategoryDetails
           modalState={[true, vi.fn()]}
           mutate={vi.fn()}
           editingCategory={gameFeedbackCategoryMock({ anonymised: true })}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByLabelText('Internal name')).toHaveValue('bugs')
@@ -124,21 +142,24 @@ describe('<FeedbackCategoryDetails />', () => {
 
     axiosMock.onPut('http://talo.api/games/1/game-feedback/categories/1').replyOnce(200, {
       feedbackCategory: {
-        ...initialCategory, anonymised: true
-      }
+        ...initialCategory,
+        anonymised: true,
+      },
     })
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <FeedbackCategoryDetails
           modalState={[true, closeMock]}
           mutate={mutateMock}
           editingCategory={initialCategory}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Yes'))
@@ -152,7 +173,7 @@ describe('<FeedbackCategoryDetails />', () => {
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ feedbackCategories: [initialCategory, { id: 2 }] })).toStrictEqual({
-      feedbackCategories: [{ ...initialCategory, anonymised: true }, { id: 2 }]
+      feedbackCategories: [{ ...initialCategory, anonymised: true }, { id: 2 }],
     })
   })
 
@@ -160,16 +181,18 @@ describe('<FeedbackCategoryDetails />', () => {
     axiosMock.onPut('http://talo.api/games/1/game-feedback/categories/1').networkErrorOnce()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <FeedbackCategoryDetails
           modalState={[true, vi.fn()]}
           mutate={vi.fn()}
           editingCategory={gameFeedbackCategoryMock()}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Update'))
@@ -189,16 +212,18 @@ describe('<FeedbackCategoryDetails />', () => {
     window.confirm = vi.fn(() => true)
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <FeedbackCategoryDetails
           modalState={[true, closeMock]}
           mutate={mutateMock}
           editingCategory={initialCategory}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Delete'))
@@ -211,7 +236,7 @@ describe('<FeedbackCategoryDetails />', () => {
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ feedbackCategories: [initialCategory, { id: 2 }] })).toStrictEqual({
-      feedbackCategories: [{ id: 2 }]
+      feedbackCategories: [{ id: 2 }],
     })
   })
 
@@ -219,16 +244,18 @@ describe('<FeedbackCategoryDetails />', () => {
     const initialCategory = gameFeedbackCategoryMock()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.DEV } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.DEV } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <FeedbackCategoryDetails
           modalState={[true, vi.fn()]}
           mutate={vi.fn()}
           editingCategory={initialCategory}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.queryByText('Delete')).not.toBeInTheDocument()
@@ -240,16 +267,18 @@ describe('<FeedbackCategoryDetails />', () => {
     const closeMock = vi.fn()
 
     render(
-      <KitchenSink states={[
-        { node: userState, initialValue: { type: UserType.ADMIN } },
-        { node: activeGameState, initialValue: activeGameValue }
-      ]}>
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
         <FeedbackCategoryDetails
           modalState={[true, closeMock]}
           mutate={vi.fn()}
           editingCategory={gameFeedbackCategoryMock()}
         />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Delete'))

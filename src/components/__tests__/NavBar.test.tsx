@@ -1,21 +1,21 @@
 import { render, screen, within } from '@testing-library/react'
-import api from '../../api/api'
+import userEvent from '@testing-library/user-event'
 import MockAdapter from 'axios-mock-adapter'
-import NavBar from '../NavBar'
+import api from '../../api/api'
+import routes from '../../constants/routes'
 import activeGameState from '../../state/activeGameState'
 import userState from '../../state/userState'
-import userEvent from '@testing-library/user-event'
-import routes from '../../constants/routes'
 import KitchenSink from '../../utils/KitchenSink'
+import NavBar from '../NavBar'
 
 describe('<NavBar />', () => {
   const axiosMock = new MockAdapter(api)
 
-  it('should not render the services link when there\'s no active game', () => {
+  it("should not render the services link when there's no active game", () => {
     render(
       <KitchenSink states={[{ node: activeGameState }]}>
         <NavBar />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     const list = screen.getAllByRole('list')[0]
@@ -32,7 +32,7 @@ describe('<NavBar />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState }]}>
         <NavBar />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     const list = screen.getAllByRole('list')[0]
@@ -48,7 +48,7 @@ describe('<NavBar />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState }]}>
         <NavBar />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     const list = screen.getAllByRole('list')[0]
@@ -58,29 +58,27 @@ describe('<NavBar />', () => {
     expect(window.location.pathname).toBe(routes.login)
   })
 
-  it('should always render the services link if there\'s an active game', () => {
+  it("should always render the services link if there's an active game", () => {
     const game = {
       id: 1,
-      name: 'Superstatic'
+      name: 'Superstatic',
     }
 
     const user = {
       organisation: {
-        games: [
-          game
-        ]
-      }
+        games: [game],
+      },
     }
 
     render(
       <KitchenSink
         states={[
           { node: userState, initialValue: user },
-          { node: activeGameState, initialValue: game }
+          { node: activeGameState, initialValue: game },
         ]}
       >
         <NavBar />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     const list = screen.getAllByRole('list')[0]
@@ -92,7 +90,7 @@ describe('<NavBar />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState }]}>
         <NavBar />
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByLabelText('Navigation menu'))

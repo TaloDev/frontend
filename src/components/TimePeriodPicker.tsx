@@ -9,7 +9,11 @@ type TimePeriodPickerProps = {
   selectedPeriod: TimePeriod | null
 }
 
-export default function TimePeriodPicker({ periods, onPick, selectedPeriod }: TimePeriodPickerProps) {
+export default function TimePeriodPicker({
+  periods,
+  onPick,
+  selectedPeriod,
+}: TimePeriodPickerProps) {
   return (
     <ButtonGroup
       options={periods}

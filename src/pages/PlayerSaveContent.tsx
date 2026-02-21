@@ -1,19 +1,19 @@
+import { Background, BackgroundVariant, Controls, Node, ReactFlow } from '@xyflow/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import routes from '../constants/routes'
-import Page from '../components/Page'
-import useNodeGraph from '../utils/useNodeGraph'
-import useLinearNodeGraph from '../utils/useLinearNodeGraph'
-import TextInput from '../components/TextInput'
-import { Background, BackgroundVariant, Controls, Node, ReactFlow } from '@xyflow/react'
-import SaveDataNode from '../components/saves/SaveDataNode'
-import SaveContentFitManager, { minZoom } from '../components/saves/SaveContentFitManager'
-import { GameSave } from '../entities/gameSave'
-import usePlayerSaves from '../api/usePlayerSaves'
 import { useRecoilValue } from 'recoil'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import usePlayerSaves from '../api/usePlayerSaves'
+import Page from '../components/Page'
+import SaveContentFitManager, { minZoom } from '../components/saves/SaveContentFitManager'
+import SaveDataNode from '../components/saves/SaveDataNode'
 import SaveModePicker, { SaveMode } from '../components/saves/SaveModePicker'
+import TextInput from '../components/TextInput'
+import routes from '../constants/routes'
+import { GameSave } from '../entities/gameSave'
+import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import useLinearNodeGraph from '../utils/useLinearNodeGraph'
 import useLocalStorage from '../utils/useLocalStorage'
+import useNodeGraph from '../utils/useNodeGraph'
 
 const nodeTypes = { default: SaveDataNode }
 
@@ -68,19 +68,15 @@ export default function PlayerSaveContent() {
       ...node,
       data: {
         ...node.data,
-        isHovered: node.id === hoveredNodeId
-      }
+        isHovered: node.id === hoveredNodeId,
+      },
     }))
   }, [hoveredNodeId, nodes])
 
   return (
-    <Page
-      showBackButton
-      title={save?.name ?? 'Save content'}
-      isLoading={isLoading}
-    >
-      <div className='md:flex justify-between items-start'>
-        <div className='w-full md:w-[400px]'>
+    <Page showBackButton title={save?.name ?? 'Save content'} isLoading={isLoading}>
+      <div className='items-start justify-between md:flex'>
+        <div className='w-full md:w-100'>
           <TextInput
             id='node-search'
             type='search'
@@ -91,14 +87,11 @@ export default function PlayerSaveContent() {
         </div>
 
         <div className='mt-4 md:mt-0'>
-          <SaveModePicker
-            selectedMode={mode}
-            onModeChange={setMode}
-          />
+          <SaveModePicker selectedMode={mode} onModeChange={setMode} />
         </div>
       </div>
 
-      <div className='w-full h-[68vh] rounded overflow-hidden'>
+      <div className='h-[68vh] w-full overflow-hidden rounded'>
         <ReactFlow
           key={mode}
           fitView

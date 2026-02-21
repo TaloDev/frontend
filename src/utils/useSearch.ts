@@ -19,6 +19,6 @@ export default function useSearch(initialSearch?: string | null) {
     setSearch,
     page,
     setPage,
-    debouncedSearch
+    debouncedSearch,
   }
 }

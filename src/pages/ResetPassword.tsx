@@ -1,36 +1,37 @@
-import { useEffect, useState } from 'react'
-import TextInput from '../components/TextInput'
-import Button from '../components/Button'
-import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import buildError from '../utils/buildError'
-import { unauthedContainerStyle } from '../styles/theme'
-import Title from '../components/Title'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { IconCheck } from '@tabler/icons-react'
+import clsx from 'clsx'
+import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import { z } from 'zod'
 import resetPassword from '../api/resetPassword'
 import AlertBanner from '../components/AlertBanner'
-import { IconCheck } from '@tabler/icons-react'
-import { useNavigate } from 'react-router-dom'
-import routes from '../constants/routes'
+import Button from '../components/Button'
+import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Link from '../components/Link'
-import { z } from 'zod'
-import clsx from 'clsx'
+import TextInput from '../components/TextInput'
+import Title from '../components/Title'
+import routes from '../constants/routes'
+import { unauthedContainerStyle } from '../styles/theme'
+import buildError from '../utils/buildError'
 
-const validationSchema = z.object({
-  password: z.string().min(8, { message: 'Password is required' }),
-  confirmPassword: z.string()
-    .min(8, { message: 'Confirm password is required' })
-}).superRefine(({ password, confirmPassword }, ctx) => {
-  if (password !== confirmPassword) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: 'These passwords do not match',
-      path: ['confirmPassword']
-    })
-    return false
-  }
-  return true
-})
+const validationSchema = z
+  .object({
+    password: z.string().min(8, { message: 'Password is required' }),
+    confirmPassword: z.string().min(8, { message: 'Confirm password is required' }),
+  })
+  .superRefine(({ password, confirmPassword }, ctx) => {
+    if (password !== confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'These passwords do not match',
+        path: ['confirmPassword'],
+      })
+      return false
+    }
+    return true
+  })
 
 type FormValues = z.infer<typeof validationSchema>
 
@@ -46,9 +47,13 @@ export default function ResetPassword() {
     if (!token) navigate(routes.login)
   }, [token, navigate])
 
-  const { register, handleSubmit, formState: { isValid, errors } } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid, errors },
+  } = useForm<FormValues>({
     resolver: zodResolver(validationSchema),
-    mode: 'onTouched'
+    mode: 'onTouched',
   })
 
   const onConfirmClick: SubmitHandler<FormValues> = async ({ password }) => {
@@ -67,8 +72,8 @@ export default function ResetPassword() {
 
   if (resetComplete) {
     return (
-      <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-        <div className={clsx('text-white space-y-8', unauthedContainerStyle)}>
+      <div className='flex h-full flex-col p-8 md:items-center md:justify-center'>
+        <div className={clsx('space-y-8 text-white', unauthedContainerStyle)}>
           <Title>Reset password</Title>
 
           <AlertBanner
@@ -77,10 +82,7 @@ export default function ResetPassword() {
             text='Success! Your password has been reset'
           />
 
-          <Button
-            type='button'
-            onClick={() => navigate(routes.login)}
-          >
+          <Button type='button' onClick={() => navigate(routes.login)}>
             Go to Login
           </Button>
         </div>
@@ -89,8 +91,11 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <form className={clsx('text-white space-y-8', unauthedContainerStyle)} onSubmit={handleSubmit(onConfirmClick)}>
+    <div className='flex h-full flex-col p-8 md:items-center md:justify-center'>
+      <form
+        className={clsx('space-y-8 text-white', unauthedContainerStyle)}
+        onSubmit={handleSubmit(onConfirmClick)}
+      >
         <Title>Reset password</Title>
 
         <TextInput
@@ -111,18 +116,21 @@ export default function ResetPassword() {
           errors={[errors.confirmPassword?.message]}
         />
 
-        {apiError &&
+        {apiError && (
           <ErrorMessage error={apiError}>
-            {apiError?.extra?.expired &&
-              <span> - <Link to={routes.forgotPassword} className='!text-white underline'>please request a new reset link</Link></span>
-            }
+            {apiError?.extra?.expired && (
+              <span>
+                {' '}
+                -{' '}
+                <Link to={routes.forgotPassword} className='!text-white underline'>
+                  please request a new reset link
+                </Link>
+              </span>
+            )}
           </ErrorMessage>
-        }
+        )}
 
-        <Button
-          disabled={!isValid}
-          isLoading={isLoading}
-        >
+        <Button disabled={!isValid} isLoading={isLoading}>
           Confirm
         </Button>
       </form>

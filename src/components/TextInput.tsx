@@ -1,7 +1,7 @@
+import { IconAlertCircle } from '@tabler/icons-react'
+import clsx from 'clsx'
 import { InputHTMLAttributes, useState, ChangeEvent } from 'react'
 import { focusStyle } from '../styles/theme'
-import clsx from 'clsx'
-import { IconAlertCircle } from '@tabler/icons-react'
 
 export type TextInputVariant = 'light' | 'modal'
 
@@ -35,7 +35,7 @@ export default function TextInput({
   disabled,
   errors,
   containerClassName,
-  inputExtra = {}
+  inputExtra = {},
 }: TextInputProps) {
   const [hasFocus, setHasFocus] = useState(false)
 
@@ -44,9 +44,9 @@ export default function TextInput({
 
   const finalClassName = clsx(`
     block
-    p-2
     w-full
     rounded
+    p-2
     disabled:bg-gray-300
     disabled:text-gray-700
     ${focusStyle}
@@ -54,18 +54,20 @@ export default function TextInput({
   `, {
     'bg-gray-600': !variant,
     'bg-gray-100 text-black': variant === 'light',
-    'bg-white border border-black/30 focus:border-black/0': variant === 'modal'
+    'border border-black/30 bg-white focus:border-black/0': variant === 'modal',
   })
 
   const Element = inputType === 'textarea' ? 'textarea' : 'input'
 
   return (
     <div>
-      <div className={clsx('w-full inline-block', containerClassName)}>
+      <div className={clsx('inline-block w-full', containerClassName)}>
         {label && (
-          <label htmlFor={id} className='flex justify-between items-end font-semibold mb-2'>
+          <label htmlFor={id} className='mb-2 flex items-end justify-between font-semibold'>
             {label}
-            {errorsToShow.length > 0 && <IconAlertCircle className='inline -mt-0.5 text-red-500' size={20} />}
+            {errorsToShow.length > 0 && (
+              <IconAlertCircle className='-mt-0.5 inline text-red-500' size={20} />
+            )}
           </label>
         )}
 
@@ -88,12 +90,16 @@ export default function TextInput({
               setHasFocus(false)
             }}
           />
-          {showErrorHighlight && <div className='h-1 bg-red-500 absolute bottom-0 left-0 right-0 rounded-bl rounded-br' />}
+          {showErrorHighlight && (
+            <div className='absolute right-0 bottom-0 left-0 h-1 rounded-br rounded-bl bg-red-500' />
+          )}
         </div>
       </div>
 
       {errorsToShow.map((error, idx) => (
-        <p role='alert' key={idx} className='text-red-500 font-medium mt-2'>{error}</p>
+        <p role='alert' key={idx} className='mt-2 font-medium text-red-500'>
+          {error}
+        </p>
       ))}
     </div>
   )

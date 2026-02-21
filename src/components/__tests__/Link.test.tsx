@@ -8,7 +8,7 @@ describe('<Link />', () => {
     render(
       <KitchenSink>
         <Link to={routes.account}>Go to Account</Link>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     expect(screen.getByRole('link')).toBeInTheDocument()
@@ -18,7 +18,7 @@ describe('<Link />', () => {
     render(
       <KitchenSink>
         <Link to='https://docs.trytalo.com'>See the docs</Link>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     const link = screen.getByRole('link')

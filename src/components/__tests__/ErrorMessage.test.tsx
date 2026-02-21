@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
-import ErrorMessage from '../ErrorMessage'
 import buildError from '../../utils/buildError'
+import ErrorMessage from '../ErrorMessage'
 
 describe('<ErrorMessage />', () => {
   it('should render all keys in the errors object', () => {
@@ -11,12 +11,12 @@ describe('<ErrorMessage />', () => {
             data: {
               errors: {
                 startDate: ['The startDate is invalid'],
-                endDate: ['The endDate is invalid']
-              }
-            }
-          }
+                endDate: ['The endDate is invalid'],
+              },
+            },
+          },
         })}
-      />
+      />,
     )
 
     expect(screen.getByText('startDate: The startDate is invalid')).toBeInTheDocument()
@@ -29,11 +29,11 @@ describe('<ErrorMessage />', () => {
         error={buildError({
           response: {
             data: {
-              message: 'Something went wrong'
-            }
-          }
+              message: 'Something went wrong',
+            },
+          },
         })}
-      />
+      />,
     )
 
     expect(screen.getByText('Something went wrong')).toBeInTheDocument()

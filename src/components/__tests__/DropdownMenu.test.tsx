@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import KitchenSink from '../../utils/KitchenSink'
-import DropdownMenu from '../DropdownMenu'
 import Button from '../Button'
+import DropdownMenu from '../DropdownMenu'
 
 describe('<DropdownMenu />', () => {
   it('should render list options correctly', async () => {
@@ -12,25 +12,21 @@ describe('<DropdownMenu />', () => {
           options={[
             {
               label: 'Option 1',
-              onClick: vi.fn
+              onClick: vi.fn,
             },
             {
               label: 'Option 2',
-              onClick: vi.fn
-            }
+              onClick: vi.fn,
+            },
           ]}
         >
           {(setOpen) => (
-            <Button
-              type='button'
-              onClick={() => setOpen(true)}
-              variant='small'
-            >
+            <Button type='button' onClick={() => setOpen(true)} variant='small'>
               Open me
             </Button>
           )}
         </DropdownMenu>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Open me'))
@@ -48,25 +44,21 @@ describe('<DropdownMenu />', () => {
           options={[
             {
               label: 'Option 1',
-              onClick: opt1Mock
+              onClick: opt1Mock,
             },
             {
               label: 'Option 2',
-              onClick: opt2Mock
-            }
+              onClick: opt2Mock,
+            },
           ]}
         >
           {(setOpen) => (
-            <Button
-              type='button'
-              onClick={() => setOpen(true)}
-              variant='small'
-            >
+            <Button type='button' onClick={() => setOpen(true)} variant='small'>
               Open me
             </Button>
           )}
         </DropdownMenu>
-      </KitchenSink>
+      </KitchenSink>,
     )
 
     await userEvent.click(screen.getByText('Open me'))

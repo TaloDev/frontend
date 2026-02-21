@@ -1,15 +1,15 @@
 import useSWR from 'swr'
-import buildError from '../utils/buildError'
-import { Game } from '../entities/game'
-import makeValidatedGetRequest from './makeValidatedGetRequest'
 import { z } from 'zod'
+import { Game } from '../entities/game'
 import { gameChannelSchema } from '../entities/gameChannels'
+import buildError from '../utils/buildError'
+import makeValidatedGetRequest from './makeValidatedGetRequest'
 
 export const channelsSchema = z.object({
   channels: z.array(gameChannelSchema),
   count: z.number(),
   itemsPerPage: z.number(),
-  isLastPage: z.boolean()
+  isLastPage: z.boolean(),
 })
 
 export default function useChannels(activeGame: Game, search: string, page: number) {
@@ -21,7 +21,7 @@ export default function useChannels(activeGame: Game, search: string, page: numb
 
   const { data, error, mutate } = useSWR(
     [`/games/${activeGame.id}/game-channels`, search, page],
-    fetcher
+    fetcher,
   )
 
   return {
@@ -30,6 +30,6 @@ export default function useChannels(activeGame: Game, search: string, page: numb
     itemsPerPage: data?.itemsPerPage,
     loading: !data && !error,
     error: error && buildError(error),
-    mutate
+    mutate,
   }
 }

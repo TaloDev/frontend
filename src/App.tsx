@@ -1,17 +1,17 @@
-import { useState, useEffect, Suspense, useCallback, useRef } from 'react'
 import * as Sentry from '@sentry/react'
+import { useState, useEffect, Suspense, useCallback, useRef } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import refreshAccess from './api/refreshAccess'
 import Loading from './components/Loading'
-import gamesState from './state/gamesState'
-import AuthService from './services/AuthService'
 import Router from './Router'
-import userState from './state/userState'
+import AuthService from './services/AuthService'
 import activeGameState from './state/activeGameState'
+import gamesState from './state/gamesState'
+import userState from './state/userState'
 
 function AppLoading() {
   return (
-    <main className='w-full flex items-center justify-center'>
+    <main className='flex w-full items-center justify-center'>
       <Loading />
     </main>
   )
@@ -37,7 +37,7 @@ export default function App() {
       setUser(user)
 
       Sentry.setUser({ id: user.id, username: user.username })
-    } catch (err) {
+    } catch {
       setActiveGame(null)
     } finally {
       setTriedRefreshing(true)
@@ -53,7 +53,7 @@ export default function App() {
 
   useEffect(() => {
     if (!hasTriedRefreshing) {
-      handleRefreshSession()
+      void handleRefreshSession()
     }
   }, [intendedRoute, hasTriedRefreshing, handleRefreshSession])
 

@@ -1,20 +1,20 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
+import { useRecoilValue } from 'recoil'
+import { z, ZodError } from 'zod'
+import updateGame from '../api/updateGame'
 import useGameSettings from '../api/useGameSettings'
 import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
+import Loading from '../components/Loading'
 import Page from '../components/Page'
 import SecondaryNav from '../components/SecondaryNav'
+import Select from '../components/Select'
 import TextInput from '../components/TextInput'
+import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import Toggle from '../components/toggles/Toggle'
 import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import { useRecoilValue } from 'recoil'
-import updateGame from '../api/updateGame'
 import buildError from '../utils/buildError'
-import ToastContext, { ToastType } from '../components/toast/ToastContext'
-import Loading from '../components/Loading'
-import { z, ZodError } from 'zod'
-import Select from '../components/Select'
 
 type Settings = NonNullable<ReturnType<typeof useGameSettings>['settings']>
 const defaultSettings: Settings = {
@@ -22,13 +22,13 @@ const defaultSettings: Settings = {
   purgeLivePlayers: false,
   purgeDevPlayersRetention: 60,
   purgeLivePlayersRetention: 90,
-  website: null
+  website: null,
 }
 
 const purgeDevPlayersRetentionOptions = [
   { label: '30 days', value: 30 },
   { label: '60 days', value: 60 },
-  { label: '90 days', value: 90 }
+  { label: '90 days', value: 90 },
 ]
 
 const purgeLivePlayersRetentionOptions = [
@@ -36,7 +36,7 @@ const purgeLivePlayersRetentionOptions = [
   { label: '90 days', value: 90 },
   { label: '3 months', value: 120 },
   { label: '6 months', value: 180 },
-  { label: '1 year', value: 365 }
+  { label: '1 year', value: 365 },
 ]
 
 export default function GameSettings() {
@@ -60,7 +60,7 @@ export default function GameSettings() {
     setSettings((curr) => {
       return {
         ...curr,
-        [key]: value
+        [key]: value,
       }
     })
   }, [])
@@ -96,26 +96,33 @@ export default function GameSettings() {
 
       <div className='flex items-center space-x-4'>
         <div>
-          {!settingsLoaded &&
-            <div className='mx-4'><Loading size={32} thickness={180} /></div>
-          }
-          {settingsLoaded &&
+          {!settingsLoaded && (
+            <div className='mx-4'>
+              <Loading size={32} thickness={180} />
+            </div>
+          )}
+          {settingsLoaded && (
             <Toggle
               id='purge-dev-players'
               enabled={settings.purgeDevPlayers}
               onToggle={(val) => updateSetting('purgeDevPlayers', val)}
             />
-          }
+          )}
         </div>
         <div>
           <p className='font-medium'>Purge dev players</p>
-          <p className='text-sm'>Automatically delete players created in dev builds with no activity in the last {settings.purgeDevPlayersRetention} days</p>
+          <p className='text-sm'>
+            Automatically delete players created in dev builds with no activity in the last{' '}
+            {settings.purgeDevPlayersRetention} days
+          </p>
         </div>
       </div>
 
       {settings.purgeDevPlayers && (
         <div>
-          <label htmlFor='dev-players-retention' className='block font-medium mb-1'>Purge dev players after...</label>
+          <label htmlFor='dev-players-retention' className='mb-1 block font-medium'>
+            Purge dev players after...
+          </label>
           <Select
             inputId='dev-players-retention'
             options={purgeDevPlayersRetentionOptions}
@@ -124,7 +131,9 @@ export default function GameSettings() {
                 updateSetting('purgeDevPlayersRetention', opt.value)
               }
             }}
-            defaultValue={purgeDevPlayersRetentionOptions.find((opt) => opt.value === settings.purgeDevPlayersRetention)}
+            defaultValue={purgeDevPlayersRetentionOptions.find(
+              (opt) => opt.value === settings.purgeDevPlayersRetention,
+            )}
           />
         </div>
       )}
@@ -133,26 +142,33 @@ export default function GameSettings() {
 
       <div className='flex items-center space-x-4'>
         <div>
-          {!settingsLoaded &&
-            <div className='mx-4'><Loading size={32} thickness={180} /></div>
-          }
-          {settingsLoaded &&
+          {!settingsLoaded && (
+            <div className='mx-4'>
+              <Loading size={32} thickness={180} />
+            </div>
+          )}
+          {settingsLoaded && (
             <Toggle
               id='purge-live-players'
               enabled={settings.purgeLivePlayers}
               onToggle={(val) => updateSetting('purgeLivePlayers', val)}
             />
-          }
+          )}
         </div>
         <div>
           <p className='font-medium'>Purge live players</p>
-          <p className='text-sm'>Automatically delete players with no activity in the last {settings.purgeLivePlayersRetention} days</p>
+          <p className='text-sm'>
+            Automatically delete players with no activity in the last{' '}
+            {settings.purgeLivePlayersRetention} days
+          </p>
         </div>
       </div>
 
       {settings.purgeLivePlayers && (
         <div>
-          <label htmlFor='live-players-retention' className='block font-medium mb-1'>Purge live players after...</label>
+          <label htmlFor='live-players-retention' className='mb-1 block font-medium'>
+            Purge live players after...
+          </label>
           <Select
             inputId='live-players-retention'
             options={purgeLivePlayersRetentionOptions}
@@ -161,7 +177,9 @@ export default function GameSettings() {
                 updateSetting('purgeLivePlayersRetention', opt.value)
               }
             }}
-            defaultValue={purgeLivePlayersRetentionOptions.find((opt) => opt.value === settings.purgeLivePlayersRetention)}
+            defaultValue={purgeLivePlayersRetentionOptions.find(
+              (opt) => opt.value === settings.purgeLivePlayersRetention,
+            )}
           />
         </div>
       )}

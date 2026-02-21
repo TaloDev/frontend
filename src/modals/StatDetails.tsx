@@ -1,25 +1,25 @@
-import { useContext, useState } from 'react'
-import Modal from '../components/Modal'
-import TextInput from '../components/TextInput'
-import Button from '../components/Button'
-import buildError from '../utils/buildError'
-import ErrorMessage, { TaloError } from '../components/ErrorMessage'
-import RadioGroup from '../components/RadioGroup'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import userState, { AuthedUser } from '../state/userState'
-import { useRecoilValue } from 'recoil'
-import createStat from '../api/createStat'
-import updateStat from '../api/updateStat'
-import deleteStat from '../api/deleteStat'
-import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import nullableNumber from '../utils/validation/nullableNumber'
-import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
-import { GameStat } from '../entities/gameStat'
+import { IconRefresh, IconTrash } from '@tabler/icons-react'
+import { useContext, useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { useRecoilValue } from 'recoil'
 import { KeyedMutator } from 'swr'
 import { z } from 'zod'
-import { IconRefresh, IconTrash } from '@tabler/icons-react'
+import createStat from '../api/createStat'
+import deleteStat from '../api/deleteStat'
+import updateStat from '../api/updateStat'
+import Button from '../components/Button'
+import ErrorMessage, { TaloError } from '../components/ErrorMessage'
+import Modal from '../components/Modal'
+import RadioGroup from '../components/RadioGroup'
+import TextInput from '../components/TextInput'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
+import { GameStat } from '../entities/gameStat'
+import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import userState, { AuthedUser } from '../state/userState'
+import buildError from '../utils/buildError'
+import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
+import nullableNumber from '../utils/validation/nullableNumber'
 
 type StatDetailsProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -28,76 +28,82 @@ type StatDetailsProps = {
   onResetClick?: () => void
 }
 
-const validationSchema = z.object({
-  internalName: z.string().min(1, { message: 'Internal name is required' }),
-  name: z.string().min(1, { message: 'Display name is required' }),
-  minTimeBetweenUpdates: z.number({
-    required_error: 'Time between updates is required',
-    invalid_type_error: 'Time between updates must be a number'
-  }).min(0, 'Time between updates must be greater than or equal to 0'),
-  minValue: z.number({
-    invalid_type_error: 'Min value must be a number'
-  }).nullable(),
-  defaultValue: z.number({
-    required_error: 'Default value is required',
-    invalid_type_error: 'Default value must be a number'
-  }),
-  maxValue: z.number({
-    invalid_type_error: 'Max value must be a number'
-  }).nullable(),
-  maxChange: z.number({
-    invalid_type_error: 'Max change must be a number'
-  }).gte(1, 'Max change must be greater than or equal to 1').nullable()
-}).superRefine(({ minValue, maxValue, defaultValue }, ctx) => {
-  let valid = true
+const validationSchema = z
+  .object({
+    internalName: z.string().min(1, { message: 'Internal name is required' }),
+    name: z.string().min(1, { message: 'Display name is required' }),
+    minTimeBetweenUpdates: z
+      .number({
+        required_error: 'Time between updates is required',
+        invalid_type_error: 'Time between updates must be a number',
+      })
+      .min(0, 'Time between updates must be greater than or equal to 0'),
+    minValue: z
+      .number({
+        invalid_type_error: 'Min value must be a number',
+      })
+      .nullable(),
+    defaultValue: z.number({
+      required_error: 'Default value is required',
+      invalid_type_error: 'Default value must be a number',
+    }),
+    maxValue: z
+      .number({
+        invalid_type_error: 'Max value must be a number',
+      })
+      .nullable(),
+    maxChange: z
+      .number({
+        invalid_type_error: 'Max change must be a number',
+      })
+      .gte(1, 'Max change must be greater than or equal to 1')
+      .nullable(),
+  })
+  .superRefine(({ minValue, maxValue, defaultValue }, ctx) => {
+    let valid = true
 
-  if (minValue !== null && maxValue !== null && maxValue <= minValue) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.too_small,
-      minimum: minValue + 1,
-      type: 'number',
-      inclusive: false,
-      message: 'Max value must be more than the min value',
-      path: ['maxValue']
-    })
-    valid = false
-  }
+    if (minValue !== null && maxValue !== null && maxValue <= minValue) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_small,
+        minimum: minValue + 1,
+        type: 'number',
+        inclusive: false,
+        message: 'Max value must be more than the min value',
+        path: ['maxValue'],
+      })
+      valid = false
+    }
 
-  if (minValue !== null && defaultValue < minValue) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.too_small,
-      minimum: minValue,
-      type: 'number',
-      inclusive: false,
-      message: 'Default value must be more than the min value',
-      path: ['defaultValue']
-    })
-    valid = false
-  }
+    if (minValue !== null && defaultValue < minValue) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_small,
+        minimum: minValue,
+        type: 'number',
+        inclusive: false,
+        message: 'Default value must be more than the min value',
+        path: ['defaultValue'],
+      })
+      valid = false
+    }
 
-  if (maxValue !== null && defaultValue > maxValue) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.too_big,
-      maximum: maxValue,
-      type: 'number',
-      inclusive: false,
-      message: 'Default value must be less than the max value',
-      path: ['defaultValue']
-    })
-    valid = false
-  }
+    if (maxValue !== null && defaultValue > maxValue) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_big,
+        maximum: maxValue,
+        type: 'number',
+        inclusive: false,
+        message: 'Default value must be less than the max value',
+        path: ['defaultValue'],
+      })
+      valid = false
+    }
 
-  return valid
-})
+    return valid
+  })
 
 type FormValues = z.infer<typeof validationSchema>
 
-const StatDetails = ({
-  modalState,
-  mutate,
-  editingStat,
-  onResetClick
-}: StatDetailsProps) => {
+const StatDetails = ({ modalState, mutate, editingStat, onResetClick }: StatDetailsProps) => {
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)
   const [isDeleting, setDeleting] = useState(false)
@@ -108,7 +114,11 @@ const StatDetails = ({
 
   const [global, setGlobal] = useState(editingStat?.global ?? false)
 
-  const { register, handleSubmit, formState: { isValid, errors } } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid, errors },
+  } = useForm<FormValues>({
     resolver: zodResolver(validationSchema),
     defaultValues: {
       internalName: editingStat?.internalName ?? '',
@@ -117,9 +127,9 @@ const StatDetails = ({
       minValue: editingStat?.minValue ?? null,
       defaultValue: editingStat?.defaultValue,
       maxValue: editingStat?.maxValue ?? null,
-      maxChange: editingStat?.maxChange ?? null
+      maxChange: editingStat?.maxChange ?? null,
     },
-    mode: 'onChange'
+    mode: 'onChange',
   })
 
   const toast = useContext(ToastContext)
@@ -132,13 +142,10 @@ const StatDetails = ({
     try {
       const { stat } = await createStat(activeGame.id, { ...FormValues, global })
 
-      mutate((data) => {
+      await mutate((data) => {
         return {
           ...data,
-          stats: [
-            ...data!.stats,
-            stat
-          ]
+          stats: [...data!.stats, stat],
         }
       }, false)
 
@@ -159,13 +166,13 @@ const StatDetails = ({
     try {
       const { stat } = await updateStat(activeGame.id, editingStat!.id, { ...FormValues, global })
 
-      mutate((data) => {
+      await mutate((data) => {
         return {
           ...data,
           stats: data!.stats.map((existingStat) => {
             if (existingStat.id === stat.id) return stat
             return existingStat
-          })
+          }),
         }
       }, false)
 
@@ -188,12 +195,12 @@ const StatDetails = ({
     try {
       await deleteStat(activeGame.id, editingStat!.id)
 
-      mutate((data) => {
+      await mutate((data) => {
         return {
           ...data,
           stats: data!.stats.filter((existingStat) => {
             return existingStat.id !== editingStat!.id
-          })
+          }),
         }
       }, false)
 
@@ -213,7 +220,7 @@ const StatDetails = ({
       modalState={modalState}
     >
       <form onSubmit={handleSubmit(editingStat ? onUpdateClick : onCreateClick)}>
-        <div className='p-4 space-y-4'>
+        <div className='space-y-4 p-4'>
           <TextInput
             id='internal-name'
             disabled={Boolean(editingStat)}
@@ -238,7 +245,7 @@ const StatDetails = ({
             name='global'
             options={[
               { label: 'Yes', value: true },
-              { label: 'No', value: false }
+              { label: 'No', value: false },
             ]}
             onChange={setGlobal}
             value={global}
@@ -253,14 +260,14 @@ const StatDetails = ({
             placeholder='Seconds'
             inputExtra={{
               ...register('minTimeBetweenUpdates', { valueAsNumber: true }),
-              step: 'any'
+              step: 'any',
             }}
             containerClassName='max-w-xs'
             errors={[errors.minTimeBetweenUpdates?.message]}
           />
 
-          <div className='border-t border-b py-4 md:py-0 border-gray-200 md:border-none'>
-            <div className='space-y-4 md:space-y-0 md:flex md:space-x-4'>
+          <div className='border-t border-b border-gray-200 py-4 md:border-none md:py-0'>
+            <div className='space-y-4 md:flex md:space-y-0 md:space-x-4'>
               <TextInput
                 id='min-value'
                 type='number'
@@ -268,8 +275,11 @@ const StatDetails = ({
                 label='Min value'
                 placeholder='Optional'
                 inputExtra={{
-                  ...register('minValue', { deps: ['defaultValue', 'maxValue'], setValueAs: nullableNumber }),
-                  step: 'any'
+                  ...register('minValue', {
+                    deps: ['defaultValue', 'maxValue'],
+                    setValueAs: nullableNumber,
+                  }),
+                  step: 'any',
                 }}
                 inputClassName='md:max-w-[160px]'
                 containerClassName='max-w-xs md:!w-auto'
@@ -282,7 +292,7 @@ const StatDetails = ({
                 label='Default value'
                 inputExtra={{
                   ...register('defaultValue', { setValueAs: nullableNumber }),
-                  step: 'any'
+                  step: 'any',
                 }}
                 inputClassName='md:max-w-[160px]'
                 containerClassName='max-w-xs md:!w-auto'
@@ -297,7 +307,7 @@ const StatDetails = ({
                 placeholder='Optional'
                 inputExtra={{
                   ...register('maxValue', { deps: ['defaultValue'], setValueAs: nullableNumber }),
-                  step: 'any'
+                  step: 'any',
                 }}
                 inputClassName='md:max-w-[160px]'
                 containerClassName='max-w-xs md:!w-auto'
@@ -307,9 +317,13 @@ const StatDetails = ({
 
             <div>
               {Object.keys(errors)
-                .filter((key) => ['minValue', 'defaultValue', 'maxValue'].includes(key) && errors[key as keyof FormValues]?.message)
+                .filter(
+                  (key) =>
+                    ['minValue', 'defaultValue', 'maxValue'].includes(key) &&
+                    errors[key as keyof FormValues]?.message,
+                )
                 .map((key, idx) => (
-                  <p role='alert' key={idx} className='text-red-500 font-medium mt-2'>
+                  <p role='alert' key={idx} className='mt-2 font-medium text-red-500'>
                     {errors[key as keyof FormValues]?.message}
                   </p>
                 ))}
@@ -324,22 +338,25 @@ const StatDetails = ({
             placeholder='Optional'
             inputExtra={{
               ...register('maxChange', {
-                setValueAs: (val) => val ? Number(val) : null /* can't use nullableNumber because it needs to be positive */
+                setValueAs: (val) =>
+                  val
+                    ? Number(val)
+                    : null /* can't use nullableNumber because it needs to be positive */,
               }),
-              step: 'any'
+              step: 'any',
             }}
             containerClassName='max-w-xs'
             errors={[errors.maxChange?.message]}
           />
 
-          {editingStat && canPerformAction(user, PermissionBasedAction.DELETE_STAT) &&
-            <div className='p-4 space-y-2 bg-red-100 border border-red-400 rounded'>
+          {editingStat && canPerformAction(user, PermissionBasedAction.DELETE_STAT) && (
+            <div className='space-y-2 rounded border border-red-400 bg-red-100 p-4'>
               <p className='font-semibold'>Danger zone</p>
 
               <div className='space-y-2'>
                 <p>Once taken, these actions are irreversible.</p>
                 <div className='flex space-x-2'>
-                  {onResetClick &&
+                  {onResetClick && (
                     <Button
                       type='button'
                       onClick={onResetClick}
@@ -347,11 +364,9 @@ const StatDetails = ({
                       className='w-auto!'
                       icon={<IconRefresh />}
                     >
-                      <span>
-                        Reset
-                      </span>
+                      <span>Reset</span>
                     </Button>
-                  }
+                  )}
 
                   <Button
                     type='button'
@@ -361,41 +376,35 @@ const StatDetails = ({
                     className='w-auto!'
                     icon={<IconTrash />}
                   >
-                    <span>
-                      Delete
-                    </span>
+                    <span>Delete</span>
                   </Button>
                 </div>
               </div>
             </div>
-          }
+          )}
 
           {apiError && <ErrorMessage error={apiError} />}
         </div>
 
-        <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>
-          {!editingStat &&
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          {!editingStat && (
             <div className='w-full md:w-32'>
-              <Button
-                disabled={!isValid}
-                isLoading={isLoading}
-              >
+              <Button disabled={!isValid} isLoading={isLoading}>
                 Create
               </Button>
             </div>
-          }
-          {editingStat &&
+          )}
+          {editingStat && (
             <div className='w-full md:w-32'>
-              <Button
-                disabled={!isValid || isDeleting}
-                isLoading={isLoading}
-              >
+              <Button disabled={!isValid || isDeleting} isLoading={isLoading}>
                 Update
               </Button>
             </div>
-          }
+          )}
           <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>Close</Button>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Close
+            </Button>
           </div>
         </div>
       </form>

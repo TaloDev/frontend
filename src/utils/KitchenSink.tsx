@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect } from 'react'
-import { RecoilRoot, RecoilState } from 'recoil'
-import RecoilObserver from '../state/RecoilObserver'
-import { Location, MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
-import { SWRConfig } from 'swr'
 import type { ReactNode } from 'react'
+import { useEffect } from 'react'
+import { Location, MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { RecoilRoot, RecoilState } from 'recoil'
+import { SWRConfig } from 'swr'
+import RecoilObserver from '../state/RecoilObserver'
 
 type SetLocationFunction = (location: Partial<Location>) => void
 
@@ -12,9 +11,7 @@ type CatchAllProps = {
   setLocation?: SetLocationFunction
 }
 
-function CatchAll({
-  setLocation
-}: CatchAllProps) {
+function CatchAll({ setLocation }: CatchAllProps) {
   const location = useLocation()
 
   useEffect(() => {
@@ -33,20 +30,11 @@ type RendererProps<T> = {
   children: ReactNode
 }
 
-function Renderer<T>({
-  states,
-  children
-}: RendererProps<T>) {
+function Renderer<T>({ states, children }: RendererProps<T>) {
   return (
     <>
       {states.map(({ node, onChange }, idx) => {
-        return (
-          <RecoilObserver
-            key={idx}
-            node={node}
-            onChange={onChange}
-          />
-        )
+        return <RecoilObserver key={idx} node={node} onChange={onChange} />
       })}
 
       {children}
@@ -56,8 +44,11 @@ function Renderer<T>({
 
 type KitchenSinkProps = {
   states?: {
+    // oxlint-disable-next-line typescript/no-explicit-any
     node: RecoilState<any>
+    // oxlint-disable-next-line typescript/no-explicit-any
     initialValue?: any
+    // oxlint-disable-next-line typescript/no-explicit-any
     onChange?: (value: any) => void
   }[]
   initialEntries?: (string | Partial<Location>)[]
@@ -71,7 +62,7 @@ export default function KitchenSink({
   children,
   initialEntries = ['/'],
   setLocation,
-  routePath = '/'
+  routePath = '/',
 }: KitchenSinkProps) {
   return (
     <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0 }}>
@@ -85,10 +76,7 @@ export default function KitchenSink({
         <MemoryRouter initialEntries={initialEntries}>
           <Routes>
             <Route path={routePath} element={<Renderer states={states}>{children}</Renderer>} />
-            <Route
-              path='*'
-              element={<CatchAll setLocation={setLocation} />}
-            />
+            <Route path='*' element={<CatchAll setLocation={setLocation} />} />
           </Routes>
         </MemoryRouter>
       </RecoilRoot>

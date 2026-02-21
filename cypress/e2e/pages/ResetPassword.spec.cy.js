@@ -3,7 +3,7 @@
 describe('ResetPassword', () => {
   it('should let users reset their password', () => {
     cy.intercept('POST', 'http://talo.api/public/users/reset_password', {
-      statusCode: 204
+      statusCode: 204,
     })
 
     cy.visitAsGuest('/reset-password?token=abc123')
@@ -25,8 +25,8 @@ describe('ResetPassword', () => {
       statusCode: 401,
       body: {
         message: 'Request expired',
-        expired: true
-      }
+        expired: true,
+      },
     })
 
     cy.visitAsGuest('/reset-password?token=abc123')

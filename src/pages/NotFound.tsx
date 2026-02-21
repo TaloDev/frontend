@@ -1,10 +1,10 @@
-import Button from '../components/Button'
-import { unauthedContainerStyle } from '../styles/theme'
-import { useNavigate } from 'react-router-dom'
-import routes from '../constants/routes'
-import { useEffect, useState } from 'react'
-import Loading from '../components/Loading'
 import clsx from 'clsx'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Button from '../components/Button'
+import Loading from '../components/Loading'
+import routes from '../constants/routes'
+import { unauthedContainerStyle } from '../styles/theme'
 
 export default function NotFound() {
   const navigate = useNavigate()
@@ -25,18 +25,12 @@ export default function NotFound() {
   }
 
   return (
-    <div className='h-full p-8 flex flex-col md:items-center md:justify-center'>
-      <div className={clsx('text-white space-y-8', unauthedContainerStyle)}>
+    <div className='flex h-full flex-col p-8 md:items-center md:justify-center'>
+      <div className={clsx('space-y-8 text-white', unauthedContainerStyle)}>
         <h1 className='text-4xl font-bold'>404 Not Found</h1>
-        <p>
-          Sorry, we couldn&apos;t find that page. If this is a mistake, please contact us.
-        </p>
+        <p>Sorry, we couldn&apos;t find that page. If this is a mistake, please contact us.</p>
 
-        <Button
-          onClick={() => navigate(routes.dashboard)}
-        >
-          Go to dashboard
-        </Button>
+        <Button onClick={() => navigate(routes.dashboard)}>Go to dashboard</Button>
       </div>
     </div>
   )

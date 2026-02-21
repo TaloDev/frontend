@@ -1,11 +1,15 @@
 import { Edge, Node } from '@xyflow/react'
 import { useCallback, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import saveDataNodeSizesState from '../state/saveDataNodeSizesState'
 import { GameSave } from '../entities/gameSave'
+import saveDataNodeSizesState from '../state/saveDataNodeSizesState'
 import { NodeDataRow, objectToRows, getLayoutedElements } from './nodeGraphHelpers'
 
-export default function useNodeGraph(save: GameSave | undefined, search: string = '', enabled: boolean) {
+export default function useNodeGraph(
+  save: GameSave | undefined,
+  search: string = '',
+  enabled: boolean,
+) {
   const content = save?.content
 
   const [nodes, setNodes] = useState<Node[]>([])
@@ -31,24 +35,26 @@ export default function useNodeGraph(save: GameSave | undefined, search: string 
       nodeSet.add({ id, position: { x: 0, y: 0 }, data })
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line typescript/no-explicit-any
     const processContent = (key: string, value: any, parentKey: string | null = null) => {
       const nodeId = parentKey ? `${parentKey}-${key}` : key
 
       if (typeof value === 'object' && value !== null) {
         if (Array.isArray(value)) {
           // arrays get their own nodes
-          addNode(nodeId, [{
-            item: `${key} [${value.length}]`,
-            type: 'array'
-          }])
+          addNode(nodeId, [
+            {
+              item: `${key} [${value.length}]`,
+              type: 'array',
+            },
+          ])
 
           // edge connecting the array node to its parent, if applicable
           if (parentKey) {
             edgeSet.add({ id: `${parentKey}-${nodeId}`, source: parentKey, target: nodeId })
           }
 
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // oxlint-disable-next-line typescript/no-explicit-any
           value.forEach((item: any, index: number) => {
             if (typeof item === 'object' && item !== null) {
               // objects get their own nodes

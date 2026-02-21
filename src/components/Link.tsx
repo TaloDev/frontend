@@ -1,7 +1,7 @@
+import type { ReactNode } from 'react'
+import clsx from 'clsx'
 import { Link as RouterLink } from 'react-router-dom'
 import { focusStyle, linkStyle } from '../styles/theme'
-import clsx from 'clsx'
-import type { ReactNode } from 'react'
 
 type LinkProps = {
   to: string
@@ -10,26 +10,19 @@ type LinkProps = {
   children: ReactNode
 }
 
-export default function Link({
-  to,
-  state,
-  className,
-  children
-}: LinkProps) {
+export default function Link({ to, state, className, children }: LinkProps) {
   const linkClass = clsx(linkStyle, focusStyle, className ?? '')
 
   if (to.startsWith('http')) {
     return (
-      <a href={to} className={linkClass} target='_blank' rel='noreferrer'>{children}</a>
+      <a href={to} className={linkClass} target='_blank' rel='noreferrer'>
+        {children}
+      </a>
     )
   }
 
   return (
-    <RouterLink
-      to={to}
-      state={state}
-      className={linkClass}
-    >
+    <RouterLink to={to} state={state} className={linkClass}>
       {children}
     </RouterLink>
   )

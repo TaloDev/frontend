@@ -1,14 +1,14 @@
-import Page from '../components/Page'
+import { useContext } from 'react'
+import { useRecoilValue } from 'recoil'
 import updatePlayer from '../api/updatePlayer'
 import Loading from '../components/Loading'
+import Page from '../components/Page'
 import PlayerIdentifier from '../components/PlayerIdentifier'
-import usePlayer from '../utils/usePlayer'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import { useRecoilValue } from 'recoil'
 import PropsEditor from '../components/PropsEditor'
-import { Prop } from '../entities/prop'
-import { useContext } from 'react'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
+import { Prop } from '../entities/prop'
+import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import usePlayer from '../utils/usePlayer'
 
 export default function PlayerProps() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
@@ -38,11 +38,7 @@ export default function PlayerProps() {
   }
 
   return (
-    <Page
-      showBackButton
-      containerClassName='w-full lg:w-2/3'
-      title='Player properties'
-    >
+    <Page showBackButton containerClassName='w-full lg:w-2/3' title='Player properties'>
       <PlayerIdentifier player={player} />
 
       <PropsEditor

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
-import routes from '../constants/routes'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import type { Player } from '../entities/player'
 import useFindPlayer from '../api/useFindPlayer'
+import routes from '../constants/routes'
+import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 
 function usePlayer(): [Player | undefined, (player: Player) => void] {
   const { id } = useParams()

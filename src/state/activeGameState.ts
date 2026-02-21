@@ -9,8 +9,8 @@ const activeGameState = atom<Game | null>({
       onSet((updatedActiveGame) => {
         window.localStorage.setItem('activeGame', JSON.stringify(updatedActiveGame))
       })
-    }
-  ]
+    },
+  ],
 })
 
 export type SelectedActiveGame = NonNullable<Game>

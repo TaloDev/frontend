@@ -6,7 +6,7 @@ export const apiKeySchema = z.object({
   gameId: z.number(),
   createdBy: z.string(),
   createdAt: z.string().datetime(),
-  lastUsedAt: z.string().datetime().nullish()
+  lastUsedAt: z.string().datetime().nullish(),
 })
 
 export type APIKey = z.infer<typeof apiKeySchema>

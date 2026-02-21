@@ -1,37 +1,42 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useContext, useMemo, useState } from 'react'
+import { useEffect } from 'react'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { useRecoilValue } from 'recoil'
+import { KeyedMutator } from 'swr'
+import { useDebounce } from 'use-debounce'
+import { z } from 'zod'
+import createGroup from '../../api/createGroup'
+import deleteGroup from '../../api/deleteGroup'
+import updateGroup from '../../api/updateGroup'
+import useGroupPreviewCount from '../../api/useGroupPreviewCount'
+import Button from '../../components/Button'
+import ErrorMessage, { TaloError } from '../../components/ErrorMessage'
+import Link from '../../components/Link'
+import Loading from '../../components/Loading'
 import Modal from '../../components/Modal'
 import TextInput from '../../components/TextInput'
-import Button from '../../components/Button'
-import buildError from '../../utils/buildError'
-import ErrorMessage, { TaloError } from '../../components/ErrorMessage'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import createGroup from '../../api/createGroup'
-import activeGameState, { SelectedActiveGame } from '../../state/activeGameState'
-import { useRecoilValue } from 'recoil'
-import updateGroup from '../../api/updateGroup'
-import deleteGroup from '../../api/deleteGroup'
-import canPerformAction, { PermissionBasedAction } from '../../utils/canPerformAction'
-import userState, { AuthedUser } from '../../state/userState'
-import GroupRules from './GroupRules'
-import useGroupPreviewCount from '../../api/useGroupPreviewCount'
-import Loading from '../../components/Loading'
-import { useDebounce } from 'use-debounce'
-import prepareRule from '../../utils/group-rules/prepareRule'
-import isGroupRuleValid from '../../utils/group-rules/isGroupRuleValid'
-import { useEffect } from 'react'
-import { PlayerGroup, PlayerGroupRuleCastType, PlayerGroupRuleName, PlayerGroupRuleMode } from '../../entities/playerGroup'
-import { KeyedMutator } from 'swr'
-import { z } from 'zod'
-import Toggle from '../../components/toggles/Toggle'
-import Link from '../../components/Link'
-import { unpackRules } from '../../utils/group-rules/unpackRules'
 import ToastContext, { ToastType } from '../../components/toast/ToastContext'
+import Toggle from '../../components/toggles/Toggle'
+import {
+  PlayerGroup,
+  PlayerGroupRuleCastType,
+  PlayerGroupRuleName,
+  PlayerGroupRuleMode,
+} from '../../entities/playerGroup'
+import activeGameState, { SelectedActiveGame } from '../../state/activeGameState'
+import userState, { AuthedUser } from '../../state/userState'
+import buildError from '../../utils/buildError'
+import canPerformAction, { PermissionBasedAction } from '../../utils/canPerformAction'
+import isGroupRuleValid from '../../utils/group-rules/isGroupRuleValid'
+import prepareRule from '../../utils/group-rules/prepareRule'
+import { unpackRules } from '../../utils/group-rules/unpackRules'
+import GroupRules from './GroupRules'
 
 const validationSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),
   description: z.string(),
-  membersVisible: z.boolean()
+  membersVisible: z.boolean(),
 })
 
 type FormValues = z.infer<typeof validationSchema>
@@ -53,11 +58,7 @@ type GroupDetailsProps = {
   editingGroup: PlayerGroup | null
 }
 
-export default function GroupDetails({
-  modalState,
-  mutate,
-  editingGroup
-}: GroupDetailsProps) {
+export default function GroupDetails({ modalState, mutate, editingGroup }: GroupDetailsProps) {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
   const user = useRecoilValue(userState) as AuthedUser
 
@@ -70,7 +71,11 @@ export default function GroupDetails({
   const [rules, setRules] = useState(unpackRules(editingGroup?.rules) ?? [])
 
   const [debouncedRules] = useDebounce(rules, 300)
-  const { count, loading: countLoading } = useGroupPreviewCount(activeGame, ruleMode, debouncedRules)
+  const { count, loading: countLoading } = useGroupPreviewCount(
+    activeGame,
+    ruleMode,
+    debouncedRules,
+  )
   const [displayableCount, setDisplayableCount] = useState(count)
 
   const toast = useContext(ToastContext)
@@ -85,14 +90,19 @@ export default function GroupDetails({
     return rules.every(isGroupRuleValid)
   }, [rules])
 
-  const { register, handleSubmit, formState: { isValid, errors }, control } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid, errors },
+    control,
+  } = useForm<FormValues>({
     resolver: zodResolver(validationSchema),
     defaultValues: {
       name: editingGroup?.name ?? '',
       description: editingGroup?.description ?? '',
-      membersVisible: editingGroup?.membersVisible ?? false
+      membersVisible: editingGroup?.membersVisible ?? false,
     },
-    mode: 'onChange'
+    mode: 'onChange',
   })
 
   const onCreateClick: SubmitHandler<FormValues> = async (FormValues, e) => {
@@ -101,15 +111,16 @@ export default function GroupDetails({
     setAPIError(null)
 
     try {
-      const { group } = await createGroup(activeGame.id, { ...FormValues, ruleMode, rules: rules.map(prepareRule) })
+      const { group } = await createGroup(activeGame.id, {
+        ...FormValues,
+        ruleMode,
+        rules: rules.map(prepareRule),
+      })
 
-      mutate((data) => {
+      await mutate((data) => {
         return {
           ...data,
-          groups: [
-            ...data!.groups,
-            group
-          ]
+          groups: [...data!.groups, group],
         }
       }, true)
 
@@ -128,15 +139,19 @@ export default function GroupDetails({
     setAPIError(null)
 
     try {
-      const { group } = await updateGroup(activeGame.id, editingGroup!.id, { ...FormValues, ruleMode, rules: rules.map(prepareRule) })
+      const { group } = await updateGroup(activeGame.id, editingGroup!.id, {
+        ...FormValues,
+        ruleMode,
+        rules: rules.map(prepareRule),
+      })
 
-      mutate((data) => {
+      await mutate((data) => {
         return {
           ...data,
           groups: data!.groups.map((existingGroup) => {
             if (existingGroup.id === group.id) return group
             return existingGroup
-          })
+          }),
         }
       }, true)
 
@@ -159,12 +174,12 @@ export default function GroupDetails({
     try {
       await deleteGroup(activeGame.id, editingGroup!.id)
 
-      mutate((data) => {
+      await mutate((data) => {
         return {
           ...data,
           groups: data!.groups.filter((existingGroup) => {
             return existingGroup.id !== editingGroup!.id
-          })
+          }),
         }
       }, false)
 
@@ -185,7 +200,7 @@ export default function GroupDetails({
       modalState={modalState}
     >
       <form onSubmit={handleSubmit(editingGroup ? onUpdateClick : onCreateClick)}>
-        <div className='p-4 space-y-4'>
+        <div className='space-y-4 p-4'>
           <TextInput
             id='name'
             variant='modal'
@@ -207,61 +222,57 @@ export default function GroupDetails({
           <Controller
             control={control}
             name='membersVisible'
-            render={({
-              field: { onChange, value, ref }
-            }) => (
-              <div className='flex justify-between items-start'>
+            render={({ field: { onChange, value, ref } }) => (
+              <div className='flex items-start justify-between'>
                 <div>
-                  <label htmlFor='members-visible' className='font-semibold'>Members visible</label>
-                  <p className='text-sm text-gray-500'>If enabled, player data will be returned in the <Link to='https://docs.trytalo.com/docs/http/player-group-api?utm_source=dashboard&utm_medium=group-details-modal'>player group API</Link></p>
+                  <label htmlFor='members-visible' className='font-semibold'>
+                    Members visible
+                  </label>
+                  <p className='text-sm text-gray-500'>
+                    If enabled, player data will be returned in the{' '}
+                    <Link to='https://docs.trytalo.com/docs/http/player-group-api?utm_source=dashboard&utm_medium=group-details-modal'>
+                      player group API
+                    </Link>
+                  </p>
                 </div>
                 <div className='flex items-center space-x-4'>
-                  <Toggle
-                    id='members-visible'
-                    inputRef={ref}
-                    enabled={value}
-                    onToggle={onChange}
-                  />
+                  <Toggle id='members-visible' inputRef={ref} enabled={value} onToggle={onChange} />
                 </div>
               </div>
             )}
           />
 
           <div>
-            <p className='font-semibold mb-2'>Membership</p>
-            <GroupRules
-              ruleModeState={[ruleMode, setRuleMode]}
-              rulesState={[rules, setRules]}
-            />
+            <p className='mb-2 font-semibold'>Membership</p>
+            <GroupRules ruleModeState={[ruleMode, setRuleMode]} rulesState={[rules, setRules]} />
           </div>
 
           {apiError && <ErrorMessage error={apiError} />}
 
           <div className='flex'>
-            {countLoading &&
+            {countLoading && (
               <div className='mr-2'>
                 <Loading size={24} thickness={180} />
               </div>
-            }
-            <p>{displayableCount} player{displayableCount !== 1 ? 's' : ''} in group</p>
+            )}
+            <p>
+              {displayableCount} player{displayableCount !== 1 ? 's' : ''} in group
+            </p>
           </div>
         </div>
 
-        <div className='flex flex-col md:flex-row-reverse md:justify-between space-y-4 md:space-y-0 p-4 border-t border-gray-200'>
-          {!editingGroup &&
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          {!editingGroup && (
             <div className='w-full md:w-32'>
-              <Button
-                disabled={!isValid || !allRulesValid}
-                isLoading={isLoading}
-              >
+              <Button disabled={!isValid || !allRulesValid} isLoading={isLoading}>
                 Create
               </Button>
             </div>
-          }
+          )}
 
-          {editingGroup &&
+          {editingGroup && (
             <div className='flex space-x-2'>
-              {canPerformAction(user, PermissionBasedAction.DELETE_GROUP) &&
+              {canPerformAction(user, PermissionBasedAction.DELETE_GROUP) && (
                 <div className='w-full md:w-32'>
                   <Button
                     type='button'
@@ -272,21 +283,20 @@ export default function GroupDetails({
                     Delete
                   </Button>
                 </div>
-              }
+              )}
 
               <div className='w-full md:w-32'>
-                <Button
-                  disabled={!isValid || isDeleting || !allRulesValid}
-                  isLoading={isLoading}
-                >
+                <Button disabled={!isValid || isDeleting || !allRulesValid} isLoading={isLoading}>
                   Update
                 </Button>
               </div>
             </div>
-          }
+          )}
 
           <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>Close</Button>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Close
+            </Button>
           </div>
         </div>
       </form>

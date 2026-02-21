@@ -1,8 +1,8 @@
 import { z } from 'zod'
 import { gameSchema } from '../entities/game'
+import { Prop } from '../entities/prop'
 import api from './api'
 import makeValidatedRequest from './makeValidatedRequest'
-import { Prop } from '../entities/prop'
 
 type Data = {
   name?: string
@@ -15,8 +15,8 @@ type Data = {
 const updateGame = makeValidatedRequest(
   (gameId: number, data: Data) => api.patch(`/games/${gameId}`, data),
   z.object({
-    game: gameSchema
-  })
+    game: gameSchema,
+  }),
 )
 
 export default updateGame
