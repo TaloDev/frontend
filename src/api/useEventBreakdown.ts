@@ -16,7 +16,7 @@ export default function useEventBreakdown(
     const qs = new URLSearchParams({
       eventName,
       startDate: convertDateToUTC(startDate),
-      endDate: convertDateToUTC(endDate),
+      endDate: convertDateToUTC(endDate, true),
     }).toString()
 
     const res = await makeValidatedGetRequest(
