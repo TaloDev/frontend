@@ -20,7 +20,7 @@ export function useStatGlobalValueChart(
   const fetcher = async ([url]: [string]) => {
     const qs = new URLSearchParams({
       startDate: convertDateToUTC(startDate),
-      endDate: convertDateToUTC(endDate),
+      endDate: convertDateToUTC(endDate, true),
     }).toString()
 
     const res = await makeValidatedGetRequest(
