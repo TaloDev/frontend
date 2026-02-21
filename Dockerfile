@@ -6,7 +6,7 @@ COPY . .
 # this prevents them from being substituted with empty values
 RUN sed -i 's/\${/\\${/g' .env.production
 
-RUN npm install
+RUN --mount=type=cache,target=/root/.npm npm install
 RUN npm run build
 
 FROM caddy:2-alpine
