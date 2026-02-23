@@ -1,38 +1,36 @@
 import { Edge, Node } from '@xyflow/react'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
+import { useDebounce } from 'use-debounce'
 import { GameSave } from '../entities/gameSave'
 import saveDataNodeSizesState from '../state/saveDataNodeSizesState'
-import { NodeDataRow, objectToRows, getLayoutedElements } from './nodeGraphHelpers'
+import {
+  NodeDataRow,
+  objectToRows,
+  getLayoutedElements,
+  getVisibleArrayItems,
+} from './nodeGraphHelpers'
 
-export default function useNodeGraph(
-  save: GameSave | undefined,
-  search: string = '',
-  enabled: boolean,
-) {
+export function useNodeGraph(save: GameSave | null, enabled: boolean, search: string = '') {
   const content = save?.content
 
   const [nodes, setNodes] = useState<Node[]>([])
   const [edges, setEdges] = useState<Edge[]>([])
+  const [committedSearch, setCommittedSearch] = useState(search)
 
   const nodeSizes = useRecoilValue(saveDataNodeSizesState)
-
-  const getFormatVersion = useCallback(() => {
-    if (!content) {
-      return ''
-    }
-    return (content.version as string) ?? ''
-  }, [content])
+  const [debouncedNodeSizes] = useDebounce(nodeSizes, 100)
+  const [debouncedSearch] = useDebounce(search, 300)
 
   useEffect(() => {
     if (!content || !enabled) return
 
     const nodeSet = new Set<Node>()
     const edgeSet = new Set<Edge>()
+    const formatVersion = (content.version as string) ?? ''
 
     const addNode = (id: string, rows: NodeDataRow[]) => {
-      const data = { rows, search, formatVersion: getFormatVersion() }
-      nodeSet.add({ id, position: { x: 0, y: 0 }, data })
+      nodeSet.add({ id, position: { x: 0, y: 0 }, data: { rows, formatVersion } })
     }
 
     // oxlint-disable-next-line typescript/no-explicit-any
@@ -41,13 +39,10 @@ export default function useNodeGraph(
 
       if (typeof value === 'object' && value !== null) {
         if (Array.isArray(value)) {
+          const { visible, label } = getVisibleArrayItems(value, debouncedSearch)
+
           // arrays get their own nodes
-          addNode(nodeId, [
-            {
-              item: `${key} [${value.length}]`,
-              type: 'array',
-            },
-          ])
+          addNode(nodeId, [{ item: label(key), type: 'array' }])
 
           // edge connecting the array node to its parent, if applicable
           if (parentKey) {
@@ -55,7 +50,7 @@ export default function useNodeGraph(
           }
 
           // oxlint-disable-next-line typescript/no-explicit-any
-          value.forEach((item: any, index: number) => {
+          visible.forEach((item: any, index: number) => {
             if (typeof item === 'object' && item !== null) {
               // objects get their own nodes
               processContent(String(index), item, nodeId)
@@ -88,9 +83,13 @@ export default function useNodeGraph(
       processContent(key, content[key])
     }
 
-    setNodes(getLayoutedElements(nodeSet, edgeSet, nodeSizes))
-    setEdges(Array.from(edgeSet))
-  }, [content, getFormatVersion, nodeSizes, search, enabled])
+    const edgeArray = Array.from(edgeSet)
+    void getLayoutedElements(nodeSet, edgeSet, debouncedNodeSizes).then((layoutedNodes) => {
+      setNodes(layoutedNodes)
+      setEdges(edgeArray)
+      setCommittedSearch(debouncedSearch)
+    })
+  }, [content, debouncedNodeSizes, debouncedSearch, enabled])
 
-  return { nodes, edges }
+  return { nodes, edges, committedSearch }
 }

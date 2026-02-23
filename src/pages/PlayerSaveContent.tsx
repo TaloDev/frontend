@@ -2,18 +2,18 @@ import { Background, BackgroundVariant, Controls, Node, ReactFlow } from '@xyflo
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
-import usePlayerSaves from '../api/usePlayerSaves'
+import { usePlayerSaves } from '../api/usePlayerSaves'
 import Page from '../components/Page'
-import SaveContentFitManager, { minZoom } from '../components/saves/SaveContentFitManager'
-import SaveDataNode from '../components/saves/SaveDataNode'
-import SaveModePicker, { SaveMode } from '../components/saves/SaveModePicker'
+import { SaveContentFitManager, minZoom } from '../components/saves/SaveContentFitManager'
+import { SaveDataNode } from '../components/saves/SaveDataNode'
+import { SaveModePicker, SaveMode } from '../components/saves/SaveModePicker'
 import TextInput from '../components/TextInput'
 import routes from '../constants/routes'
 import { GameSave } from '../entities/gameSave'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import useLinearNodeGraph from '../utils/useLinearNodeGraph'
+import { useLinearNodeGraph } from '../utils/useLinearNodeGraph'
 import useLocalStorage from '../utils/useLocalStorage'
-import useNodeGraph from '../utils/useNodeGraph'
+import { useNodeGraph } from '../utils/useNodeGraph'
 
 const nodeTypes = { default: SaveDataNode }
 
@@ -49,9 +49,11 @@ export default function PlayerSaveContent() {
 
   const [search, setSearch] = useState('')
   const [mode, setMode] = useLocalStorage<SaveMode>('saveContentViewMode', 'linear')
-  const treeGraph = useNodeGraph(save, search, mode === 'tree')
-  const linearGraph = useLinearNodeGraph(save, search, mode === 'linear')
-  const { nodes, edges } = mode === 'tree' ? treeGraph : linearGraph
+  const treeGraph = useNodeGraph(save ?? null, mode === 'tree', search)
+  const linearGraph = useLinearNodeGraph(save ?? null, mode === 'linear', search)
+
+  const { nodes, edges, committedSearch } = mode === 'tree' ? treeGraph : linearGraph
+  const isSearching = search.trim() !== committedSearch.trim()
 
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null)
 
@@ -69,9 +71,22 @@ export default function PlayerSaveContent() {
       data: {
         ...node.data,
         isHovered: node.id === hoveredNodeId,
+        search,
       },
     }))
-  }, [hoveredNodeId, nodes])
+  }, [hoveredNodeId, nodes, search])
+
+  const matchingNodeCount = useMemo(() => {
+    if (!committedSearch.trim()) {
+      return null
+    }
+
+    return nodes.filter((node) =>
+      (node.data.rows as { item: string }[]).some((row) =>
+        row.item.trim().toLowerCase().includes(committedSearch.trim().toLowerCase()),
+      ),
+    ).length
+  }, [nodes, committedSearch])
 
   return (
     <Page showBackButton title={save?.name ?? 'Save content'} isLoading={isLoading}>
@@ -84,6 +99,15 @@ export default function PlayerSaveContent() {
             onChange={setSearch}
             value={search}
           />
+          {search.trim() && (
+            <p className='mt-2 text-white'>
+              {isSearching
+                ? 'Searching...'
+                : matchingNodeCount === 0
+                  ? 'No matching nodes'
+                  : `${matchingNodeCount!.toLocaleString()} matching node${matchingNodeCount === 1 ? '' : 's'}`}
+            </p>
+          )}
         </div>
 
         <div className='mt-4 md:mt-0'>
