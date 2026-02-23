@@ -12,6 +12,6 @@ const modes: ButtonGroupOption<SaveMode>[] = [
   { id: 'tree', label: 'Tree mode' },
 ]
 
-export default function SaveModePicker({ selectedMode, onModeChange }: SaveModePickerProps) {
+export function SaveModePicker({ selectedMode, onModeChange }: SaveModePickerProps) {
   return <ButtonGroup options={modes} selected={selectedMode} onChange={onModeChange} />
 }

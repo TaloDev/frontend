@@ -6,7 +6,7 @@ import saveDataNodeSizesState from '../../state/saveDataNodeSizesState'
 
 export const minZoom = 0.1
 
-export default function SaveContentFitManager() {
+export function SaveContentFitManager() {
   const reactFlow = useReactFlow()
   const nodeSizes = useRecoilValue(saveDataNodeSizesState)
 
