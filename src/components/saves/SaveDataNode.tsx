@@ -21,7 +21,7 @@ type SaveDataNodeProps = {
   }
 }
 
-function SaveDataNode({ id, data }: SaveDataNodeProps) {
+function SaveDataNodeComponent({ id, data }: SaveDataNodeProps) {
   const ref = useRef<HTMLDivElement>(null)
   const setNodeSizes = useSetRecoilState(saveDataNodeSizesState)
 
@@ -83,6 +83,20 @@ function SaveDataNode({ id, data }: SaveDataNodeProps) {
     [data.formatVersion, valueIsString],
   )
 
+  const renderArrayRow = useCallback((item: string) => {
+    const match = item.match(/^(\S+)\s+(\[[^\]]+\])(?:\s+(\(.+\)))?$/)
+    const name = match?.[1] ?? item
+    const count = match?.[2] ?? ''
+    const suffix = match?.[3] ?? null
+    return (
+      <>
+        <span className='font-medium'>{name} </span>
+        <span className='text-indigo-300'>{count}</span>
+        {suffix && <div className='mt-1 text-xs text-yellow-400'>{suffix}</div>}
+      </>
+    )
+  }, [])
+
   const searchMatches = useMemo(() => {
     return data.rows.some((row) => {
       return row.item.trim().toLowerCase().includes(data.search.trim().toLowerCase())
@@ -129,12 +143,7 @@ function SaveDataNode({ id, data }: SaveDataNodeProps) {
               'text-center': data.rows.length === 1,
             })}
           >
-            {row.type === 'array' && (
-              <>
-                <span className='font-medium'>{row.item.split(' ')[0]} </span>
-                <span className='text-indigo-300'>{row.item.split(' ')[1]}</span>
-              </>
-            )}
+            {row.type === 'array' && renderArrayRow(row.item)}
             {row.type !== 'array' && row.item.includes(': ') && (
               <>
                 <span className='font-medium'>{row.item.split(': ')[0]}: </span>
@@ -165,4 +174,4 @@ function SaveDataNode({ id, data }: SaveDataNodeProps) {
   )
 }
 
-export default memo(SaveDataNode)
+export const SaveDataNode = memo(SaveDataNodeComponent)

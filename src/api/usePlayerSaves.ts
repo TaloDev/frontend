@@ -5,7 +5,7 @@ import { gameSaveSchema } from '../entities/gameSave'
 import buildError from '../utils/buildError'
 import makeValidatedGetRequest from './makeValidatedGetRequest'
 
-export default function usePlayerSaves(activeGame: Game, playerId: string) {
+export function usePlayerSaves(activeGame: Game, playerId: string) {
   const fetcher = async ([url]: [string]) => {
     const res = await makeValidatedGetRequest(
       url,

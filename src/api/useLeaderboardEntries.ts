@@ -25,7 +25,7 @@ export default function useLeaderboardEntries({
     const params: Record<string, string> = { page: String(page) }
     if (withDeleted) params.withDeleted = '1'
     params.startDate = convertDateToUTC(startDate)
-    params.endDate = convertDateToUTC(endDate)
+    params.endDate = convertDateToUTC(endDate, true)
     const qs = new URLSearchParams(params).toString()
 
     const res = await makeValidatedGetRequest(

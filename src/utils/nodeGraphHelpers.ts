@@ -1,10 +1,49 @@
 import { Edge, Node } from '@xyflow/react'
-import dagre from 'dagre'
+import ELK from 'elkjs/lib/elk.bundled'
 import { SaveDataNodeSize } from '../state/saveDataNodeSizesState'
+
+const elk = new ELK()
+
+export const MAX_NODE_CHILDREN = 50
 
 export type NodeDataRow = {
   item: string
   type: string
+}
+
+// oxlint-disable-next-line typescript/no-explicit-any
+export function itemMatchesSearch(item: any, search: string) {
+  if (!search) {
+    return false
+  }
+
+  const lower = search.trim().toLowerCase()
+
+  if (typeof item !== 'object' || item === null) {
+    return String(item).toLowerCase().includes(lower)
+  }
+
+  return JSON.stringify(item).toLowerCase().includes(lower)
+}
+
+// oxlint-disable-next-line typescript/no-explicit-any
+export function getVisibleArrayItems(value: any[], search: string) {
+  const visible = value.slice(0, MAX_NODE_CHILDREN)
+  const hidden = value.slice(MAX_NODE_CHILDREN)
+
+  const searchMatches = search
+    ? hidden.filter((item: unknown) => itemMatchesSearch(item, search))
+    : []
+
+  const hiddenCount = hidden.length - searchMatches.length
+  const all = [...visible, ...searchMatches]
+
+  const label = (key: string) =>
+    hiddenCount > 0
+      ? `${key} [${value.length.toLocaleString()}] (showing ${all.length.toLocaleString()})`
+      : `${key} [${value.length.toLocaleString()}]`
+
+  return { visible: all, label }
 }
 
 export function objectToRows(obj: { [key: string]: unknown }): NodeDataRow[] {
@@ -13,7 +52,7 @@ export function objectToRows(obj: { [key: string]: unknown }): NodeDataRow[] {
   )
 
   return Object.entries(filtered).map(([key, value]) => ({
-    item: `${key}: ${value}`,
+    item: `${key}: ${String(value)}`,
     type: typeof value,
   }))
 }
@@ -27,37 +66,51 @@ export function getNodeSize(id: string, nodeSizes: SaveDataNodeSize[]) {
   return { width: 0, height: 0 }
 }
 
-export function getLayoutedElements(
+export async function getLayoutedElements(
   nodes: Set<Node>,
   edges: Set<Edge>,
   nodeSizes: SaveDataNodeSize[],
-): Node[] {
-  const dagreGraph = new dagre.graphlib.Graph()
-  dagreGraph.setDefaultEdgeLabel(() => ({}))
-
-  dagreGraph.setGraph({ rankdir: 'TB' })
-  nodes.forEach((node) => {
+): Promise<Node[]> {
+  const elkNodes = Array.from(nodes).map((node) => {
     const { width, height } = getNodeSize(node.id, nodeSizes)
-    dagreGraph.setNode(node.id, { width, height })
+    return { id: node.id, width, height }
   })
-  edges.forEach((edge) => {
-    dagreGraph.setEdge(edge.source, edge.target)
-  })
-  dagre.layout(dagreGraph)
 
-  const newNodes = Array.from(nodes).map((node: Node) => {
-    const dagreNode = dagreGraph.node(node.id)
+  const elkEdges = Array.from(edges).map((edge) => ({
+    id: edge.id,
+    sources: [edge.source],
+    targets: [edge.target],
+  }))
+
+  const graph = {
+    id: 'root',
+    layoutOptions: {
+      'elk.algorithm': 'layered',
+      'elk.direction': 'DOWN',
+      'elk.layered.spacing.nodeNodeBetweenLayers': '60',
+      'elk.spacing.nodeNode': '20',
+      'elk.layered.nodePlacement.strategy': 'BRANDES_KOEPF',
+      'elk.layered.nodePlacement.bk.fixedAlignment': 'BALANCED',
+    },
+    children: elkNodes,
+    edges: elkEdges,
+  }
+
+  const layouted = await elk.layout(graph)
+
+  const childMap = new Map(layouted.children?.map((c) => [c.id, c]) ?? [])
+
+  return Array.from(nodes).map((node) => {
+    const elkNode = childMap.get(node.id)
     return {
       ...node,
       position: {
-        x: dagreNode.x - dagreNode.width / 2,
-        y: dagreNode.y - dagreNode.height / 2,
+        x: elkNode?.x ?? 0,
+        y: elkNode?.y ?? 0,
       },
       draggable: false,
-      width: dagreNode.width > 0 ? dagreNode.width : undefined,
-      height: dagreNode.height > 0 ? dagreNode.height : undefined,
+      width: elkNode?.width && elkNode.width > 0 ? elkNode.width : undefined,
+      height: elkNode?.height && elkNode.height > 0 ? elkNode.height : undefined,
     } as Node
   })
-
-  return newNodes
 }
