@@ -25,5 +25,27 @@ export default defineConfig({
         '**/__tests__',
       ],
     },
+    projects: [
+      {
+        test: {
+          name: 'unit',
+          globals: true,
+          environment: 'jsdom',
+          setupFiles: './setup-tests.js',
+          include: ['src/**/__tests__/**/*.test.{ts,tsx}'],
+          exclude: ['src/utils/__tests__/convertDateToUTC.test.ts'],
+        },
+      },
+      {
+        test: {
+          name: 'tz',
+          globals: true,
+          environment: 'jsdom',
+          setupFiles: './setup-tests.js',
+          include: ['src/utils/__tests__/convertDateToUTC.test.ts'],
+          env: { TZ: 'America/Los_Angeles' },
+        },
+      },
+    ],
   },
 })
