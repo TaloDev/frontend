@@ -15,7 +15,7 @@ export default function ToastProvider({ children, lifetime = 2000 }: ToastProvid
   const [text, setText] = useState('')
   const [type, setType] = useState<ToastType>(ToastType.NONE)
   const [show, setShow] = useState(false)
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout>()
+  const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout>>()
 
   useEffect(() => {
     return () => {
@@ -77,7 +77,7 @@ export default function ToastProvider({ children, lifetime = 2000 }: ToastProvid
           {show && (
             <motion.div
               className={clsx(
-                'fixed bottom-0 z-[51] flex w-full items-center space-x-2 bg-indigo-500 p-4 text-white shadow-md md:bottom-8 md:left-8 md:w-auto md:min-w-80 md:rounded md:pr-8',
+                'fixed bottom-0 z-51 flex w-full items-center space-x-2 bg-indigo-500 p-4 text-white shadow-md md:bottom-8 md:left-8 md:w-auto md:min-w-80 md:rounded md:pr-8',
                 { 'bg-red-500': type === ToastType.ERROR },
               )}
               initial={{ opacity: 0, scale: 0.95, y: 40 }}
