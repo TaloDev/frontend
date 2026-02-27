@@ -1,5 +1,3 @@
-/// <reference types='cypress' />
-
 describe('AcceptInvite', () => {
   it('should let users accept an invite', () => {
     cy.intercept('GET', /http:\/\/talo\.api\/public\/invites\/(.*)/, {
