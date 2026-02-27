@@ -5,13 +5,11 @@ import { useRecoilValue } from 'recoil'
 import useFeedbackCategories from '../api/useFeedbackCategories'
 import Button from '../components/Button'
 import ErrorMessage from '../components/ErrorMessage'
-import Link from '../components/Link'
 import Page from '../components/Page'
 import DateCell from '../components/tables/cells/DateCell'
 import Table from '../components/tables/Table'
 import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
-import routes from '../constants/routes'
 import { GameFeedbackCategory } from '../entities/gameFeedbackCategory'
 import FeedbackCategoryDetails from '../modals/FeedbackCategoryDetails'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
@@ -37,6 +35,7 @@ export default function FeedbackCategories() {
 
   return (
     <Page
+      showBackButton
       title='Feedback categories'
       extraTitleComponent={
         <div className='mt-1 ml-4 rounded-full bg-indigo-600 p-1'>
@@ -50,10 +49,6 @@ export default function FeedbackCategories() {
       }
       isLoading={loading}
     >
-      <div className='!mt-2'>
-        <Link to={routes.feedback}>Back to feedback</Link>
-      </div>
-
       {!error && !loading && feedbackCategories.length === 0 && (
         <p>{activeGame.name} doesn&apos;t have any feedback categories yet</p>
       )}
