@@ -18,7 +18,7 @@ import Scopes from '../modals/Scopes'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import userState, { AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
-import { formatAPIKeyScopeGroup } from '../utils/formatAPIKeyScopeGroup'
+import { formatPascalCaseName } from '../utils/formatPascalCaseName'
 
 export default function APIKeys() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
@@ -177,7 +177,7 @@ export default function APIKeys() {
                 {availableScopes &&
                   Object.keys(availableScopes).map((group) => (
                     <div key={group}>
-                      <h4 className='font-semibold'>{formatAPIKeyScopeGroup(group)}</h4>
+                      <h4 className='font-semibold'>{formatPascalCaseName(group)}</h4>
                       {availableScopes[group].map((scope: string) => (
                         <div key={scope}>
                           <input

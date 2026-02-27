@@ -20,6 +20,7 @@ import { DataExportAvailableEntities } from '../entities/dataExport'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import userState, { AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
+import { formatPascalCaseName } from '../utils/formatPascalCaseName'
 import useSortedItems from '../utils/useSortedItems'
 
 const dataExportStatuses = ['Requested', 'Processing', 'Processing', 'Delivered']
@@ -93,14 +94,16 @@ export default function DataExports() {
                 <TableCell>
                   <span
                     className={clsx('rounded bg-gray-900 p-1', {
-                      '!text-red-400': Boolean(dataExport.failedAt),
+                      'text-red-400!': Boolean(dataExport.failedAt),
                       'text-green-400': dataExport.id === createdExportId,
                     })}
                   >
                     {dataExport.failedAt ? 'Failed' : dataExportStatuses[dataExport.status]}
                   </span>
                 </TableCell>
-                <TableCell className='capitalize'>{dataExport.entities.join(', ')}</TableCell>
+                <TableCell className='capitalize'>
+                  {dataExport.entities.map((e) => formatPascalCaseName(e)).join(', ')}
+                </TableCell>
                 <DateCell>{format(new Date(dataExport.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
                 <TableCell>
                   {dataExport.createdBy === user.email ? 'You' : dataExport.createdBy}
@@ -136,7 +139,7 @@ export default function DataExports() {
                       value={service}
                     />
                     <label htmlFor={service} className='ml-2 capitalize'>
-                      {service}
+                      {formatPascalCaseName(service)}
                     </label>
                   </div>
                 ))}
