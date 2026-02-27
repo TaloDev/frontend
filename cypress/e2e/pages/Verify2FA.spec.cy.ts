@@ -1,5 +1,3 @@
-/// <reference types='cypress' />
-
 describe('Verify2FA', () => {
   it('should let 2fa users log in', () => {
     cy.intercept('POST', 'http://talo.api/public/users/login', {

@@ -1,5 +1,3 @@
-/// <reference types='cypress' />
-
 describe('Demo', () => {
   it('should let users enter the demo dashboard', () => {
     cy.intercept('POST', 'http://talo.api/public/demo', {

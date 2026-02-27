@@ -1,5 +1,3 @@
-/// <reference types='cypress' />
-
 describe('Login', () => {
   it('should let users login with valid credentials', () => {
     cy.intercept('POST', 'http://talo.api/public/users/login', {

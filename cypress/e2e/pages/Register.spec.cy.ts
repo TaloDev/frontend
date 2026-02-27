@@ -1,5 +1,3 @@
-/// <reference types='cypress' />
-
 describe('Register', () => {
   it('should let users register and create a new game', () => {
     cy.intercept('POST', 'http://talo.api/public/users/register', {
