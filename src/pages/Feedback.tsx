@@ -7,6 +7,7 @@ import { useRecoilValue } from 'recoil'
 import useFeedback from '../api/useFeedback'
 import useFeedbackCategories from '../api/useFeedbackCategories'
 import Button from '../components/Button'
+import { NoFeedback } from '../components/empty-states/NoFeedback'
 import ErrorMessage from '../components/ErrorMessage'
 import Page from '../components/Page'
 import Pagination from '../components/Pagination'
@@ -117,9 +118,7 @@ export default function Feedback() {
 
       {!feedbackError && !feedbackLoading && sortedFeedback.length === 0 && (
         <>
-          {!categoryInternalNameFilter && debouncedSearch.length === 0 && (
-            <p>{activeGame.name} doesn&apos;t have any feedback yet</p>
-          )}
+          {!categoryInternalNameFilter && debouncedSearch.length === 0 && <NoFeedback />}
           {(categoryInternalNameFilter || debouncedSearch.length > 0) && (
             <p>No feedback matches your query</p>
           )}

@@ -17,6 +17,7 @@ import routes from '../../constants/routes'
 import { getPersistentColor } from '../../utils/getPersistentColour'
 import { EventChartTooltip } from '../charts/EventChartTooltip'
 import { useYAxis } from '../charts/useYAxis'
+import { NoEvents } from '../empty-states/NoEvents'
 import Link from '../Link'
 import { useEventsContext } from './EventsContext'
 
@@ -68,9 +69,7 @@ export default function EventsDisplay({
 
   return (
     <>
-      {!loading && Object.keys(events ?? {}).length === 0 && (
-        <p>There are no events for this date range</p>
-      )}
+      {!loading && Object.keys(events ?? {}).length === 0 && <NoEvents />}
 
       {error?.hasKeys === false && <ErrorMessage error={error} />}
 

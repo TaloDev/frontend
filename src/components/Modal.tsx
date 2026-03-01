@@ -49,7 +49,7 @@ export default function Modal({
         <div className='fixed inset-0 z-50 flex w-screen items-start bg-gray-900/60 text-black transition-colors md:items-center md:p-4'>
           <dialog
             className={clsx(
-              'block h-full w-full bg-white p-0 md:mx-auto md:h-auto md:w-[640px] md:rounded',
+              'block h-full w-full bg-white p-0 md:mx-auto md:h-auto md:w-160 md:rounded',
               className,
               {
                 'overflow-y-scroll': scroll,

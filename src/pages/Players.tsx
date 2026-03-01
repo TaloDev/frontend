@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil'
 import usePlayers from '../api/usePlayers'
 import Button from '../components/Button'
 import { NewPlayersChart } from '../components/charts/NewPlayersChart'
+import { NoPlayers } from '../components/empty-states/NoPlayers'
 import ErrorMessage from '../components/ErrorMessage'
 import Page from '../components/Page'
 import Pagination from '../components/Pagination'
@@ -59,13 +60,7 @@ export default function Players() {
       )}
 
       {players.length === 0 && !loading && (
-        <>
-          {debouncedSearch.length > 0 ? (
-            <p>No players match your query</p>
-          ) : (
-            <p>{activeGame.name} doesn&apos;t have any players yet</p>
-          )}
-        </>
+        <>{debouncedSearch.length > 0 ? <p>No players match your query</p> : <NoPlayers />}</>
       )}
 
       {error && <ErrorMessage error={error} />}

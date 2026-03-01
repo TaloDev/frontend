@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { useRecoilState } from 'recoil'
 import updateGame from '../api/updateGame'
+import { NoLiveConfig } from '../components/empty-states/NoLiveConfig'
 import Page from '../components/Page'
 import PropsEditor from '../components/PropsEditor'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
@@ -26,7 +27,7 @@ export default function GameProps() {
       <PropsEditor
         startingProps={activeGame.props}
         onSave={onSave}
-        noPropsMessage={`${activeGame.name} has no custom properties`}
+        noPropsMessage={<NoLiveConfig />}
       />
     </Page>
   )
