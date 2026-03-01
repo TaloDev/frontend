@@ -12,6 +12,7 @@ export const gameFeedbackSchema = z.object({
   devBuild: z.boolean(),
   props: z.array(propSchema),
   createdAt: z.string().datetime(),
+  deletedAt: z.string().datetime().nullable(),
 })
 
 export type GameFeedback = z.infer<typeof gameFeedbackSchema>
