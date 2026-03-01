@@ -1,3 +1,4 @@
+import { IconRefresh, IconTrash } from '@tabler/icons-react'
 import { MouseEvent, useContext, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { KeyedMutator } from 'swr'
@@ -20,12 +21,14 @@ type FeedbackCategoryDetailsProps = {
   modalState: [boolean, (open: boolean) => void]
   mutate: KeyedMutator<{ feedbackCategories: GameFeedbackCategory[] }>
   editingCategory: GameFeedbackCategory | null
+  onResetClick?: () => void
 }
 
 export default function FeedbackCategoryDetails({
   modalState,
   mutate,
   editingCategory,
+  onResetClick,
 }: FeedbackCategoryDetailsProps) {
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)
@@ -183,6 +186,41 @@ export default function FeedbackCategoryDetails({
             value={anonymised}
           />
 
+          {editingCategory &&
+            canPerformAction(user, PermissionBasedAction.DELETE_FEEDBACK_CATEGORY) && (
+              <div className='space-y-2 rounded border border-red-400 bg-red-100 p-4'>
+                <p className='font-semibold'>Danger zone</p>
+
+                <div className='space-y-2'>
+                  <p>Once taken, these actions are irreversible.</p>
+                  <div className='flex space-x-2'>
+                    {onResetClick && (
+                      <Button
+                        type='button'
+                        onClick={onResetClick}
+                        variant='red'
+                        className='w-auto!'
+                        icon={<IconRefresh />}
+                      >
+                        <span>Reset</span>
+                      </Button>
+                    )}
+
+                    <Button
+                      type='button'
+                      isLoading={isDeleting}
+                      onClick={onDeleteClick}
+                      variant='red'
+                      className='w-auto!'
+                      icon={<IconTrash />}
+                    >
+                      <span>Delete</span>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
           {error && <ErrorMessage error={error} />}
         </div>
 
@@ -199,29 +237,14 @@ export default function FeedbackCategoryDetails({
             </div>
           )}
           {editingCategory && (
-            <div className='flex space-x-2'>
-              {canPerformAction(user, PermissionBasedAction.DELETE_FEEDBACK_CATEGORY) && (
-                <div className='w-full md:w-32'>
-                  <Button
-                    type='button'
-                    isLoading={isDeleting}
-                    onClick={onDeleteClick}
-                    variant='red'
-                  >
-                    Delete
-                  </Button>
-                </div>
-              )}
-
-              <div className='w-full md:w-32'>
-                <Button
-                  disabled={!internalName || !displayName || !description || isDeleting}
-                  isLoading={isLoading}
-                  onClick={onUpdateClick}
-                >
-                  Update
-                </Button>
-              </div>
+            <div className='w-full md:w-32'>
+              <Button
+                disabled={!internalName || !displayName || !description || isDeleting}
+                isLoading={isLoading}
+                onClick={onUpdateClick}
+              >
+                Update
+              </Button>
             </div>
           )}
           <div className='w-full md:w-32'>
