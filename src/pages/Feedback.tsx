@@ -49,7 +49,6 @@ function CommentCell({ feedback }: { feedback: GameFeedback }) {
           variant='icon'
           className={clsx('flex-none rounded-full bg-indigo-900 p-1', {
             'bg-orange-900': feedback.playerAlias?.player.devBuild,
-            'bg-gray-800!': feedback.deletedAt !== null && !feedback.devBuild,
           })}
           onClick={() => setExpanded((e) => !e)}
           icon={<IconChevronUp size={16} className={clsx({ 'rotate-180': !expanded })} />}
@@ -211,8 +210,6 @@ export default function Feedback() {
               configureClassnames={(feedback, idx) => ({
                 'bg-orange-600': feedback.devBuild && idx % 2 !== 0,
                 'bg-orange-500': feedback.devBuild && idx % 2 === 0,
-                'bg-gray-600!': feedback.deletedAt !== null && !feedback.devBuild && idx % 2 !== 0,
-                'bg-gray-500!': feedback.deletedAt !== null && !feedback.devBuild && idx % 2 === 0,
               })}
             >
               {(feedback) => (
@@ -240,7 +237,6 @@ export default function Feedback() {
                           variant='icon'
                           className={clsx('ml-2 rounded-full bg-indigo-900 p-1', {
                             'bg-orange-900': feedback.playerAlias.player.devBuild,
-                            'bg-gray-800!': feedback.deletedAt !== null && !feedback.devBuild,
                           })}
                           onClick={() => goToPlayer(feedback.playerAlias!.identifier)}
                           icon={<IconArrowRight size={16} />}
