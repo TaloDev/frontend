@@ -50,7 +50,7 @@ export default function FeedbackCategories() {
       }
       isLoading={loading}
     >
-      <div className='!mt-2'>
+      <div className='-mt-4'>
         <Link to={routes.feedback}>Back to feedback</Link>
       </div>
 

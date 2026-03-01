@@ -8,6 +8,7 @@ import togglePinnedGroup from '../api/toggledPinnedGroup'
 import useGroups from '../api/useGroups'
 import usePinnedGroups from '../api/usePinnedGroups'
 import Button from '../components/Button'
+import { NoGroups } from '../components/empty-states/NoGroups'
 import ErrorMessage from '../components/ErrorMessage'
 import Identifier from '../components/Identifier'
 import Page from '../components/Page'
@@ -55,7 +56,9 @@ export default function Groups() {
   const toast = useContext(ToastContext)
 
   useEffect(() => {
-    if (!showModal) setEditingGroup(null)
+    if (!showModal) {
+      setEditingGroup(null)
+    }
   }, [showModal, editingGroup])
 
   const onEditGroupClick = (group: PlayerGroup) => {
@@ -130,13 +133,7 @@ export default function Groups() {
       )}
 
       {sortedGroups.length === 0 && !loading && (
-        <>
-          {search.length > 0 ? (
-            <p>No groups match your query</p>
-          ) : (
-            <p>{activeGame.name} doesn&apos;t have any groups yet</p>
-          )}
-        </>
+        <>{search.length > 0 ? <p>No groups match your query</p> : <NoGroups />}</>
       )}
 
       {error && <ErrorMessage error={error} />}

@@ -1,6 +1,6 @@
 import { IconPlus, IconTrash } from '@tabler/icons-react'
 import clsx from 'clsx'
-import { useMemo, useState } from 'react'
+import { ReactNode, useMemo, useState } from 'react'
 import type { Prop } from '../entities/prop'
 import { isMetaProp, metaPropKeyMap } from '../constants/metaProps'
 import buildError from '../utils/buildError'
@@ -15,7 +15,7 @@ import TextInput from './TextInput'
 type PropsEditorProps = {
   startingProps: Prop[]
   onSave: (props: Prop[]) => Promise<Prop[]>
-  noPropsMessage: string
+  noPropsMessage: ReactNode
 }
 
 type MetaProp = {
@@ -152,9 +152,7 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
           </>
         )}
 
-        {existingProps.length + newProps.length === 0 && (
-          <p>{noPropsMessage}. Click the button below to add one.</p>
-        )}
+        {existingProps.length + newProps.length === 0 && noPropsMessage}
 
         {existingProps.length + newProps.length > 0 && (
           <>
@@ -164,7 +162,7 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
                 {(prop) => (
                   <>
                     <TableCell
-                      className={clsx('min-w-80', { '!rounded-bl-none': newProps.length > 0 })}
+                      className={clsx('min-w-80', { 'rounded-bl-none!': newProps.length > 0 })}
                     >
                       {prop.key}
                     </TableCell>
@@ -177,7 +175,7 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
                         value={prop.value ?? ''}
                       />
                     </TableCell>
-                    <TableCell className={clsx({ '!rounded-br-none': newProps.length > 0 })}>
+                    <TableCell className={clsx({ 'rounded-br-none!': newProps.length > 0 })}>
                       <Button
                         variant='icon'
                         className='ml-auto rounded-full bg-indigo-900 p-1'

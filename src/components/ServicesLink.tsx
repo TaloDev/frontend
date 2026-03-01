@@ -103,7 +103,7 @@ function ServicesLink() {
     },
     {
       name: 'Channels',
-      desc: 'Manage player communication channels',
+      desc: 'Manage channels and their storage pools',
       icon: IconMessages,
       route: routes.channels,
     },
@@ -121,7 +121,7 @@ function ServicesLink() {
         theme='services'
         maxWidth=''
         content={
-          <ul className='mb-4 grid gap-2 rounded border border-gray-700 bg-gray-800 p-2 text-white transition-all sm:min-w-[480px] sm:grid-cols-2'>
+          <ul className='mb-4 grid gap-2 rounded border border-gray-700 bg-gray-800 p-2 text-white transition-all sm:min-w-120 sm:grid-cols-2'>
             {services
               .filter(({ route }) => canViewPage(user, route))
               .map(({ name, desc, icon: Icon, route }) => (
