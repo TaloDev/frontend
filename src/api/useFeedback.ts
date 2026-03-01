@@ -10,11 +10,15 @@ export default function useFeedback(
   feedbackCategoryInternalName: string | null,
   search: string,
   page: number,
+  withDeleted: boolean,
 ) {
   const fetcher = async ([url]: [string]) => {
     const params = new URLSearchParams({ page: String(page), search })
     if (feedbackCategoryInternalName) {
       params.append('feedbackCategoryInternalName', feedbackCategoryInternalName)
+    }
+    if (withDeleted) {
+      params.append('withDeleted', '1')
     }
 
     const res = await makeValidatedGetRequest(
@@ -29,8 +33,14 @@ export default function useFeedback(
     return res
   }
 
-  const { data, error } = useSWR(
-    [`/games/${activeGame.id}/game-feedback`, feedbackCategoryInternalName, search, page],
+  const { data, error, mutate } = useSWR(
+    [
+      `/games/${activeGame.id}/game-feedback`,
+      feedbackCategoryInternalName,
+      search,
+      page,
+      withDeleted,
+    ],
     fetcher,
   )
 
@@ -40,5 +50,6 @@ export default function useFeedback(
     itemsPerPage: data?.itemsPerPage,
     loading: !data && !error,
     error: error && buildError(error),
+    mutate,
   }
 }
