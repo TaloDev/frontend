@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconCheck } from '@tabler/icons-react'
-import clsx from 'clsx'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -11,6 +10,8 @@ import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Link from '../components/Link'
 import TextInput from '../components/TextInput'
 import Title from '../components/Title'
+import { UnauthedContainer } from '../components/UnauthedContainer'
+import { UnauthedContainerInner } from '../components/UnauthedContainerInner'
 import routes from '../constants/routes'
 import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
@@ -51,11 +52,8 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className='flex h-full flex-col p-8 md:items-center md:justify-center'>
-      <form
-        className={clsx('space-y-8 text-white', unauthedContainerStyle)}
-        onSubmit={handleSubmit(onConfirmClick)}
-      >
+    <UnauthedContainer>
+      <UnauthedContainerInner as='form' onSubmit={handleSubmit(onConfirmClick)}>
         <Title>Forgot password</Title>
 
         <TextInput
@@ -83,13 +81,13 @@ export default function ForgotPassword() {
             }
           />
         )}
-      </form>
+      </UnauthedContainerInner>
 
       <div className={unauthedContainerStyle}>
         <p className='mt-4 text-white'>
           <Link to={routes.login}>Back to Login</Link>
         </p>
       </div>
-    </div>
+    </UnauthedContainer>
   )
 }

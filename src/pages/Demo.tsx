@@ -1,11 +1,12 @@
 import type { MouseEvent } from 'react'
-import clsx from 'clsx'
 import { useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 import createDemo from '../api/createDemo'
 import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Link from '../components/Link'
+import { UnauthedContainer } from '../components/UnauthedContainer'
+import { UnauthedContainerInner } from '../components/UnauthedContainerInner'
 import AuthService from '../services/AuthService'
 import userState from '../state/userState'
 import { unauthedContainerStyle } from '../styles/theme'
@@ -32,8 +33,8 @@ export default function Demo() {
   }
 
   return (
-    <div className='flex h-full flex-col p-8 md:items-center md:justify-center'>
-      <form className={clsx('space-y-8 text-white', unauthedContainerStyle)}>
+    <UnauthedContainer>
+      <UnauthedContainerInner as='form'>
         <h1 className='text-4xl font-bold'>Browse the demo</h1>
         <p>
           You&apos;ll get to the read-only demo organisation for 1 hour. Some features are
@@ -45,13 +46,13 @@ export default function Demo() {
         <Button onClick={onLaunchClick} isLoading={isLoading}>
           Launch demo
         </Button>
-      </form>
+      </UnauthedContainerInner>
 
       <div className={unauthedContainerStyle}>
         <p className='mt-4 text-white'>
           Want to make an account? <Link to='/register'>Register here</Link>
         </p>
       </div>
-    </div>
+    </UnauthedContainer>
   )
 }

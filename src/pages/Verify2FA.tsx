@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import { MouseEvent, useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
@@ -8,6 +7,8 @@ import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Link from '../components/Link'
 import TextInput from '../components/TextInput'
 import Title from '../components/Title'
+import { UnauthedContainer } from '../components/UnauthedContainer'
+import { UnauthedContainerInner } from '../components/UnauthedContainerInner'
 import routes from '../constants/routes'
 import AuthService from '../services/AuthService'
 import userState from '../state/userState'
@@ -55,8 +56,8 @@ export default function Verify2FA() {
   }
 
   return (
-    <div className='flex h-full flex-col p-8 md:items-center md:justify-center'>
-      <form className={clsx('space-y-8 text-white', unauthedContainerStyle)}>
+    <UnauthedContainer>
+      <UnauthedContainerInner as='form'>
         <Title>Two factor authentication</Title>
 
         <TextInput
@@ -79,7 +80,7 @@ export default function Verify2FA() {
         <Button disabled={code.length < 6} onClick={onConfirmClick} isLoading={isLoading}>
           Confirm
         </Button>
-      </form>
+      </UnauthedContainerInner>
 
       <div className={unauthedContainerStyle}>
         <p className='mt-4 text-white'>
@@ -89,6 +90,6 @@ export default function Verify2FA() {
           </Link>
         </p>
       </div>
-    </div>
+    </UnauthedContainer>
   )
 }
