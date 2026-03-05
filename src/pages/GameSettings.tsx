@@ -93,7 +93,10 @@ export default function GameSettings() {
     }
 
     const url = new URL(window.location.href)
-    url.pathname = `manage/${fetchedSettings.gameToken}/delete`
+    url.pathname = `/manage/${fetchedSettings.gameToken}/delete`
+    url.search = ''
+    url.hash = ''
+
     return url.toString()
   }, [fetchedSettings?.gameToken])
 
@@ -217,11 +220,11 @@ export default function GameSettings() {
           <hr className='border-gray-700' />
 
           <div className='space-y-1'>
-            <p className='font-medium'>Delete link</p>
+            <p className='font-medium'>Delete Link</p>
             <p className='text-sm'>
               Players can use this link to delete their Talo Player Auth accounts
             </p>
-            <div className='mt-4 inline-flex items-center gap-4 rounded bg-gray-900 p-4'>
+            <div className='mt-4 flex items-center justify-between gap-4 rounded bg-gray-900 p-4 md:inline-flex md:justify-start'>
               <Link to={deleteLink}>{deleteLink}</Link>
               <Button
                 variant='icon'

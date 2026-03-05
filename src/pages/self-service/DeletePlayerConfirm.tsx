@@ -1,6 +1,5 @@
 import type { MouseEvent } from 'react'
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { deleteAuthAccount } from '../../api/self-service/deleteAuthAccount'
 import Button from '../../components/Button'
 import ErrorMessage, { TaloError } from '../../components/ErrorMessage'
@@ -11,12 +10,12 @@ import { UnauthedTitle } from '../../components/UnauthedTitle'
 import buildError from '../../utils/buildError'
 
 type Props = {
+  gameToken: string
   identifier: string
   sessionToken: string
 }
 
-export function DeletePlayerConfirm({ sessionToken, identifier }: Props) {
-  const { token = '' } = useParams<{ token: string }>()
+export function DeletePlayerConfirm({ gameToken, sessionToken, identifier }: Props) {
   const [confirmation, setConfirmation] = useState('')
   const [error, setError] = useState<TaloError | null>(null)
   const [isLoading, setLoading] = useState(false)
@@ -28,7 +27,7 @@ export function DeletePlayerConfirm({ sessionToken, identifier }: Props) {
     setLoading(true)
 
     try {
-      await deleteAuthAccount(token, sessionToken)
+      await deleteAuthAccount(gameToken, sessionToken)
       setDeleted(true)
     } catch (err) {
       setError(buildError(err))

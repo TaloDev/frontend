@@ -3,8 +3,8 @@ import api from '../api'
 import makeValidatedRequest from '../makeValidatedRequest'
 
 export const deleteAuthAccount = makeValidatedRequest(
-  (token: string, sessionToken: string) =>
-    api.delete(`/public/players/${token}`, {
+  (gameToken: string, sessionToken: string) =>
+    api.delete(`/public/players/${gameToken}`, {
       data: { sessionToken },
     }),
   z.literal(''),

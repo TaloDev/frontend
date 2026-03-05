@@ -41,5 +41,5 @@ export default {
 }
 
 export const selfServiceRoutes = {
-  delete: '/manage/:token/delete',
+  delete: '/manage/:gameToken/delete',
 }

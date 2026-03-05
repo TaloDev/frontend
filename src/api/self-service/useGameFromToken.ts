@@ -3,7 +3,7 @@ import { z } from 'zod'
 import buildError from '../../utils/buildError'
 import makeValidatedGetRequest from '../makeValidatedGetRequest'
 
-export function useGameFromToken(token: string) {
+export function useGameFromToken(gameToken: string) {
   const fetcher = async ([url]: [string]) => {
     return makeValidatedGetRequest(
       url,
@@ -13,7 +13,7 @@ export function useGameFromToken(token: string) {
     )
   }
 
-  const { data, error } = useSWR([`/public/players/${token}/game`], fetcher)
+  const { data, error } = useSWR([`/public/players/${gameToken}/game`], fetcher)
 
   return {
     game: data?.game,

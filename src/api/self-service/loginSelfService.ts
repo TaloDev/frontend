@@ -19,7 +19,7 @@ const sessionSchema = z.object({
 })
 
 export const loginSelfService = makeValidatedRequest(
-  (token: string, identifier: string, password: string) =>
-    api.post(`/public/players/${token}/login`, { identifier, password }),
+  (gameToken: string, identifier: string, password: string) =>
+    api.post(`/public/players/${gameToken}/login`, { identifier, password }),
   z.union([verificationRequiredSchema, sessionSchema]),
 )

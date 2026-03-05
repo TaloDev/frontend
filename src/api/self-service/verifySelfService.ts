@@ -3,8 +3,8 @@ import api from '../api'
 import makeValidatedRequest from '../makeValidatedRequest'
 
 export const verifySelfService = makeValidatedRequest(
-  (token: string, aliasId: number, code: string) =>
-    api.post(`/public/players/${token}/verify`, { aliasId, code }),
+  (gameToken: string, aliasId: number, code: string) =>
+    api.post(`/public/players/${gameToken}/verify`, { aliasId, code }),
   z.object({
     alias: z.object({
       id: z.number(),

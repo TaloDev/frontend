@@ -1,6 +1,5 @@
 import type { MouseEvent } from 'react'
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { verifySelfService } from '../../api/self-service/verifySelfService'
 import Button from '../../components/Button'
 import ErrorMessage, { TaloError } from '../../components/ErrorMessage'
@@ -11,12 +10,12 @@ import { UnauthedTitle } from '../../components/UnauthedTitle'
 import buildError from '../../utils/buildError'
 
 type Props = {
+  gameToken: string
   aliasId: number
   onSuccess: ({ identifier, sessionToken }: { identifier: string; sessionToken: string }) => void
 }
 
-export function DeletePlayerVerify({ aliasId, onSuccess }: Props) {
-  const { token = '' } = useParams<{ token: string }>()
+export function DeletePlayerVerify({ gameToken, aliasId, onSuccess }: Props) {
   const [code, setCode] = useState('')
   const [error, setError] = useState<TaloError | null>(null)
   const [isLoading, setLoading] = useState(false)
@@ -27,7 +26,7 @@ export function DeletePlayerVerify({ aliasId, onSuccess }: Props) {
     setLoading(true)
 
     try {
-      const res = await verifySelfService(token, aliasId, code)
+      const res = await verifySelfService(gameToken, aliasId, code)
       onSuccess({
         identifier: res.alias.identifier,
         sessionToken: res.sessionToken,

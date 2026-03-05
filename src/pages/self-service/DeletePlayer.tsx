@@ -4,6 +4,7 @@ import { useGameFromToken } from '../../api/self-service/useGameFromToken'
 import ErrorMessage from '../../components/ErrorMessage'
 import Loading from '../../components/Loading'
 import { UnauthedContainer } from '../../components/UnauthedContainer'
+import { UnauthedContainerInner } from '../../components/UnauthedContainerInner'
 import { DeletePlayerConfirm } from './DeletePlayerConfirm'
 import { DeletePlayerLogin } from './DeletePlayerLogin'
 import { DeletePlayerVerify } from './DeletePlayerVerify'
@@ -11,8 +12,8 @@ import { DeletePlayerVerify } from './DeletePlayerVerify'
 type Step = 'login' | 'verify' | 'confirm'
 
 export default function DeletePlayer() {
-  const { token = '' } = useParams<{ token: string }>()
-  const { game, loading, error } = useGameFromToken(token)
+  const { gameToken = '' } = useParams<{ gameToken: string }>()
+  const { game, loading, error } = useGameFromToken(gameToken)
 
   const [step, setStep] = useState<Step>('login')
   const [aliasId, setAliasId] = useState(0)
@@ -36,7 +37,9 @@ export default function DeletePlayer() {
   if (loading) {
     return (
       <UnauthedContainer>
-        <Loading />
+        <UnauthedContainerInner>
+          <Loading />
+        </UnauthedContainerInner>
       </UnauthedContainer>
     )
   }
@@ -44,7 +47,9 @@ export default function DeletePlayer() {
   if (error) {
     return (
       <UnauthedContainer>
-        <ErrorMessage error={error} />
+        <UnauthedContainerInner>
+          <ErrorMessage error={error} />
+        </UnauthedContainerInner>
       </UnauthedContainer>
     )
   }
@@ -53,6 +58,7 @@ export default function DeletePlayer() {
     return (
       <DeletePlayerLogin
         gameName={game!.name}
+        gameToken={gameToken}
         onVerificationRequired={handleVerificationRequired}
         onSuccess={handleIdentified}
       />
@@ -60,8 +66,16 @@ export default function DeletePlayer() {
   }
 
   if (step === 'verify') {
-    return <DeletePlayerVerify aliasId={aliasId} onSuccess={handleIdentified} />
+    return (
+      <DeletePlayerVerify gameToken={gameToken} aliasId={aliasId} onSuccess={handleIdentified} />
+    )
   }
 
-  return <DeletePlayerConfirm identifier={identifier} sessionToken={sessionToken} />
+  return (
+    <DeletePlayerConfirm
+      gameToken={gameToken}
+      identifier={identifier}
+      sessionToken={sessionToken}
+    />
+  )
 }
