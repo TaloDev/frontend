@@ -171,25 +171,29 @@ export default function PlayerProfile() {
 
       <SecondaryTitle>Aliases</SecondaryTitle>
 
-      <Table columns={['Alias', 'Created at', 'Last seen']}>
-        <TableBody
-          iterator={sortedAliases}
-          configureClassnames={(_, idx) => ({
-            'bg-orange-600': player.devBuild && idx % 2 !== 0,
-            'bg-orange-500': player.devBuild && idx % 2 === 0,
-          })}
-        >
-          {(alias) => (
-            <>
-              <TableCell className='min-w-60'>
-                <PlayerAliases aliases={[alias]} />
-              </TableCell>
-              <DateCell>{format(new Date(alias.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
-              <DateCell>{format(new Date(alias.lastSeenAt), 'dd MMM yyyy, HH:mm')}</DateCell>
-            </>
-          )}
-        </TableBody>
-      </Table>
+      {player.aliases.length === 0 && <p>This player has no aliases</p>}
+
+      {player.aliases.length > 0 && (
+        <Table columns={['Alias', 'Created at', 'Last seen']}>
+          <TableBody
+            iterator={sortedAliases}
+            configureClassnames={(_, idx) => ({
+              'bg-orange-600': player.devBuild && idx % 2 !== 0,
+              'bg-orange-500': player.devBuild && idx % 2 === 0,
+            })}
+          >
+            {(alias) => (
+              <>
+                <TableCell className='min-w-60'>
+                  <PlayerAliases aliases={[alias]} />
+                </TableCell>
+                <DateCell>{format(new Date(alias.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(alias.lastSeenAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+              </>
+            )}
+          </TableBody>
+        </Table>
+      )}
 
       {player.groups.length > 0 && (
         <>
