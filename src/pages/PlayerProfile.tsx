@@ -145,7 +145,7 @@ export default function PlayerProfile() {
     <Page showBackButton title='Player profile' isLoading={!player}>
       <div>
         <PlayerIdentifier player={player} />
-        <div className='mt-4 flex space-x-2'>
+        <div className='mt-4 space-y-4 space-x-2 sm:flex sm:space-y-0'>
           <Identifier id={`Registered ${format(new Date(player.createdAt), 'dd MMM yyyy')}`} />
           <Identifier id={`Last seen ${format(new Date(player.lastSeenAt), 'dd MMM yyyy')}`} />
           <span className={clsx(player.presence?.online && 'text-green-400')}>
@@ -156,7 +156,7 @@ export default function PlayerProfile() {
         </div>
       </div>
 
-      <div className='inline-grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-6'>
+      <div className='inline-grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-6'>
         {filteredLinks.map((link) => (
           <Button
             key={link.name}
