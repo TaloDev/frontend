@@ -91,7 +91,7 @@ export default function TextInput({
             }}
           />
           {showErrorHighlight && (
-            <div className='absolute right-0 bottom-0 left-0 h-1 rounded-br rounded-bl bg-red-500' />
+            <div className='absolute right-0 bottom-0 left-0 h-1 rounded-br-sm rounded-bl-sm bg-red-500' />
           )}
         </div>
       </div>
