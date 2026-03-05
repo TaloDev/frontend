@@ -182,7 +182,14 @@ export default function Feedback() {
           </div>
           <div className='flex items-center space-x-4'>
             <div>
-              <Toggle id='include-archived' enabled={withDeleted} onToggle={setWithDeleted} />
+              <Toggle
+                id='include-archived'
+                enabled={withDeleted}
+                onToggle={(val) => {
+                  setWithDeleted(val)
+                  setPage(0)
+                }}
+              />
             </div>
             <div>
               <p className='font-medium'>Show archived</p>
