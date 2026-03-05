@@ -1,5 +1,3 @@
-/// <reference types='cypress' />
-
 describe('ForgotPassword', () => {
   it('should let users request a reset link', () => {
     cy.intercept('POST', 'http://talo.api/public/users/forgot_password', {

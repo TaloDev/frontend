@@ -6,6 +6,7 @@ import { useRecoilValue } from 'recoil'
 import useLeaderboards from '../api/useLeaderboards'
 import Button from '../components/Button'
 import { NewLeaderboardEntriesChart } from '../components/charts/NewLeaderboardEntriesChart'
+import { NoLeaderboards } from '../components/empty-states/NoLeaderboards'
 import ErrorMessage from '../components/ErrorMessage'
 import Page from '../components/Page'
 import DateCell from '../components/tables/cells/DateCell'
@@ -78,9 +79,7 @@ export default function Leaderboards() {
     >
       {leaderboards.length > 0 && <NewLeaderboardEntriesChart />}
 
-      {!error && !loading && leaderboards.length === 0 && (
-        <p>{activeGame.name} doesn&apos;t have any leaderboards yet</p>
-      )}
+      {!error && !loading && leaderboards.length === 0 && <NoLeaderboards />}
 
       {!error && leaderboards.length > 0 && (
         <Table

@@ -1,5 +1,3 @@
-/// <reference types='cypress' />
-
 describe('RecoverAccount', () => {
   it('should let users log in with a recovery code', () => {
     cy.intercept('POST', 'http://talo.api/public/users/login', {

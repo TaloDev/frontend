@@ -43,3 +43,14 @@ Cypress.Commands.add('login', (userType = 'dev', url = '/') => {
 
   cy.visit(url)
 })
+
+declare global {
+  namespace Cypress {
+    // oxlint-disable-next-line typescript/consistent-type-definitions
+    interface Chainable {
+      stubDashboardCalls(): Chainable<void>
+      visitAsGuest(url?: string): Chainable<void>
+      login(userType?: string, url?: string): Chainable<void>
+    }
+  }
+}

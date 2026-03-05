@@ -44,7 +44,9 @@ export default function PlayerProps() {
       <PropsEditor
         startingProps={player.props}
         onSave={onSave}
-        noPropsMessage='This player has no custom properties'
+        noPropsMessage={
+          <p>This player has no custom properties. Click the button below to add one.</p>
+        }
       />
     </Page>
   )

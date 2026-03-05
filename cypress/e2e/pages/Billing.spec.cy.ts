@@ -1,5 +1,3 @@
-/// <reference types='cypress' />
-
 describe('Billing', () => {
   function stubBillingCalls() {
     cy.intercept('GET', 'http://talo.api/billing/organisation-plan', {

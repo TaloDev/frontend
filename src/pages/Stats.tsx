@@ -6,6 +6,7 @@ import { useRecoilValue } from 'recoil'
 import useStats from '../api/useStats'
 import Button from '../components/Button'
 import { StatsActivityChart } from '../components/charts/StatsActivityChart'
+import { NoStats } from '../components/empty-states/NoStats'
 import ErrorMessage from '../components/ErrorMessage'
 import Page from '../components/Page'
 import DateCell from '../components/tables/cells/DateCell'
@@ -76,9 +77,7 @@ export default function Stats() {
     >
       {sortedStats.length > 0 && <StatsActivityChart />}
 
-      {!error && !loading && sortedStats.length === 0 && (
-        <p>{activeGame.name} doesn&apos;t have any stats yet</p>
-      )}
+      {!error && !loading && sortedStats.length === 0 && <NoStats />}
 
       {!error && sortedStats.length > 0 && (
         <Table

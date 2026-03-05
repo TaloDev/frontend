@@ -10,7 +10,7 @@ import { APIKey } from '../entities/apiKey'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import userState, { AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
-import { formatAPIKeyScopeGroup } from '../utils/formatAPIKeyScopeGroup'
+import { formatPascalCaseName } from '../utils/formatPascalCaseName'
 
 type ScopesProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -87,7 +87,7 @@ export default function Scopes({ modalState, selectedKey, availableScopes, mutat
             {availableScopes &&
               Object.keys(availableScopes).map((group) => (
                 <div key={group} className='rounded bg-gray-100 p-4'>
-                  <h4 className='font-semibold'>{formatAPIKeyScopeGroup(group)}</h4>
+                  <h4 className='font-semibold'>{formatPascalCaseName(group)}</h4>
                   {availableScopes[group].map((scope: string) => (
                     <div key={scope}>
                       <input

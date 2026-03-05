@@ -1,7 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react-swc'
-/// <reference types="vitest" />
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
@@ -11,9 +10,6 @@ export default defineConfig({
   },
   test: {
     watch: false,
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './setup-tests.js',
     css: false,
     coverage: {
       reporter: 'lcov',
@@ -31,7 +27,7 @@ export default defineConfig({
           name: 'unit',
           globals: true,
           environment: 'jsdom',
-          setupFiles: './setup-tests.js',
+          setupFiles: './setup-tests.ts',
           include: ['src/**/__tests__/**/*.test.{ts,tsx}'],
           exclude: ['src/utils/__tests__/convertDateToUTC.test.ts'],
         },
@@ -41,7 +37,7 @@ export default defineConfig({
           name: 'tz',
           globals: true,
           environment: 'jsdom',
-          setupFiles: './setup-tests.js',
+          setupFiles: './setup-tests.ts',
           include: ['src/utils/__tests__/convertDateToUTC.test.ts'],
           env: { TZ: 'America/Los_Angeles' },
         },

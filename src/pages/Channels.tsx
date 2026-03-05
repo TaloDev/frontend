@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import useChannels from '../api/useChannels'
 import Button from '../components/Button'
+import { NoChannels } from '../components/empty-states/NoChannels'
 import ErrorMessage from '../components/ErrorMessage'
 import Page from '../components/Page'
 import Pagination from '../components/Pagination'
@@ -97,9 +98,7 @@ export default function Channels() {
       {!error && !loading && sortedChannels.length === 0 && (
         <>
           {debouncedSearch.length > 0 && <p>No channels match your query</p>}
-          {debouncedSearch.length === 0 && (
-            <p>{activeGame.name} doesn&apos;t have any channels yet</p>
-          )}
+          {debouncedSearch.length === 0 && <NoChannels />}
         </>
       )}
 

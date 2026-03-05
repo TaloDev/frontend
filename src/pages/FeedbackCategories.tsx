@@ -1,6 +1,6 @@
 import { IconPlus } from '@tabler/icons-react'
 import { format } from 'date-fns'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import useFeedbackCategories from '../api/useFeedbackCategories'
 import Button from '../components/Button'
@@ -14,11 +14,13 @@ import TableCell from '../components/tables/TableCell'
 import routes from '../constants/routes'
 import { GameFeedbackCategory } from '../entities/gameFeedbackCategory'
 import FeedbackCategoryDetails from '../modals/FeedbackCategoryDetails'
+import { ResetFeedbackCategory } from '../modals/ResetFeedbackCategory'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import useSortedItems from '../utils/useSortedItems'
 
 export default function FeedbackCategories() {
   const [showModal, setShowModal] = useState(false)
+  const [showResetModal, setShowResetModal] = useState(false)
   const [editingCategory, setEditingCategory] = useState<GameFeedbackCategory | null>(null)
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
@@ -27,13 +29,25 @@ export default function FeedbackCategories() {
   const sortedFeedbackCategories = useSortedItems(feedbackCategories, 'internalName', 'asc')
 
   useEffect(() => {
-    if (!showModal) setEditingCategory(null)
-  }, [showModal, setEditingCategory])
+    if (!showModal && !showResetModal) setEditingCategory(null)
+  }, [showModal, showResetModal])
 
   const onEditCategoryClick = (category: GameFeedbackCategory) => {
     setEditingCategory(category)
     setShowModal(true)
   }
+
+  const onResetCategoryClick = useCallback(() => {
+    setShowModal(false)
+    setShowResetModal(true)
+  }, [])
+
+  const onResetCategoryCloseClick = useCallback((close: boolean) => {
+    setShowResetModal(false)
+    if (!close) {
+      setShowModal(true)
+    }
+  }, [])
 
   return (
     <Page
@@ -50,7 +64,7 @@ export default function FeedbackCategories() {
       }
       isLoading={loading}
     >
-      <div className='!mt-2'>
+      <div className='-mt-4'>
         <Link to={routes.feedback}>Back to feedback</Link>
       </div>
 
@@ -94,6 +108,13 @@ export default function FeedbackCategories() {
         <FeedbackCategoryDetails
           modalState={[showModal, setShowModal]}
           mutate={mutate}
+          editingCategory={editingCategory}
+          onResetClick={onResetCategoryClick}
+        />
+      )}
+      {showResetModal && (
+        <ResetFeedbackCategory
+          modalState={[showResetModal, onResetCategoryCloseClick]}
           editingCategory={editingCategory}
         />
       )}
