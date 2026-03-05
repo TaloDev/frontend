@@ -1,10 +1,11 @@
-import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import getInvite from '../api/getInvite'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Link from '../components/Link'
 import Loading from '../components/Loading'
+import { UnauthedContainer } from '../components/UnauthedContainer'
+import { UnauthedContainerInner } from '../components/UnauthedContainerInner'
 import routes from '../constants/routes'
 import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
@@ -34,8 +35,8 @@ export default function AcceptInvite() {
   }, [navigate, token])
 
   return (
-    <div className='flex h-full flex-col p-8 md:items-center md:justify-center'>
-      <form className={clsx('space-y-8 text-white', unauthedContainerStyle)}>
+    <UnauthedContainer>
+      <UnauthedContainerInner as='form'>
         {!isLoading && <h1 className='text-4xl font-bold'>Accept invite</h1>}
 
         {isLoading && (
@@ -45,7 +46,7 @@ export default function AcceptInvite() {
         )}
 
         {error && <ErrorMessage error={error} />}
-      </form>
+      </UnauthedContainerInner>
 
       {!isLoading && (
         <div className={unauthedContainerStyle}>
@@ -54,6 +55,6 @@ export default function AcceptInvite() {
           </p>
         </div>
       )}
-    </div>
+    </UnauthedContainer>
   )
 }

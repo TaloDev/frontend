@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconCheck } from '@tabler/icons-react'
-import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -12,8 +11,9 @@ import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Link from '../components/Link'
 import TextInput from '../components/TextInput'
 import Title from '../components/Title'
+import { UnauthedContainer } from '../components/UnauthedContainer'
+import { UnauthedContainerInner } from '../components/UnauthedContainerInner'
 import routes from '../constants/routes'
-import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
 
 const validationSchema = z
@@ -72,8 +72,8 @@ export default function ResetPassword() {
 
   if (resetComplete) {
     return (
-      <div className='flex h-full flex-col p-8 md:items-center md:justify-center'>
-        <div className={clsx('space-y-8 text-white', unauthedContainerStyle)}>
+      <UnauthedContainer>
+        <UnauthedContainerInner>
           <Title>Reset password</Title>
 
           <AlertBanner
@@ -85,17 +85,14 @@ export default function ResetPassword() {
           <Button type='button' onClick={() => navigate(routes.login)}>
             Go to Login
           </Button>
-        </div>
-      </div>
+        </UnauthedContainerInner>
+      </UnauthedContainer>
     )
   }
 
   return (
-    <div className='flex h-full flex-col p-8 md:items-center md:justify-center'>
-      <form
-        className={clsx('space-y-8 text-white', unauthedContainerStyle)}
-        onSubmit={handleSubmit(onConfirmClick)}
-      >
+    <UnauthedContainer>
+      <UnauthedContainerInner as='form' onSubmit={handleSubmit(onConfirmClick)}>
         <Title>Reset password</Title>
 
         <TextInput
@@ -122,7 +119,7 @@ export default function ResetPassword() {
               <span>
                 {' '}
                 -{' '}
-                <Link to={routes.forgotPassword} className='!text-white underline'>
+                <Link to={routes.forgotPassword} className='text-white! underline'>
                   please request a new reset link
                 </Link>
               </span>
@@ -133,7 +130,7 @@ export default function ResetPassword() {
         <Button disabled={!isValid} isLoading={isLoading}>
           Confirm
         </Button>
-      </form>
-    </div>
+      </UnauthedContainerInner>
+    </UnauthedContainer>
   )
 }

@@ -39,3 +39,7 @@ export default {
   statMetrics: '/stats/:internalName/metrics',
   verify2FA: '/verify',
 }
+
+export const selfServiceRoutes = {
+  delete: '/manage/:gameToken/delete',
+}

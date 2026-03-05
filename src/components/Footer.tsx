@@ -1,8 +1,14 @@
+import { useLocation } from 'react-router-dom'
 import Link from './Link'
 
 export default function Footer() {
+  const location = useLocation()
+  if (location.pathname.startsWith('/manage/')) {
+    return null
+  }
+
   return (
-    <footer className='relative mt-auto w-full justify-center space-y-4 border-t border-gray-700 bg-gray-900 px-4 py-8 text-white md:flex md:space-y-0 md:space-x-12 md:py-12 lg:space-x-16 xl:space-x-[100px]'>
+    <footer className='relative mt-auto w-full justify-center space-y-4 border-t border-gray-700 bg-gray-900 px-4 py-8 text-white md:flex md:space-y-0 md:space-x-12 md:py-12 lg:space-x-16 xl:space-x-25'>
       <div className='space-y-4'>
         <div>
           <strong>&copy; Talo Platform Ltd {new Date().getFullYear()}</strong>
@@ -87,7 +93,7 @@ export default function Footer() {
         </ul>
       </div>
 
-      <div className='space-y-4 xl:flex xl:space-y-0 xl:space-x-[100px]'>
+      <div className='space-y-4 xl:flex xl:space-y-0 xl:space-x-25'>
         <div>
           <h3 className='font-semibold'>Integrations</h3>
           <ul className='mt-2 space-y-1'>

@@ -1,10 +1,12 @@
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { IconCopy } from '@tabler/icons-react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { z, ZodError } from 'zod'
 import updateGame from '../api/updateGame'
 import useGameSettings from '../api/useGameSettings'
 import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
+import Link from '../components/Link'
 import Loading from '../components/Loading'
 import Page from '../components/Page'
 import SecondaryNav from '../components/SecondaryNav'
@@ -16,7 +18,7 @@ import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
 
-type Settings = NonNullable<ReturnType<typeof useGameSettings>['settings']>
+type Settings = Omit<NonNullable<ReturnType<typeof useGameSettings>['settings']>, 'gameToken'>
 const defaultSettings: Settings = {
   purgeDevPlayers: false,
   purgeLivePlayers: false,
@@ -85,6 +87,19 @@ export default function GameSettings() {
     }
   }, [activeGame.id, settings, toast])
 
+  const deleteLink = useMemo(() => {
+    if (!fetchedSettings?.gameToken) {
+      return null
+    }
+
+    const url = new URL(window.location.href)
+    url.pathname = `/manage/${fetchedSettings.gameToken}/delete`
+    url.search = ''
+    url.hash = ''
+
+    return url.toString()
+  }, [fetchedSettings?.gameToken])
+
   return (
     <Page
       containerClassName='w-full md:w-2/3 lg:w-1/2'
@@ -109,7 +124,7 @@ export default function GameSettings() {
             />
           )}
         </div>
-        <div>
+        <div className='space-y-1'>
           <p className='font-medium'>Purge dev players</p>
           <p className='text-sm'>
             Automatically delete players created in dev builds with no activity in the last{' '}
@@ -155,7 +170,7 @@ export default function GameSettings() {
             />
           )}
         </div>
-        <div>
+        <div className='space-y-1'>
           <p className='font-medium'>Purge live players</p>
           <p className='text-sm'>
             Automatically delete players with no activity in the last{' '}
@@ -199,6 +214,31 @@ export default function GameSettings() {
       {submitError && <ErrorMessage error={submitError} />}
 
       <Button onClick={onSaveClick}>Save</Button>
+
+      {deleteLink && (
+        <>
+          <hr className='border-gray-700' />
+
+          <div className='space-y-1'>
+            <p className='font-medium'>Delete Link</p>
+            <p className='text-sm'>
+              Players can use this link to delete their Talo Player Auth accounts
+            </p>
+            <div className='mt-4 flex items-center justify-between gap-4 rounded bg-gray-900 p-4 md:inline-flex md:justify-start'>
+              <Link to={deleteLink}>{deleteLink}</Link>
+              <Button
+                variant='icon'
+                className='ml-2 rounded-full bg-indigo-500 p-1 hover:bg-indigo-600'
+                onClick={async () => {
+                  await navigator.clipboard.writeText(deleteLink)
+                  toast.trigger('Link copied to clipboard')
+                }}
+                icon={<IconCopy size={16} />}
+              />
+            </div>
+          </div>
+        </>
+      )}
     </Page>
   )
 }

@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil'
 import Footer from './components/Footer'
 import IntendedRouteHandler from './components/IntendedRouteHandler'
 import NavBar from './components/NavBar'
-import routes from './constants/routes'
+import routes, { selfServiceRoutes } from './constants/routes'
 import AuthService from './services/AuthService'
 import activeGameState from './state/activeGameState'
 import userState from './state/userState'
@@ -90,6 +90,10 @@ const ChannelStorage = lazy(
   () => import(/* webpackChunkName: 'channel-storage */ './pages/ChannelStorage'),
 )
 
+const DeletePlayer = lazy(
+  () => import(/* webpackChunkName: 'delete-player */ './pages/self-service/DeletePlayer'),
+)
+
 type RouterProps = {
   intendedRoute: string | null
 }
@@ -112,6 +116,8 @@ function Router({ intendedRoute }: RouterProps) {
               <Route path={routes.acceptInvite} element={<AcceptInvite />} />
               <Route path={routes.forgotPassword} element={<ForgotPassword />} />
               <Route path={routes.resetPassword} element={<ResetPassword />} />
+
+              <Route path={selfServiceRoutes.delete} element={<DeletePlayer />} />
 
               <Route path='*' element={<IntendedRouteHandler intendedRoute={intendedRoute} />} />
             </Routes>

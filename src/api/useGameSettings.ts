@@ -15,6 +15,7 @@ export default function useGameSettings(activeGame: Game) {
           purgeDevPlayersRetention: z.number(),
           purgeLivePlayersRetention: z.number(),
           website: z.string().nullable(),
+          gameToken: z.string(),
         }),
       }),
     )
