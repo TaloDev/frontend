@@ -37,7 +37,7 @@ export default function DeletePlayer() {
   if (loading) {
     return (
       <UnauthedContainer>
-        <UnauthedContainerInner>
+        <UnauthedContainerInner className='flex justify-center'>
           <Loading />
         </UnauthedContainerInner>
       </UnauthedContainer>
