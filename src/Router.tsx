@@ -94,6 +94,10 @@ const DeletePlayer = lazy(
   () => import(/* webpackChunkName: 'delete-player */ './pages/self-service/DeletePlayer'),
 )
 
+const selfServiceRouteElements = [
+  <Route key='delete' path={selfServiceRoutes.delete} element={<DeletePlayer />} />,
+]
+
 type RouterProps = {
   intendedRoute: string | null
 }
@@ -117,7 +121,7 @@ function Router({ intendedRoute }: RouterProps) {
               <Route path={routes.forgotPassword} element={<ForgotPassword />} />
               <Route path={routes.resetPassword} element={<ResetPassword />} />
 
-              <Route path={selfServiceRoutes.delete} element={<DeletePlayer />} />
+              {selfServiceRouteElements}
 
               <Route path='*' element={<IntendedRouteHandler intendedRoute={intendedRoute} />} />
             </Routes>
@@ -188,6 +192,8 @@ function Router({ intendedRoute }: RouterProps) {
                   <Route path={routes.channelStorage} element={<ChannelStorage />} />
                 </>
               )}
+
+              {selfServiceRouteElements}
 
               <Route path='*' element={<NotFound />} />
             </Routes>

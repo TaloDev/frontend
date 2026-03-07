@@ -7,6 +7,7 @@ import routes from '../constants/routes'
 import activeGameState from '../state/activeGameState'
 import Button from './Button'
 import GameSwitcher from './GameSwitcher'
+import { HideForSelfService } from './HideForSelfService'
 import Link from './Link'
 import LinkButton from './LinkButton'
 import MobileMenu from './MobileMenu'
@@ -49,24 +50,26 @@ export default function NavBar() {
   )
 
   return (
-    <nav className='flex w-full items-center justify-between bg-gray-900 p-4 md:p-8'>
-      <ul className='hidden space-x-4 md:flex md:space-x-8'>{links}</ul>
+    <HideForSelfService>
+      <nav className='flex w-full items-center justify-between bg-gray-900 p-4 md:p-8'>
+        <ul className='hidden space-x-4 md:flex md:space-x-8'>{links}</ul>
 
-      <div className='mr-4 flex text-white md:hidden'>
-        <Button
-          variant='icon'
-          onClick={() => setShowMobileMenu(true)}
-          extra={{ 'aria-label': 'Navigation menu' }}
-        >
-          <IconMenu2 size={24} />
-        </Button>
-      </div>
+        <div className='mr-4 flex text-white md:hidden'>
+          <Button
+            variant='icon'
+            onClick={() => setShowMobileMenu(true)}
+            extra={{ 'aria-label': 'Navigation menu' }}
+          >
+            <IconMenu2 size={24} />
+          </Button>
+        </div>
 
-      <MobileMenu visible={showMobileMenu} onClose={() => setShowMobileMenu(false)}>
-        {links}
-      </MobileMenu>
+        <MobileMenu visible={showMobileMenu} onClose={() => setShowMobileMenu(false)}>
+          {links}
+        </MobileMenu>
 
-      <GameSwitcher />
-    </nav>
+        <GameSwitcher />
+      </nav>
+    </HideForSelfService>
   )
 }
