@@ -145,7 +145,7 @@ export default function PlayerProfile() {
     <Page showBackButton title='Player profile' isLoading={!player}>
       <div>
         <PlayerIdentifier player={player} />
-        <div className='mt-4 flex space-x-2'>
+        <div className='mt-4 space-y-4 space-x-2 sm:flex sm:space-y-0'>
           <Identifier id={`Registered ${format(new Date(player.createdAt), 'dd MMM yyyy')}`} />
           <Identifier id={`Last seen ${format(new Date(player.lastSeenAt), 'dd MMM yyyy')}`} />
           <span className={clsx(player.presence?.online && 'text-green-400')}>
@@ -156,7 +156,7 @@ export default function PlayerProfile() {
         </div>
       </div>
 
-      <div className='inline-grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-6'>
+      <div className='inline-grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-6'>
         {filteredLinks.map((link) => (
           <Button
             key={link.name}
@@ -171,25 +171,29 @@ export default function PlayerProfile() {
 
       <SecondaryTitle>Aliases</SecondaryTitle>
 
-      <Table columns={['Alias', 'Created at', 'Last seen']}>
-        <TableBody
-          iterator={sortedAliases}
-          configureClassnames={(_, idx) => ({
-            'bg-orange-600': player.devBuild && idx % 2 !== 0,
-            'bg-orange-500': player.devBuild && idx % 2 === 0,
-          })}
-        >
-          {(alias) => (
-            <>
-              <TableCell className='min-w-60'>
-                <PlayerAliases aliases={[alias]} />
-              </TableCell>
-              <DateCell>{format(new Date(alias.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
-              <DateCell>{format(new Date(alias.lastSeenAt), 'dd MMM yyyy, HH:mm')}</DateCell>
-            </>
-          )}
-        </TableBody>
-      </Table>
+      {player.aliases.length === 0 && <p>This player has no aliases</p>}
+
+      {player.aliases.length > 0 && (
+        <Table columns={['Alias', 'Created at', 'Last seen']}>
+          <TableBody
+            iterator={sortedAliases}
+            configureClassnames={(_, idx) => ({
+              'bg-orange-600': player.devBuild && idx % 2 !== 0,
+              'bg-orange-500': player.devBuild && idx % 2 === 0,
+            })}
+          >
+            {(alias) => (
+              <>
+                <TableCell className='min-w-60'>
+                  <PlayerAliases aliases={[alias]} />
+                </TableCell>
+                <DateCell>{format(new Date(alias.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+                <DateCell>{format(new Date(alias.lastSeenAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+              </>
+            )}
+          </TableBody>
+        </Table>
+      )}
 
       {player.groups.length > 0 && (
         <>

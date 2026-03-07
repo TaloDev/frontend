@@ -19,8 +19,8 @@ export default function IntendedRouteHandler({ intendedRoute }: IntendedRouteHan
   }, [])
 
   if (!intendedRoute) {
-    ;<Navigate to={routes.login} replace />
+    return <Navigate to={routes.login} replace />
   }
 
-  return <Navigate to={`${routes.login}?next=${encodeURIComponent(intendedRoute!)}`} replace />
+  return <Navigate to={`${routes.login}?next=${encodeURIComponent(intendedRoute)}`} replace />
 }

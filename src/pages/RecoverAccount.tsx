@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import { MouseEvent, useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
@@ -8,11 +7,12 @@ import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import RecoveryCodes from '../components/RecoveryCodes'
 import TextInput from '../components/TextInput'
 import Title from '../components/Title'
+import { UnauthedContainer } from '../components/UnauthedContainer'
+import { UnauthedContainerInner } from '../components/UnauthedContainerInner'
 import routes from '../constants/routes'
 import { User } from '../entities/user'
 import AuthService from '../services/AuthService'
 import userState from '../state/userState'
-import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
 
 export default function RecoverAccount() {
@@ -72,8 +72,8 @@ export default function RecoverAccount() {
   }
 
   return (
-    <div className='flex h-full flex-col p-8 md:items-center md:justify-center'>
-      <form className={clsx('space-y-8 text-white', unauthedContainerStyle)}>
+    <UnauthedContainer>
+      <UnauthedContainerInner as='form'>
         {!recoveryCodes && (
           <>
             <Title>Recover account</Title>
@@ -105,7 +105,7 @@ export default function RecoverAccount() {
             <Button onClick={onContinueClick}>Continue</Button>
           </>
         )}
-      </form>
-    </div>
+      </UnauthedContainerInner>
+    </UnauthedContainer>
   )
 }

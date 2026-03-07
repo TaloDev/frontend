@@ -1,7 +1,6 @@
 import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Sentry from '@sentry/react'
-import clsx from 'clsx'
 import { useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useLocation } from 'react-router-dom'
@@ -14,6 +13,8 @@ import Checkbox from '../components/Checkbox'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Link from '../components/Link'
 import TextInput from '../components/TextInput'
+import { UnauthedContainer } from '../components/UnauthedContainer'
+import { UnauthedContainerInner } from '../components/UnauthedContainerInner'
 import routes from '../constants/routes'
 import AuthService from '../services/AuthService'
 import userState from '../state/userState'
@@ -105,11 +106,8 @@ export default function Register() {
   }
 
   return (
-    <div className='flex h-full flex-col p-8 md:items-center md:justify-center'>
-      <form
-        className={clsx(unauthedContainerStyle, 'space-y-8 text-white')}
-        onSubmit={handleSubmit(onRegisterClick)}
-      >
+    <UnauthedContainer>
+      <UnauthedContainerInner as='form' onSubmit={handleSubmit(onRegisterClick)}>
         <h1 className='text-4xl font-bold'>Let&apos;s get started</h1>
 
         <RegisterPlanBanner />
@@ -211,13 +209,13 @@ export default function Register() {
         <Button disabled={!isValid} isLoading={isLoading}>
           Sign up
         </Button>
-      </form>
+      </UnauthedContainerInner>
 
       <div className={unauthedContainerStyle}>
         <p className='mt-4 text-white'>
           Already have an account? <Link to={routes.login}>Log in here</Link>
         </p>
       </div>
-    </div>
+    </UnauthedContainer>
   )
 }

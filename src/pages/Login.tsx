@@ -1,6 +1,5 @@
 import type { MouseEvent } from 'react'
 import * as Sentry from '@sentry/react'
-import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
@@ -12,6 +11,9 @@ import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Link from '../components/Link'
 import TaloInfoCard from '../components/TaloInfoCard'
 import TextInput from '../components/TextInput'
+import { UnauthedContainer } from '../components/UnauthedContainer'
+import { UnauthedContainerInner } from '../components/UnauthedContainerInner'
+import { UnauthedTitle } from '../components/UnauthedTitle'
 import routes from '../constants/routes'
 import AuthService from '../services/AuthService'
 import userState from '../state/userState'
@@ -62,13 +64,13 @@ export default function Login() {
   }
 
   return (
-    <div className='flex h-full flex-col p-8 md:items-center md:justify-center'>
-      <form className={clsx('space-y-8 text-white', unauthedContainerStyle)}>
+    <UnauthedContainer>
+      <UnauthedContainerInner as='form'>
         <div className='space-y-4'>
-          <h1 className='flex items-center space-x-4 font-mono text-4xl font-bold'>
-            <img src={taloIcon} alt='Talo' className='h-[32px] w-[32px]' />
+          <UnauthedTitle>
+            <img src={taloIcon} alt='Talo' className='h-8 w-8' />
             <span>Talo Game Services</span>
-          </h1>
+          </UnauthedTitle>
 
           <TaloInfoCard />
 
@@ -108,13 +110,13 @@ export default function Login() {
         <Button disabled={!email || !password} onClick={onLoginClick} isLoading={isLoading}>
           Login
         </Button>
-      </form>
+      </UnauthedContainerInner>
 
       <div className={unauthedContainerStyle}>
         <p className='mt-4 text-white'>
           Need an account? <Link to={routes.register}>Register here</Link>
         </p>
       </div>
-    </div>
+    </UnauthedContainer>
   )
 }
