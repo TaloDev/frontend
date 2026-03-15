@@ -1,7 +1,13 @@
 import { z } from 'zod'
-import { IntegrationConfig, integrationSchema } from '../entities/integration'
+import {
+  GooglePlayGamesIntegrationConfig,
+  SteamIntegrationConfig,
+  integrationSchema,
+} from '../entities/integration'
 import api from './api'
 import makeValidatedRequest from './makeValidatedRequest'
+
+type IntegrationConfig = SteamIntegrationConfig | GooglePlayGamesIntegrationConfig
 
 const updateIntegration = makeValidatedRequest(
   (gameId: number, integrationId: number, data: { config: Partial<IntegrationConfig> }) =>

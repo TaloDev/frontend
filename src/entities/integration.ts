@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 export enum IntegrationType {
   STEAMWORKS = 'steamworks',
+  GOOGLE_PLAY_GAMES = 'google-play-games',
 }
 
 export const steamIntegrationConfigSchema = z.object({
@@ -12,17 +13,30 @@ export const steamIntegrationConfigSchema = z.object({
 
 export type SteamIntegrationConfig = z.infer<typeof steamIntegrationConfigSchema>
 
-// use union when more integrations are added
-export const integrationConfigSchema = steamIntegrationConfigSchema
+export const googlePlayGamesIntegrationConfigSchema = z.object({
+  clientId: z.string(),
+  clientSecret: z.string(),
+})
 
-export type IntegrationConfig = z.infer<typeof integrationConfigSchema>
+export type GooglePlayGamesIntegrationConfig = z.infer<
+  typeof googlePlayGamesIntegrationConfigSchema
+>
 
-export const integrationSchema = z.object({
+const baseIntegrationSchema = z.object({
   id: z.number(),
-  type: z.nativeEnum(IntegrationType),
-  config: integrationConfigSchema,
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 })
+
+export const integrationSchema = z.discriminatedUnion('type', [
+  baseIntegrationSchema.extend({
+    type: z.literal(IntegrationType.STEAMWORKS),
+    config: steamIntegrationConfigSchema,
+  }),
+  baseIntegrationSchema.extend({
+    type: z.literal(IntegrationType.GOOGLE_PLAY_GAMES),
+    config: googlePlayGamesIntegrationConfigSchema,
+  }),
+])
 
 export type Integration = z.infer<typeof integrationSchema>
