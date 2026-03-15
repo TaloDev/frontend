@@ -49,7 +49,7 @@ type IntegrationDetailsProps = {
   editingIntegration: Partial<Integration> | null
 }
 
-export default function IntegrationDetails({
+export function SteamworksIntegrationDetails({
   modalState,
   mutate,
   editingIntegration,
@@ -63,6 +63,8 @@ export default function IntegrationDetails({
   const [apiError, setAPIError] = useState<TaloError | null>(null)
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
 
+  const config = editingIntegration?.config as SteamIntegrationConfig | undefined
+
   const {
     register,
     handleSubmit,
@@ -73,9 +75,9 @@ export default function IntegrationDetails({
     resolver: zodResolver(validationSchema),
     defaultValues: {
       apiKey: '',
-      appId: editingIntegration?.config?.appId,
-      syncLeaderboards: editingIntegration?.config?.syncLeaderboards ?? true,
-      syncStats: editingIntegration?.config?.syncStats ?? true,
+      appId: config?.appId,
+      syncLeaderboards: config?.syncLeaderboards ?? true,
+      syncStats: config?.syncStats ?? true,
     },
     mode: 'onChange',
   })

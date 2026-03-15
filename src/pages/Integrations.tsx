@@ -1,4 +1,4 @@
-import { IconBrandSteam, IconCheck } from '@tabler/icons-react'
+import { IconBrandGooglePlay, IconBrandSteam, IconCheck } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
@@ -12,7 +12,8 @@ import Loading from '../components/Loading'
 import Page from '../components/Page'
 import Tile from '../components/Tile'
 import { Integration, IntegrationType } from '../entities/integration'
-import IntegrationDetails from '../modals/IntegrationDetails'
+import { GooglePlayGamesIntegrationDetails } from '../modals/GooglePlayGamesIntegrationDetails'
+import { SteamworksIntegrationDetails } from '../modals/SteamworksIntegrationDetails'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
 
@@ -93,6 +94,19 @@ export default function Integrations() {
     ? null
     : integrations.find((integration) => integration.type === IntegrationType.STEAMWORKS)
 
+  const googlePlayGamesIntegration = error
+    ? null
+    : integrations.find((integration) => integration.type === IntegrationType.GOOGLE_PLAY_GAMES)
+
+  const [editingGooglePlayGamesIntegration, setEditingGooglePlayGamesIntegration] =
+    useState<Partial<Integration> | null>(null)
+
+  const onGooglePlayGamesIntegrationClick = () => {
+    setEditingGooglePlayGamesIntegration(
+      googlePlayGamesIntegration ?? { type: IntegrationType.GOOGLE_PLAY_GAMES },
+    )
+  }
+
   const [isSyncingSteamworksLeaderboards, setSyncingSteamworksLeaderboards] = useState(
     syncingState.INACTIVE,
   )
@@ -138,7 +152,7 @@ export default function Integrations() {
     <Page title='Integrations'>
       {error && <ErrorMessage error={error} />}
 
-      <div className='lg:w-1/2'>
+      <div className='space-y-4 lg:w-1/2'>
         <Tile
           header={
             <>
@@ -185,20 +199,21 @@ export default function Integrations() {
           footer={
             steamIntegration ? (
               <div className='space-y-4'>
-                {steamIntegration.config.syncLeaderboards && (
-                  <ManualSyncSection
-                    loading={isSyncingSteamworksLeaderboards}
-                    error={syncingSteamworksLeaderboardsError}
-                    title='Sync your Talo and Steamworks leaderboards'
-                    docs='https://docs.trytalo.com/docs/integrations/steamworks#manually-syncing-leaderboards?utm_source=dashboard&utm_medium=integrations'
-                    onClick={onSyncSteamworksLeaderboardsClick}
-                    cta='Sync leaderboards'
-                    successTitle='Leaderboards syncing'
-                    successDesc='This will usually only take a few minutes. Leaderboards will be updated in the background.'
-                  />
-                )}
+                {'syncLeaderboards' in steamIntegration.config &&
+                  steamIntegration.config.syncLeaderboards && (
+                    <ManualSyncSection
+                      loading={isSyncingSteamworksLeaderboards}
+                      error={syncingSteamworksLeaderboardsError}
+                      title='Sync your Talo and Steamworks leaderboards'
+                      docs='https://docs.trytalo.com/docs/integrations/steamworks#manually-syncing-leaderboards?utm_source=dashboard&utm_medium=integrations'
+                      onClick={onSyncSteamworksLeaderboardsClick}
+                      cta='Sync leaderboards'
+                      successTitle='Leaderboards syncing'
+                      successDesc='This will usually only take a few minutes. Leaderboards will be updated in the background.'
+                    />
+                  )}
 
-                {steamIntegration.config.syncStats && (
+                {'syncStats' in steamIntegration.config && steamIntegration.config.syncStats && (
                   <ManualSyncSection
                     loading={isSyncingSteamworksStats}
                     error={syncingSteamworksStatsError}
@@ -214,13 +229,72 @@ export default function Integrations() {
             ) : null
           }
         />
+
+        <Tile
+          header={
+            <>
+              <h2 className='text-xl font-semibold'>
+                <IconBrandGooglePlay className='-mt-0.5 mr-2 inline align-middle' size={20} />
+                Google Play Games
+              </h2>
+              {!loading && (
+                <Button
+                  variant='grey'
+                  className='w-auto!'
+                  onClick={onGooglePlayGamesIntegrationClick}
+                >
+                  {!googlePlayGamesIntegration && <span>Enable integration</span>}
+                  {googlePlayGamesIntegration && <span>Update integration</span>}
+                </Button>
+              )}
+              {loading && <Loading size={24} thickness={180} />}
+            </>
+          }
+          content={
+            <div className='leading-relaxed'>
+              {!googlePlayGamesIntegration && (
+                <p>Authenticate Google Play Games players using OAuth 2.0</p>
+              )}
+              {!googlePlayGamesIntegration && (
+                <p>
+                  Requires an{' '}
+                  <Link to='https://developer.android.com/games/pgs/console/setup#generate_an_oauth_20_client_id'>
+                    OAuth 2.0 client ID and secret
+                  </Link>
+                </p>
+              )}
+              {googlePlayGamesIntegration && (
+                <p className='font-bold'>
+                  Enabled {format(new Date(googlePlayGamesIntegration.createdAt), 'dd MMM yyyy')}
+                </p>
+              )}
+              {googlePlayGamesIntegration && (
+                <p>
+                  Last updated{' '}
+                  {format(new Date(googlePlayGamesIntegration.updatedAt), 'dd MMM yyyy HH:mm')}
+                </p>
+              )}
+            </div>
+          }
+        />
       </div>
 
       {editingIntegration && (
-        <IntegrationDetails
+        <SteamworksIntegrationDetails
           modalState={[Boolean(editingIntegration), () => setEditingIntegration(null)]}
           mutate={mutate}
           editingIntegration={editingIntegration}
+        />
+      )}
+
+      {editingGooglePlayGamesIntegration && (
+        <GooglePlayGamesIntegrationDetails
+          modalState={[
+            Boolean(editingGooglePlayGamesIntegration),
+            () => setEditingGooglePlayGamesIntegration(null),
+          ]}
+          mutate={mutate}
+          editingIntegration={editingGooglePlayGamesIntegration}
         />
       )}
     </Page>

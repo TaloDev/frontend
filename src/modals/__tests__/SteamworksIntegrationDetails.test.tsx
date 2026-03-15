@@ -6,9 +6,9 @@ import ToastProvider from '../../components/toast/ToastProvider'
 import { IntegrationType } from '../../entities/integration'
 import activeGameState from '../../state/activeGameState'
 import KitchenSink from '../../utils/KitchenSink'
-import IntegrationDetails from '../IntegrationDetails'
+import { SteamworksIntegrationDetails } from '../SteamworksIntegrationDetails'
 
-describe('<IntegrationDetails />', () => {
+describe('<SteamworksIntegrationDetails />', () => {
   const axiosMock = new MockAdapter(api)
 
   it('should enable a steamworks integration', async () => {
@@ -22,7 +22,7 @@ describe('<IntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <IntegrationDetails
+          <SteamworksIntegrationDetails
             modalState={[true, closeMock]}
             mutate={mutateMock}
             editingIntegration={{ type: IntegrationType.STEAMWORKS }}
@@ -66,7 +66,7 @@ describe('<IntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <IntegrationDetails
+          <SteamworksIntegrationDetails
             modalState={[true, vi.fn()]}
             mutate={vi.fn()}
             editingIntegration={{ type: IntegrationType.STEAMWORKS }}
@@ -94,7 +94,7 @@ describe('<IntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <IntegrationDetails
+          <SteamworksIntegrationDetails
             modalState={[true, closeMock]}
             mutate={mutateMock}
             editingIntegration={{ type: IntegrationType.STEAMWORKS }}
@@ -114,7 +114,7 @@ describe('<IntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <IntegrationDetails
+          <SteamworksIntegrationDetails
             modalState={[true, vi.fn()]}
             mutate={vi.fn()}
             editingIntegration={{ type: IntegrationType.STEAMWORKS }}
@@ -142,7 +142,7 @@ describe('<IntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <IntegrationDetails
+          <SteamworksIntegrationDetails
             modalState={[true, vi.fn()]}
             mutate={vi.fn()}
             editingIntegration={{
@@ -173,7 +173,7 @@ describe('<IntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <IntegrationDetails
+          <SteamworksIntegrationDetails
             modalState={[true, closeMock]}
             mutate={mutateMock}
             editingIntegration={{
@@ -217,7 +217,7 @@ describe('<IntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <IntegrationDetails
+          <SteamworksIntegrationDetails
             modalState={[true, closeMock]}
             mutate={mutateMock}
             editingIntegration={{
@@ -248,7 +248,7 @@ describe('<IntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <IntegrationDetails
+          <SteamworksIntegrationDetails
             modalState={[true, vi.fn()]}
             mutate={mutateMock}
             editingIntegration={{
@@ -289,7 +289,7 @@ describe('<IntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <IntegrationDetails
+          <SteamworksIntegrationDetails
             modalState={[true, vi.fn()]}
             mutate={mutateMock}
             editingIntegration={{
@@ -331,7 +331,7 @@ describe('<IntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <IntegrationDetails
+          <SteamworksIntegrationDetails
             modalState={[true, vi.fn()]}
             mutate={mutateMock}
             editingIntegration={{
@@ -376,7 +376,7 @@ describe('<IntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <IntegrationDetails
+          <SteamworksIntegrationDetails
             modalState={[true, vi.fn()]}
             mutate={mutateMock}
             editingIntegration={{
@@ -415,7 +415,7 @@ describe('<IntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <IntegrationDetails
+          <SteamworksIntegrationDetails
             modalState={[true, vi.fn()]}
             mutate={mutateMock}
             editingIntegration={{
