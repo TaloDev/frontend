@@ -8,6 +8,7 @@ export enum PlayerAliasService {
   EMAIL = 'email',
   CUSTOM = 'custom',
   TALO = 'talo',
+  GOOGLE_PLAY_GAMES = 'google_play_games',
 }
 
 export const playerAliasSchema = z.object({

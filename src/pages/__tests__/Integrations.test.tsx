@@ -24,8 +24,8 @@ describe('<Integrations />', () => {
       </KitchenSink>,
     )
 
-    expect(await screen.findByText('Enable integration')).toBeInTheDocument()
-    await userEvent.click(screen.getByText('Enable integration'))
+    const enableButtons = await screen.findAllByText('Enable integration')
+    await userEvent.click(enableButtons[0])
 
     expect(screen.getByText('Steamworks integration')).toBeInTheDocument()
     await userEvent.click(screen.getByText('Cancel'))
@@ -63,6 +63,64 @@ describe('<Integrations />', () => {
     await userEvent.click(screen.getByText('Update integration'))
 
     expect(screen.getByText('Steamworks integration')).toBeInTheDocument()
+    await userEvent.click(screen.getByText('Done'))
+
+    expect(screen.getByText('Enabled 01 Aug 2022'))
+    expect(screen.getByText('Last updated 01 Aug 2022 20:32'))
+  })
+
+  it('should render the not-enabled state for the google play games integration', async () => {
+    axiosMock.onGet('http://talo.api/games/1/integrations').replyOnce(200, { integrations: [] })
+
+    render(
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: {} },
+          { node: activeGameState, initialValue: { id: 1 } },
+        ]}
+      >
+        <Integrations />
+      </KitchenSink>,
+    )
+
+    const enableButtons = await screen.findAllByText('Enable integration')
+    await userEvent.click(enableButtons[1])
+
+    expect(screen.getByText('Google Play Games integration')).toBeInTheDocument()
+    await userEvent.click(screen.getByText('Cancel'))
+  })
+
+  it('should render the enabled state for the google play games integration', async () => {
+    axiosMock.onGet('http://talo.api/games/1/integrations').replyOnce(200, {
+      integrations: [
+        {
+          id: 1,
+          type: 'google-play-games',
+          createdAt: '2022-08-01 20:08:13',
+          updatedAt: '2022-08-01 20:32:43',
+          config: {
+            clientId: 'client-id',
+            clientSecret: 'client-secret',
+          },
+        },
+      ],
+    })
+
+    render(
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: {} },
+          { node: activeGameState, initialValue: { id: 1 } },
+        ]}
+      >
+        <Integrations />
+      </KitchenSink>,
+    )
+
+    expect(await screen.findByText('Update integration')).toBeInTheDocument()
+    await userEvent.click(screen.getByText('Update integration'))
+
+    expect(screen.getByText('Google Play Games integration')).toBeInTheDocument()
     await userEvent.click(screen.getByText('Done'))
 
     expect(screen.getByText('Enabled 01 Aug 2022'))

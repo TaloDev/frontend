@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import playerAliasMock from '../../__mocks__/playerAliasMock'
 import { PlayerAlias, PlayerAliasService } from '../../entities/playerAlias'
-import PlayerAliases from '../PlayerAliases'
+import { PlayerAliases } from '../PlayerAliases'
 
 describe('<PlayerAliases />', () => {
   it('should render an alias', () => {
