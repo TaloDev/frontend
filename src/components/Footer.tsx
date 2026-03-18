@@ -99,6 +99,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link to='https://trytalo.com/google-play-games-integration?utm_source=dashboard&utm_medium=footer'>
+                  Google Play integration
+                </Link>
+              </li>
+              <li>
                 <Link to='https://trytalo.com/unity?utm_source=dashboard&utm_medium=footer'>
                   Unity package
                 </Link>
