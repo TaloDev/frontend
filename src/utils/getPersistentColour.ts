@@ -1,7 +1,11 @@
 import chroma from 'chroma-js'
 
 export function getPersistentColor(seed: string) {
-  const base64seed = btoa(seed)
+  // btoa allows us to have closely matching colours for similar strings
+  // we use text encoder to remove unsupported characters for btoa, which only supports latin1 characters
+  const bytes = new TextEncoder().encode(seed)
+  const binString = Array.from(bytes, (b) => String.fromCodePoint(b)).join('')
+  const base64seed = btoa(binString)
 
   // 1. Simple hashing function to turn a string into a number
   let hash = 0
