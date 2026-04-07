@@ -26,6 +26,7 @@ type StatDetailsProps = {
   mutate: KeyedMutator<{ stats: GameStat[] }>
   editingStat: GameStat | null
   onResetClick?: () => void
+  onBulkImportClick?: () => void
 }
 
 const validationSchema = z
@@ -103,7 +104,13 @@ const validationSchema = z
 
 type FormValues = z.infer<typeof validationSchema>
 
-const StatDetails = ({ modalState, mutate, editingStat, onResetClick }: StatDetailsProps) => {
+const StatDetails = ({
+  modalState,
+  mutate,
+  editingStat,
+  onResetClick,
+  onBulkImportClick,
+}: StatDetailsProps) => {
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)
   const [isDeleting, setDeleting] = useState(false)
@@ -350,7 +357,7 @@ const StatDetails = ({ modalState, mutate, editingStat, onResetClick }: StatDeta
           />
 
           {editingStat && canPerformAction(user, PermissionBasedAction.DELETE_STAT) && (
-            <div className='space-y-2 rounded border border-red-400 bg-red-100 p-4'>
+            <div className='space-y-2 rounded border border-red-400 bg-red-50 p-4'>
               <p className='font-semibold'>Danger zone</p>
 
               <div className='space-y-2'>
@@ -388,10 +395,17 @@ const StatDetails = ({ modalState, mutate, editingStat, onResetClick }: StatDeta
 
         <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
           {!editingStat && (
-            <div className='w-full md:w-32'>
-              <Button disabled={!isValid} isLoading={isLoading}>
-                Create
-              </Button>
+            <div className='flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-2'>
+              <div className='w-full md:w-36'>
+                <Button type='button' variant='grey' onClick={onBulkImportClick}>
+                  Bulk import
+                </Button>
+              </div>
+              <div className='w-full md:w-32'>
+                <Button disabled={!isValid} isLoading={isLoading}>
+                  Create
+                </Button>
+              </div>
             </div>
           )}
           {editingStat && (

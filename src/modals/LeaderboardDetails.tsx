@@ -246,7 +246,7 @@ const LeaderboardDetails = ({
 
           {editingLeaderboard &&
             canPerformAction(user, PermissionBasedAction.DELETE_LEADERBOARD) && (
-              <div className='space-y-2 rounded border border-red-400 bg-red-100 p-4'>
+              <div className='space-y-2 rounded border border-red-400 bg-red-50 p-4'>
                 <p className='font-semibold'>Danger zone</p>
 
                 <div className='space-y-2'>

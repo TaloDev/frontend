@@ -15,6 +15,7 @@ import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
 import routes from '../constants/routes'
 import { GameStat } from '../entities/gameStat'
+import { BulkCreateStats } from '../modals/BulkCreateStats'
 import { ResetStat } from '../modals/ResetStat'
 import StatDetails from '../modals/StatDetails'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
@@ -23,6 +24,7 @@ import useSortedItems from '../utils/useSortedItems'
 export default function Stats() {
   const [showModal, setShowModal] = useState(false)
   const [showResetModal, setShowResetModal] = useState(false)
+  const [showBulkModal, setShowBulkModal] = useState(false)
   const [editingStat, setEditingStat] = useState<GameStat | null>(null)
 
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
@@ -35,6 +37,18 @@ export default function Stats() {
   useEffect(() => {
     if (!showModal && !showResetModal) setEditingStat(null)
   }, [showModal, showResetModal])
+
+  const onBulkImportClick = useCallback(() => {
+    setShowModal(false)
+    setShowBulkModal(true)
+  }, [])
+
+  const onBulkImportClose = useCallback((close: boolean) => {
+    setShowBulkModal(false)
+    if (!close) {
+      setShowModal(true)
+    }
+  }, [])
 
   const onEditStatClick = useCallback((stat: GameStat) => {
     setEditingStat(stat)
@@ -131,10 +145,14 @@ export default function Stats() {
           mutate={mutate}
           editingStat={editingStat}
           onResetClick={onResetStatClick}
+          onBulkImportClick={onBulkImportClick}
         />
       )}
       {showResetModal && (
         <ResetStat modalState={[showResetModal, onResetStatCloseClick]} editingStat={editingStat} />
+      )}
+      {showBulkModal && (
+        <BulkCreateStats modalState={[showBulkModal, onBulkImportClose]} mutate={mutate} />
       )}
     </Page>
   )
