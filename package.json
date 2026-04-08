@@ -1,5 +1,5 @@
 {
-  "version": "0.72.1",
+  "version": "0.73.0",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -26,6 +26,7 @@
     "axios": "^1.13.5",
     "chroma-js": "^3.2.0",
     "clsx": "^2.0.0",
+    "csv-parse": "^6.2.1",
     "date-fns": "^2.29.3",
     "dinero.js": "^2.0.0-alpha.11",
     "elkjs": "^0.11.0",
