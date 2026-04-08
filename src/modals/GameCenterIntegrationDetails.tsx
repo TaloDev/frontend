@@ -13,28 +13,27 @@ import Link from '../components/Link'
 import Modal from '../components/Modal'
 import TextInput from '../components/TextInput'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
-import { Integration, GooglePlayGamesIntegrationConfig } from '../entities/integration'
+import { Integration, GameCenterIntegrationConfig } from '../entities/integration'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
 
 const validationSchema = z.object({
-  clientId: z.string().min(1, { message: 'Client ID is required' }),
-  clientSecret: z.string().min(1, { message: 'Client secret is required' }),
+  bundleId: z.string().min(1, { message: 'Bundle ID is required' }),
 })
 
 type FormValues = z.infer<typeof validationSchema>
 
-type GooglePlayGamesIntegrationDetailsProps = {
+type GameCenterIntegrationDetailsProps = {
   modalState: [boolean, (open: boolean) => void]
   mutate: KeyedMutator<{ integrations: Integration[] }>
   editingIntegration: Partial<Integration> | null
 }
 
-export function GooglePlayGamesIntegrationDetails({
+export function GameCenterIntegrationDetails({
   modalState,
   mutate,
   editingIntegration,
-}: GooglePlayGamesIntegrationDetailsProps) {
+}: GameCenterIntegrationDetailsProps) {
   const toast = useContext(ToastContext)
 
   const [, setOpen] = modalState
@@ -52,13 +51,12 @@ export function GooglePlayGamesIntegrationDetails({
   } = useForm<FormValues>({
     resolver: zodResolver(validationSchema),
     defaultValues: {
-      clientId: '',
-      clientSecret: '',
+      bundleId: '',
     },
     mode: 'onChange',
   })
 
-  const [clientId, clientSecret] = watch(['clientId', 'clientSecret'])
+  const [bundleId] = watch(['bundleId'])
 
   const enabled = Boolean(editingIntegration?.id)
 
@@ -85,8 +83,7 @@ export function GooglePlayGamesIntegrationDetails({
       setUpdating(null)
 
       const keyLabels: { [key: string]: string } = {
-        clientId: 'Client ID successfully updated',
-        clientSecret: 'Client secret successfully updated',
+        bundleId: 'Bundle ID successfully updated',
       }
       toast.trigger(keyLabels[key], ToastType.SUCCESS)
     } catch (err) {
@@ -95,7 +92,7 @@ export function GooglePlayGamesIntegrationDetails({
     }
   }
 
-  const onEnableClick: SubmitHandler<GooglePlayGamesIntegrationConfig> = async (formData, e) => {
+  const onEnableClick: SubmitHandler<GameCenterIntegrationConfig> = async (formData, e) => {
     e?.preventDefault()
     setLoading(true)
     setAPIError(null)
@@ -115,7 +112,7 @@ export function GooglePlayGamesIntegrationDetails({
 
       setOpen(false)
 
-      toast.trigger('Google Play Games integration successfully enabled', ToastType.SUCCESS)
+      toast.trigger('Game Center integration successfully enabled', ToastType.SUCCESS)
     } catch (err) {
       setAPIError(buildError(err))
       setLoading(false)
@@ -141,7 +138,7 @@ export function GooglePlayGamesIntegrationDetails({
 
       setOpen(false)
 
-      toast.trigger('Google Play Games integration successfully disabled')
+      toast.trigger('Game Center integration successfully disabled')
     } catch (err) {
       setAPIError(buildError(err))
       setDeleting(false)
@@ -150,70 +147,43 @@ export function GooglePlayGamesIntegrationDetails({
 
   return (
     <Modal
-      id='google-play-games-integration-details'
-      title='Google Play Games integration'
+      id='game-center-integration-details'
+      title='Game Center integration'
       modalState={modalState}
     >
       <form onSubmit={handleSubmit(onEnableClick)}>
         <div className='space-y-4 p-4'>
           <div>
             To learn more about how the integration works,{' '}
-            <Link to='https://docs.trytalo.com/docs/integrations/google-play-games?utm_source=dashboard&utm_medium=integration-modal'>
+            <Link to='https://docs.trytalo.com/docs/integrations/game-center?utm_source=dashboard&utm_medium=integration-modal'>
               visit the docs
             </Link>
           </div>
 
           <div className='space-y-4'>
             <TextInput
-              id='client-id'
+              id='bundle-id'
               variant='modal'
-              label='OAuth client ID'
+              label='Bundle ID'
               placeholder={
                 enabled
-                  ? 'Enter a new client ID to override the existing one'
-                  : 'e.g. 1234567890-abc.apps.googleusercontent.com'
+                  ? 'Enter a new bundle ID to override the existing one'
+                  : 'e.g. com.example.game'
               }
-              inputExtra={{ ...register('clientId') }}
-              errors={[errors.clientId?.message]}
+              inputExtra={{ ...register('bundleId') }}
+              errors={[errors.bundleId?.message]}
             />
 
             {enabled && (
               <div className='ml-auto w-full md:w-40'>
                 <Button
                   type='button'
-                  disabled={!clientId || Boolean(errors.clientId) || Boolean(isUpdating)}
-                  isLoading={isUpdating === 'clientId'}
-                  onClick={() => updateConfig({ clientId })}
+                  disabled={!bundleId || Boolean(errors.bundleId) || Boolean(isUpdating)}
+                  className='whitespace-nowrap'
+                  isLoading={isUpdating === 'bundleId'}
+                  onClick={() => updateConfig({ bundleId })}
                 >
-                  Update client ID
-                </Button>
-              </div>
-            )}
-          </div>
-
-          <div className='space-y-4'>
-            <TextInput
-              id='client-secret'
-              variant='modal'
-              label='OAuth client secret'
-              placeholder={
-                enabled
-                  ? 'Enter a new client secret to override the existing one'
-                  : 'Enter your OAuth client secret'
-              }
-              inputExtra={{ ...register('clientSecret') }}
-              errors={[errors.clientSecret?.message]}
-            />
-
-            {enabled && (
-              <div className='ml-auto w-full md:w-48'>
-                <Button
-                  type='button'
-                  disabled={!clientSecret || Boolean(errors.clientSecret) || Boolean(isUpdating)}
-                  isLoading={isUpdating === 'clientSecret'}
-                  onClick={() => updateConfig({ clientSecret })}
-                >
-                  Update client secret
+                  Update bundle ID
                 </Button>
               </div>
             )}

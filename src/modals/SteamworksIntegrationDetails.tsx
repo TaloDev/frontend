@@ -184,10 +184,7 @@ export function SteamworksIntegrationDetails({
 
       setOpen(false)
 
-      toast.trigger(
-        `${upperFirst(editingIntegration!.type)} integration successfully disabled`,
-        ToastType.SUCCESS,
-      )
+      toast.trigger(`${upperFirst(editingIntegration!.type)} integration successfully disabled`)
     } catch (err) {
       setAPIError(buildError(err))
       setDeleting(false)

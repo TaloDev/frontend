@@ -3,6 +3,7 @@ import { z } from 'zod'
 export enum IntegrationType {
   STEAMWORKS = 'steamworks',
   GOOGLE_PLAY_GAMES = 'google-play-games',
+  GAME_CENTER = 'game-center',
 }
 
 export const steamIntegrationConfigSchema = z.object({
@@ -22,6 +23,12 @@ export type GooglePlayGamesIntegrationConfig = z.infer<
   typeof googlePlayGamesIntegrationConfigSchema
 >
 
+export const gameCenterIntegrationConfigSchema = z.object({
+  bundleId: z.string(),
+})
+
+export type GameCenterIntegrationConfig = z.infer<typeof gameCenterIntegrationConfigSchema>
+
 const baseIntegrationSchema = z.object({
   id: z.number(),
   createdAt: z.string().datetime(),
@@ -36,6 +43,10 @@ export const integrationSchema = z.discriminatedUnion('type', [
   baseIntegrationSchema.extend({
     type: z.literal(IntegrationType.GOOGLE_PLAY_GAMES),
     config: googlePlayGamesIntegrationConfigSchema,
+  }),
+  baseIntegrationSchema.extend({
+    type: z.literal(IntegrationType.GAME_CENTER),
+    config: gameCenterIntegrationConfigSchema,
   }),
 ])
 
