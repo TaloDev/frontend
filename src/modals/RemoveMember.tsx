@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { KeyedMutator } from 'swr'
 import { z } from 'zod'
 import { removeOrganisationMember } from '../api/removeOrganisationMember'
@@ -12,14 +12,14 @@ import { User } from '../entities/user'
 import buildError from '../utils/buildError'
 
 type RemoveMemberProps = {
-  modalState: [boolean, Dispatch<SetStateAction<boolean>>]
+  modalState: [boolean, () => void]
   member: User
   organisationName: string
   mutate: KeyedMutator<z.infer<typeof currentOrganisationSchema>>
 }
 
 export function RemoveMember({ modalState, member, organisationName, mutate }: RemoveMemberProps) {
-  const [, setOpen] = modalState
+  const [, onClose] = modalState
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState<TaloError | null>(null)
   const [confirmText, setConfirmText] = useState('')
@@ -42,7 +42,7 @@ export function RemoveMember({ modalState, member, organisationName, mutate }: R
       }, false)
 
       toast.trigger(`Removed ${member.username} from the organisation`)
-      setOpen(false)
+      onClose()
     } catch (err) {
       setError(buildError(err))
       setLoading(false)
@@ -88,7 +88,7 @@ export function RemoveMember({ modalState, member, organisationName, mutate }: R
             </Button>
           </div>
           <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+            <Button type='button' variant='grey' onClick={onClose}>
               Back
             </Button>
           </div>
