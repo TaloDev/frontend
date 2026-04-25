@@ -10,10 +10,13 @@ export enum PermissionBasedAction {
   UPDATE_LEADERBOARD_ENTRY,
   DELETE_CHANNEL,
   DELETE_PLAYER,
+  REMOVE_ORGANISATION_MEMBER,
 }
 
 export default function canPerformAction(user: User, action: PermissionBasedAction) {
-  if (user.type === UserType.OWNER) return true
+  if (user.type === UserType.OWNER) {
+    return true
+  }
 
   switch (action) {
     case PermissionBasedAction.DELETE_LEADERBOARD:
@@ -27,5 +30,7 @@ export default function canPerformAction(user: User, action: PermissionBasedActi
       return user.type === UserType.ADMIN
     case PermissionBasedAction.DELETE_GROUP:
       return [UserType.DEV, UserType.ADMIN].includes(user.type)
+    case PermissionBasedAction.REMOVE_ORGANISATION_MEMBER:
+      return false
   }
 }

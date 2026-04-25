@@ -1,6 +1,6 @@
 import { IconCheck, IconPencil, IconPlus, IconX } from '@tabler/icons-react'
 import { format } from 'date-fns'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import updateGame from '../api/updateGame'
 import useOrganisation from '../api/useOrganisation'
@@ -17,17 +17,20 @@ import TableCell from '../components/tables/TableCell'
 import TextInput from '../components/TextInput'
 import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
 import userTypeMap from '../constants/userTypeMap'
-import { UserType } from '../entities/user'
+import { User, UserType } from '../entities/user'
 import NewInvite from '../modals/NewInvite'
+import { RemoveMember } from '../modals/RemoveMember'
 import activeGameState, { SelectedActiveGameState } from '../state/activeGameState'
 import organisationState from '../state/organisationState'
 import userState, { AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
+import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 
 function Organisation() {
   const organisation = useRecoilValue(organisationState)
   const { games, members, pendingInvites, loading, error, mutate } = useOrganisation()
   const [showModal, setShowModal] = useState(false)
+  const [removingMember, setRemovingMember] = useState<User | null>(null)
   const user = useRecoilValue(userState) as AuthedUser
 
   const [editingGameId, setEditingGameId] = useState<number | null>(null)
@@ -35,6 +38,9 @@ function Organisation() {
   const [editingGameNameError, setEditingGameNameError] = useState<TaloError | null>(null)
   const setUser = useSetRecoilState(userState)
   const [activeGame, setActiveGame] = useRecoilState(activeGameState) as SelectedActiveGameState
+
+  const canRemoveMembers =
+    canPerformAction(user, PermissionBasedAction.REMOVE_ORGANISATION_MEMBER) && user.emailConfirmed
 
   useEffect(() => {
     if (editingGameId) {
@@ -88,6 +94,15 @@ function Organisation() {
     },
     [onUpdateGameName],
   )
+
+  const tableColumns = useMemo(() => {
+    let columns = ['Username', 'Type', 'Joined', 'Last seen']
+    if (canRemoveMembers) {
+      columns.push('')
+    }
+
+    return columns
+  }, [canRemoveMembers])
 
   return (
     <Page
@@ -199,7 +214,7 @@ function Organisation() {
 
           <SecondaryTitle>Members</SecondaryTitle>
 
-          <Table columns={['Username', 'Type', 'Joined', 'Last seen']}>
+          <Table columns={tableColumns}>
             <TableBody iterator={members}>
               {(member) => (
                 <>
@@ -207,6 +222,15 @@ function Organisation() {
                   <TableCell>{userTypeMap[member.type]}</TableCell>
                   <DateCell>{format(new Date(member.createdAt), 'dd MMM yyyy')}</DateCell>
                   <DateCell>{format(new Date(member.lastSeenAt), 'dd MMM yyyy')}</DateCell>
+                  {canRemoveMembers && (
+                    <TableCell className='w-48'>
+                      {member.id !== user.id && (
+                        <Button variant='black' onClick={() => setRemovingMember(member)}>
+                          Remove
+                        </Button>
+                      )}
+                    </TableCell>
+                  )}
                 </>
               )}
             </TableBody>
@@ -215,6 +239,15 @@ function Organisation() {
       )}
 
       {showModal && <NewInvite modalState={[showModal, setShowModal]} mutate={mutate} />}
+
+      {removingMember && (
+        <RemoveMember
+          modalState={[true, () => setRemovingMember(null)]}
+          member={removingMember}
+          organisationName={organisation.name}
+          mutate={mutate}
+        />
+      )}
 
       {error && <ErrorMessage error={error} />}
     </Page>
