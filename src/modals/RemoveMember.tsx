@@ -41,7 +41,7 @@ export function RemoveMember({ modalState, member, organisationName, mutate }: R
         return { ...data, members: data.members.filter((m) => m.id !== member.id) }
       }, false)
 
-      toast.trigger(`Removed ${member.username} from the organisation`)
+      toast.trigger(`Removed ${member.username}`)
       onClose()
     } catch (err) {
       setError(buildError(err))

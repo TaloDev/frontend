@@ -58,7 +58,7 @@ export const metaGroupFields: AvailablePlayerGroupField[] = [
   },
   {
     fieldDisplayName: 'game version',
-    defaultCastType: PlayerGroupRuleCastType.DOUBLE,
+    defaultCastType: PlayerGroupRuleCastType.CHAR,
     mapsTo: 'props',
     namespaced: true,
     metaProp: META_GAME_VERSION,
