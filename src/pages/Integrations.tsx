@@ -1,4 +1,4 @@
-import { IconBrandGooglePlay, IconBrandSteam, IconCheck } from '@tabler/icons-react'
+import { IconBrandApple, IconBrandGooglePlay, IconBrandSteam, IconCheck } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
@@ -12,6 +12,7 @@ import Loading from '../components/Loading'
 import Page from '../components/Page'
 import Tile from '../components/Tile'
 import { Integration, IntegrationType } from '../entities/integration'
+import { GameCenterIntegrationDetails } from '../modals/GameCenterIntegrationDetails'
 import { GooglePlayGamesIntegrationDetails } from '../modals/GooglePlayGamesIntegrationDetails'
 import { SteamworksIntegrationDetails } from '../modals/SteamworksIntegrationDetails'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
@@ -98,6 +99,10 @@ export default function Integrations() {
     ? null
     : integrations.find((integration) => integration.type === IntegrationType.GOOGLE_PLAY_GAMES)
 
+  const gameCenterIntegration = error
+    ? null
+    : integrations.find((integration) => integration.type === IntegrationType.GAME_CENTER)
+
   const [editingGooglePlayGamesIntegration, setEditingGooglePlayGamesIntegration] =
     useState<Partial<Integration> | null>(null)
 
@@ -105,6 +110,13 @@ export default function Integrations() {
     setEditingGooglePlayGamesIntegration(
       googlePlayGamesIntegration ?? { type: IntegrationType.GOOGLE_PLAY_GAMES },
     )
+  }
+
+  const [editingGameCenterIntegration, setEditingGameCenterIntegration] =
+    useState<Partial<Integration> | null>(null)
+
+  const onGameCenterIntegrationClick = () => {
+    setEditingGameCenterIntegration(gameCenterIntegration ?? { type: IntegrationType.GAME_CENTER })
   }
 
   const [isSyncingSteamworksLeaderboards, setSyncingSteamworksLeaderboards] = useState(
@@ -157,7 +169,7 @@ export default function Integrations() {
           header={
             <>
               <h2 className='text-xl font-semibold'>
-                <IconBrandSteam className='-mt-0.5 mr-2 inline align-middle' size={20} />
+                <IconBrandSteam className='-mt-1 mr-2 inline align-middle' size={20} />
                 Steam
               </h2>
               {!loading && (
@@ -277,6 +289,48 @@ export default function Integrations() {
             </div>
           }
         />
+
+        <Tile
+          header={
+            <>
+              <h2 className='text-xl font-semibold'>
+                <IconBrandApple className='-mt-1 mr-2 inline align-middle' size={20} />
+                Game Center
+              </h2>
+              {!loading && (
+                <Button variant='grey' className='w-auto!' onClick={onGameCenterIntegrationClick}>
+                  {!gameCenterIntegration && <span>Enable integration</span>}
+                  {gameCenterIntegration && <span>Update integration</span>}
+                </Button>
+              )}
+              {loading && <Loading size={24} thickness={180} />}
+            </>
+          }
+          content={
+            <div className='leading-relaxed'>
+              {!gameCenterIntegration && <p>Authenticate iOS players using Apple Game Center</p>}
+              {!gameCenterIntegration && (
+                <p>
+                  Requires your{' '}
+                  <Link to='https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleidentifier'>
+                    app bundle identifier
+                  </Link>
+                </p>
+              )}
+              {gameCenterIntegration && (
+                <p className='font-bold'>
+                  Enabled {format(new Date(gameCenterIntegration.createdAt), 'dd MMM yyyy')}
+                </p>
+              )}
+              {gameCenterIntegration && (
+                <p>
+                  Last updated{' '}
+                  {format(new Date(gameCenterIntegration.updatedAt), 'dd MMM yyyy HH:mm')}
+                </p>
+              )}
+            </div>
+          }
+        />
       </div>
 
       {editingIntegration && (
@@ -295,6 +349,17 @@ export default function Integrations() {
           ]}
           mutate={mutate}
           editingIntegration={editingGooglePlayGamesIntegration}
+        />
+      )}
+
+      {editingGameCenterIntegration && (
+        <GameCenterIntegrationDetails
+          modalState={[
+            Boolean(editingGameCenterIntegration),
+            () => setEditingGameCenterIntegration(null),
+          ]}
+          mutate={mutate}
+          editingIntegration={editingGameCenterIntegration}
         />
       )}
     </Page>

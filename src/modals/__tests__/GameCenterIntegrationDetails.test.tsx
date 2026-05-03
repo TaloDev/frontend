@@ -6,12 +6,12 @@ import ToastProvider from '../../components/toast/ToastProvider'
 import { IntegrationType } from '../../entities/integration'
 import activeGameState from '../../state/activeGameState'
 import KitchenSink from '../../utils/KitchenSink'
-import { GooglePlayGamesIntegrationDetails } from '../GooglePlayGamesIntegrationDetails'
+import { GameCenterIntegrationDetails } from '../GameCenterIntegrationDetails'
 
-describe('<GooglePlayGamesIntegrationDetails />', () => {
+describe('<GameCenterIntegrationDetails />', () => {
   const axiosMock = new MockAdapter(api)
 
-  it('should enable a google play games integration', async () => {
+  it('should enable a game center integration', async () => {
     axiosMock
       .onPost('http://talo.api/games/1/integrations')
       .replyOnce(200, { integration: { id: 1 } })
@@ -22,10 +22,10 @@ describe('<GooglePlayGamesIntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <GooglePlayGamesIntegrationDetails
+          <GameCenterIntegrationDetails
             modalState={[true, closeMock]}
             mutate={mutateMock}
-            editingIntegration={{ type: IntegrationType.GOOGLE_PLAY_GAMES }}
+            editingIntegration={{ type: IntegrationType.GAME_CENTER }}
           />
         </ToastProvider>
       </KitchenSink>,
@@ -33,19 +33,13 @@ describe('<GooglePlayGamesIntegrationDetails />', () => {
 
     expect(screen.getByText('Enable')).toBeDisabled()
 
-    await userEvent.type(
-      screen.getByLabelText('OAuth client ID'),
-      '1234567890-abc.apps.googleusercontent.com',
-    )
-    expect(screen.getByText('Enable')).toBeDisabled()
-
-    await userEvent.type(screen.getByLabelText('OAuth client secret'), 'my-client-secret')
+    await userEvent.type(screen.getByLabelText('Bundle ID'), 'com.example.game')
     expect(await screen.findByText('Enable')).toBeEnabled()
 
     await userEvent.click(screen.getByText('Enable'))
 
     expect(
-      await screen.findByText('Google Play Games integration successfully enabled'),
+      await screen.findByText('Game Center integration successfully enabled'),
     ).toBeInTheDocument()
 
     await waitFor(() => {
@@ -66,20 +60,16 @@ describe('<GooglePlayGamesIntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <GooglePlayGamesIntegrationDetails
+          <GameCenterIntegrationDetails
             modalState={[true, vi.fn()]}
             mutate={vi.fn()}
-            editingIntegration={{ type: IntegrationType.GOOGLE_PLAY_GAMES }}
+            editingIntegration={{ type: IntegrationType.GAME_CENTER }}
           />
         </ToastProvider>
       </KitchenSink>,
     )
 
-    await userEvent.type(
-      screen.getByLabelText('OAuth client ID'),
-      '1234567890-abc.apps.googleusercontent.com',
-    )
-    await userEvent.type(screen.getByLabelText('OAuth client secret'), 'my-client-secret')
+    await userEvent.type(screen.getByLabelText('Bundle ID'), 'com.example.game')
 
     expect(await screen.findByText('Enable')).toBeEnabled()
     await userEvent.click(screen.getByText('Enable'))
@@ -93,10 +83,10 @@ describe('<GooglePlayGamesIntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <GooglePlayGamesIntegrationDetails
+          <GameCenterIntegrationDetails
             modalState={[true, closeMock]}
             mutate={vi.fn()}
-            editingIntegration={{ type: IntegrationType.GOOGLE_PLAY_GAMES }}
+            editingIntegration={{ type: IntegrationType.GAME_CENTER }}
           />
         </ToastProvider>
       </KitchenSink>,
@@ -109,29 +99,25 @@ describe('<GooglePlayGamesIntegrationDetails />', () => {
     })
   })
 
-  it('should require a client ID and client secret', async () => {
+  it('should require a bundle ID', async () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <GooglePlayGamesIntegrationDetails
+          <GameCenterIntegrationDetails
             modalState={[true, vi.fn()]}
             mutate={vi.fn()}
-            editingIntegration={{ type: IntegrationType.GOOGLE_PLAY_GAMES }}
+            editingIntegration={{ type: IntegrationType.GAME_CENTER }}
           />
         </ToastProvider>
       </KitchenSink>,
     )
 
-    await userEvent.type(screen.getByLabelText('OAuth client ID'), 'a')
-    await userEvent.clear(screen.getByLabelText('OAuth client ID'))
-    expect(await screen.findByText('Client ID is required')).toBeInTheDocument()
-
-    await userEvent.type(screen.getByLabelText('OAuth client secret'), 'a')
-    await userEvent.clear(screen.getByLabelText('OAuth client secret'))
-    expect(await screen.findByText('Client secret is required')).toBeInTheDocument()
+    await userEvent.type(screen.getByLabelText('Bundle ID'), 'a')
+    await userEvent.clear(screen.getByLabelText('Bundle ID'))
+    expect(await screen.findByText('Bundle ID is required')).toBeInTheDocument()
   })
 
-  it('should disable an enabled google play games integration', async () => {
+  it('should disable an enabled game center integration', async () => {
     axiosMock.onDelete('http://talo.api/games/1/integrations/1').replyOnce(204)
 
     const closeMock = vi.fn()
@@ -140,14 +126,14 @@ describe('<GooglePlayGamesIntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <GooglePlayGamesIntegrationDetails
+          <GameCenterIntegrationDetails
             modalState={[true, closeMock]}
             mutate={mutateMock}
             editingIntegration={{
               id: 1,
-              type: IntegrationType.GOOGLE_PLAY_GAMES,
+              type: IntegrationType.GAME_CENTER,
               config: {
-                clientId: '1234567890-abc.apps.googleusercontent.com',
+                bundleId: 'com.example.game',
               },
             }}
           />
@@ -164,7 +150,7 @@ describe('<GooglePlayGamesIntegrationDetails />', () => {
     expect(mutateMock).toHaveBeenCalled()
 
     expect(
-      await screen.findByText('Google Play Games integration successfully disabled'),
+      await screen.findByText('Game Center integration successfully disabled'),
     ).toBeInTheDocument()
 
     const mutator = mutateMock.mock.calls[0][0]
@@ -179,14 +165,14 @@ describe('<GooglePlayGamesIntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <GooglePlayGamesIntegrationDetails
+          <GameCenterIntegrationDetails
             modalState={[true, vi.fn()]}
             mutate={vi.fn()}
             editingIntegration={{
               id: 1,
-              type: IntegrationType.GOOGLE_PLAY_GAMES,
+              type: IntegrationType.GAME_CENTER,
               config: {
-                clientId: '1234567890-abc.apps.googleusercontent.com',
+                bundleId: 'com.example.game',
               },
             }}
           />
@@ -198,7 +184,7 @@ describe('<GooglePlayGamesIntegrationDetails />', () => {
     expect(await screen.findByText('Network Error')).toBeInTheDocument()
   })
 
-  it('should update the google play games integration client ID', async () => {
+  it('should update the game center integration bundle ID', async () => {
     axiosMock
       .onPatch('http://talo.api/games/1/integrations/1')
       .replyOnce(200, { integration: { id: 1 } })
@@ -208,14 +194,14 @@ describe('<GooglePlayGamesIntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <GooglePlayGamesIntegrationDetails
+          <GameCenterIntegrationDetails
             modalState={[true, vi.fn()]}
             mutate={mutateMock}
             editingIntegration={{
               id: 1,
-              type: IntegrationType.GOOGLE_PLAY_GAMES,
+              type: IntegrationType.GAME_CENTER,
               config: {
-                clientId: '1234567890-abc.apps.googleusercontent.com',
+                bundleId: 'com.example.game',
               },
             }}
           />
@@ -223,54 +209,14 @@ describe('<GooglePlayGamesIntegrationDetails />', () => {
       </KitchenSink>,
     )
 
-    await userEvent.type(screen.getByLabelText('OAuth client ID'), 'new-client-id')
-    await userEvent.click(screen.getByText('Update client ID'))
+    await userEvent.type(screen.getByLabelText('Bundle ID'), 'com.new.game')
+    await userEvent.click(screen.getByText('Update bundle ID'))
 
     await waitFor(() => {
       expect(mutateMock).toHaveBeenCalled()
     })
 
-    expect(await screen.findByText('Client ID successfully updated')).toBeInTheDocument()
-
-    const mutator = mutateMock.mock.calls[0][0]
-    expect(mutator({ integrations: [{ id: 1 }, { id: 2 }] })).toStrictEqual({
-      integrations: [{ id: 1 }, { id: 2 }],
-    })
-  })
-
-  it('should update the google play games integration client secret', async () => {
-    axiosMock
-      .onPatch('http://talo.api/games/1/integrations/1')
-      .replyOnce(200, { integration: { id: 1 } })
-
-    const mutateMock = vi.fn()
-
-    render(
-      <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
-        <ToastProvider>
-          <GooglePlayGamesIntegrationDetails
-            modalState={[true, vi.fn()]}
-            mutate={mutateMock}
-            editingIntegration={{
-              id: 1,
-              type: IntegrationType.GOOGLE_PLAY_GAMES,
-              config: {
-                clientId: '1234567890-abc.apps.googleusercontent.com',
-              },
-            }}
-          />
-        </ToastProvider>
-      </KitchenSink>,
-    )
-
-    await userEvent.type(screen.getByLabelText('OAuth client secret'), 'new-client-secret')
-    await userEvent.click(screen.getByText('Update client secret'))
-
-    await waitFor(() => {
-      expect(mutateMock).toHaveBeenCalled()
-    })
-
-    expect(await screen.findByText('Client secret successfully updated')).toBeInTheDocument()
+    expect(await screen.findByText('Bundle ID successfully updated')).toBeInTheDocument()
 
     const mutator = mutateMock.mock.calls[0][0]
     expect(mutator({ integrations: [{ id: 1 }, { id: 2 }] })).toStrictEqual({
@@ -286,14 +232,14 @@ describe('<GooglePlayGamesIntegrationDetails />', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { id: 1 } }]}>
         <ToastProvider>
-          <GooglePlayGamesIntegrationDetails
+          <GameCenterIntegrationDetails
             modalState={[true, vi.fn()]}
             mutate={mutateMock}
             editingIntegration={{
               id: 1,
-              type: IntegrationType.GOOGLE_PLAY_GAMES,
+              type: IntegrationType.GAME_CENTER,
               config: {
-                clientId: '1234567890-abc.apps.googleusercontent.com',
+                bundleId: 'com.example.game',
               },
             }}
           />
@@ -301,8 +247,8 @@ describe('<GooglePlayGamesIntegrationDetails />', () => {
       </KitchenSink>,
     )
 
-    await userEvent.type(screen.getByLabelText('OAuth client ID'), 'new-client-id')
-    await userEvent.click(screen.getByText('Update client ID'))
+    await userEvent.type(screen.getByLabelText('Bundle ID'), 'com.new.game')
+    await userEvent.click(screen.getByText('Update bundle ID'))
 
     expect(await screen.findByText('Network Error')).toBeInTheDocument()
 
