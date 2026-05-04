@@ -95,22 +95,27 @@ export default function Footer() {
             <ul className='mt-2 space-y-1'>
               <li>
                 <Link to='https://trytalo.com/steamworks-integration?utm_source=dashboard&utm_medium=footer'>
-                  Steamworks integration
+                  Steamworks
                 </Link>
               </li>
               <li>
                 <Link to='https://trytalo.com/google-play-games-integration?utm_source=dashboard&utm_medium=footer'>
-                  Google Play integration
+                  Google Play Games
                 </Link>
               </li>
               <li>
-                <Link to='https://trytalo.com/unity?utm_source=dashboard&utm_medium=footer'>
-                  Unity package
+                <Link to='https://trytalo.com/apple-game-center-integration?utm_source=dashboard&utm_medium=footer'>
+                  Apple Game Center
                 </Link>
               </li>
               <li>
                 <Link to='https://trytalo.com/godot?utm_source=dashboard&utm_medium=footer'>
                   Godot plugin
+                </Link>
+              </li>
+              <li>
+                <Link to='https://trytalo.com/unity?utm_source=dashboard&utm_medium=footer'>
+                  Unity package
                 </Link>
               </li>
             </ul>
