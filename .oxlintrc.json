@@ -16,6 +16,7 @@
   "env": {
     "builtin": true
   },
-  "globals": {},
-  "ignorePatterns": []
+  "options": {
+    "typeAware": true
+  }
 }
