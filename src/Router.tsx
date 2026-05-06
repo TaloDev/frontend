@@ -22,7 +22,6 @@ const APIKeys = lazy(() => import(/* webpackChunkName: 'api-keys' */ './pages/AP
 const PlayerEvents = lazy(
   () => import(/* webpackChunkName: 'player-events' */ './pages/PlayerEvents'),
 )
-const Demo = lazy(() => import(/* webpackChunkName: 'demo' */ './pages/Demo'))
 const DataExports = lazy(() => import(/* webpackChunkName: 'data-exports' */ './pages/DataExports'))
 const Leaderboards = lazy(
   () => import(/* webpackChunkName: 'leaderboards' */ './pages/Leaderboards'),
@@ -114,7 +113,6 @@ function Router({ intendedRoute }: RouterProps) {
             <Routes>
               <Route path={routes.login} element={<Login />} />
               <Route path={routes.register} element={<Register />} />
-              <Route path={routes.demo} element={<Demo />} />
               <Route path={routes.verify2FA} element={<Verify2FA />} />
               <Route path={routes.recover} element={<RecoverAccount />} />
               <Route path={routes.acceptInvite} element={<AcceptInvite />} />

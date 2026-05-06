@@ -51,4 +51,4 @@ src/
 
 - Route-level checks with `canViewPage()` in Router
 - Action-level checks with `canPerformAction()` throughout components
-- Based on user type (ADMIN, OWNER, DEV, DEMO)
+- Based on user type (ADMIN, OWNER, DEV)

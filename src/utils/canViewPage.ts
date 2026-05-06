@@ -9,7 +9,7 @@ export default function canViewPage(user: User | null, route: string) {
     case routes.activity:
     case routes.integrations:
     case routes.gameProps:
-      return [UserType.ADMIN, UserType.DEMO].includes(user.type)
+      return user.type === UserType.ADMIN
     case routes.apiKeys:
       return user.type === UserType.ADMIN
     case routes.dataExports:
