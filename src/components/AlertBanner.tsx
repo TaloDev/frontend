@@ -1,9 +1,9 @@
-import type { Icon, IconProps } from '@tabler/icons-react'
+import type { IconProps } from '@tabler/icons-react'
 import type { ForwardRefExoticComponent, ReactNode, RefAttributes } from 'react'
 import { IconAlertCircle } from '@tabler/icons-react'
 import clsx from 'clsx'
 
-type AlertBannerIcon = ForwardRefExoticComponent<Omit<IconProps, 'ref'> & RefAttributes<Icon>>
+type AlertBannerIcon = ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>
 
 type AlertBannerProps = {
   text: ReactNode | string
