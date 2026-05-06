@@ -327,32 +327,6 @@ describe('<GroupDetails />', () => {
     })
   })
 
-  it('should not render the delete button for demo users', () => {
-    const initialGroup = {
-      id: '1',
-      name: 'Winners',
-      description: 'Players who have won the game',
-      rules: [],
-      ruleMode: PlayerGroupRuleMode.AND,
-      count: 0,
-      membersVisible: false,
-      updatedAt: new Date().toISOString(),
-    }
-
-    render(
-      <KitchenSink
-        states={[
-          { node: userState, initialValue: { type: UserType.DEMO } },
-          { node: activeGameState, initialValue: activeGameValue },
-        ]}
-      >
-        <GroupDetails modalState={[true, vi.fn()]} mutate={vi.fn()} editingGroup={initialGroup} />
-      </KitchenSink>,
-    )
-
-    expect(screen.queryByText('Delete')).not.toBeInTheDocument()
-  })
-
   it('should handle deleting errors', async () => {
     axiosMock.onDelete('http://talo.api/games/1/player-groups/1').networkErrorOnce()
 

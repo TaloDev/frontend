@@ -9,7 +9,6 @@ export default {
   confirmPassword: '/confirm-password',
   dashboard: '/',
   dataExports: '/exports',
-  demo: '/demo',
   eventsOverview: '/events',
   eventBreakdown: '/events/breakdown',
   feedback: '/feedback',

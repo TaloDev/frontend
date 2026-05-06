@@ -12,7 +12,7 @@ export default function NotFound() {
   const [routeChecked, setRouteChcked] = useState(false)
 
   useEffect(() => {
-    // e.g. /demo doesn't exist post-auth but it was a real route pre-auth
+    // e.g. /login doesn't exist post-auth but it was a real route pre-auth
     if (Object.values(routes).includes(window.location.pathname)) {
       navigate(routes.dashboard)
     } else {
