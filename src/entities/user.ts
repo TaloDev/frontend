@@ -5,7 +5,6 @@ export enum UserType {
   OWNER,
   ADMIN,
   DEV,
-  DEMO,
 }
 
 export const userSchema = z.object({

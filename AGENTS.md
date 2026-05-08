@@ -1,6 +1,4 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+# AGENTS.md
 
 ## Useful Commands
 
@@ -15,14 +13,14 @@ npm run lint -- --type-check     # Run linter and tsc simultaneously
 
 ```
 src/
-├── api/              # SWR hooks and API functions (91 files)
+├── api/              # SWR hooks and API functions
 ├── components/       # Reusable UI components
 ├── constants/        # App constants (routes, nav, user types)
-├── entities/         # TypeScript types and Zod schemas (29 domain models)
+├── entities/         # TypeScript types and Zod schemas
 ├── modals/           # Modal dialog components
-├── pages/            # Page components (39 pages)
+├── pages/            # Page components
 ├── services/         # Business logic (AuthService)
-├── state/            # Recoil atoms (8 state files)
+├── state/            # Recoil atoms
 ├── styles/           # CSS files
 ├── utils/            # Utilities and custom hooks
 ├── App.tsx           # Main app component (handles auth and routing)
@@ -53,4 +51,4 @@ src/
 
 - Route-level checks with `canViewPage()` in Router
 - Action-level checks with `canPerformAction()` throughout components
-- Based on user type (ADMIN, OWNER, DEV, DEMO)
+- Based on user type (ADMIN, OWNER, DEV)

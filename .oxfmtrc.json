@@ -3,7 +3,7 @@
   "semi": false,
   "singleQuote": true,
   "jsxSingleQuote": true,
-  "experimentalSortImports": {
+  "sortImports": {
     "groups": [
       "type-import",
       ["value-builtin", "value-external"],
@@ -15,7 +15,7 @@
     ],
     "newlinesBetween": false
   },
-  "experimentalTailwindcss": {
+  "sortTailwindcss": {
     "stylesheet": "./src/styles/index.css",
     "functions": ["clsx"],
     "preserveWhitespace": true
