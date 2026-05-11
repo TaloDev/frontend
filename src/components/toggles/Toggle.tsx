@@ -8,21 +8,33 @@ type ToggleProps = {
   enabled: boolean
   onToggle: (toggled: boolean) => void
   disabled?: boolean
+  small?: boolean
+  colour?: string
+  borderColour?: string
   inputRef?: Ref<HTMLInputElement>
 }
 
-function Toggle({ id, enabled, onToggle, disabled, inputRef }: ToggleProps) {
+function Toggle({
+  id,
+  enabled,
+  onToggle,
+  disabled,
+  small,
+  colour = '#6366f1',
+  borderColour = '#818cf8',
+  inputRef,
+}: ToggleProps) {
   const [focus, setFocus] = useState(false)
   const [innerEnabled, setInnerEnabled] = useState(enabled)
 
   const getBackgroundColour = () => {
     if (disabled) return '#d1d5db'
-    return innerEnabled ? '#6366f1' : '#374151'
+    return innerEnabled ? colour : '#374151'
   }
 
   const getBorderColour = () => {
     if (disabled) return '#d1d5db'
-    return innerEnabled ? '#818cf8' : '#4b5563'
+    return innerEnabled ? borderColour : '#4b5563'
   }
 
   return (
@@ -42,9 +54,11 @@ function Toggle({ id, enabled, onToggle, disabled, inputRef }: ToggleProps) {
 
       <motion.label
         htmlFor={id}
-        className={clsx('block h-8 w-16 cursor-pointer rounded-full border-2 p-2', {
+        className={clsx('block cursor-pointer rounded-full border-2', {
+          'h-8 w-16 p-2': !small,
+          'h-5 w-10 p-1': small,
           [labelFocusStyle]: focus,
-          '!cursor-not-allowed': disabled,
+          'cursor-not-allowed!': disabled,
         })}
         animate={{
           backgroundColor: getBackgroundColour(),
@@ -54,12 +68,15 @@ function Toggle({ id, enabled, onToggle, disabled, inputRef }: ToggleProps) {
       >
         <motion.div
           animate={{
-            y: -10,
-            x: innerEnabled ? 22 : -10,
+            y: small ? -6 : -10,
+            x: innerEnabled ? (small ? 14 : 22) : small ? -6 : -10,
           }}
           initial={false}
           transition={{ duration: 0.2 }}
-          className='relative h-8 w-8 rounded-full border border-gray-200 !bg-white shadow'
+          className={clsx('relative rounded-full border border-gray-200 bg-white! shadow', {
+            'h-8 w-8': !small,
+            'h-5 w-5': small,
+          })}
           onAnimationStart={() => onToggle(innerEnabled)}
         />
       </motion.label>
