@@ -8,12 +8,14 @@ import {
   IconTrash,
   IconTrophy,
 } from '@tabler/icons-react'
+import Tippy from '@tippyjs/react'
 import clsx from 'clsx'
 import { format } from 'date-fns'
 import { useCallback, useContext, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import deletePlayer from '../api/deletePlayer'
+import { toggleDevBuild } from '../api/toggleDevBuild'
 import Button from '../components/Button'
 import Identifier from '../components/Identifier'
 import Loading from '../components/Loading'
@@ -28,6 +30,7 @@ import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
 import Tile from '../components/Tile'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
+import Toggle from '../components/toggles/Toggle'
 import routes from '../constants/routes'
 import { PlayerAliasService } from '../entities/playerAlias'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
@@ -70,7 +73,7 @@ const links = [
 ]
 
 export default function PlayerProfile() {
-  const [player] = usePlayer()
+  const [player, setPlayer] = usePlayer()
   const navigate = useNavigate()
 
   const sortedAliases = useSortedItems(player?.aliases ?? [], 'lastSeenAt')
@@ -119,6 +122,19 @@ export default function PlayerProfile() {
     }
   }, [activeGame.id, navigate, player, toast])
 
+  const onToggleDevBuild = useCallback(
+    async (devBuild: boolean) => {
+      try {
+        const { player: updatedPlayer } = await toggleDevBuild(activeGame.id, player!.id, devBuild)
+        setPlayer(updatedPlayer)
+        toast.trigger(`Marked as ${devBuild ? 'dev' : 'live'} player`, ToastType.SUCCESS)
+      } catch {
+        toast.trigger('Failed to toggle dev build status', ToastType.ERROR)
+      }
+    },
+    [activeGame.id, player, setPlayer, toast],
+  )
+
   const filteredLinks = useMemo(() => {
     if (!player) {
       return []
@@ -143,9 +159,9 @@ export default function PlayerProfile() {
 
   return (
     <Page showBackButton title='Player profile' isLoading={!player}>
-      <div>
+      <div className='space-y-4'>
         <PlayerIdentifier player={player} />
-        <div className='mt-4 space-y-4 space-x-2 sm:flex sm:space-y-0'>
+        <div className='space-y-4 space-x-2 sm:flex sm:space-y-0'>
           <Identifier id={`Registered ${format(new Date(player.createdAt), 'dd MMM yyyy')}`} />
           <Identifier id={`Last seen ${format(new Date(player.lastSeenAt), 'dd MMM yyyy')}`} />
           <span className={clsx(player.presence?.online && 'text-green-400')}>
@@ -154,6 +170,22 @@ export default function PlayerProfile() {
             />
           </span>
         </div>
+        <Tippy content={<p>Dev player data is hidden from live players</p>} placement='right'>
+          <div className='inline-block'>
+            <Identifier id='Dev build' innerClassName='inline-flex'>
+              <span className='mr-2'>
+                <Toggle
+                  id='toggle-dev-build'
+                  enabled={player.devBuild}
+                  onToggle={onToggleDevBuild}
+                  small
+                  colour='#ea580c'
+                  borderColour='#f97316'
+                />
+              </span>
+            </Identifier>
+          </div>
+        </Tippy>
       </div>
 
       <div className='inline-grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-6'>

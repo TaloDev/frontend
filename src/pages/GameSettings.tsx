@@ -220,7 +220,7 @@ export default function GameSettings() {
           <hr className='border-gray-700' />
 
           <div className='space-y-1'>
-            <p className='font-medium'>Delete Link</p>
+            <p className='font-medium'>Delete link</p>
             <p className='text-sm'>
               Players can use this link to delete their Talo Player Auth accounts
             </p>
