@@ -1,11 +1,11 @@
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { YAxis } from 'recharts'
 import ChartTick from './ChartTick'
 
 const pxPerChar = 8
 
 function getNiceMax(maxValue: number) {
-  if (maxValue === 0) {
+  if (maxValue <= 0) {
     return 0
   }
 
@@ -20,11 +20,18 @@ export function useYAxisWidth<T>({
   data: T[]
   transformer: (d: T[]) => number[]
 }) {
+  const transformerRef = useRef(transformer)
+  transformerRef.current = transformer
+
   const yAxisWidth = useMemo(() => {
-    const maxValue = Math.max(...transformer(data), 0)
+    const values = transformerRef.current(data)
+    if (values.length === 0) {
+      return 0
+    }
+    const maxValue = values.reduce((max, val) => Math.max(max, val), 0)
     const niceMax = getNiceMax(maxValue)
     return niceMax.toLocaleString().length * pxPerChar
-  }, [data, transformer])
+  }, [data])
 
   return {
     yAxisWidth,
