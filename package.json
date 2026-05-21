@@ -62,7 +62,7 @@
     "@vitejs/plugin-react-swc": "^3.8.0",
     "@vitest/coverage-v8": "^4.0.18",
     "axios-mock-adapter": "^1.20.0",
-    "cypress": "^15.11.0",
+    "cypress": "^15.15.0",
     "eslint-plugin-cypress": "^3.3.0",
     "eslint-plugin-jest-dom": "^5.4.0",
     "eslint-plugin-testing-library": "^6.2.2",
