@@ -9,6 +9,10 @@ type Data = {
   props?: Prop[]
   purgeDevPlayers?: boolean
   purgeLivePlayers?: boolean
+  purgeDevPlayersRetention?: number
+  purgeLivePlayersRetention?: number
+  blockAliasIdentifierProfanity?: boolean
+  blockPropsProfanity?: boolean
   website?: string | null
 }
 
