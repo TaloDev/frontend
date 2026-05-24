@@ -24,6 +24,8 @@ const defaultSettings: Settings = {
   purgeLivePlayers: false,
   purgeDevPlayersRetention: 60,
   purgeLivePlayersRetention: 90,
+  blockAliasIdentifierProfanity: false,
+  blockPropsProfanity: false,
   website: null,
 }
 
@@ -128,7 +130,7 @@ export default function GameSettings() {
           <p className='font-medium'>Purge dev players</p>
           <p className='text-sm'>
             Automatically delete players created in dev builds with no activity in the last{' '}
-            {settings.purgeDevPlayersRetention} days
+            {settings.purgeDevPlayersRetention} days.
           </p>
         </div>
       </div>
@@ -174,7 +176,7 @@ export default function GameSettings() {
           <p className='font-medium'>Purge live players</p>
           <p className='text-sm'>
             Automatically delete players with no activity in the last{' '}
-            {settings.purgeLivePlayersRetention} days
+            {settings.purgeLivePlayersRetention} days.
           </p>
         </div>
       </div>
@@ -201,6 +203,57 @@ export default function GameSettings() {
 
       <hr className='border-gray-700' />
 
+      <div className='flex items-center space-x-4'>
+        <div>
+          {!settingsLoaded && (
+            <div className='mx-4'>
+              <Loading size={32} thickness={180} />
+            </div>
+          )}
+          {settingsLoaded && (
+            <Toggle
+              id='block-alias-identifier-profanity'
+              enabled={settings.blockAliasIdentifierProfanity}
+              onToggle={(val) => updateSetting('blockAliasIdentifierProfanity', val)}
+            />
+          )}
+        </div>
+        <div className='space-y-1'>
+          <p className='font-medium'>Block profanity in identifiers</p>
+          <p className='text-sm'>
+            Players will not be created if their identifiers contain profanity.
+          </p>
+        </div>
+      </div>
+
+      <hr className='border-gray-700' />
+
+      <div className='flex items-center space-x-4'>
+        <div>
+          {!settingsLoaded && (
+            <div className='mx-4'>
+              <Loading size={32} thickness={180} />
+            </div>
+          )}
+          {settingsLoaded && (
+            <Toggle
+              id='block-props-profanity'
+              enabled={settings.blockPropsProfanity}
+              onToggle={(val) => updateSetting('blockPropsProfanity', val)}
+            />
+          )}
+        </div>
+        <div className='space-y-1'>
+          <p className='font-medium'>Block profanity in props</p>
+          <p className='text-sm'>
+            Players will not be able to submit props that include profanity. This includes player
+            props, leaderboard entry props, channel props and channel storage.
+          </p>
+        </div>
+      </div>
+
+      <hr className='border-gray-700' />
+
       <div>
         <TextInput
           id='website'
@@ -210,6 +263,8 @@ export default function GameSettings() {
           value={settings.website ?? ''}
         />
       </div>
+
+      <hr className='border-gray-700' />
 
       {submitError && <ErrorMessage error={submitError} />}
 
