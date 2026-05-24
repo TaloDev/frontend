@@ -1,10 +1,7 @@
 import { IconBook, IconExternalLink } from '@tabler/icons-react'
 import { clsx } from 'clsx'
-import { ReactNode, useCallback, useState } from 'react'
-import { useRecoilValue } from 'recoil'
-import { DocsTypeSelection, DocType } from '../../modals/DocsTypeSelection'
-import activeGameState, { SelectedActiveGame } from '../../state/activeGameState'
-import useLocalStorage from '../../utils/useLocalStorage'
+import { ReactNode, useCallback } from 'react'
+import { useDocsSelection } from '../../utils/useDocsSelection'
 import Button from '../Button'
 
 type Props = {
@@ -17,6 +14,38 @@ type Props = {
     godot: string
     unity: string
   }
+}
+
+export function EmptyStateContainer({
+  className,
+  children,
+}: {
+  className?: string
+  children: ReactNode
+}) {
+  return (
+    <div
+      className={clsx(
+        'mx-auto my-20 flex flex-col items-center justify-center gap-4 text-center lg:mb-0 lg:w-1/2 xl:w-1/3',
+        className,
+      )}
+    >
+      {children}
+    </div>
+  )
+}
+
+export function EmptyStateIcon({ icon, className }: { icon: ReactNode; className?: string }) {
+  return (
+    <div
+      className={clsx(
+        'flex size-16 items-center justify-center rounded-2xl border-2 border-indigo-400 bg-linear-to-b from-gray-800 to-gray-900 text-indigo-400 shadow-md',
+        className,
+      )}
+    >
+      {icon}
+    </div>
+  )
 }
 
 export function EmptyStateTitle({ children }: { children: ReactNode }) {
@@ -42,31 +71,11 @@ export function EmptyStateButtons({
   learnMoreLink: Props['learnMoreLink']
   docs: Props['docs']
 }) {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
-
-  const [showModal, setShowModal] = useState(false)
-  const [docsType, setDocsType] = useLocalStorage<DocType | null>(`${activeGame.id}-docsType`, null)
+  const { openDocs, modalElement } = useDocsSelection(docs)
 
   const handleLearnMoreClick = useCallback(() => {
     window.open(learnMoreLink, '_blank')
   }, [learnMoreLink])
-
-  const handleDocsClick = useCallback(() => {
-    if (docsType) {
-      window.open(docs[docsType], '_blank')
-    } else {
-      setShowModal(true)
-    }
-  }, [docs, docsType])
-
-  const handleDocTypeSelected = useCallback(
-    (selectedType: DocType) => {
-      setDocsType(selectedType)
-      setShowModal(false)
-      window.open(docs[selectedType], '_blank')
-    },
-    [docs, setDocsType],
-  )
 
   return (
     <>
@@ -75,30 +84,23 @@ export function EmptyStateButtons({
           <IconExternalLink />
           <span>Learn more</span>
         </Button>
-        <Button className='flex w-auto! gap-2' onClick={handleDocsClick}>
+        <Button className='flex w-auto! gap-2' onClick={openDocs}>
           <IconBook />
           <span>Go to docs</span>
         </Button>
       </div>
-      {showModal && (
-        <DocsTypeSelection
-          modalState={[showModal, setShowModal]}
-          onSelected={handleDocTypeSelected}
-        />
-      )}
+      {modalElement}
     </>
   )
 }
 
 export function EmptyState({ title, icon, children, learnMoreLink, docs }: Props) {
   return (
-    <div className='mx-auto my-20 flex flex-col items-center justify-center gap-4 text-center lg:mb-0 lg:w-1/2 xl:w-1/3'>
-      <div className='flex size-16 items-center justify-center rounded-2xl border-2 border-indigo-400 bg-linear-to-b from-gray-800 to-gray-900 text-indigo-400 shadow-md'>
-        {icon}
-      </div>
+    <EmptyStateContainer>
+      <EmptyStateIcon icon={icon} />
       <EmptyStateTitle>{title}</EmptyStateTitle>
       <EmptyStateContent>{children}</EmptyStateContent>
       <EmptyStateButtons learnMoreLink={learnMoreLink} docs={docs} />
-    </div>
+    </EmptyStateContainer>
   )
 }

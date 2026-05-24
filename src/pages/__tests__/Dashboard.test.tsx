@@ -3,16 +3,21 @@ import userEvent from '@testing-library/user-event'
 import MockAdapter from 'axios-mock-adapter'
 import api from '../../api/api'
 import { PlayerGroupRuleMode } from '../../entities/playerGroup'
+import { UserType } from '../../entities/user'
 import activeGameState from '../../state/activeGameState'
 import devDataState from '../../state/devDataState'
 import userState from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
 import Dashboard from '../Dashboard'
 
+const mockUser = { id: 1, type: UserType.ADMIN }
+
 describe('<Dashboard />', () => {
   const axiosMock = new MockAdapter(api)
 
   beforeEach(() => {
+    localStorage.clear()
+
     axiosMock.onGet(/\/games\/\d\/headlines\/new_players/).replyOnce(200, {
       count: 3,
     })
@@ -66,7 +71,7 @@ describe('<Dashboard />', () => {
     render(
       <KitchenSink
         states={[
-          { node: userState, initialValue: {} },
+          { node: userState, initialValue: mockUser },
           { node: devDataState, initialValue: false },
         ]}
       >
@@ -74,18 +79,16 @@ describe('<Dashboard />', () => {
       </KitchenSink>,
     )
 
-    expect(
-      await screen.findByText(
-        'Welcome to Talo! To get started, create a new game using the button in the top right',
-      ),
-    ).toBeInTheDocument()
+    expect(await screen.findByText("Welcome to Talo. Let's get started!")).toBeInTheDocument()
   })
 
   it('should render the dashboard for an existing game', async () => {
+    localStorage.setItem('1-showOnboarding', JSON.stringify(false))
+
     render(
       <KitchenSink
         states={[
-          { node: userState, initialValue: {} },
+          { node: userState, initialValue: mockUser },
           { node: activeGameState, initialValue: { id: 1, name: 'Swerve City' } },
           { node: devDataState, initialValue: false },
         ]}
@@ -111,10 +114,12 @@ describe('<Dashboard />', () => {
   })
 
   it('should be able to change the time period for headlines', async () => {
+    localStorage.setItem('1-showOnboarding', JSON.stringify(false))
+
     render(
       <KitchenSink
         states={[
-          { node: userState, initialValue: {} },
+          { node: userState, initialValue: mockUser },
           { node: activeGameState, initialValue: { id: 2, name: 'Swerve City' } },
           { node: devDataState, initialValue: false },
         ]}
@@ -155,6 +160,8 @@ describe('<Dashboard />', () => {
   })
 
   it('should render headline, pinned group and stat errors', async () => {
+    localStorage.setItem('1-showOnboarding', JSON.stringify(false))
+
     axiosMock.reset()
     axiosMock.onGet(/\/games\/\d\/headlines\/new_players/).networkErrorOnce()
     axiosMock.onGet(/\/games\/\d\/headlines\/returning_players/).networkErrorOnce()
@@ -168,7 +175,7 @@ describe('<Dashboard />', () => {
     render(
       <KitchenSink
         states={[
-          { node: userState, initialValue: {} },
+          { node: userState, initialValue: mockUser },
           { node: activeGameState, initialValue: { id: 3, name: 'Swerve City' } },
           { node: devDataState, initialValue: false },
         ]}
@@ -193,7 +200,7 @@ describe('<Dashboard />', () => {
     render(
       <KitchenSink
         states={[
-          { node: userState, initialValue: {} },
+          { node: userState, initialValue: mockUser },
           { node: activeGameState, initialValue: { id: 4, name: 'Swerve City' } },
           { node: devDataState, initialValue: false },
         ]}
