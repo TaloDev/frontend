@@ -30,12 +30,16 @@ function ErrorMessage({ error, children, className }: ErrorMessageProps) {
         <div className='ml-2 w-full font-bold'>
           {error?.hasKeys &&
             Object.entries(error.keys!).map(([key, value]) => (
-              <p key={key} className='text-sm' role='alert'>
+              <p key={key} className='inline-block text-sm' role='alert'>
                 {key}: {value.join(', ')}
               </p>
             ))}
 
-          {!error?.hasKeys && error?.message && <p role='alert'>{error.message}</p>}
+          {!error?.hasKeys && error?.message && (
+            <p className='inline-block' role='alert'>
+              {error.message}
+            </p>
+          )}
 
           {children}
         </div>
