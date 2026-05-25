@@ -14,6 +14,8 @@ export default function useGameSettings(activeGame: Game) {
           purgeLivePlayers: z.boolean(),
           purgeDevPlayersRetention: z.number(),
           purgeLivePlayersRetention: z.number(),
+          blockAliasIdentifierProfanity: z.boolean(),
+          blockPropsProfanity: z.boolean(),
           website: z.string().nullable(),
           gameToken: z.string(),
         }),

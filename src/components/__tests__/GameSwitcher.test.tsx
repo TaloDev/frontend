@@ -6,28 +6,6 @@ import KitchenSink from '../../utils/KitchenSink'
 import GameSwitcher from '../GameSwitcher'
 
 describe('<GameSwitcher />', () => {
-  it('should render a cta if there is no active game', () => {
-    render(
-      <KitchenSink>
-        <GameSwitcher />
-      </KitchenSink>,
-    )
-
-    expect(screen.getByText('New game')).toBeInTheDocument()
-  })
-
-  it('should open the new game modal', async () => {
-    render(
-      <KitchenSink>
-        <GameSwitcher />
-      </KitchenSink>,
-    )
-
-    await userEvent.click(screen.getByRole('button'))
-
-    expect(screen.getByText('New game')).toBeInTheDocument()
-  })
-
   it('should render the active game name', () => {
     render(
       <KitchenSink states={[{ node: activeGameState, initialValue: { name: 'Crawle' } }]}>

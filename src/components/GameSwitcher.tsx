@@ -34,99 +34,92 @@ export default function GameSwitcher() {
 
   const dropdownButtonStyle = 'hover:bg-gray-200 active:bg-gray-300 focus:z-10'
 
+  if (!activeGame) {
+    return null
+  }
+
   return (
     <div className='relative z-50'>
-      {activeGame && (
-        <Tippy
-          placement='bottom-start'
-          visible={isOpen}
-          onClickOutside={() => setOpen(false)}
-          offset={[0, 0]}
-          interactive={true}
-          arrow={false}
-          theme='bare'
-          content={
-            <motion.ul
-              animate={{ opacity: isOpen ? 1 : 0 }}
-              transition={{ duration: 0.2 }}
-              className='w-60 divide-y divide-gray-300 rounded-b bg-white text-black shadow md:w-80'
-            >
-              {games.map((game) => {
-                const disabled = activeGame.id === game.id
-
-                return (
-                  <li
-                    key={game.name}
-                    className={clsx(dropdownButtonStyle, { ['bg-transparent!']: disabled })}
-                  >
-                    <Button
-                      variant='bare'
-                      disabled={disabled}
-                      className='w-full truncate p-2'
-                      onClick={() => switchToGame(game)}
-                    >
-                      {game.name}
-                    </Button>
-                  </li>
-                )
-              })}
-
-              <li className={clsx('rounded-b', dropdownButtonStyle)}>
-                <Button
-                  variant='bare'
-                  className='flex w-full items-center rounded-b p-2'
-                  onClick={openModal}
-                >
-                  <div className='rounded-full bg-indigo-600 p-1'>
-                    <IconPlus size={16} color='white' stroke={3} />
-                  </div>
-                  <span className='ml-2'>New game</span>
-                </Button>
-              </li>
-            </motion.ul>
-          }
-        >
-          <div
-            className={clsx(
-              'flex w-60 items-center justify-between rounded bg-indigo-300 p-2 lg:w-80',
-              { 'rounded-b-none': isOpen },
-            )}
+      <Tippy
+        placement='bottom-start'
+        visible={isOpen}
+        onClickOutside={() => setOpen(false)}
+        offset={[0, 0]}
+        interactive={true}
+        arrow={false}
+        theme='bare'
+        content={
+          <motion.ul
+            animate={{ opacity: isOpen ? 1 : 0 }}
+            transition={{ duration: 0.2 }}
+            className='w-60 divide-y divide-gray-300 rounded-b bg-white text-black shadow md:w-80'
           >
-            <div className='flex items-center'>
-              <span
-                style={{
-                  backgroundColor: randomColor({ seed: activeGame.name, luminosity: 'dark' }),
-                }}
-                className='h-8 w-8 rounded border-2 border-gray-900/30 bg-indigo-100 text-center leading-7 font-semibold text-white'
-              >
-                {activeGame.name.substring(0, 1).toUpperCase()}
-              </span>
-              <p className='ml-2 font-semibold'>{activeGame.name}</p>
-            </div>
+            {games.map((game) => {
+              const disabled = activeGame.id === game.id
 
-            <div className='ml-2 flex items-center md:ml-8'>
+              return (
+                <li
+                  key={game.name}
+                  className={clsx(dropdownButtonStyle, { ['bg-transparent!']: disabled })}
+                >
+                  <Button
+                    variant='bare'
+                    disabled={disabled}
+                    className='w-full truncate p-2'
+                    onClick={() => switchToGame(game)}
+                  >
+                    {game.name}
+                  </Button>
+                </li>
+              )
+            })}
+
+            <li className={clsx('rounded-b', dropdownButtonStyle)}>
               <Button
-                variant='icon'
-                onClick={() => setOpen(!isOpen)}
-                extra={{ 'aria-label': 'Switch games or create a new one' }}
+                variant='bare'
+                className='flex w-full items-center rounded-b p-2'
+                onClick={openModal}
               >
-                <div className={clsx('transform transition-transform', { 'rotate-180': isOpen })}>
-                  <IconChevronDown size={24} />
+                <div className='rounded-full bg-indigo-600 p-1'>
+                  <IconPlus size={16} color='white' stroke={3} />
                 </div>
+                <span className='ml-2'>New game</span>
               </Button>
-            </div>
-          </div>
-        </Tippy>
-      )}
-
-      {!activeGame && (
-        <Button
-          onClick={() => setShowModal(true)}
-          icon={<IconPlus size={16} color='white' stroke={3} />}
+            </li>
+          </motion.ul>
+        }
+      >
+        <div
+          className={clsx(
+            'flex w-60 items-center justify-between rounded bg-indigo-300 p-2 lg:w-80',
+            { 'rounded-b-none': isOpen },
+          )}
         >
-          <span>New game</span>
-        </Button>
-      )}
+          <div className='flex items-center'>
+            <span
+              style={{
+                backgroundColor: randomColor({ seed: activeGame.name, luminosity: 'dark' }),
+              }}
+              className='h-8 w-8 rounded border-2 border-gray-900/30 bg-indigo-100 text-center leading-7 font-semibold text-white'
+            >
+              {activeGame.name.substring(0, 1).toUpperCase()}
+            </span>
+            <p className='ml-2 font-semibold'>{activeGame.name}</p>
+          </div>
+
+          <div className='ml-2 flex items-center md:ml-8'>
+            <Button
+              variant='icon'
+              onClick={() => setOpen(!isOpen)}
+              extra={{ 'aria-label': 'Switch games or create a new one' }}
+            >
+              <div className={clsx('transform transition-transform', { 'rotate-180': isOpen })}>
+                <IconChevronDown size={24} />
+              </div>
+            </Button>
+          </div>
+        </div>
+      </Tippy>
 
       {showModal && <NewGame modalState={[showModal, setShowModal]} />}
     </div>
