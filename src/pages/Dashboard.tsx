@@ -7,6 +7,7 @@ import useStats from '../api/useStats'
 import DevDataStatus from '../components/DevDataStatus'
 import ErrorMessage from '../components/ErrorMessage'
 import HeadlineStat from '../components/HeadlineStat'
+import { Onboarding } from '../components/Onboarding'
 import Page from '../components/Page'
 import SecondaryNav from '../components/SecondaryNav'
 import SecondaryTitle from '../components/SecondaryTitle'
@@ -14,6 +15,7 @@ import TimePeriodPicker from '../components/TimePeriodPicker'
 import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
 import activeGameState from '../state/activeGameState'
 import devDataState from '../state/devDataState'
+import userState, { AuthedUser } from '../state/userState'
 import useIntendedRoute from '../utils/useIntendedRoute'
 import useLocalStorage from '../utils/useLocalStorage'
 import useTimePeriod, { TimePeriod } from '../utils/useTimePeriod'
@@ -22,6 +24,7 @@ export default function Dashboard() {
   const includeDevData = useRecoilValue(devDataState)
 
   const activeGame = useRecoilValue(activeGameState)
+  const user = useRecoilValue(userState) as AuthedUser
 
   const timePeriods: {
     id: TimePeriod
@@ -60,12 +63,19 @@ export default function Dashboard() {
     return stats.filter((stat) => stat.global)
   }, [stats])
 
-  if (!intendedRouteChecked) return null
+  const [showOnboarding, setShowOnboarding] = useLocalStorage(
+    `${user.id}-showOnboarding`,
+    !activeGame,
+  )
 
-  if (!activeGame) {
+  if (!intendedRouteChecked) {
+    return null
+  }
+
+  if (!activeGame || showOnboarding) {
     return (
-      <Page title="Let's get started!" disableBanners>
-        <p>Welcome to Talo! To get started, create a new game using the button in the top right</p>
+      <Page title='' disableBanners>
+        <Onboarding onComplete={() => setShowOnboarding(false)} />
       </Page>
     )
   }
