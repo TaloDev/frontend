@@ -123,12 +123,7 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
 
               {error && <ErrorMessage error={error} />}
 
-              <Button
-                disabled={!gameName.trim()}
-                isLoading={isLoading}
-                className='w-40! self-end'
-                onClick={handleCreate}
-              >
+              <Button disabled={!gameName.trim()} isLoading={isLoading} className='w-40! self-end'>
                 Create
               </Button>
             </form>

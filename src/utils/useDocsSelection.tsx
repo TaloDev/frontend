@@ -13,7 +13,7 @@ export function useDocsSelection(docs: Record<DocType, string>): {
 
   const [showModal, setShowModal] = useState(false)
   const [storedType, setDocsType] = useLocalStorage<DocType | null>(storageKey, null)
-  const docsType = storageKey ? storedType : null
+  const docsType = storedType
 
   const openDocs = useCallback(() => {
     if (docsType && storageKey) {
