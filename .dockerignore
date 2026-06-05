@@ -2,5 +2,9 @@
 .github
 node_modules
 .env.development
-*.json
+.oxlintrc.json
+.oxfmtrc.json
+renovate.json
+.vscode
+cypress
 build
