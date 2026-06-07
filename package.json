@@ -1,5 +1,5 @@
 {
-  "version": "0.77.0",
+  "version": "0.77.1",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -39,7 +39,7 @@
     "react-dom": "^18.3.1",
     "react-focus-lock": "^2.13.6",
     "react-hook-form": "^7.66.0",
-    "react-router-dom": "^6.30.3",
+    "react-router-dom": "^6.30.4",
     "react-select": "^5.8.0",
     "react-useportal": "^1.0.19",
     "recharts": "^2.15.2",
@@ -60,7 +60,7 @@
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react-swc": "^3.8.0",
-    "@vitest/coverage-v8": "^4.0.18",
+    "@vitest/coverage-v8": "^4.1.8",
     "axios-mock-adapter": "^1.20.0",
     "cypress": "^15.15.0",
     "eslint-plugin-cypress": "^3.3.0",
@@ -76,7 +76,7 @@
     "tailwindcss": "^4.1.17",
     "typescript": "^5.4.5",
     "vite": "^7.3.1",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.8"
   },
   "lint-staged": {
     "*.{ts,js,tsx,jsx}": "npm run lint"
