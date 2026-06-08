@@ -52,3 +52,28 @@ src/
 - Route-level checks with `canViewPage()` in Router
 - Action-level checks with `canPerformAction()` throughout components
 - Based on user type (ADMIN, OWNER, DEV)
+
+### Environment Variables
+
+**How it works:**
+
+Runtime env vars are injected via a `<script>` in `index.html` that sets `window.__ENV__`. The app reads them through `getEnv()` in `src/utils/env.ts`, which:
+
+1. Checks `window.__ENV__` for a substituted value
+2. Falls back to `import.meta.env` for dev / CI builds
+3. Detects unresolved placeholders (e.g., `"${API_URL}"`) and skips them
+
+**Why not `import.meta.env` directly?**
+
+Vite/Rollup inlines `import.meta.env` values at build time. For Docker images built without knowing the user's runtime env vars, this would bake empty strings into conditionals — breaking features like hCaptcha when the env var is optional.
+
+**To add a new env var:**
+
+1. Add it to `.env.production` with placeholder syntax:
+   ```
+   VITE_NEW_VAR=${NEW_VAR}
+   ```
+2. Add it to the `window.__ENV__` object in `index.html`
+3. Use `getEnv('VITE_NEW_VAR')` in code instead of `import.meta.env.VITE_NEW_VAR`
+
+The `Dockerfile` automatically extracts var names from `.env.production` and `entrypoint.sh` runs `envsub` on `index.html` at container startup.
