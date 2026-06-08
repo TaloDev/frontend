@@ -3,12 +3,8 @@ WORKDIR /usr/frontend
 COPY . .
 
 # extract env var names that need runtime substitution from .env.production
-# this list drives the entrypoint's envsub --env flags
+# this list drives the entrypoint's envsub --env flags for index.html
 RUN sed -n 's/^VITE_[^=]*=\${\([A-Z_][A-Z0-9_]*\)}[[:space:]]*$/\1/p' .env.production > /tmp/env-vars.txt
-
-# escape ${VAR} syntax so Vite leaves placeholders in the JS bundle
-# for runtime substitution by the entrypoint script
-RUN sed -i 's/\${/\\${/g' .env.production
 
 RUN --mount=type=cache,target=/root/.npm npm install
 RUN npm run build
