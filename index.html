@@ -9,6 +9,13 @@
       content="Talo is an open source, self-hostable backend for your games. Manage players, leaderboards and stats with our Godot plugin and Unity package."
     />
     <title>Talo Dashboard</title>
+    <script>
+      window.__ENV__ = {
+        VITE_API_URL: '${API_URL}',
+        VITE_SENTRY_DSN: '${SENTRY_DSN}',
+        VITE_HCAPTCHA_SITE_KEY: '${HCAPTCHA_SITE_KEY}',
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

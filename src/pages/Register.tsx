@@ -20,8 +20,9 @@ import AuthService from '../services/AuthService'
 import userState from '../state/userState'
 import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
+import { getEnv } from '../utils/env'
 
-const captchaKey = import.meta.env.VITE_HCAPTCHA_SITE_KEY
+const captchaKey = getEnv('VITE_HCAPTCHA_SITE_KEY')
 
 const validationSchema = z
   .object({

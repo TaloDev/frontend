@@ -9,11 +9,13 @@ import { BrowserRouter } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
 import App from './App'
 import ToastProvider from './components/toast/ToastProvider'
+import { getEnv } from './utils/env'
 
-if (import.meta.env.VITE_SENTRY_DSN?.startsWith('http')) {
+const dsn = getEnv('VITE_SENTRY_DSN')
+if (dsn?.startsWith('http')) {
   Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
-    environment: import.meta.env.VITE_SENTRY_ENV,
+    dsn,
+    environment: getEnv('VITE_SENTRY_ENV'),
   })
 }
 

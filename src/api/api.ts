@@ -1,10 +1,11 @@
 import axios from 'axios'
 import AuthService from '../services/AuthService'
+import { getEnv } from '../utils/env'
 import refreshAccess from './refreshAccess'
 
 export const apiConfig = {
   withCredentials: true,
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: getEnv('VITE_API_URL'),
 }
 
 const instance = axios.create(apiConfig)
