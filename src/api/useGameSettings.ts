@@ -16,6 +16,7 @@ export default function useGameSettings(activeGame: Game) {
           purgeLivePlayersRetention: z.number(),
           blockAliasIdentifierProfanity: z.boolean(),
           blockPropsProfanity: z.boolean(),
+          verifyRequests: z.boolean(),
           website: z.string().nullable(),
           gameToken: z.string(),
         }),
@@ -25,11 +26,12 @@ export default function useGameSettings(activeGame: Game) {
     return res
   }
 
-  const { data, error } = useSWR([`/games/${activeGame.id}/settings`], fetcher)
+  const { data, error, mutate } = useSWR([`/games/${activeGame.id}/settings`], fetcher)
 
   return {
     settings: data?.settings,
     loading: !data && !error,
     error: error && buildError(error),
+    mutate,
   }
 }

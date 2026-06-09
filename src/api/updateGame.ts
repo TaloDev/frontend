@@ -13,6 +13,7 @@ type Data = {
   purgeLivePlayersRetention?: number
   blockAliasIdentifierProfanity?: boolean
   blockPropsProfanity?: boolean
+  verifyRequests?: boolean
   website?: string | null
 }
 

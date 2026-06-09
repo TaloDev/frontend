@@ -37,6 +37,7 @@ export default {
   stats: '/stats',
   statMetrics: '/stats/:internalName/metrics',
   verify2FA: '/verify',
+  verificationKeys: '/verification-keys',
 }
 
 export const selfServiceRoutes = {
