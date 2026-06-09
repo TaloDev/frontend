@@ -7,20 +7,19 @@ export default function canViewPage(user: User | null, route: string) {
 
   switch (route) {
     case routes.activity:
-    case routes.integrations:
-    case routes.gameProps:
-      return user.type === UserType.ADMIN
     case routes.apiKeys:
+    case routes.gameProps:
+    case routes.integrations:
+    case routes.organisation:
+    case routes.verificationKeys:
       return user.type === UserType.ADMIN
     case routes.dataExports:
       return user.type === UserType.ADMIN && user.emailConfirmed
-    case routes.organisation:
-      return user.type === UserType.ADMIN
+    case routes.feedbackCategories:
+      return [UserType.ADMIN, UserType.DEV].includes(user.type)
     case routes.billing:
     case routes.gameSettings:
       return false
-    case routes.feedbackCategories:
-      return [UserType.ADMIN, UserType.DEV].includes(user.type)
     default:
       return true
   }

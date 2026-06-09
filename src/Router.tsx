@@ -84,6 +84,9 @@ const EventBreakdown = lazy(
 const GameSettings = lazy(
   () => import(/* webpackChunkName: 'game-settings */ './pages/GameSettings'),
 )
+const VerificationKeys = lazy(
+  () => import(/* webpackChunkName: 'verification-keys' */ './pages/VerificationKeys'),
+)
 const StatMetrics = lazy(() => import(/* webpackChunkName: 'stat-metrics */ './pages/StatMetrics'))
 const ChannelStorage = lazy(
   () => import(/* webpackChunkName: 'channel-storage */ './pages/ChannelStorage'),
@@ -185,6 +188,9 @@ function Router({ intendedRoute }: RouterProps) {
                   <Route path={routes.eventBreakdown} element={<EventBreakdown />} />
                   {canViewPage(user, routes.gameSettings) && (
                     <Route path={routes.gameSettings} element={<GameSettings />} />
+                  )}
+                  {canViewPage(user, routes.verificationKeys) && (
+                    <Route path={routes.verificationKeys} element={<VerificationKeys />} />
                   )}
                   <Route path={routes.statMetrics} element={<StatMetrics />} />
                   <Route path={routes.channelStorage} element={<ChannelStorage />} />

@@ -4,6 +4,8 @@ import { useRecoilValue } from 'recoil'
 import { z, ZodError } from 'zod'
 import updateGame from '../api/updateGame'
 import useGameSettings from '../api/useGameSettings'
+import { useVerificationKeys } from '../api/useVerificationKeys'
+import AlertBanner from '../components/AlertBanner'
 import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Link from '../components/Link'
@@ -14,6 +16,7 @@ import Select from '../components/Select'
 import TextInput from '../components/TextInput'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import Toggle from '../components/toggles/Toggle'
+import routes from '../constants/routes'
 import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
@@ -26,6 +29,7 @@ const defaultSettings: Settings = {
   purgeLivePlayersRetention: 90,
   blockAliasIdentifierProfanity: false,
   blockPropsProfanity: false,
+  verifyRequests: false,
   website: null,
 }
 
@@ -43,15 +47,33 @@ const purgeLivePlayersRetentionOptions = [
   { label: '1 year', value: 365 },
 ]
 
+const verifyRequestsConfirmation =
+  'Warning: Enabling this may block data from older game clients.\n\nPlease ensure you have configured your game to support request verification before enabling this setting.'
+
 export default function GameSettings() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
   const toast = useContext(ToastContext)
 
-  const { settings: fetchedSettings, error: fetchError, loading } = useGameSettings(activeGame)
+  const {
+    settings: fetchedSettings,
+    error: fetchError,
+    loading,
+    mutate,
+  } = useGameSettings(activeGame)
   const [settings, setSettings] = useState<Settings>(fetchedSettings ?? defaultSettings)
   const [settingsLoaded, setSettingsLoaded] = useState(false)
 
   const [submitError, setSubmitError] = useState<TaloError | null>(null)
+
+  const {
+    verificationKeys,
+    loading: verificationKeysLoading,
+    error: verificationKeysError,
+  } = useVerificationKeys(activeGame)
+
+  const hasVerificationKeys = useMemo(() => {
+    return !verificationKeysError && verificationKeys.length > 0
+  }, [verificationKeys, verificationKeysError])
 
   useEffect(() => {
     if (fetchedSettings && !fetchError && !loading) {
@@ -80,6 +102,15 @@ export default function GameSettings() {
 
       await updateGame(activeGame.id, settings)
       toast.trigger('Settings updated', ToastType.SUCCESS)
+
+      if (fetchedSettings) {
+        await mutate({
+          settings: {
+            ...settings,
+            gameToken: fetchedSettings.gameToken,
+          },
+        })
+      }
     } catch (err) {
       if (err instanceof ZodError) {
         setSubmitError(buildError({ message: err.issues[0].message }))
@@ -87,7 +118,7 @@ export default function GameSettings() {
         setSubmitError(buildError(err))
       }
     }
-  }, [activeGame.id, settings, toast])
+  }, [activeGame.id, settings, toast, fetchedSettings, mutate])
 
   const deleteLink = useMemo(() => {
     if (!fetchedSettings?.gameToken) {
@@ -111,7 +142,7 @@ export default function GameSettings() {
     >
       {fetchError && <ErrorMessage error={fetchError} />}
 
-      <div className='flex items-center space-x-4'>
+      <div className='flex items-start space-x-4'>
         <div>
           {!settingsLoaded && (
             <div className='mx-4'>
@@ -121,6 +152,7 @@ export default function GameSettings() {
           {settingsLoaded && (
             <Toggle
               id='purge-dev-players'
+              className='mt-1'
               enabled={settings.purgeDevPlayers}
               onToggle={(val) => updateSetting('purgeDevPlayers', val)}
             />
@@ -157,7 +189,7 @@ export default function GameSettings() {
 
       <hr className='border-gray-700' />
 
-      <div className='flex items-center space-x-4'>
+      <div className='flex items-start space-x-4'>
         <div>
           {!settingsLoaded && (
             <div className='mx-4'>
@@ -167,6 +199,7 @@ export default function GameSettings() {
           {settingsLoaded && (
             <Toggle
               id='purge-live-players'
+              className='mt-1'
               enabled={settings.purgeLivePlayers}
               onToggle={(val) => updateSetting('purgeLivePlayers', val)}
             />
@@ -203,7 +236,7 @@ export default function GameSettings() {
 
       <hr className='border-gray-700' />
 
-      <div className='flex items-center space-x-4'>
+      <div className='flex items-start space-x-4'>
         <div>
           {!settingsLoaded && (
             <div className='mx-4'>
@@ -213,6 +246,7 @@ export default function GameSettings() {
           {settingsLoaded && (
             <Toggle
               id='block-alias-identifier-profanity'
+              className='mt-1'
               enabled={settings.blockAliasIdentifierProfanity}
               onToggle={(val) => updateSetting('blockAliasIdentifierProfanity', val)}
             />
@@ -228,7 +262,7 @@ export default function GameSettings() {
 
       <hr className='border-gray-700' />
 
-      <div className='flex items-center space-x-4'>
+      <div className='flex items-start space-x-4'>
         <div>
           {!settingsLoaded && (
             <div className='mx-4'>
@@ -238,6 +272,7 @@ export default function GameSettings() {
           {settingsLoaded && (
             <Toggle
               id='block-props-profanity'
+              className='mt-1'
               enabled={settings.blockPropsProfanity}
               onToggle={(val) => updateSetting('blockPropsProfanity', val)}
             />
@@ -249,6 +284,54 @@ export default function GameSettings() {
             Players will not be able to submit props that include profanity. This includes player
             props, leaderboard entry props, channel props and channel storage.
           </p>
+        </div>
+      </div>
+
+      <hr className='border-gray-700' />
+
+      <div className='flex items-start space-x-4'>
+        <div>
+          {!settingsLoaded && (
+            <div className='mx-4'>
+              <Loading size={32} thickness={180} />
+            </div>
+          )}
+          {settingsLoaded && (
+            <Toggle
+              id='verify-requests'
+              className='mt-1'
+              enabled={settings.verifyRequests}
+              disabled={!hasVerificationKeys}
+              onToggle={(val) => updateSetting('verifyRequests', val)}
+              evaluateToggle={(newValue) => {
+                if (newValue && !fetchedSettings?.verifyRequests) {
+                  return window.confirm(verifyRequestsConfirmation)
+                }
+                return true
+              }}
+            />
+          )}
+        </div>
+        <div className='space-y-1'>
+          <p className='font-medium'>Verify requests</p>
+          <p className='text-sm'>
+            Enable Talo's verification system to prevent replay attacks and tampered requests.
+            <br />
+            Requires Godot plugin version ≥ <strong>0.48.0</strong> or Unity package version ≥{' '}
+            <strong>0.59.0</strong>.
+          </p>
+          {!verificationKeysLoading && !hasVerificationKeys && (
+            <AlertBanner
+              className='my-4'
+              text='You must create at least one verification key version before enabling this setting'
+            />
+          )}
+          <Link
+            to={routes.verificationKeys}
+            className='text-sm font-medium text-indigo-400 hover:text-indigo-300'
+          >
+            Manage verification keys
+          </Link>
         </div>
       </div>
 
