@@ -1,18 +1,22 @@
 import { IconEye, IconEyeOff, IconPlus } from '@tabler/icons-react'
 import { format } from 'date-fns'
-import { useContext, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { deleteVerificationKey } from '../api/deleteVerificationKey'
+import useGameSettings from '../api/useGameSettings'
 import { useVerificationKeys } from '../api/useVerificationKeys'
+import AlertBanner from '../components/AlertBanner'
 import Button from '../components/Button'
 import { NoVerificationKeys } from '../components/empty-states/NoVerificationKeys'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
+import Link from '../components/Link'
 import Page from '../components/Page'
 import DateCell from '../components/tables/cells/DateCell'
 import Table from '../components/tables/Table'
 import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
 import ToastContext from '../components/toast/ToastContext'
+import routes from '../constants/routes'
 import CreateVerificationKey from '../modals/CreateVerificationKey'
 import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
@@ -21,6 +25,12 @@ export default function VerificationKeys() {
   const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
   const { verificationKeys, loading, error: fetchError, mutate } = useVerificationKeys(activeGame)
   const toast = useContext(ToastContext)
+
+  const { settings: fetchedSettings } = useGameSettings(activeGame)
+
+  const verifyRequestsEnabled = useMemo(() => {
+    return fetchedSettings?.verifyRequests ?? false
+  }, [fetchedSettings])
 
   const [deletingKeys, setDeletingKeys] = useState<number[]>([])
   const [error, setError] = useState<TaloError | null>(null)
@@ -60,7 +70,6 @@ export default function VerificationKeys() {
   return (
     <>
       <Page
-        showBackButton
         title='Verification keys'
         isLoading={loading}
         extraTitleComponent={
@@ -75,6 +84,22 @@ export default function VerificationKeys() {
         }
       >
         {Boolean(error ?? fetchError) && <ErrorMessage error={error ?? fetchError} />}
+
+        {verificationKeys.length > 0 && fetchedSettings && !verifyRequestsEnabled && (
+          <div className='inline-block'>
+            <AlertBanner
+              text={
+                <span>
+                  Request verification is currently disabled. You can enable it on the{' '}
+                  <Link to={routes.gameSettings} className='text-white underline'>
+                    game settings
+                  </Link>{' '}
+                  page.
+                </span>
+              }
+            />
+          </div>
+        )}
 
         {!error && !fetchError && !loading && verificationKeys.length === 0 && (
           <NoVerificationKeys />
