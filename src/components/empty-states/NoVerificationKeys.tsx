@@ -10,7 +10,7 @@ export function NoVerificationKeys() {
     <EmptyState
       title={`${activeGame.name} doesn't have any verification keys yet`}
       icon={<IconShieldHalf size={32} />}
-      learnMoreLink='https://trytalo.com/verification-keys'
+      learnMoreLink='https://trytalo.com/blog/request-verification-announcement'
       docs={{
         api: 'https://docs.trytalo.com/docs/http/game-verification-key-api',
         godot: 'https://docs.trytalo.com/docs/godot/verification-keys',
