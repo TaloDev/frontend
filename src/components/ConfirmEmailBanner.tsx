@@ -58,6 +58,11 @@ export default function ConfirmEmailBanner() {
                 value={code}
                 placeholder='Code'
                 variant='light'
+                inputExtra={{
+                  inputMode: 'numeric',
+                  pattern: '[0-9]*',
+                  autoComplete: 'one-time-code',
+                }}
               />
             </div>
             <div className='mt-4 w-full lg:mt-0 lg:ml-4 lg:w-24'>

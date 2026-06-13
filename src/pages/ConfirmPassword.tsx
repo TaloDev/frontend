@@ -103,6 +103,7 @@ const ConfirmPassword = () => {
           type='password'
           onChange={setPassword}
           value={password}
+          inputExtra={{ autoComplete: 'current-password' }}
         />
 
         {error && <ErrorMessage error={error} />}

@@ -56,6 +56,7 @@ export default function Account() {
             placeholder='New password'
             variant='light'
             label='New password'
+            inputExtra={{ autoComplete: 'new-password' }}
           />
         </div>
 
