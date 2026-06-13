@@ -139,7 +139,7 @@ export default function Register() {
           label='Username'
           type='text'
           placeholder='Your name or a screen name'
-          inputExtra={{ ...register('username') }}
+          inputExtra={{ ...register('username'), autoComplete: 'username' }}
           errors={[errors.username?.message]}
         />
 
@@ -149,7 +149,7 @@ export default function Register() {
           label='Email'
           type='email'
           placeholder='For transactional notifications'
-          inputExtra={{ ...register('email') }}
+          inputExtra={{ ...register('email'), autoComplete: 'email' }}
           errors={[errors.email?.message]}
         />
 
@@ -158,7 +158,7 @@ export default function Register() {
           label='Password'
           placeholder='Keep it secure'
           type='password'
-          inputExtra={{ ...register('password') }}
+          inputExtra={{ ...register('password'), autoComplete: 'new-password' }}
           errors={[errors.password?.message]}
         />
 

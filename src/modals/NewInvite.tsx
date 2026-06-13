@@ -96,7 +96,8 @@ export default function NewInvite({ modalState, mutate }: NewInviteProps) {
             variant='modal'
             label='Email'
             placeholder='user@example.com'
-            inputExtra={{ ...register('email') }}
+            type='email'
+            inputExtra={{ ...register('email'), autoComplete: 'off' }}
             errors={[errors.email?.message]}
           />
 

@@ -88,6 +88,7 @@ export default function Login() {
           placeholder='Email'
           onChange={setEmail}
           value={email}
+          inputExtra={{ autoComplete: 'email' }}
         />
 
         <div>
@@ -98,6 +99,7 @@ export default function Login() {
             type='password'
             onChange={setPassword}
             value={password}
+            inputExtra={{ autoComplete: 'current-password' }}
           />
 
           <Link to={routes.forgotPassword} className='mt-4 inline-block'>
