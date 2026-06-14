@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { useRecoilValue } from 'recoil'
 import { useStatsActivityChart } from '../../api/useStatsActivityChart'
 import activeGameState, { SelectedActiveGame } from '../../state/activeGameState'
-import { getPersistentColor } from '../../utils/getPersistentColour'
+import { getPersistentColour } from '../../utils/getPersistentColour'
 import useTimePeriodAndDates from '../../utils/useTimePeriodAndDates'
 import { BarChartCard } from './BarChartCard'
 import { ChartCardTooltip } from './ChartCardTooltip'
@@ -22,7 +22,7 @@ export function StatsActivityChart() {
   const bars = statNames.map((name) => ({
     dataKey: (p: (typeof stats)[number]) => p.stats[name] ?? null,
     stackId: 'stats',
-    fill: getPersistentColor(name),
+    fill: getPersistentColour(name),
   }))
 
   return (
@@ -50,7 +50,7 @@ export function StatsActivityChart() {
                       <span className='flex items-center text-sm'>
                         <span
                           className='mr-2 inline-block h-4 w-4 rounded'
-                          style={{ backgroundColor: getPersistentColor(key) }}
+                          style={{ backgroundColor: getPersistentColour(key) }}
                         />
                         {key}
                       </span>

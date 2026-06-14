@@ -4,11 +4,13 @@ import { timePeriods } from '../../utils/useTimePeriodAndDates'
 import DateInput from '../DateInput'
 import TimePeriodPicker from '../TimePeriodPicker'
 import { useEventsContext } from './EventsContext'
-import EventsFilter from './EventsFilter'
+import { EventsFilter } from './EventsFilter'
 
-type Props = Pick<ReturnType<typeof useEvents>, 'eventNames' | 'error'>
+type Props = Pick<ReturnType<typeof useEvents>, 'eventNames' | 'error'> & {
+  entityName?: 'events' | 'event props'
+}
 
-export default function EventsFiltersSection({ eventNames, error }: Props) {
+export default function EventsFiltersSection({ eventNames, error, entityName = 'events' }: Props) {
   const {
     timePeriod,
     setTimePeriod,
@@ -70,7 +72,11 @@ export default function EventsFiltersSection({ eventNames, error }: Props) {
         </div>
 
         {eventNames.length > 0 && (
-          <EventsFilter initialShow={filteredSelectedEvents.length === 0} eventNames={eventNames} />
+          <EventsFilter
+            initialShow={filteredSelectedEvents.length === 0}
+            eventNames={eventNames}
+            entityName={entityName}
+          />
         )}
       </div>
     </div>

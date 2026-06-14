@@ -1,28 +1,20 @@
 import { IconAlertCircle } from '@tabler/icons-react'
-import { format } from 'date-fns'
 import { useCallback } from 'react'
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts'
 import useEvents from '../../api/useEvents'
-import ChartTick from '../../components/charts/ChartTick'
 import ErrorMessage from '../../components/ErrorMessage'
 import routes from '../../constants/routes'
-import { getPersistentColor } from '../../utils/getPersistentColour'
-import { EventChartTooltip } from '../charts/EventChartTooltip'
-import { useYAxis } from '../charts/useYAxis'
+import { getPersistentColour } from '../../utils/getPersistentColour'
+import useLocalStorage from '../../utils/useLocalStorage'
+import { EventsLineChart } from '../charts/EventsLineChart'
+import { EventsPieChart } from '../charts/EventsPieChart'
 import { NoEvents } from '../empty-states/NoEvents'
 import Link from '../Link'
+import { ChartMode, EventChartTypeSwitcher } from './EventChartTypeSwitcher'
 import { useEventsContext } from './EventsContext'
 
 type Props = ReturnType<typeof useEvents> & {
   showBreakdown?: boolean
+  entityName?: 'events' | 'event props'
 }
 
 function EventName({ name, showBreakdown }: { name: string; showBreakdown?: boolean }) {
@@ -43,13 +35,14 @@ export default function EventsDisplay({
   loading,
   error,
   showBreakdown,
+  entityName = 'events',
 }: Props) {
-  const { selectedEventNames } = useEventsContext()
+  const { selectedEventNames, localStorageKey } = useEventsContext()
 
-  const { yAxisProps } = useYAxis({
-    data: Object.values(events ?? {}),
-    transformer: (d) => d.flat().map((item) => item.count),
-  })
+  const [chartMode, setChartMode] = useLocalStorage<ChartMode>(
+    `${localStorageKey}ChartMode`,
+    'line',
+  )
 
   const getEventCount = useCallback(
     (eventNames: string[]): string => {
@@ -67,59 +60,41 @@ export default function EventsDisplay({
     [events],
   )
 
+  const hasEvents = Object.keys(events ?? {}).length > 0 && eventNames.length > 0
+  const hasSelection = selectedEventNames.length > 0
+
   return (
     <>
-      {!loading && Object.keys(events ?? {}).length === 0 && <NoEvents />}
+      {!loading &&
+        Object.keys(events ?? {}).length === 0 &&
+        (entityName === 'events' ? (
+          <NoEvents />
+        ) : (
+          <p>There are no {entityName} for this date range</p>
+        ))}
 
       {error?.hasKeys === false && <ErrorMessage error={error} />}
 
-      {Object.keys(events ?? {}).length > 0 && eventNames.length > 0 && (
+      {hasEvents && (
         <div className='flex overflow-x-scroll rounded border-2 border-gray-700 bg-black'>
           <div className='w-full pt-4 pb-4 pl-4'>
-            <ResponsiveContainer height={600}>
-              <LineChart margin={{ top: 8, left: 16, bottom: 20, right: 8 }}>
-                <CartesianGrid strokeDasharray='4' stroke='#444' vertical={false} />
+            <EventChartTypeSwitcher value={chartMode} onChange={setChartMode} />
 
-                <XAxis
-                  dataKey='date'
-                  type='number'
-                  domain={['dataMin', 'dataMax']}
-                  scale='time'
-                  tick={
-                    <ChartTick
-                      transform={(x, y) => `translate(${x},${y}) rotate(-30)`}
-                      formatter={(tick) => {
-                        if (!isFinite(tick as number)) return tick
-                        return format(new Date(tick), 'd MMM')
-                      }}
-                    />
-                  }
-                />
-
-                <YAxis dataKey='count' {...yAxisProps} />
-
-                {selectedEventNames.length > 0 && <Tooltip content={<EventChartTooltip />} />}
-
-                {selectedEventNames.map((eventName) => (
-                  <Line
-                    dataKey='count'
-                    data={events![eventName]}
-                    key={eventName}
-                    stroke={getPersistentColor(eventName)}
-                    activeDot={{ r: 6 }}
-                    type='linear'
-                    strokeWidth={3}
-                    dot={false}
-                  />
-                ))}
-              </LineChart>
-            </ResponsiveContainer>
+            {chartMode === 'line' ? (
+              <EventsLineChart events={events} selectedEventNames={selectedEventNames} />
+            ) : (
+              <EventsPieChart
+                events={events}
+                selectedEventNames={selectedEventNames}
+                showBreakdown={showBreakdown}
+              />
+            )}
           </div>
 
           <div className='min-w-80 space-y-4 border-l-2 border-gray-700 p-4'>
             <h2 className='flex space-x-2 font-mono font-medium'>
-              {selectedEventNames.length > 0 ? (
-                `${getEventCount(selectedEventNames)} events`
+              {hasSelection ? (
+                `${getEventCount(selectedEventNames)} ${entityName}`
               ) : (
                 <>
                   <IconAlertCircle />
@@ -136,13 +111,13 @@ export default function EventsDisplay({
                       <span className='rounded border border-gray-800 bg-gray-900 px-2 py-1'>
                         <span
                           className='inline-block h-4 w-4 rounded align-text-bottom'
-                          style={{ backgroundColor: getPersistentColor(name) }}
+                          style={{ backgroundColor: getPersistentColour(name) }}
                         />
                         <span className='ml-2'>
                           <EventName name={name} showBreakdown={showBreakdown} />
                         </span>
                       </span>
-                      <span className='font-mono'>({getEventCount([name])})</span>
+                      <span className='font-mono'>{getEventCount([name])}</span>
                     </p>
                   </li>
                 ))}
