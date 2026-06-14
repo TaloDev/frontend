@@ -1,6 +1,6 @@
 import chroma from 'chroma-js'
 
-export function getPersistentColor(seed: string) {
+export function getPersistentColour(seed: string) {
   // btoa allows us to have closely matching colours for similar strings
   // we use text encoder to remove unsupported characters for btoa, which only supports latin1 characters
   const bytes = new TextEncoder().encode(seed)
@@ -20,4 +20,8 @@ export function getPersistentColor(seed: string) {
   // 3. Return a color with consistent Lightness and Saturation
   // L: 65 (not too dark, not too bright), C: 50 (pleasant saturation)
   return chroma.lch(65, 50, hue).hex()
+}
+
+export function getPersistentStroke(seed: string) {
+  return chroma(getPersistentColour(seed)).brighten(1).hex()
 }

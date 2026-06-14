@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { useRecoilValue } from 'recoil'
 import { useNewLeaderboardEntriesChart } from '../../api/useNewLeaderboardEntriesChart'
 import activeGameState, { SelectedActiveGame } from '../../state/activeGameState'
-import { getPersistentColor } from '../../utils/getPersistentColour'
+import { getPersistentColour } from '../../utils/getPersistentColour'
 import useTimePeriodAndDates from '../../utils/useTimePeriodAndDates'
 import { BarChartCard } from './BarChartCard'
 import { ChartCardTooltip } from './ChartCardTooltip'
@@ -23,7 +23,7 @@ export function NewLeaderboardEntriesChart() {
   const bars = leaderboardNames.map((name) => ({
     dataKey: (p: (typeof leaderboards)[number]) => p.leaderboards[name] ?? null,
     stackId: 'leaderboards',
-    fill: getPersistentColor(name),
+    fill: getPersistentColour(name),
   }))
 
   return (
@@ -51,7 +51,7 @@ export function NewLeaderboardEntriesChart() {
                       <span className='flex items-center text-sm'>
                         <span
                           className='mr-2 inline-block h-4 w-4 rounded'
-                          style={{ backgroundColor: getPersistentColor(key) }}
+                          style={{ backgroundColor: getPersistentColour(key) }}
                         />
                         {key}
                       </span>

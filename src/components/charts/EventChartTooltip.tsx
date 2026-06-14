@@ -4,7 +4,7 @@ import { uniqBy } from 'lodash-es'
 import { Fragment } from 'react'
 import { z } from 'zod'
 import { eventsVisualisationPayloadSchema } from '../../api/useEvents'
-import { getPersistentColor } from '../../utils/getPersistentColour'
+import { getPersistentColour } from '../../utils/getPersistentColour'
 
 type Payload = z.infer<typeof eventsVisualisationPayloadSchema>
 
@@ -36,7 +36,7 @@ export function EventChartTooltip({ active, payload, label }: ChartTooltipProps)
               <li className='flex items-center text-sm'>
                 <span
                   className='mr-2 inline-block h-4 w-4 rounded'
-                  style={{ backgroundColor: getPersistentColor(item.payload.name) }}
+                  style={{ backgroundColor: getPersistentColour(item.payload.name) }}
                 />
                 {item.payload.name}
               </li>
@@ -49,7 +49,7 @@ export function EventChartTooltip({ active, payload, label }: ChartTooltipProps)
                 className={clsx('ml-2 rounded p-1 text-center text-xs', {
                   'bg-red-100/50 text-red-600': item.payload.change < 0,
                   'bg-green-100/50 text-green-600': item.payload.change > 0,
-                  'bg-gray-100 text-gray-600': item.payload.change === 0,
+                  'bg-gray-200 text-gray-800': item.payload.change === 0,
                 })}
               >
                 {(item.payload.change * 100).toFixed(1)}%
