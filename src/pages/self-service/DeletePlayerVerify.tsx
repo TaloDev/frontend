@@ -50,6 +50,11 @@ export function DeletePlayerVerify({ gameToken, aliasId, onSuccess }: Props) {
           placeholder='000000'
           onChange={setCode}
           value={code}
+          inputExtra={{
+            inputMode: 'numeric',
+            pattern: '[0-9]*',
+            autoComplete: 'one-time-code',
+          }}
         />
 
         {error && <ErrorMessage error={error} />}

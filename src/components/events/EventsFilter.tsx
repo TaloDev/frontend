@@ -10,9 +10,15 @@ import { useEventsContext } from './EventsContext'
 type EventsFilterProps = {
   initialShow?: boolean
   eventNames: string[]
+  entityName?: 'events' | 'event props'
 }
 
-export default function EventsFilter({ eventNames, initialShow = false }: EventsFilterProps) {
+export function EventsFilter({
+  eventNames,
+  initialShow = false,
+  entityName = 'events',
+}: EventsFilterProps) {
+  const capitalized = entityName.charAt(0).toUpperCase() + entityName.slice(1)
   const { selectedEventNames, setSelectedEventNames } = useEventsContext()
 
   const [show, setShow] = useState(initialShow)
@@ -37,7 +43,7 @@ export default function EventsFilter({ eventNames, initialShow = false }: Events
   }, [eventNames, eventNamefilter])
 
   return (
-    <div className='w-40'>
+    <div>
       <Tippy
         placement='bottom-start'
         offset={[0, 8]}
@@ -47,7 +53,9 @@ export default function EventsFilter({ eventNames, initialShow = false }: Events
         content={
           <div className='rdp min-w-100 space-y-2 p-0!'>
             <div className='space-y-2 p-2'>
-              <h2 className='text-lg font-semibold'>{filteredEventNames.length} events</h2>
+              <h2 className='text-lg font-semibold'>
+                {filteredEventNames.length} {capitalized}
+              </h2>
               <TextInput
                 id='event-name-filter'
                 variant='modal'
@@ -60,7 +68,7 @@ export default function EventsFilter({ eventNames, initialShow = false }: Events
 
             <hr className='border-gray-200' />
 
-            <ul className='mt-0! h-[200px] overflow-y-scroll p-2'>
+            <ul className='mt-0! h-50 overflow-y-scroll p-2'>
               {filteredEventNames
                 .sort((a, b) => a.localeCompare(b))
                 .map((name) => (
@@ -73,7 +81,7 @@ export default function EventsFilter({ eventNames, initialShow = false }: Events
                     />
                   </li>
                 ))}
-              {filteredEventNames.length === 0 && <li>No events found</li>}
+              {filteredEventNames.length === 0 && <li>No {entityName} found</li>}
             </ul>
 
             <hr className='mt-0! border-gray-200' />
@@ -95,7 +103,9 @@ export default function EventsFilter({ eventNames, initialShow = false }: Events
       >
         <div>
           <Button type='button' icon={<IconAdjustmentsHorizontal />} onClick={() => setShow(!show)}>
-            <span>Events ({selectedEventNames.length})</span>
+            <span className='whitespace-nowrap'>
+              {capitalized} ({selectedEventNames.length})
+            </span>
           </Button>
         </div>
       </Tippy>

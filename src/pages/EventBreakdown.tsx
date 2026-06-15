@@ -47,8 +47,14 @@ function EventBreakdownDisplay({ activeGame }: { activeGame: SelectedActiveGame 
 
   return (
     <Page showBackButton title={`${location.state.eventName} breakdown`} isLoading={loading}>
-      <EventsFiltersSection eventNames={eventNames} error={error} />
-      <EventsDisplay events={events} eventNames={eventNames} loading={loading} error={error} />
+      <EventsFiltersSection eventNames={eventNames} error={error} entityName='event props' />
+      <EventsDisplay
+        events={events}
+        eventNames={eventNames}
+        loading={loading}
+        error={error}
+        entityName='event props'
+      />
     </Page>
   )
 }

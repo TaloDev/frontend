@@ -85,6 +85,11 @@ export default function RecoverAccount() {
               placeholder='10-digit recovery code'
               onChange={setCode}
               value={code}
+              inputExtra={{
+                inputMode: 'numeric',
+                pattern: '[0-9]*',
+                autoComplete: 'one-time-code',
+              }}
             />
 
             {error && <ErrorMessage error={error} />}

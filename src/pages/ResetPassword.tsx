@@ -100,7 +100,7 @@ export default function ResetPassword() {
           label='New password'
           type='password'
           placeholder='Password'
-          inputExtra={{ ...register('password') }}
+          inputExtra={{ ...register('password'), autoComplete: 'new-password' }}
           errors={[errors.password?.message]}
         />
 
@@ -109,7 +109,7 @@ export default function ResetPassword() {
           label='Confirm password'
           type='password'
           placeholder='Confirm password'
-          inputExtra={{ ...register('confirmPassword') }}
+          inputExtra={{ ...register('confirmPassword'), autoComplete: 'new-password' }}
           errors={[errors.confirmPassword?.message]}
         />
 

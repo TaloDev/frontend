@@ -85,6 +85,15 @@ table {
   @apply outline-none;
 }
 
+.recharts-pie:focus,
+.recharts-sector:focus {
+  @apply outline-none;
+}
+
+.recharts-pie-sector {
+  @apply cursor-pointer;
+}
+
 .tippy-box[data-theme~='bare'],
 .tippy-box[data-theme~='services'] {
   background-color: unset;

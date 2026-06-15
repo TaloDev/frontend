@@ -115,6 +115,11 @@ export default function Account2FA() {
                   placeholder='Enter your code'
                   variant='light'
                   label='Code'
+                  inputExtra={{
+                    inputMode: 'numeric',
+                    pattern: '[0-9]*',
+                    autoComplete: 'one-time-code',
+                  }}
                 />
               </div>
 

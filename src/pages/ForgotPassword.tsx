@@ -62,7 +62,7 @@ export default function ForgotPassword() {
           type='email'
           placeholder='Email'
           disabled={emailSent}
-          inputExtra={{ ...register('email') }}
+          inputExtra={{ ...register('email'), autoComplete: 'email' }}
           errors={[errors.email?.message]}
         />
 

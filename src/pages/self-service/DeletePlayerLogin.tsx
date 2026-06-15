@@ -61,6 +61,7 @@ export function DeletePlayerLogin({
           placeholder='Identifier'
           onChange={setIdentifier}
           value={identifier}
+          inputExtra={{ autoComplete: 'username' }}
         />
 
         <TextInput
@@ -70,6 +71,7 @@ export function DeletePlayerLogin({
           type='password'
           onChange={setPassword}
           value={password}
+          inputExtra={{ autoComplete: 'current-password' }}
         />
 
         {error && <ErrorMessage error={error} />}
