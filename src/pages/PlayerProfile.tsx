@@ -149,6 +149,20 @@ export default function PlayerProfile() {
     })
   }, [player])
 
+  const displayName = useMemo(() => {
+    if (!player) {
+      return null
+    }
+
+    if (player.aliases.length > 0) {
+      return (
+        player.aliases.find((alias) => alias.displayName !== alias.identifier)?.displayName ?? null
+      )
+    }
+
+    return null
+  }, [player])
+
   if (!player) {
     return (
       <div className='flex items-center justify-center'>
@@ -160,7 +174,10 @@ export default function PlayerProfile() {
   return (
     <Page showBackButton title='Player profile' isLoading={!player}>
       <div className='space-y-4'>
-        <PlayerIdentifier player={player} />
+        <div className='space-y-4 space-x-2 sm:flex sm:space-y-0'>
+          <PlayerIdentifier player={player} />
+          {displayName && <Identifier id={`Display name = ${displayName}`} />}
+        </div>
         <div className='space-y-4 space-x-2 sm:flex sm:space-y-0'>
           <Identifier id={`Registered ${format(new Date(player.createdAt), 'dd MMM yyyy')}`} />
           <Identifier id={`Last seen ${format(new Date(player.lastSeenAt), 'dd MMM yyyy')}`} />

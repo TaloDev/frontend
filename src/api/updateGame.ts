@@ -14,6 +14,7 @@ type Data = {
   blockAliasIdentifierProfanity?: boolean
   blockPropsProfanity?: boolean
   verifyRequests?: boolean
+  displayNamePropKey?: string | null
   website?: string | null
 }
 

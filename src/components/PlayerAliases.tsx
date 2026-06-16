@@ -14,6 +14,7 @@ import useSortedItems from '../utils/useSortedItems'
 
 type PlayerAliasesProps = {
   aliases: PlayerAlias[]
+  showDisplayName?: boolean
 }
 
 function transformService(service: string) {
@@ -60,7 +61,7 @@ export function SingleAlias({ alias }: { alias: PlayerAlias }) {
   )
 }
 
-export function PlayerAliases({ aliases }: PlayerAliasesProps) {
+export function PlayerAliases({ aliases, showDisplayName }: PlayerAliasesProps) {
   const sortedAliases = useSortedItems(aliases, 'lastSeenAt')
 
   const alias = useMemo(() => {
@@ -75,7 +76,7 @@ export function PlayerAliases({ aliases }: PlayerAliasesProps) {
     <div className='space-y-2'>
       <div className='flex items-center space-x-2'>
         <SingleAlias alias={alias} />
-        <span className='text-sm'>{alias.identifier}</span>
+        <span className='text-sm'>{showDisplayName ? alias.displayName : alias.identifier}</span>
       </div>
 
       {sortedAliases.length > 1 && <p className='text-sm'>+ {sortedAliases.length - 1} more</p>}

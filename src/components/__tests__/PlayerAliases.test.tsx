@@ -46,4 +46,19 @@ describe('<PlayerAliases />', () => {
 
     expect(screen.getByText('None')).toBeInTheDocument()
   })
+
+  it('should render the alias displayName when it differs from the identifier', () => {
+    const aliases: PlayerAlias[] = [
+      playerAliasMock({
+        service: PlayerAliasService.STEAM,
+        identifier: 'yxre12',
+        displayName: 'CaptainSparkles',
+      }),
+    ]
+
+    render(<PlayerAliases showDisplayName aliases={aliases} />)
+
+    expect(screen.getByText('CaptainSparkles')).toBeInTheDocument()
+    expect(screen.queryByText('yxre12')).not.toBeInTheDocument()
+  })
 })

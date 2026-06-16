@@ -17,6 +17,7 @@ export default function useGameSettings(activeGame: Game) {
           blockAliasIdentifierProfanity: z.boolean(),
           blockPropsProfanity: z.boolean(),
           verifyRequests: z.boolean(),
+          displayNamePropKey: z.string().nullable(),
           website: z.string().nullable(),
           gameToken: z.string(),
         }),
