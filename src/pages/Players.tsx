@@ -78,7 +78,7 @@ export default function Players() {
               {(player) => (
                 <>
                   <TableCell className='min-w-80 md:min-w-0'>
-                    <PlayerAliases aliases={player.aliases} />
+                    <PlayerAliases showDisplayName aliases={player.aliases} />
                   </TableCell>
                   <DateCell>{format(new Date(player.createdAt), 'dd MMM yyyy')}</DateCell>
                   <DateCell>{format(new Date(player.lastSeenAt), 'dd MMM yyyy')}</DateCell>

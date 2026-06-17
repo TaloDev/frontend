@@ -19,7 +19,7 @@ export default function Tile({ header, content, footer, selected }: TileProps) {
     >
       <div className='space-y-4'>
         <div className='flex items-center justify-between px-4'>{header}</div>
-        <div className={clsx('my-4 h-[1px] bg-gray-600', { 'bg-indigo-400': selected })} />
+        <div className={clsx('my-4 h-px bg-gray-600', { 'bg-indigo-400': selected })} />
         <div className='flex items-center justify-between px-4'>{content}</div>
 
         {footer}
