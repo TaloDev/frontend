@@ -15,6 +15,7 @@ export const playerAliasSchema = z.object({
   id: z.number(),
   service: z.string(),
   identifier: z.string(),
+  displayName: z.string(),
   player: z.lazy(() => basePlayerSchema),
   lastSeenAt: z.string().datetime(),
   createdAt: z.string().datetime(),

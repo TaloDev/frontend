@@ -38,7 +38,7 @@ function Toggle({
 
   const getBorderColour = () => {
     if (disabled) return '#9ca3af'
-    return innerEnabled ? borderColour : '#4b5563'
+    return innerEnabled ? borderColour : '#6b7280'
   }
 
   return (

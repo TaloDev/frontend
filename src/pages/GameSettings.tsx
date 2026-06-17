@@ -14,6 +14,7 @@ import Page from '../components/Page'
 import SecondaryNav from '../components/SecondaryNav'
 import Select from '../components/Select'
 import TextInput from '../components/TextInput'
+import Tile from '../components/Tile'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import Toggle from '../components/toggles/Toggle'
 import routes from '../constants/routes'
@@ -30,6 +31,7 @@ const defaultSettings: Settings = {
   blockAliasIdentifierProfanity: false,
   blockPropsProfanity: false,
   verifyRequests: false,
+  displayNamePropKey: null,
   website: null,
 }
 
@@ -142,241 +144,278 @@ export default function GameSettings() {
     >
       {fetchError && <ErrorMessage error={fetchError} />}
 
-      <div className='flex items-start space-x-4'>
-        <div>
-          {!settingsLoaded && (
-            <div className='mx-4'>
-              <Loading size={32} thickness={180} />
+      <div className='space-y-4'>
+        <Tile
+          header={<h2 className='text-xl font-semibold'>Players</h2>}
+          content={
+            <div className='w-full space-y-4 leading-relaxed'>
+              <div className='flex items-start space-x-4'>
+                <div>
+                  {!settingsLoaded && (
+                    <div className='mx-4'>
+                      <Loading size={32} thickness={180} />
+                    </div>
+                  )}
+                  {settingsLoaded && (
+                    <Toggle
+                      id='block-alias-identifier-profanity'
+                      className='mt-1'
+                      enabled={settings.blockAliasIdentifierProfanity}
+                      onToggle={(val) => updateSetting('blockAliasIdentifierProfanity', val)}
+                    />
+                  )}
+                </div>
+                <div className='space-y-1'>
+                  <p className='font-medium'>Block profanity in identifiers</p>
+                  <p className='text-sm'>
+                    Players will not be created if their identifiers contain profanity.
+                  </p>
+                </div>
+              </div>
+
+              <div className='-mx-4 h-px bg-gray-600' />
+
+              <div className='flex items-start space-x-4'>
+                <div>
+                  {!settingsLoaded && (
+                    <div className='mx-4'>
+                      <Loading size={32} thickness={180} />
+                    </div>
+                  )}
+                  {settingsLoaded && (
+                    <Toggle
+                      id='block-props-profanity'
+                      className='mt-1'
+                      enabled={settings.blockPropsProfanity}
+                      onToggle={(val) => updateSetting('blockPropsProfanity', val)}
+                    />
+                  )}
+                </div>
+                <div className='space-y-1'>
+                  <p className='font-medium'>Block profanity in props</p>
+                  <p className='text-sm'>
+                    Players will not be able to submit props that include profanity. This includes
+                    player props, leaderboard entry props, channel props and channel storage.
+                  </p>
+                </div>
+              </div>
+
+              <div className='-mx-4 h-px bg-gray-600' />
+
+              <div className='space-y-1'>
+                <label htmlFor='display-name-prop-key' className='mb-2 font-semibold'>
+                  Display name prop key
+                </label>
+                <p className='mb-2 text-sm'>
+                  If set, player aliases use this prop's value as their display name.
+                </p>
+                <TextInput
+                  id='display-name-prop-key'
+                  placeholder='e.g. playerChosenName'
+                  onChange={(val) => updateSetting('displayNamePropKey', val.trim())}
+                  value={settings.displayNamePropKey ?? ''}
+                  variant='light'
+                />
+              </div>
             </div>
-          )}
-          {settingsLoaded && (
-            <Toggle
-              id='purge-dev-players'
-              className='mt-1'
-              enabled={settings.purgeDevPlayers}
-              onToggle={(val) => updateSetting('purgeDevPlayers', val)}
-            />
-          )}
-        </div>
-        <div className='space-y-1'>
-          <p className='font-medium'>Purge dev players</p>
-          <p className='text-sm'>
-            Automatically delete players created in dev builds with no activity in the last{' '}
-            {settings.purgeDevPlayersRetention} days.
-          </p>
-        </div>
-      </div>
+          }
+        />
 
-      {settings.purgeDevPlayers && (
-        <div>
-          <label htmlFor='dev-players-retention' className='mb-1 block font-medium'>
-            Purge dev players after...
-          </label>
-          <Select
-            inputId='dev-players-retention'
-            options={purgeDevPlayersRetentionOptions}
-            onChange={(opt) => {
-              if (opt) {
-                updateSetting('purgeDevPlayersRetention', opt.value)
-              }
-            }}
-            defaultValue={purgeDevPlayersRetentionOptions.find(
-              (opt) => opt.value === settings.purgeDevPlayersRetention,
-            )}
-          />
-        </div>
-      )}
-
-      <hr className='border-gray-700' />
-
-      <div className='flex items-start space-x-4'>
-        <div>
-          {!settingsLoaded && (
-            <div className='mx-4'>
-              <Loading size={32} thickness={180} />
+        <Tile
+          header={<h2 className='text-xl font-semibold'>Security</h2>}
+          content={
+            <div className='w-full space-y-4 leading-relaxed'>
+              <div className='flex items-start space-x-4'>
+                <div>
+                  {!settingsLoaded && (
+                    <div className='mx-4'>
+                      <Loading size={32} thickness={180} />
+                    </div>
+                  )}
+                  {settingsLoaded && (
+                    <Toggle
+                      id='verify-requests'
+                      className='mt-1'
+                      enabled={settings.verifyRequests}
+                      disabled={!hasVerificationKeys}
+                      onToggle={(val) => updateSetting('verifyRequests', val)}
+                      evaluateToggle={(newValue) => {
+                        if (newValue && !fetchedSettings?.verifyRequests) {
+                          return window.confirm(verifyRequestsConfirmation)
+                        }
+                        return true
+                      }}
+                    />
+                  )}
+                </div>
+                <div className='space-y-1'>
+                  <p className='font-medium'>Verify requests</p>
+                  <p className='text-sm'>
+                    Enable Talo's verification system to prevent replay attacks and tampered
+                    requests.
+                    <br />
+                    Requires Godot plugin version ≥ <strong>0.48.0</strong> or Unity package version
+                    ≥ <strong>0.59.0</strong>.
+                  </p>
+                  {!verificationKeysLoading && !hasVerificationKeys && (
+                    <AlertBanner
+                      className='my-4'
+                      text='You must create at least one verification key version before enabling this setting'
+                    />
+                  )}
+                  <Link to={routes.verificationKeys}>Manage verification keys</Link>
+                </div>
+              </div>
             </div>
-          )}
-          {settingsLoaded && (
-            <Toggle
-              id='purge-live-players'
-              className='mt-1'
-              enabled={settings.purgeLivePlayers}
-              onToggle={(val) => updateSetting('purgeLivePlayers', val)}
-            />
-          )}
-        </div>
-        <div className='space-y-1'>
-          <p className='font-medium'>Purge live players</p>
-          <p className='text-sm'>
-            Automatically delete players with no activity in the last{' '}
-            {settings.purgeLivePlayersRetention} days.
-          </p>
-        </div>
-      </div>
+          }
+        />
 
-      {settings.purgeLivePlayers && (
-        <div>
-          <label htmlFor='live-players-retention' className='mb-1 block font-medium'>
-            Purge live players after...
-          </label>
-          <Select
-            inputId='live-players-retention'
-            options={purgeLivePlayersRetentionOptions}
-            onChange={(opt) => {
-              if (opt) {
-                updateSetting('purgeLivePlayersRetention', opt.value)
-              }
-            }}
-            defaultValue={purgeLivePlayersRetentionOptions.find(
-              (opt) => opt.value === settings.purgeLivePlayersRetention,
-            )}
-          />
-        </div>
-      )}
+        <Tile
+          header={<h2 className='text-xl font-semibold'>Data retention</h2>}
+          content={
+            <div className='w-full space-y-4 leading-relaxed'>
+              <div className='flex items-start space-x-4'>
+                <div>
+                  {!settingsLoaded && (
+                    <div className='mx-4'>
+                      <Loading size={32} thickness={180} />
+                    </div>
+                  )}
+                  {settingsLoaded && (
+                    <Toggle
+                      id='purge-dev-players'
+                      className='mt-1'
+                      enabled={settings.purgeDevPlayers}
+                      onToggle={(val) => updateSetting('purgeDevPlayers', val)}
+                    />
+                  )}
+                </div>
+                <div className='space-y-1'>
+                  <p className='font-medium'>Purge dev players</p>
+                  <p className='text-sm'>
+                    Automatically delete players created in dev builds with no activity in the last{' '}
+                    {settings.purgeDevPlayersRetention} days.
+                  </p>
+                </div>
+              </div>
 
-      <hr className='border-gray-700' />
+              {settings.purgeDevPlayers && (
+                <div>
+                  <label htmlFor='dev-players-retention' className='mb-1 block font-medium'>
+                    Purge dev players after...
+                  </label>
+                  <Select
+                    inputId='dev-players-retention'
+                    options={purgeDevPlayersRetentionOptions}
+                    onChange={(opt) => {
+                      if (opt) {
+                        updateSetting('purgeDevPlayersRetention', opt.value)
+                      }
+                    }}
+                    defaultValue={purgeDevPlayersRetentionOptions.find(
+                      (opt) => opt.value === settings.purgeDevPlayersRetention,
+                    )}
+                  />
+                </div>
+              )}
 
-      <div className='flex items-start space-x-4'>
-        <div>
-          {!settingsLoaded && (
-            <div className='mx-4'>
-              <Loading size={32} thickness={180} />
+              <div className='-mx-4 h-px bg-gray-600' />
+
+              <div className='flex items-start space-x-4'>
+                <div>
+                  {!settingsLoaded && (
+                    <div className='mx-4'>
+                      <Loading size={32} thickness={180} />
+                    </div>
+                  )}
+                  {settingsLoaded && (
+                    <Toggle
+                      id='purge-live-players'
+                      className='mt-1'
+                      enabled={settings.purgeLivePlayers}
+                      onToggle={(val) => updateSetting('purgeLivePlayers', val)}
+                    />
+                  )}
+                </div>
+                <div className='space-y-1'>
+                  <p className='font-medium'>Purge live players</p>
+                  <p className='text-sm'>
+                    Automatically delete players with no activity in the last{' '}
+                    {settings.purgeLivePlayersRetention} days.
+                  </p>
+                </div>
+              </div>
+
+              {settings.purgeLivePlayers && (
+                <div>
+                  <label htmlFor='live-players-retention' className='mb-1 block font-medium'>
+                    Purge live players after...
+                  </label>
+                  <Select
+                    inputId='live-players-retention'
+                    options={purgeLivePlayersRetentionOptions}
+                    onChange={(opt) => {
+                      if (opt) {
+                        updateSetting('purgeLivePlayersRetention', opt.value)
+                      }
+                    }}
+                    defaultValue={purgeLivePlayersRetentionOptions.find(
+                      (opt) => opt.value === settings.purgeLivePlayersRetention,
+                    )}
+                  />
+                </div>
+              )}
+
+              {(settings.purgeLivePlayers || deleteLink) && (
+                <div className='-mx-4 h-px bg-gray-600' />
+              )}
+
+              {deleteLink && (
+                <div className='space-y-1'>
+                  <p className='font-medium'>Delete link</p>
+                  <p className='text-sm'>
+                    Players can use this link to delete their Talo Player Auth accounts
+                  </p>
+                  <div className='mt-2 flex items-center justify-between gap-4 rounded bg-gray-900 p-4 md:inline-flex md:justify-start'>
+                    <Link to={deleteLink}>{deleteLink}</Link>
+                    <Button
+                      variant='icon'
+                      className='ml-2 rounded-full bg-indigo-500 p-1 hover:bg-indigo-600'
+                      onClick={async () => {
+                        await navigator.clipboard.writeText(deleteLink)
+                        toast.trigger('Link copied to clipboard')
+                      }}
+                      icon={<IconCopy size={16} />}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-          {settingsLoaded && (
-            <Toggle
-              id='block-alias-identifier-profanity'
-              className='mt-1'
-              enabled={settings.blockAliasIdentifierProfanity}
-              onToggle={(val) => updateSetting('blockAliasIdentifierProfanity', val)}
-            />
-          )}
-        </div>
-        <div className='space-y-1'>
-          <p className='font-medium'>Block profanity in identifiers</p>
-          <p className='text-sm'>
-            Players will not be created if their identifiers contain profanity.
-          </p>
-        </div>
-      </div>
+          }
+        />
 
-      <hr className='border-gray-700' />
-
-      <div className='flex items-start space-x-4'>
-        <div>
-          {!settingsLoaded && (
-            <div className='mx-4'>
-              <Loading size={32} thickness={180} />
+        <Tile
+          header={<h2 className='text-xl font-semibold'>Miscellaneous</h2>}
+          content={
+            <div className='w-full space-y-4 leading-relaxed'>
+              <TextInput
+                id='website'
+                label='Website'
+                placeholder="Your game's dedicated site, Steam page or itch.io page"
+                onChange={(val) => updateSetting('website', val)}
+                value={settings.website ?? ''}
+                variant='light'
+              />
             </div>
-          )}
-          {settingsLoaded && (
-            <Toggle
-              id='block-props-profanity'
-              className='mt-1'
-              enabled={settings.blockPropsProfanity}
-              onToggle={(val) => updateSetting('blockPropsProfanity', val)}
-            />
-          )}
-        </div>
-        <div className='space-y-1'>
-          <p className='font-medium'>Block profanity in props</p>
-          <p className='text-sm'>
-            Players will not be able to submit props that include profanity. This includes player
-            props, leaderboard entry props, channel props and channel storage.
-          </p>
-        </div>
-      </div>
-
-      <hr className='border-gray-700' />
-
-      <div className='flex items-start space-x-4'>
-        <div>
-          {!settingsLoaded && (
-            <div className='mx-4'>
-              <Loading size={32} thickness={180} />
-            </div>
-          )}
-          {settingsLoaded && (
-            <Toggle
-              id='verify-requests'
-              className='mt-1'
-              enabled={settings.verifyRequests}
-              disabled={!hasVerificationKeys}
-              onToggle={(val) => updateSetting('verifyRequests', val)}
-              evaluateToggle={(newValue) => {
-                if (newValue && !fetchedSettings?.verifyRequests) {
-                  return window.confirm(verifyRequestsConfirmation)
-                }
-                return true
-              }}
-            />
-          )}
-        </div>
-        <div className='space-y-1'>
-          <p className='font-medium'>Verify requests</p>
-          <p className='text-sm'>
-            Enable Talo's verification system to prevent replay attacks and tampered requests.
-            <br />
-            Requires Godot plugin version ≥ <strong>0.48.0</strong> or Unity package version ≥{' '}
-            <strong>0.59.0</strong>.
-          </p>
-          {!verificationKeysLoading && !hasVerificationKeys && (
-            <AlertBanner
-              className='my-4'
-              text='You must create at least one verification key version before enabling this setting'
-            />
-          )}
-          <Link
-            to={routes.verificationKeys}
-            className='text-sm font-medium text-indigo-400 hover:text-indigo-300'
-          >
-            Manage verification keys
-          </Link>
-        </div>
-      </div>
-
-      <hr className='border-gray-700' />
-
-      <div>
-        <TextInput
-          id='website'
-          label='Website'
-          placeholder="Your game's dedicated site, Steam page or itch.io page"
-          onChange={(val) => updateSetting('website', val)}
-          value={settings.website ?? ''}
+          }
         />
       </div>
 
-      <hr className='border-gray-700' />
-
       {submitError && <ErrorMessage error={submitError} />}
 
-      <Button onClick={onSaveClick}>Save</Button>
-
-      {deleteLink && (
-        <>
-          <hr className='border-gray-700' />
-
-          <div className='space-y-1'>
-            <p className='font-medium'>Delete link</p>
-            <p className='text-sm'>
-              Players can use this link to delete their Talo Player Auth accounts
-            </p>
-            <div className='mt-4 flex items-center justify-between gap-4 rounded bg-gray-900 p-4 md:inline-flex md:justify-start'>
-              <Link to={deleteLink}>{deleteLink}</Link>
-              <Button
-                variant='icon'
-                className='ml-2 rounded-full bg-indigo-500 p-1 hover:bg-indigo-600'
-                onClick={async () => {
-                  await navigator.clipboard.writeText(deleteLink)
-                  toast.trigger('Link copied to clipboard')
-                }}
-                icon={<IconCopy size={16} />}
-              />
-            </div>
-          </div>
-        </>
-      )}
+      <div className='mt-4'>
+        <Button onClick={onSaveClick}>Save</Button>
+      </div>
     </Page>
   )
 }
