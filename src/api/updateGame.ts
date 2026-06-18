@@ -16,6 +16,7 @@ type Data = {
   verifyRequests?: boolean
   displayNamePropKey?: string | null
   website?: string | null
+  logoUrl?: string | null
 }
 
 const updateGame = makeValidatedRequest(
