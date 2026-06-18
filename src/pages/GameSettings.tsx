@@ -33,6 +33,7 @@ const defaultSettings: Settings = {
   verifyRequests: false,
   displayNamePropKey: null,
   website: null,
+  logoUrl: null,
 }
 
 const purgeDevPlayersRetentionOptions = [
@@ -100,6 +101,11 @@ export default function GameSettings() {
       if (settings.website) {
         const websiteSchema = z.string().url('Website must be a valid URL').nullable()
         await websiteSchema.parseAsync(settings.website)
+      }
+
+      if (settings.logoUrl) {
+        const logoUrlSchema = z.string().url('Logo must be a valid URL').nullable()
+        await logoUrlSchema.parseAsync(settings.logoUrl)
       }
 
       await updateGame(activeGame.id, settings)
@@ -395,7 +401,7 @@ export default function GameSettings() {
         />
 
         <Tile
-          header={<h2 className='text-xl font-semibold'>Miscellaneous</h2>}
+          header={<h2 className='text-xl font-semibold'>Emails</h2>}
           content={
             <div className='w-full space-y-4 leading-relaxed'>
               <TextInput
@@ -404,6 +410,14 @@ export default function GameSettings() {
                 placeholder="Your game's dedicated site, Steam page or itch.io page"
                 onChange={(val) => updateSetting('website', val)}
                 value={settings.website ?? ''}
+                variant='light'
+              />
+              <TextInput
+                id='logo'
+                label='Logo'
+                placeholder="A link to your game's logo, shown in player auth emails"
+                onChange={(val) => updateSetting('logoUrl', val)}
+                value={settings.logoUrl ?? ''}
                 variant='light'
               />
             </div>

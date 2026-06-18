@@ -19,6 +19,7 @@ export default function useGameSettings(activeGame: Game) {
           verifyRequests: z.boolean(),
           displayNamePropKey: z.string().nullable(),
           website: z.string().nullable(),
+          logoUrl: z.string().nullable(),
           gameToken: z.string(),
         }),
       }),
