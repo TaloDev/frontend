@@ -1,8 +1,8 @@
 import { IconX } from '@tabler/icons-react'
 import clsx from 'clsx'
 import { ReactNode, useCallback, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import FocusLock from 'react-focus-lock'
-import usePortal from 'react-useportal'
 import Button from './Button'
 
 type ModalProps = {
@@ -41,44 +41,41 @@ export default function Modal({
     }
   }, [handleEscapePressed])
 
-  const { Portal } = usePortal()
+  return createPortal(
+    <FocusLock>
+      <div className='fixed inset-0 z-50 flex w-screen items-start bg-gray-900/60 text-black transition-colors md:items-center md:p-4'>
+        <dialog
+          className={clsx(
+            'block h-full w-full bg-white p-0 md:mx-auto md:h-auto md:w-160 md:rounded',
+            className,
+            {
+              'overflow-y-scroll': scroll,
+              'overflow-y-visible': !scroll,
+            },
+          )}
+          aria-modal='true'
+          aria-labelledby={`modal-${id}-label`}
+        >
+          <div className='flex items-center justify-between border-b border-gray-200 p-4'>
+            <h2
+              id={`modal-${id}-label`}
+              className={clsx('text-xl font-semibold', { hidden: hideTitle })}
+            >
+              {title}
+            </h2>
 
-  return (
-    <Portal>
-      <FocusLock>
-        <div className='fixed inset-0 z-50 flex w-screen items-start bg-gray-900/60 text-black transition-colors md:items-center md:p-4'>
-          <dialog
-            className={clsx(
-              'block h-full w-full bg-white p-0 md:mx-auto md:h-auto md:w-160 md:rounded',
-              className,
-              {
-                'overflow-y-scroll': scroll,
-                'overflow-y-visible': !scroll,
-              },
-            )}
-            aria-modal='true'
-            aria-labelledby={`modal-${id}-label`}
-          >
-            <div className='flex items-center justify-between border-b border-gray-200 p-4'>
-              <h2
-                id={`modal-${id}-label`}
-                className={clsx('text-xl font-semibold', { hidden: hideTitle })}
-              >
-                {title}
-              </h2>
+            <Button
+              variant='icon'
+              onClick={() => setOpen(false)}
+              icon={<IconX />}
+              extra={{ 'aria-label': 'Close modal' }}
+            />
+          </div>
 
-              <Button
-                variant='icon'
-                onClick={() => setOpen(false)}
-                icon={<IconX />}
-                extra={{ 'aria-label': 'Close modal' }}
-              />
-            </div>
-
-            {children}
-          </dialog>
-        </div>
-      </FocusLock>
-    </Portal>
+          {children}
+        </dialog>
+      </div>
+    </FocusLock>,
+    document.body,
   )
 }
