@@ -1,4 +1,4 @@
-name: pr-summary
+name: PR Summary
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-      pull-requests: read
+      pull-requests: write
 
     steps:
       - name: Checkout repository
@@ -20,12 +20,19 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Summarise PR
+      - name: Update PR description
         uses: anomalyco/opencode/github@latest
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
         with:
           model: opencode-go/deepseek-v4-flash
+          share: false
           prompt: |
-            Write a brief high-level summary of the changes in this pull request.
-            3-5 sentences. What changed and why. No preamble, no restating the title.
+            Summarise the changes in this pull request at a high level.
+            3-5 short paragraphs. Each point must be a separate paragraph (blank line between them) for readability.
+            No preamble, no restating the title.
+
+            Write the summary to the PR description with:
+              gh pr edit ${{ github.event.pull_request.number }} --body "..."
+
+            Do not post comments.
