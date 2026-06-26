@@ -12,6 +12,7 @@ describe('<BillingUsageTile />', () => {
             limit: 5,
             used: 3,
           }}
+          breakdown={{ live: 2, dev: 1, deleted: 0 }}
           usageError={null}
         />
       </KitchenSink>,
@@ -26,6 +27,7 @@ describe('<BillingUsageTile />', () => {
       <KitchenSink>
         <BillingUsageTile
           usage={{ limit: 0, used: 0 }}
+          breakdown={{ live: 0, dev: 0, deleted: 0 }}
           usageError={buildError(new Error('Network Error'))}
         />
       </KitchenSink>,

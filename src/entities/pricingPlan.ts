@@ -15,6 +15,14 @@ export const pricingPlanUsageSchema = z.object({
 
 export type PricingPlanUsage = z.infer<typeof pricingPlanUsageSchema>
 
+export const playerUsageBreakdownSchema = z.object({
+  live: z.number(),
+  dev: z.number(),
+  deleted: z.number(),
+})
+
+export type PlayerUsageBreakdown = z.infer<typeof playerUsageBreakdownSchema>
+
 const pricingPlanProductPriceSchema = z.object({
   currency: z.string(),
   amount: z.number(),
