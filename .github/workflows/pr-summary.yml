@@ -35,7 +35,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: curl -fsSL https://opencode.ai/install | bash
 
-      - name: Generate and apply PR summary
+      - name: Generate and apply summary
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
