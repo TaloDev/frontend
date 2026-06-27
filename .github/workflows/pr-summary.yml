@@ -1,4 +1,4 @@
-name: PR Summary
+name: Summarise
 
 on:
   pull_request:
@@ -30,9 +30,9 @@ jobs:
           prompt: |
             Summarise the changes in this pull request at a high level.
             3-5 short paragraphs. Each point must be a separate paragraph (blank line between them) for readability.
-            No preamble, no restating the title.
+            No preamble, no restating the title, no judgements.
 
             Write the summary to the PR description with:
               gh pr edit ${{ github.event.pull_request.number }} --body "..."
 
-            Do not post comments.
+            Do not post comments. Do not attempt to create files in external directories.
