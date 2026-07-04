@@ -10,7 +10,11 @@ import { userState } from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
 import Dashboard from '../Dashboard'
 
-const mockUser = { id: 1, type: UserType.ADMIN }
+const mockUser = {
+  id: 1,
+  type: UserType.ADMIN,
+  organisation: { games: [] as Array<{ id: number; name: string }> },
+}
 
 describe('<Dashboard />', () => {
   const axiosMock = new MockAdapter(api)

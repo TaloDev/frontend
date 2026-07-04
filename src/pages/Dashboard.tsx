@@ -15,6 +15,7 @@ import TimePeriodPicker from '../components/TimePeriodPicker'
 import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
 import { activeGameState } from '../state/activeGameState'
 import { devDataState } from '../state/devDataState'
+import { gamesState } from '../state/gamesState'
 import { userState, AuthedUser } from '../state/userState'
 import useIntendedRoute from '../utils/useIntendedRoute'
 import useLocalStorage from '../utils/useLocalStorage'
@@ -25,6 +26,7 @@ export default function Dashboard() {
 
   const activeGame = useAtomValue(activeGameState)
   const user = useAtomValue(userState) as AuthedUser
+  const games = useAtomValue(gamesState)
 
   const timePeriods: {
     id: TimePeriod
@@ -65,7 +67,7 @@ export default function Dashboard() {
 
   const [showOnboarding, setShowOnboarding] = useLocalStorage(
     `${user.id}-showOnboarding`,
-    !activeGame,
+    games.length === 0,
   )
 
   if (!intendedRouteChecked) {
