@@ -1,5 +1,5 @@
 import { MouseEvent, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router'
 import { useRecoilState } from 'recoil'
 import confirmEnable2FA from '../api/confirmEnable2FA'
 import enable2FA from '../api/enable2FA'

@@ -1,7 +1,7 @@
 import type { MouseEvent } from 'react'
 import * as Sentry from '@sentry/react'
 import { useEffect, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router'
 import { useSetRecoilState } from 'recoil'
 import login from '../api/login'
 import taloIcon from '../assets/talo-icon.svg'

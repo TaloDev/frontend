@@ -1,6 +1,6 @@
 import { Background, BackgroundVariant, Controls, Node, ReactFlow } from '@xyflow/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router'
 import { useRecoilValue } from 'recoil'
 import { usePlayerSaves } from '../api/usePlayerSaves'
 import Page from '../components/Page'

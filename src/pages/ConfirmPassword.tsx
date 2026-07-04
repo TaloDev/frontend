@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router'
 import { useSetRecoilState } from 'recoil'
 import changePassword from '../api/changePassword'
 import createRecoveryCodes from '../api/createRecoveryCodes'

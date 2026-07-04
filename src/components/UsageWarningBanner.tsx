@@ -1,5 +1,5 @@
 import { IconInfoCircle } from '@tabler/icons-react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { PricingPlanUsage } from '../entities/pricingPlan'
 import AlertBanner from './AlertBanner'
 

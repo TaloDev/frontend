@@ -1,6 +1,6 @@
 import { IconCheck } from '@tabler/icons-react'
 import { MouseEvent, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router'
 import { useRecoilValue } from 'recoil'
 import Account2FA from '../components/Account2FA'
 import AlertBanner from '../components/AlertBanner'

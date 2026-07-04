@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router'
 import { useRecoilValue } from 'recoil'
 import Footer from './components/Footer'
 import IntendedRouteHandler from './components/IntendedRouteHandler'

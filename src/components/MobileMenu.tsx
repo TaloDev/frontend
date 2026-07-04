@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { IconArrowLeft } from '@tabler/icons-react'
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 import Button from './Button'
 
 type MobileMenuProps = {

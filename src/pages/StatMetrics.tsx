@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router'
 import { useRecoilValue } from 'recoil'
 import useStats from '../api/useStats'
 import { StatGlobalValueChart } from '../components/charts/StatGlobalValueChart'

@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router'
 import { useRecoilValue } from 'recoil'
 import usePlayerEvents from '../api/usePlayerEvents'
 import ErrorMessage from '../components/ErrorMessage'

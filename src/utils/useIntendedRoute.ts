@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 export default function useIntendedRoute() {
   const navigate = useNavigate()

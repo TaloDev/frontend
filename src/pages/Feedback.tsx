@@ -2,7 +2,7 @@ import { IconArrowRight, IconChevronUp, IconCrosshair } from '@tabler/icons-reac
 import clsx from 'clsx'
 import { format } from 'date-fns'
 import { useCallback, useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { useRecoilValue } from 'recoil'
 import { toggleFeedbackArchived } from '../api/toggleFeedbackArchived'
 import useFeedback from '../api/useFeedback'
