@@ -1,10 +1,10 @@
 import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Sentry from '@sentry/react'
+import { useSetAtom } from 'jotai'
 import { useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useLocation } from 'react-router'
-import { useSetRecoilState } from 'recoil'
 import { z } from 'zod'
 import registerUser from '../api/register'
 import RegisterPlanBanner from '../components/billing/RegisterPlanBanner'
@@ -17,7 +17,7 @@ import { UnauthedContainer } from '../components/UnauthedContainer'
 import { UnauthedContainerInner } from '../components/UnauthedContainerInner'
 import routes from '../constants/routes'
 import AuthService from '../services/AuthService'
-import userState from '../state/userState'
+import { userState } from '../state/userState'
 import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
 import { getEnv } from '../utils/env'
@@ -53,7 +53,7 @@ type FormValues = z.infer<typeof validationSchema>
 export default function Register() {
   const location = useLocation()
 
-  const setUser = useSetRecoilState(userState)
+  const setUser = useSetAtom(userState)
   const [apiError, setAPIError] = useState<TaloError | null>(null)
   const [isLoading, setLoading] = useState(false)
 

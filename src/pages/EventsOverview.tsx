@@ -1,15 +1,15 @@
-import { useRecoilValue } from 'recoil'
+import { useAtomValue } from 'jotai'
 import useEvents from '../api/useEvents'
 import { EventsProvider, useEventsContext } from '../components/events/EventsContext'
 import EventsDisplay from '../components/events/EventsDisplay'
 import EventsFiltersSection from '../components/events/EventsFiltersSection'
 import Page from '../components/Page'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 
 const localStorageKey = 'eventsOverview'
 
 export default function EventsOverview() {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   return (
     <EventsProvider localStorageKey={localStorageKey}>

@@ -1,6 +1,6 @@
 import { IconRefresh, IconTrash } from '@tabler/icons-react'
+import { useAtomValue } from 'jotai'
 import { MouseEvent, useContext, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import { KeyedMutator } from 'swr'
 import createFeedbackCategory from '../api/createFeedbackCategory'
 import deleteFeedbackCategory from '../api/deleteFeedbackCategory'
@@ -12,8 +12,8 @@ import RadioGroup from '../components/RadioGroup'
 import TextInput from '../components/TextInput'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import { GameFeedbackCategory } from '../entities/gameFeedbackCategory'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import userState, { AuthedUser } from '../state/userState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
+import { userState, AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 
@@ -35,8 +35,8 @@ export default function FeedbackCategoryDetails({
   const [isDeleting, setDeleting] = useState(false)
   const [error, setError] = useState<TaloError | null>(null)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
-  const user = useRecoilValue(userState) as AuthedUser
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
+  const user = useAtomValue(userState) as AuthedUser
 
   const [internalName, setInternalName] = useState(editingCategory?.internalName ?? '')
   const [displayName, setDisplayName] = useState(editingCategory?.name ?? '')

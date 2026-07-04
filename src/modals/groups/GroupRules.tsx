@@ -1,6 +1,6 @@
 import { IconPlus, IconTrash } from '@tabler/icons-react'
+import { useAtomValue } from 'jotai'
 import { Dispatch, SetStateAction, useCallback } from 'react'
-import { useRecoilValue } from 'recoil'
 import useGroupRules from '../../api/useGroupRules'
 import Button from '../../components/Button'
 import DateInput from '../../components/DateInput'
@@ -16,7 +16,7 @@ import {
   PlayerGroupRuleName,
   PlayerGroupRuleOption,
 } from '../../entities/playerGroup'
-import activeGameState, { SelectedActiveGame } from '../../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../../state/activeGameState'
 import { UnpackedGroupRule } from './GroupDetails'
 
 const groupPropKeyField = 'prop with key'
@@ -59,7 +59,7 @@ type GroupRulesProps = {
 }
 
 export default function GroupRules({ ruleModeState, rulesState }: GroupRulesProps) {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const { availableRules, availableFields: fields, loading, error } = useGroupRules(activeGame)
 
   const availableFields: AvailablePlayerGroupField[] = [...fields, ...metaGroupFields].sort(

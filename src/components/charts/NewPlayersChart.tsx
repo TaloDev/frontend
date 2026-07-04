@@ -1,7 +1,7 @@
 import clsx from 'clsx'
-import { useRecoilValue } from 'recoil'
+import { useAtomValue } from 'jotai'
 import { useNewPlayersChart } from '../../api/useNewPlayersChart'
-import activeGameState, { SelectedActiveGame } from '../../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../../state/activeGameState'
 import useTimePeriodAndDates from '../../utils/useTimePeriodAndDates'
 import { BarChartCard } from './BarChartCard'
 import { ChartCardTooltip } from './ChartCardTooltip'
@@ -9,7 +9,7 @@ import { ChartCardTooltip } from './ChartCardTooltip'
 const bars = [{ dataKey: 'count', fill: '#6366f1' }]
 
 export function NewPlayersChart() {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const { timePeriod, setTimePeriod, debouncedStartDate, debouncedEndDate } =
     useTimePeriodAndDates('newPlayersChart')

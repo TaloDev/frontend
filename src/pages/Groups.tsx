@@ -1,9 +1,9 @@
 import { IconPinned, IconPinnedFilled, IconPlus } from '@tabler/icons-react'
 import Tippy from '@tippyjs/react'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { useRecoilValue } from 'recoil'
 import togglePinnedGroup from '../api/toggledPinnedGroup'
 import useGroups from '../api/useGroups'
 import usePinnedGroups from '../api/usePinnedGroups'
@@ -21,14 +21,14 @@ import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import routes from '../constants/routes'
 import { PlayerGroup } from '../entities/playerGroup'
 import GroupDetails from '../modals/groups/GroupDetails'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import useSortedItems from '../utils/useSortedItems'
 
 export default function Groups() {
   const initialSearch = new URLSearchParams(window.location.search).get('search')
   const [search, setSearch] = useState(initialSearch ?? '')
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const [showModal, setShowModal] = useState(false)
   const [editingGroup, setEditingGroup] = useState<PlayerGroup | null>(null)

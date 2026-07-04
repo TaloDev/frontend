@@ -8,7 +8,7 @@ import {
   PlayerGroupRuleMode,
   PlayerGroupRuleName,
 } from '../../../entities/playerGroup'
-import activeGameState from '../../../state/activeGameState'
+import { activeGameState } from '../../../state/activeGameState'
 import KitchenSink from '../../../utils/KitchenSink'
 import { UnpackedGroupRule } from '../GroupDetails'
 import GroupRules from '../GroupRules'

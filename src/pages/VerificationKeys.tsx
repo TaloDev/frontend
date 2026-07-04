@@ -1,7 +1,7 @@
 import { IconEye, IconEyeOff, IconPlus } from '@tabler/icons-react'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useContext, useMemo, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import { deleteVerificationKey } from '../api/deleteVerificationKey'
 import useGameSettings from '../api/useGameSettings'
 import { useVerificationKeys } from '../api/useVerificationKeys'
@@ -18,11 +18,11 @@ import TableCell from '../components/tables/TableCell'
 import ToastContext from '../components/toast/ToastContext'
 import routes from '../constants/routes'
 import CreateVerificationKey from '../modals/CreateVerificationKey'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
 
 export default function VerificationKeys() {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const { verificationKeys, loading, error: fetchError, mutate } = useVerificationKeys(activeGame)
   const toast = useContext(ToastContext)
 

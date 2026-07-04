@@ -1,5 +1,5 @@
+import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
-import { useRecoilValue } from 'recoil'
 import useHeadlines from '../api/useHeadlines'
 import usePinnedGroups from '../api/usePinnedGroups'
 import usePlayerHeadlines from '../api/usePlayerHeadlines'
@@ -13,18 +13,18 @@ import SecondaryNav from '../components/SecondaryNav'
 import SecondaryTitle from '../components/SecondaryTitle'
 import TimePeriodPicker from '../components/TimePeriodPicker'
 import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
-import activeGameState from '../state/activeGameState'
-import devDataState from '../state/devDataState'
-import userState, { AuthedUser } from '../state/userState'
+import { activeGameState } from '../state/activeGameState'
+import { devDataState } from '../state/devDataState'
+import { userState, AuthedUser } from '../state/userState'
 import useIntendedRoute from '../utils/useIntendedRoute'
 import useLocalStorage from '../utils/useLocalStorage'
 import useTimePeriod, { TimePeriod } from '../utils/useTimePeriod'
 
 export default function Dashboard() {
-  const includeDevData = useRecoilValue(devDataState)
+  const includeDevData = useAtomValue(devDataState)
 
-  const activeGame = useRecoilValue(activeGameState)
-  const user = useRecoilValue(userState) as AuthedUser
+  const activeGame = useAtomValue(activeGameState)
+  const user = useAtomValue(userState) as AuthedUser
 
   const timePeriods: {
     id: TimePeriod

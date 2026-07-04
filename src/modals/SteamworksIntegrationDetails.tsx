@@ -1,8 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useAtomValue } from 'jotai'
 import { upperFirst } from 'lodash-es'
 import { useState, useContext, MouseEvent } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { useRecoilValue } from 'recoil'
 import { KeyedMutator } from 'swr'
 import { z } from 'zod'
 import disableIntegration from '../api/disableIntegration'
@@ -17,7 +17,7 @@ import TextInput from '../components/TextInput'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import Toggle from '../components/toggles/Toggle'
 import { Integration, SteamIntegrationConfig } from '../entities/integration'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
 
 const toastMessageConfigKeyMap = (newValue: boolean) =>
@@ -61,7 +61,7 @@ export function SteamworksIntegrationDetails({
   const [isUpdating, setUpdating] = useState<string | null>(null)
   const [isDeleting, setDeleting] = useState(false)
   const [apiError, setAPIError] = useState<TaloError | null>(null)
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const config = editingIntegration?.config as SteamIntegrationConfig | undefined
 

@@ -1,9 +1,9 @@
 import { IconArrowRight, IconPlus } from '@tabler/icons-react'
 import clsx from 'clsx'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { useRecoilValue } from 'recoil'
 import useChannels from '../api/useChannels'
 import Button from '../components/Button'
 import { NoChannels } from '../components/empty-states/NoChannels'
@@ -18,12 +18,12 @@ import TextInput from '../components/TextInput'
 import routes from '../constants/routes'
 import { GameChannel } from '../entities/gameChannels'
 import ChannelDetails from '../modals/ChannelDetails'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import useSearch from '../utils/useSearch'
 import useSortedItems from '../utils/useSortedItems'
 
 export default function Channels() {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const { search, setSearch, page, setPage, debouncedSearch } = useSearch()
 

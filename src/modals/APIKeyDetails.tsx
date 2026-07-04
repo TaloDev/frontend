@@ -1,6 +1,6 @@
 import { IconCopy } from '@tabler/icons-react'
+import { useAtomValue } from 'jotai'
 import { ChangeEvent, useContext, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import { KeyedMutator } from 'swr'
 import createAPIKey from '../api/createAPIKey'
 import updateAPIKey from '../api/updateAPIKey'
@@ -10,8 +10,8 @@ import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Modal from '../components/Modal'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import { APIKey } from '../entities/apiKey'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import userState, { AuthedUser } from '../state/userState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
+import { userState, AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
 import { formatPascalCaseName } from '../utils/formatPascalCaseName'
 
@@ -32,8 +32,8 @@ export default function APIKeyDetails({
 
   const toast = useContext(ToastContext)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
-  const user = useRecoilValue(userState) as AuthedUser
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
+  const user = useAtomValue(userState) as AuthedUser
 
   const [selectedScopes, setSelectedScopes] = useState(editingKey?.scopes ?? [])
   const [isLoading, setLoading] = useState(false)

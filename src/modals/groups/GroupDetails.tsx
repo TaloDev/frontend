@@ -1,8 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useAtomValue } from 'jotai'
 import { useContext, useMemo, useState } from 'react'
 import { useEffect } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { useRecoilValue } from 'recoil'
 import { KeyedMutator } from 'swr'
 import { useDebounce } from 'use-debounce'
 import { z } from 'zod'
@@ -24,8 +24,8 @@ import {
   PlayerGroupRuleName,
   PlayerGroupRuleMode,
 } from '../../entities/playerGroup'
-import activeGameState, { SelectedActiveGame } from '../../state/activeGameState'
-import userState, { AuthedUser } from '../../state/userState'
+import { activeGameState, SelectedActiveGame } from '../../state/activeGameState'
+import { userState, AuthedUser } from '../../state/userState'
 import buildError from '../../utils/buildError'
 import canPerformAction, { PermissionBasedAction } from '../../utils/canPerformAction'
 import isGroupRuleValid from '../../utils/group-rules/isGroupRuleValid'
@@ -59,8 +59,8 @@ type GroupDetailsProps = {
 }
 
 export default function GroupDetails({ modalState, mutate, editingGroup }: GroupDetailsProps) {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
-  const user = useRecoilValue(userState) as AuthedUser
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
+  const user = useAtomValue(userState) as AuthedUser
 
   const [, setOpen] = modalState
   const [isLoading, setLoading] = useState(false)

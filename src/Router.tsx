@@ -1,13 +1,13 @@
+import { useAtomValue } from 'jotai'
 import { lazy } from 'react'
 import { Route, Routes } from 'react-router'
-import { useRecoilValue } from 'recoil'
 import Footer from './components/Footer'
 import IntendedRouteHandler from './components/IntendedRouteHandler'
 import NavBar from './components/NavBar'
 import routes, { selfServiceRoutes } from './constants/routes'
 import AuthService from './services/AuthService'
-import activeGameState from './state/activeGameState'
-import userState from './state/userState'
+import { activeGameState } from './state/activeGameState'
+import { userState } from './state/userState'
 import canViewPage from './utils/canViewPage'
 
 const Login = lazy(() => import(/* webpackChunkName: 'login' */ './pages/Login'))
@@ -105,8 +105,8 @@ type RouterProps = {
 }
 
 function Router({ intendedRoute }: RouterProps) {
-  const user = useRecoilValue(userState)
-  const activeGame = useRecoilValue(activeGameState)
+  const user = useAtomValue(userState)
+  const activeGame = useAtomValue(activeGameState)
 
   return (
     <>

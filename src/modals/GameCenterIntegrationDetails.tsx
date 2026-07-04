@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useAtomValue } from 'jotai'
 import { useState, useContext, MouseEvent } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useRecoilValue } from 'recoil'
 import { KeyedMutator } from 'swr'
 import { z } from 'zod'
 import disableIntegration from '../api/disableIntegration'
@@ -14,7 +14,7 @@ import Modal from '../components/Modal'
 import TextInput from '../components/TextInput'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import { Integration, GameCenterIntegrationConfig } from '../entities/integration'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
 
 const validationSchema = z.object({
@@ -41,7 +41,7 @@ export function GameCenterIntegrationDetails({
   const [isUpdating, setUpdating] = useState<string | null>(null)
   const [isDeleting, setDeleting] = useState(false)
   const [apiError, setAPIError] = useState<TaloError | null>(null)
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const {
     register,

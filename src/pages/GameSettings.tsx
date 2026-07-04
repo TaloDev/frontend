@@ -1,6 +1,6 @@
 import { IconCopy } from '@tabler/icons-react'
+import { useAtomValue } from 'jotai'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import { z, ZodError } from 'zod'
 import updateGame from '../api/updateGame'
 import useGameSettings from '../api/useGameSettings'
@@ -19,7 +19,7 @@ import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import Toggle from '../components/toggles/Toggle'
 import routes from '../constants/routes'
 import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
 
 type Settings = Omit<NonNullable<ReturnType<typeof useGameSettings>['settings']>, 'gameToken'>
@@ -54,7 +54,7 @@ const verifyRequestsConfirmation =
   'Warning: Enabling this may block data from older game clients.\n\nPlease ensure you have configured your game to support request verification before enabling this setting.'
 
 export default function GameSettings() {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const toast = useContext(ToastContext)
 
   const {

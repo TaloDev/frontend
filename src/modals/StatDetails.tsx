@@ -1,8 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IconRefresh, IconTrash } from '@tabler/icons-react'
+import { useAtomValue } from 'jotai'
 import { useContext, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useRecoilValue } from 'recoil'
 import { KeyedMutator } from 'swr'
 import { z } from 'zod'
 import createStat from '../api/createStat'
@@ -15,8 +15,8 @@ import RadioGroup from '../components/RadioGroup'
 import TextInput from '../components/TextInput'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import { GameStat } from '../entities/gameStat'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import userState, { AuthedUser } from '../state/userState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
+import { userState, AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 import nullableNumber from '../utils/validation/nullableNumber'
@@ -116,8 +116,8 @@ const StatDetails = ({
   const [isDeleting, setDeleting] = useState(false)
   const [apiError, setAPIError] = useState<TaloError | null>(null)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
-  const user = useRecoilValue(userState) as AuthedUser
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
+  const user = useAtomValue(userState) as AuthedUser
 
   const [global, setGlobal] = useState(editingStat?.global ?? false)
 

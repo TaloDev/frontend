@@ -1,13 +1,8 @@
-import { SetterOrUpdater, atom } from 'recoil'
+import type { SetStateAction } from 'jotai'
+import { atom } from 'jotai'
 import { User } from '../entities/user'
 
-const userState = atom<User | null>({
-  key: 'user',
-  default: null,
-})
+export const userState = atom<User | null>(null)
 
 export type AuthedUser = NonNullable<User>
-
-export type AuthedUserState = [AuthedUser, SetterOrUpdater<User | null>]
-
-export default userState
+export type AuthedUserState = [AuthedUser, (action: SetStateAction<User | null>) => void]

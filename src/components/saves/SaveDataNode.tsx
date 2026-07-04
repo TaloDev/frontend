@@ -1,9 +1,9 @@
 import { IconCopy } from '@tabler/icons-react'
 import { Handle, Position } from '@xyflow/react'
 import clsx from 'clsx'
+import { useSetAtom } from 'jotai'
 import { memo, useCallback, useContext, useEffect, useMemo, useRef } from 'react'
-import { useSetRecoilState } from 'recoil'
-import saveDataNodeSizesState from '../../state/saveDataNodeSizesState'
+import { saveDataNodeSizesState } from '../../state/saveDataNodeSizesState'
 import { NodeDataRow } from '../../utils/nodeGraphHelpers'
 import Button from '../Button'
 import ToastContext from '../toast/ToastContext'
@@ -23,7 +23,7 @@ type SaveDataNodeProps = {
 
 function SaveDataNodeComponent({ id, data }: SaveDataNodeProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const setNodeSizes = useSetRecoilState(saveDataNodeSizesState)
+  const setNodeSizes = useSetAtom(saveDataNodeSizesState)
 
   useEffect(() => {
     if (ref.current) {

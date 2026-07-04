@@ -1,9 +1,9 @@
-import { useRecoilValue } from 'recoil'
-import activeGameState, { SelectedActiveGame } from '../../state/activeGameState'
+import { useAtomValue } from 'jotai'
+import { activeGameState, SelectedActiveGame } from '../../state/activeGameState'
 import { EmptyStateButtons, EmptyStateContent, EmptyStateTitle } from './EmptyState'
 
 export function NoLiveConfig() {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   return (
     <>

@@ -1,7 +1,7 @@
 import clsx from 'clsx'
+import { useAtomValue } from 'jotai'
 import { useLocation } from 'react-router'
-import { useRecoilValue } from 'recoil'
-import userState from '../state/userState'
+import { userState } from '../state/userState'
 import canViewPage from '../utils/canViewPage'
 import Link from './Link'
 
@@ -14,7 +14,7 @@ type SecondaryNavProps = {
 
 function SecondaryNav({ routes }: SecondaryNavProps) {
   const location = useLocation()
-  const user = useRecoilValue(userState)
+  const user = useAtomValue(userState)
 
   const availableRoutes = routes.filter(({ to }) => canViewPage(user, to))
   if (availableRoutes.length < 2) return null
@@ -29,7 +29,7 @@ function SecondaryNav({ routes }: SecondaryNavProps) {
             <li
               key={to}
               className={clsx(
-                'relative shrink-0 after:absolute after:top-[38px] after:left-0 after:h-0.5 after:w-full after:content-[""]',
+                'relative shrink-0 after:absolute after:top-9.5 after:left-0 after:h-0.5 after:w-full after:content-[""]',
                 {
                   'after:bg-white': active,
                   'hover:after:bg-indigo-300': !active,

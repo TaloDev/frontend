@@ -1,6 +1,6 @@
 import clsx from 'clsx'
+import { useAtomValue } from 'jotai'
 import { useContext, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import { resetStat } from '../api/resetStat'
 import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
@@ -10,7 +10,7 @@ import TextInput from '../components/TextInput'
 import ToastContext from '../components/toast/ToastContext'
 import { ResetMode, resetModeOptions } from '../constants/resetMode'
 import { GameStat } from '../entities/gameStat'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
 
 type ResetStatProps = {
@@ -23,7 +23,7 @@ export function ResetStat({ modalState, editingStat }: ResetStatProps) {
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState<TaloError | null>(null)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const [confirmText, setConfirmText] = useState('')
   const [resetMode, setResetMode] = useState<ResetMode>('dev')
@@ -54,7 +54,7 @@ export function ResetStat({ modalState, editingStat }: ResetStatProps) {
       title={`Reset ${editingStat?.name}`}
       modalState={[true, () => goBack(true)]}
       className={clsx('flex flex-col', {
-        'md:!h-[55vh]': isMenuOpen,
+        'md:h-[55vh]!': isMenuOpen,
       })}
     >
       <form className='flex grow flex-col'>

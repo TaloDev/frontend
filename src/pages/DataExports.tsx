@@ -2,8 +2,8 @@ import { IconCheck } from '@tabler/icons-react'
 import { AxiosError } from 'axios'
 import clsx from 'clsx'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { ChangeEvent, MouseEvent, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import createDataExport from '../api/createDataExport'
 import useDataExportEntities from '../api/useDataExportEntities'
 import useDataExports from '../api/useDataExports'
@@ -17,8 +17,8 @@ import Table from '../components/tables/Table'
 import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
 import { DataExportAvailableEntities } from '../entities/dataExport'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import userState, { AuthedUser } from '../state/userState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
+import { userState, AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
 import { formatPascalCaseName } from '../utils/formatPascalCaseName'
 import useSortedItems from '../utils/useSortedItems'
@@ -26,8 +26,8 @@ import useSortedItems from '../utils/useSortedItems'
 const dataExportStatuses = ['Requested', 'Processing', 'Processing', 'Delivered']
 
 export default function DataExports() {
-  const user = useRecoilValue(userState) as AuthedUser
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const user = useAtomValue(userState) as AuthedUser
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const [isCreating, setCreating] = useState(false)
   const [selectedEntities, setSelectedEntities] = useState<DataExportAvailableEntities[]>([])

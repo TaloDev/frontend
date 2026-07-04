@@ -6,7 +6,6 @@ import 'react-day-picker/dist/style.css'
 import '@xyflow/react/dist/base.css'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
-import { RecoilRoot } from 'recoil'
 import App from './App'
 import ToastProvider from './components/toast/ToastProvider'
 import { getEnv } from './utils/env'
@@ -22,12 +21,10 @@ if (dsn?.startsWith('http')) {
 const root = createRoot(document.getElementById('root')!)
 root.render(
   <React.StrictMode>
-    <RecoilRoot>
-      <ToastProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ToastProvider>
-    </RecoilRoot>
+    <ToastProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ToastProvider>
   </React.StrictMode>,
 )

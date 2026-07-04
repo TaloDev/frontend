@@ -1,7 +1,7 @@
 import { IconPlus } from '@tabler/icons-react'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useContext, useEffect, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import deleteAPIKey from '../api/deleteAPIKey'
 import useAPIKeys from '../api/useAPIKeys'
 import AlertBanner from '../components/AlertBanner'
@@ -16,12 +16,12 @@ import TableCell from '../components/tables/TableCell'
 import ToastContext from '../components/toast/ToastContext'
 import { APIKey } from '../entities/apiKey'
 import APIKeyDetails from '../modals/APIKeyDetails'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import userState, { AuthedUser } from '../state/userState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
+import { userState, AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
 
 export default function APIKeys() {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const {
     apiKeys,
     scopes: availableScopes,
@@ -35,7 +35,7 @@ export default function APIKeys() {
   const [showDetailsModal, setShowDetailsModal] = useState(false)
   const [editingKey, setEditingKey] = useState<APIKey | null>(null)
 
-  const user = useRecoilValue(userState) as AuthedUser
+  const user = useAtomValue(userState) as AuthedUser
   const toast = useContext(ToastContext)
 
   useEffect(() => {

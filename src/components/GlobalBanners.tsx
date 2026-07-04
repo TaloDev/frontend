@@ -1,12 +1,12 @@
+import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router'
-import { useRecoilValue } from 'recoil'
 import usePricingPlanUsage from '../api/usePricingPlanUsage'
 import routes from '../constants/routes'
 import { UserType } from '../entities/user'
-import justConfirmedEmailState from '../state/justConfirmedEmailState'
-import organisationState from '../state/organisationState'
-import userState, { AuthedUser } from '../state/userState'
+import { justConfirmedEmailState } from '../state/justConfirmedEmailState'
+import { organisationState } from '../state/organisationState'
+import { userState, AuthedUser } from '../state/userState'
 import PaymentRequiredBanner from './billing/PaymentRequiredBanner'
 import ConfirmEmailBanner from './ConfirmEmailBanner'
 import UsageWarningBanner from './UsageWarningBanner'
@@ -18,9 +18,9 @@ export default function GlobalBanners() {
 
   const [showBanners, setShowBanners] = useState(false)
 
-  const user = useRecoilValue(userState) as AuthedUser
-  const organisation = useRecoilValue(organisationState)
-  const justConfirmedEmail = useRecoilValue(justConfirmedEmailState)
+  const user = useAtomValue(userState) as AuthedUser
+  const organisation = useAtomValue(organisationState)
+  const justConfirmedEmail = useAtomValue(justConfirmedEmailState)
 
   useEffect(() => {
     setShowBanners(!blocklist.includes(location.pathname))

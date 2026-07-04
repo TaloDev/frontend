@@ -1,8 +1,3 @@
-import { atom } from 'recoil'
+import { atom } from 'jotai'
 
-const justConfirmedEmailState = atom<boolean>({
-  key: 'justConfirmedEmail',
-  default: false,
-})
-
-export default justConfirmedEmailState
+export const justConfirmedEmailState = atom(false)

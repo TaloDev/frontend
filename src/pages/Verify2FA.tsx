@@ -1,6 +1,6 @@
+import { useSetAtom } from 'jotai'
 import { MouseEvent, useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router'
-import { useSetRecoilState } from 'recoil'
 import verify2FA from '../api/verify2FA'
 import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
@@ -11,7 +11,7 @@ import { UnauthedContainer } from '../components/UnauthedContainer'
 import { UnauthedContainerInner } from '../components/UnauthedContainerInner'
 import routes from '../constants/routes'
 import AuthService from '../services/AuthService'
-import userState from '../state/userState'
+import { userState } from '../state/userState'
 import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
 
@@ -21,7 +21,7 @@ export default function Verify2FA() {
 
   const [userId] = useState(location.state?.userId)
   const [code, setCode] = useState('')
-  const setUser = useSetRecoilState(userState)
+  const setUser = useSetAtom(userState)
   const [error, setError] = useState<TaloError | null>(null)
   const [isLoading, setLoading] = useState(false)
 
