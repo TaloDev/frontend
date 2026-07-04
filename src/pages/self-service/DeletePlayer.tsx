@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { useGameFromToken } from '../../api/self-service/useGameFromToken'
 import ErrorMessage from '../../components/ErrorMessage'
 import Loading from '../../components/Loading'

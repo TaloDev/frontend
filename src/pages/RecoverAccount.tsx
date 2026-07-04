@@ -1,5 +1,5 @@
 import { MouseEvent, useEffect, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router'
 import { useSetRecoilState } from 'recoil'
 import recoverAccount from '../api/recoverAccount'
 import Button from '../components/Button'

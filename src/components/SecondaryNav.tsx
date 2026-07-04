@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 import { useRecoilValue } from 'recoil'
 import userState from '../state/userState'
 import canViewPage from '../utils/canViewPage'

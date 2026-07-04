@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 import { useRecoilValue } from 'recoil'
 import usePricingPlanUsage from '../api/usePricingPlanUsage'
 import routes from '../constants/routes'

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router'
 import routes from '../constants/routes'
 
 type IntendedRouteHandlerProps = {

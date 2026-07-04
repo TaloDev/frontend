@@ -1,7 +1,7 @@
 import { IconPlus, IconZoom } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { useCallback, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { useRecoilValue } from 'recoil'
 import useStats from '../api/useStats'
 import Button from '../components/Button'

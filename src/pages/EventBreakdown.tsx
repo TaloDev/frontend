@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router'
 import { useRecoilValue } from 'recoil'
 import useEventBreakdown from '../api/useEventBreakdown'
 import { EventsProvider, useEventsContext } from '../components/events/EventsContext'

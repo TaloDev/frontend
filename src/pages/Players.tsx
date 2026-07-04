@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { useRecoilValue } from 'recoil'
 import usePlayers from '../api/usePlayers'
 import Button from '../components/Button'

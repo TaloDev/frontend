@@ -15,7 +15,7 @@ import {
 import Tippy from '@tippyjs/react'
 import clsx from 'clsx'
 import { useState, useEffect } from 'react'
-import { Link as RouterLink, useLocation } from 'react-router-dom'
+import { Link as RouterLink, useLocation } from 'react-router'
 import { useRecoilValue } from 'recoil'
 import routes from '../constants/routes'
 import userState from '../state/userState'

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useEffect } from 'react'
-import { Location, MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { Location, MemoryRouter, Route, Routes, useLocation } from 'react-router'
 import { RecoilRoot, RecoilState } from 'recoil'
 import { SWRConfig } from 'swr'
 import RecoilObserver from '../state/RecoilObserver'

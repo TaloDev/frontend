@@ -1,7 +1,7 @@
 import { IconPencil } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router'
 import { useRecoilValue } from 'recoil'
 import usePlayerStats from '../api/usePlayerStats'
 import Button from '../components/Button'
