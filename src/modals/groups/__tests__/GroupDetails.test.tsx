@@ -125,7 +125,7 @@ describe('<GroupDetails />', () => {
     expect(closeMock).toHaveBeenCalled()
   })
 
-  it('should prefill details if a group is being edited', () => {
+  it('should prefill details if a group is being edited', async () => {
     render(
       <KitchenSink
         states={[
@@ -166,6 +166,8 @@ describe('<GroupDetails />', () => {
         />
       </KitchenSink>,
     )
+
+    await screen.findByText('8 players in group')
 
     expect(screen.getByLabelText('Name')).toHaveValue('Winners')
     expect(screen.getByLabelText('Description')).toHaveValue('Players who have won the game')
