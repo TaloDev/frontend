@@ -30,7 +30,7 @@
     "date-fns": "^2.29.3",
     "dinero.js": "^2.0.0-alpha.11",
     "elkjs": "^0.11.0",
-    "framer-motion": "^10.9.1",
+    "framer-motion": "^12.42.2",
     "jotai": "^2.20.1",
     "lodash-es": "^4.17.23",
     "prop-types": "^15.7.2",
