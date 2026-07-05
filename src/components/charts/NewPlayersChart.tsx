@@ -6,7 +6,7 @@ import useTimePeriodAndDates from '../../utils/useTimePeriodAndDates'
 import { BarChartCard } from './BarChartCard'
 import { ChartCardTooltip } from './ChartCardTooltip'
 
-const bars = [{ dataKey: 'count', fill: '#6366f1' }]
+const bars = [{ dataKey: 'count' as const, fill: '#6366f1' }]
 
 export function NewPlayersChart() {
   const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
