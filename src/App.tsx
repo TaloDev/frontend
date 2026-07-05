@@ -1,13 +1,13 @@
 import * as Sentry from '@sentry/react'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useState, useEffect, Suspense, useCallback, useRef } from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import refreshAccess from './api/refreshAccess'
 import Loading from './components/Loading'
 import Router from './Router'
 import AuthService from './services/AuthService'
-import activeGameState from './state/activeGameState'
-import gamesState from './state/gamesState'
-import userState from './state/userState'
+import { activeGameState } from './state/activeGameState'
+import { gamesState } from './state/gamesState'
+import { userState } from './state/userState'
 
 function AppLoading() {
   return (
@@ -18,13 +18,13 @@ function AppLoading() {
 }
 
 export default function App() {
-  const setUser = useSetRecoilState(userState)
+  const setUser = useSetAtom(userState)
 
   const [hasTriedRefreshing, setTriedRefreshing] = useState(false)
   const [intendedRoute, setIntendedRoute] = useState<string | null>(null)
 
-  const games = useRecoilValue(gamesState)
-  const [activeGame, setActiveGame] = useRecoilState(activeGameState)
+  const games = useAtomValue(gamesState)
+  const [activeGame, setActiveGame] = useAtom(activeGameState)
   const refreshingRef = useRef(false)
 
   const handleRefreshSession = useCallback(async () => {

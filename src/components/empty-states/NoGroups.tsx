@@ -1,10 +1,10 @@
 import { IconSocial } from '@tabler/icons-react'
-import { useRecoilValue } from 'recoil'
-import activeGameState, { SelectedActiveGame } from '../../state/activeGameState'
+import { useAtomValue } from 'jotai'
+import { activeGameState, SelectedActiveGame } from '../../state/activeGameState'
 import { EmptyState } from './EmptyState'
 
 export function NoGroups() {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   return (
     <EmptyState

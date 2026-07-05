@@ -1,8 +1,8 @@
 import { IconPencil } from '@tabler/icons-react'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import { useRecoilValue } from 'recoil'
 import usePlayerStats from '../api/usePlayerStats'
 import Button from '../components/Button'
 import ErrorMessage from '../components/ErrorMessage'
@@ -15,8 +15,8 @@ import TableCell from '../components/tables/TableCell'
 import routes from '../constants/routes'
 import { PlayerGameStat } from '../entities/playerGameStat'
 import UpdateStatValue from '../modals/UpdateStatValue'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import userState from '../state/userState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
+import { userState } from '../state/userState'
 import { AuthedUser } from '../state/userState'
 import { PermissionBasedAction } from '../utils/canPerformAction'
 import canPerformAction from '../utils/canPerformAction'
@@ -24,8 +24,8 @@ import usePlayer from '../utils/usePlayer'
 import useSortedItems from '../utils/useSortedItems'
 
 export default function PlayerStats() {
-  const user = useRecoilValue(userState) as AuthedUser
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const user = useAtomValue(userState) as AuthedUser
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const { id: playerId } = useParams()
   const [player] = usePlayer()

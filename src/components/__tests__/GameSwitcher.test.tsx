@@ -1,7 +1,7 @@
 import { render, screen, within, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import activeGameState from '../../state/activeGameState'
-import userState from '../../state/userState'
+import { activeGameState } from '../../state/activeGameState'
+import { userState } from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
 import GameSwitcher from '../GameSwitcher'
 

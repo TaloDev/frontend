@@ -1,13 +1,13 @@
 import { IconCheck, IconX } from '@tabler/icons-react'
 import clsx from 'clsx'
 import { motion } from 'framer-motion'
+import { useAtom } from 'jotai'
 import { useState } from 'react'
-import { useRecoilState } from 'recoil'
-import devDataState from '../../state/devDataState'
+import { devDataState } from '../../state/devDataState'
 import { hiddenInputStyle, labelFocusStyle } from '../../styles/theme'
 
 function DevDataToggle() {
-  const [includeDevData, setIncludeDevData] = useRecoilState(devDataState)
+  const [includeDevData, setIncludeDevData] = useAtom(devDataState)
 
   const [focus, setFocus] = useState(false)
   const [innerEnabled, setInnerEnabled] = useState(includeDevData)

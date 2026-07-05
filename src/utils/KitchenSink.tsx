@@ -1,17 +1,20 @@
-import type { ReactNode } from 'react'
-import { useEffect } from 'react'
+import { useAtomValue, type WritableAtom, Provider } from 'jotai'
+import { useHydrateAtoms } from 'jotai/utils'
+import { useEffect, type ReactNode } from 'react'
 import { Location, MemoryRouter, Route, Routes, useLocation } from 'react-router'
-import { RecoilRoot, RecoilState } from 'recoil'
 import { SWRConfig } from 'swr'
-import RecoilObserver from '../state/RecoilObserver'
 
 type SetLocationFunction = (location: Partial<Location>) => void
 
-type CatchAllProps = {
-  setLocation?: SetLocationFunction
+// oxlint-disable-next-line typescript/no-explicit-any
+type StateEntry<T = any> = {
+  // oxlint-disable-next-line typescript/no-explicit-any
+  node: WritableAtom<T, [any], void>
+  initialValue?: T
+  onChange?: (value: T) => void
 }
 
-function CatchAll({ setLocation }: CatchAllProps) {
+function CatchAll({ setLocation }: { setLocation?: SetLocationFunction }) {
   const location = useLocation()
 
   useEffect(() => {
@@ -21,36 +24,49 @@ function CatchAll({ setLocation }: CatchAllProps) {
   return null
 }
 
-type RendererProps<T> = {
-  states: {
-    node: RecoilState<T>
-    initialValue?: T
-    onChange?: (value: T) => T
-  }[]
+function Observer<T>({
+  node,
+  onChange,
+}: {
+  // oxlint-disable-next-line typescript/no-explicit-any
+  node: WritableAtom<T, [any], void>
+  onChange: (value: T) => void
+}) {
+  const value = useAtomValue(node)
+
+  useEffect(() => {
+    onChange(value)
+  }, [onChange, value])
+
+  return null
+}
+
+type HydrateStatesProps = {
+  states: StateEntry[]
   children: ReactNode
 }
 
-function Renderer<T>({ states, children }: RendererProps<T>) {
+function HydrateStates({ states, children }: HydrateStatesProps) {
+  useHydrateAtoms(
+    states
+      .filter((s) => s.initialValue !== undefined)
+      .map((s) => [s.node, s.initialValue] as [StateEntry['node'], unknown]),
+  )
+
   return (
     <>
-      {states.map(({ node, onChange }, idx) => {
-        return <RecoilObserver key={idx} node={node} onChange={onChange} />
-      })}
-
+      {states
+        .filter((s) => s.onChange)
+        .map((s, idx) => (
+          <Observer key={idx} node={s.node} onChange={s.onChange!} />
+        ))}
       {children}
     </>
   )
 }
 
 type KitchenSinkProps = {
-  states?: {
-    // oxlint-disable-next-line typescript/no-explicit-any
-    node: RecoilState<any>
-    // oxlint-disable-next-line typescript/no-explicit-any
-    initialValue?: any
-    // oxlint-disable-next-line typescript/no-explicit-any
-    onChange?: (value: any) => void
-  }[]
+  states?: StateEntry[]
   initialEntries?: (string | Partial<Location>)[]
   children: ReactNode
   setLocation?: SetLocationFunction
@@ -66,20 +82,22 @@ export default function KitchenSink({
 }: KitchenSinkProps) {
   return (
     <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0 }}>
-      <RecoilRoot
-        initializeState={(snap) => {
-          states.forEach(({ node, initialValue }) => {
-            snap.set(node, initialValue)
-          })
-        }}
-      >
+      <Provider>
         <MemoryRouter initialEntries={initialEntries}>
           <Routes>
-            <Route path={routePath} element={<Renderer states={states}>{children}</Renderer>} />
+            <Route
+              path={routePath}
+              element={
+                <HydrateStates states={states}>
+                  <CatchAll setLocation={setLocation} />
+                  {children}
+                </HydrateStates>
+              }
+            />
             <Route path='*' element={<CatchAll setLocation={setLocation} />} />
           </Routes>
         </MemoryRouter>
-      </RecoilRoot>
+      </Provider>
     </SWRConfig>
   )
 }

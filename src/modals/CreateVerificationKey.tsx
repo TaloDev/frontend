@@ -1,5 +1,5 @@
+import { useAtomValue } from 'jotai'
 import { useCallback, useContext, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import { KeyedMutator } from 'swr'
 import { createVerificationKey as create } from '../api/createVerificationKey'
 import Button from '../components/Button'
@@ -8,7 +8,7 @@ import Modal from '../components/Modal'
 import TextInput from '../components/TextInput'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import { VerificationKey } from '../entities/verificationKey'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
 
 type CreateVerificationKeyProps = {
@@ -19,7 +19,7 @@ type CreateVerificationKeyProps = {
 export default function CreateVerificationKey({ modalState, mutate }: CreateVerificationKeyProps) {
   const [, setOpen] = modalState
   const toast = useContext(ToastContext)
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const [version, setVersion] = useState('')
   const [value, setValue] = useState('')

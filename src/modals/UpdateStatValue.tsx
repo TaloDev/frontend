@@ -1,6 +1,6 @@
+import { useAtomValue } from 'jotai'
 import { upperFirst } from 'lodash-es'
 import { MouseEvent, useContext, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import { KeyedMutator } from 'swr'
 import updateStatValue from '../api/updateStatValue'
 import Button from '../components/Button'
@@ -9,7 +9,7 @@ import Modal from '../components/Modal'
 import TextInput from '../components/TextInput'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import { PlayerGameStat } from '../entities/playerGameStat'
-import activeGameState from '../state/activeGameState'
+import { activeGameState } from '../state/activeGameState'
 import { SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
 
@@ -25,7 +25,7 @@ export default function UpdateStatValue({ modalState, mutate, editingStat }: Upd
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState<TaloError | null>(null)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const toast = useContext(ToastContext)
 

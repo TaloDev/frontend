@@ -1,12 +1,12 @@
+import { useAtom, useSetAtom } from 'jotai'
 import { MouseEvent, useState } from 'react'
-import { useRecoilState, useSetRecoilState } from 'recoil'
 import createGame from '../api/createGame'
 import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Modal from '../components/Modal'
 import TextInput from '../components/TextInput'
-import activeGameState from '../state/activeGameState'
-import userState, { AuthedUserState } from '../state/userState'
+import { activeGameState } from '../state/activeGameState'
+import { userState, AuthedUserState } from '../state/userState'
 import buildError from '../utils/buildError'
 
 type NewGameProps = {
@@ -18,9 +18,9 @@ export default function NewGame({ modalState }: NewGameProps) {
   const [name, setName] = useState('')
   const [isLoading, setLoading] = useState(false)
 
-  const [user, setUser] = useRecoilState(userState) as AuthedUserState
+  const [user, setUser] = useAtom(userState) as AuthedUserState
 
-  const setActiveGame = useSetRecoilState(activeGameState)
+  const setActiveGame = useSetAtom(activeGameState)
   const [error, setError] = useState<TaloError | null>(null)
 
   const onCreateClick = async (e: MouseEvent<HTMLElement>) => {

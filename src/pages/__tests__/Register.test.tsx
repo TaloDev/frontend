@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import MockAdapter from 'axios-mock-adapter'
 import api from '../../api/api'
-import userState from '../../state/userState'
+import { userState } from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
 import Register from '../Register'
 

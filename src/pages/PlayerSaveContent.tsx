@@ -1,7 +1,7 @@
 import { Background, BackgroundVariant, Controls, Node, ReactFlow } from '@xyflow/react'
+import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
-import { useRecoilValue } from 'recoil'
 import { usePlayerSaves } from '../api/usePlayerSaves'
 import Page from '../components/Page'
 import { SaveContentFitManager, minZoom } from '../components/saves/SaveContentFitManager'
@@ -10,7 +10,7 @@ import { SaveModePicker, SaveMode } from '../components/saves/SaveModePicker'
 import TextInput from '../components/TextInput'
 import routes from '../constants/routes'
 import { GameSave } from '../entities/gameSave'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import { useLinearNodeGraph } from '../utils/useLinearNodeGraph'
 import useLocalStorage from '../utils/useLocalStorage'
 import { useNodeGraph } from '../utils/useNodeGraph'
@@ -23,7 +23,7 @@ export default function PlayerSaveContent() {
   const location = useLocation()
   const [save, setSave] = useState<GameSave | undefined>(location.state?.save)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const { saves } = usePlayerSaves(activeGame, playerId!)
 
   useEffect(() => {

@@ -1,9 +1,9 @@
 import { IconArrowRight, IconPencil } from '@tabler/icons-react'
 import clsx from 'clsx'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { useNavigate, useLocation, useParams } from 'react-router'
-import { useRecoilValue } from 'recoil'
 import findLeaderboard from '../api/findLeaderboard'
 import updateLeaderboardEntry from '../api/updateLeaderboardEntry'
 import useLeaderboardEntries from '../api/useLeaderboardEntries'
@@ -26,8 +26,8 @@ import routes from '../constants/routes'
 import { Leaderboard, LeaderboardRefreshInterval } from '../entities/leaderboard'
 import { LeaderboardEntry } from '../entities/leaderboardEntry'
 import UpdateEntryScore from '../modals/UpdateEntryScore'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import userState, { AuthedUser } from '../state/userState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
+import { userState, AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 import useTimePeriodAndDates, { timePeriods } from '../utils/useTimePeriodAndDates'
@@ -37,7 +37,7 @@ export default function LeaderboardEntries() {
   const { internalName } = useParams()
 
   const [isLoading, setLoading] = useState(!location.state?.leaderboard)
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const [leaderboard, setLeaderboard] = useState<Leaderboard | undefined>(
     location.state?.leaderboard,
   )
@@ -73,7 +73,7 @@ export default function LeaderboardEntries() {
 
   const navigate = useNavigate()
 
-  const user = useRecoilValue(userState) as AuthedUser
+  const user = useAtomValue(userState) as AuthedUser
 
   const [editingEntry, setEditingEntry] = useState<LeaderboardEntry | null>(null)
 

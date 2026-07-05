@@ -1,9 +1,9 @@
 import clsx from 'clsx'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts'
-import { useRecoilValue } from 'recoil'
 import { useStatGlobalValueChart } from '../../api/useStatGlobalValueChart'
-import activeGameState, { SelectedActiveGame } from '../../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../../state/activeGameState'
 import { ChartCard } from './ChartCard'
 import { ChartCardTooltip } from './ChartCardTooltip'
 import ChartTick from './ChartTick'
@@ -20,7 +20,7 @@ export function StatGlobalValueChart({
   startDate,
   endDate,
 }: StatGlobalValueChartProps) {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const { dataPoints, loading, error } = useStatGlobalValueChart(
     activeGame,

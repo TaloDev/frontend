@@ -1,9 +1,9 @@
 import { Edge, Node } from '@xyflow/react'
+import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import { useDebounce } from 'use-debounce'
 import { GameSave } from '../entities/gameSave'
-import saveDataNodeSizesState from '../state/saveDataNodeSizesState'
+import { saveDataNodeSizesState } from '../state/saveDataNodeSizesState'
 import {
   NodeDataRow,
   objectToRows,
@@ -18,7 +18,7 @@ export function useLinearNodeGraph(save: GameSave | null, enabled: boolean, sear
   const [edges, setEdges] = useState<Edge[]>([])
   const [committedSearch, setCommittedSearch] = useState(search)
 
-  const nodeSizes = useRecoilValue(saveDataNodeSizesState)
+  const nodeSizes = useAtomValue(saveDataNodeSizesState)
   const [debouncedNodeSizes] = useDebounce(nodeSizes, 100)
   const [debouncedSearch] = useDebounce(search, 300)
 

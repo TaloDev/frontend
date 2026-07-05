@@ -31,6 +31,7 @@
     "dinero.js": "^2.0.0-alpha.11",
     "elkjs": "^0.11.0",
     "framer-motion": "^10.9.1",
+    "jotai": "^2.20.1",
     "lodash-es": "^4.17.23",
     "prop-types": "^15.7.2",
     "randomcolor": "^0.6.2",
@@ -42,7 +43,6 @@
     "react-router": "^7.18.1",
     "react-select": "^5.8.0",
     "recharts": "^2.15.2",
-    "recoil": "^0.7.6",
     "swr": "^2.0.0",
     "use-debounce": "^9.0.0",
     "zod": "^3.23.8"

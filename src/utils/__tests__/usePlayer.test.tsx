@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import MockAdapter from 'axios-mock-adapter'
 import api from '../../api/api'
-import activeGameState from '../../state/activeGameState'
+import { activeGameState } from '../../state/activeGameState'
 import KitchenSink from '../KitchenSink'
 import usePlayer from '../usePlayer'
 

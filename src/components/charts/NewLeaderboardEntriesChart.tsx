@@ -1,15 +1,15 @@
 import clsx from 'clsx'
+import { useAtomValue } from 'jotai'
 import { Fragment } from 'react'
-import { useRecoilValue } from 'recoil'
 import { useNewLeaderboardEntriesChart } from '../../api/useNewLeaderboardEntriesChart'
-import activeGameState, { SelectedActiveGame } from '../../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../../state/activeGameState'
 import { getPersistentColour } from '../../utils/getPersistentColour'
 import useTimePeriodAndDates from '../../utils/useTimePeriodAndDates'
 import { BarChartCard } from './BarChartCard'
 import { ChartCardTooltip } from './ChartCardTooltip'
 
 export function NewLeaderboardEntriesChart() {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const { timePeriod, setTimePeriod, debouncedStartDate, debouncedEndDate } = useTimePeriodAndDates(
     'newLeaderboardEntriesChart',

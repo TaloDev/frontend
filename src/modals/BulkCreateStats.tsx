@@ -1,8 +1,8 @@
 import { IconCircleCheckFilled, IconCircleXFilled } from '@tabler/icons-react'
 import clsx from 'clsx'
 import { parse } from 'csv-parse/browser/esm/sync'
+import { useAtomValue } from 'jotai'
 import { useContext, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import { KeyedMutator } from 'swr'
 import bulkCreateStats from '../api/bulkCreateStats'
 import Button from '../components/Button'
@@ -12,7 +12,7 @@ import Loading from '../components/Loading'
 import Modal from '../components/Modal'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import { GameStat } from '../entities/gameStat'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
 
 type BulkCreateStatsProps = {
@@ -141,7 +141,7 @@ export function BulkCreateStats({ modalState, mutate }: BulkCreateStatsProps) {
   const [results, setResults] = useState<RowResult[] | null>(null)
   const [parsedRows, setParsedRows] = useState<ParsedRow[] | null>(null)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const toast = useContext(ToastContext)
 
   const onDownloadSample = () => {

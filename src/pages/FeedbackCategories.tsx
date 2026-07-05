@@ -1,7 +1,7 @@
 import { IconPlus } from '@tabler/icons-react'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import useFeedbackCategories from '../api/useFeedbackCategories'
 import Button from '../components/Button'
 import ErrorMessage from '../components/ErrorMessage'
@@ -15,7 +15,7 @@ import routes from '../constants/routes'
 import { GameFeedbackCategory } from '../entities/gameFeedbackCategory'
 import FeedbackCategoryDetails from '../modals/FeedbackCategoryDetails'
 import { ResetFeedbackCategory } from '../modals/ResetFeedbackCategory'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import useSortedItems from '../utils/useSortedItems'
 
 export default function FeedbackCategories() {
@@ -23,7 +23,7 @@ export default function FeedbackCategories() {
   const [showResetModal, setShowResetModal] = useState(false)
   const [editingCategory, setEditingCategory] = useState<GameFeedbackCategory | null>(null)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const { feedbackCategories, loading, error, mutate } = useFeedbackCategories(activeGame)
 
   const sortedFeedbackCategories = useSortedItems(feedbackCategories, 'internalName', 'asc')

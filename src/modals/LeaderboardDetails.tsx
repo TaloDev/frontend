@@ -1,6 +1,6 @@
 import { IconRefresh, IconTrash } from '@tabler/icons-react'
+import { useAtomValue } from 'jotai'
 import { MouseEvent, useContext, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import { KeyedMutator } from 'swr'
 import createLeaderboard from '../api/createLeaderboard'
 import deleteLeaderboard from '../api/deleteLeaderboard'
@@ -17,8 +17,8 @@ import {
   LeaderboardSortMode,
   LeaderboardRefreshInterval,
 } from '../entities/leaderboard'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import userState, { AuthedUser } from '../state/userState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
+import { userState, AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 
@@ -40,8 +40,8 @@ const LeaderboardDetails = ({
   const [isDeleting, setDeleting] = useState(false)
   const [error, setError] = useState<TaloError | null>(null)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
-  const user = useRecoilValue(userState) as AuthedUser
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
+  const user = useAtomValue(userState) as AuthedUser
 
   const [internalName, setInternalName] = useState(editingLeaderboard?.internalName ?? '')
   const [displayName, setDisplayName] = useState(editingLeaderboard?.name ?? '')

@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import { useRecoilValue } from 'recoil'
 import { usePlayerSaves } from '../api/usePlayerSaves'
 import Button from '../components/Button'
 import ErrorMessage from '../components/ErrorMessage'
@@ -13,12 +13,12 @@ import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
 import routes from '../constants/routes'
 import { GameSave } from '../entities/gameSave'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import usePlayer from '../utils/usePlayer'
 import useSortedItems from '../utils/useSortedItems'
 
 export default function PlayerSaves() {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const { id: playerId } = useParams()
   const [player] = usePlayer()

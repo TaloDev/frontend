@@ -1,4 +1,4 @@
-import { atom } from 'recoil'
+import { atom } from 'jotai'
 
 export type SaveDataNodeSize = {
   id: string
@@ -6,9 +6,4 @@ export type SaveDataNodeSize = {
   height: number
 }
 
-const saveDataNodeSizesState = atom<SaveDataNodeSize[]>({
-  key: 'saveDataNodeSizes',
-  default: [],
-})
-
-export default saveDataNodeSizesState
+export const saveDataNodeSizesState = atom<SaveDataNodeSize[]>([])

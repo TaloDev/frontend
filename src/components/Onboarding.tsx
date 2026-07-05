@@ -1,12 +1,12 @@
 import { IconArrowRight, IconDownload, IconKey, IconSettings } from '@tabler/icons-react'
 import { clsx } from 'clsx'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { ReactNode, useState } from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import createGame from '../api/createGame'
 import taloIcon from '../assets/talo-icon.svg'
 import routes from '../constants/routes'
-import activeGameState from '../state/activeGameState'
-import userState, { AuthedUserState } from '../state/userState'
+import { activeGameState } from '../state/activeGameState'
+import { userState, AuthedUserState } from '../state/userState'
 import { focusStyle, linkStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
 import { useDocsSelection } from '../utils/useDocsSelection'
@@ -55,7 +55,7 @@ function DocsLink({ onClick, children }: { onClick: () => void; children: ReactN
 }
 
 export function Onboarding({ onComplete }: { onComplete: () => void }) {
-  const activeGame = useRecoilValue(activeGameState)
+  const activeGame = useAtomValue(activeGameState)
 
   const [gameName, setGameName] = useState(activeGame?.name ?? '')
   const [isLoading, setLoading] = useState(false)
@@ -63,8 +63,8 @@ export function Onboarding({ onComplete }: { onComplete: () => void }) {
   const [gameCreated, setGameCreated] = useState(!!activeGame)
   const { openDocs, modalElement } = useDocsSelection(installationDocs)
 
-  const [user, setUser] = useRecoilState(userState) as AuthedUserState
-  const setActiveGame = useSetRecoilState(activeGameState)
+  const [user, setUser] = useAtom(userState) as AuthedUserState
+  const setActiveGame = useSetAtom(activeGameState)
 
   const handleCreate = async () => {
     setLoading(true)

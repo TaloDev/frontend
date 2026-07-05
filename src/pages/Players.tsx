@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useNavigate } from 'react-router'
-import { useRecoilValue } from 'recoil'
 import usePlayers from '../api/usePlayers'
 import Button from '../components/Button'
 import { NewPlayersChart } from '../components/charts/NewPlayersChart'
@@ -16,14 +16,14 @@ import TableCell from '../components/tables/TableCell'
 import TextInput from '../components/TextInput'
 import routes from '../constants/routes'
 import { Player } from '../entities/player'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import useSearch from '../utils/useSearch'
 
 export default function Players() {
   const initialSearch = new URLSearchParams(window.location.search).get('search')
   const { search, setSearch, page, setPage, debouncedSearch } = useSearch(initialSearch)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const { players, count, itemsPerPage, loading, error } = usePlayers(
     activeGame,
     debouncedSearch,

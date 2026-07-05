@@ -1,11 +1,11 @@
 import clsx from 'clsx'
-import { useRecoilValue } from 'recoil'
-import devDataState from '../state/devDataState'
+import { useAtomValue } from 'jotai'
+import { devDataState } from '../state/devDataState'
 import SecondaryTitle from './SecondaryTitle'
 import DevDataToggle from './toggles/DevDataToggle'
 
 function DevDataStatus() {
-  const includeDevData = useRecoilValue(devDataState)
+  const includeDevData = useAtomValue(devDataState)
 
   return (
     <div className='space-y-4'>

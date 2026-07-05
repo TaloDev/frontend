@@ -1,9 +1,9 @@
+import { useAtom } from 'jotai'
 import { MouseEvent, useEffect, useState } from 'react'
 import { useLocation } from 'react-router'
-import { useRecoilState } from 'recoil'
 import confirmEmail from '../api/confirmEmail'
-import justConfirmedEmailState from '../state/justConfirmedEmailState'
-import userState, { AuthedUserState } from '../state/userState'
+import { justConfirmedEmailState } from '../state/justConfirmedEmailState'
+import { userState, AuthedUserState } from '../state/userState'
 import buildError from '../utils/buildError'
 import Button from './Button'
 import ErrorMessage, { TaloError } from './ErrorMessage'
@@ -14,8 +14,8 @@ export default function ConfirmEmailBanner() {
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState<TaloError | null>(null)
 
-  const [user, setUser] = useRecoilState(userState) as AuthedUserState
-  const [justConfirmedEmail, setJustConfirmedEmail] = useRecoilState(justConfirmedEmailState)
+  const [user, setUser] = useAtom(userState) as AuthedUserState
+  const [justConfirmedEmail, setJustConfirmedEmail] = useAtom(justConfirmedEmailState)
 
   const location = useLocation()
 

@@ -2,22 +2,22 @@ import { IconChevronDown, IconPlus } from '@tabler/icons-react'
 import Tippy from '@tippyjs/react'
 import clsx from 'clsx'
 import { motion } from 'framer-motion'
+import { useAtom, useAtomValue } from 'jotai'
 import randomColor from 'randomcolor'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import { useRecoilState, useRecoilValue } from 'recoil'
 import routes from '../constants/routes'
 import { Game } from '../entities/game'
 import NewGame from '../modals/NewGame'
-import activeGameState from '../state/activeGameState'
-import gamesState from '../state/gamesState'
+import { activeGameState } from '../state/activeGameState'
+import { gamesState } from '../state/gamesState'
 import Button from './Button'
 
 export default function GameSwitcher() {
   const [isOpen, setOpen] = useState(false)
   const [showModal, setShowModal] = useState(false)
-  const games = useRecoilValue(gamesState)
-  const [activeGame, setActiveGame] = useRecoilState(activeGameState)
+  const games = useAtomValue(gamesState)
+  const [activeGame, setActiveGame] = useAtom(activeGameState)
 
   const navigate = useNavigate()
 

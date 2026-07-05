@@ -9,8 +9,8 @@ import {
   PlayerGroupRuleName,
 } from '../../../entities/playerGroup'
 import { UserType } from '../../../entities/user'
-import activeGameState from '../../../state/activeGameState'
-import userState from '../../../state/userState'
+import { activeGameState } from '../../../state/activeGameState'
+import { userState } from '../../../state/userState'
 import KitchenSink from '../../../utils/KitchenSink'
 import GroupDetails from '../GroupDetails'
 
