@@ -69,7 +69,7 @@ export default function ToastProvider({ children, lifetime = 2000 }: ToastProvid
   )
 
   return (
-    <ToastContext.Provider value={{ trigger }}>
+    <ToastContext value={{ trigger }}>
       <>
         {children}
 
@@ -100,6 +100,6 @@ export default function ToastProvider({ children, lifetime = 2000 }: ToastProvid
           )}
         </AnimatePresence>
       </>
-    </ToastContext.Provider>
+    </ToastContext>
   )
 }
