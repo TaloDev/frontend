@@ -10,7 +10,7 @@ const defaultHeadlines: PlayerHeadlines = {
   online_players: { count: 0 },
 }
 
-export default function usePlayerHeadlines(activeGame: Game | null, includeDevData: boolean) {
+export function usePlayerHeadlines(activeGame: Game | null, includeDevData: boolean) {
   const fetcher = async ([url]: [string]) => {
     const headlines: (keyof PlayerHeadlines)[] = ['total_players', 'online_players']
     const res = await Promise.all(
