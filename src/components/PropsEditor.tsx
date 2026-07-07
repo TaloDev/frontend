@@ -69,10 +69,8 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
   }, [bulkPropsList, newProps.length, originalProps, props])
 
   const enableSaveButton = useMemo(() => {
-    return (
-      newProps.every((prop) => prop.key && prop.value) && props.every((prop) => prop.value !== '')
-    )
-  }, [newProps, props])
+    return newProps.every((prop) => prop.key && prop.value)
+  }, [newProps])
 
   const reset = () => {
     setProps(originalProps)
