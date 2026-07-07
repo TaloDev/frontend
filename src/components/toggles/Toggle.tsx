@@ -55,6 +55,7 @@ function Toggle({
           const newValue = !innerEnabled
           if (evaluateToggle?.(newValue) ?? true) {
             setInnerEnabled(newValue)
+            onToggle(newValue)
           }
         }}
         disabled={disabled}
@@ -90,7 +91,6 @@ function Toggle({
             'h-8 w-8': !small,
             'h-5 w-5': small,
           })}
-          onAnimationStart={() => onToggle(innerEnabled)}
         />
       </motion.label>
     </>

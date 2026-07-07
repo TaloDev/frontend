@@ -26,7 +26,11 @@ function DevDataToggle() {
         className={hiddenInputStyle}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
-        onChange={() => setInnerEnabled(!innerEnabled)}
+        onChange={() => {
+          const newValue = !innerEnabled
+          setInnerEnabled(newValue)
+          window.localStorage.setItem('includeDevDataOptimistic', String(newValue))
+        }}
         checked={innerEnabled}
       />
 
@@ -45,9 +49,6 @@ function DevDataToggle() {
           initial={false}
           transition={{ duration: 0.2 }}
           className='relative h-full w-8 rounded-md'
-          onAnimationStart={() => {
-            window.localStorage.setItem('includeDevDataOptimistic', String(innerEnabled))
-          }}
           onAnimationComplete={() => {
             setIncludeDevData(innerEnabled)
           }}
