@@ -61,26 +61,6 @@ body {
   }
 }
 
-table {
-  & th {
-    &:first-child {
-      @apply rounded-tl;
-    }
-
-    &:last-child {
-      @apply rounded-tr;
-    }
-  }
-
-  & tr:last-child td:first-child {
-    @apply rounded-bl;
-  }
-
-  & tr:last-child td:last-child {
-    @apply rounded-br;
-  }
-}
-
 .tippy-box:focus {
   @apply outline-none;
 }

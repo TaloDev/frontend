@@ -8,7 +8,7 @@ type TableProps = {
 
 export default function Table({ columns, children }: TableProps) {
   return (
-    <div className='overflow-x-scroll'>
+    <div className='overflow-x-auto rounded'>
       <table className='w-full table-auto'>
         <TableHeader columns={columns} />
         {children}

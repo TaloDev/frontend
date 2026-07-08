@@ -1,5 +1,4 @@
 import { IconPlus, IconTrash } from '@tabler/icons-react'
-import clsx from 'clsx'
 import { ReactNode, useMemo, useState } from 'react'
 import type { Prop } from '../entities/prop'
 import { isMetaProp, metaPropKeyMap } from '../constants/metaProps'
@@ -159,9 +158,7 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
               <TableBody iterator={existingProps}>
                 {(prop) => (
                   <>
-                    <TableCell
-                      className={clsx('min-w-80', { 'rounded-bl-none!': newProps.length > 0 })}
-                    >
+                    <TableCell className='min-w-80'>
                       {prop.key}
                     </TableCell>
                     <TableCell className='min-w-80'>
@@ -173,7 +170,7 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
                         value={prop.value ?? ''}
                       />
                     </TableCell>
-                    <TableCell className={clsx({ 'rounded-br-none!': newProps.length > 0 })}>
+                    <TableCell>
                       <Button
                         variant='icon'
                         className='ml-auto rounded-full bg-indigo-900 p-1'
