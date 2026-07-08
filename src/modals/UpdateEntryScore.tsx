@@ -1,6 +1,6 @@
+import { useAtomValue } from 'jotai'
 import { upperFirst } from 'lodash-es'
 import { MouseEvent, useContext, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import updateLeaderboardEntry from '../api/updateLeaderboardEntry'
 import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
@@ -9,7 +9,7 @@ import TextInput from '../components/TextInput'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import { Leaderboard } from '../entities/leaderboard'
 import { LeaderboardEntry } from '../entities/leaderboardEntry'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
 
 type UpdateEntryScoreProps = {
@@ -30,7 +30,7 @@ export default function UpdateEntryScore({
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState<TaloError | null>(null)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const toast = useContext(ToastContext)
 

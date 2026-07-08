@@ -1,10 +1,10 @@
 import * as Sentry from '@sentry/react'
 import { IconMenu2 } from '@tabler/icons-react'
+import { useAtom } from 'jotai'
 import { useState } from 'react'
-import { useRecoilState } from 'recoil'
 import logout from '../api/logout'
 import routes from '../constants/routes'
-import activeGameState from '../state/activeGameState'
+import { activeGameState } from '../state/activeGameState'
 import Button from './Button'
 import GameSwitcher from './GameSwitcher'
 import { HideForSelfService } from './HideForSelfService'
@@ -14,7 +14,7 @@ import MobileMenu from './MobileMenu'
 import ServicesLink from './ServicesLink'
 
 export default function NavBar() {
-  const [activeGame, setActiveGame] = useRecoilState(activeGameState)
+  const [activeGame, setActiveGame] = useAtom(activeGameState)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
 
   const onLogoutClick = async () => {

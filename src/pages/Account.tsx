@@ -1,21 +1,21 @@
 import { IconCheck } from '@tabler/icons-react'
+import { useAtomValue } from 'jotai'
 import { MouseEvent, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useNavigate, useLocation } from 'react-router'
 import Account2FA from '../components/Account2FA'
 import AlertBanner from '../components/AlertBanner'
 import Button from '../components/Button'
 import Page from '../components/Page'
 import TextInput from '../components/TextInput'
 import routes from '../constants/routes'
-import userState, { AuthedUser } from '../state/userState'
+import { userState, AuthedUser } from '../state/userState'
 import { ConfirmPasswordAction } from './ConfirmPassword'
 
 export default function Account() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const user = useRecoilValue(userState) as AuthedUser
+  const user = useAtomValue(userState) as AuthedUser
 
   const [successMessage] = useState(location.state?.successMessage)
 

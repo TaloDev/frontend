@@ -23,7 +23,7 @@ export default function Billing() {
     error: orgPlanError,
   } = useOrganisationPricingPlan()
   const { plans, loading: allPlansLoading, error: allPlansError } = usePricingPlans()
-  const { usage, loading: usageLoading, error: usageError } = usePricingPlanUsage()
+  const { usage, breakdown, loading: usageLoading, error: usageError } = usePricingPlanUsage()
 
   const [yearlyPricing, setYearlyPricing] = useState(false)
 
@@ -86,7 +86,7 @@ export default function Billing() {
               </li>
             )}
 
-            <BillingUsageTile usage={usage} usageError={usageError} />
+            <BillingUsageTile usage={usage} breakdown={breakdown} usageError={usageError} />
 
             {orgPlan?.canViewBillingPortal && <BillingPortalTile />}
           </ul>

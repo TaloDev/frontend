@@ -1,13 +1,13 @@
+import { useAtom } from 'jotai'
 import { MouseEvent, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
+import { useNavigate, useLocation } from 'react-router'
 import confirmEnable2FA from '../api/confirmEnable2FA'
 import enable2FA from '../api/enable2FA'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import RecoveryCodes from '../components/RecoveryCodes'
 import routes from '../constants/routes'
 import { ConfirmPasswordAction } from '../pages/ConfirmPassword'
-import userState, { AuthedUserState } from '../state/userState'
+import { userState, AuthedUserState } from '../state/userState'
 import buildError from '../utils/buildError'
 import Button from './Button'
 import TextInput from './TextInput'
@@ -16,7 +16,7 @@ export default function Account2FA() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [user, setUser] = useRecoilState(userState) as AuthedUserState
+  const [user, setUser] = useAtom(userState) as AuthedUserState
 
   const [qrCode, setQRCode] = useState<string | null>(null)
   const [code, setCode] = useState('')

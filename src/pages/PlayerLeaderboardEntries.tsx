@@ -1,8 +1,8 @@
 import { IconArrowRight, IconPencil } from '@tabler/icons-react'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useCallback, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useNavigate } from 'react-router'
 import useLeaderboards from '../api/useLeaderboards'
 import usePlayerLeaderboardEntries from '../api/usePlayerLeaderboardEntries'
 import Button from '../components/Button'
@@ -17,16 +17,16 @@ import TableCell from '../components/tables/TableCell'
 import routes from '../constants/routes'
 import { LeaderboardEntry } from '../entities/leaderboardEntry'
 import UpdateEntryScore from '../modals/UpdateEntryScore'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import userState from '../state/userState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
+import { userState } from '../state/userState'
 import { AuthedUser } from '../state/userState'
 import { PermissionBasedAction } from '../utils/canPerformAction'
 import canPerformAction from '../utils/canPerformAction'
 import usePlayer from '../utils/usePlayer'
 
 export default function PlayerLeaderboardEntries() {
-  const user = useRecoilValue(userState) as AuthedUser
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const user = useAtomValue(userState) as AuthedUser
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const [editingEntry, setEditingEntry] = useState<LeaderboardEntry | null>(null)
 
   const [player] = usePlayer()

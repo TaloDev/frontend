@@ -1,6 +1,6 @@
+import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useNavigate, useParams } from 'react-router'
 import useStats from '../api/useStats'
 import { StatGlobalValueChart } from '../components/charts/StatGlobalValueChart'
 import DateInput from '../components/DateInput'
@@ -14,7 +14,7 @@ import TableCell from '../components/tables/TableCell'
 import TimePeriodPicker from '../components/TimePeriodPicker'
 import routes from '../constants/routes'
 import { GameStat } from '../entities/gameStat'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import useTimePeriodAndDates, { timePeriods } from '../utils/useTimePeriodAndDates'
 
 type GameStatWithMetrics = Omit<GameStat, 'metrics'> & { metrics: NonNullable<GameStat['metrics']> }
@@ -34,7 +34,7 @@ export default function StatMetrics() {
     onEndDateChange,
   } = useTimePeriodAndDates(`${internalName}-metrics`)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const { stats, loading, error } = useStats(
     activeGame,
     undefined,

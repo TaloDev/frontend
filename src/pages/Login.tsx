@@ -1,8 +1,8 @@
 import type { MouseEvent } from 'react'
 import * as Sentry from '@sentry/react'
+import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useSetRecoilState } from 'recoil'
+import { useNavigate, useLocation } from 'react-router'
 import login from '../api/login'
 import taloIcon from '../assets/talo-icon.svg'
 import AlertBanner from '../components/AlertBanner'
@@ -16,14 +16,14 @@ import { UnauthedContainerInner } from '../components/UnauthedContainerInner'
 import { UnauthedTitle } from '../components/UnauthedTitle'
 import routes from '../constants/routes'
 import AuthService from '../services/AuthService'
-import userState from '../state/userState'
+import { userState } from '../state/userState'
 import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const setUser = useSetRecoilState(userState)
+  const setUser = useSetAtom(userState)
   const [error, setError] = useState<TaloError | null>(null)
   const [isLoading, setLoading] = useState(false)
   const [wasLoggedOut] = useState(window.localStorage.getItem('loggedOut'))

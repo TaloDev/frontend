@@ -1,6 +1,7 @@
 import { format } from 'date-fns'
-import { useNavigate } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useAtomValue } from 'jotai'
+import { useNavigate } from 'react-router'
+import { usePlayerHeadlines } from '../api/usePlayerHeadlines'
 import usePlayers from '../api/usePlayers'
 import Button from '../components/Button'
 import { NewPlayersChart } from '../components/charts/NewPlayersChart'
@@ -16,19 +17,29 @@ import TableCell from '../components/tables/TableCell'
 import TextInput from '../components/TextInput'
 import routes from '../constants/routes'
 import { Player } from '../entities/player'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
+import { devDataState } from '../state/devDataState'
 import useSearch from '../utils/useSearch'
 
 export default function Players() {
   const initialSearch = new URLSearchParams(window.location.search).get('search')
   const { search, setSearch, page, setPage, debouncedSearch } = useSearch(initialSearch)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const { players, count, itemsPerPage, loading, error } = usePlayers(
     activeGame,
     debouncedSearch,
     page,
   )
+
+  const includeDevData = useAtomValue(devDataState)
+  const {
+    headlines: playerHeadlines,
+    loading: playerHeadlinesLoading,
+    error: playerHeadlinesError,
+  } = usePlayerHeadlines(activeGame, includeDevData)
+  const hasZeroPlayers =
+    !playerHeadlinesLoading && !playerHeadlinesError && playerHeadlines.total_players.count === 0
 
   const navigate = useNavigate()
 
@@ -38,7 +49,7 @@ export default function Players() {
 
   return (
     <Page title='Players' isLoading={loading} showBackButton={Boolean(initialSearch)}>
-      <NewPlayersChart />
+      {!hasZeroPlayers && <NewPlayersChart />}
 
       {(players.length > 0 || debouncedSearch.length > 0) && (
         <div className='flex items-center'>

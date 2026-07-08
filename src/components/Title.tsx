@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { IconArrowLeft } from '@tabler/icons-react'
 import clsx from 'clsx'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import Button from './Button'
 
 type TitleProps = {

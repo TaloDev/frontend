@@ -1,9 +1,9 @@
 import { IconArrowRight, IconChevronUp, IconCrosshair } from '@tabler/icons-react'
 import clsx from 'clsx'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useCallback, useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useNavigate } from 'react-router'
 import { toggleFeedbackArchived } from '../api/toggleFeedbackArchived'
 import useFeedback from '../api/useFeedback'
 import useFeedbackCategories from '../api/useFeedbackCategories'
@@ -24,8 +24,8 @@ import Toggle from '../components/toggles/Toggle'
 import routes from '../constants/routes'
 import { GameFeedback } from '../entities/gameFeedback'
 import { Prop } from '../entities/prop'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import userState from '../state/userState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
+import { userState } from '../state/userState'
 import buildError from '../utils/buildError'
 import canViewPage from '../utils/canViewPage'
 import useSearch from '../utils/useSearch'
@@ -59,8 +59,8 @@ function CommentCell({ feedback }: { feedback: GameFeedback }) {
 }
 
 export default function Feedback() {
-  const user = useRecoilValue(userState)
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const user = useAtomValue(userState)
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const [categoryInternalNameFilter, setCategoryInternalNameFilter] = useState<string | null>(null)
   const { search, setSearch, page, setPage, debouncedSearch } = useSearch()

@@ -1,5 +1,5 @@
+import { useAtomValue } from 'jotai'
 import { useContext } from 'react'
-import { useRecoilValue } from 'recoil'
 import updatePlayer from '../api/updatePlayer'
 import Loading from '../components/Loading'
 import Page from '../components/Page'
@@ -7,11 +7,11 @@ import PlayerIdentifier from '../components/PlayerIdentifier'
 import PropsEditor from '../components/PropsEditor'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import { Prop } from '../entities/prop'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import usePlayer from '../utils/usePlayer'
 
 export default function PlayerProps() {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const [player] = usePlayer()
 

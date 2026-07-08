@@ -1,8 +1,8 @@
 import { IconChevronUp, IconChevronDown, IconPlus } from '@tabler/icons-react'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useNavigate } from 'react-router'
 import useLeaderboards from '../api/useLeaderboards'
 import Button from '../components/Button'
 import { NewLeaderboardEntriesChart } from '../components/charts/NewLeaderboardEntriesChart'
@@ -17,11 +17,11 @@ import routes from '../constants/routes'
 import { Leaderboard } from '../entities/leaderboard'
 import LeaderboardDetails from '../modals/LeaderboardDetails'
 import { ResetLeaderboardEntries } from '../modals/ResetLeaderboardEntries'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import useSortedItems from '../utils/useSortedItems'
 
 export default function Leaderboards() {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const navigate = useNavigate()
 
   const [showModal, setShowModal] = useState(false)

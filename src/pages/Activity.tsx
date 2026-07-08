@@ -1,5 +1,5 @@
+import { useAtomValue } from 'jotai'
 import { useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import useGameActivities from '../api/useGameActivities'
 import ActivityRenderer from '../components/ActivityRenderer'
 import ErrorMessage from '../components/ErrorMessage'
@@ -7,13 +7,13 @@ import Page from '../components/Page'
 import Pagination from '../components/Pagination'
 import SecondaryNav from '../components/SecondaryNav'
 import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import useDaySections from '../utils/useDaySections'
 
 export default function Activity() {
   const [page, setPage] = useState(0)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const { activities, count, itemsPerPage, loading, error } = useGameActivities(activeGame, page)
   const sections = useDaySections(activities)
 

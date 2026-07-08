@@ -8,8 +8,8 @@ type Props = {
   title: ReactNode
   icon: ReactNode
   children: ReactNode
-  learnMoreLink: string
-  docs: {
+  learnMoreLink?: string
+  docs?: {
     api: string
     godot: string
     unity: string
@@ -69,7 +69,7 @@ export function EmptyStateButtons({
 }: {
   className?: string
   learnMoreLink: Props['learnMoreLink']
-  docs: Props['docs']
+  docs: NonNullable<Props['docs']>
 }) {
   const { openDocs, modalElement } = useDocsSelection(docs)
 
@@ -100,7 +100,7 @@ export function EmptyState({ title, icon, children, learnMoreLink, docs }: Props
       <EmptyStateIcon icon={icon} />
       <EmptyStateTitle>{title}</EmptyStateTitle>
       <EmptyStateContent>{children}</EmptyStateContent>
-      <EmptyStateButtons learnMoreLink={learnMoreLink} docs={docs} />
+      {learnMoreLink && docs && <EmptyStateButtons learnMoreLink={learnMoreLink} docs={docs} />}
     </EmptyStateContainer>
   )
 }

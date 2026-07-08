@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { Cell, Pie, PieChart, Tooltip } from 'recharts'
 import { z } from 'zod'
 import { eventsVisualisationPayloadSchema } from '../../api/useEvents'

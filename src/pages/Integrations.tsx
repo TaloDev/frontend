@@ -1,7 +1,7 @@
 import { IconBrandApple, IconBrandGooglePlay, IconBrandSteam, IconCheck } from '@tabler/icons-react'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import syncLeaderboards from '../api/syncLeaderboards'
 import syncStats from '../api/syncStats'
 import useIntegrations from '../api/useIntegrations'
@@ -15,7 +15,7 @@ import { Integration, IntegrationType } from '../entities/integration'
 import { GameCenterIntegrationDetails } from '../modals/GameCenterIntegrationDetails'
 import { GooglePlayGamesIntegrationDetails } from '../modals/GooglePlayGamesIntegrationDetails'
 import { SteamworksIntegrationDetails } from '../modals/SteamworksIntegrationDetails'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
 
 const syncingState = {
@@ -87,7 +87,7 @@ function ManualSyncSection({
 }
 
 export default function Integrations() {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const { integrations, loading, error, mutate } = useIntegrations(activeGame)
   const [editingIntegration, setEditingIntegration] = useState<Partial<Integration> | null>(null)
 

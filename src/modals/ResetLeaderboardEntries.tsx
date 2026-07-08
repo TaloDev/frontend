@@ -1,6 +1,6 @@
 import clsx from 'clsx'
+import { useAtomValue } from 'jotai'
 import { useContext, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import { resetLeaderboard } from '../api/resetLeaderboard'
 import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
@@ -10,7 +10,7 @@ import TextInput from '../components/TextInput'
 import ToastContext from '../components/toast/ToastContext'
 import { ResetMode, resetModeOptions } from '../constants/resetMode'
 import { Leaderboard } from '../entities/leaderboard'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
 
 type ResetLeaderboardEntriesProps = {
@@ -26,7 +26,7 @@ export function ResetLeaderboardEntries({
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState<TaloError | null>(null)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const [confirmText, setConfirmText] = useState('')
   const [resetMode, setResetMode] = useState<ResetMode>('dev')
@@ -57,7 +57,7 @@ export function ResetLeaderboardEntries({
       title={`Reset ${editingLeaderboard?.name}`}
       modalState={[true, () => goBack(true)]}
       className={clsx('flex flex-col', {
-        'md:!h-[55vh]': isMenuOpen,
+        'md:h-[55vh]!': isMenuOpen,
       })}
     >
       <form className='flex grow flex-col'>

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import MockAdapter from 'axios-mock-adapter'
 import api from '../../api/api'
 import { UserType } from '../../entities/user'
-import userState from '../../state/userState'
+import { userState } from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
 import Billing from '../Billing'
 
@@ -121,12 +121,18 @@ describe('<Billing />', () => {
     used: 3,
   }
 
+  const breakdown = {
+    live: 2,
+    dev: 1,
+    deleted: 0,
+  }
+
   it('should render the current plan and the other returned plans', async () => {
     axiosMock
       .onGet('http://talo.api/billing/organisation-plan')
       .replyOnce(200, { pricingPlan: orgPlan })
     axiosMock.onGet('http://talo.api/billing/plans').replyOnce(200, { pricingPlans })
-    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage })
+    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage, breakdown })
 
     render(
       <KitchenSink states={[{ node: userState, initialValue: userValue }]}>
@@ -144,7 +150,7 @@ describe('<Billing />', () => {
       .onGet('http://talo.api/billing/organisation-plan')
       .replyOnce(200, { pricingPlan: orgPlan })
     axiosMock.onGet('http://talo.api/billing/plans').replyOnce(200, { pricingPlans })
-    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage })
+    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage, breakdown })
 
     render(
       <KitchenSink states={[{ node: userState, initialValue: userValue }]}>
@@ -166,7 +172,7 @@ describe('<Billing />', () => {
 
     axiosMock.onGet('http://talo.api/billing/organisation-plan').replyOnce(200, { pricingPlan })
     axiosMock.onGet('http://talo.api/billing/plans').replyOnce(200, { pricingPlans })
-    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage })
+    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage, breakdown })
 
     render(
       <KitchenSink states={[{ node: userState, initialValue: userValue }]}>
@@ -185,7 +191,7 @@ describe('<Billing />', () => {
 
     axiosMock.onGet('http://talo.api/billing/organisation-plan').replyOnce(200, { pricingPlan })
     axiosMock.onGet('http://talo.api/billing/plans').replyOnce(200, { pricingPlans })
-    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage })
+    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage, breakdown })
 
     render(
       <KitchenSink states={[{ node: userState, initialValue: userValue }]}>
@@ -200,7 +206,7 @@ describe('<Billing />', () => {
   it('should handle organisation plan errors', async () => {
     axiosMock.onGet('http://talo.api/billing/organisation-plan').networkErrorOnce()
     axiosMock.onGet('http://talo.api/billing/plans').replyOnce(200, { pricingPlans })
-    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage })
+    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage, breakdown })
 
     render(
       <KitchenSink states={[{ node: userState, initialValue: userValue }]}>
@@ -216,7 +222,7 @@ describe('<Billing />', () => {
       .onGet('http://talo.api/billing/organisation-plan')
       .replyOnce(200, { pricingPlan: orgPlan })
     axiosMock.onGet('http://talo.api/billing/plans').networkErrorOnce()
-    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage })
+    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage, breakdown })
 
     render(
       <KitchenSink states={[{ node: userState, initialValue: userValue }]}>
@@ -234,7 +240,7 @@ describe('<Billing />', () => {
   it('should handle pricing plan and organisation plan errors', async () => {
     axiosMock.onGet('http://talo.api/billing/organisation-plan').networkErrorOnce()
     axiosMock.onGet('http://talo.api/billing/plans').networkErrorOnce()
-    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage })
+    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage, breakdown })
 
     render(
       <KitchenSink states={[{ node: userState, initialValue: userValue }]}>
@@ -257,7 +263,7 @@ describe('<Billing />', () => {
 
     axiosMock.onGet('http://talo.api/billing/organisation-plan').replyOnce(200, { pricingPlan })
     axiosMock.onGet('http://talo.api/billing/plans').replyOnce(200, { pricingPlans })
-    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage })
+    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage, breakdown })
 
     render(
       <KitchenSink states={[{ node: userState, initialValue: userValue }]}>
@@ -274,7 +280,7 @@ describe('<Billing />', () => {
       .onGet('http://talo.api/billing/organisation-plan')
       .replyOnce(200, { pricingPlan: orgPlan })
     axiosMock.onGet('http://talo.api/billing/plans').replyOnce(200, { pricingPlans })
-    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage })
+    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage, breakdown })
 
     render(
       <KitchenSink states={[{ node: userState, initialValue: userValue }]}>
@@ -290,7 +296,7 @@ describe('<Billing />', () => {
       .onGet('http://talo.api/billing/organisation-plan')
       .replyOnce(200, { pricingPlan: orgPlan })
     axiosMock.onGet('http://talo.api/billing/plans').replyOnce(200, { pricingPlans })
-    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage })
+    axiosMock.onGet('http://talo.api/billing/usage').replyOnce(200, { usage, breakdown })
 
     render(
       <KitchenSink states={[{ node: userState, initialValue: userValue }]}>

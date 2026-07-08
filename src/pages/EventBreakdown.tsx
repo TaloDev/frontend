@@ -1,16 +1,16 @@
+import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useLocation, useNavigate } from 'react-router'
 import useEventBreakdown from '../api/useEventBreakdown'
 import { EventsProvider, useEventsContext } from '../components/events/EventsContext'
 import EventsDisplay from '../components/events/EventsDisplay'
 import EventsFiltersSection from '../components/events/EventsFiltersSection'
 import Page from '../components/Page'
 import routes from '../constants/routes'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 
 export default function EventBreakdown() {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const navigate = useNavigate()
   const location = useLocation()

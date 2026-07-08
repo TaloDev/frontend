@@ -4,13 +4,17 @@ import MockAdapter from 'axios-mock-adapter'
 import api from '../../api/api'
 import { PlayerGroupRuleMode } from '../../entities/playerGroup'
 import { UserType } from '../../entities/user'
-import activeGameState from '../../state/activeGameState'
-import devDataState from '../../state/devDataState'
-import userState from '../../state/userState'
+import { activeGameState } from '../../state/activeGameState'
+import { devDataState } from '../../state/devDataState'
+import { userState } from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
 import Dashboard from '../Dashboard'
 
-const mockUser = { id: 1, type: UserType.ADMIN }
+const mockUser = {
+  id: 1,
+  type: UserType.ADMIN,
+  organisation: { games: [] as Array<{ id: number; name: string }> },
+}
 
 describe('<Dashboard />', () => {
   const axiosMock = new MockAdapter(api)

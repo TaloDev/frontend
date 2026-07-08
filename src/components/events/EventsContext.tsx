@@ -43,7 +43,7 @@ export function EventsProvider({
   )
 
   return (
-    <EventsContext.Provider
+    <EventsContext
       value={{
         localStorageKey,
         selectedEventNames,
@@ -59,7 +59,7 @@ export function EventsProvider({
       }}
     >
       {children}
-    </EventsContext.Provider>
+    </EventsContext>
   )
 }
 

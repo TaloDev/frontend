@@ -11,9 +11,9 @@ import {
 import Tippy from '@tippyjs/react'
 import clsx from 'clsx'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useCallback, useContext, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useNavigate } from 'react-router'
 import deletePlayer from '../api/deletePlayer'
 import { toggleDevBuild } from '../api/toggleDevBuild'
 import Button from '../components/Button'
@@ -33,8 +33,8 @@ import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import Toggle from '../components/toggles/Toggle'
 import routes from '../constants/routes'
 import { PlayerAliasService } from '../entities/playerAlias'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import userState, { AuthedUser } from '../state/userState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
+import { userState, AuthedUser } from '../state/userState'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 import usePlayer from '../utils/usePlayer'
 import useSortedItems from '../utils/useSortedItems'
@@ -78,8 +78,8 @@ export default function PlayerProfile() {
 
   const sortedAliases = useSortedItems(player?.aliases ?? [], 'lastSeenAt')
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
-  const user = useRecoilValue(userState) as AuthedUser
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
+  const user = useAtomValue(userState) as AuthedUser
   const [isDeleting, setIsDeleting] = useState(false)
   const toast = useContext(ToastContext)
 

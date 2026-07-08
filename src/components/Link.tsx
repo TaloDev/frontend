@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import clsx from 'clsx'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router'
 import { focusStyle, linkStyle } from '../styles/theme'
 
 type LinkProps = {

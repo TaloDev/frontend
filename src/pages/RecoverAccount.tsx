@@ -1,6 +1,6 @@
+import { useSetAtom } from 'jotai'
 import { MouseEvent, useEffect, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useSetRecoilState } from 'recoil'
+import { useNavigate, useLocation } from 'react-router'
 import recoverAccount from '../api/recoverAccount'
 import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
@@ -12,7 +12,7 @@ import { UnauthedContainerInner } from '../components/UnauthedContainerInner'
 import routes from '../constants/routes'
 import { User } from '../entities/user'
 import AuthService from '../services/AuthService'
-import userState from '../state/userState'
+import { userState } from '../state/userState'
 import buildError from '../utils/buildError'
 
 export default function RecoverAccount() {
@@ -21,7 +21,7 @@ export default function RecoverAccount() {
 
   const [userId] = useState(location.state?.userId)
   const [code, setCode] = useState('')
-  const setUser = useSetRecoilState(userState)
+  const setUser = useSetAtom(userState)
   const [error, setError] = useState<TaloError | null>(null)
   const [isLoading, setLoading] = useState(false)
   const [recoveryCodes, setRecoveryCodes] = useState<string[] | null>(null)

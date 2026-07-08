@@ -1,7 +1,7 @@
 import clsx from 'clsx'
+import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useSetRecoilState } from 'recoil'
+import { useNavigate, useLocation } from 'react-router'
 import changePassword from '../api/changePassword'
 import createRecoveryCodes from '../api/createRecoveryCodes'
 import disable2FA from '../api/disable2FA'
@@ -11,7 +11,7 @@ import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import TextInput from '../components/TextInput'
 import Title from '../components/Title'
 import routes from '../constants/routes'
-import userState from '../state/userState'
+import { userState } from '../state/userState'
 import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
 
@@ -30,7 +30,7 @@ const ConfirmPassword = () => {
   const [error, setError] = useState<TaloError | null>(null)
   const [isLoading, setLoading] = useState(false)
 
-  const setUser = useSetRecoilState(userState)
+  const setUser = useSetAtom(userState)
 
   useEffect(() => {
     if (!location.state?.onConfirmAction) {

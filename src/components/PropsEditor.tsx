@@ -1,5 +1,4 @@
 import { IconPlus, IconTrash } from '@tabler/icons-react'
-import clsx from 'clsx'
 import { ReactNode, useMemo, useState } from 'react'
 import type { Prop } from '../entities/prop'
 import { isMetaProp, metaPropKeyMap } from '../constants/metaProps'
@@ -69,10 +68,8 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
   }, [bulkPropsList, newProps.length, originalProps, props])
 
   const enableSaveButton = useMemo(() => {
-    return (
-      newProps.every((prop) => prop.key && prop.value) && props.every((prop) => prop.value !== '')
-    )
-  }, [newProps, props])
+    return newProps.every((prop) => prop.key && prop.value)
+  }, [newProps])
 
   const reset = () => {
     setProps(originalProps)
@@ -161,11 +158,7 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
               <TableBody iterator={existingProps}>
                 {(prop) => (
                   <>
-                    <TableCell
-                      className={clsx('min-w-80', { 'rounded-bl-none!': newProps.length > 0 })}
-                    >
-                      {prop.key}
-                    </TableCell>
+                    <TableCell className='min-w-80'>{prop.key}</TableCell>
                     <TableCell className='min-w-80'>
                       <TextInput
                         id={`edit-${prop.key}`}
@@ -175,7 +168,7 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
                         value={prop.value ?? ''}
                       />
                     </TableCell>
-                    <TableCell className={clsx({ 'rounded-br-none!': newProps.length > 0 })}>
+                    <TableCell>
                       <Button
                         variant='icon'
                         className='ml-auto rounded-full bg-indigo-900 p-1'

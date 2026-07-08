@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import routes from '../../constants/routes'
 import { UserType } from '../../entities/user'
-import userState from '../../state/userState'
+import { userState } from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
 import SecondaryNav from '../SecondaryNav'
 

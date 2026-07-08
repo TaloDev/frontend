@@ -1,7 +1,7 @@
 import { IconCheck, IconPencil, IconPlus, IconX } from '@tabler/icons-react'
 import { format } from 'date-fns'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import updateGame from '../api/updateGame'
 import useOrganisation from '../api/useOrganisation'
 import AlertBanner from '../components/AlertBanner'
@@ -20,24 +20,24 @@ import userTypeMap from '../constants/userTypeMap'
 import { User, UserType } from '../entities/user'
 import NewInvite from '../modals/NewInvite'
 import { RemoveMember } from '../modals/RemoveMember'
-import activeGameState, { SelectedActiveGameState } from '../state/activeGameState'
-import organisationState from '../state/organisationState'
-import userState, { AuthedUser } from '../state/userState'
+import { activeGameState, SelectedActiveGameState } from '../state/activeGameState'
+import { organisationState } from '../state/organisationState'
+import { userState, AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 
 function Organisation() {
-  const organisation = useRecoilValue(organisationState)
+  const organisation = useAtomValue(organisationState)
   const { games, members, pendingInvites, loading, error, mutate } = useOrganisation()
   const [showModal, setShowModal] = useState(false)
   const [removingMember, setRemovingMember] = useState<User | null>(null)
-  const user = useRecoilValue(userState) as AuthedUser
+  const user = useAtomValue(userState) as AuthedUser
 
   const [editingGameId, setEditingGameId] = useState<number | null>(null)
   const [editingGameName, setEditingGameName] = useState('')
   const [editingGameNameError, setEditingGameNameError] = useState<TaloError | null>(null)
-  const setUser = useSetRecoilState(userState)
-  const [activeGame, setActiveGame] = useRecoilState(activeGameState) as SelectedActiveGameState
+  const setUser = useSetAtom(userState)
+  const [activeGame, setActiveGame] = useAtom(activeGameState) as SelectedActiveGameState
 
   const canRemoveMembers =
     canPerformAction(user, PermissionBasedAction.REMOVE_ORGANISATION_MEMBER) && user.emailConfirmed

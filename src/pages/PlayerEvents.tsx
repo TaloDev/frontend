@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useNavigate, useParams } from 'react-router'
 import usePlayerEvents from '../api/usePlayerEvents'
 import ErrorMessage from '../components/ErrorMessage'
 import Page from '../components/Page'
@@ -14,13 +14,13 @@ import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
 import TextInput from '../components/TextInput'
 import routes from '../constants/routes'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import usePlayer from '../utils/usePlayer'
 import useSearch from '../utils/useSearch'
 import useSortedItems from '../utils/useSortedItems'
 
 export default function PlayerEvents() {
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const { id: playerId } = useParams()
   const [player] = usePlayer()

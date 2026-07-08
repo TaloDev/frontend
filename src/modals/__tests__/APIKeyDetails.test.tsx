@@ -4,12 +4,12 @@ import MockAdapter from 'axios-mock-adapter'
 import api from '../../api/api'
 import ToastProvider from '../../components/toast/ToastProvider'
 import { UserType } from '../../entities/user'
-import activeGameState from '../../state/activeGameState'
-import userState from '../../state/userState'
+import { activeGameState } from '../../state/activeGameState'
+import { userState } from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
-import Scopes from '../Scopes'
+import APIKeyDetails from '../APIKeyDetails'
 
-describe('<Scopes />', () => {
+describe('<APIKeyDetails />', () => {
   const axiosMock = new MockAdapter(api)
   const activeGameValue = { id: 1, name: 'Shattered' }
 
@@ -24,11 +24,11 @@ describe('<Scopes />', () => {
         ]}
       >
         <ToastProvider>
-          <Scopes
+          <APIKeyDetails
             modalState={[true, closeMock]}
             mutate={vi.fn()}
             availableScopes={{}}
-            selectedKey={null}
+            editingKey={null}
           />
         </ToastProvider>
       </KitchenSink>,
@@ -48,10 +48,10 @@ describe('<Scopes />', () => {
         ]}
       >
         <ToastProvider>
-          <Scopes
+          <APIKeyDetails
             modalState={[true, vi.fn()]}
             mutate={vi.fn()}
-            selectedKey={{
+            editingKey={{
               id: 1,
               scopes: ['read:leaderboards', 'read:players', 'write:players'],
               gameId: activeGameValue.id,
@@ -68,7 +68,7 @@ describe('<Scopes />', () => {
       </KitchenSink>,
     )
 
-    expect(screen.getAllByRole('checkbox', { hidden: true })).toHaveLength(4)
+    expect(screen.getAllByRole('checkbox', { hidden: true })).toHaveLength(6)
 
     expect(screen.getByDisplayValue('read:leaderboards')).toBeChecked()
     expect(screen.getByDisplayValue('write:leaderboards')).not.toBeChecked()
@@ -87,10 +87,10 @@ describe('<Scopes />', () => {
         ]}
       >
         <ToastProvider>
-          <Scopes
+          <APIKeyDetails
             modalState={[true, vi.fn()]}
             mutate={vi.fn()}
-            selectedKey={{
+            editingKey={{
               id: 1,
               scopes: ['read:leaderboards', 'read:players', 'write:players'],
               gameId: activeGameValue.id,
@@ -146,10 +146,10 @@ describe('<Scopes />', () => {
         ]}
       >
         <ToastProvider>
-          <Scopes
+          <APIKeyDetails
             modalState={[true, closeMock]}
             mutate={mutateMock}
-            selectedKey={initialKey}
+            editingKey={initialKey}
             availableScopes={{
               leaderboards: ['read:leaderboards', 'write:leaderboards'],
               players: ['read:players', 'write:players'],
@@ -186,10 +186,10 @@ describe('<Scopes />', () => {
         ]}
       >
         <ToastProvider>
-          <Scopes
+          <APIKeyDetails
             modalState={[true, closeMock]}
             mutate={mutateMock}
-            selectedKey={{
+            editingKey={{
               id: 1,
               scopes: [],
               gameId: activeGameValue.id,
@@ -208,7 +208,7 @@ describe('<Scopes />', () => {
 
     await userEvent.click(screen.getByText('Select all scopes'))
 
-    expect(screen.getAllByRole('checkbox', { hidden: true })).toHaveLength(4)
+    expect(screen.getAllByRole('checkbox', { hidden: true })).toHaveLength(6)
 
     expect(screen.getByDisplayValue('read:leaderboards')).toBeChecked()
     expect(screen.getByDisplayValue('write:leaderboards')).toBeChecked()
@@ -227,10 +227,10 @@ describe('<Scopes />', () => {
         ]}
       >
         <ToastProvider>
-          <Scopes
+          <APIKeyDetails
             modalState={[true, vi.fn()]}
             mutate={vi.fn()}
-            selectedKey={{
+            editingKey={{
               id: 1,
               scopes: ['read:leaderboards', 'read:players', 'write:players'],
               gameId: activeGameValue.id,

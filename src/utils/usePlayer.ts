@@ -1,15 +1,15 @@
+import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useNavigate, useParams } from 'react-router'
 import type { Player } from '../entities/player'
 import useFindPlayer from '../api/useFindPlayer'
 import routes from '../constants/routes'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 
 function usePlayer(): [Player | undefined, (player: Player) => void] {
   const { id } = useParams()
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const [player, setPlayer] = useState<Player | undefined>()
   const { player: fetchedPlayer, loading } = useFindPlayer(activeGame, id)
 

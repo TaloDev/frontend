@@ -1,8 +1,8 @@
 import { IconPlus, IconZoom } from '@tabler/icons-react'
 import { format } from 'date-fns'
+import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useNavigate } from 'react-router'
 import useStats from '../api/useStats'
 import Button from '../components/Button'
 import { StatsActivityChart } from '../components/charts/StatsActivityChart'
@@ -18,7 +18,7 @@ import { GameStat } from '../entities/gameStat'
 import { BulkCreateStats } from '../modals/BulkCreateStats'
 import { ResetStat } from '../modals/ResetStat'
 import StatDetails from '../modals/StatDetails'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import useSortedItems from '../utils/useSortedItems'
 
 export default function Stats() {
@@ -27,7 +27,7 @@ export default function Stats() {
   const [showBulkModal, setShowBulkModal] = useState(false)
   const [editingStat, setEditingStat] = useState<GameStat | null>(null)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const { stats, loading, error, mutate } = useStats(activeGame)
 
   const sortedStats = useSortedItems(stats, 'internalName', 'asc')

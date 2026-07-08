@@ -14,17 +14,17 @@ import {
 } from '@tabler/icons-react'
 import Tippy from '@tippyjs/react'
 import clsx from 'clsx'
+import { useAtomValue } from 'jotai'
 import { useState, useEffect } from 'react'
-import { Link as RouterLink, useLocation } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { Link as RouterLink, useLocation } from 'react-router'
 import routes from '../constants/routes'
-import userState from '../state/userState'
+import { userState } from '../state/userState'
 import { focusStyle } from '../styles/theme'
 import canViewPage from '../utils/canViewPage'
 import LinkButton from './LinkButton'
 
 function ServicesLink() {
-  const user = useRecoilValue(userState)
+  const user = useAtomValue(userState)
   const [showServicesMenu, setShowServicesMenu] = useState(false)
 
   const location = useLocation()

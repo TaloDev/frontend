@@ -1,21 +1,21 @@
+import { useAtomValue } from 'jotai'
 import { useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import usePlayerAuthActivities from '../api/usePlayerAuthActivities'
 import ActivityRenderer from '../components/ActivityRenderer'
 import ErrorMessage from '../components/ErrorMessage'
 import Page from '../components/Page'
 import Pagination from '../components/Pagination'
 import PlayerIdentifier from '../components/PlayerIdentifier'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import userState, { AuthedUser } from '../state/userState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
+import { userState, AuthedUser } from '../state/userState'
 import useDaySections from '../utils/useDaySections'
 import usePlayer from '../utils/usePlayer'
 
 export default function PlayerAuthActivities() {
   const [page, setPage] = useState(0)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
-  const user = useRecoilValue(userState) as AuthedUser
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
+  const user = useAtomValue(userState) as AuthedUser
   const [player] = usePlayer()
 
   const {

@@ -1,6 +1,6 @@
 import { IconCheck, IconCopy, IconDownload } from '@tabler/icons-react'
 import { ReactNode, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import routes from '../constants/routes'
 import { ConfirmPasswordAction } from '../pages/ConfirmPassword'
 import AlertBanner from './AlertBanner'

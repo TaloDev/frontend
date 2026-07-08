@@ -1,14 +1,14 @@
+import { useAtomValue } from 'jotai'
 import { ReactNode, useCallback, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import { DocsTypeSelection, DocType } from '../modals/DocsTypeSelection'
-import activeGameState from '../state/activeGameState'
+import { activeGameState } from '../state/activeGameState'
 import useLocalStorage from './useLocalStorage'
 
 export function useDocsSelection(docs: Record<DocType, string>): {
   openDocs: () => void
   modalElement: ReactNode
 } {
-  const activeGame = useRecoilValue(activeGameState)
+  const activeGame = useAtomValue(activeGameState)
   const storageKey = activeGame ? `${activeGame.id}-docsType` : null
 
   const [showModal, setShowModal] = useState(false)

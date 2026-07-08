@@ -1,8 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import clsx from 'clsx'
+import { useAtomValue } from 'jotai'
 import { useState, useContext, MouseEvent, useMemo } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { useRecoilValue } from 'recoil'
 import { KeyedMutator } from 'swr'
 import { z } from 'zod'
 import createChannel from '../api/createChannel'
@@ -20,8 +20,8 @@ import TextInput from '../components/TextInput'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import Toggle from '../components/toggles/Toggle'
 import { GameChannel } from '../entities/gameChannels'
-import activeGameState, { SelectedActiveGame } from '../state/activeGameState'
-import userState, { AuthedUser } from '../state/userState'
+import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
+import { userState, AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 
@@ -53,14 +53,14 @@ export default function ChannelDetails({
   const [isDeleting, setDeleting] = useState(false)
   const [apiError, setAPIError] = useState<TaloError | null>(null)
 
-  const activeGame = useRecoilValue(activeGameState) as SelectedActiveGame
+  const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const [ownerSearch, setOwnerSearch] = useState('')
   const { players } = usePlayers(activeGame, ownerSearch, 0)
 
   const [isMenuOpen, setMenuOpen] = useState(false)
 
-  const user = useRecoilValue(userState) as AuthedUser
+  const user = useAtomValue(userState) as AuthedUser
 
   const {
     register,

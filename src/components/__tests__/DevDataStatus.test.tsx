@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import devDataState from '../../state/devDataState'
+import { devDataState } from '../../state/devDataState'
 import KitchenSink from '../../utils/KitchenSink'
 import DevDataStatus from '../DevDataStatus'
 
