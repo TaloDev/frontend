@@ -158,9 +158,7 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
               <TableBody iterator={existingProps}>
                 {(prop) => (
                   <>
-                    <TableCell className='min-w-80'>
-                      {prop.key}
-                    </TableCell>
+                    <TableCell className='min-w-80'>{prop.key}</TableCell>
                     <TableCell className='min-w-80'>
                       <TextInput
                         id={`edit-${prop.key}`}
