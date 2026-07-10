@@ -143,6 +143,37 @@ export default function FeedbackCategoryDetails({
       id='feedback-category-details'
       title={editingCategory ? 'Update feedback category' : 'Create feedback category'}
       modalState={modalState}
+      footer={
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          {!editingCategory && (
+            <div className='w-full md:w-32'>
+              <Button
+                disabled={!internalName || !displayName || !description}
+                isLoading={isLoading}
+                onClick={onCreateClick}
+              >
+                Create
+              </Button>
+            </div>
+          )}
+          {editingCategory && (
+            <div className='w-full md:w-32'>
+              <Button
+                disabled={!internalName || !displayName || !description || isDeleting}
+                isLoading={isLoading}
+                onClick={onUpdateClick}
+              >
+                Update
+              </Button>
+            </div>
+          )}
+          <div className='w-full md:w-32'>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Close
+            </Button>
+          </div>
+        </div>
+      }
     >
       <form>
         <div className='space-y-4 p-4'>
@@ -222,36 +253,6 @@ export default function FeedbackCategoryDetails({
             )}
 
           {error && <ErrorMessage error={error} />}
-        </div>
-
-        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
-          {!editingCategory && (
-            <div className='w-full md:w-32'>
-              <Button
-                disabled={!internalName || !displayName || !description}
-                isLoading={isLoading}
-                onClick={onCreateClick}
-              >
-                Create
-              </Button>
-            </div>
-          )}
-          {editingCategory && (
-            <div className='w-full md:w-32'>
-              <Button
-                disabled={!internalName || !displayName || !description || isDeleting}
-                isLoading={isLoading}
-                onClick={onUpdateClick}
-              >
-                Update
-              </Button>
-            </div>
-          )}
-          <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
-              Close
-            </Button>
-          </div>
         </div>
       </form>
     </Modal>

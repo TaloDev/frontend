@@ -65,7 +65,32 @@ export default function ConfirmPlanChange({
   })
 
   return (
-    <Modal id='confirm-plan-change' title='Confirm plan change' modalState={modalState}>
+    <Modal
+      id='confirm-plan-change'
+      title='Confirm plan change'
+      modalState={modalState}
+      footer={
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          <div className='w-full md:w-32'>
+            <Button
+              variant='green'
+              isLoading={isLoading}
+              onClick={onConfirmClick}
+              extra={{
+                'data-testid': 'confirm-plan-change',
+              }}
+            >
+              Confirm
+            </Button>
+          </div>
+          <div className='w-full md:w-32'>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+          </div>
+        </div>
+      }
+    >
       <form>
         <div className='space-y-4 p-4'>
           <div>
@@ -119,26 +144,6 @@ export default function ConfirmPlanChange({
           </table>
 
           {error && <ErrorMessage error={error} />}
-        </div>
-
-        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
-          <div className='w-full md:w-32'>
-            <Button
-              variant='green'
-              isLoading={isLoading}
-              onClick={onConfirmClick}
-              extra={{
-                'data-testid': 'confirm-plan-change',
-              }}
-            >
-              Confirm
-            </Button>
-          </div>
-          <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-          </div>
         </div>
       </form>
     </Modal>

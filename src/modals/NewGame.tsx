@@ -52,7 +52,25 @@ export default function NewGame({ modalState }: NewGameProps) {
   }
 
   return (
-    <Modal id='new-game' title='Create new game' modalState={modalState}>
+    <Modal
+      id='new-game'
+      title='Create new game'
+      modalState={modalState}
+      footer={
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          <div className='w-full md:w-32'>
+            <Button disabled={!name} isLoading={isLoading} onClick={onCreateClick}>
+              Create
+            </Button>
+          </div>
+          <div className='w-full md:w-32'>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+          </div>
+        </div>
+      }
+    >
       <form>
         <div className='space-y-4 p-4'>
           <TextInput
@@ -66,19 +84,6 @@ export default function NewGame({ modalState }: NewGameProps) {
           />
 
           {error && <ErrorMessage error={error} />}
-        </div>
-
-        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
-          <div className='w-full md:w-32'>
-            <Button disabled={!name} isLoading={isLoading} onClick={onCreateClick}>
-              Create
-            </Button>
-          </div>
-          <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-          </div>
         </div>
       </form>
     </Modal>

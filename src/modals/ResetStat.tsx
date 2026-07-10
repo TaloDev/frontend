@@ -56,6 +56,26 @@ export function ResetStat({ modalState, editingStat }: ResetStatProps) {
       className={clsx('flex flex-col', {
         'md:h-[55vh]!': isMenuOpen,
       })}
+      footer={
+        <div className='mt-auto flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          <div className='w-full md:w-32'>
+            <Button
+              type='button'
+              isLoading={isLoading}
+              disabled={confirmText !== 'confirm'}
+              onClick={onResetClick}
+              variant='red'
+            >
+              Reset
+            </Button>
+          </div>
+          <div className='w-full md:w-32'>
+            <Button type='button' variant='grey' onClick={() => goBack(false)}>
+              Back
+            </Button>
+          </div>
+        </div>
+      }
     >
       <form className='flex grow flex-col'>
         <div className='space-y-4 p-4'>
@@ -94,25 +114,6 @@ export function ResetStat({ modalState, editingStat }: ResetStatProps) {
           />
 
           {error && <ErrorMessage error={error} />}
-        </div>
-
-        <div className='mt-auto flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
-          <div className='w-full md:w-32'>
-            <Button
-              type='button'
-              isLoading={isLoading}
-              disabled={confirmText !== 'confirm'}
-              onClick={onResetClick}
-              variant='red'
-            >
-              Reset
-            </Button>
-          </div>
-          <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => goBack(false)}>
-              Back
-            </Button>
-          </div>
         </div>
       </form>
     </Modal>
