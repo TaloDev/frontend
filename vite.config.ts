@@ -29,7 +29,10 @@ export default defineConfig({
           environment: 'jsdom',
           setupFiles: './setup-tests.ts',
           include: ['src/**/__tests__/**/*.test.{ts,tsx}'],
-          exclude: ['src/utils/__tests__/convertDateToUTC.test.ts'],
+          exclude: [
+            'src/utils/__tests__/convertDateToUTC.test.ts',
+            'src/**/__tests__/*.tz.test.{ts,tsx}',
+          ],
         },
       },
       {
@@ -38,7 +41,10 @@ export default defineConfig({
           globals: true,
           environment: 'jsdom',
           setupFiles: './setup-tests.ts',
-          include: ['src/utils/__tests__/convertDateToUTC.test.ts'],
+          include: [
+            'src/utils/__tests__/convertDateToUTC.test.ts',
+            'src/components/__tests__/DateInput.tz.test.tsx',
+          ],
           env: { TZ: 'America/Los_Angeles' },
         },
       },
