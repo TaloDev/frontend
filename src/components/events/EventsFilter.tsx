@@ -43,7 +43,7 @@ export function EventsFilter({
   }, [eventNames, eventNamefilter])
 
   return (
-    <div>
+    <div className='self-end'>
       <Tippy
         placement='bottom-start'
         offset={[0, 8]}
