@@ -225,8 +225,51 @@ const StatDetails = ({
       id='stat-details'
       title={editingStat ? 'Update stat' : 'Create stat'}
       modalState={modalState}
+      footer={
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          {!editingStat && (
+            <div className='flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-2'>
+              <div className='w-full md:w-36'>
+                <Button type='button' variant='grey' onClick={onBulkImportClick}>
+                  Bulk import
+                </Button>
+              </div>
+              <div className='w-full md:w-32'>
+                <Button
+                  type='submit'
+                  disabled={!isValid}
+                  isLoading={isLoading}
+                  extra={{ form: 'stat-details-form' }}
+                >
+                  Create
+                </Button>
+              </div>
+            </div>
+          )}
+          {editingStat && (
+            <div className='w-full md:w-32'>
+              <Button
+                type='submit'
+                disabled={!isValid || isDeleting}
+                isLoading={isLoading}
+                extra={{ form: 'stat-details-form' }}
+              >
+                Update
+              </Button>
+            </div>
+          )}
+          <div className='w-full md:w-32'>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Close
+            </Button>
+          </div>
+        </div>
+      }
     >
-      <form onSubmit={handleSubmit(editingStat ? onUpdateClick : onCreateClick)}>
+      <form
+        id='stat-details-form'
+        onSubmit={handleSubmit(editingStat ? onUpdateClick : onCreateClick)}
+      >
         <div className='space-y-4 p-4'>
           <TextInput
             id='internal-name'
@@ -391,35 +434,6 @@ const StatDetails = ({
           )}
 
           {apiError && <ErrorMessage error={apiError} />}
-        </div>
-
-        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
-          {!editingStat && (
-            <div className='flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-2'>
-              <div className='w-full md:w-36'>
-                <Button type='button' variant='grey' onClick={onBulkImportClick}>
-                  Bulk import
-                </Button>
-              </div>
-              <div className='w-full md:w-32'>
-                <Button disabled={!isValid} isLoading={isLoading}>
-                  Create
-                </Button>
-              </div>
-            </div>
-          )}
-          {editingStat && (
-            <div className='w-full md:w-32'>
-              <Button disabled={!isValid || isDeleting} isLoading={isLoading}>
-                Update
-              </Button>
-            </div>
-          )}
-          <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
-              Close
-            </Button>
-          </div>
         </div>
       </form>
     </Modal>

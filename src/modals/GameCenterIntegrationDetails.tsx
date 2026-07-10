@@ -150,8 +150,44 @@ export function GameCenterIntegrationDetails({
       id='game-center-integration-details'
       title='Game Center integration'
       modalState={modalState}
+      footer={
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          {!enabled && (
+            <div className='w-full md:w-32'>
+              <Button
+                type='submit'
+                disabled={!isValid}
+                isLoading={isLoading}
+                extra={{ form: 'game-center-integration-form' }}
+              >
+                Enable
+              </Button>
+            </div>
+          )}
+
+          {enabled && (
+            <div className='w-full md:w-32'>
+              <Button
+                type='button'
+                disabled={Boolean(isUpdating)}
+                isLoading={isDeleting}
+                onClick={onDeleteClick}
+                variant='red'
+              >
+                Disable
+              </Button>
+            </div>
+          )}
+
+          <div className='w-full md:w-32'>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              {enabled ? 'Done' : 'Cancel'}
+            </Button>
+          </div>
+        </div>
+      }
     >
-      <form onSubmit={handleSubmit(onEnableClick)}>
+      <form id='game-center-integration-form' onSubmit={handleSubmit(onEnableClick)}>
         <div className='space-y-4 p-4'>
           <div>
             To learn more about how the integration works,{' '}
@@ -190,36 +226,6 @@ export function GameCenterIntegrationDetails({
           </div>
 
           {apiError && <ErrorMessage error={apiError} />}
-        </div>
-
-        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
-          {!enabled && (
-            <div className='w-full md:w-32'>
-              <Button disabled={!isValid} isLoading={isLoading}>
-                Enable
-              </Button>
-            </div>
-          )}
-
-          {enabled && (
-            <div className='w-full md:w-32'>
-              <Button
-                type='button'
-                disabled={Boolean(isUpdating)}
-                isLoading={isDeleting}
-                onClick={onDeleteClick}
-                variant='red'
-              >
-                Disable
-              </Button>
-            </div>
-          )}
-
-          <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
-              {enabled ? 'Done' : 'Cancel'}
-            </Button>
-          </div>
         </div>
       </form>
     </Modal>

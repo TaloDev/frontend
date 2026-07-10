@@ -180,8 +180,61 @@ export default function ChannelDetails({
       className={clsx('flex flex-col', {
         'md:h-[50vh]!': isMenuOpen,
       })}
+      footer={
+        <div className='mt-auto flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          {!isEditing && (
+            <div className='w-full md:w-32'>
+              <Button
+                type='submit'
+                disabled={!isValid}
+                isLoading={isLoading}
+                extra={{ form: 'channel-details-form' }}
+              >
+                Create
+              </Button>
+            </div>
+          )}
+
+          {isEditing && (
+            <div className='flex space-x-2'>
+              {canPerformAction(user, PermissionBasedAction.DELETE_CHANNEL) && (
+                <div className='w-full md:w-32'>
+                  <Button
+                    type='button'
+                    isLoading={isDeleting}
+                    onClick={onDeleteClick}
+                    variant='red'
+                  >
+                    Delete
+                  </Button>
+                </div>
+              )}
+              <div className='w-full md:w-32'>
+                <Button
+                  type='submit'
+                  disabled={!isValid}
+                  isLoading={isLoading}
+                  extra={{ form: 'channel-details-form' }}
+                >
+                  Update
+                </Button>
+              </div>
+            </div>
+          )}
+
+          <div className='w-full md:w-32'>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Close
+            </Button>
+          </div>
+        </div>
+      }
     >
-      <form onSubmit={handleSubmit(onSubmit)} className='flex grow flex-col'>
+      <form
+        id='channel-details-form'
+        onSubmit={handleSubmit(onSubmit)}
+        className='flex grow flex-col'
+      >
         <div className='space-y-4 p-4'>
           <TextInput
             id='name'
@@ -284,44 +337,6 @@ export default function ChannelDetails({
           </div>
 
           {apiError && <ErrorMessage error={apiError} />}
-        </div>
-
-        <div className='mt-auto flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
-          {!isEditing && (
-            <div className='w-full md:w-32'>
-              <Button disabled={!isValid} isLoading={isLoading}>
-                Create
-              </Button>
-            </div>
-          )}
-
-          {isEditing && (
-            <div className='flex space-x-2'>
-              {canPerformAction(user, PermissionBasedAction.DELETE_CHANNEL) && (
-                <div className='w-full md:w-32'>
-                  <Button
-                    type='button'
-                    isLoading={isDeleting}
-                    onClick={onDeleteClick}
-                    variant='red'
-                  >
-                    Delete
-                  </Button>
-                </div>
-              )}
-              <div className='w-full md:w-32'>
-                <Button disabled={!isValid} isLoading={isLoading}>
-                  Update
-                </Button>
-              </div>
-            </div>
-          )}
-
-          <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
-              Close
-            </Button>
-          </div>
         </div>
       </form>
     </Modal>

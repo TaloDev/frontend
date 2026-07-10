@@ -167,6 +167,37 @@ const LeaderboardDetails = ({
       title={editingLeaderboard ? 'Update leaderboard' : 'Create leaderboard'}
       modalState={modalState}
       className='flex flex-col'
+      footer={
+        <div className='mt-auto flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          {!editingLeaderboard && (
+            <div className='w-full md:w-32'>
+              <Button
+                disabled={!internalName || !displayName || !sortMode}
+                isLoading={isLoading}
+                onClick={onCreateClick}
+              >
+                Create
+              </Button>
+            </div>
+          )}
+          {editingLeaderboard && (
+            <div className='w-full md:w-32'>
+              <Button
+                disabled={!internalName || !displayName || !sortMode || isDeleting}
+                isLoading={isLoading}
+                onClick={onUpdateClick}
+              >
+                Update
+              </Button>
+            </div>
+          )}
+          <div className='w-full md:w-32'>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Close
+            </Button>
+          </div>
+        </div>
+      }
     >
       <form className='flex grow flex-col'>
         <div className='space-y-4 p-4'>
@@ -279,36 +310,6 @@ const LeaderboardDetails = ({
             )}
 
           {error && <ErrorMessage error={error} />}
-        </div>
-
-        <div className='mt-auto flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
-          {!editingLeaderboard && (
-            <div className='w-full md:w-32'>
-              <Button
-                disabled={!internalName || !displayName || !sortMode}
-                isLoading={isLoading}
-                onClick={onCreateClick}
-              >
-                Create
-              </Button>
-            </div>
-          )}
-          {editingLeaderboard && (
-            <div className='w-full md:w-32'>
-              <Button
-                disabled={!internalName || !displayName || !sortMode || isDeleting}
-                isLoading={isLoading}
-                onClick={onUpdateClick}
-              >
-                Update
-              </Button>
-            </div>
-          )}
-          <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
-              Close
-            </Button>
-          </div>
         </div>
       </form>
     </Modal>

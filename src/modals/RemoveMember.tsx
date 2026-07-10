@@ -55,6 +55,26 @@ export function RemoveMember({ modalState, member, organisationName, mutate }: R
       title={`Remove ${member.username}`}
       modalState={modalState}
       scroll={false}
+      footer={
+        <div className='mt-auto flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          <div className='w-full md:w-32'>
+            <Button
+              type='button'
+              isLoading={isLoading}
+              disabled={confirmText !== 'confirm'}
+              onClick={onRemoveClick}
+              variant='red'
+            >
+              Remove
+            </Button>
+          </div>
+          <div className='w-full md:w-32'>
+            <Button type='button' variant='grey' onClick={onClose}>
+              Back
+            </Button>
+          </div>
+        </div>
+      }
     >
       <div className='flex grow flex-col'>
         <div className='space-y-4 p-4'>
@@ -73,25 +93,6 @@ export function RemoveMember({ modalState, member, organisationName, mutate }: R
           />
 
           {error && <ErrorMessage error={error} />}
-        </div>
-
-        <div className='mt-auto flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
-          <div className='w-full md:w-32'>
-            <Button
-              type='button'
-              isLoading={isLoading}
-              disabled={confirmText !== 'confirm'}
-              onClick={onRemoveClick}
-              variant='red'
-            >
-              Remove
-            </Button>
-          </div>
-          <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={onClose}>
-              Back
-            </Button>
-          </div>
         </div>
       </div>
     </Modal>
