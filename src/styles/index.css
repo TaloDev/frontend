@@ -98,38 +98,55 @@ body {
   }
 }
 
-.rdp {
+.rdp-root {
   @apply bg-white;
   @apply text-black;
-  @apply p-2;
+  @apply p-4;
+  @apply pt-2;
   @apply m-0!;
   @apply rounded;
   @apply border;
   @apply border-gray-300;
   @apply shadow-lg;
+  --rdp-accent-color: theme(--color-indigo-500);
 }
 
-.rdp-day,
-.rdp-button {
+.rdp-day_button,
+.rdp-button_previous,
+.rdp-button_next {
   @apply transition-colors;
 }
 
-.rdp-day:hover,
-.rdp-button:hover {
+.rdp-day_button:hover,
+.rdp-button_previous:hover,
+.rdp-button_next:hover {
   @apply bg-indigo-100!;
 }
 
-.rdp-day_selected {
-  @apply bg-indigo-500!;
+.rdp-selected {
+  font-weight: normal;
+  font-size: inherit;
 }
 
-.rdp-day_selected:hover {
+.rdp-selected .rdp-day_button {
+  @apply bg-indigo-500!;
+  @apply text-white!;
+  border: none;
+}
+
+.rdp-selected .rdp-day_button:hover {
   @apply bg-indigo-600!;
 }
 
 .rdp-caption_label {
   @apply text-lg!;
   @apply font-semibold!;
+}
+
+.rdp-nav {
+  & > button {
+    @apply rounded;
+  }
 }
 
 @keyframes spinners-react-circular-fixed {
