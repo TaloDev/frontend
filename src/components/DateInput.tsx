@@ -1,7 +1,7 @@
+import { DayPicker } from '@daypicker/react'
 import Tippy from '@tippyjs/react'
 import { format, isValid } from 'date-fns'
 import { useMemo, useState } from 'react'
-import { DayPicker } from 'react-day-picker'
 import { formatLocalDate, parseLocalDate } from '../utils/localDate'
 import TextInput from './TextInput'
 
@@ -21,6 +21,7 @@ export default function DateInput({
   textInputProps,
 }: DateInputProps) {
   const [isOpen, setOpen] = useState(false)
+  const [month, setMonth] = useState<Date | undefined>(undefined)
 
   const date = useMemo(() => {
     if (!value) {
@@ -30,6 +31,13 @@ export default function DateInput({
     const parsed = parseLocalDate(value)
     return isValid(parsed) ? parsed : new Date()
   }, [value])
+
+  const applyDate = (selectedDate?: Date) => {
+    const newDate = selectedDate ?? new Date()
+    onDateChange?.(newDate)
+    onDateTimeStringChange?.(formatLocalDate(newDate))
+    setMonth(newDate)
+  }
 
   return (
     <div>
@@ -41,16 +49,21 @@ export default function DateInput({
         theme='bare'
         content={
           <DayPicker
+            captionLayout='dropdown'
             mode='single'
             selected={date}
-            onSelect={(selectedDate) => {
-              const newDate = selectedDate ?? new Date()
-              onDateChange?.(newDate)
-              onDateTimeStringChange?.(formatLocalDate(newDate))
-
-              setOpen(false)
-            }}
-            defaultMonth={date}
+            onSelect={applyDate}
+            footer={
+              <button
+                type='button'
+                onClick={() => applyDate(new Date())}
+                className='text-sm text-indigo-600 hover:text-indigo-800'
+              >
+                Reset to today
+              </button>
+            }
+            month={month}
+            onMonthChange={setMonth}
           />
         }
         visible={isOpen}
