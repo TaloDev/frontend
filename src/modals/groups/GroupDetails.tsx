@@ -198,8 +198,61 @@ export default function GroupDetails({ modalState, mutate, editingGroup }: Group
       id='group-details'
       title={editingGroup ? 'Update group' : 'Create group'}
       modalState={modalState}
+      footer={
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          {!editingGroup && (
+            <div className='w-full md:w-32'>
+              <Button
+                type='submit'
+                disabled={!isValid || !allRulesValid}
+                isLoading={isLoading}
+                extra={{ form: 'group-details-form' }}
+              >
+                Create
+              </Button>
+            </div>
+          )}
+
+          {editingGroup && (
+            <div className='flex space-x-2'>
+              {canPerformAction(user, PermissionBasedAction.DELETE_GROUP) && (
+                <div className='w-full md:w-32'>
+                  <Button
+                    type='button'
+                    isLoading={isDeleting}
+                    onClick={onDeleteClick}
+                    variant='red'
+                  >
+                    Delete
+                  </Button>
+                </div>
+              )}
+
+              <div className='w-full md:w-32'>
+                <Button
+                  type='submit'
+                  disabled={!isValid || isDeleting || !allRulesValid}
+                  isLoading={isLoading}
+                  extra={{ form: 'group-details-form' }}
+                >
+                  Update
+                </Button>
+              </div>
+            </div>
+          )}
+
+          <div className='w-full md:w-32'>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Close
+            </Button>
+          </div>
+        </div>
+      }
     >
-      <form onSubmit={handleSubmit(editingGroup ? onUpdateClick : onCreateClick)}>
+      <form
+        id='group-details-form'
+        onSubmit={handleSubmit(editingGroup ? onUpdateClick : onCreateClick)}
+      >
         <div className='space-y-4 p-4'>
           <TextInput
             id='name'
@@ -258,45 +311,6 @@ export default function GroupDetails({ modalState, mutate, editingGroup }: Group
             <p>
               {displayableCount} player{displayableCount !== 1 ? 's' : ''} in group
             </p>
-          </div>
-        </div>
-
-        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
-          {!editingGroup && (
-            <div className='w-full md:w-32'>
-              <Button disabled={!isValid || !allRulesValid} isLoading={isLoading}>
-                Create
-              </Button>
-            </div>
-          )}
-
-          {editingGroup && (
-            <div className='flex space-x-2'>
-              {canPerformAction(user, PermissionBasedAction.DELETE_GROUP) && (
-                <div className='w-full md:w-32'>
-                  <Button
-                    type='button'
-                    isLoading={isDeleting}
-                    onClick={onDeleteClick}
-                    variant='red'
-                  >
-                    Delete
-                  </Button>
-                </div>
-              )}
-
-              <div className='w-full md:w-32'>
-                <Button disabled={!isValid || isDeleting || !allRulesValid} isLoading={isLoading}>
-                  Update
-                </Button>
-              </div>
-            </div>
-          )}
-
-          <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
-              Close
-            </Button>
           </div>
         </div>
       </form>

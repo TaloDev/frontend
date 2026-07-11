@@ -1,5 +1,5 @@
 {
-  "version": "0.82.0",
+  "version": "0.82.1",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -16,6 +16,7 @@
     "fmt:fix": "oxfmt"
   },
   "dependencies": {
+    "@daypicker/react": "^10.0.1",
     "@dinero.js/currencies": "^2.0.0-alpha.11",
     "@hcaptcha/react-hcaptcha": "^2.0.2",
     "@hookform/resolvers": "^5.2.2",
@@ -35,7 +36,6 @@
     "lodash-es": "^4.17.23",
     "randomcolor": "^0.6.2",
     "react": "^19.2.0",
-    "react-day-picker": "^8.3.5",
     "react-dom": "^19.2.0",
     "react-focus-lock": "^2.13.6",
     "react-hook-form": "^7.66.0",

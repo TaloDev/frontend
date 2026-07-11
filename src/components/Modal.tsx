@@ -10,6 +10,7 @@ type ModalProps = {
   title: string
   hideTitle?: boolean
   children: ReactNode
+  footer?: ReactNode
   modalState: [boolean, (open: boolean) => void]
   scroll?: boolean
   className?: string
@@ -20,6 +21,7 @@ export default function Modal({
   title,
   hideTitle,
   children,
+  footer,
   modalState,
   scroll = true,
   className,
@@ -43,20 +45,16 @@ export default function Modal({
 
   return createPortal(
     <FocusLock>
-      <div className='fixed inset-0 z-50 flex w-screen items-start bg-gray-900/60 text-black transition-colors md:items-center md:p-4'>
+      <div className='fixed inset-0 z-50 flex w-screen items-start overflow-y-auto bg-gray-900/60 text-black transition-colors md:items-center md:p-4'>
         <dialog
           className={clsx(
-            'block h-full w-full bg-white p-0 md:mx-auto md:h-auto md:w-160 md:rounded',
+            'flex h-full w-full flex-col bg-white p-0 md:mx-auto md:h-auto md:max-h-[calc(100vh-2rem)] md:w-160 md:rounded',
             className,
-            {
-              'overflow-y-scroll': scroll,
-              'overflow-y-visible': !scroll,
-            },
           )}
           aria-modal='true'
           aria-labelledby={`modal-${id}-label`}
         >
-          <div className='flex items-center justify-between border-b border-gray-200 p-4'>
+          <div className='flex flex-shrink-0 items-center justify-between border-b border-gray-200 p-4'>
             <h2
               id={`modal-${id}-label`}
               className={clsx('text-xl font-semibold', { hidden: hideTitle })}
@@ -72,7 +70,16 @@ export default function Modal({
             />
           </div>
 
-          {children}
+          <div
+            className={clsx('min-h-0 flex-1', {
+              'overflow-y-auto': scroll,
+              'overflow-y-visible': !scroll,
+            })}
+          >
+            {children}
+          </div>
+
+          {footer && <div className='flex-shrink-0'>{footer}</div>}
         </dialog>
       </div>
     </FocusLock>,

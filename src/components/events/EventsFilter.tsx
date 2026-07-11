@@ -43,7 +43,7 @@ export function EventsFilter({
   }, [eventNames, eventNamefilter])
 
   return (
-    <div>
+    <div className='self-end'>
       <Tippy
         placement='bottom-start'
         offset={[0, 8]}
@@ -51,8 +51,8 @@ export function EventsFilter({
         arrow={false}
         theme='bare'
         content={
-          <div className='rdp min-w-100 space-y-2 p-0!'>
-            <div className='space-y-2 p-2'>
+          <div className='min-w-100 rounded bg-white text-black'>
+            <div className='space-y-4 p-4'>
               <h2 className='text-lg font-semibold'>
                 {filteredEventNames.length} {capitalized}
               </h2>
@@ -68,7 +68,7 @@ export function EventsFilter({
 
             <hr className='border-gray-200' />
 
-            <ul className='mt-0! h-50 overflow-y-scroll p-2'>
+            <ul className='mt-0! h-50 overflow-y-scroll p-4'>
               {filteredEventNames
                 .sort((a, b) => a.localeCompare(b))
                 .map((name) => (
@@ -86,7 +86,7 @@ export function EventsFilter({
 
             <hr className='mt-0! border-gray-200' />
 
-            <div className='flex items-center justify-between px-2 pb-2'>
+            <div className='flex items-center justify-between p-4'>
               <LinkButton
                 onClick={() =>
                   setSelectedEventNames((curr) => [...new Set([...curr, ...filteredEventNames])])

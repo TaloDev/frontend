@@ -136,6 +136,47 @@ export default function APIKeyDetails({
       id='api-key-details'
       title={editingKey ? 'Update access key' : 'Create access key'}
       modalState={modalState}
+      footer={
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          {createdToken ? (
+            <>
+              <div className='w-full md:w-32'>
+                <Button onClick={() => setOpen(false)}>Done</Button>
+              </div>
+              <div className='w-full md:w-32'>
+                <Button
+                  className='w-auto!'
+                  variant='grey'
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(createdToken!)
+                    toast.trigger('Access key copied to clipboard')
+                  }}
+                  icon={<IconCopy />}
+                >
+                  <span>Copy</span>
+                </Button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className='w-full md:w-32'>
+                <Button
+                  disabled={!user.emailConfirmed || (!editingKey && selectedScopes.length === 0)}
+                  isLoading={isLoading}
+                  onClick={editingKey ? onUpdateClick : onCreateClick}
+                >
+                  {editingKey ? 'Update' : 'Create'}
+                </Button>
+              </div>
+              <div className='w-full md:w-32'>
+                <Button variant='grey' onClick={() => setOpen(false)}>
+                  Close
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+      }
     >
       <div>
         {createdToken ? (
@@ -226,46 +267,6 @@ export default function APIKeyDetails({
             {error && <ErrorMessage error={error} />}
           </div>
         )}
-
-        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
-          {createdToken ? (
-            <>
-              <div className='w-full md:w-32'>
-                <Button onClick={() => setOpen(false)}>Done</Button>
-              </div>
-              <div className='w-full md:w-32'>
-                <Button
-                  className='w-auto!'
-                  variant='grey'
-                  onClick={async () => {
-                    await navigator.clipboard.writeText(createdToken!)
-                    toast.trigger('Access key copied to clipboard')
-                  }}
-                  icon={<IconCopy />}
-                >
-                  <span>Copy</span>
-                </Button>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className='w-full md:w-32'>
-                <Button
-                  disabled={!user.emailConfirmed || (!editingKey && selectedScopes.length === 0)}
-                  isLoading={isLoading}
-                  onClick={editingKey ? onUpdateClick : onCreateClick}
-                >
-                  {editingKey ? 'Update' : 'Create'}
-                </Button>
-              </div>
-              <div className='w-full md:w-32'>
-                <Button variant='grey' onClick={() => setOpen(false)}>
-                  Close
-                </Button>
-              </div>
-            </>
-          )}
-        </div>
       </div>
     </Modal>
   )

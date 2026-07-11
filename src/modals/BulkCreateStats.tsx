@@ -226,6 +226,35 @@ export function BulkCreateStats({ modalState, mutate }: BulkCreateStatsProps) {
       id='bulk-create-stats'
       title='Bulk import stats'
       modalState={[true, () => goBack(!!results)]}
+      footer={
+        <div
+          className={clsx(
+            'flex flex-col space-y-4 border-t border-gray-300 p-4 md:flex-row-reverse md:justify-between md:space-y-0',
+          )}
+        >
+          <div
+            className={clsx('w-full', {
+              'md:w-44': results,
+              'md:w-32': !results,
+            })}
+          >
+            {results ? (
+              <Button type='button' className='whitespace-nowrap' onClick={onFileUploadClear}>
+                Upload another file
+              </Button>
+            ) : (
+              <Button type='button' disabled={!parsedRows || isLoading} onClick={onImportClick}>
+                Import
+              </Button>
+            )}
+          </div>
+          <div className='w-full md:w-32'>
+            <Button type='button' variant='grey' onClick={() => goBack(!!results)}>
+              {results ? 'Close' : 'Back'}
+            </Button>
+          </div>
+        </div>
+      }
     >
       <div className='space-y-4 p-4'>
         <p>Upload a CSV file to create multiple stats at once.</p>
@@ -366,34 +395,6 @@ export function BulkCreateStats({ modalState, mutate }: BulkCreateStatsProps) {
             </div>
           </div>
         )}
-      </div>
-
-      <div
-        className={clsx(
-          'flex flex-col space-y-4 border-t border-gray-300 p-4 md:flex-row-reverse md:justify-between md:space-y-0',
-        )}
-      >
-        <div
-          className={clsx('w-full', {
-            'md:w-44': results,
-            'md:w-32': !results,
-          })}
-        >
-          {results ? (
-            <Button type='button' className='whitespace-nowrap' onClick={onFileUploadClear}>
-              Upload another file
-            </Button>
-          ) : (
-            <Button type='button' disabled={!parsedRows || isLoading} onClick={onImportClick}>
-              Import
-            </Button>
-          )}
-        </div>
-        <div className='w-full md:w-32'>
-          <Button type='button' variant='grey' onClick={() => goBack(!!results)}>
-            {results ? 'Close' : 'Back'}
-          </Button>
-        </div>
       </div>
     </Modal>
   )

@@ -1,11 +1,13 @@
+import { parseLocalDate } from './localDate'
+
 export function convertDateToUTC(dateString: string, endOfDay = false): string {
   if (!dateString) return ''
 
-  const [year, month, day] = dateString.split('T')[0].split('-').map(Number)
+  const date = parseLocalDate(dateString)
 
   const utcDate = endOfDay
-    ? new Date(Date.UTC(year, month - 1, day, 23, 59, 59, 999))
-    : new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0))
+    ? new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999)
+    : date
 
   return utcDate.toISOString()
 }

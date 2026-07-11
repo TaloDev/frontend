@@ -53,7 +53,25 @@ export default function CreateVerificationKey({ modalState, mutate }: CreateVeri
   }, [activeGame.id, version, value, mutate, toast, setOpen])
 
   return (
-    <Modal id='create-verification-key' title='Create verification key' modalState={modalState}>
+    <Modal
+      id='create-verification-key'
+      title='Create verification key'
+      modalState={modalState}
+      footer={
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          <div className='w-full md:w-32'>
+            <Button disabled={!version || !value} isLoading={isLoading} onClick={onCreateClick}>
+              Create
+            </Button>
+          </div>
+          <div className='w-full md:w-32'>
+            <Button variant='grey' onClick={() => setOpen(false)}>
+              Close
+            </Button>
+          </div>
+        </div>
+      }
+    >
       <div>
         <div className='space-y-4 p-4'>
           <TextInput
@@ -76,19 +94,6 @@ export default function CreateVerificationKey({ modalState, mutate }: CreateVeri
           />
 
           {error && <ErrorMessage error={error} />}
-        </div>
-
-        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
-          <div className='w-full md:w-32'>
-            <Button disabled={!version || !value} isLoading={isLoading} onClick={onCreateClick}>
-              Create
-            </Button>
-          </div>
-          <div className='w-full md:w-32'>
-            <Button variant='grey' onClick={() => setOpen(false)}>
-              Close
-            </Button>
-          </div>
         </div>
       </div>
     </Modal>

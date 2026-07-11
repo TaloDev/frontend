@@ -88,8 +88,33 @@ export default function NewInvite({ modalState, mutate }: NewInviteProps) {
   }
 
   return (
-    <Modal id='new-invite' title='New invite' modalState={modalState} scroll={false}>
-      <form onSubmit={handleSubmit(onCreateClick)}>
+    <Modal
+      id='new-invite'
+      title='New invite'
+      modalState={modalState}
+      scroll={false}
+      footer={
+        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
+          <div className='w-full md:w-32'>
+            <Button
+              type='submit'
+              disabled={!isValid}
+              isLoading={isLoading}
+              extra={{ form: 'new-invite-form' }}
+            >
+              Create
+            </Button>
+          </div>
+
+          <div className='w-full md:w-32'>
+            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
+              Close
+            </Button>
+          </div>
+        </div>
+      }
+    >
+      <form id='new-invite-form' onSubmit={handleSubmit(onCreateClick)}>
         <div className='space-y-4 p-4'>
           <TextInput
             id='email'
@@ -116,20 +141,6 @@ export default function NewInvite({ modalState, mutate }: NewInviteProps) {
           </div>
 
           {apiError && <ErrorMessage error={apiError} />}
-        </div>
-
-        <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
-          <div className='w-full md:w-32'>
-            <Button disabled={!isValid} isLoading={isLoading}>
-              Create
-            </Button>
-          </div>
-
-          <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={() => setOpen(false)}>
-              Close
-            </Button>
-          </div>
         </div>
       </form>
     </Modal>

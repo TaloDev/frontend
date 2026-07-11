@@ -19,6 +19,23 @@ export function DocsTypeSelection({ modalState, onSelected }: Props) {
       title='Choose your Talo integration'
       modalState={modalState}
       className='flex flex-col'
+      footer={
+        <div className='border-t border-gray-200'>
+          <div className='p-4 text-right'>
+            <Button
+              disabled={!selectedType}
+              className='w-auto!'
+              onClick={() => {
+                if (selectedType) {
+                  onSelected(selectedType)
+                }
+              }}
+            >
+              Save selection
+            </Button>
+          </div>
+        </div>
+      }
     >
       <div className='p-4'>
         <RadioGroup
@@ -32,22 +49,6 @@ export function DocsTypeSelection({ modalState, onSelected }: Props) {
           onChange={setSelectedType}
           value={selectedType}
         />
-      </div>
-
-      <div className='border-t border-gray-200'>
-        <div className='p-4 text-right'>
-          <Button
-            disabled={!selectedType}
-            className='w-auto!'
-            onClick={() => {
-              if (selectedType) {
-                onSelected(selectedType)
-              }
-            }}
-          >
-            Save selection
-          </Button>
-        </div>
       </div>
     </Modal>
   )

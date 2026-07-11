@@ -201,7 +201,7 @@ export default function LeaderboardEntries() {
           />
         </div>
 
-        <div className='flex w-full items-end space-x-4 md:w-1/2'>
+        <div className='flex w-full items-start space-x-4 md:w-1/2'>
           <div className='w-1/3'>
             <DateInput
               id='start-date'
