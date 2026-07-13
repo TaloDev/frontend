@@ -1,5 +1,5 @@
-import { format } from 'date-fns'
 import { ReactNode } from 'react'
+import { formatUTC } from '../../utils/formatUTC'
 
 type ChartCardTooltipProps<T> = {
   active?: boolean
@@ -18,7 +18,7 @@ export function ChartCardTooltip<T>({
 
   return (
     <div className='rounded bg-white p-4'>
-      <p className='text-sm font-medium text-black'>{format(new Date(label), 'dd MMM yyyy')}</p>
+      <p className='text-sm font-medium text-black'>{formatUTC(label, 'dd MMM yyyy')}</p>
       {formatter(payload[0].payload)}
     </div>
   )

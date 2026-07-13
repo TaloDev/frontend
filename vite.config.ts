@@ -31,6 +31,7 @@ export default defineConfig({
           include: ['src/**/__tests__/**/*.test.{ts,tsx}'],
           exclude: [
             'src/utils/__tests__/convertDateToUTC.test.ts',
+            'src/utils/__tests__/formatUTC.test.ts',
             'src/**/__tests__/*.tz.test.{ts,tsx}',
           ],
         },
@@ -43,6 +44,7 @@ export default defineConfig({
           setupFiles: './setup-tests.ts',
           include: [
             'src/utils/__tests__/convertDateToUTC.test.ts',
+            'src/utils/__tests__/formatUTC.test.ts',
             'src/components/__tests__/DateInput.tz.test.tsx',
           ],
           env: { TZ: 'America/Los_Angeles' },

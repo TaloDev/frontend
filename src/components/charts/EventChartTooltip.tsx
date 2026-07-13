@@ -1,9 +1,9 @@
 import clsx from 'clsx'
-import { format } from 'date-fns'
 import { uniqBy } from 'lodash-es'
 import { Fragment } from 'react'
 import { z } from 'zod'
 import { eventsVisualisationPayloadSchema } from '../../api/useEvents'
+import { formatUTC } from '../../utils/formatUTC'
 import { getPersistentColour } from '../../utils/getPersistentColour'
 
 type Payload = z.infer<typeof eventsVisualisationPayloadSchema>
@@ -25,9 +25,7 @@ export function EventChartTooltip({ active, payload, label }: ChartTooltipProps)
 
   return (
     <div className='rounded bg-white p-4'>
-      <p className='text-sm font-medium text-black'>
-        {format(new Date(label!), 'EEEE dd MMM yyyy')}
-      </p>
+      <p className='text-sm font-medium text-black'>{formatUTC(label!, 'EEEE dd MMM yyyy')}</p>
       <ul className='mt-4 grid grid-cols-[2fr_1fr_0.5fr] gap-y-2 text-black'>
         {uniqBy(filteredItems, 'payload.name')
           .sort((a, b) => b.payload.count - a.payload.count)
