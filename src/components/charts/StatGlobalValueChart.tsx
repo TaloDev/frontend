@@ -1,9 +1,9 @@
 import clsx from 'clsx'
-import { format } from 'date-fns'
 import { useAtomValue } from 'jotai'
 import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts'
 import { useStatGlobalValueChart } from '../../api/useStatGlobalValueChart'
 import { activeGameState, SelectedActiveGame } from '../../state/activeGameState'
+import { formatUTC } from '../../utils/formatUTC'
 import { ChartCard } from './ChartCard'
 import { ChartCardTooltip } from './ChartCardTooltip'
 import ChartTick from './ChartTick'
@@ -45,7 +45,7 @@ export function StatGlobalValueChart({
           tick={
             <ChartTick
               transform={(x, y) => `translate(${x},${y}) rotate(-15)`}
-              formatter={(tick) => format(new Date(tick), 'd MMM')}
+              formatter={(tick) => formatUTC(tick, 'd MMM')}
             />
           }
         />

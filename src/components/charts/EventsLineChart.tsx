@@ -1,8 +1,8 @@
-import { format } from 'date-fns'
 import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts'
 import { z } from 'zod'
 import { eventsVisualisationPayloadSchema } from '../../api/useEvents'
 import ChartTick from '../../components/charts/ChartTick'
+import { formatUTC } from '../../utils/formatUTC'
 import { getPersistentColour } from '../../utils/getPersistentColour'
 import { EventChartContainer } from './EventChartContainer'
 import { EventChartTooltip } from './EventChartTooltip'
@@ -38,7 +38,7 @@ export function EventsLineChart({ events, selectedEventNames }: Props) {
               transform={(x, y) => `translate(${x},${y}) rotate(-30)`}
               formatter={(tick) => {
                 if (!isFinite(tick as number)) return tick
-                return format(new Date(tick), 'd MMM')
+                return formatUTC(tick, 'd MMM')
               }}
             />
           }
