@@ -1,13 +1,13 @@
 import { z } from 'zod'
 
-export const apiKeySchema = z.object({
+export const adminApiKeySchema = z.object({
   id: z.number(),
-  keyEnding: z.string().optional(),
   scopes: z.array(z.string()),
   gameId: z.number(),
   createdBy: z.string(),
+  keyEnding: z.string(),
   createdAt: z.string().datetime(),
   lastUsedAt: z.string().datetime().nullish(),
 })
 
-export type APIKey = z.infer<typeof apiKeySchema>
+export type AdminApiKey = z.infer<typeof adminApiKeySchema>

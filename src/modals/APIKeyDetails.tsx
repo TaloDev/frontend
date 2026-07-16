@@ -1,32 +1,58 @@
 import { IconCopy } from '@tabler/icons-react'
 import { useAtomValue } from 'jotai'
-import { ChangeEvent, useContext, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import { KeyedMutator } from 'swr'
-import createAPIKey from '../api/createAPIKey'
-import updateAPIKey from '../api/updateAPIKey'
+import { createAdminApiKey } from '../api/createAdminApiKey'
+import { createAPIKey } from '../api/createAPIKey'
+import { updateAdminApiKey } from '../api/updateAdminApiKey'
+import { updateAPIKey } from '../api/updateAPIKey'
 import AlertBanner from '../components/AlertBanner'
 import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Modal from '../components/Modal'
+import RadioGroup from '../components/RadioGroup'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
+import { AdminApiKey } from '../entities/adminApiKey'
 import { APIKey } from '../entities/apiKey'
 import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import { userState, AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
 import { formatPascalCaseName } from '../utils/formatPascalCaseName'
 
+export type EditableKey =
+  | {
+      type: 'game'
+      key: APIKey
+    }
+  | {
+      type: 'admin'
+      key: AdminApiKey
+    }
+  | null
+
+type KeyType = 'game' | 'admin'
+
+type KeysMutator<T extends APIKey | AdminApiKey> = KeyedMutator<{
+  apiKeys: T[]
+  scopes: Record<string, string[]>
+}>
+
 type APIKeyDetailsProps = {
   modalState: [boolean, (open: boolean) => void]
-  editingKey: APIKey | null
-  availableScopes: Record<string, string[]>
-  mutate: KeyedMutator<{ apiKeys: APIKey[]; scopes: Record<string, string[]> }>
+  editingKey: EditableKey
+  gameScopes: Record<string, string[]>
+  adminApiKeyScopes: Record<string, string[]>
+  mutateGame: KeysMutator<APIKey>
+  mutateAdmin: KeysMutator<AdminApiKey>
 }
 
-export default function APIKeyDetails({
+export function APIKeyDetails({
   modalState,
   editingKey,
-  availableScopes,
-  mutate,
+  gameScopes,
+  adminApiKeyScopes,
+  mutateGame,
+  mutateAdmin,
 }: APIKeyDetailsProps) {
   const [, setOpen] = modalState
 
@@ -35,13 +61,22 @@ export default function APIKeyDetails({
   const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const user = useAtomValue(userState) as AuthedUser
 
-  const [selectedScopes, setSelectedScopes] = useState(editingKey?.scopes ?? [])
+  const initialType: KeyType = editingKey?.type ?? 'game'
+  const [activeType, setActiveType] = useState<KeyType>(initialType)
+
+  useEffect(() => {
+    setActiveType(editingKey?.type ?? 'game')
+  }, [editingKey])
+
+  const activeScopes = activeType === 'game' ? gameScopes : adminApiKeyScopes
+
+  const [selectedScopes, setSelectedScopes] = useState(editingKey ? editingKey.key.scopes : [])
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState<TaloError | null>(null)
   const [createdToken, setCreatedToken] = useState<string | null>(null)
 
   const expandWildcard = (scopes: string[]) => {
-    return scopes.includes('*') ? Object.values(availableScopes).flat() : scopes
+    return scopes.includes('*') ? Object.values(activeScopes).flat() : scopes
   }
 
   const onScopeChecked = (e: ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +88,7 @@ export default function APIKeyDetails({
   }
 
   const onAllScopesSelected = () => {
-    const allScopes = Object.values(availableScopes).flat()
+    const allScopes = Object.values(activeScopes).flat()
     setSelectedScopes(allScopes)
   }
 
@@ -62,7 +97,7 @@ export default function APIKeyDetails({
   }
 
   const onGroupChecked = (group: string) => (checked: boolean) => {
-    const groupScopes = availableScopes[group]
+    const groupScopes = activeScopes[group]
     setSelectedScopes(
       checked
         ? [
@@ -78,20 +113,31 @@ export default function APIKeyDetails({
     setError(null)
 
     try {
-      const { apiKey, token } = await createAPIKey(activeGame.id, selectedScopes)
-
-      await mutate((data) => {
-        if (!data) {
-          throw new Error('Access key data is not set')
-        }
-
-        return {
-          ...data,
-          apiKeys: [...data.apiKeys, apiKey],
-        }
-      })
-
-      setCreatedToken(token)
+      if (activeType === 'game') {
+        const { token, apiKey } = await createAPIKey(activeGame.id, selectedScopes)
+        setCreatedToken(token)
+        await mutateGame((data) => {
+          if (!data) {
+            throw new Error('API key data is not set')
+          }
+          return {
+            ...data,
+            apiKeys: [...data.apiKeys, apiKey],
+          }
+        })
+      } else {
+        const { key, apiKey } = await createAdminApiKey(activeGame.id, selectedScopes)
+        setCreatedToken(key)
+        await mutateAdmin((data) => {
+          if (!data) {
+            throw new Error('Admin API key data is not set')
+          }
+          return {
+            ...data,
+            apiKeys: [...data.apiKeys, apiKey],
+          }
+        })
+      }
     } catch (err) {
       setError(buildError(err))
     } finally {
@@ -100,29 +146,45 @@ export default function APIKeyDetails({
   }
 
   const onUpdateClick = async () => {
+    if (!editingKey) {
+      return
+    }
+
     setLoading(true)
     setError(null)
 
     try {
-      const { apiKey } = await updateAPIKey(activeGame.id, editingKey!.id, {
-        scopes: selectedScopes,
-      })
+      if (editingKey.type === 'game') {
+        const { apiKey } = await updateAPIKey(activeGame.id, editingKey.key.id, {
+          scopes: selectedScopes,
+        })
 
-      await mutate((data) => {
-        if (!data) {
-          throw new Error('Access key data is not set')
-        }
+        await mutateGame((data) => {
+          if (!data) {
+            throw new Error('API key data is not set')
+          }
+          return {
+            ...data,
+            apiKeys: data.apiKeys.map((k) => (k.id === editingKey.key.id ? apiKey : k)),
+          }
+        })
+        toast.trigger('API key scopes updated', ToastType.SUCCESS)
+      } else {
+        const { apiKey } = await updateAdminApiKey(activeGame.id, editingKey.key.id, {
+          scopes: selectedScopes,
+        })
 
-        return {
-          ...data,
-          apiKeys: data.apiKeys.map((k) => {
-            if (k.id === editingKey!.id) return apiKey
-            return k
-          }),
-        }
-      })
-
-      toast.trigger('Access key scopes updated', ToastType.SUCCESS)
+        await mutateAdmin((data) => {
+          if (!data) {
+            throw new Error('Admin API key data is not set')
+          }
+          return {
+            ...data,
+            apiKeys: data.apiKeys.map((k) => (k.id === editingKey.key.id ? apiKey : k)),
+          }
+        })
+        toast.trigger('Admin API key scopes updated', ToastType.SUCCESS)
+      }
       setOpen(false)
     } catch (err) {
       setError(buildError(err))
@@ -131,10 +193,19 @@ export default function APIKeyDetails({
     }
   }
 
+  const isEdit = editingKey !== null
+  const isAdmin = activeType === 'admin'
+
+  const title = isEdit ? (isAdmin ? 'Update admin API key' : 'Update API key') : 'Create API key'
+
+  const createdCopyMessage = isAdmin
+    ? 'Admin API key copied to clipboard'
+    : 'API key copied to clipboard'
+
   return (
     <Modal
       id='api-key-details'
-      title={editingKey ? 'Update access key' : 'Create access key'}
+      title={title}
       modalState={modalState}
       footer={
         <div className='flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
@@ -149,7 +220,7 @@ export default function APIKeyDetails({
                   variant='grey'
                   onClick={async () => {
                     await navigator.clipboard.writeText(createdToken!)
-                    toast.trigger('Access key copied to clipboard')
+                    toast.trigger(createdCopyMessage)
                   }}
                   icon={<IconCopy />}
                 >
@@ -161,11 +232,11 @@ export default function APIKeyDetails({
             <>
               <div className='w-full md:w-32'>
                 <Button
-                  disabled={!user.emailConfirmed || (!editingKey && selectedScopes.length === 0)}
+                  disabled={!user.emailConfirmed || (!isEdit && selectedScopes.length === 0)}
                   isLoading={isLoading}
-                  onClick={editingKey ? onUpdateClick : onCreateClick}
+                  onClick={isEdit ? onUpdateClick : onCreateClick}
                 >
-                  {editingKey ? 'Update' : 'Create'}
+                  {isEdit ? 'Update' : 'Create'}
                 </Button>
               </div>
               <div className='w-full md:w-32'>
@@ -195,13 +266,53 @@ export default function APIKeyDetails({
           </div>
         ) : (
           <div className='space-y-4 p-4'>
+            {!isEdit && (
+              <>
+                <RadioGroup<KeyType>
+                  label='Key type'
+                  name='key-type'
+                  value={activeType}
+                  onChange={(type) => {
+                    setActiveType(type)
+                    setSelectedScopes([])
+                  }}
+                  containerClassName='w-full'
+                  itemClassName='flex-1'
+                  options={[
+                    {
+                      label: 'Game API key',
+                      value: 'game',
+                    },
+                    {
+                      label: 'Admin API key',
+                      value: 'admin',
+                    },
+                  ]}
+                />
+
+                <div className='-mt-2 text-sm'>
+                  {activeType === 'game' ? (
+                    <>These keys can be used directly inside your game client</>
+                  ) : (
+                    <>
+                      These keys should be used inside a secure environment (like a game server)
+                      <AlertBanner
+                        className='mt-2 text-base text-white'
+                        text='You should never use this key inside a game client'
+                      ></AlertBanner>
+                    </>
+                  )}
+                </div>
+              </>
+            )}
+
             <div className='mb-2!'>
               <h3 className='font-semibold'>Scopes</h3>
-              <p className='text-sm'>Scopes control what your access key can do</p>
+              <p className='text-sm'>Scopes control what your API key can do</p>
             </div>
             <div className='grid max-h-80 grid-cols-1 gap-4 overflow-y-auto rounded border border-gray-200 p-4 md:grid-cols-2'>
-              {availableScopes &&
-                Object.keys(availableScopes)
+              {activeScopes &&
+                Object.keys(activeScopes)
                   .sort((a, b) => {
                     if (a === 'players') return -1
                     if (b === 'players') return 1
@@ -210,8 +321,8 @@ export default function APIKeyDetails({
                   .map((group) => {
                     const allSelected =
                       selectedScopes.includes('*') ||
-                      availableScopes[group].every((s) => selectedScopes.includes(s))
-                    const selectedCount = availableScopes[group].filter((s) =>
+                      activeScopes[group].every((s) => selectedScopes.includes(s))
+                    const selectedCount = activeScopes[group].filter((s) =>
                       selectedScopes.includes(s),
                     ).length
                     return (
@@ -234,7 +345,7 @@ export default function APIKeyDetails({
                           {formatPascalCaseName(group)}
                         </label>
                         <div className='flex items-center gap-4 border-t border-gray-300 p-2'>
-                          {availableScopes[group].map((scope: string) => (
+                          {activeScopes[group].map((scope: string) => (
                             <div key={scope} className='flex items-center'>
                               <input
                                 id={`modal-${scope}`}
