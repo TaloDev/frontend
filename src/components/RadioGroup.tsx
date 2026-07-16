@@ -70,7 +70,7 @@ function RadioGroup<T>({
                   )}
                 </span>
 
-                <span className={clsx('ml-1', { 'text-white': selected })}>{option.label}</span>
+                <span className={clsx('ml-2', { 'text-white': selected })}>{option.label}</span>
               </label>
             </div>
           )

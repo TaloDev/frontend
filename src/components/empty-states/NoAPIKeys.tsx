@@ -8,11 +8,11 @@ export function NoAPIKeys() {
 
   return (
     <EmptyState
-      title={`${activeGame.name} doesn't have any access keys yet`}
+      title={`${activeGame.name} doesn't have any API keys yet`}
       icon={<IconKey size={32} />}
     >
       <p>
-        Access keys allow your game to communicate with Talo.
+        API keys allow your game to communicate with Talo.
         <br />
         Create your first key to get started.
       </p>
