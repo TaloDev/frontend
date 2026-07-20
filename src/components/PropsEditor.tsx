@@ -81,12 +81,21 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
     if (bulkPropsList) {
       try {
         const parsed = JSON.parse(bulkPropsList)
-        const bulkprops = Object.entries(parsed).map(([key, value]) => ({
+        const bulkProps = Object.entries(parsed).map(([key, value]) => ({
           key,
           value: typeof value === 'string' ? value : JSON.stringify(value),
         }))
-        newProps.push(...bulkprops)
-        setNewProps(newProps)
+        const bulkByKey = new Map(bulkProps.map((p) => [p.key, p]))
+
+        setProps((curr) => curr.map((p) => bulkByKey.get(p.key) ?? p))
+        setNewProps((curr) => {
+          const taken = new Set([...props, ...curr].map((p) => p.key))
+          return [
+            ...curr.map((p) => bulkByKey.get(p.key) ?? p),
+            ...bulkProps.filter((p) => !taken.has(p.key)),
+          ]
+        })
+
         setBulkPropsList('')
         setError(null)
       } catch (err) {
