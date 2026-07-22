@@ -10,7 +10,6 @@ import AlertBanner from '../components/AlertBanner'
 import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Modal from '../components/Modal'
-import RadioGroup from '../components/RadioGroup'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import { AdminApiKey } from '../entities/adminApiKey'
 import { APIKey } from '../entities/apiKey'
@@ -267,43 +266,19 @@ export function APIKeyDetails({
         ) : (
           <div className='space-y-4 p-4'>
             {!isEdit && (
-              <>
-                <RadioGroup<KeyType>
-                  label='Key type'
-                  name='key-type'
-                  value={activeType}
-                  onChange={(type) => {
-                    setActiveType(type)
-                    setSelectedScopes([])
-                  }}
-                  containerClassName='w-full'
-                  itemClassName='flex-1'
-                  options={[
-                    {
-                      label: 'Game API key',
-                      value: 'game',
-                    },
-                    {
-                      label: 'Admin API key',
-                      value: 'admin',
-                    },
-                  ]}
-                />
-
-                <div className='-mt-2 text-sm'>
-                  {activeType === 'game' ? (
-                    <>These keys can be used directly inside your game client</>
-                  ) : (
-                    <>
-                      These keys should be used inside a secure environment (like a game server)
-                      <AlertBanner
-                        className='mt-2 text-base text-white'
-                        text='You should never use this key inside a game client'
-                      ></AlertBanner>
-                    </>
-                  )}
-                </div>
-              </>
+              <div className='-mt-2 text-sm'>
+                {activeType === 'game' ? (
+                  <>These keys can be used directly inside your game client</>
+                ) : (
+                  <>
+                    These keys should be used inside a secure environment (like a game server)
+                    <AlertBanner
+                      className='mt-2 text-base text-white'
+                      text='You should never use this key inside a game client'
+                    ></AlertBanner>
+                  </>
+                )}
+              </div>
             )}
 
             <div className='mb-2!'>
