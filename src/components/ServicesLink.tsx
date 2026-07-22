@@ -42,7 +42,7 @@ function ServicesLink() {
 
   const services = [
     {
-      name: 'Access keys',
+      name: 'API keys',
       desc: 'Manage and create keys',
       icon: IconKey,
       route: routes.apiKeys,
