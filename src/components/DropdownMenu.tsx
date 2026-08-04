@@ -1,5 +1,5 @@
 import Tippy from '@tippyjs/react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { ReactNode, useState } from 'react'
 import Button from './Button'
 
