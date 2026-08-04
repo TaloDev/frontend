@@ -1,7 +1,7 @@
 import { IconCheck, IconX } from '@tabler/icons-react'
 import clsx from 'clsx'
-import { motion } from 'framer-motion'
 import { useAtom } from 'jotai'
+import { motion } from 'motion/react'
 import { useState } from 'react'
 import { devDataState } from '../../state/devDataState'
 import { hiddenInputStyle, labelFocusStyle } from '../../styles/theme'
