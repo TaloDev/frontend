@@ -1,5 +1,7 @@
 import axios from 'axios'
+import { getDefaultStore } from 'jotai'
 import AuthService from '../services/AuthService'
+import { devDataState } from '../state/devDataState'
 import { getEnv } from '../utils/env'
 import refreshAccess from './refreshAccess'
 
@@ -17,11 +19,7 @@ instance.interceptors.request.use(
       config.headers['Authorization'] = `Bearer ${AuthService.getToken()}`
     }
 
-    const includeDevData =
-      (window.localStorage.getItem('includeDevDataOptimistic') ??
-        window.localStorage.getItem('includeDevData')) === 'true'
-
-    config.headers['X-Talo-Include-Dev-Data'] = includeDevData ? '1' : '0'
+    config.headers['X-Talo-Include-Dev-Data'] = getDefaultStore().get(devDataState) ? '1' : '0'
 
     return config
   },
