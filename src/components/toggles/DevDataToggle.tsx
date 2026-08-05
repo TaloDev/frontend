@@ -10,7 +10,6 @@ function DevDataToggle() {
   const [includeDevData, setIncludeDevData] = useAtom(devDataState)
 
   const [focus, setFocus] = useState(false)
-  const [innerEnabled, setInnerEnabled] = useState(includeDevData)
 
   const sharedIconProps = {
     className: 'flex items-center justify-center h-full absolute left-0 right-0',
@@ -27,11 +26,9 @@ function DevDataToggle() {
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
         onChange={() => {
-          const newValue = !innerEnabled
-          setInnerEnabled(newValue)
-          window.localStorage.setItem('includeDevDataOptimistic', String(newValue))
+          setIncludeDevData(!includeDevData)
         }}
-        checked={innerEnabled}
+        checked={includeDevData}
       />
 
       <label
@@ -43,21 +40,18 @@ function DevDataToggle() {
       >
         <motion.div
           animate={{
-            x: innerEnabled ? 44 : 0,
-            backgroundColor: innerEnabled ? 'rgb(249,115,22)' : 'rgb(99,102,241)',
+            x: includeDevData ? 44 : 0,
+            backgroundColor: includeDevData ? 'rgb(249,115,22)' : 'rgb(99,102,241)',
           }}
           initial={false}
           transition={{ duration: 0.2 }}
           className='relative h-full w-8 rounded-md'
-          onAnimationComplete={() => {
-            setIncludeDevData(innerEnabled)
-          }}
         >
-          <motion.span {...sharedIconProps} animate={{ opacity: innerEnabled ? 1 : 0 }}>
+          <motion.span {...sharedIconProps} animate={{ opacity: includeDevData ? 1 : 0 }}>
             <IconCheck size={24} stroke={3} />
           </motion.span>
 
-          <motion.span {...sharedIconProps} animate={{ opacity: innerEnabled ? 0 : 1 }}>
+          <motion.span {...sharedIconProps} animate={{ opacity: includeDevData ? 0 : 1 }}>
             <IconX size={24} stroke={3} />
           </motion.span>
         </motion.div>
