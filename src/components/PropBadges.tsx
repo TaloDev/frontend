@@ -29,12 +29,27 @@ export function PropBadges({
   contentRenderer = defaultContentRenderer,
 }: Props) {
   const sortedProps = useMemo(() => {
-    return props.filter((prop) => !isMetaProp(prop)).sort((a, b) => a.key.localeCompare(b.key))
+    const grouped = new Map<string, Prop[]>()
+
+    props
+      .filter((prop) => !isMetaProp(prop))
+      .forEach((prop) => {
+        grouped.set(prop.key, [...(grouped.get(prop.key) ?? []), prop])
+      })
+
+    return [...grouped.entries()]
+      .map(([key, entries]) => ({
+        key,
+        value: entries.map((entry) => entry.value).join(', '),
+        firstValue: entries[0].value,
+      }))
+      .filter((prop) => prop.key !== '')
+      .sort((a, b) => a.key.localeCompare(b.key))
   }, [props])
 
   return (
     <div className={clsx('gap-2', className)}>
-      {sortedProps.map(({ key, value }) => (
+      {sortedProps.map(({ key, value, firstValue }) => (
         <span key={`${key}-${value}`} className='flex w-fit rounded bg-gray-900 text-xs'>
           <code className='inline-block p-2 align-middle break-all'>
             {contentRenderer({ key, value })}
@@ -46,7 +61,7 @@ export function PropBadges({
                 className={clsx('grow rounded-r bg-indigo-900 px-2', focusStyle, {
                   'bg-orange-900': devBuild,
                 })}
-                onClick={() => onClick({ key, value })}
+                onClick={() => onClick({ key, value: firstValue })}
                 aria-label={buttonTitle}
               >
                 {Icon}
