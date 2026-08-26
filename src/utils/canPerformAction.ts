@@ -11,6 +11,8 @@ export enum PermissionBasedAction {
   DELETE_CHANNEL,
   DELETE_PLAYER,
   REMOVE_ORGANISATION_MEMBER,
+  CHANGE_ORGANISATION_MEMBER_TYPE,
+  RESEND_INVITE,
 }
 
 export default function canPerformAction(user: User, action: PermissionBasedAction) {
@@ -27,10 +29,12 @@ export default function canPerformAction(user: User, action: PermissionBasedActi
     case PermissionBasedAction.UPDATE_LEADERBOARD_ENTRY:
     case PermissionBasedAction.DELETE_CHANNEL:
     case PermissionBasedAction.DELETE_PLAYER:
+    case PermissionBasedAction.RESEND_INVITE:
       return user.type === UserType.ADMIN
     case PermissionBasedAction.DELETE_GROUP:
       return [UserType.DEV, UserType.ADMIN].includes(user.type)
     case PermissionBasedAction.REMOVE_ORGANISATION_MEMBER:
+    case PermissionBasedAction.CHANGE_ORGANISATION_MEMBER_TYPE:
       return false
   }
 }

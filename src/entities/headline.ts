@@ -2,12 +2,14 @@ import { z } from 'zod'
 
 export const countSchema = z.object({
   count: z.number(),
+  lastUpdatedAt: z.number(),
 })
 
 export const averageSessionDurationSchema = z.object({
   hours: z.number(),
   minutes: z.number(),
   seconds: z.number(),
+  lastUpdatedAt: z.number(),
 })
 
 export const headlinesSchema = z.object({

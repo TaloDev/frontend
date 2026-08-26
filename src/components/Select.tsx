@@ -56,6 +56,10 @@ function Select<T>({ innerRef, onChange, ...props }: SelectProps<T>) {
       color: '#000',
       padding: '0px',
     }),
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 1000,
+    }),
   }
 
   return (
@@ -63,6 +67,7 @@ function Select<T>({ innerRef, onChange, ...props }: SelectProps<T>) {
       {...props}
       ref={innerRef}
       components={{ Option }}
+      menuPosition='fixed'
       onChange={(option) => onChange(option as SingleValue<SelectOption<T>>)}
       styles={styles}
     />

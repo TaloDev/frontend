@@ -1,7 +1,8 @@
-import { IconCheck, IconPencil, IconPlus, IconX } from '@tabler/icons-react'
+import { IconCheck, IconPencil, IconPlus, IconSend, IconX } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import resendInvite from '../api/resendInvite'
 import updateGame from '../api/updateGame'
 import useOrganisation from '../api/useOrganisation'
 import AlertBanner from '../components/AlertBanner'
@@ -15,9 +16,11 @@ import Table from '../components/tables/Table'
 import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
 import TextInput from '../components/TextInput'
+import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
-import userTypeMap from '../constants/userTypeMap'
+import { userTypeMap } from '../constants/userTypeMap'
 import { User, UserType } from '../entities/user'
+import { ManageMember } from '../modals/ManageMember'
 import NewInvite from '../modals/NewInvite'
 import { RemoveMember } from '../modals/RemoveMember'
 import { activeGameState, SelectedActiveGameState } from '../state/activeGameState'
@@ -30,8 +33,11 @@ function Organisation() {
   const organisation = useAtomValue(organisationState)
   const { games, members, pendingInvites, loading, error, mutate } = useOrganisation()
   const [showModal, setShowModal] = useState(false)
-  const [removingMember, setRemovingMember] = useState<User | null>(null)
+  const [showManageModal, setShowManageModal] = useState(false)
+  const [showRemoveModal, setShowRemoveModal] = useState(false)
+  const [managingMember, setManagingMember] = useState<User | null>(null)
   const user = useAtomValue(userState) as AuthedUser
+  const toast = useContext(ToastContext)
 
   const [editingGameId, setEditingGameId] = useState<number | null>(null)
   const [editingGameName, setEditingGameName] = useState('')
@@ -39,8 +45,56 @@ function Organisation() {
   const setUser = useSetAtom(userState)
   const [activeGame, setActiveGame] = useAtom(activeGameState) as SelectedActiveGameState
 
-  const canRemoveMembers =
-    canPerformAction(user, PermissionBasedAction.REMOVE_ORGANISATION_MEMBER) && user.emailConfirmed
+  const canManageMember =
+    (canPerformAction(user, PermissionBasedAction.CHANGE_ORGANISATION_MEMBER_TYPE) ||
+      canPerformAction(user, PermissionBasedAction.REMOVE_ORGANISATION_MEMBER)) &&
+    user.emailConfirmed
+
+  useEffect(() => {
+    if (!showManageModal && !showRemoveModal) {
+      setManagingMember(null)
+    }
+  }, [showManageModal, showRemoveModal])
+
+  const onManageMemberClick = useCallback((member: User) => {
+    setManagingMember(member)
+    setShowManageModal(true)
+  }, [])
+
+  const onRemoveMemberClick = useCallback(() => {
+    setShowManageModal(false)
+    setShowRemoveModal(true)
+  }, [])
+
+  const onRemoveMemberCloseClick = useCallback((close: boolean) => {
+    setShowRemoveModal(false)
+    if (!close) {
+      setShowManageModal(true)
+    }
+  }, [])
+
+  const canResendInvites =
+    canPerformAction(user, PermissionBasedAction.RESEND_INVITE) && user.emailConfirmed
+
+  const [resendingInviteId, setResendingInviteId] = useState<number | null>(null)
+  const [resendInviteError, setResendInviteError] = useState<TaloError | null>(null)
+
+  const onResendInvite = useCallback(
+    async (inviteId: number) => {
+      setResendingInviteId(inviteId)
+      setResendInviteError(null)
+
+      try {
+        await resendInvite(inviteId)
+        toast.trigger('Invite resent', ToastType.SUCCESS)
+      } catch (err) {
+        setResendInviteError(buildError(err))
+      } finally {
+        setResendingInviteId(null)
+      }
+    },
+    [toast],
+  )
 
   useEffect(() => {
     if (editingGameId) {
@@ -97,12 +151,12 @@ function Organisation() {
 
   const tableColumns = useMemo(() => {
     let columns = ['Username', 'Type', 'Joined', 'Last seen']
-    if (canRemoveMembers) {
+    if (canManageMember) {
       columns.push('')
     }
 
     return columns
-  }, [canRemoveMembers])
+  }, [canManageMember])
 
   return (
     <Page
@@ -183,8 +237,18 @@ function Organisation() {
           )}
 
           <div className='space-y-4'>
+            {resendInviteError && <ErrorMessage error={resendInviteError} />}
+
             {pendingInvites.length > 0 && (
-              <Table columns={['Email', 'Type', 'Invited by', 'Sent at']}>
+              <Table
+                columns={[
+                  'Email',
+                  'Type',
+                  'Invited by',
+                  'Sent at',
+                  ...(canResendInvites ? [''] : []),
+                ]}
+              >
                 <TableBody iterator={pendingInvites}>
                   {(invite) => (
                     <>
@@ -192,6 +256,18 @@ function Organisation() {
                       <TableCell>{invite.type === UserType.ADMIN ? 'Admin' : 'Dev'}</TableCell>
                       <TableCell>{invite.invitedBy}</TableCell>
                       <DateCell>{format(new Date(invite.createdAt), 'dd MMM yyyy')}</DateCell>
+                      {canResendInvites && (
+                        <TableCell className='w-32'>
+                          <Button
+                            variant='grey'
+                            onClick={() => onResendInvite(invite.id)}
+                            isLoading={resendingInviteId === invite.id}
+                            icon={<IconSend size={16} />}
+                          >
+                            <span>Resend</span>
+                          </Button>
+                        </TableCell>
+                      )}
                     </>
                   )}
                 </TableBody>
@@ -222,11 +298,11 @@ function Organisation() {
                   <TableCell>{userTypeMap[member.type]}</TableCell>
                   <DateCell>{format(new Date(member.createdAt), 'dd MMM yyyy')}</DateCell>
                   <DateCell>{format(new Date(member.lastSeenAt), 'dd MMM yyyy')}</DateCell>
-                  {canRemoveMembers && (
-                    <TableCell className='w-48'>
+                  {canManageMember && (
+                    <TableCell className='w-32'>
                       {member.id !== user.id && (
-                        <Button variant='black' onClick={() => setRemovingMember(member)}>
-                          Remove
+                        <Button variant='grey' onClick={() => onManageMemberClick(member)}>
+                          Manage
                         </Button>
                       )}
                     </TableCell>
@@ -240,10 +316,19 @@ function Organisation() {
 
       {showModal && <NewInvite modalState={[showModal, setShowModal]} mutate={mutate} />}
 
-      {removingMember && (
+      {showManageModal && managingMember && (
+        <ManageMember
+          modalState={[showManageModal, setShowManageModal]}
+          member={managingMember}
+          mutate={mutate}
+          onRemoveClick={onRemoveMemberClick}
+        />
+      )}
+
+      {showRemoveModal && managingMember && (
         <RemoveMember
-          modalState={[true, () => setRemovingMember(null)]}
-          member={removingMember}
+          modalState={[showRemoveModal, onRemoveMemberCloseClick]}
+          member={managingMember}
           organisationName={organisation.name}
           mutate={mutate}
         />
