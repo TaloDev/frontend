@@ -10,6 +10,7 @@ import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Modal from '../components/Modal'
 import Select from '../components/Select'
 import TextInput from '../components/TextInput'
+import { userTypeOptions } from '../constants/userTypeMap'
 import { UserType } from '../entities/user'
 import buildError from '../utils/buildError'
 
@@ -23,19 +24,6 @@ const validationSchema = z.object({
 })
 
 type FormValues = z.infer<typeof validationSchema>
-
-const userTypeOptions = [
-  {
-    label: 'Developer',
-    value: UserType.DEV,
-    desc: 'Developers can create entities such as trackable stats and also update entities like players and leaderboard entries',
-  },
-  {
-    label: 'Admin',
-    value: UserType.ADMIN,
-    desc: 'Admins can perform destructive actions such as deleting leaderboards but can also create access keys and export data',
-  },
-]
 
 type NewInviteProps = {
   modalState: [boolean, Dispatch<React.SetStateAction<boolean>>]

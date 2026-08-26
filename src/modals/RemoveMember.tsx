@@ -12,17 +12,17 @@ import { User } from '../entities/user'
 import buildError from '../utils/buildError'
 
 type RemoveMemberProps = {
-  modalState: [boolean, () => void]
+  modalState: [boolean, (goBack: boolean) => void]
   member: User
   organisationName: string
   mutate: KeyedMutator<z.infer<typeof currentOrganisationSchema>>
 }
 
 export function RemoveMember({ modalState, member, organisationName, mutate }: RemoveMemberProps) {
-  const [, onClose] = modalState
+  const [, goBack] = modalState
+  const [confirmText, setConfirmText] = useState('')
   const [isLoading, setLoading] = useState(false)
   const [error, setError] = useState<TaloError | null>(null)
-  const [confirmText, setConfirmText] = useState('')
 
   const toast = useContext(ToastContext)
 
@@ -42,7 +42,7 @@ export function RemoveMember({ modalState, member, organisationName, mutate }: R
       }, false)
 
       toast.trigger(`Removed ${member.username}`)
-      onClose()
+      goBack(true)
     } catch (err) {
       setError(buildError(err))
       setLoading(false)
@@ -53,7 +53,7 @@ export function RemoveMember({ modalState, member, organisationName, mutate }: R
     <Modal
       id='remove-member'
       title={`Remove ${member.username}`}
-      modalState={modalState}
+      modalState={[true, () => goBack(true)]}
       scroll={false}
       footer={
         <div className='mt-auto flex flex-col space-y-4 border-t border-gray-200 p-4 md:flex-row-reverse md:justify-between md:space-y-0'>
@@ -69,14 +69,14 @@ export function RemoveMember({ modalState, member, organisationName, mutate }: R
             </Button>
           </div>
           <div className='w-full md:w-32'>
-            <Button type='button' variant='grey' onClick={onClose}>
+            <Button type='button' variant='grey' onClick={() => goBack(false)}>
               Back
             </Button>
           </div>
         </div>
       }
     >
-      <div className='flex grow flex-col'>
+      <form className='flex grow flex-col'>
         <div className='space-y-4 p-4'>
           <p>
             <strong>{member.username}</strong> will be removed from the organisation. They will no
@@ -94,7 +94,7 @@ export function RemoveMember({ modalState, member, organisationName, mutate }: R
 
           {error && <ErrorMessage error={error} />}
         </div>
-      </div>
+      </form>
     </Modal>
   )
 }

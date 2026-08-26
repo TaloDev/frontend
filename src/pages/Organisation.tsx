@@ -16,8 +16,9 @@ import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
 import TextInput from '../components/TextInput'
 import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
-import userTypeMap from '../constants/userTypeMap'
+import { userTypeMap } from '../constants/userTypeMap'
 import { User, UserType } from '../entities/user'
+import { ManageMember } from '../modals/ManageMember'
 import NewInvite from '../modals/NewInvite'
 import { RemoveMember } from '../modals/RemoveMember'
 import { activeGameState, SelectedActiveGameState } from '../state/activeGameState'
@@ -30,7 +31,9 @@ function Organisation() {
   const organisation = useAtomValue(organisationState)
   const { games, members, pendingInvites, loading, error, mutate } = useOrganisation()
   const [showModal, setShowModal] = useState(false)
-  const [removingMember, setRemovingMember] = useState<User | null>(null)
+  const [showManageModal, setShowManageModal] = useState(false)
+  const [showRemoveModal, setShowRemoveModal] = useState(false)
+  const [managingMember, setManagingMember] = useState<User | null>(null)
   const user = useAtomValue(userState) as AuthedUser
 
   const [editingGameId, setEditingGameId] = useState<number | null>(null)
@@ -39,8 +42,33 @@ function Organisation() {
   const setUser = useSetAtom(userState)
   const [activeGame, setActiveGame] = useAtom(activeGameState) as SelectedActiveGameState
 
-  const canRemoveMembers =
-    canPerformAction(user, PermissionBasedAction.REMOVE_ORGANISATION_MEMBER) && user.emailConfirmed
+  const canManageMember =
+    (canPerformAction(user, PermissionBasedAction.CHANGE_ORGANISATION_MEMBER_TYPE) ||
+      canPerformAction(user, PermissionBasedAction.REMOVE_ORGANISATION_MEMBER)) &&
+    user.emailConfirmed
+
+  useEffect(() => {
+    if (!showManageModal && !showRemoveModal) {
+      setManagingMember(null)
+    }
+  }, [showManageModal, showRemoveModal])
+
+  const onManageMemberClick = useCallback((member: User) => {
+    setManagingMember(member)
+    setShowManageModal(true)
+  }, [])
+
+  const onRemoveMemberClick = useCallback(() => {
+    setShowManageModal(false)
+    setShowRemoveModal(true)
+  }, [])
+
+  const onRemoveMemberCloseClick = useCallback((close: boolean) => {
+    setShowRemoveModal(false)
+    if (!close) {
+      setShowManageModal(true)
+    }
+  }, [])
 
   useEffect(() => {
     if (editingGameId) {
@@ -97,12 +125,12 @@ function Organisation() {
 
   const tableColumns = useMemo(() => {
     let columns = ['Username', 'Type', 'Joined', 'Last seen']
-    if (canRemoveMembers) {
+    if (canManageMember) {
       columns.push('')
     }
 
     return columns
-  }, [canRemoveMembers])
+  }, [canManageMember])
 
   return (
     <Page
@@ -222,11 +250,11 @@ function Organisation() {
                   <TableCell>{userTypeMap[member.type]}</TableCell>
                   <DateCell>{format(new Date(member.createdAt), 'dd MMM yyyy')}</DateCell>
                   <DateCell>{format(new Date(member.lastSeenAt), 'dd MMM yyyy')}</DateCell>
-                  {canRemoveMembers && (
-                    <TableCell className='w-48'>
+                  {canManageMember && (
+                    <TableCell className='w-32'>
                       {member.id !== user.id && (
-                        <Button variant='black' onClick={() => setRemovingMember(member)}>
-                          Remove
+                        <Button variant='grey' onClick={() => onManageMemberClick(member)}>
+                          Manage
                         </Button>
                       )}
                     </TableCell>
@@ -240,10 +268,19 @@ function Organisation() {
 
       {showModal && <NewInvite modalState={[showModal, setShowModal]} mutate={mutate} />}
 
-      {removingMember && (
+      {showManageModal && managingMember && (
+        <ManageMember
+          modalState={[showManageModal, setShowManageModal]}
+          member={managingMember}
+          mutate={mutate}
+          onRemoveClick={onRemoveMemberClick}
+        />
+      )}
+
+      {showRemoveModal && managingMember && (
         <RemoveMember
-          modalState={[true, () => setRemovingMember(null)]}
-          member={removingMember}
+          modalState={[showRemoveModal, onRemoveMemberCloseClick]}
+          member={managingMember}
           organisationName={organisation.name}
           mutate={mutate}
         />
