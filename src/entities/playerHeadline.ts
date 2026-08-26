@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 const countSchema = z.object({
   count: z.number(),
+  lastUpdatedAt: z.number(),
 })
 
 export const playerHeadlinesSchema = z.object({

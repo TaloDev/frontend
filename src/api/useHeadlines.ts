@@ -6,12 +6,12 @@ import { convertDateToUTC } from '../utils/convertDateToUTC'
 import makeValidatedGetRequest from './makeValidatedGetRequest'
 
 const defaultHeadlines: Headlines = {
-  new_players: { count: 0 },
-  returning_players: { count: 0 },
-  events: { count: 0 },
-  unique_event_submitters: { count: 0 },
-  total_sessions: { count: 0 },
-  average_session_duration: { hours: 0, minutes: 0, seconds: 0 },
+  new_players: { count: 0, lastUpdatedAt: 0 },
+  returning_players: { count: 0, lastUpdatedAt: 0 },
+  events: { count: 0, lastUpdatedAt: 0 },
+  unique_event_submitters: { count: 0, lastUpdatedAt: 0 },
+  total_sessions: { count: 0, lastUpdatedAt: 0 },
+  average_session_duration: { hours: 0, minutes: 0, seconds: 0, lastUpdatedAt: 0 },
 }
 
 function getSchema(headline: keyof Headlines) {
@@ -58,7 +58,7 @@ export default function useHeadlines(
     )
   }
 
-  const { data, error } = useSWR(
+  const { data, error, mutate } = useSWR(
     activeGame && startDate && endDate
       ? [`/games/${activeGame.id}/headlines`, startDate, endDate, includeDevData]
       : null,
@@ -69,5 +69,6 @@ export default function useHeadlines(
     headlines: data ?? defaultHeadlines,
     loading: !data && !error,
     error: error && buildError(error),
+    mutate,
   }
 }
