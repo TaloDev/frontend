@@ -1,9 +1,13 @@
+import { IconRefresh } from '@tabler/icons-react'
+import { formatDistanceToNow } from 'date-fns'
 import { useAtomValue } from 'jotai'
-import { useMemo } from 'react'
+import { useContext, useMemo, useState } from 'react'
+import { clearHeadlines } from '../api/clearHeadlines'
 import useHeadlines from '../api/useHeadlines'
 import usePinnedGroups from '../api/usePinnedGroups'
 import { usePlayerHeadlines } from '../api/usePlayerHeadlines'
 import useStats from '../api/useStats'
+import Button from '../components/Button'
 import DevDataStatus from '../components/DevDataStatus'
 import ErrorMessage from '../components/ErrorMessage'
 import HeadlineStat from '../components/HeadlineStat'
@@ -12,11 +16,13 @@ import Page from '../components/Page'
 import SecondaryNav from '../components/SecondaryNav'
 import SecondaryTitle from '../components/SecondaryTitle'
 import TimePeriodPicker from '../components/TimePeriodPicker'
+import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import { secondaryNavRoutes } from '../constants/secondaryNavRoutes'
 import { activeGameState } from '../state/activeGameState'
 import { devDataState } from '../state/devDataState'
 import { gamesState } from '../state/gamesState'
 import { userState, AuthedUser } from '../state/userState'
+import buildError from '../utils/buildError'
 import useIntendedRoute from '../utils/useIntendedRoute'
 import useLocalStorage from '../utils/useLocalStorage'
 import useTimePeriod, { TimePeriod } from '../utils/useTimePeriod'
@@ -47,6 +53,7 @@ export default function Dashboard() {
     headlines,
     loading: headlinesLoading,
     error: headlinesError,
+    mutate: mutateHeadlines,
   } = useHeadlines(activeGame, startDate, endDate, includeDevData)
   const { stats, loading: statsLoading, error: statsError } = useStats(activeGame, includeDevData)
   const {
@@ -58,12 +65,49 @@ export default function Dashboard() {
     headlines: playerHeadlines,
     loading: playerHeadlinesLoading,
     error: playerHeadlinesError,
+    mutate: mutatePlayerHeadlines,
   } = usePlayerHeadlines(activeGame, includeDevData)
   const intendedRouteChecked = useIntendedRoute()
+  const toast = useContext(ToastContext)
 
   const globalStats = useMemo(() => {
     return stats.filter((stat) => stat.global)
   }, [stats])
+
+  const lastUpdatedAt = useMemo(() => {
+    const values = [
+      headlines.new_players.lastUpdatedAt,
+      headlines.returning_players.lastUpdatedAt,
+      headlines.events.lastUpdatedAt,
+      headlines.unique_event_submitters.lastUpdatedAt,
+      headlines.total_sessions.lastUpdatedAt,
+      headlines.average_session_duration.lastUpdatedAt,
+      playerHeadlines.total_players.lastUpdatedAt,
+      playerHeadlines.online_players.lastUpdatedAt,
+    ]
+
+    return Math.min(...values)
+  }, [headlines, playerHeadlines])
+
+  const [refreshing, setRefreshing] = useState(false)
+
+  const onRefresh = async () => {
+    if (!activeGame) {
+      return
+    }
+
+    setRefreshing(true)
+
+    try {
+      await clearHeadlines(activeGame.id)
+      await Promise.all([mutateHeadlines(), mutatePlayerHeadlines()])
+      toast.trigger('Headlines refreshed', ToastType.SUCCESS)
+    } catch (err) {
+      toast.trigger(buildError(err).message, ToastType.ERROR)
+    } finally {
+      setRefreshing(false)
+    }
+  }
 
   const [showOnboarding, setShowOnboarding] = useLocalStorage(
     `${user.id}-showOnboarding`,
@@ -93,7 +137,26 @@ export default function Dashboard() {
       <DevDataStatus />
 
       <div className='flex flex-col md:flex-row md:items-center md:justify-between'>
-        <SecondaryTitle className='mb-4 md:mb-0'>{titlePrefix} at a glance</SecondaryTitle>
+        <div className='mb-4 md:mb-0'>
+          <SecondaryTitle>{titlePrefix} at a glance</SecondaryTitle>
+
+          {!headlinesLoading && !headlinesError && lastUpdatedAt > 0 && (
+            <div className='mt-1 flex items-center gap-1'>
+              <p className='text-sm text-gray-400'>
+                Updated {formatDistanceToNow(lastUpdatedAt)} ago
+              </p>
+              <Button
+                variant='icon'
+                disabled={refreshing}
+                className='rounded-full p-1 text-gray-400 hover:bg-gray-700 hover:text-white'
+                onClick={onRefresh}
+                icon={<IconRefresh size={14} className={refreshing ? 'animate-spin' : ''} />}
+                extra={{ 'aria-label': 'Refresh headlines' }}
+              />
+            </div>
+          )}
+        </div>
+
         <TimePeriodPicker
           periods={timePeriods}
           onPick={(period) => setTimePeriod(period.id)}

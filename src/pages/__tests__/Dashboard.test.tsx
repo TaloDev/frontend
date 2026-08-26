@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import MockAdapter from 'axios-mock-adapter'
 import api from '../../api/api'
+import ToastProvider from '../../components/toast/ToastProvider'
 import { PlayerGroupRuleMode } from '../../entities/playerGroup'
 import { UserType } from '../../entities/user'
 import { activeGameState } from '../../state/activeGameState'
@@ -24,29 +25,37 @@ describe('<Dashboard />', () => {
 
     axiosMock.onGet(/\/games\/\d\/headlines\/new_players/).replyOnce(200, {
       count: 3,
+      lastUpdatedAt: 1720000000000,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/returning_players/).replyOnce(200, {
       count: 1,
+      lastUpdatedAt: 1720000000000,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/events/).replyOnce(200, {
       count: 104,
+      lastUpdatedAt: 1720000000000,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/unique_event_submitters/).replyOnce(200, {
       count: 8,
+      lastUpdatedAt: 1720000000000,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/total_sessions/).replyOnce(200, {
       count: 122,
+      lastUpdatedAt: 1720000000000,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/average_session_duration/).replyOnce(200, {
       hours: 2,
       minutes: 30,
       seconds: 45,
+      lastUpdatedAt: 1720000000000,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/total_players/).replyOnce(200, {
       count: 150030,
+      lastUpdatedAt: 1720000000000,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/online_players/).replyOnce(200, {
       count: 2094,
+      lastUpdatedAt: 1720000000000,
     })
 
     axiosMock.onGet(/\/games\/\d\/player-groups\/pinned/).replyOnce(200, {
@@ -139,23 +148,29 @@ describe('<Dashboard />', () => {
     axiosMock.reset()
     axiosMock.onGet(/\/games\/\d\/headlines\/new_players/).replyOnce(200, {
       count: 3,
+      lastUpdatedAt: 1720000000000,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/returning_players/).replyOnce(200, {
       count: 1,
+      lastUpdatedAt: 1720000000000,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/events/).replyOnce(200, {
       count: 2103,
+      lastUpdatedAt: 1720000000000,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/unique_event_submitters/).replyOnce(200, {
       count: 8,
+      lastUpdatedAt: 1720000000000,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/total_sessions/).replyOnce(200, {
       count: 122,
+      lastUpdatedAt: 1720000000000,
     })
     axiosMock.onGet(/\/games\/\d\/headlines\/average_session_duration/).replyOnce(200, {
       hours: 2,
       minutes: 30,
       seconds: 45,
+      lastUpdatedAt: 1720000000000,
     })
 
     await userEvent.click(screen.getByText('This year'))
@@ -192,6 +207,32 @@ describe('<Dashboard />', () => {
 
     expect(await screen.findByText("Couldn't fetch headlines")).toBeInTheDocument()
     expect(await screen.findByText("Couldn't fetch stats")).toBeInTheDocument()
+  })
+
+  it('should refresh the headlines cache and show a toast', async () => {
+    localStorage.setItem('1-showOnboarding', JSON.stringify(false))
+
+    axiosMock.onDelete(/\/games\/\d\/headlines/).replyOnce(200, {})
+
+    render(
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: mockUser },
+          { node: activeGameState, initialValue: { id: 1, name: 'Swerve City' } },
+          { node: devDataState, initialValue: false },
+        ]}
+      >
+        <ToastProvider>
+          <Dashboard />
+        </ToastProvider>
+      </KitchenSink>,
+    )
+
+    expect(await screen.findByText('New players')).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Refresh headlines' }))
+
+    expect(await screen.findByText('Headlines refreshed')).toBeInTheDocument()
   })
 
   it('should go to the intended route', () => {

@@ -1,13 +1,12 @@
 import useSWR from 'swr'
-import { z } from 'zod'
 import { Game } from '../entities/game'
-import { PlayerHeadlines } from '../entities/playerHeadline'
+import { playerHeadlinesSchema, PlayerHeadlines } from '../entities/playerHeadline'
 import buildError from '../utils/buildError'
 import makeValidatedGetRequest from './makeValidatedGetRequest'
 
 const defaultHeadlines: PlayerHeadlines = {
-  total_players: { count: 0 },
-  online_players: { count: 0 },
+  total_players: { count: 0, lastUpdatedAt: 0 },
+  online_players: { count: 0, lastUpdatedAt: 0 },
 }
 
 export function usePlayerHeadlines(activeGame: Game | null, includeDevData: boolean) {
@@ -15,12 +14,7 @@ export function usePlayerHeadlines(activeGame: Game | null, includeDevData: bool
     const headlines: (keyof PlayerHeadlines)[] = ['total_players', 'online_players']
     const res = await Promise.all(
       headlines.map((headline) =>
-        makeValidatedGetRequest(
-          `${url}/${headline}`,
-          z.object({
-            count: z.number(),
-          }),
-        ),
+        makeValidatedGetRequest(`${url}/${headline}`, playerHeadlinesSchema.shape[headline]),
       ),
     )
 
@@ -33,7 +27,7 @@ export function usePlayerHeadlines(activeGame: Game | null, includeDevData: bool
     )
   }
 
-  const { data, error } = useSWR(
+  const { data, error, mutate } = useSWR(
     activeGame ? [`/games/${activeGame.id}/headlines`, includeDevData] : null,
     fetcher,
   )
@@ -42,5 +36,6 @@ export function usePlayerHeadlines(activeGame: Game | null, includeDevData: bool
     headlines: data ?? defaultHeadlines,
     loading: !data && !error,
     error: error && buildError(error),
+    mutate,
   }
 }
