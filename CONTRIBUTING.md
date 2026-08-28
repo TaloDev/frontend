@@ -4,14 +4,14 @@ Want to add a new system? Are the docs not clear enough? We're always accepting 
 
 ## Installing, building & running
 
-Run `npm install` to install the dependencies.
+Run `pnpm install` to install the dependencies.
 
-### npm run dev
+### pnpm dev
 
 Runs the app in the development mode.
 Open http://localhost:8080 to view it in the browser.
 
-### npm run build
+### pnpm build
 
 Builds a static copy of the site to the `dist/` folder.
 

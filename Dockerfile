@@ -1,4 +1,4 @@
-FROM node:24-alpine AS build
+FROM ghcr.io/pnpm/pnpm:12 AS build
 WORKDIR /usr/frontend
 COPY . .
 
@@ -6,8 +6,9 @@ COPY . .
 # this list drives the entrypoint's envsub --env flags for index.html
 RUN sed -n 's/^VITE_[^=]*=\${\([A-Z_][A-Z0-9_]*\)}[[:space:]]*$/\1/p' .env.production > /tmp/env-vars.txt
 
-RUN --mount=type=cache,target=/root/.npm npm install
-RUN npm run build
+RUN pnpm runtime set node 24 -g
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm build
 
 FROM caddy:2-alpine
 COPY --from=build /usr/frontend/dist /srv

@@ -11,36 +11,34 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: pnpm/setup@v2
         with:
-          node-version: 24
+          runtime: node@24
+          cache: true
 
-      - uses: actions/cache@v5
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install deps
-        run: npm ci --prefer-offline
-
-      - run: npm test -- --silent
+      - run: pnpm test --silent
 
   e2e-tests:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: pnpm/setup@v2
         with:
-          node-version: 24
+          runtime: node@24
+          cache: true
+
+      - name: Cache Cypress binary
+        uses: actions/cache@v6
+        with:
+          path: /home/runner/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Install Cypress binary
+        run: pnpm exec cypress install
 
       - name: Run Cypress
-        uses: cypress-io/github-action@v6
-        with:
-          cache-key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
-          install-command: npm ci --prefer-offline
-          start: npm run dev:e2e
-          wait-on: 'http://127.0.0.1:8080'
+        run: pnpm test:cypress
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -49,43 +47,29 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: pnpm/setup@v2
         with:
-          node-version: 24
-
-      - uses: actions/cache@v5
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install deps
-        run: npm ci --prefer-offline
+          runtime: node@24
+          cache: true
 
       - name: Type check
-        run: npx tsc
+        run: pnpm exec tsc
 
       - name: Build
-        run: npm run build
+        run: pnpm build
 
   lint:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: pnpm/setup@v2
         with:
-          node-version: 24
-
-      - uses: actions/cache@v5
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install deps
-        run: npm ci --prefer-offline
+          runtime: node@24
+          cache: true
 
       - name: Format
-        run: npm run fmt
+        run: pnpm fmt
 
       - name: Lint
-        run: npm run lint
+        run: pnpm lint
