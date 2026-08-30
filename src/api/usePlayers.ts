@@ -5,7 +5,12 @@ import { playerSchema } from '../entities/player'
 import buildError from '../utils/buildError'
 import makeValidatedGetRequest from './makeValidatedGetRequest'
 
-export default function usePlayers(activeGame: Game, search: string, page: number) {
+export default function usePlayers(
+  activeGame: Game,
+  search: string,
+  page: number,
+  includeDevData: boolean,
+) {
   const fetcher = async ([url, search, page]: [string, string, number]) => {
     const qs = new URLSearchParams({
       search,
@@ -24,7 +29,10 @@ export default function usePlayers(activeGame: Game, search: string, page: numbe
     return res
   }
 
-  const { data, error } = useSWR([`games/${activeGame.id}/players`, search, page], fetcher)
+  const { data, error } = useSWR(
+    [`games/${activeGame.id}/players`, search, page, includeDevData],
+    fetcher,
+  )
 
   return {
     players: data?.players ?? [],

@@ -26,13 +26,14 @@ export default function Players() {
   const { search, setSearch, page, setPage, debouncedSearch } = useSearch(initialSearch)
 
   const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
+  const includeDevData = useAtomValue(devDataState)
   const { players, count, itemsPerPage, loading, error } = usePlayers(
     activeGame,
     debouncedSearch,
     page,
+    includeDevData,
   )
 
-  const includeDevData = useAtomValue(devDataState)
   const {
     headlines: playerHeadlines,
     loading: playerHeadlinesLoading,
