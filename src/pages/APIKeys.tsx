@@ -1,7 +1,7 @@
 import { IconPlus } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { useAtomValue } from 'jotai'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { deleteAdminApiKey } from '../api/deleteAdminApiKey'
 import { deleteAPIKey } from '../api/deleteAPIKey'
 import { useAdminApiKeys } from '../api/useAdminApiKeys'
@@ -52,10 +52,6 @@ export default function APIKeys() {
   const [editingKey, setEditingKey] = useState<EditableKey>(null)
 
   const toast = useContext(ToastContext)
-
-  useEffect(() => {
-    if (!showDetailsModal) setEditingKey(null)
-  }, [showDetailsModal])
 
   const onDeleteClick = async (apiKey: APIKey) => {
     if (

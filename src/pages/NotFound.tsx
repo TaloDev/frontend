@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router'
 import Button from '../components/Button'
 import Loading from '../components/Loading'
 import { UnauthedContainer } from '../components/UnauthedContainer'
@@ -8,19 +8,18 @@ import routes from '../constants/routes'
 
 export default function NotFound() {
   const navigate = useNavigate()
+  const location = useLocation()
 
-  const [routeChecked, setRouteChcked] = useState(false)
+  // e.g. /login doesn't exist post-auth but it was a real route pre-auth
+  const isKnownRoute = Object.values(routes).includes(location.pathname)
 
   useEffect(() => {
-    // e.g. /login doesn't exist post-auth but it was a real route pre-auth
-    if (Object.values(routes).includes(window.location.pathname)) {
+    if (isKnownRoute) {
       navigate(routes.dashboard)
-    } else {
-      setRouteChcked(true)
     }
-  }, [navigate])
+  }, [isKnownRoute, navigate])
 
-  if (!routeChecked) {
+  if (isKnownRoute) {
     return <Loading />
   }
 

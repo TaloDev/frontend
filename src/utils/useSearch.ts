@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 
 export default function useSearch(initialSearch?: string | null) {
-  const [search, setSearch] = useState(initialSearch ?? '')
+  const [search, setSearchState] = useState(initialSearch ?? '')
   const [page, setPage] = useState(0)
   const [debouncedSearch] = useDebounce(search, 300)
 
@@ -10,9 +10,10 @@ export default function useSearch(initialSearch?: string | null) {
     window.scrollTo(0, 0)
   }, [page])
 
-  useEffect(() => {
+  const setSearch = (value: string) => {
+    setSearchState(value)
     setPage(0)
-  }, [search])
+  }
 
   return {
     search,
