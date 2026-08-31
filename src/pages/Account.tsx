@@ -5,9 +5,11 @@ import { useNavigate, useLocation } from 'react-router'
 import Account2FA from '../components/Account2FA'
 import AlertBanner from '../components/AlertBanner'
 import Button from '../components/Button'
+import LinkButton from '../components/LinkButton'
 import Page from '../components/Page'
 import TextInput from '../components/TextInput'
 import routes from '../constants/routes'
+import { DeleteAccount } from '../modals/DeleteAccount'
 import { userState, AuthedUser } from '../state/userState'
 import { ConfirmPasswordAction } from './ConfirmPassword'
 
@@ -20,6 +22,7 @@ export default function Account() {
   const [successMessage] = useState(location.state?.successMessage)
 
   const [newPassword, setNewPassword] = useState('')
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   const onChangePasswordClick = (e: MouseEvent<HTMLElement>) => {
     e.preventDefault()
@@ -68,6 +71,12 @@ export default function Account() {
           Change password
         </Button>
       </form>
+
+      <LinkButton onClick={() => setShowDeleteModal(true)}>Delete account</LinkButton>
+
+      {showDeleteModal && (
+        <DeleteAccount modalState={[showDeleteModal, setShowDeleteModal]} userType={user.type} />
+      )}
     </Page>
   )
 }

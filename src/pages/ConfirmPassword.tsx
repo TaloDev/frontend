@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router'
 import changePassword from '../api/changePassword'
 import createRecoveryCodes from '../api/createRecoveryCodes'
+import { deleteAccount } from '../api/deleteAccount'
 import disable2FA from '../api/disable2FA'
 import viewRecoveryCodes from '../api/viewRecoveryCodes'
 import Button from '../components/Button'
@@ -20,6 +21,7 @@ export const ConfirmPasswordAction = {
   CHANGE_PASSWORD: 'changePassword',
   VIEW_RECOVERY_CODES: 'viewRecoveryCodes',
   CREATE_RECOVERY_CODES: 'createRecoveryCodes',
+  DELETE_ACCOUNT: 'deleteAccount',
 }
 
 const ConfirmPassword = () => {
@@ -76,6 +78,10 @@ const ConfirmPassword = () => {
           recoveryCodes: recoveryCodes,
         },
       })
+    },
+    [ConfirmPasswordAction.DELETE_ACCOUNT]: async () => {
+      await deleteAccount(password)
+      window.location.href = routes.login
     },
   }
 
