@@ -92,27 +92,30 @@ const ConfirmPassword = () => {
   }
 
   return (
-    <div className='md:translate-y-[80%]'>
-      <form className={clsx('mx-auto space-y-8 text-white', unauthedContainerStyle)}>
-        <Title>Confirm your password</Title>
+    <form
+      className={clsx(
+        'mx-auto space-y-8 pt-8 text-white md:pt-16 lg:pt-32',
+        unauthedContainerStyle,
+      )}
+    >
+      <Title>Confirm your password</Title>
 
-        <TextInput
-          id='password'
-          label='Password'
-          placeholder='Your current password'
-          type='password'
-          onChange={setPassword}
-          value={password}
-          inputExtra={{ autoComplete: 'current-password' }}
-        />
+      <TextInput
+        id='password'
+        label='Password'
+        placeholder='Your current password'
+        type='password'
+        onChange={setPassword}
+        value={password}
+        inputExtra={{ autoComplete: 'current-password' }}
+      />
 
-        {error && <ErrorMessage error={error} />}
+      {error && <ErrorMessage error={error} />}
 
-        <Button disabled={!password} onClick={onConfirmClick} isLoading={isLoading}>
-          Confirm
-        </Button>
-      </form>
-    </div>
+      <Button disabled={!password} onClick={onConfirmClick} isLoading={isLoading}>
+        Confirm
+      </Button>
+    </form>
   )
 }
 
