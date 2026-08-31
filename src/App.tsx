@@ -23,6 +23,7 @@ export default function App() {
   const [hasTriedRefreshing, setTriedRefreshing] = useState(false)
   const [intendedRoute, setIntendedRoute] = useState<string | null>(null)
 
+  const user = useAtomValue(userState)
   const games = useAtomValue(gamesState)
   const [activeGame, setActiveGame] = useAtom(activeGameState)
   const refreshingRef = useRef(false)
@@ -58,8 +59,10 @@ export default function App() {
   }, [intendedRoute, hasTriedRefreshing, handleRefreshSession])
 
   useEffect(() => {
-    if (!activeGame && games.length > 0) setActiveGame(games[0])
-  }, [activeGame, games, setActiveGame])
+    if (user && !games.some((game) => game.id === activeGame?.id)) {
+      setActiveGame(games[0] ?? null)
+    }
+  }, [user, activeGame, games, setActiveGame])
 
   if (!hasTriedRefreshing) return <AppLoading />
 
