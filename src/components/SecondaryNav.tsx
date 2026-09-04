@@ -12,18 +12,22 @@ type SecondaryNavProps = {
   }[]
 }
 
-function SecondaryNav({ routes }: SecondaryNavProps) {
+export function SecondaryNav({ routes }: SecondaryNavProps) {
   const location = useLocation()
   const user = useAtomValue(userState)
 
   const availableRoutes = routes.filter(({ to }) => canViewPage(user, to))
   if (availableRoutes.length < 2) return null
 
+  const activeRoute = availableRoutes
+    .filter(({ to }) => location.pathname === to || location.pathname.startsWith(`${to}/`))
+    .sort((a, b) => b.to.length - a.to.length)[0]?.to
+
   return (
     <nav className='no-scrollbar -mx-4 -mt-4 mb-8 overflow-x-scroll border-b-2 border-b-gray-600 bg-gray-700 py-4 pr-12 pl-4 md:-mx-8 md:-mt-8 md:px-8'>
       <ul className='flex space-x-6 md:space-x-8'>
         {availableRoutes.map(({ title, to }) => {
-          const active = location.pathname === to
+          const active = to === activeRoute
 
           return (
             <li
@@ -53,5 +57,3 @@ function SecondaryNav({ routes }: SecondaryNavProps) {
     </nav>
   )
 }
-
-export default SecondaryNav

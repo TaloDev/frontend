@@ -3,7 +3,12 @@ import routes from '../../constants/routes'
 import { UserType } from '../../entities/user'
 import { userState } from '../../state/userState'
 import KitchenSink from '../../utils/KitchenSink'
-import SecondaryNav from '../SecondaryNav'
+import { SecondaryNav } from '../SecondaryNav'
+
+const eventsRoutes = [
+  { title: 'Events overview', to: routes.eventsOverview },
+  { title: 'Event funnels', to: routes.eventsFunnels },
+]
 
 describe('<SecondaryNav />', () => {
   it('should filter out pages that the user cannot see', () => {
@@ -31,5 +36,20 @@ describe('<SecondaryNav />', () => {
     )
 
     expect(screen.queryByText('Dashboard')).not.toBeInTheDocument()
+  })
+
+  it('should highlight the longest matching route on a subpage', () => {
+    render(
+      <KitchenSink
+        states={[{ node: userState, initialValue: { type: UserType.OWNER } }]}
+        initialEntries={[routes.eventsFunnelNew]}
+        routePath={routes.eventFunnel}
+      >
+        <SecondaryNav routes={eventsRoutes} />
+      </KitchenSink>,
+    )
+
+    expect(screen.getByText('Event funnels')).toHaveClass('text-white!')
+    expect(screen.getByText('Events overview')).toHaveClass('text-indigo-300!')
   })
 })
