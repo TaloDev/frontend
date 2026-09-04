@@ -39,8 +39,9 @@ export default function TextInput({
 }: TextInputProps) {
   const [hasFocus, setHasFocus] = useState(false)
 
-  const errorsToShow = errors?.filter(Boolean) ?? []
-  const showErrorHighlight = !hasFocus && errorsToShow.length > 0
+  const hasError = (errors ?? []).some((error) => error !== undefined)
+  const errorsToShow = (errors ?? []).filter((error) => error && error.trim().length > 0)
+  const showErrorHighlight = !hasFocus && hasError
 
   const finalClassName = clsx(`
     block

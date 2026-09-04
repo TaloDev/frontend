@@ -50,6 +50,8 @@ export default function Button({
     'flex justify-center hover:bg-indigo-500': isLoading,
     'flex items-center justify-center space-x-1': Boolean(icon),
     'rounded bg-gray-200 p-2 text-sm hover:bg-gray-300 active:bg-gray-400': variant === 'small',
+    'rounded bg-white p-2 text-sm text-black hover:bg-gray-200 active:bg-gray-300':
+      variant === 'white-small',
   })
 
   return (

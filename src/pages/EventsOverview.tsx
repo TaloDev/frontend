@@ -4,6 +4,8 @@ import { EventsProvider, useEventsContext } from '../components/events/EventsCon
 import EventsDisplay from '../components/events/EventsDisplay'
 import EventsFiltersSection from '../components/events/EventsFiltersSection'
 import Page from '../components/Page'
+import { SecondaryNav } from '../components/SecondaryNav'
+import routes from '../constants/routes'
 import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 
 const localStorageKey = 'eventsOverview'
@@ -27,7 +29,18 @@ function EventsOverviewDisplay({ activeGame }: { activeGame: SelectedActiveGame 
   )
 
   return (
-    <Page title='Events overview' isLoading={loading}>
+    <Page
+      title='Events overview'
+      isLoading={loading}
+      secondaryNav={
+        <SecondaryNav
+          routes={[
+            { title: 'Events overview', to: routes.eventsOverview },
+            { title: 'Event funnels', to: routes.eventsFunnels },
+          ]}
+        />
+      }
+    >
       <EventsFiltersSection eventNames={eventNames} error={error} />
       <EventsDisplay
         showBreakdown
