@@ -10,17 +10,22 @@ function usePlayer(): [Player | undefined, (player: Player) => void] {
   const { id } = useParams()
 
   const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
-  const [player, setPlayer] = useState<Player | undefined>()
   const { player: fetchedPlayer, loading } = useFindPlayer(activeGame, id)
 
   const navigate = useNavigate()
 
+  const [player, setPlayer] = useState<Player | undefined>(fetchedPlayer)
+  const [prevFetchedPlayer, setPrevFetchedPlayer] = useState<Player | undefined>(fetchedPlayer)
+
+  if (fetchedPlayer !== prevFetchedPlayer) {
+    setPrevFetchedPlayer(fetchedPlayer)
+    setPlayer(fetchedPlayer)
+  }
+
   useEffect(() => {
     if (loading) return
 
-    if (fetchedPlayer) {
-      setPlayer(fetchedPlayer)
-    } else {
+    if (!fetchedPlayer) {
       navigate(routes.players, { replace: true })
     }
   }, [fetchedPlayer, loading, navigate])

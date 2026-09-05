@@ -1,13 +1,20 @@
-import { IconBrandApple, IconBrandGooglePlay, IconBrandSteam, IconCheck } from '@tabler/icons-react'
+import {
+  IconBrandApple,
+  IconBrandGooglePlay,
+  IconBrandSteam,
+  IconCheck,
+  IconPlus,
+} from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { useAtomValue } from 'jotai'
-import { useState } from 'react'
+import { ComponentType, ReactNode, useState } from 'react'
 import syncLeaderboards from '../api/syncLeaderboards'
 import syncStats from '../api/syncStats'
 import useIntegrations from '../api/useIntegrations'
 import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Link from '../components/Link'
+import LinkButton from '../components/LinkButton'
 import Loading from '../components/Loading'
 import Page from '../components/Page'
 import Tile from '../components/Tile'
@@ -24,16 +31,8 @@ const syncingState = {
   SYNCING: 'syncing',
 }
 
-type ManualSyncSectionProps = {
-  loading: string
-  error: TaloError | null
-  onClick: () => void
-  title: string
-  docs: string
-  cta: string
-  successTitle: string
-  successDesc: string
-}
+const createdAtFormat = 'dd MMM yyyy'
+const updatedAtFormat = 'dd MMM yyyy HH:mm'
 
 function ManualSyncSection({
   loading,
@@ -44,7 +43,16 @@ function ManualSyncSection({
   cta,
   successTitle,
   successDesc,
-}: ManualSyncSectionProps) {
+}: {
+  loading: string
+  error: TaloError | null
+  onClick: () => void
+  title: string
+  docs: string
+  cta: string
+  successTitle: string
+  successDesc: string
+}) {
   return (
     <div className='flex items-start justify-between border-t border-gray-600 px-4 pt-4'>
       {loading !== syncingState.SYNCING && (
@@ -86,254 +94,235 @@ function ManualSyncSection({
   )
 }
 
+function SteamworksSync({
+  activeGame,
+  integration,
+}: {
+  activeGame: SelectedActiveGame
+  integration: Integration
+}) {
+  const [leaderboardsLoading, setLeaderboardsLoading] = useState(syncingState.INACTIVE)
+  const [leaderboardsError, setLeaderboardsError] = useState<TaloError | null>(null)
+
+  const [statsLoading, setStatsLoading] = useState(syncingState.INACTIVE)
+  const [statsError, setStatsError] = useState<TaloError | null>(null)
+
+  const showLeaderboards =
+    integration.type === IntegrationType.STEAMWORKS && integration.config.syncLeaderboards
+  const showStats = integration.type === IntegrationType.STEAMWORKS && integration.config.syncStats
+
+  if (!showLeaderboards && !showStats) {
+    return null
+  }
+
+  const onSyncLeaderboardsClick = async () => {
+    setLeaderboardsLoading(syncingState.ACTIVE)
+    setLeaderboardsError(null)
+
+    try {
+      await syncLeaderboards(activeGame.id, integration.id)
+      setLeaderboardsLoading(syncingState.SYNCING)
+    } catch (err) {
+      setLeaderboardsError(buildError(err))
+      setLeaderboardsLoading(syncingState.INACTIVE)
+    }
+  }
+
+  const onSyncStatsClick = async () => {
+    setStatsLoading(syncingState.ACTIVE)
+    setStatsError(null)
+
+    try {
+      await syncStats(activeGame.id, integration.id)
+      setStatsLoading(syncingState.SYNCING)
+    } catch (err) {
+      setStatsError(buildError(err))
+      setStatsLoading(syncingState.INACTIVE)
+    }
+  }
+
+  return (
+    <div className='space-y-4'>
+      {showLeaderboards && (
+        <ManualSyncSection
+          loading={leaderboardsLoading}
+          error={leaderboardsError}
+          onClick={onSyncLeaderboardsClick}
+          title='Sync your Talo and Steamworks leaderboards'
+          docs='https://docs.trytalo.com/docs/integrations/steamworks#manually-syncing-leaderboards?utm_source=dashboard&utm_medium=integrations'
+          cta='Sync leaderboards'
+          successTitle='Leaderboards syncing'
+          successDesc='This will usually only take a few minutes. Leaderboards will be updated in the background.'
+        />
+      )}
+
+      {showStats && (
+        <ManualSyncSection
+          loading={statsLoading}
+          error={statsError}
+          onClick={onSyncStatsClick}
+          title='Sync your Talo and Steamworks global stats'
+          docs='https://docs.trytalo.com/docs/integrations/steamworks#manually-syncing-stats?utm_source=dashboard&utm_medium=integrations'
+          cta='Sync stats'
+          successTitle='Stats syncing'
+          successDesc='This will usually only take a few minutes.'
+        />
+      )}
+    </div>
+  )
+}
+
+const integrationMeta: {
+  type: IntegrationType
+  icon: ComponentType<{ className?: string; size?: number }>
+  iconClass: string
+  title: string
+  addLabel: string
+  emptyContent: ReactNode
+}[] = [
+  {
+    type: IntegrationType.STEAMWORKS,
+    icon: IconBrandSteam,
+    iconClass: '-mt-1',
+    title: 'Steam',
+    addLabel: 'Add another Steam app',
+    emptyContent: (
+      <>
+        <p>Authenticate Steam players and sync your leaderboards and stats from Steamworks</p>
+        <p>
+          Requires a{' '}
+          <Link to='https://partner.steamgames.com/doc/webapi_overview/auth'>
+            Web API Publisher key
+          </Link>
+        </p>
+      </>
+    ),
+  },
+  {
+    type: IntegrationType.GOOGLE_PLAY_GAMES,
+    icon: IconBrandGooglePlay,
+    iconClass: '-mt-0.5',
+    title: 'Google Play Games',
+    addLabel: 'Add another Google Play Games client',
+    emptyContent: (
+      <>
+        <p>Authenticate Google Play Games players using OAuth 2.0</p>
+        <p>
+          Requires an{' '}
+          <Link to='https://developer.android.com/games/pgs/console/setup#generate_an_oauth_20_client_id'>
+            OAuth 2.0 client ID and secret
+          </Link>
+        </p>
+      </>
+    ),
+  },
+  {
+    type: IntegrationType.GAME_CENTER,
+    icon: IconBrandApple,
+    iconClass: '-mt-1',
+    title: 'Game Center',
+    addLabel: 'Add another Game Center app',
+    emptyContent: (
+      <>
+        <p>Authenticate iOS players using Apple Game Center</p>
+        <p>
+          Requires your{' '}
+          <Link to='https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleidentifier'>
+            app bundle identifier
+          </Link>
+        </p>
+      </>
+    ),
+  },
+]
+
+const getIntegrationLabel = (integration: Integration) => {
+  switch (integration.type) {
+    case IntegrationType.STEAMWORKS:
+      return `App ${integration.config.appId}`
+    case IntegrationType.GOOGLE_PLAY_GAMES:
+      return `Client ${integration.config.clientId}`
+    case IntegrationType.GAME_CENTER:
+      return `Bundle ${integration.config.bundleId}`
+  }
+}
+
 export default function Integrations() {
   const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
   const { integrations, loading, error, mutate } = useIntegrations(activeGame)
   const [editingIntegration, setEditingIntegration] = useState<Partial<Integration> | null>(null)
 
-  const steamIntegration = error
-    ? null
-    : integrations.find((integration) => integration.type === IntegrationType.STEAMWORKS)
-
-  const googlePlayGamesIntegration = error
-    ? null
-    : integrations.find((integration) => integration.type === IntegrationType.GOOGLE_PLAY_GAMES)
-
-  const gameCenterIntegration = error
-    ? null
-    : integrations.find((integration) => integration.type === IntegrationType.GAME_CENTER)
-
-  const [editingGooglePlayGamesIntegration, setEditingGooglePlayGamesIntegration] =
-    useState<Partial<Integration> | null>(null)
-
-  const onGooglePlayGamesIntegrationClick = () => {
-    setEditingGooglePlayGamesIntegration(
-      googlePlayGamesIntegration ?? { type: IntegrationType.GOOGLE_PLAY_GAMES },
-    )
-  }
-
-  const [editingGameCenterIntegration, setEditingGameCenterIntegration] =
-    useState<Partial<Integration> | null>(null)
-
-  const onGameCenterIntegrationClick = () => {
-    setEditingGameCenterIntegration(gameCenterIntegration ?? { type: IntegrationType.GAME_CENTER })
-  }
-
-  const [isSyncingSteamworksLeaderboards, setSyncingSteamworksLeaderboards] = useState(
-    syncingState.INACTIVE,
-  )
-  const [syncingSteamworksLeaderboardsError, setSyncingSteamworksLeaderboardsError] =
-    useState<TaloError | null>(null)
-
-  const [isSyncingSteamworksStats, setSyncingSteamworksStats] = useState(syncingState.INACTIVE)
-  const [syncingSteamworksStatsError, setSyncingSteamworksStatsError] = useState<TaloError | null>(
-    null,
-  )
-
-  const onSteamIntegrationClick = () => {
-    setEditingIntegration(steamIntegration ?? { type: IntegrationType.STEAMWORKS })
-  }
-
-  const onSyncSteamworksLeaderboardsClick = async () => {
-    setSyncingSteamworksLeaderboards(syncingState.ACTIVE)
-    setSyncingSteamworksLeaderboardsError(null)
-
-    try {
-      await syncLeaderboards(activeGame.id, steamIntegration!.id)
-      setSyncingSteamworksLeaderboards(syncingState.SYNCING)
-    } catch (err) {
-      setSyncingSteamworksLeaderboardsError(buildError(err))
-      setSyncingSteamworksLeaderboards(syncingState.INACTIVE)
-    }
-  }
-
-  const onSyncSteamworksStatsClick = async () => {
-    setSyncingSteamworksStats(syncingState.ACTIVE)
-    setSyncingSteamworksStatsError(null)
-
-    try {
-      await syncStats(activeGame.id, steamIntegration!.id)
-      setSyncingSteamworksStats(syncingState.SYNCING)
-    } catch (err) {
-      setSyncingSteamworksStatsError(buildError(err))
-      setSyncingSteamworksStats(syncingState.INACTIVE)
-    }
-  }
-
   return (
     <Page title='Integrations'>
       {error && <ErrorMessage error={error} />}
 
-      <div className='space-y-4 lg:w-1/2'>
-        <Tile
-          header={
-            <>
-              <h2 className='text-xl font-semibold'>
-                <IconBrandSteam className='-mt-1 mr-2 inline align-middle' size={20} />
-                Steam
-              </h2>
-              {!loading && (
-                <Button variant='grey' className='w-auto!' onClick={onSteamIntegrationClick}>
-                  {!steamIntegration && <span>Enable integration</span>}
-                  {steamIntegration && <span>Update integration</span>}
-                </Button>
-              )}
-              {loading && <Loading size={24} thickness={180} />}
-            </>
-          }
-          content={
-            <div className='leading-relaxed'>
-              {!steamIntegration && (
-                <p>
-                  Authenticate Steam players and sync your leaderboards and stats from Steamworks
-                </p>
-              )}
-              {!steamIntegration && (
-                <p>
-                  Requires a{' '}
-                  <Link to='https://partner.steamgames.com/doc/webapi_overview/auth'>
-                    Web API Publisher key
-                  </Link>
-                </p>
-              )}
-              {steamIntegration && (
-                <p className='font-bold'>
-                  Enabled {format(new Date(steamIntegration.createdAt), 'dd MMM yyyy')}
-                </p>
-              )}
-              {steamIntegration && (
-                <p>
-                  Last updated {format(new Date(steamIntegration.updatedAt), 'dd MMM yyyy HH:mm')}
-                </p>
-              )}
-            </div>
-          }
-          footer={
-            steamIntegration ? (
-              <div className='space-y-4'>
-                {'syncLeaderboards' in steamIntegration.config &&
-                  steamIntegration.config.syncLeaderboards && (
-                    <ManualSyncSection
-                      loading={isSyncingSteamworksLeaderboards}
-                      error={syncingSteamworksLeaderboardsError}
-                      title='Sync your Talo and Steamworks leaderboards'
-                      docs='https://docs.trytalo.com/docs/integrations/steamworks#manually-syncing-leaderboards?utm_source=dashboard&utm_medium=integrations'
-                      onClick={onSyncSteamworksLeaderboardsClick}
-                      cta='Sync leaderboards'
-                      successTitle='Leaderboards syncing'
-                      successDesc='This will usually only take a few minutes. Leaderboards will be updated in the background.'
-                    />
-                  )}
+      <div className='space-y-8 lg:w-1/2'>
+        {integrationMeta.map(({ type, icon: Icon, iconClass, title, addLabel, emptyContent }) => {
+          const typeIntegrations = integrations.filter((integration) => integration.type === type)
 
-                {'syncStats' in steamIntegration.config && steamIntegration.config.syncStats && (
-                  <ManualSyncSection
-                    loading={isSyncingSteamworksStats}
-                    error={syncingSteamworksStatsError}
-                    title='Sync your Talo and Steamworks global stats'
-                    docs='https://docs.trytalo.com/docs/integrations/steamworks#manually-syncing-stats?utm_source=dashboard&utm_medium=integrations'
-                    onClick={onSyncSteamworksStatsClick}
-                    cta='Sync stats'
-                    successTitle='Stats syncing'
-                    successDesc='This will usually only take a few minutes.'
-                  />
-                )}
+          const renderHeader = (label: string | null, buttonLabel: string, onClick: () => void) => (
+            <>
+              <div>
+                <h2 className='text-xl font-semibold'>
+                  <Icon className={`${iconClass} mr-2 inline align-middle`} size={20} />
+                  {title}
+                </h2>
+                {label && <p className='text-sm text-white'>{label}</p>}
               </div>
-            ) : null
-          }
-        />
-
-        <Tile
-          header={
-            <>
-              <h2 className='text-xl font-semibold'>
-                <IconBrandGooglePlay className='-mt-0.5 mr-2 inline align-middle' size={20} />
-                Google Play Games
-              </h2>
               {!loading && (
-                <Button
-                  variant='grey'
-                  className='w-auto!'
-                  onClick={onGooglePlayGamesIntegrationClick}
-                >
-                  {!googlePlayGamesIntegration && <span>Enable integration</span>}
-                  {googlePlayGamesIntegration && <span>Update integration</span>}
+                <Button variant='grey' className='w-auto!' onClick={onClick}>
+                  <span>{buttonLabel}</span>
                 </Button>
               )}
               {loading && <Loading size={24} thickness={180} />}
             </>
-          }
-          content={
-            <div className='leading-relaxed'>
-              {!googlePlayGamesIntegration && (
-                <p>Authenticate Google Play Games players using OAuth 2.0</p>
-              )}
-              {!googlePlayGamesIntegration && (
-                <p>
-                  Requires an{' '}
-                  <Link to='https://developer.android.com/games/pgs/console/setup#generate_an_oauth_20_client_id'>
-                    OAuth 2.0 client ID and secret
-                  </Link>
-                </p>
-              )}
-              {googlePlayGamesIntegration && (
-                <p className='font-bold'>
-                  Enabled {format(new Date(googlePlayGamesIntegration.createdAt), 'dd MMM yyyy')}
-                </p>
-              )}
-              {googlePlayGamesIntegration && (
-                <p>
-                  Last updated{' '}
-                  {format(new Date(googlePlayGamesIntegration.updatedAt), 'dd MMM yyyy HH:mm')}
-                </p>
-              )}
-            </div>
-          }
-        />
+          )
 
-        <Tile
-          header={
-            <>
-              <h2 className='text-xl font-semibold'>
-                <IconBrandApple className='-mt-1 mr-2 inline align-middle' size={20} />
-                Game Center
-              </h2>
-              {!loading && (
-                <Button variant='grey' className='w-auto!' onClick={onGameCenterIntegrationClick}>
-                  {!gameCenterIntegration && <span>Enable integration</span>}
-                  {gameCenterIntegration && <span>Update integration</span>}
-                </Button>
+          const onAdd = () => setEditingIntegration({ type })
+
+          return (
+            <div key={type} className='space-y-4'>
+              {typeIntegrations.map((integration) => (
+                <Tile
+                  key={integration.id}
+                  header={renderHeader(getIntegrationLabel(integration), 'Update integration', () =>
+                    setEditingIntegration(integration),
+                  )}
+                  content={
+                    <div className='leading-relaxed'>
+                      <p className='font-bold'>
+                        Enabled {format(new Date(integration.createdAt), createdAtFormat)}
+                      </p>
+                      <p>Last updated {format(new Date(integration.updatedAt), updatedAtFormat)}</p>
+                    </div>
+                  }
+                  footer={
+                    type === IntegrationType.STEAMWORKS ? (
+                      <SteamworksSync activeGame={activeGame} integration={integration} />
+                    ) : null
+                  }
+                />
+              ))}
+
+              {typeIntegrations.length > 0 && (
+                <LinkButton onClick={onAdd} className='flex items-center space-x-1'>
+                  <IconPlus size={16} />
+                  <span>{addLabel}</span>
+                </LinkButton>
               )}
-              {loading && <Loading size={24} thickness={180} />}
-            </>
-          }
-          content={
-            <div className='leading-relaxed'>
-              {!gameCenterIntegration && <p>Authenticate iOS players using Apple Game Center</p>}
-              {!gameCenterIntegration && (
-                <p>
-                  Requires your{' '}
-                  <Link to='https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleidentifier'>
-                    app bundle identifier
-                  </Link>
-                </p>
-              )}
-              {gameCenterIntegration && (
-                <p className='font-bold'>
-                  Enabled {format(new Date(gameCenterIntegration.createdAt), 'dd MMM yyyy')}
-                </p>
-              )}
-              {gameCenterIntegration && (
-                <p>
-                  Last updated{' '}
-                  {format(new Date(gameCenterIntegration.updatedAt), 'dd MMM yyyy HH:mm')}
-                </p>
+
+              {typeIntegrations.length === 0 && (
+                <Tile
+                  header={renderHeader(null, 'Enable integration', onAdd)}
+                  content={<div className='leading-relaxed'>{emptyContent}</div>}
+                />
               )}
             </div>
-          }
-        />
+          )
+        })}
       </div>
 
-      {editingIntegration && (
+      {editingIntegration?.type === IntegrationType.STEAMWORKS && (
         <SteamworksIntegrationDetails
           modalState={[Boolean(editingIntegration), () => setEditingIntegration(null)]}
           mutate={mutate}
@@ -341,25 +330,19 @@ export default function Integrations() {
         />
       )}
 
-      {editingGooglePlayGamesIntegration && (
+      {editingIntegration?.type === IntegrationType.GOOGLE_PLAY_GAMES && (
         <GooglePlayGamesIntegrationDetails
-          modalState={[
-            Boolean(editingGooglePlayGamesIntegration),
-            () => setEditingGooglePlayGamesIntegration(null),
-          ]}
+          modalState={[Boolean(editingIntegration), () => setEditingIntegration(null)]}
           mutate={mutate}
-          editingIntegration={editingGooglePlayGamesIntegration}
+          editingIntegration={editingIntegration}
         />
       )}
 
-      {editingGameCenterIntegration && (
+      {editingIntegration?.type === IntegrationType.GAME_CENTER && (
         <GameCenterIntegrationDetails
-          modalState={[
-            Boolean(editingGameCenterIntegration),
-            () => setEditingGameCenterIntegration(null),
-          ]}
+          modalState={[Boolean(editingIntegration), () => setEditingIntegration(null)]}
           mutate={mutate}
-          editingIntegration={editingGameCenterIntegration}
+          editingIntegration={editingIntegration}
         />
       )}
     </Page>

@@ -1,7 +1,7 @@
 import { IconPlus } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { useAtomValue } from 'jotai'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import useFeedbackCategories from '../api/useFeedbackCategories'
 import Button from '../components/Button'
 import ErrorMessage from '../components/ErrorMessage'
@@ -28,10 +28,6 @@ export default function FeedbackCategories() {
 
   const sortedFeedbackCategories = useSortedItems(feedbackCategories, 'internalName', 'asc')
 
-  useEffect(() => {
-    if (!showModal && !showResetModal) setEditingCategory(null)
-  }, [showModal, showResetModal])
-
   const onEditCategoryClick = (category: GameFeedbackCategory) => {
     setEditingCategory(category)
     setShowModal(true)
@@ -56,7 +52,10 @@ export default function FeedbackCategories() {
         <div className='mt-1 ml-4 rounded-full bg-indigo-600 p-1'>
           <Button
             variant='icon'
-            onClick={() => setShowModal(true)}
+            onClick={() => {
+              setEditingCategory(null)
+              setShowModal(true)
+            }}
             icon={<IconPlus />}
             extra={{ 'aria-label': 'Create category' }}
           />

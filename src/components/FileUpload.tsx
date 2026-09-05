@@ -59,7 +59,7 @@ export default function FileUpload({ accept, label, onChange, onClear }: FileUpl
     })
   }
 
-  const onDrop = (e: DragEvent<HTMLLabelElement>) => {
+  const onDrop = (e: DragEvent<HTMLButtonElement>) => {
     e.preventDefault()
     setIsDragging(false)
 
@@ -69,12 +69,12 @@ export default function FileUpload({ accept, label, onChange, onClear }: FileUpl
     }
   }
 
-  const onDragOver = (e: DragEvent<HTMLLabelElement>) => {
+  const onDragOver = (e: DragEvent<HTMLButtonElement>) => {
     e.preventDefault()
     setIsDragging(true)
   }
 
-  const onDragLeave = (e: DragEvent<HTMLLabelElement>) => {
+  const onDragLeave = (e: DragEvent<HTMLButtonElement>) => {
     if (!e.currentTarget.contains(e.relatedTarget as Node)) {
       setIsDragging(false)
     }
@@ -90,42 +90,51 @@ export default function FileUpload({ accept, label, onChange, onClear }: FileUpl
           {label}
         </p>
       )}
-      <label
-        htmlFor={inputId}
-        className={clsx(
-          'flex cursor-pointer flex-col items-center justify-center space-y-2 rounded-lg border-2 border-dashed border-gray-300 p-8 text-center transition-colors hover:border-indigo-400 hover:bg-indigo-50',
-          focusStyle,
-          {
-            'border-indigo-400 bg-indigo-50': isDragging,
-          },
+      <div className='relative'>
+        <button
+          type='button'
+          className={clsx(
+            'flex w-full cursor-pointer flex-col items-center justify-center space-y-2 rounded-lg border-2 border-dashed border-gray-300 p-8 text-center transition-colors hover:border-indigo-400 hover:bg-indigo-50',
+            focusStyle,
+            {
+              'border-indigo-400 bg-indigo-50': isDragging,
+            },
+          )}
+          onClick={() => inputRef.current?.click()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              inputRef.current?.click()
+            }
+          }}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
+          onDragLeave={onDragLeave}
+        >
+          {fileName ? (
+            <span className='text-sm font-medium'>{fileName}</span>
+          ) : (
+            <>
+              <p className='text-sm text-gray-700'>
+                <IconFileUpload className='-mt-1 inline-block' size={24} aria-hidden='true' />
+                <span className='ml-1'>Drop a file here or click to browse</span>
+              </p>
+              {accept && <p className='text-xs text-gray-500'>{accept.toUpperCase()}</p>}
+            </>
+          )}
+        </button>
+        {fileName && (
+          <button
+            type='button'
+            aria-label='Clear file'
+            className='absolute top-3 right-3 text-xs text-indigo-600 hover:text-indigo-800'
+            onClick={handleClear}
+          >
+            <IconTrash className='-mt-1 inline-block' size={16} aria-hidden='true' />
+            <span className='ml-1'>Clear file</span>
+          </button>
         )}
-        onDrop={onDrop}
-        onDragOver={onDragOver}
-        onDragLeave={onDragLeave}
-      >
-        {fileName ? (
-          <>
-            <p className='text-sm font-medium'>{fileName}</p>
-            <button
-              type='button'
-              aria-label='Clear file'
-              className='text-xs text-indigo-600 hover:text-indigo-800'
-              onClick={handleClear}
-            >
-              <IconTrash className='-mt-1 inline-block' size={16} aria-hidden='true' />
-              <span className='ml-1'>Clear file</span>
-            </button>
-          </>
-        ) : (
-          <>
-            <p className='text-sm text-gray-700'>
-              <IconFileUpload className='-mt-1 inline-block' size={24} aria-hidden='true' />
-              <span className='ml-1'>Drop a file here or click to browse</span>
-            </p>
-            {accept && <p className='text-xs text-gray-500'>{accept.toUpperCase()}</p>}
-          </>
-        )}
-      </label>
+      </div>
       <input
         ref={inputRef}
         id={inputId}

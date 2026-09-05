@@ -63,6 +63,10 @@ export default function PlayerLeaderboardEntries() {
     [mutate],
   )
 
+  const editingLeaderboard = editingEntry
+    ? leaderboards.find((lb) => lb.internalName === editingEntry.leaderboardInternalName)
+    : undefined
+
   return (
     <Page showBackButton title='Player leaderboard entries' isLoading={loading}>
       <PlayerIdentifier player={player} />
@@ -112,16 +116,12 @@ export default function PlayerLeaderboardEntries() {
         </Table>
       )}
 
-      {editingEntry && (
+      {editingEntry && editingLeaderboard && (
         <UpdateEntryScore
           modalState={[true, () => setEditingEntry(null)]}
           onEntryUpdated={onEntryUpdated}
           editingEntry={editingEntry}
-          leaderboard={
-            leaderboards.find((leaderboard) => {
-              return leaderboard.internalName === editingEntry.leaderboardInternalName
-            })!
-          }
+          leaderboard={editingLeaderboard}
         />
       )}
 

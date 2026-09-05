@@ -81,6 +81,16 @@ const Channels = lazy(() => import(/* webpackChunkName: 'channels' */ './pages/C
 const EventBreakdown = lazy(
   () => import(/* webpackChunkName: 'event-breakdown' */ './pages/EventBreakdown'),
 )
+const EventFunnels = lazy(
+  () => import(/* webpackChunkName: 'event-funnels' */ './pages/EventFunnels'),
+)
+const EventCatalogue = lazy(
+  () => import(/* webpackChunkName: 'event-catalogue' */ './pages/EventCatalogue'),
+)
+const EventFunnelNew = lazy(
+  () => import(/* webpackChunkName: 'event-funnel-new' */ './pages/EventFunnelNew'),
+)
+const EventFunnel = lazy(() => import(/* webpackChunkName: 'event-funnel' */ './pages/EventFunnel'))
 const GameSettings = lazy(
   () => import(/* webpackChunkName: 'game-settings */ './pages/GameSettings'),
 )
@@ -186,6 +196,10 @@ function Router({ intendedRoute }: RouterProps) {
                   )}
                   <Route path={routes.channels} element={<Channels />} />
                   <Route path={routes.eventBreakdown} element={<EventBreakdown />} />
+                  <Route path={routes.eventsCatalogue} element={<EventCatalogue />} />
+                  <Route path={routes.eventsFunnels} element={<EventFunnels />} />
+                  <Route path={routes.eventsFunnelNew} element={<EventFunnelNew />} />
+                  <Route path={routes.eventFunnel} element={<EventFunnel />} />
                   {canViewPage(user, routes.gameSettings) && (
                     <Route path={routes.gameSettings} element={<GameSettings />} />
                   )}

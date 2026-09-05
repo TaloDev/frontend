@@ -1,14 +1,17 @@
 {
-  "version": "1.1.0",
+  "name": "talo-dashboard",
+  "version": "1.2.0",
+  "description": "",
   "license": "MIT",
+  "author": "Talo Platform Ltd",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:e2e": "vite --mode e2e",
+    "dev:e2e": "start-server-and-test 'vite --mode e2e' http://localhost:8080",
+    "dev:cypress": "pnpm dev:e2e 'cypress open'",
     "build": "tsc -p tsconfig.build.json && vite build",
     "test": "TZ=UTC vitest",
-    "test:e2e": "start-server-and-test dev:e2e http://localhost:8080 cypress:open",
-    "cypress:open": "cypress open",
+    "test:cypress": "pnpm dev:e2e 'cypress run'",
     "prepare": "husky || true",
     "lint": "oxlint --type-aware",
     "lint:fix": "oxlint --type-aware --fix",
@@ -30,7 +33,7 @@
     "csv-parse": "^6.2.1",
     "date-fns": "^2.29.3",
     "dinero.js": "^2.0.0-alpha.11",
-    "elkjs": "^0.11.0",
+    "elkjs": "^0.12.0",
     "jotai": "^2.20.1",
     "lodash-es": "^4.17.23",
     "motion": "^12.43.0",
@@ -43,6 +46,7 @@
     "react-select": "^5.8.0",
     "recharts": "^3.9.2",
     "swr": "^2.0.0",
+    "tippy.js": "^6.3.7",
     "use-debounce": "^9.0.0",
     "zod": "^3.23.8"
   },
@@ -69,7 +73,7 @@
     "husky": "^9.0.11",
     "jsdom": "^24.0.0",
     "lint-staged": ">=10",
-    "oxfmt": "^0.48.0",
+    "oxfmt": "^0.66.0",
     "oxlint": "^1.63.0",
     "oxlint-tsgolint": "^0.22.1",
     "start-server-and-test": "^2.0.0",
@@ -79,9 +83,15 @@
     "vitest": "^4.1.9"
   },
   "lint-staged": {
-    "*.{ts,js,tsx,jsx}": "npm run lint"
+    "*.{ts,js,tsx,jsx}": "pnpm lint"
   },
   "browserslist": ">0.75%",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.0.0"
+    }
+  },
   "engines": {
     "node": "24.x"
   }

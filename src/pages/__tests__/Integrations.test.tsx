@@ -183,6 +183,56 @@ describe('<Integrations />', () => {
     expect(screen.getByText('Last updated 01 Aug 2022 20:32'))
   })
 
+  it('should render multiple steamworks integrations', async () => {
+    axiosMock.onGet('http://talo.api/games/1/integrations').replyOnce(200, {
+      integrations: [
+        {
+          id: 1,
+          type: 'steamworks',
+          createdAt: '2022-08-01 20:08:13',
+          updatedAt: '2022-08-01 20:32:43',
+          config: {
+            appId: '375290',
+            syncLeaderboards: true,
+            syncStats: true,
+          },
+        },
+        {
+          id: 2,
+          type: 'steamworks',
+          createdAt: '2022-08-02 20:08:13',
+          updatedAt: '2022-08-02 20:32:43',
+          config: {
+            appId: '375291',
+            syncLeaderboards: false,
+            syncStats: false,
+          },
+        },
+      ],
+    })
+
+    render(
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: {} },
+          { node: activeGameState, initialValue: { id: 1 } },
+        ]}
+      >
+        <Integrations />
+      </KitchenSink>,
+    )
+
+    expect(await screen.findAllByText('Update integration')).toHaveLength(2)
+    expect(screen.getByText('App 375290')).toBeInTheDocument()
+    expect(screen.getByText('App 375291')).toBeInTheDocument()
+    expect(screen.getByText('Enabled 01 Aug 2022')).toBeInTheDocument()
+    expect(screen.getByText('Enabled 02 Aug 2022')).toBeInTheDocument()
+    expect(screen.getAllByText('Sync leaderboards')).toHaveLength(1)
+
+    await userEvent.click(screen.getByText('Add another Steam app'))
+    expect(screen.getByText('Steamworks integration')).toBeInTheDocument()
+  })
+
   it('should render the error state', async () => {
     axiosMock.onGet('http://talo.api/games/1/integrations').networkErrorOnce()
 

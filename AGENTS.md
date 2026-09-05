@@ -3,10 +3,10 @@
 ## Useful Commands
 
 ```bash
-npm test                         # Run all Vitest unit tests (runs with TZ=UTC)
-npm test -- <pattern>            # Run specific test file(s) matching pattern
+pnpm test                         # Run all Vitest unit tests (runs with TZ=UTC)
+pnpm test <pattern>               # Run specific test file(s) matching pattern
 
-npm run lint -- --type-check     # Run linter and tsc simultaneously
+pnpm lint --type-check            # Run linter and tsc simultaneously
 ```
 
 ### Directory Structure

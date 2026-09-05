@@ -21,6 +21,7 @@ import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import Toggle from '../components/toggles/Toggle'
 import { GameChannel } from '../entities/gameChannels'
 import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
+import { devDataState } from '../state/devDataState'
 import { userState, AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
@@ -56,7 +57,8 @@ export default function ChannelDetails({
   const activeGame = useAtomValue(activeGameState) as SelectedActiveGame
 
   const [ownerSearch, setOwnerSearch] = useState('')
-  const { players } = usePlayers(activeGame, ownerSearch, 0)
+  const includeDevData = useAtomValue(devDataState)
+  const { players } = usePlayers(activeGame, ownerSearch, 0, includeDevData)
 
   const [isMenuOpen, setMenuOpen] = useState(false)
 

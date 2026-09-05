@@ -1,5 +1,4 @@
 import { useAtomValue } from 'jotai'
-import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router'
 import usePricingPlanUsage from '../api/usePricingPlanUsage'
 import routes from '../constants/routes'
@@ -16,15 +15,11 @@ const blocklist = [routes.confirmPassword]
 export default function GlobalBanners() {
   const location = useLocation()
 
-  const [showBanners, setShowBanners] = useState(false)
+  const showBanners = !blocklist.includes(location.pathname)
 
   const user = useAtomValue(userState) as AuthedUser
   const organisation = useAtomValue(organisationState)
   const justConfirmedEmail = useAtomValue(justConfirmedEmailState)
-
-  useEffect(() => {
-    setShowBanners(!blocklist.includes(location.pathname))
-  }, [location.pathname])
 
   const showConfirmEmailBanner = !user.emailConfirmed || justConfirmedEmail
   const showPaymentRequiredBanner =
