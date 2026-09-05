@@ -1,7 +1,9 @@
 {
   "name": "talo-dashboard",
   "version": "1.2.0",
+  "description": "",
   "license": "MIT",
+  "author": "Talo Platform Ltd",
   "type": "module",
   "scripts": {
     "dev": "vite",
