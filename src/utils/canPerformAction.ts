@@ -13,6 +13,8 @@ export enum PermissionBasedAction {
   REMOVE_ORGANISATION_MEMBER,
   CHANGE_ORGANISATION_MEMBER_TYPE,
   RESEND_INVITE,
+  PURGE_EVENTS,
+  CHANGE_EVENT_RETENTION,
 }
 
 export default function canPerformAction(user: User, action: PermissionBasedAction) {
@@ -30,6 +32,8 @@ export default function canPerformAction(user: User, action: PermissionBasedActi
     case PermissionBasedAction.DELETE_CHANNEL:
     case PermissionBasedAction.DELETE_PLAYER:
     case PermissionBasedAction.RESEND_INVITE:
+    case PermissionBasedAction.PURGE_EVENTS:
+    case PermissionBasedAction.CHANGE_EVENT_RETENTION:
       return user.type === UserType.ADMIN
     case PermissionBasedAction.DELETE_GROUP:
       return [UserType.DEV, UserType.ADMIN].includes(user.type)

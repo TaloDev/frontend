@@ -14,6 +14,7 @@ import Table from '../components/tables/Table'
 import TableBody from '../components/tables/TableBody'
 import TableCell from '../components/tables/TableCell'
 import routes from '../constants/routes'
+import { eventsSecondaryNavRoutes } from '../constants/secondaryNavRoutes'
 import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 
 const localStorageKey = 'eventFunnels'
@@ -33,14 +34,7 @@ function EventFunnelsDisplay({ activeGame }: { activeGame: SelectedActiveGame })
 
   const { funnels, loading, error } = useEventFunnels(activeGame)
 
-  const secondaryNav = (
-    <SecondaryNav
-      routes={[
-        { title: 'Events overview', to: routes.eventsOverview },
-        { title: 'Event funnels', to: routes.eventsFunnels },
-      ]}
-    />
-  )
+  const secondaryNav = <SecondaryNav routes={eventsSecondaryNavRoutes} />
 
   return (
     <Page

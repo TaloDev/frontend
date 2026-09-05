@@ -11,6 +11,7 @@ export default {
   dataExports: '/exports',
   eventsOverview: '/events',
   eventBreakdown: '/events/breakdown',
+  eventsCatalogue: '/events/catalogue',
   eventsFunnels: '/events/funnels',
   eventsFunnelNew: '/events/funnels/new',
   eventFunnel: '/events/funnels/:funnelId',

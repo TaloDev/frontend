@@ -6,6 +6,7 @@ import { EventsProvider } from '../components/events/EventsContext'
 import Page from '../components/Page'
 import { SecondaryNav } from '../components/SecondaryNav'
 import routes from '../constants/routes'
+import { eventsSecondaryNavRoutes } from '../constants/secondaryNavRoutes'
 import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 
 const localStorageKey = 'eventFunnelNew'
@@ -15,14 +16,7 @@ export default function EventFunnelNew() {
   const navigate = useNavigate()
   const { mutate } = useSWRConfig()
 
-  const secondaryNav = (
-    <SecondaryNav
-      routes={[
-        { title: 'Events overview', to: routes.eventsOverview },
-        { title: 'Event funnels', to: routes.eventsFunnels },
-      ]}
-    />
-  )
+  const secondaryNav = <SecondaryNav routes={eventsSecondaryNavRoutes} />
 
   return (
     <EventsProvider localStorageKey={localStorageKey}>
