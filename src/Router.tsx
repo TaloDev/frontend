@@ -84,6 +84,9 @@ const EventBreakdown = lazy(
 const EventFunnels = lazy(
   () => import(/* webpackChunkName: 'event-funnels' */ './pages/EventFunnels'),
 )
+const EventCatalogue = lazy(
+  () => import(/* webpackChunkName: 'event-catalogue' */ './pages/EventCatalogue'),
+)
 const EventFunnelNew = lazy(
   () => import(/* webpackChunkName: 'event-funnel-new' */ './pages/EventFunnelNew'),
 )
@@ -193,6 +196,7 @@ function Router({ intendedRoute }: RouterProps) {
                   )}
                   <Route path={routes.channels} element={<Channels />} />
                   <Route path={routes.eventBreakdown} element={<EventBreakdown />} />
+                  <Route path={routes.eventsCatalogue} element={<EventCatalogue />} />
                   <Route path={routes.eventsFunnels} element={<EventFunnels />} />
                   <Route path={routes.eventsFunnelNew} element={<EventFunnelNew />} />
                   <Route path={routes.eventFunnel} element={<EventFunnel />} />
