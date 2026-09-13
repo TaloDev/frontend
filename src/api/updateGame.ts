@@ -17,6 +17,7 @@ type Data = {
   displayNamePropKey?: string | null
   website?: string | null
   logoUrl?: string | null
+  playerAuthActivityEnrichment?: boolean
 }
 
 const updateGame = makeValidatedRequest(
