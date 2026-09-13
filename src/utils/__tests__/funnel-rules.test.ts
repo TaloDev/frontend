@@ -5,6 +5,7 @@ import {
   EventFunnelStep,
 } from '../../entities/eventFunnel'
 import {
+  type EditableFunnelStep,
   isFunnelRuleValid,
   isFunnelStepsValid,
   isFunnelStepValid,
@@ -63,5 +64,11 @@ describe('prepareFunnelStep', () => {
     const prepared = prepareFunnelStep(step('a', [rule({ op: 'between', value: ['1', ''] })]))
 
     expect(prepared.props.rules[0].value).toEqual(['1'])
+  })
+
+  it('strips the transient editor id', () => {
+    const editable: EditableFunnelStep = { ...step('a'), id: 'step-1' }
+
+    expect(prepareFunnelStep(editable)).not.toHaveProperty('id')
   })
 })
