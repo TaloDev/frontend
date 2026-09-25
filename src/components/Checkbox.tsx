@@ -9,9 +9,17 @@ type CheckboxProps = {
   onChange: (checked: boolean) => void
   labelContent: ReactNode
   inputRef?: Ref<HTMLInputElement>
+  variant?: 'dark' | 'modal'
 }
 
-export default function Checkbox({ id, checked, onChange, labelContent, inputRef }: CheckboxProps) {
+export default function Checkbox({
+  id,
+  checked,
+  onChange,
+  labelContent,
+  inputRef,
+  variant = 'dark',
+}: CheckboxProps) {
   return (
     <div>
       <span className='relative'>
@@ -20,7 +28,11 @@ export default function Checkbox({ id, checked, onChange, labelContent, inputRef
           ref={inputRef}
           className={clsx(
             focusStyle,
-            'peer h-[20px] w-[20px] appearance-none rounded-sm border border-gray-500 bg-gray-600 align-text-top checked:border-indigo-400 checked:bg-indigo-500',
+            'peer h-[20px] w-[20px] appearance-none rounded-sm border align-text-top checked:border-indigo-400 checked:bg-indigo-500',
+            {
+              'border-gray-500 bg-gray-600': variant === 'dark',
+              'border-black/30 bg-white': variant === 'modal',
+            },
           )}
           type='checkbox'
           checked={checked}
@@ -29,7 +41,7 @@ export default function Checkbox({ id, checked, onChange, labelContent, inputRef
         <IconCheck
           size={16}
           stroke={3}
-          className='pointer-events-none absolute top-[2px] left-[1.5px] hidden peer-checked:inline'
+          className='pointer-events-none absolute top-[2px] left-[1.5px] hidden text-white peer-checked:inline'
         />
       </span>
 
