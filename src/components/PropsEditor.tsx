@@ -136,7 +136,7 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
         {metaProps.length > 0 && (
           <>
             <SecondaryTitle>Talo props</SecondaryTitle>
-            <Table columns={['Property', 'Value', '']}>
+            <Table columns={['Key', 'Value', '']}>
               <TableBody
                 iterator={metaProps}
                 configureClassnames={(prop, idx) => ({
@@ -163,7 +163,7 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
         {existingProps.length + newProps.length > 0 && (
           <>
             {metaProps.length > 0 && <SecondaryTitle>Your props</SecondaryTitle>}
-            <Table columns={['Property', 'Value', '']}>
+            <Table columns={['Key', 'Value', '']}>
               <TableBody iterator={existingProps}>
                 {(prop) => (
                   <>

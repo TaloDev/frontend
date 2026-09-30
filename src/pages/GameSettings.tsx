@@ -34,6 +34,7 @@ const defaultSettings: Settings = {
   displayNamePropKey: null,
   website: null,
   logoUrl: null,
+  playerAuthActivityEnrichment: false,
 }
 
 const purgeDevPlayersRetentionOptions = [
@@ -270,6 +271,36 @@ export default function GameSettings() {
                     />
                   )}
                   <Link to={routes.verificationKeys}>Manage verification keys</Link>
+                </div>
+              </div>
+
+              <div className='-mx-4 h-px bg-gray-600' />
+
+              <div className='flex items-start space-x-4'>
+                <div>
+                  {!settingsLoaded && (
+                    <div className='mx-4'>
+                      <Loading size={32} thickness={180} />
+                    </div>
+                  )}
+                  {settingsLoaded && (
+                    <Toggle
+                      id='player-auth-activity-enrichment'
+                      className='mt-1'
+                      enabled={settings.playerAuthActivityEnrichment}
+                      onToggle={(val) => updateSetting('playerAuthActivityEnrichment', val)}
+                    />
+                  )}
+                </div>
+                <div className='space-y-1'>
+                  <p className='font-medium'>Enrich Talo Player Auth activity</p>
+                  <p className='text-sm'>
+                    Store the player's IP address and user agent for every Talo Player Auth
+                    activity.
+                    <br />
+                    Activities like registering, logging in, updating details and merging accounts
+                    are visible on the player's profile.
+                  </p>
                 </div>
               </div>
             </div>

@@ -1,6 +1,6 @@
 {
   "name": "talo-dashboard",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "",
   "license": "MIT",
   "author": "Talo Platform Ltd",
@@ -13,8 +13,8 @@
     "test": "TZ=UTC vitest",
     "test:cypress": "pnpm dev:e2e 'cypress run'",
     "prepare": "husky || true",
-    "lint": "oxlint --type-aware",
-    "lint:fix": "oxlint --type-aware --fix",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "fmt": "oxfmt --check",
     "fmt:fix": "oxfmt"
   },
@@ -30,7 +30,7 @@
     "axios": "^1.16.0",
     "chroma-js": "^3.2.0",
     "clsx": "^2.0.0",
-    "csv-parse": "^6.2.1",
+    "csv-parse": "^7.0.0",
     "date-fns": "^2.29.3",
     "dinero.js": "^2.0.0-alpha.11",
     "elkjs": "^0.12.0",

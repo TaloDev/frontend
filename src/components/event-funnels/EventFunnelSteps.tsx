@@ -1,12 +1,19 @@
-import { IconPlus, IconTrash } from '@tabler/icons-react'
-import { Dispatch, SetStateAction } from 'react'
+import { IconGripVertical, IconPlus, IconTrash } from '@tabler/icons-react'
+import { Reorder, useDragControls } from 'motion/react'
+import { Dispatch, SetStateAction, useState, type PointerEvent as ReactPointerEvent } from 'react'
 import {
   EventFunnelPropOp,
   EventFunnelRuleMode,
   EventFunnelStep,
   eventFunnelPropOps,
 } from '../../entities/eventFunnel'
-import { getRuleOperandCount, MAX_FUNNEL_STEPS } from '../../utils/funnel-rules'
+import {
+  type EditableFunnelStep,
+  getRuleOperandCount,
+  makeFunnelStepId,
+  MAX_FUNNEL_STEPS,
+  reorderFunnelSteps,
+} from '../../utils/funnel-rules'
 import Button from '../Button'
 import DropdownMenu from '../DropdownMenu'
 import TextInput from '../TextInput'
@@ -23,15 +30,32 @@ const ruleOpLabels: Record<EventFunnelPropOp, string> = {
   contains: 'contains',
 }
 
-type EventFunnelStepsProps = {
-  stepsState: [EventFunnelStep[], Dispatch<SetStateAction<EventFunnelStep[]>>]
-  showErrors?: boolean
+type StepHandlers = {
+  updateStep: (stepIdx: number, partial: Partial<EditableFunnelStep>) => void
+  updateRuleMode: (stepIdx: number, ruleMode: EventFunnelRuleMode) => void
+  updateRule: (
+    stepIdx: number,
+    ruleIdx: number,
+    partial: Partial<EventFunnelStep['props']['rules'][number]>,
+  ) => void
+  updateRuleOp: (stepIdx: number, ruleIdx: number, op: EventFunnelPropOp) => void
+  updateRuleValue: (stepIdx: number, ruleIdx: number, valueIdx: number, value: string) => void
+  onRemoveStepClick: (stepIdx: number) => void
+  onAddRuleClick: (stepIdx: number) => void
+  onRemoveRuleClick: (stepIdx: number, ruleIdx: number) => void
 }
 
-export function EventFunnelSteps({ stepsState, showErrors = false }: EventFunnelStepsProps) {
+export function EventFunnelSteps({
+  stepsState,
+  showErrors = false,
+}: {
+  stepsState: [EditableFunnelStep[], Dispatch<SetStateAction<EditableFunnelStep[]>>]
+  showErrors?: boolean
+}) {
   const [steps, setSteps] = stepsState
+  const [isDragging, setIsDragging] = useState(false)
 
-  const updateStep = (stepIdx: number, partial: Partial<EventFunnelStep>) => {
+  const updateStep = (stepIdx: number, partial: Partial<EditableFunnelStep>) => {
     setSteps((steps) =>
       steps.map((step, idx) => (idx === stepIdx ? { ...step, ...partial } : step)),
     )
@@ -115,9 +139,11 @@ export function EventFunnelSteps({ stepsState, showErrors = false }: EventFunnel
   }
 
   const onAddStepClick = () => {
+    const id = makeFunnelStepId()
+
     setSteps((steps) => [
       ...steps,
-      { name: '', props: { ruleMode: EventFunnelRuleMode.AND, rules: [] } },
+      { id, name: '', props: { ruleMode: EventFunnelRuleMode.AND, rules: [] } },
     ])
   }
 
@@ -157,149 +183,227 @@ export function EventFunnelSteps({ stepsState, showErrors = false }: EventFunnel
     )
   }
 
+  const onReorder = (orderedIds: string[]) => {
+    setSteps((steps) => reorderFunnelSteps(steps, orderedIds))
+  }
+
+  const handlers: StepHandlers = {
+    updateStep,
+    updateRuleMode,
+    updateRule,
+    updateRuleOp,
+    updateRuleValue,
+    onRemoveStepClick,
+    onAddRuleClick,
+    onRemoveRuleClick,
+  }
+
   return (
     <div className='space-y-4'>
       <p className='font-semibold'>Steps</p>
 
-      <div className='space-y-4'>
+      <Reorder.Group
+        as='div'
+        axis='y'
+        className='space-y-4'
+        values={steps.map((step) => step.id)}
+        onReorder={onReorder}
+      >
         {steps.map((step, stepIdx) => (
-          <div key={stepIdx} className='text-sm'>
-            <div className='grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-2'>
-              <span className='text-white'>Step {stepIdx + 1}</span>
-
-              <div className='flex w-full items-center space-x-2 md:w-[calc(66.666667%_-_20px)]'>
-                <div className='min-w-0 grow'>
-                  <TextInput
-                    id={`step-name-${stepIdx}`}
-                    onChange={(value) => updateStep(stepIdx, { name: value })}
-                    value={step.name}
-                    placeholder='Event name'
-                    errors={[showErrors && !step.name ? '' : undefined]}
-                  />
-                </div>
-
-                <Button
-                  type='button'
-                  onClick={() => onRemoveStepClick(stepIdx)}
-                  variant='white-small'
-                  icon={<IconTrash size={16} />}
-                  extra={{ 'aria-label': `Remove step ${stepIdx + 1}` }}
-                />
-              </div>
-
-              <div />
-
-              <div className='space-y-2'>
-                {step.props.rules.length > 0 && (
-                  <div className='space-y-2'>
-                    {step.props.rules.map((rule, ruleIdx) => (
-                      <div key={ruleIdx} className='flex flex-wrap items-center gap-2'>
-                        <DropdownMenu
-                          options={[
-                            {
-                              label: 'and',
-                              onClick: () => updateRuleMode(stepIdx, EventFunnelRuleMode.AND),
-                            },
-                            {
-                              label: 'or',
-                              onClick: () => updateRuleMode(stepIdx, EventFunnelRuleMode.OR),
-                            },
-                          ]}
-                        >
-                          {(setOpen) => (
-                            <Button
-                              type='button'
-                              onClick={() => setOpen(true)}
-                              variant='white-small'
-                            >
-                              {step.props.ruleMode === EventFunnelRuleMode.AND ? 'and' : 'or'}
-                            </Button>
-                          )}
-                        </DropdownMenu>
-
-                        <TextInput
-                          id={`rule-key-${stepIdx}-${ruleIdx}`}
-                          containerClassName='w-32 md:w-40'
-                          onChange={(value) => updateRule(stepIdx, ruleIdx, { key: value })}
-                          value={rule.key}
-                          placeholder='Prop key'
-                          errors={[showErrors && !rule.key ? '' : undefined]}
-                        />
-
-                        <DropdownMenu
-                          options={eventFunnelPropOps.map((op) => ({
-                            label: ruleOpLabels[op],
-                            onClick: () => updateRuleOp(stepIdx, ruleIdx, op),
-                          }))}
-                        >
-                          {(setOpen) => (
-                            <Button
-                              type='button'
-                              onClick={() => setOpen(true)}
-                              variant='white-small'
-                            >
-                              {ruleOpLabels[rule.op]}
-                            </Button>
-                          )}
-                        </DropdownMenu>
-
-                        {[...new Array(getRuleOperandCount(rule.op))].map((_, operandIdx) => (
-                          <TextInput
-                            key={operandIdx}
-                            id={`rule-value-${stepIdx}-${ruleIdx}-${operandIdx}`}
-                            containerClassName='w-20 md:w-24'
-                            onChange={(value) =>
-                              updateRuleValue(stepIdx, ruleIdx, operandIdx, value)
-                            }
-                            value={rule.value[operandIdx] ?? ''}
-                            placeholder={
-                              rule.op === 'between' ? (operandIdx === 0 ? 'Min' : 'Max') : 'Value'
-                            }
-                            errors={[showErrors && !rule.value[operandIdx] ? '' : undefined]}
-                          />
-                        ))}
-
-                        <Button
-                          type='button'
-                          onClick={() => onRemoveRuleClick(stepIdx, ruleIdx)}
-                          variant='white-small'
-                          icon={<IconTrash size={16} />}
-                          extra={{
-                            'aria-label': `Remove rule ${ruleIdx + 1} from step ${stepIdx + 1}`,
-                          }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                <div>
-                  <Button
-                    type='button'
-                    onClick={() => onAddRuleClick(stepIdx)}
-                    variant='white-small'
-                    icon={<IconPlus size={14} />}
-                  >
-                    <span>Prop filter</span>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <FunnelStepItem
+            key={step.id}
+            step={step}
+            stepIdx={stepIdx}
+            showErrors={showErrors}
+            isDragging={isDragging}
+            onDraggingChange={setIsDragging}
+            handlers={handlers}
+          />
         ))}
+      </Reorder.Group>
 
-        <div className='w-40'>
-          <Button
-            type='button'
-            onClick={onAddStepClick}
-            disabled={steps.length >= MAX_FUNNEL_STEPS}
-            icon={<IconPlus size={16} />}
-            variant='white-small'
-          >
-            <span>New step</span>
-          </Button>
-        </div>
+      <div className='w-40'>
+        <Button
+          type='button'
+          onClick={onAddStepClick}
+          disabled={steps.length >= MAX_FUNNEL_STEPS}
+          icon={<IconPlus size={16} />}
+          variant='white-small'
+        >
+          <span>New step</span>
+        </Button>
       </div>
     </div>
+  )
+}
+
+function FunnelStepItem({
+  step,
+  stepIdx,
+  showErrors,
+  isDragging,
+  onDraggingChange,
+  handlers,
+}: {
+  step: EditableFunnelStep
+  stepIdx: number
+  showErrors: boolean
+  isDragging: boolean
+  onDraggingChange: Dispatch<SetStateAction<boolean>>
+  handlers: StepHandlers
+}) {
+  const controls = useDragControls()
+
+  const {
+    updateStep,
+    updateRuleMode,
+    updateRule,
+    updateRuleOp,
+    updateRuleValue,
+    onRemoveStepClick,
+    onAddRuleClick,
+    onRemoveRuleClick,
+  } = handlers
+
+  return (
+    <Reorder.Item
+      as='div'
+      value={step.id}
+      dragListener={false}
+      dragControls={controls}
+      layout='position'
+      // animate reordering during a drag, but keep rule add/remove instant so
+      // steps below don't slide when a step changes height
+      transition={{ layout: { duration: isDragging ? 0.3 : 0 } }}
+      onDragStart={() => onDraggingChange(true)}
+      onDragEnd={() => onDraggingChange(false)}
+      className='text-sm'
+    >
+      <div className='grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-2'>
+        <div className='flex items-center space-x-2'>
+          <Button
+            type='button'
+            variant='bare'
+            icon={<IconGripVertical size={18} />}
+            className='cursor-grab touch-none p-1 text-gray-400 hover:text-white active:cursor-grabbing'
+            extra={{
+              tabIndex: -1,
+              onPointerDown: (event: ReactPointerEvent<HTMLButtonElement>) => controls.start(event),
+              'aria-label': `Reorder step ${stepIdx + 1}`,
+            }}
+          />
+
+          <span className='text-white'>Step {stepIdx + 1}</span>
+        </div>
+
+        <div className='flex w-full items-center space-x-2 md:w-[calc(66.666667%_-_20px)]'>
+          <div className='min-w-0 grow'>
+            <TextInput
+              id={`step-name-${stepIdx}`}
+              onChange={(value) => updateStep(stepIdx, { name: value })}
+              value={step.name}
+              placeholder='Event name'
+              errors={[showErrors && !step.name ? '' : undefined]}
+            />
+          </div>
+
+          <Button
+            type='button'
+            onClick={() => onRemoveStepClick(stepIdx)}
+            variant='white-small'
+            icon={<IconTrash size={16} />}
+            extra={{ 'aria-label': `Remove step ${stepIdx + 1}` }}
+          />
+        </div>
+
+        <div />
+
+        <div className='space-y-2'>
+          {step.props.rules.length > 0 && (
+            <div className='space-y-2'>
+              {step.props.rules.map((rule, ruleIdx) => (
+                <div key={ruleIdx} className='flex flex-wrap items-center gap-2'>
+                  <DropdownMenu
+                    options={[
+                      {
+                        label: 'and',
+                        onClick: () => updateRuleMode(stepIdx, EventFunnelRuleMode.AND),
+                      },
+                      {
+                        label: 'or',
+                        onClick: () => updateRuleMode(stepIdx, EventFunnelRuleMode.OR),
+                      },
+                    ]}
+                  >
+                    {(setOpen) => (
+                      <Button type='button' onClick={() => setOpen(true)} variant='white-small'>
+                        {step.props.ruleMode === EventFunnelRuleMode.AND ? 'and' : 'or'}
+                      </Button>
+                    )}
+                  </DropdownMenu>
+
+                  <TextInput
+                    id={`rule-key-${stepIdx}-${ruleIdx}`}
+                    containerClassName='w-32 md:w-40'
+                    onChange={(value) => updateRule(stepIdx, ruleIdx, { key: value })}
+                    value={rule.key}
+                    placeholder='Prop key'
+                    errors={[showErrors && !rule.key ? '' : undefined]}
+                  />
+
+                  <DropdownMenu
+                    options={eventFunnelPropOps.map((op) => ({
+                      label: ruleOpLabels[op],
+                      onClick: () => updateRuleOp(stepIdx, ruleIdx, op),
+                    }))}
+                  >
+                    {(setOpen) => (
+                      <Button type='button' onClick={() => setOpen(true)} variant='white-small'>
+                        {ruleOpLabels[rule.op]}
+                      </Button>
+                    )}
+                  </DropdownMenu>
+
+                  {[...new Array(getRuleOperandCount(rule.op))].map((_, operandIdx) => (
+                    <TextInput
+                      key={operandIdx}
+                      id={`rule-value-${stepIdx}-${ruleIdx}-${operandIdx}`}
+                      containerClassName='w-20 md:w-24'
+                      onChange={(value) => updateRuleValue(stepIdx, ruleIdx, operandIdx, value)}
+                      value={rule.value[operandIdx] ?? ''}
+                      placeholder={
+                        rule.op === 'between' ? (operandIdx === 0 ? 'Min' : 'Max') : 'Value'
+                      }
+                      errors={[showErrors && !rule.value[operandIdx] ? '' : undefined]}
+                    />
+                  ))}
+
+                  <Button
+                    type='button'
+                    onClick={() => onRemoveRuleClick(stepIdx, ruleIdx)}
+                    variant='white-small'
+                    icon={<IconTrash size={16} />}
+                    extra={{
+                      'aria-label': `Remove rule ${ruleIdx + 1} from step ${stepIdx + 1}`,
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div>
+            <Button
+              type='button'
+              onClick={() => onAddRuleClick(stepIdx)}
+              variant='white-small'
+              icon={<IconPlus size={14} />}
+            >
+              <span>Prop filter</span>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </Reorder.Item>
   )
 }

@@ -3,12 +3,17 @@ import { SetStateAction, useContext, useState } from 'react'
 import { createEventFunnel } from '../../api/createEventFunnel'
 import { deleteEventFunnel } from '../../api/deleteEventFunnel'
 import { updateEventFunnel } from '../../api/updateEventFunnel'
-import { EventFunnel, EventFunnelRuleMode, EventFunnelStep } from '../../entities/eventFunnel'
+import { EventFunnel, EventFunnelRuleMode } from '../../entities/eventFunnel'
 import { SelectedActiveGame } from '../../state/activeGameState'
 import { userState, AuthedUser } from '../../state/userState'
 import buildError from '../../utils/buildError'
 import canPerformAction, { PermissionBasedAction } from '../../utils/canPerformAction'
-import { isFunnelStepsValid, prepareFunnelStep } from '../../utils/funnel-rules'
+import {
+  isFunnelStepsValid,
+  makeFunnelStepId,
+  prepareFunnelStep,
+  type EditableFunnelStep,
+} from '../../utils/funnel-rules'
 import Button from '../Button'
 import ErrorMessage, { TaloError } from '../ErrorMessage'
 import TextInput from '../TextInput'
@@ -41,11 +46,13 @@ export function EventFunnelBuilder({
 
   const [interacted, setInteracted] = useState(false)
   const [name, setName] = useState(editingFunnel?.name ?? '')
-  const [steps, setSteps] = useState<EventFunnelStep[]>(
-    editingFunnel?.steps ?? [
-      { name: '', props: { ruleMode: EventFunnelRuleMode.AND, rules: [] } },
-      { name: '', props: { ruleMode: EventFunnelRuleMode.AND, rules: [] } },
-    ],
+  const [steps, setSteps] = useState<EditableFunnelStep[]>(() =>
+    (
+      editingFunnel?.steps ?? [
+        { name: '', props: { ruleMode: EventFunnelRuleMode.AND, rules: [] } },
+        { name: '', props: { ruleMode: EventFunnelRuleMode.AND, rules: [] } },
+      ]
+    ).map((step) => ({ ...step, id: makeFunnelStepId() })),
   )
   const [maxGap, setMaxGap] = useState(editingFunnel?.maxGap?.toString() ?? '60')
 
@@ -54,7 +61,7 @@ export function EventFunnelBuilder({
     setInteracted(true)
   }
 
-  const setStepsInteracted = (update: SetStateAction<EventFunnelStep[]>) => {
+  const setStepsInteracted = (update: SetStateAction<EditableFunnelStep[]>) => {
     setInteracted(true)
     setSteps(update)
   }
@@ -70,18 +77,19 @@ export function EventFunnelBuilder({
   const maxGapValid = maxGap !== '' && Number.isFinite(maxGapNum) && maxGapNum > 0
   const allStepsValid = isFunnelStepsValid(steps)
   const canSave = nameValid && maxGapValid && allStepsValid
+  const preparedSteps = steps.map(prepareFunnelStep)
   const hasChanges =
     Boolean(editingFunnel) &&
     (name !== editingFunnel?.name ||
       maxGapNum !== editingFunnel?.maxGap ||
-      JSON.stringify(steps) !== JSON.stringify(editingFunnel?.steps))
+      JSON.stringify(preparedSteps) !== JSON.stringify(editingFunnel?.steps))
   const submitDisabled = editingFunnel
     ? !canSave || isDeleting || !hasChanges
     : !canSave || isDeleting
 
   const onResetClick = () => {
     setName(editingFunnel?.name ?? '')
-    setSteps(editingFunnel?.steps ?? [])
+    setSteps((editingFunnel?.steps ?? []).map((step) => ({ ...step, id: makeFunnelStepId() })))
     setMaxGap(editingFunnel?.maxGap?.toString() ?? '60')
   }
 

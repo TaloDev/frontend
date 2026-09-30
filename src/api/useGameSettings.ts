@@ -20,6 +20,7 @@ export default function useGameSettings(activeGame: Game) {
           displayNamePropKey: z.string().nullable(),
           website: z.string().nullable(),
           logoUrl: z.string().nullable(),
+          playerAuthActivityEnrichment: z.boolean(),
           gameToken: z.string(),
         }),
       }),
