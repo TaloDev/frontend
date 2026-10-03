@@ -1,4 +1,5 @@
 import {
+  IconBrandApple,
   IconBrandGooglePlay,
   IconBrandSteam,
   IconMail,
@@ -28,6 +29,8 @@ export function SingleAlias({ alias }: { alias: PlayerAlias }) {
         return <IconBrandSteam size={16} />
       case 'google_play_games':
         return <IconBrandGooglePlay size={16} className='pl-0.5' />
+      case 'game_center':
+        return <IconBrandApple size={16} />
       case 'username':
         return <IconUser size={16} />
       case 'email':
