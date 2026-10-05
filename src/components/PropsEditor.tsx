@@ -1,4 +1,5 @@
-import { IconPlus, IconTrash } from '@tabler/icons-react'
+import { IconChevronUp, IconPlus, IconTrash } from '@tabler/icons-react'
+import clsx from 'clsx'
 import { ReactNode, useMemo, useState } from 'react'
 import type { Prop } from '../entities/prop'
 import { isMetaProp, metaPropKeyMap } from '../constants/metaProps'
@@ -22,6 +23,65 @@ type MetaProp = {
   value: string
 }
 
+type IndexedProp = {
+  prop: Prop
+  idx: number
+}
+
+type PropsRow = {
+  key: string
+  isArray: boolean
+  entries: IndexedProp[]
+}
+
+const ARRAY_KEY_SUFFIX = '[]'
+
+function isArrayKey(key: string): boolean {
+  return key.endsWith(ARRAY_KEY_SUFFIX)
+}
+
+function stringifyPropValue(value: unknown): string {
+  return typeof value === 'string' ? value : JSON.stringify(value)
+}
+
+function itemCountLabel(count: number): string {
+  return `${count} ${count === 1 ? 'item' : 'items'}`
+}
+
+// props arrays are written as:
+// {"weapons[]": ["sword", "axe"]} -> two weapons[] props
+function expandBulkProp(key: string, value: unknown): Prop[] {
+  if (!Array.isArray(value) || !isArrayKey(key)) {
+    return [{ key, value: stringifyPropValue(value) }]
+  }
+
+  return value.map((entry) => ({ key, value: stringifyPropValue(entry) }))
+}
+
+function groupPropRows(entries: IndexedProp[]): PropsRow[] {
+  const rows: PropsRow[] = []
+  const arrayRows = new Map<string, PropsRow>()
+
+  for (const entry of entries) {
+    const { key } = entry.prop
+    const arrayRow = isArrayKey(key) ? arrayRows.get(key) : undefined
+
+    if (arrayRow) {
+      arrayRow.entries.push(entry)
+      continue
+    }
+
+    const row = { key, isArray: isArrayKey(key), entries: [entry] }
+    if (row.isArray) {
+      arrayRows.set(key, row)
+    }
+
+    rows.push(row)
+  }
+
+  return rows
+}
+
 export default function PropsEditor({ startingProps, onSave, noPropsMessage }: PropsEditorProps) {
   const [originalProps, setOriginalProps] = useState<Prop[]>(startingProps)
   const [props, setProps] = useState<Prop[]>(originalProps)
@@ -29,14 +89,29 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
   const [newProps, setNewProps] = useState<Prop[]>([])
   const [error, setError] = useState<TaloError | null>(null)
   const [isUpdating, setUpdating] = useState(false)
+  const [collapsedArrays, setCollapsedArrays] = useState<Set<string>>(new Set())
 
-  const editExistingProp = (key: string, value: string | null) => {
-    setProps((curr) => {
-      return curr.map((prop): Prop => {
-        if (prop.key === key) return { ...prop, value }
-        return prop
-      })
+  const editExistingProp = (idx: number, value: string | null) => {
+    setProps((curr) => curr.map((prop, currIdx) => (currIdx === idx ? { ...prop, value } : prop)))
+  }
+
+  const toggleArray = (key: string) => {
+    setCollapsedArrays((curr) => {
+      const next = new Set(curr)
+      if (next.has(key)) {
+        next.delete(key)
+      } else {
+        next.add(key)
+      }
+
+      return next
     })
+  }
+
+  const deleteArray = (entries: IndexedProp[]) => {
+    const idxs = new Set(entries.map(({ idx }) => idx))
+
+    setProps((curr) => curr.map((prop, idx) => (idxs.has(idx) ? { ...prop, value: null } : prop)))
   }
 
   const addNewProp = () => {
@@ -61,6 +136,7 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
 
   const enableResetButton = useMemo(() => {
     if (newProps.length > 0 || bulkPropsList) return true
+    if (originalProps.length !== props.length) return true
 
     return originalProps.some((prop, idx) => {
       return prop.value !== props[idx].value
@@ -78,29 +154,45 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
   }
 
   const parseBulkPropsList = () => {
-    if (bulkPropsList) {
-      try {
-        const parsed = JSON.parse(bulkPropsList)
-        const bulkProps = Object.entries(parsed).map(([key, value]) => ({
-          key,
-          value: typeof value === 'string' ? value : JSON.stringify(value),
-        }))
-        const bulkByKey = new Map(bulkProps.map((p) => [p.key, p]))
+    if (!bulkPropsList) {
+      return
+    }
 
-        setProps((curr) => curr.map((p) => bulkByKey.get(p.key) ?? p))
-        setNewProps((curr) => {
-          const taken = new Set([...props, ...curr].map((p) => p.key))
-          return [
-            ...curr.map((p) => bulkByKey.get(p.key) ?? p),
-            ...bulkProps.filter((p) => !taken.has(p.key)),
-          ]
-        })
+    try {
+      const parsed = JSON.parse(bulkPropsList)
+      const bulkProps = Object.entries(parsed).flatMap(([key, value]) => expandBulkProp(key, value))
+      const bulkByKey = new Map<string, Prop[]>()
 
-        setBulkPropsList('')
-        setError(null)
-      } catch (err) {
-        setError(buildError(err))
-      }
+      bulkProps.forEach((prop) => {
+        bulkByKey.set(prop.key, [...(bulkByKey.get(prop.key) ?? []), prop])
+      })
+
+      const arrayKeys = new Set([...bulkByKey.keys()].filter(isArrayKey))
+
+      // replace array props wholesale so imported arrays group like saved ones
+      setProps((curr) => [
+        ...curr
+          .filter((prop) => !arrayKeys.has(prop.key))
+          .map((prop) => bulkByKey.get(prop.key)?.[0] ?? prop),
+        ...[...arrayKeys].flatMap((key) => bulkByKey.get(key) ?? []),
+      ])
+
+      setNewProps((curr) => {
+        const kept = curr
+          .filter((prop) => !arrayKeys.has(prop.key))
+          .map((prop) => bulkByKey.get(prop.key)?.[0] ?? prop)
+        const taken = new Set([...props, ...kept].map((prop) => prop.key))
+
+        return [
+          ...kept,
+          ...bulkProps.filter((prop) => !isArrayKey(prop.key) && !taken.has(prop.key)),
+        ]
+      })
+
+      setBulkPropsList('')
+      setError(null)
+    } catch (err) {
+      setError(buildError(err))
     }
   }
 
@@ -122,9 +214,12 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
     }
   }
 
-  const existingProps = props
-    .filter((prop) => prop.value !== null && !isMetaProp(prop))
-    .sort((a, b) => a.key.localeCompare(b.key))
+  const existingProps: IndexedProp[] = props
+    .map((prop, idx) => ({ prop, idx }))
+    .filter(({ prop }) => prop.value !== null && !isMetaProp(prop))
+    .sort((a, b) => a.prop.key.localeCompare(b.prop.key))
+
+  const propRows = groupPropRows(existingProps)
 
   const metaProps = props
     .filter((prop) => isMetaProp(prop))
@@ -163,33 +258,81 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
         {existingProps.length + newProps.length > 0 && (
           <>
             {metaProps.length > 0 && <SecondaryTitle>Your props</SecondaryTitle>}
-            <Table columns={['Key', 'Value', '']}>
-              <TableBody iterator={existingProps}>
-                {(prop) => (
-                  <>
-                    <TableCell className='min-w-80'>{prop.key}</TableCell>
-                    <TableCell className='min-w-80'>
-                      <TextInput
-                        id={`edit-${prop.key}`}
-                        variant='light'
-                        placeholder='Value'
-                        onChange={(value: string) => editExistingProp(prop.key, value)}
-                        value={prop.value ?? ''}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant='icon'
-                        className='ml-auto rounded-full bg-indigo-900 p-1'
-                        onClick={() => editExistingProp(prop.key, null)}
-                        icon={<IconTrash size={16} />}
-                        extra={{ 'aria-label': `Delete ${prop.key} prop` }}
-                      />
-                    </TableCell>
-                  </>
-                )}
+            <Table columns={['Key', 'Value']}>
+              <TableBody iterator={propRows}>
+                {(row) => {
+                  const isCollapsed = row.isArray && collapsedArrays.has(row.key)
+                  const itemCount = itemCountLabel(row.entries.length)
+
+                  return (
+                    <>
+                      <TableCell className={clsx('min-w-80', { 'align-top': row.isArray })}>
+                        {row.key}
+                      </TableCell>
+
+                      <TableCell className='min-w-80'>
+                        {row.isArray && (
+                          <div className='flex items-center space-x-2 text-white'>
+                            <Button
+                              variant='bare'
+                              className='flex items-center space-x-2'
+                              onClick={() => toggleArray(row.key)}
+                              extra={{
+                                'aria-label': `${isCollapsed ? 'Expand' : 'Collapse'} ${row.key} (${itemCount})`,
+                                'aria-expanded': !isCollapsed,
+                              }}
+                            >
+                              <span>{itemCount}</span>
+
+                              <span className='flex rounded-full bg-indigo-900 p-1'>
+                                <IconChevronUp
+                                  size={16}
+                                  className={clsx({ 'rotate-180': isCollapsed })}
+                                />
+                              </span>
+                            </Button>
+
+                            <Button
+                              variant='icon'
+                              className='rounded-full bg-indigo-900 p-1'
+                              onClick={() => deleteArray(row.entries)}
+                              icon={<IconTrash size={16} />}
+                              extra={{ 'aria-label': `Delete all ${row.key} props` }}
+                            />
+                          </div>
+                        )}
+
+                        {!isCollapsed && (
+                          <div className={clsx('space-y-2', { 'mt-4': row.isArray })}>
+                            {row.entries.map(({ prop, idx: propIdx }) => (
+                              <div key={propIdx} className='flex items-center space-x-2'>
+                                <div className='grow'>
+                                  <TextInput
+                                    id={`edit-${propIdx}`}
+                                    variant='light'
+                                    placeholder='Value'
+                                    onChange={(value: string) => editExistingProp(propIdx, value)}
+                                    value={prop.value ?? ''}
+                                  />
+                                </div>
+
+                                <Button
+                                  variant='icon'
+                                  className='rounded-full bg-indigo-900 p-1'
+                                  onClick={() => editExistingProp(propIdx, null)}
+                                  icon={<IconTrash size={16} />}
+                                  extra={{ 'aria-label': `Delete ${prop.key} prop` }}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </TableCell>
+                    </>
+                  )
+                }}
               </TableBody>
-              <TableBody iterator={newProps} startIdx={existingProps.length}>
+              <TableBody iterator={newProps} startIdx={propRows.length}>
                 {(prop, idx) => (
                   <>
                     <TableCell className='min-w-80'>
@@ -202,22 +345,25 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
                       />
                     </TableCell>
                     <TableCell className='min-w-80'>
-                      <TextInput
-                        id={`edit-value-${idx}`}
-                        variant='light'
-                        placeholder='Value'
-                        onChange={(value: string) => editNewPropValue(idx, value)}
-                        value={prop.value ?? ''}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant='icon'
-                        className='ml-auto rounded-full bg-indigo-900 p-1'
-                        onClick={() => deleteNewProp(idx)}
-                        icon={<IconTrash size={16} />}
-                        extra={{ 'aria-label': `Delete ${prop.key} prop` }}
-                      />
+                      <div className='flex items-center space-x-2'>
+                        <div className='grow'>
+                          <TextInput
+                            id={`edit-value-${idx}`}
+                            variant='light'
+                            placeholder='Value'
+                            onChange={(value: string) => editNewPropValue(idx, value)}
+                            value={prop.value ?? ''}
+                          />
+                        </div>
+
+                        <Button
+                          variant='icon'
+                          className='rounded-full bg-indigo-900 p-1'
+                          onClick={() => deleteNewProp(idx)}
+                          icon={<IconTrash size={16} />}
+                          extra={{ 'aria-label': `Delete ${prop.key} prop` }}
+                        />
+                      </div>
                     </TableCell>
                   </>
                 )}
@@ -240,7 +386,7 @@ export default function PropsEditor({ startingProps, onSave, noPropsMessage }: P
           id='bulk-props'
           variant='light'
           inputType='textarea'
-          placeholder='{"key1": "value1", "key2": "value2"}'
+          placeholder='{"key1": "value1", "weapons[]": ["sword", "axe"]}'
           onChange={(value: string) => setBulkPropsList(value)}
           value={bulkPropsList ?? ''}
         />
