@@ -6,6 +6,7 @@ describe('ForgotPassword', () => {
 
     cy.visitAsGuest()
     cy.findByText('Forgot your password?').click()
+    cy.findByText('Forgot password').should('exist')
     cy.findByLabelText('Email').type('admin@trytalo.com')
     cy.findByText('Confirm').click()
 
