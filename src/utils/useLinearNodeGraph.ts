@@ -6,6 +6,7 @@ import { GameSave } from '../entities/gameSave'
 import { saveDataNodeSizesState } from '../state/saveDataNodeSizesState'
 import {
   NodeDataRow,
+  normaliseContent,
   objectToRows,
   getLayoutedElements,
   getVisibleArrayItems,
@@ -28,6 +29,7 @@ export function useLinearNodeGraph(save: GameSave | null, enabled: boolean, sear
     const nodeSet = new Set<Node>()
     const edgeSet = new Set<Edge>()
     const formatVersion = (content.version as string) ?? ''
+    const normalised = normaliseContent(content)
 
     const addNode = (id: string, rows: NodeDataRow[]) => {
       nodeSet.add({ id, position: { x: 0, y: 0 }, data: { rows, formatVersion } })
@@ -113,8 +115,8 @@ export function useLinearNodeGraph(save: GameSave | null, enabled: boolean, sear
       }
     }
 
-    for (const key in content) {
-      processContent(key, content[key])
+    for (const key in normalised) {
+      processContent(key, normalised[key])
     }
 
     const edgeArray = Array.from(edgeSet)
