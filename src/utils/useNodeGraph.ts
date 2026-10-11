@@ -7,6 +7,7 @@ import { saveDataNodeSizesState } from '../state/saveDataNodeSizesState'
 import {
   NodeDataRow,
   objectToRows,
+  typeOfRow,
   getLayoutedElements,
   getVisibleArrayItems,
 } from './nodeGraphHelpers'
@@ -57,7 +58,7 @@ export function useNodeGraph(save: GameSave | null, enabled: boolean, search: st
             } else {
               // primitive array items
               const itemId = `${nodeId}-${index}`
-              addNode(itemId, [{ item: String(item), type: typeof item }])
+              addNode(itemId, [{ item: String(item), type: typeOfRow(item) }])
               edgeSet.add({ id: `${nodeId}-${index}`, source: nodeId, target: itemId })
             }
           })
