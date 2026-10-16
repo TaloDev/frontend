@@ -42,13 +42,18 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link to='https://trytalo.com/events?utm_source=dashboard&utm_medium=footer'>
-                Event tracking
+              <Link to='https://trytalo.com/game-analytics?utm_source=dashboard&utm_medium=footer'>
+                Game analytics
               </Link>
             </li>
             <li>
               <Link to='https://trytalo.com/leaderboards?utm_source=dashboard&utm_medium=footer'>
                 Leaderboards
+              </Link>
+            </li>
+            <li>
+              <Link to='https://trytalo.com/events?utm_source=dashboard&utm_medium=footer'>
+                Event tracking
               </Link>
             </li>
             <li>
@@ -81,11 +86,6 @@ export default function Footer() {
                 Player relationships
               </Link>
             </li>
-            <li>
-              <Link to='https://trytalo.com/open-source?utm_source=dashboard&utm_medium=footer'>
-                Open source
-              </Link>
-            </li>
           </ul>
         </div>
 
@@ -116,6 +116,11 @@ export default function Footer() {
               <li>
                 <Link to='https://trytalo.com/unity?utm_source=dashboard&utm_medium=footer'>
                   Unity package
+                </Link>
+              </li>
+              <li>
+                <Link to='https://trytalo.com/open-source?utm_source=dashboard&utm_medium=footer'>
+                  Open source
                 </Link>
               </li>
             </ul>
