@@ -7,6 +7,7 @@ import { saveDataNodeSizesState } from '../state/saveDataNodeSizesState'
 import {
   NodeDataRow,
   objectToRows,
+  typeOfRow,
   getLayoutedElements,
   getVisibleArrayItems,
 } from './nodeGraphHelpers'
@@ -69,7 +70,7 @@ export function useLinearNodeGraph(save: GameSave | null, enabled: boolean, sear
               previousItemId = itemId
             } else {
               // primitive array items
-              addNode(itemId, [{ item: String(item), type: typeof item }])
+              addNode(itemId, [{ item: String(item), type: typeOfRow(item) }])
 
               // chain only if this is a data array
               if (isDataArray && previousItemId) {
