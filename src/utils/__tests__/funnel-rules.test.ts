@@ -51,11 +51,14 @@ describe('isFunnelStepValid', () => {
 })
 
 describe('isFunnelStepsValid', () => {
-  it('requires between 2 and 5 distinct steps', () => {
+  it('requires between 2 and 5 steps', () => {
     expect(isFunnelStepsValid([step('a'), step('b')])).toBe(true)
     expect(isFunnelStepsValid([step('a')])).toBe(false)
     expect(isFunnelStepsValid(['a', 'b', 'c', 'd', 'e', 'f'].map((name) => step(name)))).toBe(false)
-    expect(isFunnelStepsValid([step('a'), step('a')])).toBe(false)
+  })
+
+  it('allows the same event in multiple steps', () => {
+    expect(isFunnelStepsValid([step('a'), step('a')])).toBe(true)
   })
 })
 

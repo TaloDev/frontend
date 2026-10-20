@@ -53,11 +53,6 @@ export function isFunnelStepsValid(steps: EventFunnelStep[]) {
     return false
   }
 
-  const names = steps.map((step) => step.name)
-  if (new Set(names).size !== names.length) {
-    return false
-  }
-
   return steps.every(isFunnelStepValid)
 }
 
