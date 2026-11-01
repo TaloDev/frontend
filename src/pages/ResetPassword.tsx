@@ -24,13 +24,11 @@ const validationSchema = z
   .superRefine(({ password, confirmPassword }, ctx) => {
     if (password !== confirmPassword) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: 'These passwords do not match',
         path: ['confirmPassword'],
       })
-      return false
     }
-    return true
   })
 
 type FormValues = z.infer<typeof validationSchema>

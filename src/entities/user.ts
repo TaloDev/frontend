@@ -9,14 +9,14 @@ export enum UserType {
 
 export const userSchema = z.object({
   id: z.number(),
-  email: z.string().email(),
+  email: z.email(),
   username: z.string(),
-  lastSeenAt: z.string().datetime(),
+  lastSeenAt: z.iso.datetime(),
   emailConfirmed: z.boolean(),
   organisation: organisationSchema,
-  type: z.nativeEnum(UserType),
+  type: z.enum(UserType),
   has2fa: z.boolean(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 })
 
 export type User = z.infer<typeof userSchema>

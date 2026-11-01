@@ -28,7 +28,7 @@ const validationSchema = z
   .object({
     organisationName: z.string().optional(),
     username: z.string().min(1, { message: 'Username is required' }),
-    email: z.string().email({ message: 'Please enter a valid email address' }),
+    email: z.email({ message: 'Please enter a valid email address' }),
     password: z.string().min(1, { message: 'Password is required' }),
     termsAccepted: z.boolean().refine((val) => val === true, { message: 'Terms must be accepted' }),
     hasInvite: z.boolean(),
@@ -39,13 +39,11 @@ const validationSchema = z
   .superRefine(({ hasInvite, organisationName }, ctx) => {
     if (!hasInvite && !organisationName?.trim()) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: 'custom',
         message: 'Team or studio name is required',
         path: ['organisationName'],
       })
-      return false
     }
-    return true
   })
 
 type FormValues = z.infer<typeof validationSchema>

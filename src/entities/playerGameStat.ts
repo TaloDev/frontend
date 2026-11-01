@@ -5,8 +5,8 @@ export const playerGameStatSchema = z.object({
   id: z.number(),
   stat: gameStatSchema,
   value: z.number(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 })
 
 export type PlayerGameStat = z.infer<typeof playerGameStatSchema>

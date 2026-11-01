@@ -10,7 +10,7 @@ export default function useDataExportEntities(activeGame: Game) {
     const res = await makeValidatedGetRequest(
       url,
       z.object({
-        entities: z.array(z.nativeEnum(DataExportAvailableEntities)),
+        entities: z.array(z.enum(DataExportAvailableEntities)),
       }),
     )
 

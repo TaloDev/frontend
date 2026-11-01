@@ -15,10 +15,10 @@ import { UserType } from '../entities/user'
 import buildError from '../utils/buildError'
 
 const validationSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email address' }),
+  email: z.email({ message: 'Please enter a valid email address' }),
   userType: z.object({
     label: z.string(),
-    value: z.nativeEnum(UserType),
+    value: z.enum(UserType),
     desc: z.string(),
   }),
 })

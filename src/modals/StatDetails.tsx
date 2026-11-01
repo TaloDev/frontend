@@ -20,6 +20,7 @@ import { userState, AuthedUser } from '../state/userState'
 import buildError from '../utils/buildError'
 import canPerformAction, { PermissionBasedAction } from '../utils/canPerformAction'
 import nullableNumber from '../utils/validation/nullableNumber'
+import requiredNumber from '../utils/validation/requiredNumber'
 
 type StatDetailsProps = {
   modalState: [boolean, (open: boolean) => void]
@@ -33,73 +34,52 @@ const validationSchema = z
   .object({
     internalName: z.string().min(1, { message: 'Internal name is required' }),
     name: z.string().min(1, { message: 'Display name is required' }),
-    minTimeBetweenUpdates: z
-      .number({
-        required_error: 'Time between updates is required',
-        invalid_type_error: 'Time between updates must be a number',
-      })
-      .min(0, 'Time between updates must be greater than or equal to 0'),
+    minTimeBetweenUpdates: requiredNumber(
+      'Time between updates is required',
+      'Time between updates must be a number',
+    ).min(0, 'Time between updates must be greater than or equal to 0'),
     minValue: z
       .number({
-        invalid_type_error: 'Min value must be a number',
+        error: 'Min value must be a number',
       })
       .nullable(),
-    defaultValue: z.number({
-      required_error: 'Default value is required',
-      invalid_type_error: 'Default value must be a number',
-    }),
+    defaultValue: requiredNumber('Default value is required', 'Default value must be a number'),
     maxValue: z
       .number({
-        invalid_type_error: 'Max value must be a number',
+        error: 'Max value must be a number',
       })
       .nullable(),
     maxChange: z
       .number({
-        invalid_type_error: 'Max change must be a number',
+        error: 'Max change must be a number',
       })
       .gte(1, 'Max change must be greater than or equal to 1')
       .nullable(),
   })
   .superRefine(({ minValue, maxValue, defaultValue }, ctx) => {
-    let valid = true
-
     if (minValue !== null && maxValue !== null && maxValue <= minValue) {
       ctx.addIssue({
-        code: z.ZodIssueCode.too_small,
-        minimum: minValue + 1,
-        type: 'number',
-        inclusive: false,
+        code: 'custom',
         message: 'Max value must be more than the min value',
         path: ['maxValue'],
       })
-      valid = false
     }
 
     if (minValue !== null && defaultValue < minValue) {
       ctx.addIssue({
-        code: z.ZodIssueCode.too_small,
-        minimum: minValue,
-        type: 'number',
-        inclusive: false,
+        code: 'custom',
         message: 'Default value must be more than the min value',
         path: ['defaultValue'],
       })
-      valid = false
     }
 
     if (maxValue !== null && defaultValue > maxValue) {
       ctx.addIssue({
-        code: z.ZodIssueCode.too_big,
-        maximum: maxValue,
-        type: 'number',
-        inclusive: false,
+        code: 'custom',
         message: 'Default value must be less than the max value',
         path: ['defaultValue'],
       })
-      valid = false
     }
-
-    return valid
   })
 
 type FormValues = z.infer<typeof validationSchema>

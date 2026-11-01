@@ -7,8 +7,8 @@ import makeValidatedGetRequest from './makeValidatedGetRequest'
 
 export const statsActivityChartSchema = z.object({
   date: z.number(),
-  stats: z.record(z.number()),
-  change: z.record(z.number()),
+  stats: z.record(z.string(), z.number()),
+  change: z.record(z.string(), z.number()),
 })
 
 export function useStatsActivityChart(activeGame: Game, startDate: string, endDate: string) {

@@ -7,7 +7,7 @@ const createCheckoutSession = makeValidatedRequest(
   (pricingPlanId: number, pricingInterval: string) =>
     api.post('/billing/checkout-session', { pricingPlanId, pricingInterval }),
   z.object({
-    redirect: z.string().url().optional(),
+    redirect: z.url().optional(),
     invoice: invoiceSchema.optional(),
   }),
 )
