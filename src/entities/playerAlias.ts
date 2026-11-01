@@ -17,9 +17,9 @@ export const playerAliasSchema = z.object({
   identifier: z.string(),
   displayName: z.string(),
   player: z.lazy(() => basePlayerSchema),
-  lastSeenAt: z.string().datetime(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  lastSeenAt: z.iso.datetime(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 })
 
 export type PlayerAlias = z.infer<typeof playerAliasSchema>

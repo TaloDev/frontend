@@ -100,12 +100,12 @@ export default function GameSettings() {
       setSubmitError(null)
 
       if (settings.website) {
-        const websiteSchema = z.string().url('Website must be a valid URL').nullable()
+        const websiteSchema = z.url('Website must be a valid URL').nullable()
         await websiteSchema.parseAsync(settings.website)
       }
 
       if (settings.logoUrl) {
-        const logoUrlSchema = z.string().url('Logo must be a valid URL').nullable()
+        const logoUrlSchema = z.url('Logo must be a valid URL').nullable()
         await logoUrlSchema.parseAsync(settings.logoUrl)
       }
 

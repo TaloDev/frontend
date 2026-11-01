@@ -20,11 +20,11 @@ export enum DataExportAvailableEntities {
 
 export const dataExportSchema = z.object({
   id: z.number(),
-  entities: z.array(z.nativeEnum(DataExportAvailableEntities)),
+  entities: z.array(z.enum(DataExportAvailableEntities)),
   createdBy: z.string(),
-  status: z.nativeEnum(DataExportStatus),
-  createdAt: z.string().datetime(),
-  failedAt: z.string().datetime().nullish(),
+  status: z.enum(DataExportStatus),
+  createdAt: z.iso.datetime(),
+  failedAt: z.iso.datetime().nullish(),
 })
 
 export type DataExport = z.infer<typeof dataExportSchema>

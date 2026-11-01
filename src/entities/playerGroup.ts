@@ -30,8 +30,8 @@ export enum PlayerField {
 
 export const availablePlayerGroupFieldSchema = z.object({
   fieldDisplayName: z.string(),
-  defaultCastType: z.nativeEnum(PlayerGroupRuleCastType),
-  mapsTo: z.union([z.nativeEnum(PlayerField), z.string().startsWith('META_')]),
+  defaultCastType: z.enum(PlayerGroupRuleCastType),
+  mapsTo: z.union([z.enum(PlayerField), z.string().startsWith('META_')]),
   namespaced: z.boolean(),
   metaProp: z.string().optional(), // client-side only
 })
@@ -39,10 +39,10 @@ export const availablePlayerGroupFieldSchema = z.object({
 export type AvailablePlayerGroupField = z.infer<typeof availablePlayerGroupFieldSchema>
 
 export const playerGroupRuleSchema = z.object({
-  name: z.nativeEnum(PlayerGroupRuleName),
+  name: z.enum(PlayerGroupRuleName),
   negate: z.boolean(),
   field: z.string(),
-  castType: z.nativeEnum(PlayerGroupRuleCastType),
+  castType: z.enum(PlayerGroupRuleCastType),
   operands: z.array(z.string()),
   namespaced: z.boolean(),
 })
@@ -54,17 +54,17 @@ export const playerGroupSchema = z.object({
   name: z.string(),
   description: z.string(),
   rules: z.array(playerGroupRuleSchema),
-  ruleMode: z.nativeEnum(PlayerGroupRuleMode),
+  ruleMode: z.enum(PlayerGroupRuleMode),
   count: z.number(),
   membersVisible: z.boolean(),
-  updatedAt: z.string().datetime(),
+  updatedAt: z.iso.datetime(),
 })
 
 export type PlayerGroup = z.infer<typeof playerGroupSchema>
 
 export const playerGroupRuleOptionSchema = z.object({
-  name: z.nativeEnum(PlayerGroupRuleName),
-  castTypes: z.array(z.nativeEnum(PlayerGroupRuleCastType)),
+  name: z.enum(PlayerGroupRuleName),
+  castTypes: z.array(z.enum(PlayerGroupRuleCastType)),
   operandCount: z.number(),
   negate: z.boolean(),
   negatable: z.boolean().optional(),

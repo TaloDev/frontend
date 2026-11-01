@@ -30,8 +30,8 @@ export type GameCenterIntegrationConfig = z.infer<typeof gameCenterIntegrationCo
 
 const baseIntegrationSchema = z.object({
   id: z.number(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 })
 
 export const integrationSchema = z.discriminatedUnion('type', [

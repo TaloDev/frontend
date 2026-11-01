@@ -29,8 +29,8 @@ export const gameStatSchema = z.object({
   minValue: z.number().nullable(),
   maxValue: z.number().nullable(),
   minTimeBetweenUpdates: z.number(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 })
 
 export type GameStat = z.infer<typeof gameStatSchema>

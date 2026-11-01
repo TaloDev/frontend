@@ -28,7 +28,7 @@ export const eventFunnelPropRuleSchema = z.object({
 export type EventFunnelPropRule = z.infer<typeof eventFunnelPropRuleSchema>
 
 export const eventFunnelStepPropsSchema = z.object({
-  ruleMode: z.nativeEnum(EventFunnelRuleMode),
+  ruleMode: z.enum(EventFunnelRuleMode),
   rules: z.array(eventFunnelPropRuleSchema),
 })
 
@@ -46,7 +46,7 @@ export const eventFunnelSchema = z.object({
   name: z.string(),
   steps: z.array(eventFunnelStepSchema),
   maxGap: z.number(),
-  updatedAt: z.string().datetime(),
+  updatedAt: z.iso.datetime(),
 })
 
 export type EventFunnel = z.infer<typeof eventFunnelSchema>

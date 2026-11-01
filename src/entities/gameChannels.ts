@@ -12,8 +12,8 @@ export const gameChannelSchema = z.object({
   autoCleanup: z.boolean(),
   private: z.boolean(),
   temporaryMembership: z.boolean(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 })
 
 export type GameChannel = z.infer<typeof gameChannelSchema>

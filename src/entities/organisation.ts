@@ -16,7 +16,7 @@ export const statusSchema = z.enum([
 export const organisationPricingPlanSchema = z.object({
   pricingPlan: pricingPlanSchema,
   status: statusSchema,
-  endDate: z.string().datetime().nullable(),
+  endDate: z.iso.datetime().nullable(),
   canViewBillingPortal: z.boolean(),
 })
 

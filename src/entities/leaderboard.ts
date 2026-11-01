@@ -17,12 +17,12 @@ export const leaderboardSchema = z.object({
   id: z.number(),
   internalName: z.string(),
   name: z.string(),
-  sortMode: z.nativeEnum(LeaderboardSortMode),
+  sortMode: z.enum(LeaderboardSortMode),
   unique: z.boolean(),
   uniqueByProps: z.boolean(),
-  refreshInterval: z.nativeEnum(LeaderboardRefreshInterval),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  refreshInterval: z.enum(LeaderboardRefreshInterval),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 })
 
 export type Leaderboard = z.infer<typeof leaderboardSchema>
