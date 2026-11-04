@@ -14,6 +14,7 @@ import { APIKeyDetails, type EditableKey } from '../APIKeyDetails'
 
 const gameKey: APIKey = {
   id: 1,
+  name: 'Game server',
   scopes: ['read:leaderboards', 'read:players', 'write:players'],
   gameId: 1,
   createdBy: 'admin',
@@ -23,6 +24,7 @@ const gameKey: APIKey = {
 
 const adminApiKey: AdminApiKey = {
   id: 7,
+  name: 'Admin server',
   scopes: ['read:stats'],
   gameId: 1,
   createdBy: 'admin',
@@ -111,6 +113,7 @@ describe('<APIKeyDetails />', () => {
   it('should prefill details for an api key', () => {
     renderModal({ editingKey: { type: 'game', key: gameKey } })
 
+    expect(screen.getByLabelText('Name')).toHaveValue('Game server')
     expect(screen.getAllByRole('checkbox', { hidden: true })).toHaveLength(6)
 
     expect(screen.getByDisplayValue('read:leaderboards')).toBeChecked()
@@ -273,6 +276,7 @@ describe('<APIKeyDetails />', () => {
 
     renderModal({ mutateGame, mutateAdmin })
 
+    await userEvent.type(screen.getByLabelText('Name'), 'New key')
     await userEvent.click(screen.getByDisplayValue('read:leaderboards'))
     await userEvent.click(screen.getByText('Create'))
 
@@ -280,6 +284,10 @@ describe('<APIKeyDetails />', () => {
       expect(screen.getByText('jwt-token-here')).toBeInTheDocument()
     })
 
+    expect(JSON.parse(axiosMock.history.post[0].data)).toEqual({
+      name: 'New key',
+      scopes: ['read:leaderboards'],
+    })
     expect(mutateGame).toHaveBeenCalled()
     expect(mutateAdmin).not.toHaveBeenCalled()
   })
@@ -296,6 +304,7 @@ describe('<APIKeyDetails />', () => {
     renderModal({ mutateGame, mutateAdmin })
 
     await userEvent.click(screen.getByLabelText('Admin API key'))
+    await userEvent.type(screen.getByLabelText('Name'), 'New key')
     await userEvent.click(screen.getByDisplayValue('read:stats'))
     await userEvent.click(screen.getByText('Create'))
 
@@ -318,6 +327,64 @@ describe('<APIKeyDetails />', () => {
     expect(screen.getByDisplayValue('write:leaderboards')).toBeChecked()
     expect(screen.getByDisplayValue('read:players')).toBeChecked()
     expect(screen.getByDisplayValue('write:players')).toBeChecked()
+  })
+
+  it('should block creating a key without a name', async () => {
+    renderModal({})
+
+    await userEvent.click(screen.getByDisplayValue('read:leaderboards'))
+    expect(screen.getByText('Create')).toBeDisabled()
+
+    await userEvent.type(screen.getByLabelText('Name'), '   ')
+    expect(screen.getByText('Create')).toBeDisabled()
+
+    await userEvent.type(screen.getByLabelText('Name'), 'Game server')
+    expect(screen.getByText('Create')).not.toBeDisabled()
+  })
+
+  it('should block updating a key when the name is cleared', async () => {
+    renderModal({ editingKey: { type: 'game', key: gameKey } })
+
+    await userEvent.clear(screen.getByLabelText('Name'))
+
+    expect(screen.getByText('Update')).toBeDisabled()
+  })
+
+  it('should revoke a key from the danger zone', async () => {
+    const closeMock = vi.fn()
+    const mutateGame = vi.fn()
+
+    axiosMock.onDelete('http://talo.api/games/1/api-keys/1').replyOnce(204)
+    vi.spyOn(window, 'confirm').mockReturnValueOnce(true)
+
+    render(
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: { type: UserType.ADMIN, emailConfirmed: true } },
+          { node: activeGameState, initialValue: activeGameValue },
+        ]}
+      >
+        <ToastProvider>
+          <APIKeyDetails
+            modalState={[true, closeMock]}
+            editingKey={{ type: 'game', key: gameKey }}
+            gameScopes={gameScopes}
+            adminApiKeyScopes={adminApiKeyScopes}
+            mutateGame={mutateGame}
+            mutateAdmin={vi.fn()}
+          />
+        </ToastProvider>
+      </KitchenSink>,
+    )
+
+    await userEvent.click(screen.getByText('Revoke'))
+
+    await waitFor(() => {
+      expect(closeMock).toHaveBeenCalledWith(false)
+    })
+
+    expect(axiosMock.history.delete[0].url).toBe('/games/1/api-keys/1')
+    expect(mutateGame).toHaveBeenCalled()
   })
 
   it('should handle updating errors', async () => {

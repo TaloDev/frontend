@@ -67,6 +67,7 @@ describe('<APIKeys />', () => {
       apiKeys: [
         {
           id: 1,
+          name: 'Game server',
           scopes: ['read:players'],
           gameId: 1,
           createdBy: 'me',
@@ -82,6 +83,7 @@ describe('<APIKeys />', () => {
       apiKeys: [
         {
           id: 7,
+          name: 'Admin server',
           scopes: ['read:stats'],
           gameId: 1,
           createdBy: 'me',
@@ -108,6 +110,7 @@ describe('<APIKeys />', () => {
       apiKeys: [
         {
           id: 7,
+          name: 'Admin server',
           scopes: ['read:stats'],
           gameId: 1,
           createdBy: 'me',
@@ -128,6 +131,39 @@ describe('<APIKeys />', () => {
     expect(screen.queryByText("Shattered doesn't have any API keys yet")).not.toBeInTheDocument()
   })
 
+  it('renders key names and a dash for keys without one', async () => {
+    axiosMock.onGet('http://talo.api/games/1/api-keys').replyOnce(200, {
+      apiKeys: [
+        {
+          id: 1,
+          name: 'Game server',
+          scopes: ['read:players'],
+          gameId: 1,
+          createdBy: 'me',
+          createdAt: '2021-01-01T00:00:00Z',
+          lastUsedAt: null,
+        },
+        {
+          id: 2,
+          name: '',
+          scopes: ['read:players'],
+          gameId: 1,
+          createdBy: 'me',
+          createdAt: '2021-01-01T00:00:00Z',
+          lastUsedAt: null,
+        },
+      ],
+    })
+    axiosMock.onGet('http://talo.api/games/1/api-keys/scopes').replyOnce(200, { scopes: {} })
+    axiosMock.onGet('http://talo.api/games/1/admin-api-keys').replyOnce(200, { apiKeys: [] })
+    axiosMock.onGet('http://talo.api/games/1/admin-api-keys/scopes').replyOnce(200, { scopes: {} })
+
+    renderPage({ type: UserType.ADMIN })
+
+    expect(await screen.findByText('Game server')).toBeInTheDocument()
+    expect(await screen.findByText('—')).toBeInTheDocument()
+  })
+
   it('opens the modal in admin mode when modifying an admin API key', async () => {
     axiosMock.onGet('http://talo.api/games/1/api-keys').replyOnce(200, { apiKeys: [] })
     axiosMock.onGet('http://talo.api/games/1/api-keys/scopes').replyOnce(200, { scopes: {} })
@@ -135,6 +171,7 @@ describe('<APIKeys />', () => {
       apiKeys: [
         {
           id: 7,
+          name: 'Admin server',
           scopes: ['read:stats'],
           gameId: 1,
           createdBy: 'me',
@@ -150,7 +187,7 @@ describe('<APIKeys />', () => {
 
     renderPage({ type: UserType.ADMIN })
 
-    const modifyButtons = await screen.findAllByText('Modify scopes')
+    const modifyButtons = await screen.findAllByText('Modify')
     await userEvent.click(modifyButtons[0])
 
     expect(await screen.findByText('Update admin API key')).toBeInTheDocument()
@@ -163,6 +200,7 @@ describe('<APIKeys />', () => {
       apiKeys: [
         {
           id: 7,
+          name: 'Admin server',
           scopes: ['read:stats'],
           gameId: 1,
           createdBy: 'me',
@@ -181,8 +219,11 @@ describe('<APIKeys />', () => {
 
     renderPage({ type: UserType.ADMIN })
 
-    const revokeButtons = await screen.findAllByText('Revoke')
-    await userEvent.click(revokeButtons[0])
+    expect(await screen.findByText('Modify')).toBeInTheDocument()
+    expect(screen.queryByText('Revoke')).not.toBeInTheDocument()
+
+    await userEvent.click(screen.getByText('Modify'))
+    await userEvent.click(await screen.findByText('Revoke'))
 
     await waitFor(() => {
       expect(axiosMock.history.delete.length).toBe(1)

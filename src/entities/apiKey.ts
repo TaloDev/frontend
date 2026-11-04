@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 export const apiKeySchema = z.object({
   id: z.number(),
+  name: z.string(),
   keyEnding: z.string().optional(),
   scopes: z.array(z.string()),
   gameId: z.number(),

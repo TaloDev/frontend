@@ -1,9 +1,11 @@
-import { IconCopy } from '@tabler/icons-react'
+import { IconCopy, IconTrash } from '@tabler/icons-react'
 import { useAtomValue } from 'jotai'
 import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import { KeyedMutator } from 'swr'
 import { createAdminApiKey } from '../api/createAdminApiKey'
 import { createAPIKey } from '../api/createAPIKey'
+import { deleteAdminApiKey } from '../api/deleteAdminApiKey'
+import { deleteAPIKey } from '../api/deleteAPIKey'
 import { updateAdminApiKey } from '../api/updateAdminApiKey'
 import { updateAPIKey } from '../api/updateAPIKey'
 import AlertBanner from '../components/AlertBanner'
@@ -11,6 +13,7 @@ import Button from '../components/Button'
 import ErrorMessage, { TaloError } from '../components/ErrorMessage'
 import Modal from '../components/Modal'
 import RadioGroup from '../components/RadioGroup'
+import TextInput from '../components/TextInput'
 import ToastContext, { ToastType } from '../components/toast/ToastContext'
 import { AdminApiKey } from '../entities/adminApiKey'
 import { APIKey } from '../entities/apiKey'
@@ -31,6 +34,8 @@ export type EditableKey =
   | null
 
 type KeyType = 'game' | 'admin'
+
+const MAX_NAME_LENGTH = 255
 
 type KeysMutator<T extends APIKey | AdminApiKey> = KeyedMutator<{
   apiKeys: T[]
@@ -64,16 +69,28 @@ export function APIKeyDetails({
   const initialType: KeyType = editingKey?.type ?? 'game'
   const [activeType, setActiveType] = useState<KeyType>(initialType)
 
-  useEffect(() => {
-    setActiveType(editingKey?.type ?? 'game')
-  }, [editingKey])
+  const isEdit = editingKey !== null
+  const isAdmin = activeType === 'admin'
 
   const activeScopes = activeType === 'game' ? gameScopes : adminApiKeyScopes
 
   const [selectedScopes, setSelectedScopes] = useState(editingKey ? editingKey.key.scopes : [])
+
+  const [name, setName] = useState(editingKey ? editingKey.key.name : '')
+  const trimmedName = name.trim()
+
+  // allow renames of empty names
+  const isRename = trimmedName !== (editingKey ? editingKey.key.name : '')
+  const nameBlocked = trimmedName.length === 0 && (isRename || !isEdit)
+
   const [isLoading, setLoading] = useState(false)
+  const [isDeleting, setDeleting] = useState(false)
   const [error, setError] = useState<TaloError | null>(null)
   const [createdToken, setCreatedToken] = useState<string | null>(null)
+
+  useEffect(() => {
+    setActiveType(editingKey?.type ?? 'game')
+  }, [editingKey])
 
   const expandWildcard = (scopes: string[]) => {
     return scopes.includes('*') ? Object.values(activeScopes).flat() : scopes
@@ -114,7 +131,7 @@ export function APIKeyDetails({
 
     try {
       if (activeType === 'game') {
-        const { token, apiKey } = await createAPIKey(activeGame.id, selectedScopes)
+        const { token, apiKey } = await createAPIKey(activeGame.id, trimmedName, selectedScopes)
         setCreatedToken(token)
         await mutateGame((data) => {
           if (!data) {
@@ -126,7 +143,7 @@ export function APIKeyDetails({
           }
         })
       } else {
-        const { key, apiKey } = await createAdminApiKey(activeGame.id, selectedScopes)
+        const { key, apiKey } = await createAdminApiKey(activeGame.id, trimmedName, selectedScopes)
         setCreatedToken(key)
         await mutateAdmin((data) => {
           if (!data) {
@@ -156,6 +173,7 @@ export function APIKeyDetails({
     try {
       if (editingKey.type === 'game') {
         const { apiKey } = await updateAPIKey(activeGame.id, editingKey.key.id, {
+          ...(isRename ? { name: trimmedName } : {}),
           scopes: selectedScopes,
         })
 
@@ -168,9 +186,10 @@ export function APIKeyDetails({
             apiKeys: data.apiKeys.map((k) => (k.id === editingKey.key.id ? apiKey : k)),
           }
         })
-        toast.trigger('API key scopes updated', ToastType.SUCCESS)
+        toast.trigger('API key updated', ToastType.SUCCESS)
       } else {
         const { apiKey } = await updateAdminApiKey(activeGame.id, editingKey.key.id, {
+          ...(isRename ? { name: trimmedName } : {}),
           scopes: selectedScopes,
         })
 
@@ -183,7 +202,7 @@ export function APIKeyDetails({
             apiKeys: data.apiKeys.map((k) => (k.id === editingKey.key.id ? apiKey : k)),
           }
         })
-        toast.trigger('Admin API key scopes updated', ToastType.SUCCESS)
+        toast.trigger('Admin API key updated', ToastType.SUCCESS)
       }
       setOpen(false)
     } catch (err) {
@@ -193,8 +212,54 @@ export function APIKeyDetails({
     }
   }
 
-  const isEdit = editingKey !== null
-  const isAdmin = activeType === 'admin'
+  const onRevokeClick = async () => {
+    if (!editingKey) {
+      return
+    }
+
+    if (
+      !window.confirm(
+        `Are you sure you want to permanently revoke this ${isAdmin ? 'admin ' : ''}API key? This action is irreversible.`,
+      )
+    ) {
+      return
+    }
+
+    setDeleting(true)
+    setError(null)
+
+    try {
+      if (editingKey.type === 'game') {
+        await deleteAPIKey(activeGame.id, editingKey.key.id)
+        await mutateGame((data) => {
+          if (!data) {
+            throw new Error('API key data is not set')
+          }
+          return {
+            ...data,
+            apiKeys: data.apiKeys.filter((k) => k.id !== editingKey.key.id),
+          }
+        })
+      } else {
+        await deleteAdminApiKey(activeGame.id, editingKey.key.id)
+        await mutateAdmin((data) => {
+          if (!data) {
+            throw new Error('Admin API key data is not set')
+          }
+          return {
+            ...data,
+            apiKeys: data.apiKeys.filter((k) => k.id !== editingKey.key.id),
+          }
+        })
+      }
+
+      toast.trigger(isAdmin ? 'Admin API key revoked' : 'API key revoked')
+      setOpen(false)
+    } catch (err) {
+      setError(buildError(err))
+      setDeleting(false)
+    }
+  }
 
   const title = isEdit ? (isAdmin ? 'Update admin API key' : 'Update API key') : 'Create API key'
 
@@ -232,7 +297,12 @@ export function APIKeyDetails({
             <>
               <div className='w-full md:w-32'>
                 <Button
-                  disabled={!user.emailConfirmed || (!isEdit && selectedScopes.length === 0)}
+                  disabled={
+                    !user.emailConfirmed ||
+                    nameBlocked ||
+                    isDeleting ||
+                    (!isEdit && selectedScopes.length === 0)
+                  }
                   isLoading={isLoading}
                   onClick={isEdit ? onUpdateClick : onCreateClick}
                 >
@@ -306,6 +376,16 @@ export function APIKeyDetails({
               </>
             )}
 
+            <TextInput
+              id='key-name'
+              variant='modal'
+              label='Name'
+              placeholder='What this key is used for'
+              onChange={setName}
+              value={name}
+              inputExtra={{ maxLength: MAX_NAME_LENGTH }}
+            />
+
             <div className='mb-2!'>
               <h3 className='font-semibold'>Scopes</h3>
               <p className='text-sm'>Scopes control what your API key can do</p>
@@ -375,6 +455,30 @@ export function APIKeyDetails({
                 Deselect all scopes
               </Button>
             </div>
+
+            {isEdit && (
+              <div className='space-y-2 rounded border border-red-400 bg-red-50 p-4'>
+                <p className='font-semibold'>Danger zone</p>
+
+                <div className='space-y-2'>
+                  <p>Once taken, these actions are irreversible.</p>
+                  <div className='flex space-x-2'>
+                    <Button
+                      type='button'
+                      isLoading={isDeleting}
+                      disabled={!user.emailConfirmed}
+                      onClick={onRevokeClick}
+                      variant='red'
+                      className='w-auto!'
+                      icon={<IconTrash />}
+                    >
+                      <span>Revoke</span>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {error && <ErrorMessage error={error} />}
           </div>
         )}

@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 export const adminApiKeySchema = z.object({
   id: z.number(),
+  name: z.string(),
   scopes: z.array(z.string()),
   gameId: z.number(),
   createdBy: z.string(),
