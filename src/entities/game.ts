@@ -6,6 +6,7 @@ export const gameSchema = z.object({
   name: z.string(),
   props: z.array(propSchema),
   playerCount: z.number().optional(),
+  switcherHidden: z.boolean(),
   createdAt: z.iso.datetime(),
 })
 

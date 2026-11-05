@@ -9,6 +9,7 @@ export default function gameMock(
     name: activeGameValue.name,
     props: [],
     playerCount: 0,
+    switcherHidden: false,
     createdAt: new Date().toISOString(),
     ...extra,
   }

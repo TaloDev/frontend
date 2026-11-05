@@ -103,4 +103,86 @@ describe('<Organisation />', () => {
       await screen.findByText('Invites can only be resent once every 60 seconds'),
     ).toBeInTheDocument()
   })
+
+  const crawle = {
+    id: 1,
+    name: 'Crawle',
+    props: [],
+    switcherHidden: false,
+    createdAt: '2021-01-01T00:00:00Z',
+  }
+  const scrunk = {
+    id: 2,
+    name: 'Scrunk',
+    props: [],
+    switcherHidden: false,
+    createdAt: '2021-01-01T00:00:00Z',
+  }
+
+  const renderGamesPage = (userOverrides: Partial<User>, games: object[]) => {
+    axiosMock.onGet('http://talo.api/organisations/current').replyOnce(200, {
+      games,
+      members: [],
+      pendingInvites: [],
+    })
+
+    return render(
+      <KitchenSink states={[{ node: userState, initialValue: { ...baseUser, ...userOverrides } }]}>
+        <ToastProvider>
+          <Organisation />
+        </ToastProvider>
+      </KitchenSink>,
+    )
+  }
+
+  // the table shows the names as spans, so the DOM order of those spans is the row order
+  const gameNames = () => {
+    return screen.getAllByText(/^(Crawle|Scrunk)$/).map((el) => el.textContent)
+  }
+
+  it('reorders games as an owner', async () => {
+    renderGamesPage({ type: UserType.OWNER }, [crawle, scrunk])
+
+    await screen.findByText('Crawle')
+    axiosMock.onPut('http://talo.api/organisations/games/order').replyOnce(200, {
+      games: [scrunk, crawle],
+    })
+
+    expect(gameNames()).toStrictEqual(['Crawle', 'Scrunk'])
+
+    await userEvent.click(screen.getByLabelText('Move Scrunk up'))
+
+    await waitFor(() => {
+      expect(axiosMock.history.put.length).toBe(1)
+    })
+    expect(axiosMock.history.put[0].url).toBe('/organisations/games/order')
+    expect(JSON.parse(axiosMock.history.put[0].data)).toStrictEqual({ gameIds: [2, 1] })
+    expect(gameNames()).toStrictEqual(['Scrunk', 'Crawle'])
+  })
+
+  it('hides a game from the switcher as an owner', async () => {
+    renderGamesPage({ type: UserType.OWNER }, [crawle, scrunk])
+
+    await screen.findByText('Crawle')
+    axiosMock.onPatch('http://talo.api/games/1').replyOnce(200, {
+      game: { ...crawle, switcherHidden: true },
+    })
+
+    await userEvent.click(screen.getByLabelText('Hide Crawle from the game switcher'))
+
+    await waitFor(() => {
+      expect(axiosMock.history.patch.length).toBe(1)
+    })
+    expect(JSON.parse(axiosMock.history.patch[0].data)).toStrictEqual({ switcherHidden: true })
+    expect(await screen.findByLabelText('Show Crawle in the game switcher')).toBeInTheDocument()
+  })
+
+  it('hides the game controls from non-owners', async () => {
+    renderGamesPage({ type: UserType.ADMIN }, [crawle, scrunk])
+
+    await screen.findByText('Crawle')
+
+    expect(screen.queryByLabelText('Move Scrunk up')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Hide Crawle from the game switcher')).not.toBeInTheDocument()
+  })
 })
