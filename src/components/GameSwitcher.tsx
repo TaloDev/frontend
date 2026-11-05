@@ -38,6 +38,9 @@ export default function GameSwitcher() {
     return null
   }
 
+  // a hidden active game stays in the list so it can always be switched back to
+  const visibleGames = games.filter((game) => !game.switcherHidden || game.id === activeGame.id)
+
   return (
     <div className='relative z-50'>
       <Tippy
@@ -54,7 +57,7 @@ export default function GameSwitcher() {
             transition={{ duration: 0.2 }}
             className='w-60 divide-y divide-gray-300 rounded-b bg-white text-black shadow md:w-80'
           >
-            {games.map((game) => {
+            {visibleGames.map((game) => {
               const disabled = activeGame.id === game.id
 
               return (

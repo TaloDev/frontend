@@ -1,7 +1,19 @@
-import { IconCheck, IconPencil, IconPlus, IconSend, IconX } from '@tabler/icons-react'
+import {
+  IconArrowDown,
+  IconArrowUp,
+  IconCheck,
+  IconEye,
+  IconEyeOff,
+  IconPencil,
+  IconPlus,
+  IconSend,
+  IconX,
+} from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import type { Game } from '../entities/game'
+import reorderGames from '../api/reorderGames'
 import resendInvite from '../api/resendInvite'
 import updateGame from '../api/updateGame'
 import useOrganisation from '../api/useOrganisation'
@@ -49,6 +61,8 @@ function Organisation() {
     (canPerformAction(user, PermissionBasedAction.CHANGE_ORGANISATION_MEMBER_TYPE) ||
       canPerformAction(user, PermissionBasedAction.REMOVE_ORGANISATION_MEMBER)) &&
     user.emailConfirmed
+
+  const canManageGames = user.type === UserType.OWNER
 
   useEffect(() => {
     if (!showManageModal && !showRemoveModal) {
@@ -149,6 +163,52 @@ function Organisation() {
     [onUpdateGameName],
   )
 
+  // the game switcher in the sidebar reads from userState, the table reads from SWR
+  const syncGames = useCallback(
+    async (games: Game[]) => {
+      await mutate((data) => ({ ...data!, games }), false)
+      setUser({ ...user, organisation: { ...user.organisation, games } })
+    },
+    [mutate, setUser, user],
+  )
+
+  const onMoveGame = useCallback(
+    async (idx: number, offset: number) => {
+      const reordered = [...games]
+      const [moved] = reordered.splice(idx, 1)
+      reordered.splice(idx + offset, 0, moved)
+
+      try {
+        await reorderGames(reordered.map((game) => game.id))
+        await syncGames(reordered)
+      } catch (err) {
+        toast.trigger(buildError(err).message, ToastType.ERROR)
+      }
+    },
+    [games, syncGames, toast],
+  )
+
+  const onToggleGameHidden = useCallback(
+    async (game: Game) => {
+      try {
+        const { game: updatedGame } = await updateGame(game.id, {
+          switcherHidden: !game.switcherHidden,
+        })
+        await syncGames(
+          games.map((existing) => {
+            if (existing.id !== updatedGame.id) {
+              return existing
+            }
+            return { ...existing, switcherHidden: updatedGame.switcherHidden }
+          }),
+        )
+      } catch (err) {
+        toast.trigger(buildError(err).message, ToastType.ERROR)
+      }
+    },
+    [games, syncGames, toast],
+  )
+
   const tableColumns = useMemo(() => {
     let columns = ['Username', 'Type', 'Joined', 'Last seen']
     if (canManageMember) {
@@ -172,9 +232,18 @@ function Organisation() {
 
               {editingGameNameError && <ErrorMessage error={editingGameNameError} />}
 
-              <Table columns={['Game', 'Player count', 'Created at']}>
-                <TableBody iterator={games}>
-                  {(game) => (
+              <Table
+                columns={
+                  canManageGames
+                    ? ['Game', 'Player count', 'Created at', '']
+                    : ['Game', 'Player count', 'Created at']
+                }
+              >
+                <TableBody
+                  iterator={games}
+                  rowKey={(game) => game.id}
+                >
+                  {(game, idx) => (
                     <>
                       <TableCell className='flex items-center space-x-2'>
                         {editingGameId === game.id && (
@@ -220,6 +289,39 @@ function Organisation() {
                         {game.playerCount?.toLocaleString() ?? '-'}
                       </TableCell>
                       <DateCell>{format(new Date(game.createdAt), 'dd MMM yyyy')}</DateCell>
+                      {canManageGames && (
+                        <TableCell className='flex items-center space-x-1'>
+                          <Button
+                            variant='icon'
+                            className='rounded-full bg-indigo-900 p-1'
+                            disabled={idx === 0}
+                            onClick={() => onMoveGame(idx, -1)}
+                            icon={<IconArrowUp size={16} />}
+                            extra={{ 'aria-label': `Move ${game.name} up` }}
+                          />
+                          <Button
+                            variant='icon'
+                            className='rounded-full bg-indigo-900 p-1'
+                            disabled={idx === games.length - 1}
+                            onClick={() => onMoveGame(idx, 1)}
+                            icon={<IconArrowDown size={16} />}
+                            extra={{ 'aria-label': `Move ${game.name} down` }}
+                          />
+                          <Button
+                            variant='icon'
+                            className='rounded-full bg-indigo-900 p-1'
+                            onClick={() => onToggleGameHidden(game)}
+                            icon={
+                              game.switcherHidden ? <IconEyeOff size={16} /> : <IconEye size={16} />
+                            }
+                            extra={{
+                              'aria-label': game.switcherHidden
+                                ? `Show ${game.name} in the game switcher`
+                                : `Hide ${game.name} from the game switcher`,
+                            }}
+                          />
+                        </TableCell>
+                      )}
                     </>
                   )}
                 </TableBody>

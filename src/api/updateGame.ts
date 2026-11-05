@@ -16,6 +16,7 @@ type Data = {
   website?: string | null
   logoUrl?: string | null
   playerAuthActivityEnrichment?: boolean
+  switcherHidden?: boolean
 }
 
 const updateGame = makeValidatedRequest(
