@@ -239,10 +239,7 @@ function Organisation() {
                     : ['Game', 'Player count', 'Created at']
                 }
               >
-                <TableBody
-                  iterator={games}
-                  rowKey={(game) => game.id}
-                >
+                <TableBody iterator={games} rowKey={(game) => game.id}>
                   {(game, idx) => (
                     <>
                       <TableCell className='flex items-center space-x-2'>
