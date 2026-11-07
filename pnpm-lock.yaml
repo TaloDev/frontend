@@ -177,7 +177,7 @@ importers:
         version: 2.2.0
       '@hookform/resolvers':
         specifier: ^5.2.2
-        version: 5.9.1(@standard-schema/spec@1.1.0)(joi@18.2.5)(react-hook-form@7.86.0(react@19.2.8))(zod@4.6.7)
+        version: 5.9.1(@standard-schema/spec@1.1.0)(joi@18.3.2)(react-hook-form@7.86.0(react@19.2.8))(zod@4.6.7)
       '@sentry/react':
         specifier: ^10.63.0
         version: 10.71.0(react@19.2.8)
@@ -2341,8 +2341,8 @@ packages:
     resolution: {integrity: sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ==}
     hasBin: true
 
-  joi@18.2.5:
-    resolution: {integrity: sha512-+gEA7rLfaNWx9JzawWPrPetSZwT16NUqHtECDgjyAJreXcs4TM7tx2Pa+VVJJK0YHM83ybrVdaT6UekHH50FJQ==}
+  joi@18.3.2:
+    resolution: {integrity: sha512-iUivApKYw5GpZmq2Sy6El99j7noo8QSUFZlyQtr3HCkosC/b5wKF6/Y3teiHIlaM8WI38sAT3P+51rB0lhAhJA==}
     engines: {node: '>= 20'}
 
   jotai@2.20.3:
@@ -3831,13 +3831,13 @@ snapshots:
 
   '@hcaptcha/react-hcaptcha@2.2.0': {}
 
-  '@hookform/resolvers@5.9.1(@standard-schema/spec@1.1.0)(joi@18.2.5)(react-hook-form@7.86.0(react@19.2.8))(zod@4.6.7)':
+  '@hookform/resolvers@5.9.1(@standard-schema/spec@1.1.0)(joi@18.3.2)(react-hook-form@7.86.0(react@19.2.8))(zod@4.6.7)':
     dependencies:
       '@standard-schema/utils': 0.3.0
       react-hook-form: 7.86.0(react@19.2.8)
     optionalDependencies:
       '@standard-schema/spec': 1.1.0
-      joi: 18.2.5
+      joi: 18.3.2
       zod: 4.6.7
 
   '@humanwhocodes/config-array@0.13.0(supports-color@8.1.1)':
@@ -5375,7 +5375,7 @@ snapshots:
 
   jiti@2.7.0: {}
 
-  joi@18.2.5:
+  joi@18.3.2:
     dependencies:
       '@hapi/address': 5.1.1
       '@hapi/formula': 3.0.2
@@ -6421,7 +6421,7 @@ snapshots:
   wait-on@9.0.4(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1):
     dependencies:
       axios: 1.20.0(debug@4.4.3(supports-color@8.1.1))(supports-color@8.1.1)
-      joi: 18.2.5
+      joi: 18.3.2
       lodash: 4.18.1
       minimist: 1.2.8
       rxjs: 7.8.2
