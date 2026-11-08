@@ -65,8 +65,8 @@ describe('<Integrations />', () => {
     expect(screen.getByText('Steamworks integration')).toBeInTheDocument()
     await userEvent.click(screen.getByText('Done'))
 
-    expect(screen.getByText('Enabled 01 Aug 2022'))
-    expect(screen.getByText('Last updated 01 Aug 2022 20:32'))
+    expect(screen.getByText('Enabled 01 Aug 2022, 20:08'))
+    expect(screen.getByText('Last updated 01 Aug 2022, 20:32'))
   })
 
   it('should render the not-enabled state for the google play games integration', async () => {
@@ -122,8 +122,8 @@ describe('<Integrations />', () => {
     expect(screen.getByText('Google Play Games integration')).toBeInTheDocument()
     await userEvent.click(screen.getByText('Done'))
 
-    expect(screen.getByText('Enabled 01 Aug 2022'))
-    expect(screen.getByText('Last updated 01 Aug 2022 20:32'))
+    expect(screen.getByText('Enabled 01 Aug 2022, 20:08'))
+    expect(screen.getByText('Last updated 01 Aug 2022, 20:32'))
   })
 
   it('should render the not-enabled state for the game center integration', async () => {
@@ -179,8 +179,8 @@ describe('<Integrations />', () => {
     expect(screen.getByText('Game Center integration')).toBeInTheDocument()
     await userEvent.click(screen.getByText('Done'))
 
-    expect(screen.getByText('Enabled 01 Aug 2022'))
-    expect(screen.getByText('Last updated 01 Aug 2022 20:32'))
+    expect(screen.getByText('Enabled 01 Aug 2022, 20:08'))
+    expect(screen.getByText('Last updated 01 Aug 2022, 20:32'))
   })
 
   it('should render multiple steamworks integrations', async () => {
@@ -225,8 +225,8 @@ describe('<Integrations />', () => {
     expect(await screen.findAllByText('Update integration')).toHaveLength(2)
     expect(screen.getByText('App 375290')).toBeInTheDocument()
     expect(screen.getByText('App 375291')).toBeInTheDocument()
-    expect(screen.getByText('Enabled 01 Aug 2022')).toBeInTheDocument()
-    expect(screen.getByText('Enabled 02 Aug 2022')).toBeInTheDocument()
+    expect(screen.getByText('Enabled 01 Aug 2022, 20:08')).toBeInTheDocument()
+    expect(screen.getByText('Enabled 02 Aug 2022, 20:08')).toBeInTheDocument()
     expect(screen.getAllByText('Sync leaderboards')).toHaveLength(1)
 
     await userEvent.click(screen.getByText('Add another Steam app'))

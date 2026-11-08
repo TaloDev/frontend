@@ -180,7 +180,7 @@ export default function Groups() {
                     <div className='mt-2 text-sm'>{group.description}</div>
                   </TableCell>
                   <TableCell className='font-mono'>{group.count.toLocaleString()}</TableCell>
-                  <DateCell>{format(new Date(group.updatedAt), 'dd MMM yyyy')}</DateCell>
+                  <DateCell>{format(new Date(group.updatedAt), 'dd MMM yyyy, HH:mm')}</DateCell>
                   <TableCell className='w-40'>
                     <Button variant='grey' onClick={() => onEditGroupClick(group)}>
                       Edit
