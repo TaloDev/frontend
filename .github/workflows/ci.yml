@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: pnpm/setup@v2
         with:
-          runtime: node@24
+          runtime: node@26
           cache: true
 
       - run: pnpm test --silent
@@ -22,10 +22,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: pnpm/setup@v2
         with:
-          runtime: node@24
+          runtime: node@26
           cache: true
 
       - name: Cache Cypress binary
@@ -46,10 +46,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: pnpm/setup@v2
         with:
-          runtime: node@24
+          runtime: node@26
           cache: true
 
       - name: Type check
@@ -62,10 +62,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: pnpm/setup@v2
         with:
-          runtime: node@24
+          runtime: node@26
           cache: true
 
       - name: Format

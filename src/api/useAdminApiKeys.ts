@@ -16,7 +16,7 @@ export function useAdminApiKeys(activeGame: Game) {
     const { scopes } = await makeValidatedGetRequest(
       `${url}/scopes`,
       z.object({
-        scopes: z.record(z.array(z.string())),
+        scopes: z.record(z.string(), z.array(z.string())),
       }),
     )
 

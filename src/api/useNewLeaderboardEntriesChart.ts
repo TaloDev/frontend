@@ -7,8 +7,8 @@ import makeValidatedGetRequest from './makeValidatedGetRequest'
 
 export const newLeaderboardEntriesChartSchema = z.object({
   date: z.number(),
-  leaderboards: z.record(z.number()),
-  change: z.record(z.number()),
+  leaderboards: z.record(z.string(), z.number()),
+  change: z.record(z.string(), z.number()),
 })
 
 export function useNewLeaderboardEntriesChart(

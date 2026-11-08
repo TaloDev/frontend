@@ -6,8 +6,8 @@ export const gameFeedbackCategorySchema = z.object({
   name: z.string(),
   description: z.string(),
   anonymised: z.boolean(),
-  createdAt: z.string().datetime(),
-  updatedAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
 })
 
 export type GameFeedbackCategory = z.infer<typeof gameFeedbackCategorySchema>

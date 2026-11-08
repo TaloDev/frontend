@@ -19,6 +19,7 @@ import Toggle from '../components/toggles/Toggle'
 import { Integration, SteamIntegrationConfig } from '../entities/integration'
 import { activeGameState, SelectedActiveGame } from '../state/activeGameState'
 import buildError from '../utils/buildError'
+import requiredNumber from '../utils/validation/requiredNumber'
 
 const toastMessageConfigKeyMap = (newValue: boolean) =>
   ({
@@ -33,12 +34,9 @@ const validationSchema = z.object({
     .string()
     .length(32, { message: 'Key must be 32 characters long' })
     .min(1, { message: 'Key is required' }),
-  appId: z.number({
-    invalid_type_error: 'App ID must be a number',
-    required_error: 'App ID is required',
-  }),
-  syncLeaderboards: z.boolean({ required_error: 'Sync leaderboards is required' }),
-  syncStats: z.boolean({ required_error: 'Sync stats is required' }),
+  appId: requiredNumber('App ID is required', 'App ID must be a number'),
+  syncLeaderboards: z.boolean({ error: 'Sync leaderboards is required' }),
+  syncStats: z.boolean({ error: 'Sync stats is required' }),
 })
 
 type FormValues = z.infer<typeof validationSchema>

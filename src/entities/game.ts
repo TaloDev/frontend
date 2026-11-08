@@ -6,7 +6,8 @@ export const gameSchema = z.object({
   name: z.string(),
   props: z.array(propSchema),
   playerCount: z.number().optional(),
-  createdAt: z.string().datetime(),
+  switcherHidden: z.boolean(),
+  createdAt: z.iso.datetime(),
 })
 
 export type Game = z.infer<typeof gameSchema>

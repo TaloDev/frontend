@@ -78,7 +78,7 @@ function EventFunnelsDisplay({ activeGame }: { activeGame: SelectedActiveGame })
                     </div>
                   </TableCell>
                   <TableCell className='font-mono'>{funnel.maxGap}s</TableCell>
-                  <DateCell>{format(new Date(funnel.updatedAt), 'dd MMM yyyy')}</DateCell>
+                  <DateCell>{format(new Date(funnel.updatedAt), 'dd MMM yyyy, HH:mm')}</DateCell>
                   <TableCell className='w-40'>
                     <Button
                       variant='grey'

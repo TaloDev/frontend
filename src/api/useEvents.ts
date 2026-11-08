@@ -22,7 +22,7 @@ export default function useEvents(activeGame: Game, startDate: string, endDate: 
     const res = await makeValidatedGetRequest(
       `${url}?${qs}`,
       z.object({
-        events: z.record(z.array(eventsVisualisationPayloadSchema)),
+        events: z.record(z.string(), z.array(eventsVisualisationPayloadSchema)),
         eventNames: z.array(z.string()),
       }),
     )

@@ -17,7 +17,7 @@ import { unauthedContainerStyle } from '../styles/theme'
 import buildError from '../utils/buildError'
 
 const validationSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email address' }),
+  email: z.email({ message: 'Please enter a valid email address' }),
 })
 
 type FormValues = z.infer<typeof validationSchema>

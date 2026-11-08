@@ -4,11 +4,11 @@ import { playerPresenceSchema } from './playerPresence'
 import { propSchema } from './prop'
 
 export const basePlayerSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   props: z.array(propSchema),
   devBuild: z.boolean(),
-  createdAt: z.string().datetime(),
-  lastSeenAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
+  lastSeenAt: z.iso.datetime(),
   groups: z.array(
     z.object({
       id: z.string(),

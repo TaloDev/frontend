@@ -4,11 +4,11 @@ import { UserType } from './user'
 
 export const inviteSchema = z.object({
   id: z.number(),
-  email: z.string().email(),
+  email: z.email(),
   organisation: organisationSchema,
-  type: z.nativeEnum(UserType),
+  type: z.enum(UserType),
   invitedBy: z.string(),
-  createdAt: z.string().datetime(),
+  createdAt: z.iso.datetime(),
 })
 
 export type Invite = z.infer<typeof inviteSchema>

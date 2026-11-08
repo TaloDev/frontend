@@ -17,7 +17,7 @@ export default function makeValidatedRequest<T extends ZodType, A extends unknow
       if (import.meta.env.MODE !== 'test' && parseError instanceof ZodError) {
         console.error(
           `Response body (${res.request.responseURL}) is invalid`,
-          parseError.errors.map((error) => ({
+          parseError.issues.map((error) => ({
             ...error,
             path: error.path.join('.'),
           })),

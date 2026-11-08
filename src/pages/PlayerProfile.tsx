@@ -179,8 +179,12 @@ export default function PlayerProfile() {
           {displayName && <Identifier id={`Display name = ${displayName}`} />}
         </div>
         <div className='space-y-4 space-x-2 sm:flex sm:space-y-0'>
-          <Identifier id={`Registered ${format(new Date(player.createdAt), 'dd MMM yyyy')}`} />
-          <Identifier id={`Last seen ${format(new Date(player.lastSeenAt), 'dd MMM yyyy')}`} />
+          <Identifier
+            id={`Registered ${format(new Date(player.createdAt), 'dd MMM yyyy, HH:mm')}`}
+          />
+          <Identifier
+            id={`Last seen ${format(new Date(player.lastSeenAt), 'dd MMM yyyy, HH:mm')}`}
+          />
           <span className={clsx(player.presence?.online && 'text-green-400')}>
             <Identifier
               id={`${player.presence?.online ? 'Online' : 'Offline'}${player.presence?.customStatus ? ` (${player.presence.customStatus})` : ''}`}

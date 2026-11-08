@@ -46,6 +46,62 @@ describe('<GameSwitcher />', () => {
     }
   })
 
+  it('should skip games hidden from the switcher', async () => {
+    const user = {
+      organisation: {
+        games: [
+          { id: 1, name: 'Crawle' },
+          { id: 2, name: 'Superstatic', switcherHidden: true },
+          { id: 3, name: 'Scrunk' },
+        ],
+      },
+    }
+
+    render(
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: user },
+          { node: activeGameState, initialValue: { name: 'Crawle' } },
+        ]}
+      >
+        <GameSwitcher />
+      </KitchenSink>,
+    )
+
+    await userEvent.click(screen.getByLabelText('Switch games or create a new one'))
+    const list = screen.getByRole('list')
+
+    expect(within(list).queryByText('Superstatic')).not.toBeInTheDocument()
+    expect(within(list).getByText('Crawle')).toBeInTheDocument()
+    expect(within(list).getByText('Scrunk')).toBeInTheDocument()
+  })
+
+  it('should keep the active game in the switcher when it is hidden', async () => {
+    const activeGame = { id: 2, name: 'Superstatic', switcherHidden: true }
+    const user = {
+      organisation: {
+        games: [{ id: 1, name: 'Crawle' }, activeGame],
+      },
+    }
+
+    render(
+      <KitchenSink
+        states={[
+          { node: userState, initialValue: user },
+          { node: activeGameState, initialValue: activeGame },
+        ]}
+      >
+        <GameSwitcher />
+      </KitchenSink>,
+    )
+
+    await userEvent.click(screen.getByLabelText('Switch games or create a new one'))
+    const list = screen.getByRole('list')
+
+    expect(within(list).getByText('Superstatic')).toBeInTheDocument()
+    expect(within(list).getByText('Crawle')).toBeInTheDocument()
+  })
+
   it('should render be able to switch games', async () => {
     const user = {
       organisation: {

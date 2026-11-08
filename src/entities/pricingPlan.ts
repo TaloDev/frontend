@@ -32,18 +32,16 @@ const pricingPlanProductPriceSchema = z.object({
 
 export type PricingPlanProductPrice = z.infer<typeof pricingPlanProductPriceSchema>
 
-export const pricingPlanProductSchema = pricingPlanSchema.merge(
-  z.object({
-    name: z.string(),
-    prices: z.array(
-      z.object({
-        currency: z.string(),
-        amount: z.number(),
-        interval: z.enum(['day', 'week', 'month', 'year']),
-        current: z.boolean(),
-      }),
-    ),
-  }),
-)
+export const pricingPlanProductSchema = pricingPlanSchema.extend({
+  name: z.string(),
+  prices: z.array(
+    z.object({
+      currency: z.string(),
+      amount: z.number(),
+      interval: z.enum(['day', 'week', 'month', 'year']),
+      current: z.boolean(),
+    }),
+  ),
+})
 
 export type PricingPlanProduct = z.infer<typeof pricingPlanProductSchema>
