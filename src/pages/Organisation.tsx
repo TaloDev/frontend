@@ -354,7 +354,9 @@ function Organisation() {
                       <TableCell>{invite.email}</TableCell>
                       <TableCell>{invite.type === UserType.ADMIN ? 'Admin' : 'Dev'}</TableCell>
                       <TableCell>{invite.invitedBy}</TableCell>
-                      <DateCell>{format(new Date(invite.createdAt), 'dd MMM yyyy')}</DateCell>
+                      <DateCell>
+                        {format(new Date(invite.createdAt), 'dd MMM yyyy, HH:mm')}
+                      </DateCell>
                       {canResendInvites && (
                         <TableCell className='w-32'>
                           <Button
@@ -395,8 +397,8 @@ function Organisation() {
                 <>
                   <TableCell>{member.username}</TableCell>
                   <TableCell>{userTypeMap[member.type]}</TableCell>
-                  <DateCell>{format(new Date(member.createdAt), 'dd MMM yyyy')}</DateCell>
-                  <DateCell>{format(new Date(member.lastSeenAt), 'dd MMM yyyy')}</DateCell>
+                  <DateCell>{format(new Date(member.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+                  <DateCell>{format(new Date(member.lastSeenAt), 'dd MMM yyyy, HH:mm')}</DateCell>
                   {canManageMember && (
                     <TableCell className='w-32'>
                       {member.id !== user.id && (

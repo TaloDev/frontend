@@ -31,8 +31,7 @@ const syncingState = {
   SYNCING: 'syncing',
 }
 
-const createdAtFormat = 'dd MMM yyyy'
-const updatedAtFormat = 'dd MMM yyyy HH:mm'
+const dateFormat = 'dd MMM yyyy, HH:mm'
 
 function ManualSyncSection({
   loading,
@@ -291,9 +290,9 @@ export default function Integrations() {
                   content={
                     <div className='leading-relaxed'>
                       <p className='font-bold'>
-                        Enabled {format(new Date(integration.createdAt), createdAtFormat)}
+                        Enabled {format(new Date(integration.createdAt), dateFormat)}
                       </p>
-                      <p>Last updated {format(new Date(integration.updatedAt), updatedAtFormat)}</p>
+                      <p>Last updated {format(new Date(integration.updatedAt), dateFormat)}</p>
                     </div>
                   }
                   footer={

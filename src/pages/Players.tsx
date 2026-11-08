@@ -92,8 +92,8 @@ export default function Players() {
                   <TableCell className='min-w-80 md:min-w-0'>
                     <PlayerAliases showDisplayName aliases={player.aliases} />
                   </TableCell>
-                  <DateCell>{format(new Date(player.createdAt), 'dd MMM yyyy')}</DateCell>
-                  <DateCell>{format(new Date(player.lastSeenAt), 'dd MMM yyyy')}</DateCell>
+                  <DateCell>{format(new Date(player.createdAt), 'dd MMM yyyy, HH:mm')}</DateCell>
+                  <DateCell>{format(new Date(player.lastSeenAt), 'dd MMM yyyy, HH:mm')}</DateCell>
                   <TableCell className='w-48'>
                     <Button variant='grey' onClick={() => goToPlayerProfile(player)}>
                       <span>View profile</span>
