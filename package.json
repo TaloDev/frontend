@@ -10,7 +10,7 @@
     "dev:e2e": "start-server-and-test 'vite --mode e2e' http://localhost:8080",
     "dev:cypress": "pnpm dev:e2e 'cypress open'",
     "build": "tsc -p tsconfig.build.json && vite build",
-    "test": "TZ=UTC vitest",
+    "test": "TZ=UTC NODE_OPTIONS=--no-experimental-webstorage vitest",
     "test:cypress": "pnpm dev:e2e 'cypress run'",
     "prepare": "husky || true",
     "lint": "oxlint",
@@ -93,6 +93,6 @@
     }
   },
   "engines": {
-    "node": "24.x"
+    "node": "26.x"
   }
 }

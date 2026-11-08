@@ -6,7 +6,7 @@ COPY . .
 # this list drives the entrypoint's envsub --env flags for index.html
 RUN sed -n 's/^VITE_[^=]*=\${\([A-Z_][A-Z0-9_]*\)}[[:space:]]*$/\1/p' .env.production > /tmp/env-vars.txt
 
-RUN pnpm runtime set node 24 -g
+RUN pnpm runtime set node 26 -g
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm build
 
