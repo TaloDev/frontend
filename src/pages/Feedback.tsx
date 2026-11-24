@@ -39,7 +39,7 @@ function CommentCell({ feedback }: { feedback: GameFeedback }) {
 
   return (
     <span className='flex items-center gap-2'>
-      <span className='whitespace-pre-wrap'>
+      <span className='wrap-anywhere whitespace-pre-wrap'>
         {isLong && !expanded
           ? feedback.comment.slice(0, COMMENT_CHAR_LIMIT).trimEnd() + '…'
           : feedback.comment.trimEnd()}
