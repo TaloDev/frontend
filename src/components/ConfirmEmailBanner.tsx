@@ -47,7 +47,7 @@ export default function ConfirmEmailBanner() {
         <>
           <div>
             <p className='text-xl font-bold'>Please confirm your email address</p>
-            <p>We&apos;ve sent a 6 digit code to your email address, please enter it below:</p>
+            <p>We&apos;ve sent a code to your email address, please enter it below:</p>
           </div>
 
           <form className='flex flex-col lg:flex-row lg:items-center'>
@@ -59,8 +59,6 @@ export default function ConfirmEmailBanner() {
                 placeholder='Code'
                 variant='light'
                 inputExtra={{
-                  inputMode: 'numeric',
-                  pattern: '[0-9]*',
                   autoComplete: 'one-time-code',
                 }}
               />

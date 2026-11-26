@@ -32,7 +32,7 @@ describe('<ConfirmEmailBanner />', () => {
     )
 
     const { type, click } = userEvent.setup()
-    await type(screen.getByRole('textbox'), '123456')
+    await type(screen.getByRole('textbox'), 'ABC123')
     await click(screen.getByText('Confirm'))
 
     expect(await screen.findByText('Success!')).toBeInTheDocument()
