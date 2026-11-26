@@ -42,17 +42,15 @@ export function DeletePlayerVerify({ gameToken, aliasId, onSuccess }: Props) {
       <UnauthedContainerInner as='form'>
         <UnauthedTitle>Verify your identity</UnauthedTitle>
 
-        <p>We sent a 6-digit code to your email.</p>
+        <p>We sent a 6-character code to your email.</p>
 
         <TextInput
           id='code'
           label='Verification code'
-          placeholder='000000'
+          placeholder='ABC123'
           onChange={setCode}
           value={code}
           inputExtra={{
-            inputMode: 'numeric',
-            pattern: '[0-9]*',
             autoComplete: 'one-time-code',
           }}
         />
